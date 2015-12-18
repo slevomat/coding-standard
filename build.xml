@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Slevomat Coding Standard" default="check">
+
+	<target name="check" depends="
+		composer,
+		lint,
+		cs,
+		tests
+	"/>
+
+	<target name="composer">
+		<exec
+			executable="composer"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
+		>
+			<arg value="install"/>
+		</exec>
+	</target>
+
+	<target name="lint">
+		<exec
+			executable="vendor/bin/parallel-lint"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
+		>
+			<arg path="SlevomatCodingStandard" />
+			<arg path="tests" />
+		</exec>
+	</target>
+
+	<target name="cs">
+		<exec
+			executable="vendor/bin/phpcs"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
+		>
+			<arg value="--standard=ruleset.xml"/>
+			<arg value="--extensions=php"/>
+			<arg value="--encoding=utf-8"/>
+			<arg value="--tab-width=4"/>
+			<arg value="--ignore=*/data/*"/>
+			<arg value="-sp"/>
+			<arg path="SlevomatCodingStandard"/>
+			<arg path="tests"/>
+		</exec>
+	</target>
+
+	<target name="cs-fix">
+		<exec
+				executable="vendor/bin/phpcbf"
+				logoutput="true"
+				passthru="true"
+				checkreturn="true"
+		>
+			<arg value="--standard=ruleset.xml"/>
+			<arg value="--extensions=php"/>
+			<arg value="--encoding=utf-8"/>
+			<arg value="--tab-width=4"/>
+			<arg value="--ignore=*/data/*"/>
+			<arg path="SlevomatCodingStandard"/>
+			<arg path="tests"/>
+		</exec>
+	</target>
+
+	<target name="tests">
+		<exec
+			executable="vendor/bin/phpunit"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
+		>
+			<arg value="-c"/>
+			<arg value="tests/phpunit.xml"/>
+			<arg path="tests"/>
+		</exec>
+	</target>
+
+</project>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<phpunit
+	bootstrap="bootstrap.php"
+	colors="true"
+	backupGlobals="false"
+	backupStaticAttributes="false"
+	beStrictAboutChangesToGlobalState="true"
+	beStrictAboutOutputDuringTests="true"
+	beStrictAboutTestsThatDoNotTestAnything="true"
+	beStrictAboutTodoAnnotatedTests="true"
+>
+	<logging>
+		<log
+			type="coverage-html"
+			target="../coverage"
+			charset="UTF-8"
+			lowUpperBound="0.0000000000001"
+			highLowerBound="99.999999999999"
+		/>
+		<log type="coverage-clover" target="../coverage/clover.xml"/>
+		<log
+			type="coverage-text"
+			target="php://stdout"
+			showUncoveredFiles="true"
+			showOnlySummary="true"
+		/>
+	</logging>
+	<filter>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">../SlevomatCodingStandard</directory>
+		</whitelist>
+	</filter>
+</phpunit>

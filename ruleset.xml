@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<ruleset name="Slevomat Coding Standard">
+	<rule ref="SlevomatCodingStandard/ruleset.xml" />
+	<rule ref="vendor/consistence/coding-standard/Consistence/ruleset.xml" />
+	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
+		<properties>
+			<property name="rootNamespaces" type="array" value="SlevomatCodingStandard=>SlevomatCodingStandard,tests=>SlevomatCodingStandard"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword">
+		<properties>
+			<property name="keywordsToCheck" type="array" value="T_EXTENDS,T_IMPLEMENTS"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
+		<properties>
+			<property name="namespacesRequiredToUse" type="array" value="SlevomatCodingStandard"/>
+			<property name="fullyQualifiedKeywords" type="array" value="T_EXTENDS,T_IMPLEMENTS"/>
+			<property name="allowFullyQualifiedExceptions" value="true"/>
+			<property name="allowPartialUses" value="false"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces">
+		<properties>
+			<property name="allowUseFromRootNamespace" value="true"/>
+			<property name="namespacesRequiredToUse" type="array" value="SlevomatCodingStandard"/>
+		</properties>
+	</rule>
+</ruleset>
