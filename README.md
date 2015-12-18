@@ -1,0 +1,2 @@
+Slevomat Coding Standard
+======================
