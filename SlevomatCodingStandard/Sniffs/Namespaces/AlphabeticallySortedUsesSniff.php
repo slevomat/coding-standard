@@ -99,7 +99,8 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 	 */
 	private function compareStrings($a, $b)
 	{
-		for ($i = 0; $i < min(strlen($a), strlen($b)); $i++) {
+		$i = 0;
+		for (; $i < min(strlen($a), strlen($b)); $i++) {
 			if ($this->isSpecialCharacter($a[$i]) && !$this->isSpecialCharacter($b[$i])) {
 				return -1;
 			} elseif (!$this->isSpecialCharacter($a[$i]) && $this->isSpecialCharacter($b[$i])) {
