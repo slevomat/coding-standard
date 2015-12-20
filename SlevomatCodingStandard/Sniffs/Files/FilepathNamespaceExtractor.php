@@ -2,6 +2,8 @@
 
 namespace SlevomatCodingStandard\Sniffs\Files;
 
+use SlevomatCodingStandard\Helpers\StringHelper;
+
 class FilepathNamespaceExtractor
 {
 
@@ -35,7 +37,7 @@ class FilepathNamespaceExtractor
 		while (count($pathParts) > 0) {
 			array_shift($pathParts);
 			foreach ($this->rootNamespaces as $directory => $namespace) {
-				if (self::startsWith(implode('/', $pathParts) . '/', $directory . '/')) {
+				if (StringHelper::startsWith(implode('/', $pathParts) . '/', $directory . '/')) {
 					for ($i = 0; $i < count(explode('/', $directory)); $i++) {
 						array_shift($pathParts);
 					}
@@ -69,18 +71,6 @@ class FilepathNamespaceExtractor
 		}));
 
 		return pathinfo($typeName, PATHINFO_FILENAME);
-	}
-
-	/**
-	 * @param string $haystack
-	 * @param string $needle
-	 * @return boolean
-	 */
-	private static function startsWith($haystack, $needle)
-	{
-		// todo do helperu
-
-		return strncmp($haystack, $needle, strlen($needle)) === 0;
 	}
 
 }
