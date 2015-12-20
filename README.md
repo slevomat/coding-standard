@@ -198,7 +198,7 @@ The recommended way to install Slevomat Coding Standard is [through Composer](ht
 
 ```JSON
 {
-	"require": {
+	"require-dev": {
 		"slevomat/coding-standard": "^1.0"
 	}
 }
@@ -212,7 +212,7 @@ If you want to use the whole coding standard, besides requiring `slevomat/coding
 
 ```JSON
 {
-	"require": {
+	"require-dev": {
 		"consistence/coding-standard": "^0.8"
 	}
 }
@@ -244,7 +244,7 @@ Besides requiring `slevomat/coding-standard` in composer.json, require also PHP_
 
 ```JSON
 {
-	"require": {
+	"require-dev": {
 		"squizlabs/php_codesniffer": "2.5.0"
 	}
 }
