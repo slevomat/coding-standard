@@ -32,6 +32,10 @@ class FilepathNamespaceExtractor
 	 */
 	public function getTypeNameFromProjectPath($path)
 	{
+		if (pathinfo($path, PATHINFO_EXTENSION) !== 'php') {
+			return null;
+		}
+
 		$pathParts = explode(DIRECTORY_SEPARATOR, $path);
 		$rootNamespace = null;
 		while (count($pathParts) > 0) {
@@ -56,21 +60,13 @@ class FilepathNamespaceExtractor
 			return null;
 		}
 
-		if (pathinfo($pathParts[count($pathParts) - 1], PATHINFO_EXTENSION) !== 'php') {
-			return null;
-		}
-
-		if (count($pathParts) === 0) {
-			return null;
-		}
-
 		array_unshift($pathParts, $rootNamespace);
 
 		$typeName = implode('\\', array_filter($pathParts, function ($pathPart) {
 			return !isset($this->skipDirs[$pathPart]);
 		}));
 
-		return pathinfo($typeName, PATHINFO_FILENAME);
+		return substr($typeName, 0, -strlen('.php'));
 	}
 
 }
