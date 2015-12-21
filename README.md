@@ -158,7 +158,7 @@ Disallows uses of other than configured namespaces.
 use DateTimeImmutable;
 ```
 
-#### SlevomatCodingStandard.Namespaces.UseStartsWithBackslash
+#### SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash
 
 Disallows leading backslash in use statement:
 
