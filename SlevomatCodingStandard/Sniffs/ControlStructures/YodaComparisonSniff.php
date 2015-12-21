@@ -222,7 +222,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 	{
 		$dynamism = $this->getTokenDynamism();
 		$sideTokens = array_values(array_filter($sideTokens, function (array $token) {
-			return !in_array($token['code'], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT, T_NS_SEPARATOR], true);
+			return !in_array($token['code'], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT, T_NS_SEPARATOR, T_PLUS, T_MINUS], true);
 		}));
 
 		if (count($sideTokens) > 0) {

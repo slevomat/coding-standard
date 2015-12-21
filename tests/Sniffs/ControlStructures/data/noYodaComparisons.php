@@ -16,6 +16,8 @@ $e === \Foo\Bar\Baz::BAR;
 $foo === Foo::BAR;
 $foo + 2 === Foo::BAR;
 $this->foo() === Foo::BAR;
+$foo === -1;
+$foo === +1;
 count($cartItem->getReservations()) !== $neededReservationsAmount;
 $optionalPartOpeningBracePosition !== strlen($part) - 1;
 $optionalPartOpeningBracePosition !== \Nette\Utils\Strings::length($part) - 1;
