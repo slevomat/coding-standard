@@ -243,7 +243,11 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 				continue;
 			}
 
-			$reportedMethods[$tokens[$namePointer]['content']] = $methodTokenPointer;
+			$methodName = $tokens[$namePointer]['content'];
+
+			if ($methodName !== '__construct') {
+				$reportedMethods[$methodName] = $methodTokenPointer;
+			}
 			$findMethodsStartTokenPointer = $methodTokenPointer + 1;
 		}
 

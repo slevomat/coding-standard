@@ -67,4 +67,9 @@ class ClassWithSomeUnusedProperties extends \Consistence\Object
 
 	}
 
+	private function __construct()
+	{
+
+	}
+
 }
