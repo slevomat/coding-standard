@@ -29,6 +29,9 @@ class ClassWithSomeUnusedProperties extends \Consistence\Object
 
 	private $writeOnlyProperty;
 
+	/** @ORM\Column(name="foo") */
+	private $doctrineProperty;
+
 	public function foo()
 	{
 		$this->usedProperty->foo();

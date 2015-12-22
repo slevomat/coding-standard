@@ -179,7 +179,8 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			$findPropertiesStartTokenPointer = $propertyTokenPointer + 1;
 			$phpDocTags = $this->getPhpDocTags($phpcsFile, $tokens, $visibilityModifiedTokenPointer);
 			foreach ($phpDocTags as $tag) {
-				if (in_array(substr($tag, 0, 4), $this->alwaysUsedPropertiesAnnotations, true)) {
+				preg_match('#([@a-zA-Z\\\]+)#', $tag, $matches);
+				if (in_array($matches[1], $this->alwaysUsedPropertiesAnnotations, true)) {
 					continue 2;
 				}
 			}
