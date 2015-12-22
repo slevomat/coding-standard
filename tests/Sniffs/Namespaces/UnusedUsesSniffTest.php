@@ -72,4 +72,10 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		);
 	}
 
+	public function testUsedTrait()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/usedTrait.php');
+		$this->assertNoSniffError($report, 5);
+	}
+
 }

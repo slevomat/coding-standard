@@ -8,6 +8,9 @@ use UsedNamespace\UsedNameFooBar as UsedNameFooBarBaz;
 class FooClass extends \ExtendedClass implements \ImplementedInterface
 {
 
+	use \FullyQualified\SomeOtherTrait;
+	use SomeTrait;
+
 	/** @ORM\Column(name="foo") */
 	private $foo;
 

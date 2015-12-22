@@ -12,6 +12,8 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 				[
 					'\ExtendedClass',
 					'\ImplementedInterface',
+					'\FullyQualified\SomeOtherTrait',
+					'SomeTrait',
 					'TypehintedName',
 					'ClassInstance',
 					'StaticClass',
@@ -24,6 +26,8 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 				[
 					'\ExtendedClass',
 					'\ImplementedInterface',
+					'\FullyQualified\SomeOtherTrait',
+					'SomeTrait',
 					'ORM\Column',
 					'Bar',
 					'Lorem',

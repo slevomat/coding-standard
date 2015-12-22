@@ -157,12 +157,22 @@ class ReferencedNameHelper
 
 		$skipTokenCodes = [
 			T_FUNCTION,
-			T_USE,
 			T_AS,
 			T_DOUBLE_COLON,
 			T_OBJECT_OPERATOR,
 			T_NAMESPACE,
 		];
+
+		if ($previousToken['code'] === T_USE) {
+			$classPointer = $phpcsFile->findPrevious(T_CLASS, $startPointer - 1);
+			if ($classPointer !== false) {
+				$tokens = $phpcsFile->getTokens();
+				$classToken = $tokens[$classPointer];
+				return $startPointer > $classToken['scope_opener'] && $startPointer < $classToken['scope_closer'];
+			}
+
+			return false;
+		}
 
 		return !in_array(
 			$previousToken['code'],
