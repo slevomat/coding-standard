@@ -14,6 +14,12 @@ class FooClass extends \ExtendedClass implements \ImplementedInterface
 	/** @var Bar */
 	private $bar;
 
+	/** @var Lorem[]|Ipsum|null */
+	private $baz;
+
+	/** @var Rasmus|Lerdorf[]|null|string|self|\Foo\BarBaz */
+	private $barz;
+
 	/**
 	 * @param TypehintedName $foo
 	 * @param AnotherTypehintedName[] $bar

@@ -34,9 +34,11 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
 		$unusedNames = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
-		$types = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer, $this->searchAnnotations);
+		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer, $this->searchAnnotations);
 
-		foreach ($types as $pointer => $name) {
+		foreach ($referencedNames as $referencedName) {
+			$name = $referencedName->getNameAsReferencedInFile();
+			$pointer = $referencedName->getPointer();
 			$nameParts = NamespaceHelper::getNameParts($name);
 			$nameAsReferencedInFile = $nameParts[0];
 			$normalizedNameAsReferencedInFile = UseStatement::normalizedNameAsReferencedInFile($nameAsReferencedInFile);

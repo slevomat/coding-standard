@@ -26,6 +26,11 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 					'\ImplementedInterface',
 					'ORM\Column',
 					'Bar',
+					'Lorem',
+					'Ipsum',
+					'Rasmus',
+					'Lerdorf',
+					'\Foo\BarBaz',
 					'TypehintedName',
 					'AnotherTypehintedName',
 					'ClassInstance',
@@ -48,8 +53,11 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/lotsOfReferencedNames.php'
 		);
+
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0, $searchAnnotations);
-		$this->assertSame($foundTypes, array_values(array_unique($names)));
+		$this->assertSame($foundTypes, array_values(array_unique(array_map(function (ReferencedName $name) {
+			return $name->getNameAsReferencedInFile();
+		}, $names))));
 	}
 
 	public function testFindReferencedNameEndPointerOnNonReferencedName()

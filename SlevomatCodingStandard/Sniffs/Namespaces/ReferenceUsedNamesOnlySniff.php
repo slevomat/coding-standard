@@ -105,7 +105,9 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
-		foreach ($referencedNames as $pointer => $name) {
+		foreach ($referencedNames as $referencedName) {
+			$name = $referencedName->getNameAsReferencedInFile();
+			$pointer = $referencedName->getPointer();
 			if (NamespaceHelper::isFullyQualifiedName($name)) {
 				if (
 					(
