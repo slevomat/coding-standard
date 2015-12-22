@@ -7,7 +7,16 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 
 	public function testCheckFile()
 	{
-		$resultFile = $this->checkFile(__DIR__ . '/data/ClassWithSomeUnusedProperties.php');
+		$resultFile = $this->checkFile(__DIR__ . '/data/ClassWithSomeUnusedProperties.php', [
+			'alwaysUsedPropertiesAnnotations' => [
+				'@get',
+				'@set',
+			],
+			'alwaysUsedPropertiesSuffixes' => [
+				'Value',
+				'Timestamp',
+			],
+		]);
 		$this->assertNoSniffError($resultFile, 6);
 		$this->assertNoSniffError($resultFile, 8);
 		$this->assertNoSniffError($resultFile, 10);

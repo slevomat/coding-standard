@@ -33,6 +33,8 @@ Although PHP_CodeSniffer is not suitable for static analysis because it is limit
 
 This is very useful during refactoring to clean up dead code and injected dependencies.
 
+This sniff supports `alwaysUsedPropertiesAnnotations` setting to mark certain properties as always used, for example the ones with `@ORM\Column` annotations. Also, `alwaysUsedPropertiesSuffixes` can be set to mark properties with name ending with a certain string to be always marked as used.
+
 ### SlevomatCodingStandard.Arrays.TrailingArrayComma 🔧
 
 Commas after last element in an array make adding a new element easier and result in a cleaner versioning diff.

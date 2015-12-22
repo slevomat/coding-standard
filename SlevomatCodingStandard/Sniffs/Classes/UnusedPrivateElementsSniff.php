@@ -15,6 +15,12 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 
 	const CODE_UNUSED_METHOD = 'unusedMethod';
 
+	/** @var string[] */
+	public $alwaysUsedPropertiesAnnotations = [];
+
+	/** @var string[] */
+	public $alwaysUsedPropertiesSuffixes = [];
+
 	/**
 	 * @return integer[]
 	 */
@@ -173,7 +179,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			$findPropertiesStartTokenPointer = $propertyTokenPointer + 1;
 			$phpDocTags = $this->getPhpDocTags($phpcsFile, $tokens, $visibilityModifiedTokenPointer);
 			foreach ($phpDocTags as $tag) {
-				if (in_array(substr($tag, 0, 4), ['@get', '@set'], true)) {
+				if (in_array(substr($tag, 0, 4), $this->alwaysUsedPropertiesAnnotations, true)) {
 					continue 2;
 				}
 			}
@@ -181,11 +187,10 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			$propertyToken = $tokens[$propertyTokenPointer];
 			$name = substr($propertyToken['content'], 1);
 
-			if (StringHelper::endsWith($name, 'Value')) {
-				continue;
-			}
-			if (StringHelper::endsWith($name, 'Timestamp')) {
-				continue;
+			foreach ($this->alwaysUsedPropertiesSuffixes as $prefix) {
+				if (StringHelper::endsWith($name, $prefix)) {
+					continue 2;
+				}
 			}
 
 			$reportedProperties[$name] = $propertyTokenPointer;
