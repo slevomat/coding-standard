@@ -26,6 +26,8 @@
 			passthru="true"
 			checkreturn="true"
 		>
+			<arg value="--exclude"/>
+			<arg path="tests/Helpers/data/php7"/>
 			<arg path="SlevomatCodingStandard" />
 			<arg path="tests" />
 		</exec>

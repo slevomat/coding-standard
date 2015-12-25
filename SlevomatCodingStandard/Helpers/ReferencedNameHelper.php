@@ -56,7 +56,7 @@ class ReferencedNameHelper
 			T_DOC_COMMENT_TAG,
 		];
 
-		$searchTypes = TokenHelper::$nameTokenCodes;
+		$searchTypes = array_merge([T_RETURN_TYPE], TokenHelper::$nameTokenCodes);
 		if ($searchAnnotations) {
 			$searchTypes = array_merge($phpDocTypes, $searchTypes);
 		}
@@ -118,7 +118,7 @@ class ReferencedNameHelper
 			if ($nameEndPointer === null) {
 				$beginSearchAtPointer = TokenHelper::findNextExcluding(
 					$phpcsFile,
-					array_merge([T_WHITESPACE], TokenHelper::$nameTokenCodes),
+					array_merge([T_WHITESPACE, T_RETURN_TYPE], TokenHelper::$nameTokenCodes),
 					$nameStartPointer
 				);
 				continue;
@@ -140,7 +140,7 @@ class ReferencedNameHelper
 			return null;
 		}
 
-		return TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $startPointer + 1);
+		return TokenHelper::findNextExcluding($phpcsFile, array_merge([T_RETURN_TYPE], TokenHelper::$nameTokenCodes), $startPointer + 1);
 	}
 
 	/**

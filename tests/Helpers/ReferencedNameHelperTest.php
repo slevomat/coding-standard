@@ -83,4 +83,19 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertTokenPointer(T_OPEN_PARENTHESIS, 3, $codeSnifferFile, $endTokenPointer);
 	}
 
+	public function testReturnTypehint()
+	{
+		if (PHP_VERSION_ID < 70000) {
+			$this->markTestSkipped('Available on PHP7 only');
+		}
+
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/php7/return-typehint.php'
+		);
+		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
+		$this->assertCount(2, $names);
+		$this->assertSame('Bar', $names[0]->getNameAsReferencedInFile());
+		$this->assertSame('\OtherNamespace\Lorem', $names[1]->getNameAsReferencedInFile());
+	}
+
 }
