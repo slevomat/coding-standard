@@ -26,6 +26,7 @@ class FooClass extends \ExtendedClass implements \ImplementedInterface
 	/**
 	 * @param TypehintedName $foo
 	 * @param AnotherTypehintedName[] $bar
+	 * @return Returned_Typehinted_Underscored_Name
 	 */
 	public function fooMethod(TypehintedName $foo, array $bar)
 	{

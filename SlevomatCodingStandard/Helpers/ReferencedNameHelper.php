@@ -65,7 +65,7 @@ class ReferencedNameHelper
 
 		$matchTypesInAnnotation = function ($annotation, $nameStartPointer) use (&$types) {
 			$annotation = trim($annotation, '@ ');
-			if (preg_match('#([a-zA-Z0-9|\[\]\\\]+)#', $annotation, $matches) > 0) {
+			if (preg_match('#([a-zA-Z0-9_|\[\]\\\]+)#', $annotation, $matches) > 0) {
 				$referencedNames = array_filter(array_map(function ($name) {
 					return trim($name, '[]');
 				}, explode('|', $matches[1])), function ($match) {

@@ -37,6 +37,7 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 					'\Foo\BarBaz',
 					'TypehintedName',
 					'AnotherTypehintedName',
+					'Returned_Typehinted_Underscored_Name',
 					'ClassInstance',
 					'StaticClass',
 					'\Foo\Bar\SpecificException',
