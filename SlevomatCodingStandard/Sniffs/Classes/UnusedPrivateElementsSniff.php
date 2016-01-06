@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer_File;
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 
@@ -19,7 +20,13 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 	public $alwaysUsedPropertiesAnnotations = [];
 
 	/** @var string[] */
+	private $normalizedAlwaysUsedPropertiesAnnotations;
+
+	/** @var string[] */
 	public $alwaysUsedPropertiesSuffixes = [];
+
+	/** @var string[] */
+	private $normalizedAlwaysUsedPropertiesSuffixes;
 
 	/**
 	 * @return integer[]
@@ -29,6 +36,30 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 		return [
 			T_CLASS,
 		];
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getAlwaysUsedPropertiesAnnotations()
+	{
+		if ($this->normalizedAlwaysUsedPropertiesAnnotations === null) {
+			$this->normalizedAlwaysUsedPropertiesAnnotations = SniffSettingsHelper::normalizeArray($this->alwaysUsedPropertiesAnnotations);
+		}
+
+		return $this->normalizedAlwaysUsedPropertiesAnnotations;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getAlwaysUsedPropertiesSuffixes()
+	{
+		if ($this->normalizedAlwaysUsedPropertiesSuffixes === null) {
+			$this->normalizedAlwaysUsedPropertiesSuffixes = SniffSettingsHelper::normalizeArray($this->alwaysUsedPropertiesSuffixes);
+		}
+
+		return $this->normalizedAlwaysUsedPropertiesSuffixes;
 	}
 
 	/**
@@ -180,7 +211,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			$phpDocTags = $this->getPhpDocTags($phpcsFile, $tokens, $visibilityModifiedTokenPointer);
 			foreach ($phpDocTags as $tag) {
 				preg_match('#([@a-zA-Z\\\]+)#', $tag, $matches);
-				if (in_array($matches[1], $this->alwaysUsedPropertiesAnnotations, true)) {
+				if (in_array($matches[1], $this->getAlwaysUsedPropertiesAnnotations(), true)) {
 					continue 2;
 				}
 			}
@@ -188,7 +219,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			$propertyToken = $tokens[$propertyTokenPointer];
 			$name = substr($propertyToken['content'], 1);
 
-			foreach ($this->alwaysUsedPropertiesSuffixes as $prefix) {
+			foreach ($this->getAlwaysUsedPropertiesSuffixes() as $prefix) {
 				if (StringHelper::endsWith($name, $prefix)) {
 					continue 2;
 				}

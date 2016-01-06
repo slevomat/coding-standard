@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\Files;
 
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 
 class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
@@ -10,11 +11,20 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 	/** @var string[] path(string) => namespace */
 	public $rootNamespaces = [];
 
+	/** @var string[] path(string) => namespace */
+	private $normalizedRootNamespaces;
+
 	/** @var string */
 	public $skipDirs = [];
 
+	/** @var string */
+	private $normalizedSkipDirs;
+
 	/** @var string[] */
 	public $ignoredNamespaces = [];
+
+	/** @var string[] */
+	private $normalizedIgnoredNamespaces;
 
 	/** @var \SlevomatCodingStandard\Sniffs\Files\FilepathNamespaceExtractor */
 	private $namespaceExtractor;
@@ -32,14 +42,50 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @return string[] path(string) => namespace
+	 */
+	private function getRootNamespaces()
+	{
+		if ($this->normalizedRootNamespaces === null) {
+			$this->normalizedRootNamespaces = SniffSettingsHelper::normalizeAssociativeArray($this->rootNamespaces);
+		}
+
+		return $this->normalizedRootNamespaces;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getSkipDirs()
+	{
+		if ($this->normalizedSkipDirs === null) {
+			$this->normalizedSkipDirs = SniffSettingsHelper::normalizeArray($this->skipDirs);
+		}
+
+		return $this->normalizedSkipDirs;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getIgnoredNamespaces()
+	{
+		if ($this->normalizedIgnoredNamespaces === null) {
+			$this->normalizedIgnoredNamespaces = SniffSettingsHelper::normalizeArray($this->ignoredNamespaces);
+		}
+
+		return $this->normalizedIgnoredNamespaces;
+	}
+
+	/**
 	 * @return \SlevomatCodingStandard\Sniffs\Files\FilepathNamespaceExtractor
 	 */
 	private function getNamespaceExtractor()
 	{
 		if ($this->namespaceExtractor === null) {
 			$this->namespaceExtractor = new FilepathNamespaceExtractor(
-				$this->rootNamespaces,
-				$this->skipDirs
+				$this->getRootNamespaces(),
+				$this->getSkipDirs()
 			);
 		}
 
@@ -78,7 +124,7 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 			return;
 		}
 
-		foreach ($this->ignoredNamespaces as $ignoredNamespace) {
+		foreach ($this->getIgnoredNamespaces() as $ignoredNamespace) {
 			if (StringHelper::startsWith($typeName, $ignoredNamespace . '\\')) {
 				return;
 			}
