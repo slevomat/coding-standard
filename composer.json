@@ -24,5 +24,11 @@
 		"files": [
 			"vendor/consistence/coding-standard/tests/Sniffs/TestCase.php"
 		]
-	}
+	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "git@github.com:slevomat/PHP_CodeSniffer.git"
+		}
+	]
 }

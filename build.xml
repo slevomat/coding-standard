@@ -30,6 +30,8 @@
 		>
 			<arg value="--exclude"/>
 			<arg path="tests/Helpers/data/php7"/>
+			<arg value="--exclude"/>
+			<arg path="tests/Sniffs/Typehints/data"/>
 			<arg path="SlevomatCodingStandard" />
 			<arg path="tests" />
 		</exec>
