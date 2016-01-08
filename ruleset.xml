@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <ruleset name="Slevomat Coding Standard">
-	<rule ref="SlevomatCodingStandard/ruleset.xml" />
+	<rule ref="SlevomatCodingStandard/ruleset.xml">
+		<exclude name="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly"/>
+	</rule>
 	<rule ref="vendor/consistence/coding-standard/Consistence/ruleset.xml" />
 	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
 		<properties>
