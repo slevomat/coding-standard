@@ -14,7 +14,7 @@
 		"phing/phing": "^2.9",
 		"phpstan/phpstan": "dev-dev#1cb3904e17",
 		"phpunit/phpunit": "^5.0",
-		"satooshi/php-coveralls": "dev-master"
+		"satooshi/php-coveralls": "^1.0"
 	},
   	"autoload-dev": {
 		"psr-4": {
