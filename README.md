@@ -215,7 +215,7 @@ If you want to use the whole coding standard, besides requiring `slevomat/coding
 ```JSON
 {
 	"require-dev": {
-		"consistence/coding-standard": "^0.8"
+		"consistence/coding-standard": "^0.10"
 	}
 }
 ```
