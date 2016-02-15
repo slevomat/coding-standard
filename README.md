@@ -242,16 +242,6 @@ vendor/bin/phpcs --standard=ruleset.xml --extensions=php --encoding=utf-8 --tab-
 
 If you don't want to follow the whole standard, but find a handful of included sniffs useful, you can use them selectively.
 
-Besides requiring `slevomat/coding-standard` in composer.json, require also PHP_CodeSniffer in desired version:
-
-```JSON
-{
-	"require-dev": {
-		"squizlabs/php_codesniffer": "2.5.0"
-	}
-}
-```
-
 You can choose one of two ways to run only selected sniffs from the standard on your codebase:
 
 ### List all sniffs to run
