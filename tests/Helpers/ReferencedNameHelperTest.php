@@ -99,4 +99,13 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertSame('\OtherNamespace\Lorem', $names[1]->getNameAsReferencedInFile());
 	}
 
+	public function testConstantIsNotReferencedName()
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/class-constant.php'
+		);
+		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
+		$this->assertCount(0, $names);
+	}
+
 }

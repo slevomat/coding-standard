@@ -161,6 +161,7 @@ class ReferencedNameHelper
 			T_DOUBLE_COLON,
 			T_OBJECT_OPERATOR,
 			T_NAMESPACE,
+			T_CONST,
 		];
 
 		if ($previousToken['code'] === T_USE) {
