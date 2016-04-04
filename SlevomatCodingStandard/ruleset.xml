@@ -1,2 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Slevomat Coding Standard" />
+<ruleset name="Slevomat Coding Standard">
+	<rule ref="Squiz.WhiteSpace.ControlStructureSpacing">
+		<exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingAfterOpenBrace"/><!-- errors on multiline ifs-->
+	</rule>
+</ruleset>
