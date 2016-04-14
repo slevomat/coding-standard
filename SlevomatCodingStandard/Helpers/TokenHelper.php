@@ -34,7 +34,7 @@ class TokenHelper
 	 * @param integer|integer[] $types
 	 * @param integer $startPointer search starts at this token, inclusive
 	 * @param integer|null $endPointer search ends at this token, exclusive
-	 * @return integer|boolean
+	 * @return integer|null
 	 */
 	public static function findNextExcluding(PHP_CodeSniffer_File $phpcsFile, $types, $startPointer, $endPointer = null)
 	{
@@ -49,7 +49,7 @@ class TokenHelper
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param integer $startPointer search starts at this token, inclusive
 	 * @param integer|null $endPointer search ends at this token, exclusive
-	 * @return integer|boolean
+	 * @return integer|null
 	 */
 	public static function findNextAnyToken(PHP_CodeSniffer_File $phpcsFile, $startPointer, $endPointer = null)
 	{
@@ -60,7 +60,7 @@ class TokenHelper
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param integer $startPointer search starts at this token, inclusive
 	 * @param integer|null $endPointer search ends at this token, exclusive
-	 * @return integer|boolean
+	 * @return integer|null
 	 */
 	public static function findPreviousNonWhitespace(PHP_CodeSniffer_File $phpcsFile, $startPointer, $endPointer = null)
 	{
@@ -72,7 +72,7 @@ class TokenHelper
 	 * @param integer[]|integer $types
 	 * @param integer $startPointer search starts at this token, inclusive
 	 * @param integer|null $endPointer search ends at this token, exclusive
-	 * @return integer|boolean
+	 * @return integer|null
 	 */
 	public static function findPreviousExcluding(PHP_CodeSniffer_File $phpcsFile, $types, $startPointer, $endPointer = null)
 	{
