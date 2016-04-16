@@ -86,6 +86,14 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertNoSniffError($report, 5);
 	}
 
+	public function testTypeComment()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/unusedUsesTypeComment.php', [
+			'searchAnnotations' => true,
+		]);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
 	public function testMatchingCaseOfUseAndClassConstant()
 	{
 		$report = $this->checkFile(__DIR__ . '/data/matchingCaseOfUseAndClassConstant.php');
