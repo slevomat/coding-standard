@@ -43,6 +43,35 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		);
 	}
 
+	public function dataDeclareStrictTypesIncorrectFormat()
+	{
+		return [
+			[
+				__DIR__ . '/data/declareStrictTypesIncorrectFormat1.php',
+			],
+			[
+				__DIR__ . '/data/declareStrictTypesIncorrectFormat2.php',
+			],
+			[
+				__DIR__ . '/data/declareStrictTypesIncorrectFormat3.php',
+			],
+		];
+	}
+
+	/**
+	 * @dataProvider dataDeclareStrictTypesIncorrectFormat
+	 * @param string $file
+	 */
+	public function testDeclareStrictTypesIncorrectFormat($file)
+	{
+		$report = $this->checkFile($file);
+		$this->assertSniffError(
+			$report,
+			1,
+			DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT
+		);
+	}
+
 	public function testDeclareStrictTwoNewlines()
 	{
 		$file = __DIR__ . '/data/declareStrictTypesTwoNewlines.php';
@@ -78,6 +107,11 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 	public function testDeclareStrictOneSpace()
 	{
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/declareStrictTypesOneSpace.php'));
+	}
+
+	public function testDeclareStrictWithTicks()
+	{
+		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/declareStrictTypesWithTicks.php'));
 	}
 
 }
