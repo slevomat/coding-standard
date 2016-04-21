@@ -10,6 +10,8 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 
 	const CODE_DECLARE_STRICT_TYPES_MISSING = 'declareStrictTypesMissing';
 
+	const CODE_INCORRECT_STRICT_TYPES_FORMAT = 'incorrectStrictTypesFormat';
+
 	const CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE = 'incorrectWhitespaceBetweenOpenTagAndDeclare';
 
 	public $newlinesCountBetweenOpenTagAndDeclare = 0;
@@ -45,16 +47,36 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 			$this->reportMissingDeclareStrict($phpcsFile, $openTagPointer);
 			return;
 		}
-		$stringPointer = $phpcsFile->findNext(T_STRING, $declarePointer + 1);
-		if ($tokens[$stringPointer]['content'] !== 'strict_types') {
+
+		$strictTypesPointer = null;
+		for ($i = $tokens[$declarePointer]['parenthesis_opener'] + 1; $i < $tokens[$declarePointer]['parenthesis_closer']; $i++) {
+			if ($tokens[$i]['code'] === T_STRING && $tokens[$i]['content'] === 'strict_types') {
+				$strictTypesPointer = $i;
+				break;
+			}
+		}
+
+		if ($strictTypesPointer === null) {
 			$this->reportMissingDeclareStrict($phpcsFile, $declarePointer);
 			return;
 		}
 
-		$numberPointer = $phpcsFile->findNext(T_LNUMBER, $stringPointer + 1);
+		$numberPointer = $phpcsFile->findNext(T_LNUMBER, $strictTypesPointer + 1);
 		if ($tokens[$numberPointer]['content'] !== '1') {
 			$this->reportMissingDeclareStrict($phpcsFile, $declarePointer);
 			return;
+		}
+
+		$strictTypesContent = TokenHelper::getContent($phpcsFile, $strictTypesPointer, $numberPointer + 1);
+		if ($strictTypesContent !== 'strict_types = 1') {
+			$phpcsFile->addError(
+				sprintf(
+					'Expected strict_types = 1, found %s.',
+					$strictTypesContent
+				),
+				$strictTypesPointer,
+				self::CODE_INCORRECT_STRICT_TYPES_FORMAT
+			);
 		}
 
 		$openingWhitespace = substr($tokens[$openTagPointer]['content'], strlen('<?php'));
@@ -98,7 +120,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 	private function reportMissingDeclareStrict(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
 		$phpcsFile->addError(
-			'Missing declare(strict_types=1).',
+			'Missing declare(strict_types = 1).',
 			$openTagPointer,
 			self::CODE_DECLARE_STRICT_TYPES_MISSING
 		);
