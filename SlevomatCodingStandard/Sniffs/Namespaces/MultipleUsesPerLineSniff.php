@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-use PHP_CodeSniffer_File;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
 class MultipleUsesPerLineSniff implements \PHP_CodeSniffer_Sniff
@@ -26,7 +25,7 @@ class MultipleUsesPerLineSniff implements \PHP_CodeSniffer_Sniff
 	 * @param int $usePointer
 	 * @return int|null
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $usePointer)
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $usePointer)
 	{
 		if (
 			UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer)

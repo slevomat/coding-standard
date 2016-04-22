@@ -2,8 +2,6 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-use PHP_CodeSniffer_File;
-
 /**
  * Terms "unqualified", "qualified" and "fully qualified" have the same meaning as described here:
  * http://php.net/manual/en/language.namespaces.rules.php
@@ -43,7 +41,7 @@ class NamespaceHelper
 	 * @param int $anyPointer any pointer type where the search begins from (backwards)
 	 * @return string|null
 	 */
-	public static function findCurrentNamespaceName(PHP_CodeSniffer_File $phpcsFile, int $anyPointer)
+	public static function findCurrentNamespaceName(\PHP_CodeSniffer_File $phpcsFile, int $anyPointer)
 	{
 		$namespacePointer = $phpcsFile->findPrevious(T_NAMESPACE, $anyPointer);
 		if ($namespacePointer === false) {

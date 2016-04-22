@@ -2,8 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\Types;
 
-use PHP_CodeSniffer_File;
-
 class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer_Sniff
 {
 
@@ -24,7 +22,7 @@ class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer_Sniff
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $stackPointer
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPointer)
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $stackPointer)
 	{
 		$tokens = $phpcsFile->getTokens();
 		$typeToken = $tokens[$stackPointer];
