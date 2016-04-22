@@ -7,14 +7,14 @@ abstract class WithAnnotation
 {
 
 	/**
-	 * @var boolean
+	 * @var bool
 	 */
 	const WITH_ANNOTATION = true;
 
 	const WITHOUT_ANNOTATION = false;
 
 	/**
-	 * @var integer
+	 * @var int
 	 */
 	protected static $withAnnotation = 1;
 

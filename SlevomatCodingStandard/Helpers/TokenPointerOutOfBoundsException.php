@@ -5,18 +5,13 @@ namespace SlevomatCodingStandard\Helpers;
 class TokenPointerOutOfBoundsException extends \Exception
 {
 
-	/** @var integer */
+	/** @var int */
 	private $pointer;
 
-	/** @var integer */
+	/** @var int */
 	private $lastTokenPointer;
 
-	/**
-	 * @param integer $pointer
-	 * @param integer $lastTokenPointer
-	 * @param \Exception|null $previous
-	 */
-	public function __construct($pointer, $lastTokenPointer, \Exception $previous = null)
+	public function __construct(int $pointer, int $lastTokenPointer, \Exception $previous = null)
 	{
 		parent::__construct(
 			sprintf(
@@ -32,18 +27,12 @@ class TokenPointerOutOfBoundsException extends \Exception
 		$this->lastTokenPointer = $lastTokenPointer;
 	}
 
-	/**
-	 * @return integer
-	 */
-	public function getPointer()
+	public function getPointer(): int
 	{
 		return $this->pointer;
 	}
 
-	/**
-	 * @return integer
-	 */
-	public function getLastTokenPointer()
+	public function getLastTokenPointer(): int
 	{
 		return $this->lastTokenPointer;
 	}

@@ -29,9 +29,9 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 	private $normalizedAlwaysUsedPropertiesSuffixes;
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_CLASS,
@@ -41,7 +41,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @return string[]
 	 */
-	private function getAlwaysUsedPropertiesAnnotations()
+	private function getAlwaysUsedPropertiesAnnotations(): array
 	{
 		if ($this->normalizedAlwaysUsedPropertiesAnnotations === null) {
 			$this->normalizedAlwaysUsedPropertiesAnnotations = SniffSettingsHelper::normalizeArray($this->alwaysUsedPropertiesAnnotations);
@@ -53,7 +53,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @return string[]
 	 */
-	private function getAlwaysUsedPropertiesSuffixes()
+	private function getAlwaysUsedPropertiesSuffixes(): array
 	{
 		if ($this->normalizedAlwaysUsedPropertiesSuffixes === null) {
 			$this->normalizedAlwaysUsedPropertiesSuffixes = SniffSettingsHelper::normalizeArray($this->alwaysUsedPropertiesSuffixes);
@@ -63,8 +63,9 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $classPointer
+	 * @param int $classPointer
 	 */
 	public function process(PHP_CodeSniffer_File $phpcsFile, $classPointer)
 	{
@@ -191,9 +192,9 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 	 * @param PHP_CodeSniffer_File $phpcsFile
 	 * @param mixed[] $tokens
 	 * @param mixed[] $classToken
-	 * @return integer[] string(name) => pointer
+	 * @return int[] string(name) => pointer
 	 */
-	private function getProperties(PHP_CodeSniffer_File $phpcsFile, array $tokens, array $classToken)
+	private function getProperties(PHP_CodeSniffer_File $phpcsFile, array $tokens, array $classToken): array
 	{
 		$reportedProperties = [];
 		$findPropertiesStartTokenPointer = $classToken['scope_opener'] + 1;
@@ -232,10 +233,10 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @param PHP_CodeSniffer_File $phpcsFile
 	 * @param mixed[] $tokens
-	 * @param integer $privateTokenPointer
+	 * @param int $privateTokenPointer
 	 * @return string[]
 	 */
-	private function getPhpDocTags(PHP_CodeSniffer_File $phpcsFile, array $tokens, $privateTokenPointer)
+	private function getPhpDocTags(PHP_CodeSniffer_File $phpcsFile, array $tokens, int $privateTokenPointer): array
 	{
 		$phpDocTokenCloseTagPointer = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $privateTokenPointer - 1);
 		$phpDocTokenCloseTag = $tokens[$phpDocTokenCloseTagPointer];
@@ -259,9 +260,9 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 	 * @param PHP_CodeSniffer_File $phpcsFile
 	 * @param mixed[] $tokens
 	 * @param mixed[] $classToken
-	 * @return integer[] string(name) => pointer
+	 * @return int[] string(name) => pointer
 	 */
-	private function getMethods(PHP_CodeSniffer_File $phpcsFile, array $tokens, array $classToken)
+	private function getMethods(PHP_CodeSniffer_File $phpcsFile, array $tokens, array $classToken): array
 	{
 		$reportedMethods = [];
 		$findMethodsStartTokenPointer = $classToken['scope_opener'] + 1;
@@ -292,10 +293,10 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @param PHP_CodeSniffer_File $phpcsFile
 	 * @param mixed[] $tokens
-	 * @param integer $methodTokenPointer
-	 * @return integer|null
+	 * @param int $methodTokenPointer
+	 * @return int|null
 	 */
-	private function findVisibilityModifier(PHP_CodeSniffer_File $phpcsFile, array $tokens, $methodTokenPointer)
+	private function findVisibilityModifier(PHP_CodeSniffer_File $phpcsFile, array $tokens, int $methodTokenPointer)
 	{
 		$visibilityModifiedTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $methodTokenPointer - 1);
 		$visibilityModifiedToken = $tokens[$visibilityModifiedTokenPointer];

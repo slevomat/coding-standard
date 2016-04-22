@@ -25,7 +25,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @return string[]
 	 */
-	private function getKeywordsToCheck()
+	private function getKeywordsToCheck(): array
 	{
 		if ($this->normalizedKeywordsToCheck === null) {
 			$this->normalizedKeywordsToCheck = SniffSettingsHelper::normalizeArray($this->keywordsToCheck);
@@ -35,9 +35,9 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		if (count($this->getKeywordsToCheck()) === 0) {
 			throw new \SlevomatCodingStandard\Sniffs\Namespaces\NoKeywordsException(self::class, 'keywordsToCheck');
@@ -51,8 +51,9 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $keywordPointer
+	 * @param int $keywordPointer
 	 */
 	public function process(PHP_CodeSniffer_File $phpcsFile, $keywordPointer)
 	{
@@ -81,13 +82,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 		}
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $keywordPointer
-	 * @param integer $nameStartPointer
-	 * @return integer Referenced name end pointer (exclusive)
-	 */
-	private function checkReferencedName(PHP_CodeSniffer_File $phpcsFile, $keywordPointer, $nameStartPointer)
+	private function checkReferencedName(PHP_CodeSniffer_File $phpcsFile, int $keywordPointer, int $nameStartPointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
 		$nameStartToken = $tokens[$nameStartPointer];
@@ -105,11 +100,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 		return $endPointer;
 	}
 
-	/**
-	 * @param string $keyword
-	 * @return string
-	 */
-	public static function getErrorCode($keyword)
+	public static function getErrorCode(string $keyword): string
 	{
 		return sprintf(self::CODE_NON_FULLY_QUALIFIED, ucfirst($keyword));
 	}

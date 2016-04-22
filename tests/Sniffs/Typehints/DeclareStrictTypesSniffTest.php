@@ -10,7 +10,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/declareStrictTypesMultipleOpenTags.php'));
 	}
 
-	public function dataDeclareStrictTypesMissing()
+	public function dataDeclareStrictTypesMissing(): array
 	{
 		return [
 			[
@@ -31,9 +31,9 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 	/**
 	 * @dataProvider dataDeclareStrictTypesMissing
 	 * @param string $file
-	 * @param integer $line
+	 * @param int $line
 	 */
-	public function testDeclareStrictTypesMissing($file, $line)
+	public function testDeclareStrictTypesMissing(string $file, int $line)
 	{
 		$report = $this->checkFile($file);
 		$this->assertSniffError(
@@ -43,7 +43,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		);
 	}
 
-	public function dataDeclareStrictTypesIncorrectFormat()
+	public function dataDeclareStrictTypesIncorrectFormat(): array
 	{
 		return [
 			[
@@ -62,7 +62,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 	 * @dataProvider dataDeclareStrictTypesIncorrectFormat
 	 * @param string $file
 	 */
-	public function testDeclareStrictTypesIncorrectFormat($file)
+	public function testDeclareStrictTypesIncorrectFormat(string $file)
 	{
 		$report = $this->checkFile($file);
 		$this->assertSniffError(
