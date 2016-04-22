@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\Typehints;
 
-use PHP_CodeSniffer_File;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 
 class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
@@ -34,7 +33,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $openTagPointer
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
 		if (isset(self::$alreadyProcessedFiles[$phpcsFile->getFilename()])) {
 			return;
@@ -114,7 +113,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 		}
 	}
 
-	private function reportMissingDeclareStrict(PHP_CodeSniffer_File $phpcsFile, int $openTagPointer)
+	private function reportMissingDeclareStrict(\PHP_CodeSniffer_File $phpcsFile, int $openTagPointer)
 	{
 		$phpcsFile->addError(
 			'Missing declare(strict_types = 1).',

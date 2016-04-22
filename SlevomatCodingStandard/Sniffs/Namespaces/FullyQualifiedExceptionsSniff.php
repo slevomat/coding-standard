@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-use PHP_CodeSniffer_File;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
@@ -66,7 +65,7 @@ class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer_Sniff
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $openTagPointer
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
 		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
