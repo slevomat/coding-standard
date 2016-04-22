@@ -11,12 +11,12 @@ abstract class WithDocCommentAndDescription
 	/**
 	 * Constant WITH_DOC_COMMENT_AND_DESCRIPTION
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	const WITH_DOC_COMMENT_AND_DESCRIPTION = true;
 
 	/**
-	 * @var boolean
+	 * @var bool
 	 */
 	const WITH_DOC_COMMENT = true;
 
@@ -25,12 +25,12 @@ abstract class WithDocCommentAndDescription
 	/**
 	 * Property with doc comment and description
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $withDocCommentAndDescription;
 
 	/**
-	 * @var boolean
+	 * @var bool
 	 */
 	protected static $withDocComment;
 

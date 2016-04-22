@@ -8,30 +8,21 @@ class ReferencedName
 	/** @var string */
 	private $nameAsReferencedInFile;
 
-	/** @var integer */
+	/** @var int */
 	private $pointer;
 
-	/**
-	 * @param string $nameAsReferencedInFile
-	 * @param integer $pointer
-	 */
-	public function __construct($nameAsReferencedInFile, $pointer)
+	public function __construct(string $nameAsReferencedInFile, int $pointer)
 	{
 		$this->nameAsReferencedInFile = $nameAsReferencedInFile;
 		$this->pointer = $pointer;
 	}
-	/**
-	 * @return string
-	 */
-	public function getNameAsReferencedInFile()
+
+	public function getNameAsReferencedInFile(): string
 	{
 		return $this->nameAsReferencedInFile;
 	}
 
-	/**
-	 * @return integer
-	 */
-	public function getPointer()
+	public function getPointer(): int
 	{
 		return $this->pointer;
 	}

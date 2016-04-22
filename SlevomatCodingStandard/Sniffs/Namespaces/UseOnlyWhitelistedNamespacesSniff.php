@@ -12,7 +12,7 @@ class UseOnlyWhitelistedNamespacesSniff implements \PHP_CodeSniffer_Sniff
 
 	const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified';
 
-	/** @var boolean */
+	/** @var bool */
 	public $allowUseFromRootNamespace = false;
 
 	/** @var string[] */
@@ -22,9 +22,9 @@ class UseOnlyWhitelistedNamespacesSniff implements \PHP_CodeSniffer_Sniff
 	private $normalizedNamespacesRequiredToUse;
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_USE,
@@ -34,7 +34,7 @@ class UseOnlyWhitelistedNamespacesSniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @return string[]
 	 */
-	private function getNamespacesRequiredToUse()
+	private function getNamespacesRequiredToUse(): array
 	{
 		if ($this->namespacesRequiredToUse !== null && $this->normalizedNamespacesRequiredToUse === null) {
 			$this->normalizedNamespacesRequiredToUse = SniffSettingsHelper::normalizeArray($this->namespacesRequiredToUse);
@@ -44,8 +44,9 @@ class UseOnlyWhitelistedNamespacesSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $usePointer
+	 * @param int $usePointer
 	 */
 	public function process(PHP_CodeSniffer_File $phpcsFile, $usePointer)
 	{

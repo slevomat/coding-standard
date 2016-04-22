@@ -27,11 +27,11 @@ class ReferencedNameHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $openTagPointer
-	 * @param boolean $searchAnnotations
+	 * @param int $openTagPointer
+	 * @param bool $searchAnnotations
 	 * @return \SlevomatCodingStandard\Helpers\ReferencedName[] referenced names
 	 */
-	public static function getAllReferencedNames(PHP_CodeSniffer_File $phpcsFile, $openTagPointer, $searchAnnotations = false)
+	public static function getAllReferencedNames(PHP_CodeSniffer_File $phpcsFile, int $openTagPointer, bool $searchAnnotations = false): array
 	{
 		$cacheKey = $phpcsFile->getFilename() . '-' . $openTagPointer . ($searchAnnotations ? '-annotations' : '-no-annotations');
 		if (!isset(self::$allReferencedTypesCache[$cacheKey])) {
@@ -43,11 +43,11 @@ class ReferencedNameHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $openTagPointer
-	 * @param boolean $searchAnnotations
+	 * @param int $openTagPointer
+	 * @param bool $searchAnnotations
 	 * @return \SlevomatCodingStandard\Helpers\ReferencedName[] referenced names
 	 */
-	private static function createAllReferencedNames(PHP_CodeSniffer_File $phpcsFile, $openTagPointer, $searchAnnotations)
+	private static function createAllReferencedNames(PHP_CodeSniffer_File $phpcsFile, int $openTagPointer, bool $searchAnnotations): array
 	{
 		$beginSearchAtPointer = $openTagPointer + 1;
 		$tokens = $phpcsFile->getTokens();
@@ -131,10 +131,10 @@ class ReferencedNameHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $startPointer
-	 * @return integer|null
+	 * @param int $startPointer
+	 * @return int|null
 	 */
-	public static function findReferencedNameEndPointer(PHP_CodeSniffer_File $phpcsFile, $startPointer)
+	public static function findReferencedNameEndPointer(PHP_CodeSniffer_File $phpcsFile, int $startPointer)
 	{
 		if (!self::isReferencedName($phpcsFile, $startPointer)) {
 			return null;
@@ -143,12 +143,7 @@ class ReferencedNameHelper
 		return TokenHelper::findNextExcluding($phpcsFile, array_merge([T_RETURN_TYPE], TokenHelper::$nameTokenCodes), $startPointer + 1);
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $startPointer
-	 * @return boolean
-	 */
-	private static function isReferencedName(PHP_CodeSniffer_File $phpcsFile, $startPointer)
+	private static function isReferencedName(PHP_CodeSniffer_File $phpcsFile, int $startPointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 

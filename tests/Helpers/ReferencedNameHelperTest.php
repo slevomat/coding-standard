@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Helpers;
 class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
-	public function dataGetAllReferencedNames()
+	public function dataGetAllReferencedNames(): array
 	{
 		return [
 			[
@@ -51,9 +51,9 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	/**
 	 * @dataProvider dataGetAllReferencedNames
 	 * @param string[] $foundTypes
-	 * @param boolean $searchAnnotations
+	 * @param bool $searchAnnotations
 	 */
-	public function testGetAllReferencedNames(array $foundTypes, $searchAnnotations)
+	public function testGetAllReferencedNames(array $foundTypes, bool $searchAnnotations)
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/lotsOfReferencedNames.php'

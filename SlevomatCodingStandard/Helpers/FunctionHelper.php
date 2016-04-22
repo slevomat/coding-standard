@@ -5,23 +5,13 @@ namespace SlevomatCodingStandard\Helpers;
 class FunctionHelper
 {
 
-	/**
-	 * @param \PHP_CodeSniffer_File $codeSnifferFile
-	 * @param integer $functionPointer
-	 * @return string
-	 */
-	public static function getName(\PHP_CodeSniffer_File $codeSnifferFile, $functionPointer)
+	public static function getName(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): string
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		return $tokens[$codeSnifferFile->findNext(T_STRING, $functionPointer + 1, $tokens[$functionPointer]['parenthesis_opener'])]['content'];
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer_File $codeSnifferFile
-	 * @param integer $functionPointer
-	 * @return string
-	 */
-	public static function getFullyQualifiedName(\PHP_CodeSniffer_File $codeSnifferFile, $functionPointer)
+	public static function getFullyQualifiedName(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): string
 	{
 		$name = self::getName($codeSnifferFile, $functionPointer);
 		$namespace = NamespaceHelper::findCurrentNamespaceName($codeSnifferFile, $functionPointer);
@@ -42,22 +32,12 @@ class FunctionHelper
 		}
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer_File $codeSnifferFile
-	 * @param integer $functionPointer
-	 * @return boolean
-	 */
-	public static function isAbstract(\PHP_CodeSniffer_File $codeSnifferFile, $functionPointer)
+	public static function isAbstract(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): bool
 	{
 		return !isset($codeSnifferFile->getTokens()[$functionPointer]['scope_opener']);
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer_File $codeSnifferFile
-	 * @param integer $functionPointer
-	 * @return boolean
-	 */
-	public static function isMethod(\PHP_CodeSniffer_File $codeSnifferFile, $functionPointer)
+	public static function isMethod(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): bool
 	{
 		foreach (array_reverse($codeSnifferFile->getTokens()[$functionPointer]['conditions']) as $conditionTokenCode) {
 			if (in_array($conditionTokenCode, [T_CLASS, T_INTERFACE, T_TRAIT, T_ANON_CLASS], true)) {
@@ -70,10 +50,10 @@ class FunctionHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $codeSnifferFile
-	 * @param integer $functionPointer
+	 * @param int $functionPointer
 	 * @return string[]
 	 */
-	public static function getParametersWithoutTypeHint(\PHP_CodeSniffer_File $codeSnifferFile, $functionPointer)
+	public static function getParametersWithoutTypeHint(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): array
 	{
 		return array_keys(array_filter(self::getParametersTypeHints($codeSnifferFile, $functionPointer), function ($parameterTypeHint) {
 			return $parameterTypeHint === null;
@@ -82,10 +62,10 @@ class FunctionHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $codeSnifferFile
-	 * @param integer $functionPointer
+	 * @param int $functionPointer
 	 * @return string[]
 	 */
-	public static function getParametersTypeHints(\PHP_CodeSniffer_File $codeSnifferFile, $functionPointer)
+	public static function getParametersTypeHints(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): array
 	{
 		$tokens = $codeSnifferFile->getTokens();
 
@@ -111,12 +91,7 @@ class FunctionHelper
 		return $parametersTypeHints;
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer_File $codeSnifferFile
-	 * @param integer $functionPointer
-	 * @return boolean
-	 */
-	public static function returnsValue(\PHP_CodeSniffer_File $codeSnifferFile, $functionPointer)
+	public static function returnsValue(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): bool
 	{
 		$tokens = $codeSnifferFile->getTokens();
 
@@ -137,10 +112,10 @@ class FunctionHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $codeSnifferFile
-	 * @param integer $functionPointer
+	 * @param int $functionPointer
 	 * @return string|null
 	 */
-	public static function findReturnTypeHint(\PHP_CodeSniffer_File $codeSnifferFile, $functionPointer)
+	public static function findReturnTypeHint(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer)
 	{
 		$tokens = $codeSnifferFile->getTokens();
 
@@ -170,32 +145,27 @@ class FunctionHelper
 		return $returnTypeHint;
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer_File $codeSnifferFile
-	 * @param integer $functionPointer
-	 * @return boolean
-	 */
-	public static function hasReturnTypeHint(\PHP_CodeSniffer_File $codeSnifferFile, $functionPointer)
+	public static function hasReturnTypeHint(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): bool
 	{
 		return self::findReturnTypeHint($codeSnifferFile, $functionPointer) !== null;
 	}
 
 	/**
 	 * @param \PHP_CodeSniffer_File $codeSnifferFile
-	 * @param integer $functionPointer
+	 * @param int $functionPointer
 	 * @return string[]
 	 */
-	public static function getParametersAnnotations(\PHP_CodeSniffer_File $codeSnifferFile, $functionPointer)
+	public static function getParametersAnnotations(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): array
 	{
 		return AnnotationHelper::getAnnotationsByName($codeSnifferFile, $functionPointer, '@param');
 	}
 
 	/**
 	 * @param \PHP_CodeSniffer_File $codeSnifferFile
-	 * @param integer $functionPointer
+	 * @param int $functionPointer
 	 * @return string|null
 	 */
-	public static function findReturnAnnotation(\PHP_CodeSniffer_File $codeSnifferFile, $functionPointer)
+	public static function findReturnAnnotation(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer)
 	{
 		$returnAnnotations = AnnotationHelper::getAnnotationsByName($codeSnifferFile, $functionPointer, '@return');
 

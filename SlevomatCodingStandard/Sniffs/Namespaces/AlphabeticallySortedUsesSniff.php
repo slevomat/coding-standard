@@ -16,9 +16,9 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 	private $lastUseTypeName;
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_OPEN_TAG,
@@ -26,8 +26,9 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $openTagPointer
+	 * @param int $openTagPointer
 	 */
 	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
@@ -92,12 +93,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
-	/**
-	 * @param string $a
-	 * @param string $b
-	 * @return integer
-	 */
-	private function compareStrings($a, $b)
+	private function compareStrings(string $a, string $b): int
 	{
 		$i = 0;
 		for (; $i < min(strlen($a), strlen($b)); $i++) {
@@ -123,11 +119,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 		return strnatcasecmp(substr($a, $i), substr($b, $i));
 	}
 
-	/**
-	 * @param string $character String of length 1
-	 * @return boolean
-	 */
-	private function isSpecialCharacter($character)
+	private function isSpecialCharacter(string $character): bool
 	{
 		return in_array($character, ['\\', '_'], true);
 	}

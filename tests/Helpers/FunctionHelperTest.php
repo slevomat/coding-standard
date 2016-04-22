@@ -149,9 +149,9 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'withAnnotations');
 		$this->assertSame([
 			'string $a',
-			'integer $b',
+			'int $b',
 		], FunctionHelper::getParametersAnnotations($codeSnifferFile, $functionPointer));
-		$this->assertSame('boolean', FunctionHelper::findReturnAnnotation($codeSnifferFile, $functionPointer));
+		$this->assertSame('bool', FunctionHelper::findReturnAnnotation($codeSnifferFile, $functionPointer));
 
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'withoutAnnotations');
 		$this->assertCount(0, FunctionHelper::getParametersAnnotations($codeSnifferFile, $functionPointer));

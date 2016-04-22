@@ -10,9 +10,9 @@ class TrailingArrayCommaSniff implements \PHP_CodeSniffer_Sniff
 	const CODE_MISSING_TRAILING_COMMA = 'missingTrailingComma';
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_OPEN_SHORT_ARRAY,
@@ -20,8 +20,9 @@ class TrailingArrayCommaSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $stackPointer
+	 * @param int $stackPointer
 	 */
 	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPointer)
 	{

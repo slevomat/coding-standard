@@ -10,7 +10,7 @@ class FilepathNamespaceExtractor
 	/** @var string[] */
 	private $rootNamespaces;
 
-	/** @var boolean[] dir(string) => true(boolean) */
+	/** @var bool[] dir(string) => true(bool) */
 	private $skipDirs;
 
 	/**
@@ -30,7 +30,7 @@ class FilepathNamespaceExtractor
 	 * @param string $path
 	 * @return string|null
 	 */
-	public function getTypeNameFromProjectPath($path)
+	public function getTypeNameFromProjectPath(string $path)
 	{
 		if (pathinfo($path, PATHINFO_EXTENSION) !== 'php') {
 			return null;

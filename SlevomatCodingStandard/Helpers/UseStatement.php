@@ -14,18 +14,13 @@ class UseStatement
 	/** @var string */
 	private $fullyQualifiedTypeName;
 
-	/** @var integer */
+	/** @var int */
 	private $usePointer;
 
-	/**
-	 * @param string $nameAsReferencedInFile
-	 * @param string $fullyQualifiedClassName
-	 * @param integer $usePointer T_USE pointer
-	 */
 	public function __construct(
-		$nameAsReferencedInFile,
-		$fullyQualifiedClassName,
-		$usePointer
+		string $nameAsReferencedInFile,
+		string $fullyQualifiedClassName,
+		int $usePointer
 	)
 	{
 		$this->nameAsReferencedInFile = $nameAsReferencedInFile;
@@ -34,43 +29,27 @@ class UseStatement
 		$this->usePointer = $usePointer;
 	}
 
-	/**
-	 * @param string $name
-	 * @return string
-	 */
-	public static function normalizedNameAsReferencedInFile($name)
+	public static function normalizedNameAsReferencedInFile(string $name): string
 	{
 		return strtolower($name);
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getNameAsReferencedInFile()
+	public function getNameAsReferencedInFile(): string
 	{
 		return $this->nameAsReferencedInFile;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getCanonicalNameAsReferencedInFile()
+	public function getCanonicalNameAsReferencedInFile(): string
 	{
 		return $this->normalizedNameAsReferencedInFile;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getFullyQualifiedTypeName()
+	public function getFullyQualifiedTypeName(): string
 	{
 		return $this->fullyQualifiedTypeName;
 	}
 
-	/**
-	 * @return integer
-	 */
-	public function getPointer()
+	public function getPointer(): int
 	{
 		return $this->usePointer;
 	}

@@ -24,7 +24,7 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	{
 		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITH_ANNOTATION'), '@var');
 		$this->assertCount(1, $annotations);
-		$this->assertSame('boolean', $annotations[0]);
+		$this->assertSame('bool', $annotations[0]);
 	}
 
 	public function testConstantWithoutAnnotation()
@@ -36,7 +36,7 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	{
 		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withAnnotation'), '@var');
 		$this->assertCount(1, $annotations);
-		$this->assertSame('integer', $annotations[0]);
+		$this->assertSame('int', $annotations[0]);
 	}
 
 	public function testPropertyWithoutAnnotation()
@@ -57,7 +57,7 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertCount(0, AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withoutAnnotation'), '@param'));
 	}
 
-	private function getTestedCodeSnifferFile()
+	private function getTestedCodeSnifferFile(): \PHP_CodeSniffer_File
 	{
 		if ($this->testedCodeSnifferFile === null) {
 			$this->testedCodeSnifferFile = $this->getCodeSnifferFile(
