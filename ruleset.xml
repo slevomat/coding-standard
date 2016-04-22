@@ -24,7 +24,6 @@
 	</rule>
 	<rule ref="SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces">
 		<properties>
-			<property name="allowUseFromRootNamespace" value="true"/>
 			<property name="namespacesRequiredToUse" type="array" value="SlevomatCodingStandard"/>
 		</properties>
 	</rule>

@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-use PHP_CodeSniffer_File;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
@@ -30,7 +29,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $openTagPointer
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
 		$this->lastUseTypeName = null;
 		$useStatements = UseStatementHelper::getUseStatements(
@@ -66,7 +65,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
 	 */
 	private function fixAlphabeticalOrder(
-		PHP_CodeSniffer_File $phpcsFile,
+		\PHP_CodeSniffer_File $phpcsFile,
 		array $useStatements
 	)
 	{

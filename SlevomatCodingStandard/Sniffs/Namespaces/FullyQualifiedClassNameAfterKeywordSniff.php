@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-use PHP_CodeSniffer_File;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -55,7 +54,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $keywordPointer
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $keywordPointer)
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $keywordPointer)
 	{
 		$nameStartPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $keywordPointer + 1);
 		$this->checkReferencedName($phpcsFile, $keywordPointer, $nameStartPointer);
@@ -82,7 +81,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 		}
 	}
 
-	private function checkReferencedName(PHP_CodeSniffer_File $phpcsFile, int $keywordPointer, int $nameStartPointer): int
+	private function checkReferencedName(\PHP_CodeSniffer_File $phpcsFile, int $keywordPointer, int $nameStartPointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
 		$nameStartToken = $tokens[$nameStartPointer];
