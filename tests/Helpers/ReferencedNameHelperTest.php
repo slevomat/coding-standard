@@ -86,10 +86,6 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 	public function testReturnTypehint()
 	{
-		if (PHP_VERSION_ID < 70000) {
-			$this->markTestSkipped('Available on PHP7 only');
-		}
-
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/php7/return-typehint.php'
 		);
