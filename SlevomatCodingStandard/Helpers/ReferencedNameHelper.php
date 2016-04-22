@@ -80,6 +80,7 @@ class ReferencedNameHelper
 						'integer',
 						'bool',
 						'boolean',
+						'callable',
 					], true);
 				});
 				foreach ($referencedNames as $name) {
