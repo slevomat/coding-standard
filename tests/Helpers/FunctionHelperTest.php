@@ -25,7 +25,7 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 	public function testNameInAnonymousClass()
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/php7/functionInAnonymousClass.php');
+		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionInAnonymousClass.php');
 		$this->assertSame('class@anonymous::fooMethod', FunctionHelper::getFullyQualifiedName($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooMethod')));
 		$this->assertSame('fooMethod', FunctionHelper::getName($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooMethod')));
 	}
@@ -114,7 +114,7 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		array $expectedParametersWithoutTypeHints
 	)
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/php7/functionParametersTypeHints.php');
+		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersTypeHints.php');
 
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, $functionName);
 		$this->assertSame($expectedParametersTypeHints, FunctionHelper::getParametersTypeHints($codeSnifferFile, $functionPointer));
@@ -150,7 +150,7 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 	public function testReturnTypeHint()
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/php7/functionReturnTypeHint.php');
+		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionReturnTypeHint.php');
 
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'withReturnTypeHint');
 		$this->assertTrue(FunctionHelper::hasReturnTypeHint($codeSnifferFile, $functionPointer));
