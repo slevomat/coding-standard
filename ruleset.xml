@@ -2,7 +2,6 @@
 <ruleset name="Slevomat Coding Standard">
 	<rule ref="SlevomatCodingStandard/ruleset.xml">
 		<exclude name="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly"/>
-		<exclude name="SlevomatCodingStandard.Typehints.TypeHintDeclaration"/>
 	</rule>
 	<rule ref="vendor/consistence/coding-standard/Consistence/ruleset.xml" />
 	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
@@ -27,6 +26,13 @@
 		<properties>
 			<property name="allowUseFromRootNamespace" value="true"/>
 			<property name="namespacesRequiredToUse" type="array" value="SlevomatCodingStandard"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Typehints.TypeHintDeclaration">
+		<properties>
+			<property name="usefulAnnotations" type="array" value="
+				@dataProvider
+			"/>
 		</properties>
 	</rule>
 </ruleset>

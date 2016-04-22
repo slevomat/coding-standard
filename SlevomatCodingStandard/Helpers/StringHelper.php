@@ -5,22 +5,12 @@ namespace SlevomatCodingStandard\Helpers;
 class StringHelper
 {
 
-	/**
-	 * @param string $haystack
-	 * @param string $needle
-	 * @return boolean
-	 */
-	public static function startsWith($haystack, $needle)
+	public static function startsWith(string $haystack, string $needle): bool
 	{
 		return strncmp($haystack, $needle, strlen($needle)) === 0;
 	}
 
-	/**
-	 * @param string $haystack
-	 * @param string $needle
-	 * @return boolean
-	 */
-	public static function endsWith($haystack, $needle)
+	public static function endsWith(string $haystack, string $needle): bool
 	{
 		return strlen($needle) === 0 || substr($haystack, -strlen($needle)) === $needle;
 	}

@@ -7,11 +7,11 @@ class AnnotationHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $codeSnifferFile
-	 * @param integer $pointer
+	 * @param int $pointer
 	 * @param string $annotationName
 	 * @return string[]
 	 */
-	public static function getAnnotationsByName(\PHP_CodeSniffer_File $codeSnifferFile, $pointer, $annotationName)
+	public static function getAnnotationsByName(\PHP_CodeSniffer_File $codeSnifferFile, int $pointer, string $annotationName): array
 	{
 		$annotations = self::getAnnotations($codeSnifferFile, $pointer);
 
@@ -24,10 +24,10 @@ class AnnotationHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $codeSnifferFile
-	 * @param integer $pointer
+	 * @param int $pointer
 	 * @return array
 	 */
-	public static function getAnnotations(\PHP_CodeSniffer_File $codeSnifferFile, $pointer)
+	public static function getAnnotations(\PHP_CodeSniffer_File $codeSnifferFile, int $pointer): array
 	{
 		$annotations = [];
 
