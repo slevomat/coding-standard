@@ -86,27 +86,18 @@
 	</target>
 
 	<target name="phpstan">
-		<php expression="PHP_VERSION_ID >= 70000 ?'true':'false'" returnProperty="isPHP7" level="verbose" />
-		<if>
-			<equals arg1="${isPHP7}" arg2="true" />
-			<then>
-				<exec
-					executable="vendor/bin/phpstan"
-					logoutput="true"
-					passthru="true"
-					checkreturn="true"
-				>
-					<arg value="analyse"/>
-					<arg value="-c"/>
-					<arg path="phpstan.neon"/>
-					<arg path="SlevomatCodingStandard"/>
-					<arg path="tests"/>
-				</exec>
-			</then>
-			<else>
-				<echo message="PHPStan requires PHP 7." />
-			</else>
-		</if>
+		<exec
+			executable="vendor/bin/phpstan"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
+		>
+			<arg value="analyse"/>
+			<arg value="-c"/>
+			<arg path="phpstan.neon"/>
+			<arg path="SlevomatCodingStandard"/>
+			<arg path="tests"/>
+		</exec>
 	</target>
 
 </project>
