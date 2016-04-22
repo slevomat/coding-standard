@@ -11,7 +11,7 @@ class YodaComparisonSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertNoSniffErrorInFile($resultFile);
 	}
 
-	public function dataIncorrectFile()
+	public function dataIncorrectFile(): array
 	{
 		$lineNumbers = [];
 		foreach (range(3, 22) as $lineNumber) {
@@ -23,9 +23,9 @@ class YodaComparisonSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 
 	/**
 	 * @dataProvider dataIncorrectFile
-	 * @param integer $lineNumber
+	 * @param int $lineNumber
 	 */
-	public function testIncorrectFile($lineNumber)
+	public function testIncorrectFile(int $lineNumber)
 	{
 		$resultFile = $this->checkFile(__DIR__ . '/data/allYodaComparisons.php');
 		$this->assertSniffError($resultFile, $lineNumber, YodaComparisonSniff::CODE_YODA_COMPARISON);

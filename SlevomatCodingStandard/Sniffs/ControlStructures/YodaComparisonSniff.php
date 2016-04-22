@@ -20,16 +20,16 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 
 	const DYNAMISM_FUNCTION_CALL = self::DYNAMISM_VARIABLE;
 
-	/** @var integer[] */
+	/** @var int[] */
 	private $tokenDynamism;
 
-	/** @var integer[] */
+	/** @var int[] */
 	private $stopTokenCodes;
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_IS_IDENTICAL,
@@ -40,9 +40,9 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	private function getTokenDynamism()
+	private function getTokenDynamism(): array
 	{
 		if ($this->tokenDynamism === null) {
 			$this->tokenDynamism = [
@@ -65,9 +65,9 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	private function getStopTokenCodes()
+	private function getStopTokenCodes(): array
 	{
 		if ($this->stopTokenCodes === null) {
 			$this->stopTokenCodes = [
@@ -88,8 +88,9 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $comparisonTokenPointer
+	 * @param int $comparisonTokenPointer
 	 */
 	public function process(\PHP_CodeSniffer_File $phpcsFile, $comparisonTokenPointer)
 	{
@@ -141,10 +142,10 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param mixed[] $tokens
-	 * @param integer $comparisonTokenPointer
+	 * @param int $comparisonTokenPointer
 	 * @return mixed[]
 	 */
-	private function getLeftSideTokens(\PHP_CodeSniffer_File $phpcsFile, array $tokens, $comparisonTokenPointer)
+	private function getLeftSideTokens(\PHP_CodeSniffer_File $phpcsFile, array $tokens, int $comparisonTokenPointer): array
 	{
 		$parenthesisDepth = 0;
 		$examinedTokenPointer = $comparisonTokenPointer;
@@ -179,10 +180,10 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param mixed[] $tokens
-	 * @param integer $comparisonTokenPointer
+	 * @param int $comparisonTokenPointer
 	 * @return mixed[]
 	 */
-	private function getRightSideTokens(\PHP_CodeSniffer_File $phpcsFile, array $tokens, $comparisonTokenPointer)
+	private function getRightSideTokens(\PHP_CodeSniffer_File $phpcsFile, array $tokens, int $comparisonTokenPointer): array
 	{
 		$parenthesisDepth = 0;
 		$examinedTokenPointer = $comparisonTokenPointer;
@@ -216,7 +217,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @param mixed[] $sideTokens
-	 * @return integer|null
+	 * @return int|null
 	 */
 	private function getDynamismForTokens(array $sideTokens)
 	{
@@ -261,7 +262,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 	 * @param mixed[] $tokens
 	 * @return mixed[]
 	 */
-	private function trimWhitespaceTokens(array $tokens)
+	private function trimWhitespaceTokens(array $tokens): array
 	{
 		foreach ($tokens as $pointer => $token) {
 			if ($token['code'] === T_WHITESPACE) {

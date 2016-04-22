@@ -22,9 +22,9 @@ class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer_Sniff
 	private $normalizedSpecialExceptionNames;
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_OPEN_TAG,
@@ -34,7 +34,7 @@ class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @return string[]
 	 */
-	private function getSpecialExceptionNames()
+	private function getSpecialExceptionNames(): array
 	{
 		if ($this->normalizedSpecialExceptionNames === null) {
 			$this->normalizedSpecialExceptionNames = SniffSettingsHelper::normalizeArray($this->specialExceptionNames);
@@ -44,8 +44,9 @@ class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $openTagPointer
+	 * @param int $openTagPointer
 	 */
 	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{

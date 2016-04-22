@@ -16,11 +16,12 @@ abstract class TestCase extends \Consistence\Sniffs\TestCase
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param string $filePath
 	 * @param mixed[] $sniffProperties
 	 * @return \PHP_CodeSniffer_File
 	 */
-	protected function checkFile($filePath, array $sniffProperties = [])
+	protected function checkFile($filePath, array $sniffProperties = []): \PHP_CodeSniffer_File
 	{
 		$codeSniffer = new PHP_CodeSniffer();
 		$codeSniffer->cli->setCommandLineValues([
@@ -53,10 +54,7 @@ abstract class TestCase extends \Consistence\Sniffs\TestCase
 		$propertyReflection->setValue($codeSniffer, $ruleset);
 	}
 
-	/**
-	 * @return string
-	 */
-	private function getSniffPath()
+	private function getSniffPath(): string
 	{
 		// copied from Consistence\Sniffs\TestCase because it's private and I needed to override checkFile
 		$path = preg_replace(

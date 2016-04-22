@@ -8,9 +8,9 @@ class AssignmentInConditionSniff implements \PHP_CodeSniffer_Sniff
 	const CODE_ASSIGNMENT_IN_CONDITION = 'assignmentInCondition';
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_IF,
@@ -20,8 +20,9 @@ class AssignmentInConditionSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $conditionStartPointer
+	 * @param int $conditionStartPointer
 	 */
 	public function process(\PHP_CodeSniffer_File $phpcsFile, $conditionStartPointer)
 	{
@@ -41,17 +42,11 @@ class AssignmentInConditionSniff implements \PHP_CodeSniffer_Sniff
 		$this->processCondition($phpcsFile, $parenthesisOpener, $parenthesisCloser, $type);
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $parenthesisOpener
-	 * @param integer $parenthesisCloser
-	 * @param string $conditionType
-	 */
 	private function processCondition(
 		\PHP_CodeSniffer_File $phpcsFile,
-		$parenthesisOpener,
-		$parenthesisCloser,
-		$conditionType
+		int $parenthesisOpener,
+		int $parenthesisCloser,
+		string $conditionType
 	)
 	{
 		$equalsTokenPointer = $phpcsFile->findNext(T_EQUAL, $parenthesisOpener + 1, $parenthesisCloser);

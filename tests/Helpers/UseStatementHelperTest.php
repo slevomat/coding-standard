@@ -87,14 +87,7 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertUseStatement('Lerdorf\isBar', 'isBar', $useStatements['isbar'], true, false);
 	}
 
-	/**
-	 * @param string $fullyQualifiedTypeName
-	 * @param string $referencedName
-	 * @param \SlevomatCodingStandard\Helpers\UseStatement $useStatement
-	 * @param boolean $isFunction
-	 * @param boolean $isConstant
-	 */
-	private function assertUseStatement($fullyQualifiedTypeName, $referencedName, UseStatement $useStatement, $isFunction, $isConstant)
+	private function assertUseStatement(string $fullyQualifiedTypeName, string $referencedName, UseStatement $useStatement, bool $isFunction, bool $isConstant)
 	{
 		$this->assertSame($fullyQualifiedTypeName, $useStatement->getFullyQualifiedTypeName());
 		$this->assertSame($referencedName, $useStatement->getNameAsReferencedInFile());

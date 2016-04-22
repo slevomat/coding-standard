@@ -20,9 +20,9 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 	private static $alreadyProcessedFiles = [];
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_OPEN_TAG,
@@ -30,8 +30,9 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $openTagPointer
+	 * @param int $openTagPointer
 	 */
 	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
@@ -113,11 +114,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 		}
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $openTagPointer
-	 */
-	private function reportMissingDeclareStrict(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
+	private function reportMissingDeclareStrict(PHP_CodeSniffer_File $phpcsFile, int $openTagPointer)
 	{
 		$phpcsFile->addError(
 			'Missing declare(strict_types = 1).',

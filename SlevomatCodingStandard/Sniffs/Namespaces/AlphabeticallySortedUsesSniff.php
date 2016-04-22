@@ -16,9 +16,9 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 	private $lastUse;
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_OPEN_TAG,
@@ -26,8 +26,9 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $openTagPointer
+	 * @param int $openTagPointer
 	 */
 	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
@@ -91,12 +92,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
-	/**
-	 * @param \SlevomatCodingStandard\Helpers\UseStatement $a
-	 * @param \SlevomatCodingStandard\Helpers\UseStatement $b
-	 * @return integer
-	 */
-	private function compareUseStatements(UseStatement $a, UseStatement $b)
+	private function compareUseStatements(UseStatement $a, UseStatement $b): int
 	{
 		if (!$a->hasSameType($b)) {
 			return $a->compareByType($b);
@@ -128,11 +124,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 		return strnatcasecmp(substr($aName, $i), substr($bName, $i));
 	}
 
-	/**
-	 * @param string $character String of length 1
-	 * @return boolean
-	 */
-	private function isSpecialCharacter($character)
+	private function isSpecialCharacter(string $character): bool
 	{
 		return in_array($character, ['\\', '_'], true);
 	}

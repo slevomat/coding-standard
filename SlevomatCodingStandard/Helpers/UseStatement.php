@@ -18,23 +18,17 @@ class UseStatement
 	/** @var string */
 	private $fullyQualifiedTypeName;
 
-	/** @var integer */
+	/** @var int */
 	private $usePointer;
 
 	/** @var string */
 	private $type;
 
-	/**
-	 * @param string $nameAsReferencedInFile
-	 * @param string $fullyQualifiedClassName
-	 * @param integer $usePointer T_USE pointer
-	 * @param string $type
-	 */
 	public function __construct(
-		$nameAsReferencedInFile,
-		$fullyQualifiedClassName,
-		$usePointer,
-		$type
+		string $nameAsReferencedInFile,
+		string $fullyQualifiedClassName,
+		int $usePointer,
+		string $type
 	)
 	{
 		$this->nameAsReferencedInFile = $nameAsReferencedInFile;
@@ -44,77 +38,47 @@ class UseStatement
 		$this->type = $type;
 	}
 
-	/**
-	 * @param string $name
-	 * @return string
-	 */
-	public static function normalizedNameAsReferencedInFile($name)
+	public static function normalizedNameAsReferencedInFile(string $name): string
 	{
 		return strtolower($name);
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getNameAsReferencedInFile()
+	public function getNameAsReferencedInFile(): string
 	{
 		return $this->nameAsReferencedInFile;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getCanonicalNameAsReferencedInFile()
+	public function getCanonicalNameAsReferencedInFile(): string
 	{
 		return $this->normalizedNameAsReferencedInFile;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getFullyQualifiedTypeName()
+	public function getFullyQualifiedTypeName(): string
 	{
 		return $this->fullyQualifiedTypeName;
 	}
 
-	/**
-	 * @return integer
-	 */
-	public function getPointer()
+	public function getPointer(): int
 	{
 		return $this->usePointer;
 	}
 
-	/**
-	 * @return boolean
-	 */
-	public function isConstant()
+	public function isConstant(): bool
 	{
 		return $this->type === self::TYPE_CONSTANT;
 	}
 
-	/**
-	 * @return boolean
-	 */
-	public function isFunction()
+	public function isFunction(): bool
 	{
 		return $this->type === self::TYPE_FUNCTION;
 	}
 
-	/**
-	 * @param self $that
-	 * @return boolean
-	 */
-	public function hasSameType(self $that)
+	public function hasSameType(self $that): bool
 	{
 		return $this->type === $that->type;
 	}
 
-	/**
-	 * @param self $that
-	 * @return integer
-	 */
-	public function compareByType(self $that)
+	public function compareByType(self $that): int
 	{
 		$order = [
 			self::TYPE_DEFAULT => 1,

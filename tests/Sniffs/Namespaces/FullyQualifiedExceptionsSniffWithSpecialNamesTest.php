@@ -5,15 +5,12 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 class FullyQualifiedExceptionsSniffWithSpecialNamesTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	/**
-	 * @return string
-	 */
-	protected function getSniffClassName()
+	protected function getSniffClassName(): string
 	{
 		return FullyQualifiedExceptionsSniff::class;
 	}
 
-	private function getFileReport()
+	private function getFileReport(): \PHP_CodeSniffer_File
 	{
 		return $this->checkFile(
 			__DIR__ . '/data/fullyQualifiedSpecialExceptionNames.php',

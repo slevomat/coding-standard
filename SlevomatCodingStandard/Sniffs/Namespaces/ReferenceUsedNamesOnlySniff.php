@@ -24,7 +24,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	/** @var string[] */
 	private $normalizedFullyQualifiedKeywords;
 
-	/** @var boolean */
+	/** @var bool */
 	public $allowFullyQualifiedExceptions = false;
 
 	/** @var string[] */
@@ -33,7 +33,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	/** @var string[]|null */
 	private $normalizedSpecialExceptionNames;
 
-	/** @var boolean */
+	/** @var bool */
 	public $allowPartialUses = true;
 
 	/**
@@ -47,9 +47,9 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	private $normalizedNamespacesRequiredToUse;
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_OPEN_TAG,
@@ -59,7 +59,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @return string[]
 	 */
-	private function getSpecialExceptionNames()
+	private function getSpecialExceptionNames(): array
 	{
 		if ($this->normalizedSpecialExceptionNames === null) {
 			$this->normalizedSpecialExceptionNames = SniffSettingsHelper::normalizeArray($this->specialExceptionNames);
@@ -71,7 +71,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @return string[]
 	 */
-	private function getNamespacesRequiredToUse()
+	private function getNamespacesRequiredToUse(): array
 	{
 		if ($this->namespacesRequiredToUse !== null && $this->normalizedNamespacesRequiredToUse === null) {
 			$this->normalizedNamespacesRequiredToUse = SniffSettingsHelper::normalizeArray($this->namespacesRequiredToUse);
@@ -83,7 +83,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @return string[]
 	 */
-	private function getFullyQualifiedKeywords()
+	private function getFullyQualifiedKeywords(): array
 	{
 		if ($this->normalizedFullyQualifiedKeywords === null) {
 			$this->normalizedFullyQualifiedKeywords = array_map(function ($keyword) {
@@ -98,8 +98,9 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $openTagPointer
+	 * @param int $openTagPointer
 	 */
 	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
@@ -153,11 +154,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 		}
 	}
 
-	/**
-	 * @param string $name
-	 * @return boolean
-	 */
-	private function isClassRequiredToBeUsed($name)
+	private function isClassRequiredToBeUsed(string $name): bool
 	{
 		if ($this->namespacesRequiredToUse === null) {
 			return true;

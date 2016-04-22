@@ -5,8 +5,8 @@ class FooClass
 
 	/**
 	 * @param string $a
-	 * @param integer $b
-	 * @return boolean
+	 * @param int $b
+	 * @return bool
 	 */
 	public function withAnnotations($a, $b)
 	{
