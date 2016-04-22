@@ -59,7 +59,7 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	public function testReturnTypehint()
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/php7/return-typehint.php'
+			__DIR__ . '/data/return-typehint.php'
 		);
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
 		$this->assertCount(2, $names);
