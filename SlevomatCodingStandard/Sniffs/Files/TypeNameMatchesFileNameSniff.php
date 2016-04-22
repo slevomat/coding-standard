@@ -30,9 +30,9 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 	private $namespaceExtractor;
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_CLASS,
@@ -44,7 +44,7 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @return string[] path(string) => namespace
 	 */
-	private function getRootNamespaces()
+	private function getRootNamespaces(): array
 	{
 		if ($this->normalizedRootNamespaces === null) {
 			$this->normalizedRootNamespaces = SniffSettingsHelper::normalizeAssociativeArray($this->rootNamespaces);
@@ -56,7 +56,7 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @return string[]
 	 */
-	private function getSkipDirs()
+	private function getSkipDirs(): array
 	{
 		if ($this->normalizedSkipDirs === null) {
 			$this->normalizedSkipDirs = SniffSettingsHelper::normalizeArray($this->skipDirs);
@@ -68,7 +68,7 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @return string[]
 	 */
-	private function getIgnoredNamespaces()
+	private function getIgnoredNamespaces(): array
 	{
 		if ($this->normalizedIgnoredNamespaces === null) {
 			$this->normalizedIgnoredNamespaces = SniffSettingsHelper::normalizeArray($this->ignoredNamespaces);
@@ -77,10 +77,7 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 		return $this->normalizedIgnoredNamespaces;
 	}
 
-	/**
-	 * @return \SlevomatCodingStandard\Sniffs\Files\FilepathNamespaceExtractor
-	 */
-	private function getNamespaceExtractor()
+	private function getNamespaceExtractor(): FilepathNamespaceExtractor
 	{
 		if ($this->namespaceExtractor === null) {
 			$this->namespaceExtractor = new FilepathNamespaceExtractor(
@@ -93,8 +90,9 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $stackPointer
+	 * @param int $stackPointer
 	 */
 	public function process(\PHP_CodeSniffer_File $phpcsFile, $stackPointer)
 	{

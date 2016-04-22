@@ -9,7 +9,7 @@ class SniffSettingsHelper
 	 * @param mixed[] $settings
 	 * @return mixed[]
 	 */
-	public static function normalizeArray(array $settings)
+	public static function normalizeArray(array $settings): array
 	{
 		$settings = array_map(function ($value) {
 			return trim($value);
@@ -24,7 +24,7 @@ class SniffSettingsHelper
 	 * @param mixed[] $settings
 	 * @return mixed[]
 	 */
-	public static function normalizeAssociativeArray(array $settings)
+	public static function normalizeAssociativeArray(array $settings): array
 	{
 		$normalizedSettings = [];
 		foreach ($settings as $key => $value) {

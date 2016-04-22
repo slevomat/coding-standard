@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function dataIgnoredNamesForIrrelevantTests()
+	public function dataIgnoredNamesForIrrelevantTests(): array
 	{
 		return [
 			[
@@ -428,7 +428,7 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		);
 	}
 
-	public function dataIgnoredNames()
+	public function dataIgnoredNames(): array
 	{
 		return [
 			[
@@ -447,10 +447,10 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 
 	/**
 	 * @dataProvider dataIgnoredNames
-	 * @param boolean $allowFullyQualifiedExceptions
+	 * @param bool $allowFullyQualifiedExceptions
 	 * @param string[] $ignoredNames
 	 */
-	public function testIgnoredNames($allowFullyQualifiedExceptions, array $ignoredNames)
+	public function testIgnoredNames(bool $allowFullyQualifiedExceptions, array $ignoredNames)
 	{
 		$report = $this->checkFile(
 			__DIR__ . '/data/ignoredNames.php',
@@ -474,7 +474,7 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		$this->assertNoSniffErrorInFile($report);
 	}
 
-	public function dataIgnoredNamesInNamespace()
+	public function dataIgnoredNamesInNamespace(): array
 	{
 		return [
 			[
@@ -493,10 +493,10 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 
 	/**
 	 * @dataProvider dataIgnoredNamesInNamespace
-	 * @param boolean $allowFullyQualifiedExceptions
+	 * @param bool $allowFullyQualifiedExceptions
 	 * @param string[] $ignoredNames
 	 */
-	public function testIgnoredNamesInNamespace($allowFullyQualifiedExceptions, array $ignoredNames)
+	public function testIgnoredNamesInNamespace(bool $allowFullyQualifiedExceptions, array $ignoredNames)
 	{
 		$report = $this->checkFile(
 			__DIR__ . '/data/ignoredNamesInNamespace.php',

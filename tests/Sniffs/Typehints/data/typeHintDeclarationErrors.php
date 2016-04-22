@@ -56,7 +56,7 @@ abstract class FooClass
 	}
 
 	/**
-	 * @return boolean
+	 * @return bool
 	 */
 	public function withoutReturnTypeHintAndWithSimpleReturnAnnotation()
 	{
@@ -95,7 +95,7 @@ abstract class FooClass
 	}
 
 	/**
-	 * @return boolean
+	 * @return bool
 	 */
 	abstract public function uselessDocCommentBecauseOfReturnTypeHint(): bool;
 
