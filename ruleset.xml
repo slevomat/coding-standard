@@ -2,7 +2,6 @@
 <ruleset name="Slevomat Coding Standard">
 	<rule ref="SlevomatCodingStandard/ruleset.xml">
 		<exclude name="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly"/>
-		<exclude name="SlevomatCodingStandard.Typehints.DeclareStrictTypes"/>
 		<exclude name="SlevomatCodingStandard.Typehints.TypeHintDeclaration"/>
 	</rule>
 	<rule ref="vendor/consistence/coding-standard/Consistence/ruleset.xml" />
