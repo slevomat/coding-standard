@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\Typehints;
 
@@ -80,7 +80,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		$openingWhitespace = substr($tokens[$openTagPointer]['content'], strlen('<?php'));
-		$newlinesCountBetweenOpenTagAndDeclare = (int) trim($this->newlinesCountBetweenOpenTagAndDeclare);
+		$newlinesCountBetweenOpenTagAndDeclare = (int) trim((string) $this->newlinesCountBetweenOpenTagAndDeclare);
 		if ($newlinesCountBetweenOpenTagAndDeclare === 0) {
 			if ($openingWhitespace !== ' ') {
 				$phpcsFile->addError(
