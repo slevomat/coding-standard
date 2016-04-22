@@ -85,9 +85,6 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 
 	public function testReturnTypehint()
 	{
-		if (PHP_VERSION_ID < 70000) {
-			$this->markTestSkipped('Available on PHP7 only');
-		}
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/php7/unusedUses.php'));
 	}
 
