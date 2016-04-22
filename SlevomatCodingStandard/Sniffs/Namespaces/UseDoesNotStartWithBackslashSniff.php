@@ -12,9 +12,9 @@ class UseDoesNotStartWithBackslashSniff implements \PHP_CodeSniffer_Sniff
 	const CODE_STARTS_WITH_BACKSLASH = 'UseStartsWithBackslash';
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_USE,
@@ -22,8 +22,9 @@ class UseDoesNotStartWithBackslashSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $usePointer
+	 * @param int $usePointer
 	 */
 	public function process(PHP_CodeSniffer_File $phpcsFile, $usePointer)
 	{

@@ -85,12 +85,7 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertUseStatement('Zero', 'Zero', $useStatements['zero']);
 	}
 
-	/**
-	 * @param string $fullyQualifiedTypeName
-	 * @param string $referencedName
-	 * @param \SlevomatCodingStandard\Helpers\UseStatement $useStatement
-	 */
-	private function assertUseStatement($fullyQualifiedTypeName, $referencedName, UseStatement $useStatement)
+	private function assertUseStatement(string $fullyQualifiedTypeName, string $referencedName, UseStatement $useStatement)
 	{
 		$this->assertSame($fullyQualifiedTypeName, $useStatement->getFullyQualifiedTypeName());
 		$this->assertSame($referencedName, $useStatement->getNameAsReferencedInFile());

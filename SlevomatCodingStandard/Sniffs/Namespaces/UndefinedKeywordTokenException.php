@@ -8,11 +8,7 @@ class UndefinedKeywordTokenException extends \Exception
 	/** @var string */
 	private $keyword;
 
-	/**
-	 * @param string $keyword
-	 * @param \Exception|null $previous
-	 */
-	public function __construct($keyword, \Exception $previous = null)
+	public function __construct(string $keyword, \Exception $previous = null)
 	{
 		parent::__construct(sprintf(
 			'Value for keyword token not found, constant "%s" is not defined',
@@ -21,10 +17,7 @@ class UndefinedKeywordTokenException extends \Exception
 		$this->keyword = $keyword;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getKeyword()
+	public function getKeyword(): string
 	{
 		return $this->keyword;
 	}

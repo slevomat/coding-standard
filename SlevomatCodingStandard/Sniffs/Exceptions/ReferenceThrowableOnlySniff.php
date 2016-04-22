@@ -14,9 +14,9 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer_Sniff
 	const CODE_REFERENCED_GENERAL_EXCEPTION = 'ReferencedGeneralException';
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_OPEN_TAG,
@@ -24,8 +24,9 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $openTagPointer
+	 * @param int $openTagPointer
 	 */
 	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{

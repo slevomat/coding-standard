@@ -15,20 +15,12 @@ class NamespaceHelper
 
 	const NAMESPACE_SEPARATOR = '\\';
 
-	/**
-	 * @param string $typeName
-	 * @return boolean
-	 */
-	public static function isFullyQualifiedName($typeName)
+	public static function isFullyQualifiedName(string $typeName): bool
 	{
 		return StringHelper::startsWith($typeName, self::NAMESPACE_SEPARATOR);
 	}
 
-	/**
-	 * @param string $typeName
-	 * @return boolean
-	 */
-	public static function hasNamespace($typeName)
+	public static function hasNamespace(string $typeName): bool
 	{
 		$parts = self::getNameParts($typeName);
 
@@ -39,7 +31,7 @@ class NamespaceHelper
 	 * @param string $name
 	 * @return string[]
 	 */
-	public static function getNameParts($name)
+	public static function getNameParts(string $name): array
 	{
 		$name = self::normalizeToCanonicalName($name);
 
@@ -48,10 +40,10 @@ class NamespaceHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $anyPointer any pointer type where the search begins from (backwards)
+	 * @param int $anyPointer any pointer type where the search begins from (backwards)
 	 * @return string|null
 	 */
-	public static function findCurrentNamespaceName(PHP_CodeSniffer_File $phpcsFile, $anyPointer)
+	public static function findCurrentNamespaceName(PHP_CodeSniffer_File $phpcsFile, int $anyPointer)
 	{
 		$namespacePointer = $phpcsFile->findPrevious(T_NAMESPACE, $anyPointer);
 		if ($namespacePointer === false) {
@@ -64,40 +56,23 @@ class NamespaceHelper
 		return TokenHelper::getContent($phpcsFile, $namespaceNameStartPointer, $namespaceNameEndPointer);
 	}
 
-	/**
-	 * @param string $name
-	 * @return string
-	 */
-	public static function getUnqualifiedNameFromFullyQualifiedName($name)
+	public static function getUnqualifiedNameFromFullyQualifiedName(string $name): string
 	{
 		$parts = self::getNameParts($name);
 		return $parts[count($parts) - 1];
 	}
 
-	/**
-	 * @param string $name
-	 * @return boolean
-	 */
-	public static function isQualifiedName($name)
+	public static function isQualifiedName(string $name): bool
 	{
 		return strpos($name, self::NAMESPACE_SEPARATOR) !== false;
 	}
 
-	/**
-	 * @param string $fullyQualifiedName
-	 * @return string
-	 */
-	public static function normalizeToCanonicalName($fullyQualifiedName)
+	public static function normalizeToCanonicalName(string $fullyQualifiedName): string
 	{
 		return ltrim($fullyQualifiedName, self::NAMESPACE_SEPARATOR);
 	}
 
-	/**
-	 * @param string $typeName
-	 * @param string $namespace
-	 * @return boolean
-	 */
-	public static function isTypeInNamespace($typeName, $namespace)
+	public static function isTypeInNamespace(string $typeName, string $namespace): bool
 	{
 		return StringHelper::startsWith(
 			self::normalizeToCanonicalName($typeName) . '\\',

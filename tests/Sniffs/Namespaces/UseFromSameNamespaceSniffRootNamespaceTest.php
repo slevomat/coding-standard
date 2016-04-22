@@ -5,10 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 class UseFromSameNamespaceSniffRootNamespaceTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	/**
-	 * @return string
-	 */
-	protected function getSniffClassName()
+	protected function getSniffClassName(): string
 	{
 		return UseFromSameNamespaceSniff::class;
 	}

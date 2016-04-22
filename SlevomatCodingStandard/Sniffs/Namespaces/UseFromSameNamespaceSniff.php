@@ -13,9 +13,9 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
 	const CODE_USE_FROM_SAME_NAMESPACE = 'UseFromSameNamespace';
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_USE,
@@ -23,8 +23,9 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $usePointer
+	 * @param int $usePointer
 	 */
 	public function process(PHP_CodeSniffer_File $phpcsFile, $usePointer)
 	{
@@ -73,10 +74,10 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $startPointer
-	 * @return integer|null
+	 * @param int $startPointer
+	 * @return int|null
 	 */
-	private function findAsPointer(PHP_CodeSniffer_File $phpcsFile, $startPointer)
+	private function findAsPointer(PHP_CodeSniffer_File $phpcsFile, int $startPointer)
 	{
 		$asPointer = $phpcsFile->findNext(T_AS, $startPointer, null, false, null, true);
 		if ($asPointer === false) {
