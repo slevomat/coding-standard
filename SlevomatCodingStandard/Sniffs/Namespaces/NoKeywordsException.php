@@ -11,7 +11,7 @@ class NoKeywordsException extends \Exception
 	/** @var string */
 	private $propertyName;
 
-	public function __construct(string $sniffClassName, string $propertyName, \Exception $previous = null)
+	public function __construct(string $sniffClassName, string $propertyName, \Throwable $previous = null)
 	{
 		parent::__construct(sprintf(
 			'Sniff %s requires an array of keywords set in property %s',
