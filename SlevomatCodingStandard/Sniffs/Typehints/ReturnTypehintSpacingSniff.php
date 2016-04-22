@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\Typehints;
 
-use PHP_CodeSniffer_File;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 
 class ReturnTypehintSpacingSniff implements \PHP_CodeSniffer_Sniff
@@ -29,7 +28,7 @@ class ReturnTypehintSpacingSniff implements \PHP_CodeSniffer_Sniff
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $returnTypePointer
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $returnTypePointer)
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $returnTypePointer)
 	{
 		$tokens = $phpcsFile->getTokens();
 		$beforeNamePointer = TokenHelper::findPreviousExcluding($phpcsFile, [T_NS_SEPARATOR, T_STRING], $returnTypePointer - 1);

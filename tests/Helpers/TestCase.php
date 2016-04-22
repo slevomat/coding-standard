@@ -2,9 +2,6 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-use PHP_CodeSniffer;
-use PHP_CodeSniffer_File;
-
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
 
@@ -117,7 +114,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 			}
 		}
 
-		// PHP_CodeSniffer defines more token constants
+		// \PHP_CodeSniffer defines more token constants
 		$constants = get_defined_constants(true);
 		foreach ($constants['user'] as $name => $value) {
 			if ($value === $code) {
@@ -134,7 +131,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 * @return mixed[]
 	 */
 	private function getTokenFromPointer(
-		PHP_CodeSniffer_File $codeSnifferFile,
+		\PHP_CodeSniffer_File $codeSnifferFile,
 		int $tokenPointer = null
 	): array
 	{
@@ -153,10 +150,10 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		return $tokens[$tokenPointer];
 	}
 
-	protected function getCodeSnifferFile(string $filename): PHP_CodeSniffer_File
+	protected function getCodeSnifferFile(string $filename): \PHP_CodeSniffer_File
 	{
-		$codeSniffer = new PHP_CodeSniffer();
-		$codeSnifferFile = new PHP_CodeSniffer_File(
+		$codeSniffer = new \PHP_CodeSniffer();
+		$codeSnifferFile = new \PHP_CodeSniffer_File(
 			$filename,
 			[],
 			[],

@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-use PHP_CodeSniffer_File;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
@@ -27,7 +26,7 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $usePointer
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $usePointer)
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $usePointer)
 	{
 		if (
 			UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer)
@@ -77,7 +76,7 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
 	 * @param int $startPointer
 	 * @return int|null
 	 */
-	private function findAsPointer(PHP_CodeSniffer_File $phpcsFile, int $startPointer)
+	private function findAsPointer(\PHP_CodeSniffer_File $phpcsFile, int $startPointer)
 	{
 		$asPointer = $phpcsFile->findNext(T_AS, $startPointer, null, false, null, true);
 		if ($asPointer === false) {

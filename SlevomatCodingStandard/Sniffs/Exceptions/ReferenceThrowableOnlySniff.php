@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\Exceptions;
 
-use PHP_CodeSniffer_File;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -28,7 +27,7 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer_Sniff
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $openTagPointer
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
 		$tokens = $phpcsFile->getTokens();
 		$message = sprintf('Referencing general \%s; use \%s instead', \Exception::class, \Throwable::class);
