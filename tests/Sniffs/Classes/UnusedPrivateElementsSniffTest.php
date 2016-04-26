@@ -60,6 +60,10 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 			'Class ClassWithSomeUnusedProperties contains unused private method: unusedStaticPrivateMethod'
 		);
 		$this->assertNoSniffError($resultFile, 73);
+
+		$this->assertNoSniffError($resultFile, 81);
+		$this->assertNoSniffError($resultFile, 86);
+		$this->assertNoSniffError($resultFile, 91);
 	}
 
 }

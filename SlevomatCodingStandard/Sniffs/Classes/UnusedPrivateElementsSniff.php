@@ -5,10 +5,13 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
+use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 
 class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 {
+
+	const NAME = 'SlevomatCodingStandard.Classes.UnusedPrivateElements';
 
 	const CODE_UNUSED_PROPERTY = 'unusedProperty';
 
@@ -60,6 +63,11 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		return $this->normalizedAlwaysUsedPropertiesSuffixes;
+	}
+
+	private function getSniffName(string $sniffName): string
+	{
+		return sprintf('%s.%s', self::NAME, $sniffName);
 	}
 
 	/**
@@ -171,20 +179,33 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 		$className = $tokens[$classNamePointer]['content'];
 
 		foreach ($reportedProperties as $name => $propertyTokenPointer) {
-			$phpcsFile->addError(sprintf(
-				'Class %s contains %s property: $%s',
-				$className,
-				isset($writeOnlyProperties[$name]) ? 'write-only' : 'unused',
-				$name
-			), $propertyTokenPointer, isset($writeOnlyProperties[$name]) ? self::CODE_WRITE_ONLY_PROPERTY : self::CODE_UNUSED_PROPERTY);
+			if (isset($writeOnlyProperties[$name])) {
+				if (!SuppressHelper::isSniffSuppressed($phpcsFile, $propertyTokenPointer, $this->getSniffName(self::CODE_WRITE_ONLY_PROPERTY))) {
+					$phpcsFile->addError(sprintf(
+						'Class %s contains write-only property: $%s',
+						$className,
+						$name
+					), $propertyTokenPointer, self::CODE_WRITE_ONLY_PROPERTY);
+				}
+			} else {
+				if (!SuppressHelper::isSniffSuppressed($phpcsFile, $propertyTokenPointer, $this->getSniffName(self::CODE_UNUSED_PROPERTY))) {
+					$phpcsFile->addError(sprintf(
+						'Class %s contains unused property: $%s',
+						$className,
+						$name
+					), $propertyTokenPointer, self::CODE_UNUSED_PROPERTY);
+				}
+			}
 		}
 
 		foreach ($reportedMethods as $name => $methodTokenPointer) {
-			$phpcsFile->addError(sprintf(
-				'Class %s contains unused private method: %s',
-				$className,
-				$name
-			), $methodTokenPointer, self::CODE_UNUSED_METHOD);
+			if (!SuppressHelper::isSniffSuppressed($phpcsFile, $methodTokenPointer, $this->getSniffName(self::CODE_UNUSED_METHOD))) {
+				$phpcsFile->addError(sprintf(
+					'Class %s contains unused private method: %s',
+					$className,
+					$name
+				), $methodTokenPointer, self::CODE_UNUSED_METHOD);
+			}
 		}
 	}
 
