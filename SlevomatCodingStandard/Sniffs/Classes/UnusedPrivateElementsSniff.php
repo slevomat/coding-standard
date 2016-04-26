@@ -81,7 +81,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 		$reportedProperties = $this->getProperties($phpcsFile, $tokens, $classToken);
 		$reportedMethods = $this->getMethods($phpcsFile, $tokens, $classToken);
 
-		if (count($reportedProperties) === 0) {
+		if (count($reportedProperties) + count($reportedMethods) === 0) {
 			return;
 		}
 
