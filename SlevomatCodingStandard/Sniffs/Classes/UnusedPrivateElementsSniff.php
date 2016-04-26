@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\Classes;
 
+use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
@@ -229,7 +230,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			}
 
 			$findPropertiesStartTokenPointer = $propertyTokenPointer + 1;
-			$phpDocTags = $this->getPhpDocTags($phpcsFile, $tokens, $visibilityModifiedTokenPointer);
+			$phpDocTags = $this->getPhpDocTags($phpcsFile, $visibilityModifiedTokenPointer);
 			foreach ($phpDocTags as $tag) {
 				preg_match('#([@a-zA-Z\\\]+)#', $tag, $matches);
 				if (in_array($matches[1], $this->getAlwaysUsedPropertiesAnnotations(), true)) {
@@ -254,28 +255,12 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param mixed[] $tokens
 	 * @param int $privateTokenPointer
 	 * @return string[]
 	 */
-	private function getPhpDocTags(\PHP_CodeSniffer_File $phpcsFile, array $tokens, int $privateTokenPointer): array
+	private function getPhpDocTags(\PHP_CodeSniffer_File $phpcsFile, int $privateTokenPointer): array
 	{
-		$phpDocTokenCloseTagPointer = TokenHelper::findPreviousNonWhitespace($phpcsFile, $privateTokenPointer - 1);
-		$phpDocTokenCloseTag = $tokens[$phpDocTokenCloseTagPointer];
-		if ($phpDocTokenCloseTag['code'] !== T_DOC_COMMENT_CLOSE_TAG) {
-			return [];
-		}
-
-		$tags = [];
-		$findPhpDocTagPointer = $phpcsFile->findPrevious(T_DOC_COMMENT_OPEN_TAG, $phpDocTokenCloseTagPointer - 1) + 1;
-		while (($phpDocTagTokenPointer = $phpcsFile->findNext([T_DOC_COMMENT_TAG], $findPhpDocTagPointer, $phpDocTokenCloseTagPointer)) !== false) {
-			$phpDocTagToken = $tokens[$phpDocTagTokenPointer];
-			$tags[] = $phpDocTagToken['content'];
-
-			$findPhpDocTagPointer++;
-		}
-
-		return $tags;
+		return array_keys(AnnotationHelper::getAnnotations($phpcsFile, $privateTokenPointer));
 	}
 
 	/**
