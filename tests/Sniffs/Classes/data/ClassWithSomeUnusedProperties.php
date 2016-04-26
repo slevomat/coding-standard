@@ -75,4 +75,22 @@ class ClassWithSomeUnusedProperties extends \Consistence\Object
 
 	}
 
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Classes.UnusedPrivateElements.unusedProperty
+	 */
+	private $unusedPropertyWithSuppress;
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Classes.UnusedPrivateElements.writeOnlyProperty
+	 */
+	private $writeOnlyPropertyWithSuppress;
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Classes.UnusedPrivateElements.unusedMethod
+	 */
+	private function unusedMethodWithSuppress()
+	{
+		$this->writeOnlyPropertyWithSuppress = true;
+	}
+
 }
