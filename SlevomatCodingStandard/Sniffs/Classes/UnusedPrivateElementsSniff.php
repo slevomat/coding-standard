@@ -222,11 +222,9 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 		while (($propertyTokenPointer = $phpcsFile->findNext(T_VARIABLE, $findPropertiesStartTokenPointer, $classToken['scope_closer'])) !== false) {
 			$visibilityModifiedTokenPointer = TokenHelper::findPreviousNonWhitespace($phpcsFile, $propertyTokenPointer - 1);
 			$visibilityModifiedToken = $tokens[$visibilityModifiedTokenPointer];
-			if (in_array($visibilityModifiedToken['code'], [T_PUBLIC, T_PROTECTED], true)) {
+			if ($visibilityModifiedToken['code'] !== T_PRIVATE) {
 				$findPropertiesStartTokenPointer = $propertyTokenPointer + 1;
 				continue;
-			} elseif ($visibilityModifiedToken['code'] !== T_PRIVATE) {
-				break;
 			}
 
 			$findPropertiesStartTokenPointer = $propertyTokenPointer + 1;
