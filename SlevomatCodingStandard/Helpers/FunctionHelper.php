@@ -96,7 +96,7 @@ class FunctionHelper
 		$tokens = $codeSnifferFile->getTokens();
 
 		for ($i = $tokens[$functionPointer]['scope_opener'] + 1; $i < $tokens[$functionPointer]['scope_closer']; $i++) {
-			if ($tokens[$i]['code'] === T_RETURN && $tokens[TokenHelper::findNextNonWhitespace($codeSnifferFile, $i + 1)]['code'] !== T_SEMICOLON) {
+			if ($tokens[$i]['code'] === T_RETURN && $tokens[TokenHelper::findNextEffective($codeSnifferFile, $i + 1)]['code'] !== T_SEMICOLON) {
 				foreach (array_reverse($tokens[$i]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
 					if ($conditionTokenCode === T_CLOSURE || $conditionTokenCode === T_ANON_CLASS) {
 						continue 2;

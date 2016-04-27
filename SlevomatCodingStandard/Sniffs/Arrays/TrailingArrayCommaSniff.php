@@ -2,6 +2,8 @@
 
 namespace SlevomatCodingStandard\Sniffs\Arrays;
 
+use SlevomatCodingStandard\Helpers\TokenHelper;
+
 class TrailingArrayCommaSniff implements \PHP_CodeSniffer_Sniff
 {
 
@@ -33,7 +35,7 @@ class TrailingArrayCommaSniff implements \PHP_CodeSniffer_Sniff
 			return;
 		}
 
-		$previousToCloseParenthesisPointer = $phpcsFile->findPrevious([T_WHITESPACE, T_COMMENT], $closeParenthesisPointer - 1, null, true);
+		$previousToCloseParenthesisPointer = TokenHelper::findPreviousEffective($phpcsFile, $closeParenthesisPointer - 1);
 		$previousToCloseParenthesisToken = $tokens[$previousToCloseParenthesisPointer];
 		if ($previousToCloseParenthesisToken['code'] !== T_COMMA && $closeParenthesisToken['line'] !== $previousToCloseParenthesisToken['line']) {
 			$fix = $phpcsFile->addFixableError(

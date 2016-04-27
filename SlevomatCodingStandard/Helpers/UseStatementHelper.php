@@ -8,7 +8,7 @@ class UseStatementHelper
 	public static function isAnonymousFunctionUse(\PHP_CodeSniffer_File $phpcsFile, int $usePointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
-		$nextPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $usePointer + 1);
+		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
 		$nextToken = $tokens[$nextPointer];
 
 		return $nextToken['code'] === T_OPEN_PARENTHESIS;

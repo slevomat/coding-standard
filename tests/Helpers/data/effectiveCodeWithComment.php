@@ -1,0 +1,8 @@
+<?php
+
+/* Comment */
+
+class Foo
+{
+
+}

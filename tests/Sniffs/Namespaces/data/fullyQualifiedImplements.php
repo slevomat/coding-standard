@@ -5,7 +5,7 @@ class Foo implements \SomeClass, \Some\OtherClass
 
 }
 
-class Ipsum implements Dolor
+class Ipsum implements /*\Omega, */ Dolor
 {
 
 }

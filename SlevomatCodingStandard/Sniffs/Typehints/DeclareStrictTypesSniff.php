@@ -42,7 +42,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 		self::$alreadyProcessedFiles[$phpcsFile->getFilename()] = true;
 
 		$tokens = $phpcsFile->getTokens();
-		$declarePointer = TokenHelper::findNextNonWhitespace($phpcsFile, $openTagPointer + 1);
+		$declarePointer = TokenHelper::findNextEffective($phpcsFile, $openTagPointer + 1);
 		if ($tokens[$declarePointer]['code'] !== T_DECLARE) {
 			$this->reportMissingDeclareStrict($phpcsFile, $openTagPointer);
 			return;
