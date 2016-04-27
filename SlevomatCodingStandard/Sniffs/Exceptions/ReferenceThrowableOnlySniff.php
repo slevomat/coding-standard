@@ -55,7 +55,7 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer_Sniff
 			if (!in_array($referencedName->getNameAsReferencedInFile(), ['\Exception', 'Exception'], true)) {
 				continue;
 			}
-			$previousPointer = TokenHelper::findPreviousNonWhitespace($phpcsFile, $referencedName->getPointer() - 1);
+			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $referencedName->getPointer() - 1);
 			if (in_array($tokens[$previousPointer]['code'], [T_EXTENDS, T_NEW, T_INSTANCEOF], true)) {
 				continue; // allow \Exception in extends and instantiating it
 			}

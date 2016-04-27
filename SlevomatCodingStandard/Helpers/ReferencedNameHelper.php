@@ -146,7 +146,7 @@ class ReferencedNameHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$previousPointer = TokenHelper::findPreviousNonWhitespace($phpcsFile, $startPointer - 1);
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $startPointer - 1);
 		$previousToken = $tokens[$previousPointer];
 
 		$skipTokenCodes = [
