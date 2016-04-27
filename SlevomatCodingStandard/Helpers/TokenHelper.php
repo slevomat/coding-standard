@@ -18,15 +18,27 @@ class TokenHelper
 		T_INTERFACE,
 	];
 
+	public static $ineffectiveTokenCodes = [
+		T_WHITESPACE,
+		T_COMMENT,
+		T_DOC_COMMENT,
+		T_DOC_COMMENT_OPEN_TAG,
+		T_DOC_COMMENT_CLOSE_TAG,
+		T_DOC_COMMENT_STAR,
+		T_DOC_COMMENT_STRING,
+		T_DOC_COMMENT_TAG,
+		T_DOC_COMMENT_WHITESPACE,
+	];
+
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param integer $startPointer search starts at this token, inclusive
 	 * @param integer|null $endPointer search ends at this token, exclusive
 	 * @return integer|null
 	 */
-	public static function findNextNonWhitespace(PHP_CodeSniffer_File $phpcsFile, $startPointer, $endPointer = null)
+	public static function findNextEffective(PHP_CodeSniffer_File $phpcsFile, $startPointer, $endPointer = null)
 	{
-		return self::findNextExcluding($phpcsFile, T_WHITESPACE, $startPointer, $endPointer);
+		return self::findNextExcluding($phpcsFile, self::$ineffectiveTokenCodes, $startPointer, $endPointer);
 	}
 
 	/**
@@ -62,9 +74,9 @@ class TokenHelper
 	 * @param integer|null $endPointer search ends at this token, exclusive
 	 * @return integer|null
 	 */
-	public static function findPreviousNonWhitespace(PHP_CodeSniffer_File $phpcsFile, $startPointer, $endPointer = null)
+	public static function findPreviousEffective(PHP_CodeSniffer_File $phpcsFile, $startPointer, $endPointer = null)
 	{
-		return self::findPreviousExcluding($phpcsFile, T_WHITESPACE, $startPointer, $endPointer);
+		return self::findPreviousExcluding($phpcsFile, self::$ineffectiveTokenCodes, $startPointer, $endPointer);
 	}
 
 	/**

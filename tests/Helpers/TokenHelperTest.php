@@ -5,22 +5,38 @@ namespace SlevomatCodingStandard\Helpers;
 class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
-	public function testFindNextNonWhitespace()
+	public function testFindNextEffective()
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/emptyPhpFile.php'
 		);
-		$this->assertTokenPointer(T_OPEN_TAG, 1, $codeSnifferFile, TokenHelper::findNextNonWhitespace($codeSnifferFile, 0));
+		$this->assertTokenPointer(T_OPEN_TAG, 1, $codeSnifferFile, TokenHelper::findNextEffective($codeSnifferFile, 0));
 	}
 
-	public function testFindNextNonWhitespaceAtEndOfFile()
+	public function testFindNextEffectiveAtEndOfFile()
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/emptyPhpFile.php'
 		);
 		$openTagPointer = $codeSnifferFile->findNext(T_OPEN_TAG, 0);
 		$this->assertTokenPointer(T_OPEN_TAG, 1, $codeSnifferFile, $openTagPointer);
-		$this->assertNull(TokenHelper::findNextNonWhitespace($codeSnifferFile, $openTagPointer + 1));
+		$this->assertNull(TokenHelper::findNextEffective($codeSnifferFile, $openTagPointer + 1));
+	}
+
+	public function testFindNextEffectiveWithComment()
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/effectiveCodeWithComment.php'
+		);
+		$this->assertTokenPointer(T_CLASS, 5, $codeSnifferFile, TokenHelper::findNextEffective($codeSnifferFile, 1));
+	}
+
+	public function testFindNextEffectiveWithDocComment()
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/effectiveCodeWithDocComment.php'
+		);
+		$this->assertTokenPointer(T_CLASS, 8, $codeSnifferFile, TokenHelper::findNextEffective($codeSnifferFile, 1));
 	}
 
 	public function testFindNothingNextExcluding()
@@ -74,14 +90,30 @@ class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertTokenPointer(T_VARIABLE, 3, $codeSnifferFile, TokenHelper::findNextAnyToken($codeSnifferFile, $variableTokenPointer));
 	}
 
-	public function testFindPreviousNonWhitespace()
+	public function testFindPreviousEffective()
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/sampleOne.php'
 		);
 		$barTokenPointer = $codeSnifferFile->findNext(T_STRING, 1);
-		$assignmentTokenPointer = TokenHelper::findPreviousNonWhitespace($codeSnifferFile, $barTokenPointer - 1);
+		$assignmentTokenPointer = TokenHelper::findPreviousEffective($codeSnifferFile, $barTokenPointer - 1);
 		$this->assertTokenPointer(T_EQUAL, 3, $codeSnifferFile, $assignmentTokenPointer);
+	}
+
+	public function testFindPreviousEffectiveWithComment()
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/effectiveCodeWithComment.php'
+		);
+		$this->assertTokenPointer(T_OPEN_TAG, 1, $codeSnifferFile, TokenHelper::findPreviousEffective($codeSnifferFile, $codeSnifferFile->findNext(T_CLASS, 0) - 1));
+	}
+
+	public function testFindPreviousEffectiveWithDocComment()
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/effectiveCodeWithDocComment.php'
+		);
+		$this->assertTokenPointer(T_OPEN_TAG, 1, $codeSnifferFile, TokenHelper::findPreviousEffective($codeSnifferFile, $codeSnifferFile->findNext(T_CLASS, 0) - 1));
 	}
 
 	public function testFindNothingPreviousExcluding()

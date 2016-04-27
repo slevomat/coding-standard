@@ -35,7 +35,7 @@ class UseDoesNotStartWithBackslashSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		$tokens = $phpcsFile->getTokens();
-		$nextTokenPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $usePointer + 1);
+		$nextTokenPointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
 		$nextToken = $tokens[$nextTokenPointer];
 
 		if ($nextToken['code'] === T_NS_SEPARATOR) {

@@ -58,7 +58,7 @@ class NamespaceHelper
 			return null;
 		}
 
-		$namespaceNameStartPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $namespacePointer + 1);
+		$namespaceNameStartPointer = TokenHelper::findNextEffective($phpcsFile, $namespacePointer + 1);
 		$namespaceNameEndPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $namespaceNameStartPointer + 1);
 
 		return TokenHelper::getContent($phpcsFile, $namespaceNameStartPointer, $namespaceNameEndPointer);

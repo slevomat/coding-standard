@@ -69,8 +69,8 @@ class ReferencedNameHelper
 				continue;
 			}
 
-			$nextTokenAfterEndPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $nameEndPointer);
-			$previousTokenBeforeStartPointer = TokenHelper::findPreviousNonWhitespace($phpcsFile, $nameStartPointer - 1);
+			$nextTokenAfterEndPointer = TokenHelper::findNextEffective($phpcsFile, $nameEndPointer);
+			$previousTokenBeforeStartPointer = TokenHelper::findPreviousEffective($phpcsFile, $nameStartPointer - 1);
 			$type = ReferencedName::TYPE_DEFAULT;
 			if ($nextTokenAfterEndPointer !== null && $previousTokenBeforeStartPointer !== null) {
 				if ($tokens[$nextTokenAfterEndPointer]['code'] === T_OPEN_PARENTHESIS) {
@@ -124,7 +124,7 @@ class ReferencedNameHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$previousPointer = TokenHelper::findPreviousNonWhitespace($phpcsFile, $startPointer - 1);
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $startPointer - 1);
 		$previousToken = $tokens[$previousPointer];
 
 		$skipTokenCodes = [

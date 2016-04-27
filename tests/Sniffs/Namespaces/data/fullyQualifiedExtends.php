@@ -1,6 +1,6 @@
 <?php
 
-class Foo extends \Lorem\Dolor
+class Foo extends /*\Omega\*/\Lorem\Dolor
 {
 
 }

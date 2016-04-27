@@ -15,7 +15,7 @@ class UseStatementHelper
 	public static function isAnonymousFunctionUse(PHP_CodeSniffer_File $phpcsFile, $usePointer)
 	{
 		$tokens = $phpcsFile->getTokens();
-		$nextPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $usePointer + 1);
+		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
 		$nextToken = $tokens[$nextPointer];
 
 		return $nextToken['code'] === T_OPEN_PARENTHESIS;
@@ -90,7 +90,7 @@ class UseStatementHelper
 		$names = [];
 		$tokens = $phpcsFile->getTokens();
 		foreach (self::getUseStatementPointers($phpcsFile, $openTagPointer) as $usePointer) {
-			$nextTokenFromUsePointer = TokenHelper::findNextNonWhitespace($phpcsFile, $usePointer + 1);
+			$nextTokenFromUsePointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
 			$type = UseStatement::TYPE_DEFAULT;
 			if ($tokens[$nextTokenFromUsePointer]['code'] === T_STRING) {
 				if ($tokens[$nextTokenFromUsePointer]['content'] === 'const') {

@@ -56,7 +56,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 	 */
 	public function process(PHP_CodeSniffer_File $phpcsFile, $keywordPointer)
 	{
-		$nameStartPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $keywordPointer + 1);
+		$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $keywordPointer + 1);
 		$this->checkReferencedName($phpcsFile, $keywordPointer, $nameStartPointer);
 
 		$tokens = $phpcsFile->getTokens();
@@ -70,7 +70,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 				if ($possibleCommaPointer !== null) {
 					$possibleCommaToken = $tokens[$possibleCommaPointer];
 					if ($possibleCommaToken['code'] === T_COMMA) {
-						$nameStartPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $possibleCommaPointer + 1);
+						$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $possibleCommaPointer + 1);
 						$possibleCommaPointer = $this->checkReferencedName($phpcsFile, $keywordPointer, $nameStartPointer);
 						continue;
 					}
