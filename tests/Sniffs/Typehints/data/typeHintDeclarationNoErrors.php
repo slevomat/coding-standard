@@ -199,4 +199,12 @@ abstract class FooClass
 	 */
 	abstract public function withNullableReturnAnnotation();
 
+	/**
+	 * @phpcsSuppress Whatever
+	 * @param string $s
+	 */
+	public function withAnySuppress(string $s)
+	{
+	}
+
 }
