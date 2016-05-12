@@ -9,7 +9,7 @@ class SuppressHelper
 
 	public static function isSniffSuppressed(\PHP_CodeSniffer_File $codeSnifferFile, int $pointer, string $suppressName): bool
 	{
-		return array_reduce(AnnotationHelper::getAnnotationsByName($codeSnifferFile, $pointer, self::ANNOTATION), function ($carry, $annotationContent) use ($suppressName) {
+		return array_reduce(AnnotationHelper::getAnnotationsByName($codeSnifferFile, $pointer, self::ANNOTATION), function (bool $carry, string $annotationContent = null) use ($suppressName): bool {
 			if ($annotationContent === $suppressName || strpos($suppressName, sprintf('%s.', $annotationContent)) === 0) {
 				$carry = true;
 			}

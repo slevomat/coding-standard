@@ -103,7 +103,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	private function getFullyQualifiedKeywords(): array
 	{
 		if ($this->normalizedFullyQualifiedKeywords === null) {
-			$this->normalizedFullyQualifiedKeywords = array_map(function ($keyword) {
+			$this->normalizedFullyQualifiedKeywords = array_map(function (string $keyword) {
 				if (!defined($keyword)) {
 					throw new \SlevomatCodingStandard\Sniffs\Namespaces\UndefinedKeywordTokenException($keyword);
 				}
