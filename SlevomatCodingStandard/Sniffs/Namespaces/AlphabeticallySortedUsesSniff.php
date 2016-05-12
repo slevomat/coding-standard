@@ -81,7 +81,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 			return $this->compareStrings($a->getFullyQualifiedTypeName(), $b->getFullyQualifiedTypeName());
 		});
 
-		$phpcsFile->fixer->addContent($firstUseStatement->getPointer(), implode(PHP_EOL, array_map(function (UseStatement $useStatement) {
+		$phpcsFile->fixer->addContent($firstUseStatement->getPointer(), implode(PHP_EOL, array_map(function (UseStatement $useStatement): string {
 			$unqualifiedName = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($useStatement->getFullyQualifiedTypeName());
 			if ($unqualifiedName === $useStatement->getNameAsReferencedInFile()) {
 				return sprintf('use %s;', $useStatement->getFullyQualifiedTypeName());
