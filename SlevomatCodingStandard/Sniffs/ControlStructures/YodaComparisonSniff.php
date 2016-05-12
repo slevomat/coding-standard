@@ -134,7 +134,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 
-		$phpcsFile->fixer->addContent($firstLeftPointer, trim(implode('', array_map(function (array $token) {
+		$phpcsFile->fixer->addContent($firstLeftPointer, trim(implode('', array_map(function (array $token): string {
 			return $token['content'];
 		}, $rightSideTokens))));
 	}
@@ -222,7 +222,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 	private function getDynamismForTokens(array $sideTokens)
 	{
 		$dynamism = $this->getTokenDynamism();
-		$sideTokens = array_values(array_filter($sideTokens, function (array $token) {
+		$sideTokens = array_values(array_filter($sideTokens, function (array $token): bool {
 			return !in_array($token['code'], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT, T_NS_SEPARATOR, T_PLUS, T_MINUS], true);
 		}));
 
