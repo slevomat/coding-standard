@@ -61,12 +61,12 @@ class ReferencedNameHelper
 
 		$types = [];
 
-		$matchTypesInAnnotation = function ($annotation, $nameStartPointer) use (&$types) {
+		$matchTypesInAnnotation = function (string $annotation, int $nameStartPointer) use (&$types) {
 			$annotation = trim($annotation, '@ ');
 			if (preg_match('#([a-zA-Z0-9_|\[\]\\\]+)#', $annotation, $matches) > 0) {
-				$referencedNames = array_filter(array_map(function ($name) {
+				$referencedNames = array_filter(array_map(function (string $name): string {
 					return trim($name, '[]');
-				}, explode('|', $matches[1])), function ($match) {
+				}, explode('|', $matches[1])), function (string $match): bool {
 					return !in_array($match, [
 						'null',
 						'self',

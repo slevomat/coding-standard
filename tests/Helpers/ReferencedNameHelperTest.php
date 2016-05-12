@@ -60,7 +60,7 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		);
 
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0, $searchAnnotations);
-		$this->assertSame($foundTypes, array_values(array_unique(array_map(function (ReferencedName $name) {
+		$this->assertSame($foundTypes, array_values(array_unique(array_map(function (ReferencedName $name): string {
 			return $name->getNameAsReferencedInFile();
 		}, $names))));
 	}

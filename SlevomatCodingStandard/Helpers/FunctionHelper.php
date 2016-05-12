@@ -55,7 +55,7 @@ class FunctionHelper
 	 */
 	public static function getParametersWithoutTypeHint(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): array
 	{
-		return array_keys(array_filter(self::getParametersTypeHints($codeSnifferFile, $functionPointer), function ($parameterTypeHint) {
+		return array_keys(array_filter(self::getParametersTypeHints($codeSnifferFile, $functionPointer), function (string $parameterTypeHint = null): bool {
 			return $parameterTypeHint === null;
 		}));
 	}

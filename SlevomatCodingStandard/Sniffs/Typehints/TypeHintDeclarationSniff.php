@@ -311,7 +311,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			return false;
 		}
 
-		return array_reduce(explode('|', $typeHintDefinition), function ($carry, $typeHint) use ($phpcsFile, $functionPointer) {
+		return array_reduce(explode('|', $typeHintDefinition), function (bool $carry, string $typeHint) use ($phpcsFile, $functionPointer): bool {
 			$fullyQualifiedTypeHint = $this->getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint);
 			if ($this->isTraversableTypeHint($fullyQualifiedTypeHint)) {
 				$carry = true;
@@ -351,7 +351,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	private function getNormalizedTraversableTypeHints(): array
 	{
 		if ($this->normalizedTraversableTypeHints === null) {
-			$this->normalizedTraversableTypeHints = array_flip(array_map(function ($typeHint) {
+			$this->normalizedTraversableTypeHints = array_flip(array_map(function (string $typeHint): string {
 				return NamespaceHelper::isFullyQualifiedName($typeHint) ? $typeHint : sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint);
 			}, SniffSettingsHelper::normalizeArray($this->traversableTypeHints)));
 		}
