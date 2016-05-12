@@ -62,7 +62,7 @@ class FilepathNamespaceExtractor
 
 		array_unshift($pathParts, $rootNamespace);
 
-		$typeName = implode('\\', array_filter($pathParts, function ($pathPart) {
+		$typeName = implode('\\', array_filter($pathParts, function (string $pathPart): bool {
 			return !isset($this->skipDirs[$pathPart]);
 		}));
 
