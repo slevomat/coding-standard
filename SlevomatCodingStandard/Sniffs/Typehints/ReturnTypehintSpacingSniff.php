@@ -43,6 +43,8 @@ class ReturnTypehintSpacingSniff implements \PHP_CodeSniffer_Sniff
 				$phpcsFile->addError($afterColonMessage, $returnTypePointer, self::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE);
 			}
 			$colonPointer = $phpcsFile->findPrevious(T_COLON, $beforeNamePointer - 1);
+		} else {
+			return;
 		}
 
 		$previousPointer = $colonPointer - 1;
