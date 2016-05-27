@@ -2,9 +2,8 @@
 	"name": "slevomat/coding-standard",
 	"license": "MIT",
 	"description": "Slevomat Coding Standard for PHP_CodeSniffer extends Consistence Coding Standard by providing sniffs with additional checks.",
-	"config": {
-		"preferred-install": "source"
-	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
 	"require": {
 		"php": "^7.0",
 		"jakub-onderka/php-parallel-lint": "^0.9.2",
@@ -20,10 +19,7 @@
 	"autoload-dev": {
 		"psr-4": {
 			"SlevomatCodingStandard\\": ["SlevomatCodingStandard/", "tests/"]
-		},
-		"files": [
-			"vendor/consistence/coding-standard/tests/Sniffs/TestCase.php"
-		]
+		}
 	},
 	"config": {
 		"bin-dir": "bin"
