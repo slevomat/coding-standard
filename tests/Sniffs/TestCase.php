@@ -2,70 +2,137 @@
 
 namespace SlevomatCodingStandard\Sniffs;
 
-abstract class TestCase extends \Consistence\Sniffs\TestCase
+abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
 
-	protected function assertNoSniffErrorInFile(\PHP_CodeSniffer_File $file)
-	{
-		$errors = $file->getErrors();
-		$this->assertEmpty($errors, sprintf('No errors expected but %d found.', count($errors)));
-	}
-
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
 	 * @param string $filePath
 	 * @param mixed[] $sniffProperties
 	 * @return \PHP_CodeSniffer_File
 	 */
-	protected function checkFile($filePath, array $sniffProperties = []): \PHP_CodeSniffer_File
+	protected function checkFile(string $filePath, array $sniffProperties = []): \PHP_CodeSniffer_File
 	{
 		$codeSniffer = new \PHP_CodeSniffer();
 		$codeSniffer->cli->setCommandLineValues([
-			'-s', // showSources must be on, so that errors are recorded
+			'-s',
 		]);
 
-		$this->setCodeSnifferRulesetProperties($codeSniffer, $sniffProperties);
+		if (count($sniffProperties) > 0) {
+			$propertyReflection = new \ReflectionProperty(\PHP_CodeSniffer::class, 'ruleset');
+			$propertyReflection->setAccessible(true);
+			$ruleset = $propertyReflection->getValue($codeSniffer);
+			$ruleset[$this->getSniffName()]['properties'] = $sniffProperties;
+			$propertyReflection->setValue($codeSniffer, $ruleset);
+		}
+
 		$codeSniffer->registerSniffs([$this->getSniffPath()], [], []);
 		$codeSniffer->populateTokenListeners();
 
 		return $codeSniffer->processFile($filePath);
 	}
 
-	/**
-	 * Uses reflection because \PHP_CodeSniffer::setSniffProperties
-	 * cannot be used to propagate settings into sniffs' register() method
-	 *
-	 * @param \PHP_CodeSniffer $codeSniffer
-	 * @param mixed[] $sniffProperties
-	 */
-	private function setCodeSnifferRulesetProperties(\PHP_CodeSniffer $codeSniffer, array $sniffProperties)
+	protected function assertNoSniffErrorInFile(\PHP_CodeSniffer_File $file)
 	{
-		if (count($sniffProperties) === 0) {
-			return;
-		}
-		$propertyReflection = new \ReflectionProperty(\PHP_CodeSniffer::class, 'ruleset');
-		$propertyReflection->setAccessible(true);
-		$ruleset = $propertyReflection->getValue($codeSniffer);
-		$ruleset[$this->getSniffName()]['properties'] = $sniffProperties;
-		$propertyReflection->setValue($codeSniffer, $ruleset);
+		$errors = $file->getErrors();
+		$this->assertEmpty($errors, sprintf('No errors expected, but %d errors found.', count($errors)));
 	}
 
-	private function getSniffPath(): string
+	protected function assertSniffError(\PHP_CodeSniffer_File $codeSnifferFile, int $line, string $code = null, string $message = null)
 	{
-		// copied from \Consistence\Sniffs\TestCase because it's private and I needed to override checkFile
-		$path = preg_replace(
+		$errors = $codeSnifferFile->getErrors();
+		$this->assertTrue(isset($errors[$line]), sprintf('Expected error on line %s, but none found.', $line));
+
+		$sniffCode = $this->getSniffName();
+		if ($code !== null) {
+			$sniffCode .= '.' . $code;
+		}
+
+		$this->assertTrue(
+			$this->hasError($errors[$line], $sniffCode, $message),
+			sprintf(
+				'Expected error %s%s, but none found on line %d.%sErrors found on line %d:%s%s%s',
+				$sniffCode,
+				$message !== null ? sprintf(' with message "%s"', $message) : '',
+				$line,
+				PHP_EOL . PHP_EOL,
+				$line,
+				PHP_EOL,
+				$this->getFormattedErrors($errors[$line]),
+				PHP_EOL
+			)
+		);
+	}
+
+	protected function assertNoSniffError(\PHP_CodeSniffer_File $codeSnifferFile, int $line)
+	{
+		$errors = $codeSnifferFile->getErrors();
+		$this->assertFalse(
+			isset($errors[$line]),
+			sprintf(
+				'Expected no error on line %s, but found:%s%s%s',
+				$line,
+				PHP_EOL . PHP_EOL,
+				isset($errors[$line]) ? $this->getFormattedErrors($errors[$line]) : '',
+				PHP_EOL
+			)
+		);
+	}
+
+	private function hasError(array $errorsOnLine, string $sniffCode, string $message = null): bool
+	{
+		foreach ($errorsOnLine as $errorsOnPosition) {
+			foreach ($errorsOnPosition as $error) {
+				if (
+					$error['source'] === $sniffCode
+					&& ($message === null || strpos($error['message'], $message) !== false)
+				) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	private function getFormattedErrors(array $errors): string
+	{
+		return implode(PHP_EOL, array_map(function (array $errors): string {
+			return implode(PHP_EOL, array_map(function (array $error): string {
+				return sprintf("\t%s: %s", $error['source'], $error['message']);
+			}, $errors));
+		}, $errors));
+	}
+
+	protected function getSniffName(): string
+	{
+		return preg_replace(
 			[
 				'~\\\~',
-				'~SlevomatCodingStandard~',
-				'~$~',
+				'~\.Sniffs~',
+				'~Sniff$~',
 			],
 			[
-				'/',
-				__DIR__ . '/../../SlevomatCodingStandard',
-				'.php',
+				'.',
+				'',
+				'',
 			],
 			$this->getSniffClassName()
 		);
+	}
+
+	protected function getSniffClassName(): string
+	{
+		return substr(get_class($this), 0, -strlen('Test'));
+	}
+
+	protected function getSniffPath(): string
+	{
+		$path = $this->getSniffClassName();
+
+		$path = str_replace('\\', '/', $path);
+		$path = str_replace('SlevomatCodingStandard', __DIR__ . '/../../SlevomatCodingStandard', $path);
+
+		$path .= '.php';
 
 		return realpath($path);
 	}
