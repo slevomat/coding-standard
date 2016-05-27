@@ -38,21 +38,37 @@ class FullyQualifiedExceptionsSniffTest extends \SlevomatCodingStandard\Sniffs\T
 			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
 			'BarException'
 		);
+		$this->assertSniffError(
+			$this->getFileReport(),
+			9,
+			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
+			'Throwable'
+		);
+		$this->assertSniffError(
+			$this->getFileReport(),
+			11,
+			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
+			'TypeError'
+		);
 	}
 
 	public function testFullyQualifiedExceptionInTypehint()
 	{
-		$this->assertNoSniffError($this->getFileReport(), 12);
+		$this->assertNoSniffError($this->getFileReport(), 16);
 	}
 
 	public function testFullyQualifiedExceptionInThrow()
 	{
-		$this->assertNoSniffError($this->getFileReport(), 15);
+		$this->assertNoSniffError($this->getFileReport(), 19);
 	}
 
 	public function testFullyQualifiedExceptionInCatch()
 	{
-		$this->assertNoSniffError($this->getFileReport(), 16);
+		$this->assertNoSniffError($this->getFileReport(), 20);
+		$this->assertNoSniffError($this->getFileReport(), 22);
+		$this->assertNoSniffError($this->getFileReport(), 24);
+		$this->assertNoSniffError($this->getFileReport(), 26);
+		$this->assertNoSniffError($this->getFileReport(), 28);
 	}
 
 }

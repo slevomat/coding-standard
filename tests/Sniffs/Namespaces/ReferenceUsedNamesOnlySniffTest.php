@@ -87,6 +87,21 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		$this->assertNoSniffError($report, 8);
 	}
 
+	public function testAllowFullyQualifiedExceptions()
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/fullyQualifiedExceptionNames.php',
+			['allowFullyQualifiedExceptions' => true]
+		);
+		$this->assertSame(1, $report->getErrorCount());
+		$this->assertSniffError(
+			$report,
+			28,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'\Foo\BarError'
+		);
+	}
+
 	public function testDoNotAllowFullyQualifiedExceptionsInTypeHint()
 	{
 		$report = $this->checkFile(
@@ -95,7 +110,7 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		);
 		$this->assertSniffError(
 			$report,
-			12,
+			16,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
 			'\Some\Exception'
 		);
@@ -110,7 +125,7 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		);
 		$this->assertSniffError(
 			$report,
-			15,
+			19,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
 			'\Some\Other\Exception'
 		);
@@ -125,11 +140,37 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		);
 		$this->assertSniffError(
 			$report,
-			16,
+			20,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
 			'\Some\Other\DifferentException'
 		);
+		$this->assertSniffError(
+			$report,
+			22,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'\Throwable'
+		);
+		$this->assertSniffError(
+			$report,
+			24,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'\Exception'
+		);
+		$this->assertSniffError(
+			$report,
+			26,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'\TypeError'
+		);
+		$this->assertSniffError(
+			$report,
+			28,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'\Foo\BarError'
+		);
 		$this->assertNoSniffError($report, 7);
+		$this->assertNoSniffError($report, 9);
+		$this->assertNoSniffError($report, 11);
 	}
 
 	public function testDoNotAllowPartialUses()

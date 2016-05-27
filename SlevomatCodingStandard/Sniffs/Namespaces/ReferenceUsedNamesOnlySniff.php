@@ -113,6 +113,8 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 					(
 						!(
 						StringHelper::endsWith($name, 'Exception')
+						|| $name === '\Throwable'
+						|| (StringHelper::endsWith($name, 'Error') && !NamespaceHelper::hasNamespace($name))
 						|| in_array(NamespaceHelper::normalizeToCanonicalName($name), $this->getSpecialExceptionNames(), true)
 						) || !$this->allowFullyQualifiedExceptions
 					) && $this->isClassRequiredToBeUsed($name)
@@ -122,7 +124,12 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 						[T_WHITESPACE, T_COMMA]
 					), $pointer - 1);
 					if (!in_array($tokens[$previousKeywordPointer]['code'], $this->getFullyQualifiedKeywords(), true)) {
-						if (!NamespaceHelper::hasNamespace($name) && NamespaceHelper::findCurrentNamespaceName($phpcsFile, $pointer) === null) {
+						if (
+							!NamespaceHelper::hasNamespace($name)
+							&& NamespaceHelper::findCurrentNamespaceName($phpcsFile, $pointer) === null
+							&& !in_array($name, ['\Exception', '\Throwable'], true)
+							&& (!StringHelper::endsWith($name, 'Error') || NamespaceHelper::hasNamespace($name))
+						) {
 							$phpcsFile->addError(sprintf(
 								'Type %s should not be referenced via a fully qualified name, but via an unqualified name without the leading \\, because the file does not have a namespace and the type cannot be put in a use statement',
 								$name
