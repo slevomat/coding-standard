@@ -24,5 +24,8 @@
 		"files": [
 			"vendor/consistence/coding-standard/tests/Sniffs/TestCase.php"
 		]
+	},
+	"config": {
+		"bin-dir": "bin"
 	}
 }

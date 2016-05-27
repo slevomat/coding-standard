@@ -23,7 +23,7 @@
 
 	<target name="lint">
 		<exec
-			executable="vendor/bin/parallel-lint"
+			executable="bin/parallel-lint"
 			logoutput="true"
 			passthru="true"
 			checkreturn="true"
@@ -37,7 +37,7 @@
 
 	<target name="cs">
 		<exec
-			executable="vendor/bin/phpcs"
+			executable="bin/phpcs"
 			logoutput="true"
 			passthru="true"
 			checkreturn="true"
@@ -55,7 +55,7 @@
 
 	<target name="cs-fix">
 		<exec
-				executable="vendor/bin/phpcbf"
+				executable="bin/phpcbf"
 				logoutput="true"
 				passthru="true"
 				checkreturn="true"
@@ -72,7 +72,7 @@
 
 	<target name="tests">
 		<exec
-			executable="vendor/bin/phpunit"
+			executable="bin/phpunit"
 			logoutput="true"
 			passthru="true"
 			checkreturn="true"
@@ -85,7 +85,7 @@
 
 	<target name="phpstan">
 		<exec
-			executable="vendor/bin/phpstan"
+			executable="bin/phpstan"
 			logoutput="true"
 			passthru="true"
 			checkreturn="true"
