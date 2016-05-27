@@ -6,6 +6,6 @@ before_script:
   - composer self-update
 script:
   - composer install --ignore-platform-reqs
-  - vendor/bin/phing
+  - bin/phing
 after_script:
-  - php vendor/bin/coveralls -v
+  - php bin/coveralls -v
