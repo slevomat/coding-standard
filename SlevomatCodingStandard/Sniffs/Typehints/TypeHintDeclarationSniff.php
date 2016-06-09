@@ -249,8 +249,8 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		$phpcsFile->addError(
 			sprintf(
 				'%s %s() does not need documentation comment.',
-				FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-				$this->getFunctionTypeLabel($phpcsFile, $functionPointer)
+				$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
+				FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
 			),
 			$functionPointer,
 			self::USELESS_DOC_COMMENT
