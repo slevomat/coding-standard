@@ -32,12 +32,15 @@ class ClassWithSomeUnusedProperties extends \Consistence\Object
 	/** @ORM\Column(name="foo") */
 	private $doctrineProperty;
 
+	private $propertyUsedInString;
+
 	public function foo()
 	{
 		$this->usedProperty->foo();
 		$this->writeOnlyProperty = 'foo';
 		$this->unusedPropertyWhichNameIsAlsoAFunction();
 		$this->usedPrivateMethod();
+		echo "{$this->propertyUsedInString}";
 	}
 
 	private function usedPrivateMethod()
