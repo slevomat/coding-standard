@@ -18,7 +18,6 @@ class TestCaseChecksTokenBoundsTest extends \SlevomatCodingStandard\Helpers\Test
 			$this->assertSame(5, $e->getPointer());
 			$this->assertSame(0, $e->getLastTokenPointer());
 		}
-
 	}
 
 }

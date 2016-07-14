@@ -60,7 +60,6 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	public function testHasNamespace(string $typeName)
 	{
 		$this->assertTrue(NamespaceHelper::hasNamespace($typeName));
-
 	}
 
 	public function dataDoesNotHaveNamespace(): array

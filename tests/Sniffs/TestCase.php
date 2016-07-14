@@ -25,7 +25,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 			$propertyReflection->setValue($codeSniffer, $ruleset);
 		}
 
-		$codeSniffer->registerSniffs([$this->getSniffPath()], []);
+		$codeSniffer->registerSniffs([$this->getSniffPath()], [], []);
 		$codeSniffer->populateTokenListeners();
 
 		return $codeSniffer->processFile($filePath);
@@ -76,7 +76,6 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 				PHP_EOL
 			)
 		);
-
 	}
 
 	private function hasError(array $errorsOnLine, string $sniffCode, string $message = null): bool
