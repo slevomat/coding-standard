@@ -28,7 +28,7 @@ abstract class TestCase extends \Consistence\Sniffs\TestCase
 		]);
 
 		$this->setCodeSnifferRulesetProperties($codeSniffer, $sniffProperties);
-		$codeSniffer->registerSniffs([$this->getSniffPath()], []);
+		$codeSniffer->registerSniffs([$this->getSniffPath()], [], []);
 		$codeSniffer->populateTokenListeners();
 
 		return $codeSniffer->processFile($filePath);
