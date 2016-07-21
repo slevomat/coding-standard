@@ -3,8 +3,12 @@
 namespace FooNamespace;
 
 use UsedNamespace\UsedClass;
+use UsedNamespace\ReadOnlyCollectionWrapper;
+use UsedNamespace\User;
 
-abstract class FooClass
+require __DIR__ . '/typeHintDeclarationAbstractNoErrors.php';
+
+abstract class FooClass extends AbstractFooClass
 {
 
 	/**
@@ -139,6 +143,30 @@ abstract class FooClass
 	public function returnsMoreTypesWithTraversable(): \QueryResultSet
 	{
 		return [];
+	}
+
+	/**
+	 * @return static
+	 */
+	public function returnsStaticAsSelf(): self
+	{
+		return $this;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function returnsThisAsSelf(): self
+	{
+		return $this;
+	}
+
+	/**
+	 * @param string $cacheKey
+	 */
+	public function stringParameterWithoutHint($cacheKey)
+	{
+
 	}
 
 	/**
