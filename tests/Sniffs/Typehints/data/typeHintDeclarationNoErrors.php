@@ -142,6 +142,22 @@ abstract class FooClass
 	}
 
 	/**
+	 * @return static
+	 */
+	public function returnsStaticAsSelf(): self
+	{
+		return $this;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function returnsThisAsSelf(): self
+	{
+		return $this;
+	}
+
+	/**
 	 * @return string[]|\UsedNamespace\UsedClass
 	 */
 	abstract public function returnUsedClass(): UsedClass;
@@ -205,6 +221,14 @@ abstract class FooClass
 	 */
 	public function withAnySuppress(string $s)
 	{
+	}
+
+	/**
+	 * @param string|int|null $value
+	 */
+	public function returnTypehintIsNotChecked($value): self
+	{
+		return $this;
 	}
 
 }
