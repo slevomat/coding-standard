@@ -225,10 +225,15 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			) {
 				return;
 			}
-		} else {
+		} elseif (FunctionHelper::returnsValue($phpcsFile, $functionPointer)) {
+			$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
 			if (
-				FunctionHelper::returnsValue($phpcsFile, $functionPointer)
-				&& ($returnTypeHint === null || $this->isTraversableTypeHint($this->getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint)))
+				$returnTypeHint === null
+				|| $this->isTraversableTypeHint($this->getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint))
+				|| (
+					$this->getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint) === 'self'
+					&& $this->definitionContainsStaticOrThisTypeHint($returnAnnotation)
+				)
 			) {
 				return;
 			}
@@ -293,6 +298,12 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	private function definitionContainsNullTypeHint(string $typeHintDefinition): bool
 	{
 		return preg_match('~(?:^null$)|(?:^null\|)|(\|null\|)|(?:\|null$)~i', $typeHintDefinition) !== 0;
+	}
+
+	private function definitionContainsStaticOrThisTypeHint(string $typeHintDefinition): bool
+	{
+		return preg_match('~(?:^static$)|(?:^static\|)|(\|static\|)|(?:\|static$)~i', $typeHintDefinition) !== 0
+			|| preg_match('~(?:^\$this$)|(?:^\$this\|)|(\|\$this\|)|(?:\|\$this$)~i', $typeHintDefinition) !== 0;
 	}
 
 	private function definitionContainsOneTypeHint(string $typeHintDefinition): bool

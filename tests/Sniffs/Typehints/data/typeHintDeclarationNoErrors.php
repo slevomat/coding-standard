@@ -142,6 +142,22 @@ abstract class FooClass
 	}
 
 	/**
+	 * @return static
+	 */
+	public function returnsStaticAsSelf(): self
+	{
+		return $this;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function returnsThisAsSelf(): self
+	{
+		return $this;
+	}
+
+	/**
 	 * @return string[]|\UsedNamespace\UsedClass
 	 */
 	abstract public function returnUsedClass(): UsedClass;
