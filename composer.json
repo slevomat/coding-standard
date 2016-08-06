@@ -17,9 +17,14 @@
 		"phpunit/phpunit": "^5.0",
 		"satooshi/php-coveralls": "^1.0"
 	},
+	"autoload": {
+		"psr-4": {
+			"SlevomatCodingStandard\\": "SlevomatCodingStandard"
+		}
+	},
 	"autoload-dev": {
 		"psr-4": {
-			"SlevomatCodingStandard\\": ["SlevomatCodingStandard/", "tests/"]
+			"SlevomatCodingStandard\\": "tests"
 		},
 		"files": [
 			"vendor/consistence/coding-standard/tests/Sniffs/TestCase.php"
