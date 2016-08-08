@@ -72,6 +72,9 @@ class UseStatementHelper
 			$nameEndPointer = TokenHelper::findPreviousExcluding($phpcsFile, [T_WHITESPACE], $nameEndPointer - 1) + 1;
 		}
 		$nameStartPointer = $phpcsFile->findNext(TokenHelper::$nameTokenCodes, $usePointer + 1, $nameEndPointer);
+		if (in_array($tokens[$nameStartPointer]['content'], ['const', 'function'], true)) {
+			$nameStartPointer = $phpcsFile->findNext(TokenHelper::$nameTokenCodes, $nameStartPointer + 1, $nameEndPointer);
+		}
 		$name = TokenHelper::getContent($phpcsFile, $nameStartPointer, $nameEndPointer);
 
 		return NamespaceHelper::normalizeToCanonicalName($name);
@@ -85,12 +88,23 @@ class UseStatementHelper
 	public static function getUseStatements(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
 		$names = [];
+		$tokens = $phpcsFile->getTokens();
 		foreach (self::getUseStatementPointers($phpcsFile, $openTagPointer) as $usePointer) {
+			$nextTokenFromUsePointer = TokenHelper::findNextNonWhitespace($phpcsFile, $usePointer + 1);
+			$type = UseStatement::TYPE_DEFAULT;
+			if ($tokens[$nextTokenFromUsePointer]['code'] === T_STRING) {
+				if ($tokens[$nextTokenFromUsePointer]['content'] === 'const') {
+					$type = UseStatement::TYPE_CONSTANT;
+				} elseif ($tokens[$nextTokenFromUsePointer]['content'] === 'function') {
+					$type = UseStatement::TYPE_FUNCTION;
+				}
+			}
 			$name = self::getNameAsReferencedInClassFromUse($phpcsFile, $usePointer);
 			$useStatement = new UseStatement(
 				$name,
 				self::getFullyQualifiedTypeNameFromUse($phpcsFile, $usePointer),
-				$usePointer
+				$usePointer,
+				$type
 			);
 			$names[$useStatement->getCanonicalNameAsReferencedInFile()] = $useStatement;
 		}

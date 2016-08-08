@@ -12,8 +12,8 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 
 	const CODE_INCORRECT_ORDER = 'IncorrectlyOrderedUses';
 
-	/** @var string */
-	private $lastUseTypeName;
+	/** @var \SlevomatCodingStandard\Helpers\UseStatement */
+	private $lastUse;
 
 	/**
 	 * @return integer[]
@@ -31,20 +31,19 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 	 */
 	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
-		$this->lastUseTypeName = null;
+		$this->lastUse = null;
 		$useStatements = UseStatementHelper::getUseStatements(
 			$phpcsFile,
 			$openTagPointer
 		);
 		foreach ($useStatements as $useStatement) {
-			$typeName = $useStatement->getFullyQualifiedTypeName();
-			if ($this->lastUseTypeName === null) {
-				$this->lastUseTypeName = $typeName;
+			if ($this->lastUse === null) {
+				$this->lastUse = $useStatement;
 			} else {
-				$order = $this->compareStrings($typeName, $this->lastUseTypeName);
+				$order = $this->compareUseStatements($useStatement, $this->lastUse);
 				if ($order < 0) {
 					$fix = $phpcsFile->addFixableError(
-						sprintf('Use statements are incorrectly ordered. The first wrong one is %s', $typeName),
+						sprintf('Use statements are incorrectly ordered. The first wrong one is %s', $useStatement->getFullyQualifiedTypeName()),
 						$useStatement->getPointer(),
 						self::CODE_INCORRECT_ORDER
 					);
@@ -54,7 +53,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 
 					return;
 				} else {
-					$this->lastUseTypeName = $typeName;
+					$this->lastUse = $useStatement;
 				}
 			}
 		}
@@ -78,7 +77,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		uasort($useStatements, function (UseStatement $a, UseStatement $b) {
-			return $this->compareStrings($a->getFullyQualifiedTypeName(), $b->getFullyQualifiedTypeName());
+			return $this->compareUseStatements($a, $b);
 		});
 
 		$phpcsFile->fixer->addContent($firstUseStatement->getPointer(), implode(PHP_EOL, array_map(function (UseStatement $useStatement) {
@@ -93,34 +92,40 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @param string $a
-	 * @param string $b
+	 * @param \SlevomatCodingStandard\Helpers\UseStatement $a
+	 * @param \SlevomatCodingStandard\Helpers\UseStatement $b
 	 * @return integer
 	 */
-	private function compareStrings($a, $b)
+	private function compareUseStatements(UseStatement $a, UseStatement $b)
 	{
+		if (!$a->hasSameType($b)) {
+			return $a->compareByType($b);
+		}
+		$aName = $a->getFullyQualifiedTypeName();
+		$bName = $b->getFullyQualifiedTypeName();
+
 		$i = 0;
-		for (; $i < min(strlen($a), strlen($b)); $i++) {
-			if ($this->isSpecialCharacter($a[$i]) && !$this->isSpecialCharacter($b[$i])) {
+		for (; $i < min(strlen($aName), strlen($bName)); $i++) {
+			if ($this->isSpecialCharacter($aName[$i]) && !$this->isSpecialCharacter($bName[$i])) {
 				return -1;
-			} elseif (!$this->isSpecialCharacter($a[$i]) && $this->isSpecialCharacter($b[$i])) {
+			} elseif (!$this->isSpecialCharacter($aName[$i]) && $this->isSpecialCharacter($bName[$i])) {
 				return 1;
 			}
 
-			if (is_numeric($a[$i]) && is_numeric($b[$i])) {
+			if (is_numeric($aName[$i]) && is_numeric($bName[$i])) {
 				break;
 			}
 
-			$cmp = strcasecmp($a[$i], $b[$i]);
+			$cmp = strcasecmp($aName[$i], $bName[$i]);
 			if (
 				$cmp !== 0
-				|| ($a[$i] !== $b[$i] && strtolower($a[$i]) === strtolower($b[$i]))
+				|| ($aName[$i] !== $bName[$i] && strtolower($aName[$i]) === strtolower($bName[$i]))
 			) {
 				return $cmp;
 			}
 		}
 
-		return strnatcasecmp(substr($a, $i), substr($b, $i));
+		return strnatcasecmp(substr($aName, $i), substr($bName, $i));
 	}
 
 	/**

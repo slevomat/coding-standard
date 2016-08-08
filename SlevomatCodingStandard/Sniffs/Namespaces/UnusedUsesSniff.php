@@ -46,6 +46,9 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 				!NamespaceHelper::isFullyQualifiedName($name)
 				&& isset($unusedNames[$normalizedNameAsReferencedInFile])
 			) {
+				if (!$referencedName->hasSameUseStatementType($unusedNames[$normalizedNameAsReferencedInFile])) {
+					continue;
+				}
 				if ($unusedNames[$normalizedNameAsReferencedInFile]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
 					$phpcsFile->addError(sprintf(
 						'Case of reference name %s and use statement %s do not match',

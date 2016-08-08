@@ -18,6 +18,18 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 			UnusedUsesSniff::CODE_UNUSED_USE,
 			'First\Object'
 		);
+		$this->assertSniffError(
+			$this->getFileReport(),
+			12,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'FooBar\UnusedFunction'
+		);
+		$this->assertSniffError(
+			$this->getFileReport(),
+			14,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'FooBar\UNUSED_CONSTANT'
+		);
 	}
 
 	public function testUnusedUseWithAsPart()
@@ -53,6 +65,24 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 	public function testUsedUseWithStaticMethodCall()
 	{
 		$this->assertNoSniffError($this->getFileReport(), 11);
+	}
+
+	public function testUsedFunction()
+	{
+		$this->assertNoSniffError($this->getFileReport(), 13);
+	}
+
+	public function testUsedConstant()
+	{
+		$this->assertNoSniffError($this->getFileReport(), 15);
+	}
+
+	public function testReturnTypehint()
+	{
+		if (PHP_VERSION_ID < 70000) {
+			$this->markTestSkipped('Available on PHP7 only');
+		}
+		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/php7/unusedUses.php'));
 	}
 
 	public function testFindCaseInsensitiveUse()

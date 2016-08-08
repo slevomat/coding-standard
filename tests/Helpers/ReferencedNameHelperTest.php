@@ -10,38 +10,49 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		return [
 			[
 				[
-					'\ExtendedClass',
-					'\ImplementedInterface',
-					'\FullyQualified\SomeOtherTrait',
-					'SomeTrait',
-					'TypehintedName',
-					'ClassInstance',
-					'StaticClass',
-					'\Foo\Bar\SpecificException',
-					'\Foo\Bar\Baz\SomeOtherException',
+					['\ExtendedClass', false, false],
+					['\ImplementedInterface', false, false],
+					['\FullyQualified\SomeOtherTrait', false, false],
+					['SomeTrait', false, false],
+					['TypehintedName', false, false],
+					['ClassInstance', false, false],
+					['StaticClass', false, false],
+					['\Foo\Bar\SpecificException', false, false],
+					['\Foo\Bar\Baz\SomeOtherException', false, false],
+					['callToFunction', true, false],
+					['FOO_CONSTANT', false, true],
+					['BAZ_CONSTANT', false, true],
+					['LoremClass', false, false],
+					['IpsumClass', false, false],
 				],
 				false,
 			],
 			[
 				[
-					'\ExtendedClass',
-					'\ImplementedInterface',
-					'\FullyQualified\SomeOtherTrait',
-					'SomeTrait',
-					'ORM\Column',
-					'Bar',
-					'Lorem',
-					'Ipsum',
-					'Rasmus',
-					'Lerdorf',
-					'\Foo\BarBaz',
-					'TypehintedName',
-					'AnotherTypehintedName',
-					'Returned_Typehinted_Underscored_Name',
-					'ClassInstance',
-					'StaticClass',
-					'\Foo\Bar\SpecificException',
-					'\Foo\Bar\Baz\SomeOtherException',
+					['\ExtendedClass', false, false],
+					['\ImplementedInterface', false, false],
+					['\FullyQualified\SomeOtherTrait', false, false],
+					['SomeTrait', false, false],
+					['ORM\Column', false, false],
+					['Bar', false, false],
+					['Lorem', false, false],
+					['Ipsum', false, false],
+					['Rasmus', false, false],
+					['Lerdorf', false, false],
+					['\Foo\BarBaz', false, false],
+					['TypehintedName', false, false],
+					['AnotherTypehintedName', false, false],
+					['Returned_Typehinted_Underscored_Name', false, false],
+					['TypehintedName', false, false],
+					['ClassInstance', false, false],
+					['StaticClass', false, false],
+					['\Foo\Bar\SpecificException', false, false],
+					['\Foo\Bar\Baz\SomeOtherException', false, false],
+					['callToFunction', true, false],
+					['FOO_CONSTANT', false, true],
+					['BAZ_CONSTANT', false, true],
+					['LoremClass', false, false],
+					['IpsumClass', false, false],
 				],
 				true,
 			],
@@ -60,9 +71,12 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		);
 
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0, $searchAnnotations);
-		$this->assertSame($foundTypes, array_values(array_unique(array_map(function (ReferencedName $name) {
-			return $name->getNameAsReferencedInFile();
-		}, $names))));
+		$this->assertCount(count($foundTypes), $names);
+		foreach ($names as $i => $referencedName) {
+			$this->assertSame($foundTypes[$i][0], $referencedName->getNameAsReferencedInFile());
+			$this->assertSame($foundTypes[$i][1], $referencedName->isFunction(), $foundTypes[$i][0]);
+			$this->assertSame($foundTypes[$i][2], $referencedName->isConstant(), $foundTypes[$i][0]);
+		}
 	}
 
 	public function testFindReferencedNameEndPointerOnNonReferencedName()

@@ -84,7 +84,7 @@ class ReferencedNameHelper
 					], true);
 				});
 				foreach ($referencedNames as $name) {
-					$types[] = new ReferencedName($name, $nameStartPointer);
+					$types[] = new ReferencedName($name, $nameStartPointer, ReferencedName::TYPE_DEFAULT);
 				}
 			}
 		};
@@ -124,7 +124,34 @@ class ReferencedNameHelper
 				);
 				continue;
 			}
-			$types[] = new ReferencedName(TokenHelper::getContent($phpcsFile, $nameStartPointer, $nameEndPointer), $nameStartPointer);
+
+			$nextTokenAfterEndPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $nameEndPointer);
+			$previousTokenBeforeStartPointer = TokenHelper::findPreviousNonWhitespace($phpcsFile, $nameStartPointer - 1);
+			$type = ReferencedName::TYPE_DEFAULT;
+			if ($nextTokenAfterEndPointer !== null && $previousTokenBeforeStartPointer !== null) {
+				if ($tokens[$nextTokenAfterEndPointer]['code'] === T_OPEN_PARENTHESIS) {
+					if ($tokens[$previousTokenBeforeStartPointer]['code'] !== T_NEW) {
+						$type = ReferencedName::TYPE_FUNCTION;
+					}
+				} elseif ($tokens[$nextTokenAfterEndPointer]['code'] !== T_VARIABLE) {
+					if (
+						!in_array($tokens[$previousTokenBeforeStartPointer]['code'], [
+							T_EXTENDS,
+							T_IMPLEMENTS,
+							T_INSTANCEOF,
+							T_USE, // trait
+							T_NEW,
+							T_COLON, // return typehint
+						], true)
+						&& !in_array($tokens[$nextTokenAfterEndPointer]['code'], [
+							T_DOUBLE_COLON,
+						], true)
+					) {
+						$type = ReferencedName::TYPE_CONSTANT;
+					}
+				}
+			}
+			$types[] = new ReferencedName(TokenHelper::getContent($phpcsFile, $nameStartPointer, $nameEndPointer), $nameStartPointer, $type);
 			$beginSearchAtPointer = $nameEndPointer + 1;
 		}
 		return $types;

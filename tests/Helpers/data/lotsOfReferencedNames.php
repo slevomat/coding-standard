@@ -38,6 +38,11 @@ class FooClass extends \ExtendedClass implements \ImplementedInterface
 		} catch (\Foo\Bar\Baz\SomeOtherException $e) {
 			throw $e;
 		}
+
+		callToFunction(FOO_CONSTANT);
+		$baz = BAZ_CONSTANT;
+		$lorem = new LoremClass;
+		$ipsum = IpsumClass::IPSUM_CONSTANT;
 	}
 
 }
