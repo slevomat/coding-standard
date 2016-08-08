@@ -13,10 +13,14 @@ use function FooBar\UnusedFunction;
 use function LoremIpsum\UsedFunction;
 use const FooBar\UNUSED_CONSTANT;
 use const LoremIpsum\USED_CONSTANT;
+use X;
 
 class TestClass
 {
 
+	/**
+	 * @Assert\NotBlank(groups={X::SOME_CONSTANT}
+	 */
 	public function test(S $s)
 	{
 		new \Test\Foo\Bar();
