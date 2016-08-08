@@ -5,72 +5,30 @@ namespace SlevomatCodingStandard\Helpers;
 class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
-	public function dataGetAllReferencedNames()
-	{
-		return [
-			[
-				[
-					['\ExtendedClass', false, false],
-					['\ImplementedInterface', false, false],
-					['\FullyQualified\SomeOtherTrait', false, false],
-					['SomeTrait', false, false],
-					['TypehintedName', false, false],
-					['ClassInstance', false, false],
-					['StaticClass', false, false],
-					['\Foo\Bar\SpecificException', false, false],
-					['\Foo\Bar\Baz\SomeOtherException', false, false],
-					['callToFunction', true, false],
-					['FOO_CONSTANT', false, true],
-					['BAZ_CONSTANT', false, true],
-					['LoremClass', false, false],
-					['IpsumClass', false, false],
-				],
-				false,
-			],
-			[
-				[
-					['\ExtendedClass', false, false],
-					['\ImplementedInterface', false, false],
-					['\FullyQualified\SomeOtherTrait', false, false],
-					['SomeTrait', false, false],
-					['ORM\Column', false, false],
-					['Bar', false, false],
-					['Lorem', false, false],
-					['Ipsum', false, false],
-					['Rasmus', false, false],
-					['Lerdorf', false, false],
-					['\Foo\BarBaz', false, false],
-					['TypehintedName', false, false],
-					['AnotherTypehintedName', false, false],
-					['Returned_Typehinted_Underscored_Name', false, false],
-					['TypehintedName', false, false],
-					['ClassInstance', false, false],
-					['StaticClass', false, false],
-					['\Foo\Bar\SpecificException', false, false],
-					['\Foo\Bar\Baz\SomeOtherException', false, false],
-					['callToFunction', true, false],
-					['FOO_CONSTANT', false, true],
-					['BAZ_CONSTANT', false, true],
-					['LoremClass', false, false],
-					['IpsumClass', false, false],
-				],
-				true,
-			],
-		];
-	}
-
-	/**
-	 * @dataProvider dataGetAllReferencedNames
-	 * @param string[] $foundTypes
-	 * @param boolean $searchAnnotations
-	 */
-	public function testGetAllReferencedNames(array $foundTypes, $searchAnnotations)
+	public function testGetAllReferencedNames()
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/lotsOfReferencedNames.php'
 		);
 
-		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0, $searchAnnotations);
+		$foundTypes = [
+			['\ExtendedClass', false, false],
+			['\ImplementedInterface', false, false],
+			['\FullyQualified\SomeOtherTrait', false, false],
+			['SomeTrait', false, false],
+			['TypehintedName', false, false],
+			['ClassInstance', false, false],
+			['StaticClass', false, false],
+			['\Foo\Bar\SpecificException', false, false],
+			['\Foo\Bar\Baz\SomeOtherException', false, false],
+			['callToFunction', true, false],
+			['FOO_CONSTANT', false, true],
+			['BAZ_CONSTANT', false, true],
+			['LoremClass', false, false],
+			['IpsumClass', false, false],
+		];
+
+		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
 		$this->assertCount(count($foundTypes), $names);
 		foreach ($names as $i => $referencedName) {
 			$this->assertSame($foundTypes[$i][0], $referencedName->getNameAsReferencedInFile());

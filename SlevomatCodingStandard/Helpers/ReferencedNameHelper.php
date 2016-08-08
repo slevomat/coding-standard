@@ -28,14 +28,13 @@ class ReferencedNameHelper
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param integer $openTagPointer
-	 * @param boolean $searchAnnotations
 	 * @return \SlevomatCodingStandard\Helpers\ReferencedName[] referenced names
 	 */
-	public static function getAllReferencedNames(PHP_CodeSniffer_File $phpcsFile, $openTagPointer, $searchAnnotations = false)
+	public static function getAllReferencedNames(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
-		$cacheKey = $phpcsFile->getFilename() . '-' . $openTagPointer . ($searchAnnotations ? '-annotations' : '-no-annotations');
+		$cacheKey = $phpcsFile->getFilename() . '-' . $openTagPointer;
 		if (!isset(self::$allReferencedTypesCache[$cacheKey])) {
-			self::$allReferencedTypesCache[$cacheKey] = self::createAllReferencedNames($phpcsFile, $openTagPointer, $searchAnnotations);
+			self::$allReferencedTypesCache[$cacheKey] = self::createAllReferencedNames($phpcsFile, $openTagPointer);
 		}
 
 		return self::$allReferencedTypesCache[$cacheKey];
@@ -44,50 +43,15 @@ class ReferencedNameHelper
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param integer $openTagPointer
-	 * @param boolean $searchAnnotations
 	 * @return \SlevomatCodingStandard\Helpers\ReferencedName[] referenced names
 	 */
-	private static function createAllReferencedNames(PHP_CodeSniffer_File $phpcsFile, $openTagPointer, $searchAnnotations)
+	private static function createAllReferencedNames(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
 		$beginSearchAtPointer = $openTagPointer + 1;
 		$tokens = $phpcsFile->getTokens();
-		$phpDocTypes = [
-			T_DOC_COMMENT_STRING,
-			T_DOC_COMMENT_TAG,
-		];
 
 		$searchTypes = array_merge([T_RETURN_TYPE], TokenHelper::$nameTokenCodes);
-		if ($searchAnnotations) {
-			$searchTypes = array_merge($phpDocTypes, $searchTypes);
-		}
-
 		$types = [];
-
-		$matchTypesInAnnotation = function ($annotation, $nameStartPointer) use (&$types) {
-			$annotation = trim($annotation, '@ ');
-			if (preg_match('#([a-zA-Z0-9_|\[\]\\\]+)#', $annotation, $matches) > 0) {
-				$referencedNames = array_filter(array_map(function ($name) {
-					return trim($name, '[]');
-				}, explode('|', $matches[1])), function ($match) {
-					return !in_array($match, [
-						'null',
-						'self',
-						'static',
-						'mixed',
-						'array',
-						'string',
-						'int',
-						'integer',
-						'bool',
-						'boolean',
-						'callable',
-					], true);
-				});
-				foreach ($referencedNames as $name) {
-					$types[] = new ReferencedName($name, $nameStartPointer, ReferencedName::TYPE_DEFAULT);
-				}
-			}
-		};
 
 		while (true) {
 			$nameStartPointer = $phpcsFile->findNext($searchTypes, $beginSearchAtPointer);
@@ -95,26 +59,6 @@ class ReferencedNameHelper
 				break;
 			}
 			$nameStartToken = $tokens[$nameStartPointer];
-			if (in_array($nameStartToken['code'], $phpDocTypes, true)) {
-				if ($nameStartToken['code'] === T_DOC_COMMENT_TAG) {
-					if (
-						!StringHelper::startsWith($nameStartToken['content'], '@var')
-						&& !StringHelper::startsWith($nameStartToken['content'], '@param')
-						&& !StringHelper::startsWith($nameStartToken['content'], '@return')
-						&& !StringHelper::startsWith($nameStartToken['content'], '@throws')
-						&& !StringHelper::startsWith($nameStartToken['content'], '@see')
-						&& !StringHelper::startsWith($nameStartToken['content'], '@link')
-						&& !StringHelper::startsWith($nameStartToken['content'], '@inherit')
-					) {
-						$matchTypesInAnnotation($nameStartToken['content'], $nameStartPointer);
-					}
-				} elseif ($nameStartToken['code'] === T_DOC_COMMENT_STRING) {
-					$matchTypesInAnnotation($nameStartToken['content'], $nameStartPointer);
-				}
-
-				$beginSearchAtPointer = $nameStartPointer + 1;
-				continue;
-			}
 			$nameEndPointer = self::findReferencedNameEndPointer($phpcsFile, $nameStartPointer);
 			if ($nameEndPointer === null) {
 				$beginSearchAtPointer = TokenHelper::findNextExcluding(

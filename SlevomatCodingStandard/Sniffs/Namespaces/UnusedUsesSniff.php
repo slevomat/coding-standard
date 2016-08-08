@@ -34,7 +34,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
 		$unusedNames = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
-		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer, $this->searchAnnotations);
+		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
 
 		foreach ($referencedNames as $referencedName) {
 			$name = $referencedName->getNameAsReferencedInFile();
@@ -57,6 +57,27 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 					), $pointer, self::CODE_MISMATCHING_CASE);
 				}
 				unset($unusedNames[$normalizedNameAsReferencedInFile]);
+			}
+		}
+
+		if ($this->searchAnnotations) {
+			$tokens = $phpcsFile->getTokens();
+			$searchAnnotationsPointer = $openTagPointer + 1;
+			while (true) {
+				$phpDocTokenPointer = $phpcsFile->findNext([T_DOC_COMMENT_TAG, T_DOC_COMMENT_STRING], $searchAnnotationsPointer);
+				if ($phpDocTokenPointer === false) {
+					break;
+				}
+
+				foreach ($unusedNames as $i => $useStatement) {
+					if (strpos($tokens[$phpDocTokenPointer]['content'], $useStatement->getNameAsReferencedInFile()) === false) {
+						continue;
+					}
+
+					unset($unusedNames[$i]);
+				}
+
+				$searchAnnotationsPointer = $phpDocTokenPointer + 1;
 			}
 		}
 
