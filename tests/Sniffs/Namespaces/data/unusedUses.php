@@ -9,10 +9,14 @@ use My\Object as MyObject;
 use NewNamespace\Object as NewObject;
 use R\S;
 use T;
+use X;
 
 class TestClass
 {
 
+	/**
+	 * @Assert\NotBlank(groups={X::SOME_CONSTANT}
+	 */
 	public function test(S $s)
 	{
 		new \Test\Foo\Bar();
