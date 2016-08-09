@@ -20,11 +20,21 @@ class Foo extends \Exception
 		}
 		try {
 			foo();
-		} catch (\Exception $e) {
+		} catch (\Exception $e) { // ok - catching \Throwable later
 
 		} catch (Exception $e) {
 
 		} catch (\Throwable $e) {
+
+		}
+
+		try {
+
+		} catch (\Exception $e) {
+
+		} catch (Exception $e) {
+
+		} catch (GeneralException $e) {
 
 		}
 	}
