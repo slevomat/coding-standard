@@ -185,4 +185,28 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertNull(FunctionHelper::findReturnAnnotation($codeSnifferFile, $functionPointer));
 	}
 
+	public function testFindCurrentParentClassName()
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/classWithExtends.php'
+		);
+		$parentClassName = FunctionHelper::findCurrentParentClassName(
+			$codeSnifferFile,
+			TokenHelper::getLastTokenPointer($codeSnifferFile)
+		);
+		$this->assertSame('\Exception', $parentClassName);
+	}
+
+	public function testFindCurrentParentInterfaceNames()
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/classWithInterfaces.php'
+		);
+		$parentInterfaceNames = FunctionHelper::findCurrentParentInterfaceNames(
+			$codeSnifferFile,
+			TokenHelper::getLastTokenPointer($codeSnifferFile)
+		);
+		$this->assertSame(['Foo', 'Bar'], $parentInterfaceNames);
+	}
+
 }

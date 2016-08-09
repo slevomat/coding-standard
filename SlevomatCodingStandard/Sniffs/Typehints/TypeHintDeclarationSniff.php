@@ -26,9 +26,13 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	public $usefulAnnotations = [];
 
+	public $externalNamespaces = [];
+
 	private $normalizedTraversableTypeHints;
 
 	private $normalizedUsefulAnnotations;
+
+	private $normalizedExternalNamespaces;
 
 	/**
 	 * @return int[]
@@ -93,6 +97,13 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			}
 
 			if ($this->definitionContainsOneTypeHint($parameterTypeHintDefinition)) {
+				foreach ($this->getParentClassAndInterfaceNames($phpcsFile, $functionPointer) as $parentClassName) {
+					foreach ($this->getExternalNamespaces() as $namespace) {
+						if (NamespaceHelper::isTypeInNamespace($parentClassName, $namespace)) {
+							return;
+						}
+					}
+				}
 				$phpcsFile->addError(
 					sprintf(
 						'%s %s() does not have parameter type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
@@ -109,6 +120,13 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 				if (strtolower($parameterTypeHints[0]) === 'null' || strtolower($parameterTypeHints[1]) === 'null') {
 					$parameterTypeHint = strtolower($parameterTypeHints[0]) === 'null' ? $parameterTypeHints[1] : $parameterTypeHints[0];
 					if ($this->definitionContainsOneTypeHint($parameterTypeHint)) {
+						foreach ($this->getParentClassAndInterfaceNames($phpcsFile, $functionPointer) as $parentClassName) {
+							foreach ($this->getExternalNamespaces() as $namespace) {
+								if (NamespaceHelper::isTypeInNamespace($parentClassName, $namespace)) {
+									return;
+								}
+							}
+						}
 						$phpcsFile->addError(
 							sprintf(
 								'%s %s() does not have parameter type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
@@ -122,6 +140,13 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 						);
 					}
 				} elseif ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $parameterTypeHintDefinition)) {
+					foreach ($this->getParentClassAndInterfaceNames($phpcsFile, $functionPointer) as $parentClassName) {
+						foreach ($this->getExternalNamespaces() as $namespace) {
+							if (NamespaceHelper::isTypeInNamespace($parentClassName, $namespace)) {
+								return;
+							}
+						}
+					}
 					$phpcsFile->addError(
 						sprintf(
 							'%s %s() does not have parameter type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
@@ -290,6 +315,25 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		return sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $canonicalQualifiedTypeHint);
 	}
 
+	private function getParentClassAndInterfaceNames(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer): array
+	{
+		$parentClassAndInterfaceNames = FunctionHelper::findCurrentParentInterfaceNames($phpcsFile, $functionPointer);
+		$parentClassName = FunctionHelper::findCurrentParentClassName($phpcsFile, $functionPointer);
+		if ($parentClassName !== null) {
+			$parentClassAndInterfaceNames[] = $parentClassName;
+		}
+
+		foreach ($parentClassAndInterfaceNames as $key => $name) {
+			$parentClassAndInterfaceNames[$key] = $this->getFullyQualifiedTypeHint(
+				$phpcsFile,
+				$functionPointer,
+				$name
+			);
+		}
+
+		return $parentClassAndInterfaceNames;
+	}
+
 	private function definitionContainsMixedTypeHint(string $typeHintDefinition): bool
 	{
 		return preg_match('~(?:^mixed$)|(?:^mixed\|)|(\|mixed\|)|(?:\|mixed$)~i', $typeHintDefinition) !== 0;
@@ -378,6 +422,20 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			$this->normalizedUsefulAnnotations = array_flip(SniffSettingsHelper::normalizeArray($this->usefulAnnotations));
 		}
 		return $this->normalizedUsefulAnnotations;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getExternalNamespaces(): array
+	{
+		if ($this->externalNamespaces !== null && $this->normalizedExternalNamespaces === null) {
+			$this->normalizedExternalNamespaces = array_map(function (string $namespace): string {
+				return NamespaceHelper::normalizeToCanonicalName($namespace);
+			}, SniffSettingsHelper::normalizeArray($this->externalNamespaces));
+		}
+
+		return $this->normalizedExternalNamespaces;
 	}
 
 	private function getFunctionTypeLabel(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer): string

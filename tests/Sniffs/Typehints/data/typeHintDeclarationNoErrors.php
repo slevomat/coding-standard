@@ -4,7 +4,9 @@ namespace FooNamespace;
 
 use UsedNamespace\UsedClass;
 
-abstract class FooClass
+require __DIR__ . '/typeHintDeclarationAbstractNoErrors.php';
+
+abstract class FooClass extends \External\AbstractFooClass
 {
 
 	/**
@@ -155,6 +157,30 @@ abstract class FooClass
 	public function returnsThisAsSelf(): self
 	{
 		return $this;
+	}
+
+	/**
+	 * @param string $cacheKey
+	 */
+	public function stringParameterWithoutHint($cacheKey)
+	{
+
+	}
+
+	/**
+	 * @param string|null $cacheKey
+	 */
+	public function stringNullableParameterWithoutHint($cacheKey)
+	{
+
+	}
+
+	/**
+	 * @param \Traversable|string[] $cacheKey
+	 */
+	public function stringTraversableParameterWithoutHint($cacheKey)
+	{
+
 	}
 
 	/**
