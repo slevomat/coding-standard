@@ -78,4 +78,32 @@ class NamespaceHelper
 		);
 	}
 
+	/**
+	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param string $nameAsReferencedInFile
+	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
+	 * @param int $currentPointer
+	 * @return string
+	 */
+	public static function resolveName(
+		\PHP_CodeSniffer_File $phpcsFile,
+		string $nameAsReferencedInFile,
+		array $useStatements,
+		int $currentPointer
+	): string
+	{
+		if (!self::isFullyQualifiedName($nameAsReferencedInFile)) {
+			$normalizedName = UseStatement::normalizedNameAsReferencedInFile(self::normalizeToCanonicalName($nameAsReferencedInFile));
+
+			if (isset($useStatements[$normalizedName])) {
+				return sprintf('%s%s', self::NAMESPACE_SEPARATOR, $useStatements[$normalizedName]->getFullyQualifiedTypeName());
+			}
+
+			$namespaceName = self::findCurrentNamespaceName($phpcsFile, $currentPointer);
+			return sprintf('%s%s%s', $namespaceName ?? '', self::NAMESPACE_SEPARATOR, $nameAsReferencedInFile);
+		}
+
+		return $nameAsReferencedInFile;
+	}
+
 }
