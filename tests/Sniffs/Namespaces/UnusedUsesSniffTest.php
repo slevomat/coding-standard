@@ -77,6 +77,12 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertNoSniffError($this->getFileReport(), 15);
 	}
 
+	public function testUsedClassesInImplements()
+	{
+		$this->assertNoSniffError($this->getFileReport(), 17);
+		$this->assertNoSniffError($this->getFileReport(), 18);
+	}
+
 	public function testReturnTypehint()
 	{
 		if (PHP_VERSION_ID < 70000) {

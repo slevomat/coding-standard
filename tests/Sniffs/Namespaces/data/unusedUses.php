@@ -14,8 +14,10 @@ use function LoremIpsum\UsedFunction;
 use const FooBar\UNUSED_CONSTANT;
 use const LoremIpsum\USED_CONSTANT;
 use X;
+use Lorem\FirstInterface;
+use Ipsum\SecondInterface;
 
-class TestClass
+class TestClass implements FirstInterface, SecondInterface
 {
 
 	/**

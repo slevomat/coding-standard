@@ -91,7 +91,18 @@ class ReferencedNameHelper
 							T_DOUBLE_COLON,
 						], true)
 					) {
-						$type = ReferencedName::TYPE_CONSTANT;
+						if ($tokens[$previousTokenBeforeStartPointer]['code'] === T_COMMA) {
+							$implementsPointer = TokenHelper::findPreviousExcluding(
+								$phpcsFile,
+								array_merge(TokenHelper::$nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
+								$previousTokenBeforeStartPointer - 1
+							);
+							if ($tokens[$implementsPointer]['code'] !== T_IMPLEMENTS) {
+								$type = ReferencedName::TYPE_CONSTANT;
+							}
+						} else {
+							$type = ReferencedName::TYPE_CONSTANT;
+						}
 					}
 				}
 			}
