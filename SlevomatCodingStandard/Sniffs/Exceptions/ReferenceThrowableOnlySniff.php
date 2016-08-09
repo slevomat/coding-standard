@@ -32,32 +32,28 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer_Sniff
 		$tokens = $phpcsFile->getTokens();
 		$message = sprintf('Referencing general \%s; use \%s instead', \Exception::class, \Throwable::class);
 		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
-		foreach ($useStatements as $useStatement) {
-			if ($useStatement->getFullyQualifiedTypeName() === \Exception::class) {
-				$phpcsFile->addError(
-					$message,
-					$useStatement->getPointer(),
-					self::CODE_REFERENCED_GENERAL_EXCEPTION
-				);
-			}
-		}
-
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
-		if (count($referencedNames) > 0) {
-			$currentNamespace = NamespaceHelper::findCurrentNamespaceName($phpcsFile, $referencedNames[0]->getPointer());
-		} else {
-			return;
-		}
 		foreach ($referencedNames as $referencedName) {
-			if ($referencedName->getNameAsReferencedInFile() === 'Exception' && $currentNamespace !== null) {
-				continue;
-			}
-			if (!in_array($referencedName->getNameAsReferencedInFile(), ['\Exception', 'Exception'], true)) {
+			$resolvedName = NamespaceHelper::resolveName(
+				$phpcsFile,
+				$referencedName->getNameAsReferencedInFile(),
+				$useStatements,
+				$referencedName->getPointer()
+			);
+			if ($resolvedName !== '\\Exception') {
 				continue;
 			}
 			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $referencedName->getPointer() - 1);
 			if (in_array($tokens[$previousPointer]['code'], [T_EXTENDS, T_NEW, T_INSTANCEOF], true)) {
 				continue; // allow \Exception in extends and instantiating it
+			}
+			if ($tokens[$previousPointer]['code'] === T_OPEN_PARENTHESIS) {
+				$catchPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
+				if ($tokens[$catchPointer]['code'] === T_CATCH) {
+					if ($this->searchForThrowableInNextCatches($phpcsFile, $useStatements, $catchPointer)) {
+						continue;
+					}
+				}
 			}
 			$phpcsFile->addError(
 				$message,
@@ -65,6 +61,36 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer_Sniff
 				self::CODE_REFERENCED_GENERAL_EXCEPTION
 			);
 		}
+	}
+
+	private function searchForThrowableInNextCatches(\PHP_CodeSniffer_File $phpcsFile, array $useStatements, int $catchPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+		$nextCatchPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$catchPointer]['scope_closer'] + 1);
+
+		while ($nextCatchPointer !== null) {
+			$nextCatchToken = $tokens[$nextCatchPointer];
+			if ($nextCatchToken['code'] !== T_CATCH) {
+				break;
+			}
+
+			$catchedTypeNameStartPointer = $phpcsFile->findNext(TokenHelper::$nameTokenCodes, $nextCatchToken['parenthesis_opener'] + 1, $nextCatchToken['parenthesis_closer']);
+			$catchedVariablePointer = $phpcsFile->findNext(T_VARIABLE, $nextCatchToken['parenthesis_opener'] + 1, $nextCatchToken['parenthesis_closer']);
+			$catchedTypeNameEndPointer = $phpcsFile->findPrevious(TokenHelper::$nameTokenCodes, $catchedVariablePointer - 1, $nextCatchToken['parenthesis_opener']) + 1;
+			$catchedType = NamespaceHelper::resolveName(
+				$phpcsFile,
+				TokenHelper::getContent($phpcsFile, $catchedTypeNameStartPointer, $catchedTypeNameEndPointer),
+				$useStatements,
+				$catchPointer
+			);
+			if ($catchedType === '\\Throwable') {
+				return true;
+			}
+
+			$nextCatchPointer = TokenHelper::findNextEffective($phpcsFile, $nextCatchToken['scope_closer'] + 1);
+		}
+
+		return false;
 	}
 
 }
