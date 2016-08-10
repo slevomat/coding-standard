@@ -40,7 +40,7 @@ class ReferencedNameHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $openTagPointer
+	 * @param int $openTagPointer
 	 * @return \SlevomatCodingStandard\Helpers\ReferencedName[] referenced names
 	 */
 	private static function createAllReferencedNames(\PHP_CodeSniffer_File $phpcsFile, int $openTagPointer): array
