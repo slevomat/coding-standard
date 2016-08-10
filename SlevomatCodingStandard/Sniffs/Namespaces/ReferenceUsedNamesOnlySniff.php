@@ -127,8 +127,6 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 						if (
 							!NamespaceHelper::hasNamespace($name)
 							&& NamespaceHelper::findCurrentNamespaceName($phpcsFile, $pointer) === null
-							&& !in_array($name, ['\Exception', '\Throwable'], true)
-							&& (!StringHelper::endsWith($name, 'Error') || NamespaceHelper::hasNamespace($name))
 						) {
 							$phpcsFile->addError(sprintf(
 								'Type %s should not be referenced via a fully qualified name, but via an unqualified name without the leading \\, because the file does not have a namespace and the type cannot be put in a use statement',
