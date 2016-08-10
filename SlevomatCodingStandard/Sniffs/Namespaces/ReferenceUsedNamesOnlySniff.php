@@ -33,6 +33,12 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	/** @var string[]|null */
 	private $normalizedSpecialExceptionNames;
 
+	/** @var string[] */
+	public $ignoredNames = [];
+
+	/** @var string[] */
+	private $normalizedIgnoredNames;
+
 	/** @var boolean */
 	public $allowPartialUses = true;
 
@@ -66,6 +72,18 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		return $this->normalizedSpecialExceptionNames;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getIgnoredNames()
+	{
+		if ($this->normalizedIgnoredNames === null) {
+			$this->normalizedIgnoredNames = SniffSettingsHelper::normalizeArray($this->ignoredNames);
+		}
+
+		return $this->normalizedIgnoredNames;
 	}
 
 	/**
@@ -108,22 +126,28 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 		foreach ($referencedNames as $referencedName) {
 			$name = $referencedName->getNameAsReferencedInFile();
 			$pointer = $referencedName->getPointer();
+			$canonicalName = NamespaceHelper::normalizeToCanonicalName($name);
 			if (NamespaceHelper::isFullyQualifiedName($name)) {
+				$isExceptionByName = StringHelper::endsWith($name, 'Exception')
+					|| $name === '\Throwable'
+					|| (StringHelper::endsWith($name, 'Error') && !NamespaceHelper::hasNamespace($name))
+					|| in_array($canonicalName, $this->getSpecialExceptionNames(), true);
+				$inIgnoredNames = in_array($canonicalName, $this->getIgnoredNames(), true);
 				if (
+					$this->isClassRequiredToBeUsed($name) &&
 					(
-						!(
-						StringHelper::endsWith($name, 'Exception')
-						|| $name === '\Throwable'
-						|| (StringHelper::endsWith($name, 'Error') && !NamespaceHelper::hasNamespace($name))
-						|| in_array(NamespaceHelper::normalizeToCanonicalName($name), $this->getSpecialExceptionNames(), true)
-						) || !$this->allowFullyQualifiedExceptions
-					) && $this->isClassRequiredToBeUsed($name)
+						!$this->allowFullyQualifiedExceptions
+						|| !$isExceptionByName
+						|| $inIgnoredNames
+					)
 				) {
 					$previousKeywordPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(
 						TokenHelper::$nameTokenCodes,
 						[T_WHITESPACE, T_COMMA]
 					), $pointer - 1);
-					if (!in_array($tokens[$previousKeywordPointer]['code'], $this->getFullyQualifiedKeywords(), true)) {
+					if (
+						!in_array($tokens[$previousKeywordPointer]['code'], $this->getFullyQualifiedKeywords(), true)
+					) {
 						if (
 							!NamespaceHelper::hasNamespace($name)
 							&& NamespaceHelper::findCurrentNamespaceName($phpcsFile, $pointer) === null

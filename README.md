@@ -112,6 +112,10 @@ try {
 
 Exceptions with different names can be configured in `specialExceptionNames` property.
 
+If your codebase uses classes that look like exceptions (because they have `Exception` or `Error` suffixes) but aren't,
+you can add them to `ignoredNames` property and the sniff won't enforce them to be fully qualified. Classes with `Error`
+suffix has to be added to ignored only if they are in the root namespace (like `LibXMLError`).
+
 #### SlevomatCodingStandard.Namespaces.MultipleUsesPerLine
 
 Prohibits multiple uses separated by commas:
@@ -126,7 +130,7 @@ Enforces to use all referenced names with configurable omissions:
 
 `fullyQualifiedKeywords` - allows fully qualified names after certain keywords. Useful in tandem with FullyQualifiedClassNameAfterKeyword sniff.
 
-`allowFullyQualifiedExceptions` & `specialExceptionNames` - allows fully qualified exceptions. Useful in tandem with FullyQualifiedExceptions sniff.
+`allowFullyQualifiedExceptions`, `specialExceptionNames` & `ignoredNames` - allows fully qualified exceptions. Useful in tandem with FullyQualifiedExceptions sniff.
 
 `allowPartialUses` - allows using and referencing whole namespaces:
 

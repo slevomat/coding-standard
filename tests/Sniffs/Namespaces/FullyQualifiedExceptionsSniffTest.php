@@ -71,4 +71,41 @@ class FullyQualifiedExceptionsSniffTest extends \SlevomatCodingStandard\Sniffs\T
 		$this->assertNoSniffError($this->getFileReport(), 28);
 	}
 
+	public function testClassSuffixedErrorOrExceptionIsNotAnExceptionButReported()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/ignoredNames.php');
+		$this->assertSniffError($report, 3, FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION);
+		$this->assertSniffError($report, 7, FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION);
+	}
+
+	public function testIgnoredNames()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/ignoredNames.php', [
+			'ignoredNames' => [
+				'LibXMLError',
+				'LibXMLException',
+			],
+		]);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
+	public function testClassSuffixedErrorOrExceptionIsNotAnExceptionButReportedInNamespace()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/ignoredNamesInNamespace.php');
+		$this->assertNoSniffError($report, 5); // *Error names are reported only with a root namespace
+		$this->assertSniffError($report, 9, FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION);
+		$this->assertNoSniffError($report, 13); // look like Exception but isn't - handled by ReferenceUsedNamesOnlySniff
+		$this->assertNoSniffError($report, 17); // dtto
+	}
+
+	public function testIgnoredNamesInNamespace()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/ignoredNamesInNamespace.php', [
+			'ignoredNames' => [
+				'IgnoredNames\\LibXMLException',
+			],
+		]);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
 }
