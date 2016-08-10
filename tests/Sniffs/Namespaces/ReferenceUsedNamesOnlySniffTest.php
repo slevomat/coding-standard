@@ -53,6 +53,31 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		$this->assertNoSniffError($report, 12);
 	}
 
+	public function testReportFullyQualifiedInFileWithNamespace()
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/shouldBeInUseStatement.php'
+		);
+		$this->assertSniffError(
+			$report,
+			13,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'\Some\CommonException'
+		);
+		$this->assertSniffError(
+			$report,
+			14,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'\Exception'
+		);
+		$this->assertSniffError(
+			$report,
+			15,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'\Nette\Object'
+		);
+	}
+
 	public function testDoNotAllowFullyQualifiedExtends()
 	{
 		$report = $this->checkFile(

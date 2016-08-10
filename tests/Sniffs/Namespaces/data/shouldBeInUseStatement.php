@@ -10,6 +10,9 @@ class Bar
 		new Lorem();
 		$constant = \Some\ConstantClass::CONSTANT;
 		new \Foo\SomeError();
+		new \Some\CommonException();
+		new \Exception();
+		new \Nette\Object();
 	}
 
 }
