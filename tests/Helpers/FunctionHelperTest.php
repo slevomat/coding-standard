@@ -137,7 +137,7 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	/**
 	 * @dataProvider dataReturnsValueOrNot
 	 * @param string $functionName
-	 * @param boolean $returnsValue
+	 * @param bool $returnsValue
 	 */
 	public function testReturnsValueOrNot(
 		string $functionName,
