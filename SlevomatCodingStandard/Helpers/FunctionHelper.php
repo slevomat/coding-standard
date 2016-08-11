@@ -176,4 +176,46 @@ class FunctionHelper
 		return $returnAnnotations[0];
 	}
 
+	/**
+	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param int $anyPointer any pointer type where the search begins from (backwards)
+	 * @return string|null
+	 */
+	public static function findCurrentParentClassName(\PHP_CodeSniffer_File $phpcsFile, int $anyPointer)
+	{
+		$parentClassNamePointer = $phpcsFile->findPrevious(T_EXTENDS, $anyPointer);
+		if ($parentClassNamePointer === false) {
+			return null;
+		}
+
+		$parentClassNameStartPointer = TokenHelper::findNextEffective($phpcsFile, $parentClassNamePointer + 1);
+		$parentClassNameEndPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $parentClassNameStartPointer + 1);
+
+		return TokenHelper::getContent($phpcsFile, $parentClassNameStartPointer, $parentClassNameEndPointer);
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param int $anyPointer any pointer type where the search begins from (backwards)
+	 * @return string[]
+	 */
+	public static function findCurrentParentInterfaceNames(\PHP_CodeSniffer_File $phpcsFile, int $anyPointer): array
+	{
+		$parentClassNamePointer = $phpcsFile->findPrevious(T_IMPLEMENTS, $anyPointer);
+		if ($parentClassNamePointer === false) {
+			return [];
+		}
+
+		$interfaceNames = [];
+		$parentClassNameEndPointer = $parentClassNamePointer;
+
+		do {
+			$parentClassNameStartPointer = TokenHelper::findNextEffective($phpcsFile, $parentClassNameEndPointer + 1);
+			$parentClassNameEndPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $parentClassNameStartPointer + 1);
+			$interfaceNames[] = TokenHelper::getContent($phpcsFile, $parentClassNameStartPointer, $parentClassNameEndPointer);
+		} while ($phpcsFile->getTokens()[$parentClassNameEndPointer]['code'] === T_COMMA);
+
+		return $interfaceNames;
+	}
+
 }
