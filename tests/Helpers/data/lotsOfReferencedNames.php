@@ -46,3 +46,7 @@ class FooClass extends \ExtendedClass implements \ImplementedInterface
 	}
 
 }
+
+interface FooInterface extends \ExtendedInterface, \SecondExtendedInterface
+{
+}

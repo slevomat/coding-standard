@@ -26,6 +26,8 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			['BAZ_CONSTANT', false, true],
 			['LoremClass', false, false],
 			['IpsumClass', false, false],
+			['\ExtendedInterface', false, false],
+			['\SecondExtendedInterface', false, false],
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
