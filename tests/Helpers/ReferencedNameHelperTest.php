@@ -14,6 +14,8 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$foundTypes = [
 			['\ExtendedClass', false, false],
 			['\ImplementedInterface', false, false],
+			['\SecondImplementedInterface', false, false],
+			['\ThirdImplementedInterface', false, false],
 			['\FullyQualified\SomeOtherTrait', false, false],
 			['SomeTrait', false, false],
 			['TypehintedName', false, false],
@@ -28,6 +30,7 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			['IpsumClass', false, false],
 			['\ExtendedInterface', false, false],
 			['\SecondExtendedInterface', false, false],
+			['\ThirdExtendedInterface', false, false],
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);

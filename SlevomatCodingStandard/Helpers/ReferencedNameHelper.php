@@ -94,7 +94,7 @@ class ReferencedNameHelper
 						if ($tokens[$previousTokenBeforeStartPointer]['code'] === T_COMMA) {
 							$implementsOrExtendsPointer = TokenHelper::findPreviousExcluding(
 								$phpcsFile,
-								array_merge(TokenHelper::$nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
+								array_merge([T_COMMA], TokenHelper::$nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
 								$previousTokenBeforeStartPointer - 1
 							);
 							if (

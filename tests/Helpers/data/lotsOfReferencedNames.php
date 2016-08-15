@@ -5,7 +5,7 @@ namespace FooNamespace;
 use Doctrine\ORM\Mapping as ORM;
 use UsedNamespace\UsedNameFooBar as UsedNameFooBarBaz;
 
-class FooClass extends \ExtendedClass implements \ImplementedInterface
+class FooClass extends \ExtendedClass implements \ImplementedInterface, \SecondImplementedInterface, \ThirdImplementedInterface
 {
 
 	use \FullyQualified\SomeOtherTrait;
@@ -47,6 +47,6 @@ class FooClass extends \ExtendedClass implements \ImplementedInterface
 
 }
 
-interface FooInterface extends \ExtendedInterface, \SecondExtendedInterface
+interface FooInterface extends \ExtendedInterface, \SecondExtendedInterface, \ThirdExtendedInterface
 {
 }
