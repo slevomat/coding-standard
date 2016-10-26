@@ -7,6 +7,10 @@ use PHP_CodeSniffer_File;
 class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer_Sniff
 {
 
+	const CODE_EMPTY_LINE_BEFORE_CLOSING_BRACE = 'EmptyLineBeforeClosingBrace';
+
+	const CODE_EMPTY_LINE_AFTER_OPENING_BRACE = 'EmptyLineAfterOpeningBrace';
+
 	/**
 	 * @return integer[]
 	 */
@@ -32,10 +36,16 @@ class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer_Sniff
 		$nextPointerAfterOpeningBrace = $phpcsFile->findNext(T_WHITESPACE, $openerPointer + 1, null, true);
 		$nextTokenAfterOpeningBrace = $tokens[$nextPointerAfterOpeningBrace];
 		if ($nextTokenAfterOpeningBrace['line'] !== $openerToken['line'] + 2) {
-			$phpcsFile->addError(sprintf(
+			$fix = $phpcsFile->addFixableError(sprintf(
 				'There must be one empty line after %s opening brace.',
 				$typeToken['content']
-			), $nextPointerAfterOpeningBrace);
+			), $nextPointerAfterOpeningBrace, self::CODE_EMPTY_LINE_AFTER_OPENING_BRACE);
+
+			if ($fix) {
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->addNewline($nextPointerAfterOpeningBrace);
+				$phpcsFile->fixer->endChangeset();
+			}
 		}
 
 		$closerPointer = $typeToken['scope_closer'];
@@ -43,10 +53,16 @@ class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer_Sniff
 		$previousPointerAfterClosingBrace = $phpcsFile->findPrevious(T_WHITESPACE, $closerPointer - 1, null, true);
 		$previousTokenAfterClosingBrace = $tokens[$previousPointerAfterClosingBrace];
 		if ($previousTokenAfterClosingBrace['line'] !== $closerToken['line'] - 2) {
-			$phpcsFile->addError(sprintf(
+			$fix = $phpcsFile->addFixableError(sprintf(
 				'There must be one empty line before %s closing brace.',
 				$typeToken['content']
-			), $previousPointerAfterClosingBrace);
+			), $previousPointerAfterClosingBrace, self::CODE_EMPTY_LINE_BEFORE_CLOSING_BRACE);
+
+			if ($fix) {
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->addNewline($previousPointerAfterClosingBrace);
+				$phpcsFile->fixer->endChangeset();
+			}
 		}
 	}
 
