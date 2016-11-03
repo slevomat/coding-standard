@@ -103,6 +103,29 @@ class ReferencedNameHelper
 							) {
 								$type = ReferencedName::TYPE_CONSTANT;
 							}
+						} elseif (
+							PHP_VERSION_ID >= 70100
+							&& ($tokens[$previousTokenBeforeStartPointer]['code'] === T_BITWISE_OR
+							|| $tokens[$previousTokenBeforeStartPointer]['code'] === T_OPEN_PARENTHESIS)
+						) {
+							$exclude = [T_BITWISE_OR, T_OPEN_PARENTHESIS];
+							$catchPointer = TokenHelper::findPreviousExcluding(
+								$phpcsFile,
+								array_merge($exclude, TokenHelper::$nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
+								$previousTokenBeforeStartPointer - 1
+							);
+							$exclude = [T_BITWISE_OR];
+							$openParenthesisPointer = TokenHelper::findPreviousExcluding(
+								$phpcsFile,
+								array_merge($exclude, TokenHelper::$nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
+								$previousTokenBeforeStartPointer
+							);
+							if (
+								$tokens[$catchPointer]['code'] !== T_CATCH
+								|| $tokens[$openParenthesisPointer]['code'] !== T_OPEN_PARENTHESIS
+							) {
+								$type = ReferencedName::TYPE_CONSTANT;
+							}
 						} else {
 							$type = ReferencedName::TYPE_CONSTANT;
 						}

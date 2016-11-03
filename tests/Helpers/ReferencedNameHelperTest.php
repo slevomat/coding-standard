@@ -42,6 +42,33 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		}
 	}
 
+	/**
+	 * @requires PHP 7.1
+	 */
+	public function testMultipleExceptionsCatch()
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/multipleExceptionsCatch.php'
+		);
+
+		$foundTypes = [
+			['doSomething', true, false],
+			['FirstDoubleException', false, false],
+			['\Foo\SecondDoubleException', false, false],
+			['\Foo\Bar\FirstMultipleException', false, false],
+			['SecondMultipleException', false, false],
+			['ThirdMultipleException', false, false],
+		];
+
+		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
+		$this->assertCount(count($foundTypes), $names);
+		foreach ($names as $i => $referencedName) {
+			$this->assertSame($foundTypes[$i][0], $referencedName->getNameAsReferencedInFile());
+			$this->assertSame($foundTypes[$i][1], $referencedName->isFunction(), $foundTypes[$i][0]);
+			$this->assertSame($foundTypes[$i][2], $referencedName->isConstant(), $foundTypes[$i][0]);
+		}
+	}
+
 	public function testFindReferencedNameEndPointerOnNonReferencedName()
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
