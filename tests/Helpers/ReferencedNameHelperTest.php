@@ -17,6 +17,8 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			['\SecondImplementedInterface', false, false],
 			['\ThirdImplementedInterface', false, false],
 			['\FullyQualified\SomeOtherTrait', false, false],
+			['SomeDifferentTrait', false, false],
+			['\FullyQualified\SometTotallyDifferentTrait', false, false],
 			['SomeTrait', false, false],
 			['TypehintedName', false, false],
 			['ClassInstance', false, false],

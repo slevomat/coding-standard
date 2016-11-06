@@ -92,14 +92,17 @@ class ReferencedNameHelper
 						], true)
 					) {
 						if ($tokens[$previousTokenBeforeStartPointer]['code'] === T_COMMA) {
-							$implementsOrExtendsPointer = TokenHelper::findPreviousExcluding(
+							$precedingTokenPointer = TokenHelper::findPreviousExcluding(
 								$phpcsFile,
 								array_merge([T_COMMA], TokenHelper::$nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
 								$previousTokenBeforeStartPointer - 1
 							);
 							if (
-								$tokens[$implementsOrExtendsPointer]['code'] !== T_IMPLEMENTS
-								&& $tokens[$implementsOrExtendsPointer]['code'] !== T_EXTENDS
+								!in_array($tokens[$precedingTokenPointer]['code'], [
+									T_IMPLEMENTS,
+									T_EXTENDS,
+									T_USE,
+								])
 							) {
 								$type = ReferencedName::TYPE_CONSTANT;
 							}
