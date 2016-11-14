@@ -7,23 +7,33 @@ use SlevomatCodingStandard\Helpers\StringHelper;
 class FilepathNamespaceExtractor
 {
 
+	const DEFAULT_EXTENSIONS = [
+		'php',
+	];
+
 	/** @var string[] */
 	private $rootNamespaces;
 
 	/** @var boolean[] dir(string) => true(boolean) */
 	private $skipDirs;
 
+	/** @var string[] */
+	private $extensions;
+
 	/**
 	 * @param string[] $rootNamespaces directory(string) => namespace
 	 * @param string[] $skipDirs
+	 * @param string[] $extensions index(integer) => extension
 	 */
 	public function __construct(
 		array $rootNamespaces,
-		array $skipDirs
+		array $skipDirs,
+		array $extensions
 	)
 	{
 		$this->rootNamespaces = $rootNamespaces;
 		$this->skipDirs = array_fill_keys($skipDirs, true);
+		$this->extensions = $extensions;
 	}
 
 	/**
@@ -32,7 +42,8 @@ class FilepathNamespaceExtractor
 	 */
 	public function getTypeNameFromProjectPath($path)
 	{
-		if (pathinfo($path, PATHINFO_EXTENSION) !== 'php') {
+		$extension = pathinfo($path, PATHINFO_EXTENSION);
+		if (!in_array($extension, $this->extensions ?: self::DEFAULT_EXTENSIONS)) {
 			return null;
 		}
 
@@ -66,7 +77,7 @@ class FilepathNamespaceExtractor
 			return !isset($this->skipDirs[$pathPart]);
 		}));
 
-		return substr($typeName, 0, -strlen('.php'));
+		return substr($typeName, 0, -strlen('.' . $extension));
 	}
 
 }
