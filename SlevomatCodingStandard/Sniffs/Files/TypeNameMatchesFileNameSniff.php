@@ -13,6 +13,9 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 	/** @var string[] path(string) => namespace */
 	public $rootNamespaces = [];
 
+	/** @var string[] index(integer) => extension */
+	public $extensions = ['php'];
+
 	/** @var string[] path(string) => namespace */
 	private $normalizedRootNamespaces;
 
@@ -84,7 +87,8 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 		if ($this->namespaceExtractor === null) {
 			$this->namespaceExtractor = new FilepathNamespaceExtractor(
 				$this->getRootNamespaces(),
-				$this->getSkipDirs()
+				$this->getSkipDirs(),
+				$this->extensions
 			);
 		}
 
