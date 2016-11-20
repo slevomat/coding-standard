@@ -91,6 +91,8 @@
 			checkreturn="true"
 		>
 			<arg value="analyse"/>
+			<arg value="-l"/>
+			<arg value="4"/>
 			<arg value="-c"/>
 			<arg path="phpstan.neon"/>
 			<arg path="SlevomatCodingStandard"/>
