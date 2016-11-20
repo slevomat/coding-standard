@@ -23,7 +23,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 	/** @var integer[] */
 	private $tokenDynamism;
 
-	/** @var integer[] */
+	/** @var bool[] */
 	private $stopTokenCodes;
 
 	/**
@@ -65,7 +65,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @return integer[]
+	 * @return bool[]
 	 */
 	private function getStopTokenCodes()
 	{

@@ -14,10 +14,10 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 	/** @var string[] path(string) => namespace */
 	private $normalizedRootNamespaces;
 
-	/** @var string */
+	/** @var string[] */
 	public $skipDirs = [];
 
-	/** @var string */
+	/** @var string[] */
 	private $normalizedSkipDirs;
 
 	/** @var string[] */

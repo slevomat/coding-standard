@@ -22,7 +22,7 @@ use PHP_CodeSniffer_File;
 class ReferencedNameHelper
 {
 
-	/** @var string[][] Cached data for method getAllReferencedNames, cacheKey(string) => pointer(integer) => name(string) */
+	/** @var \SlevomatCodingStandard\Helpers\ReferencedName[][] Cached data for method getAllReferencedNames, cacheKey(string) => pointer(integer) => name(string) */
 	private static $allReferencedTypesCache = [];
 
 	/**

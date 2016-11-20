@@ -13,7 +13,7 @@
 	"require-dev": {
 		"consistence/coding-standard": "^0.11.0",
 		"phing/phing": "^2.9",
-		"phpstan/phpstan": "0.1",
+		"phpstan/phpstan": "0.2",
 		"phpunit/phpunit": "^5.0",
 		"satooshi/php-coveralls": "^1.0"
 	},

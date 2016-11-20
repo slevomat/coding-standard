@@ -12,7 +12,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 
 	const CODE_INCORRECT_ORDER = 'IncorrectlyOrderedUses';
 
-	/** @var \SlevomatCodingStandard\Helpers\UseStatement */
+	/** @var \SlevomatCodingStandard\Helpers\UseStatement|null */
 	private $lastUse;
 
 	/**
