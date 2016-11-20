@@ -15,7 +15,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 
 	public $newlinesCountBetweenOpenTagAndDeclare = 0;
 
-	/** @var string[] */
+	/** @var bool[] */
 	private static $alreadyProcessedFiles = [];
 
 	/**
