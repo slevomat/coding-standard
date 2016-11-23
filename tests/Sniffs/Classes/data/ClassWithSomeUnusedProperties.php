@@ -9,6 +9,8 @@ class ClassWithSomeUnusedProperties extends \Consistence\Object
 
 	private $usedProperty;
 
+	private $usedPropertyInString;
+
 	/**
 	 * @set(visibility="private")
 	 */
@@ -35,6 +37,7 @@ class ClassWithSomeUnusedProperties extends \Consistence\Object
 	public function foo()
 	{
 		$this->usedProperty->foo();
+		$test = "{$this->usedPropertyInString}";
 		$this->writeOnlyProperty = 'foo';
 		$this->unusedPropertyWhichNameIsAlsoAFunction();
 		$this->usedPrivateMethod();
