@@ -148,6 +148,33 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertSame($returnsValue, FunctionHelper::returnsValue($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, $functionName)));
 	}
 
+	public function dataReturnsVoid(): array
+	{
+		return [
+			['returnsValue', false],
+			['returnsVariable', false],
+			['returnsValueInCondition', false],
+			['noReturn', false],
+			['returnsVoid', true],
+			['containsClosure', false],
+			['containsAnonymousClass', false],
+		];
+	}
+
+	/**
+	 * @dataProvider dataReturnsVoid
+	 * @param string $functionName
+	 * @param bool $returnsValue
+	 */
+	public function testReturnsVoid(
+		string $functionName,
+		bool $returnsValue
+	)
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionReturnsValueOrNot.php');
+		$this->assertSame($returnsValue, FunctionHelper::returnsVoid($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, $functionName)));
+	}
+
 	public function testReturnTypeHint()
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionReturnTypeHint.php');

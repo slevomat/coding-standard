@@ -148,30 +148,48 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			return;
 		}
 
-		if (!FunctionHelper::returnsValue($phpcsFile, $functionPointer)) {
-			return;
-		}
-
 		if (FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer)) {
 			return;
 		}
 
+		$returnsValue = FunctionHelper::returnsValue($phpcsFile, $functionPointer);
+		$returnsVoid = FunctionHelper::returnsVoid($phpcsFile, $functionPointer);
+
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
 		if ($returnAnnotation === null) {
-			$phpcsFile->addError(
-				sprintf(
-					'%s %s() does not have return type hint nor @return annotation for its return value.',
-					$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
-					FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
-				),
-				$functionPointer,
-				self::MISSING_RETURN_TYPE_HINT
-			);
+			if ($returnsValue) {
+				$phpcsFile->addError(
+					sprintf(
+						'%s %s() does not have return type hint nor @return annotation for its return value.',
+						$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
+						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
+					),
+					$functionPointer,
+					self::MISSING_RETURN_TYPE_HINT
+				);
+			}
 
 			return;
 		}
 
 		$returnTypeHintDefinition = preg_split('~\\s+~', $returnAnnotation)[0];
+		if ($this->definitionContainsVoidTypeHint($returnTypeHintDefinition) && $returnsVoid) {
+			$phpcsFile->addError(
+				sprintf(
+					'%s %s() does not have return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
+					$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
+					FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
+					$returnTypeHintDefinition
+				),
+				$functionPointer,
+				self::MISSING_RETURN_TYPE_HINT
+			);
+			return;
+		}
+
+		if (!$returnsValue) {
+			return;
+		}
 
 		if ($this->definitionContainsMixedTypeHint($returnTypeHintDefinition)) {
 			return;
@@ -301,6 +319,11 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		return preg_match('~(?:^null$)|(?:^null\|)|(\|null\|)|(?:\|null$)~i', $typeHintDefinition) !== 0;
 	}
 
+	private function definitionContainsVoidTypeHint(string $typeHintDefinition): bool
+	{
+		return preg_match('~(?:^void)|(?:^void\|)|(\|void\|)|(?:\|void)~i', $typeHintDefinition) !== 0;
+	}
+
 	private function definitionContainsStaticOrThisTypeHint(string $typeHintDefinition): bool
 	{
 		return preg_match('~(?:^static$)|(?:^static\|)|(\|static\|)|(?:\|static$)~i', $typeHintDefinition) !== 0
@@ -352,6 +375,8 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			'callable',
 			'self',
 			'array',
+			'iterable',
+			'void',
 		];
 
 		return $simpleTypeHints;

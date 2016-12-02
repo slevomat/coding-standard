@@ -91,12 +91,18 @@ class FunctionHelper
 		return $parametersTypeHints;
 	}
 
-	public static function returnsValue(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): bool
+	public static function returnsValue(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer, bool $requireVoid = false): bool
 	{
 		$tokens = $codeSnifferFile->getTokens();
 
 		for ($i = $tokens[$functionPointer]['scope_opener'] + 1; $i < $tokens[$functionPointer]['scope_closer']; $i++) {
-			if ($tokens[$i]['code'] === T_RETURN && $tokens[TokenHelper::findNextEffective($codeSnifferFile, $i + 1)]['code'] !== T_SEMICOLON) {
+			$nextEffectiveTokenCode = $tokens[TokenHelper::findNextEffective($codeSnifferFile, $i + 1)]['code'];
+			if ($requireVoid) {
+				$checkReturn = $nextEffectiveTokenCode === T_SEMICOLON;
+			} else {
+				$checkReturn = $nextEffectiveTokenCode !== T_SEMICOLON;
+			}
+			if ($tokens[$i]['code'] === T_RETURN && $checkReturn) {
 				foreach (array_reverse($tokens[$i]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
 					if ($conditionTokenCode === T_CLOSURE || $conditionTokenCode === T_ANON_CLASS) {
 						continue 2;
@@ -108,6 +114,11 @@ class FunctionHelper
 		}
 
 		return false;
+	}
+
+	public static function returnsVoid(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): bool
+	{
+		return self::returnsValue($codeSnifferFile, $functionPointer, true);
 	}
 
 	/**

@@ -48,4 +48,20 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$this->assertSniffError($report, 100, TypeHintDeclarationSniff::USELESS_DOC_COMMENT);
 	}
 
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.uselessDocComment
+	 * @requires PHP 7.1
+	 */
+	public function test71Typehints()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/typehints71.php', [
+			'traversableTypeHints' => [
+				\Traversable::class,
+			],
+		]);
+		$this->assertSniffError($report, 11, TypeHintDeclarationSniff::MISSING_PARAMETER_TYPE_HINT);
+		$this->assertSniffError($report, 11, TypeHintDeclarationSniff::MISSING_RETURN_TYPE_HINT);
+		$this->assertSniffError($report, 20, TypeHintDeclarationSniff::USELESS_DOC_COMMENT);
+	}
+
 }
