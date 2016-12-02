@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\Exceptions;
 
+use SlevomatCodingStandard\Helpers\CatchHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -47,6 +48,16 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer_Sniff
 			if (in_array($tokens[$previousPointer]['code'], [T_EXTENDS, T_NEW, T_INSTANCEOF], true)) {
 				continue; // allow \Exception in extends and instantiating it
 			}
+			if (
+				PHP_VERSION_ID >= 70100
+				&& $tokens[$previousPointer]['code'] === T_BITWISE_OR
+			) {
+				$previousPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(
+					TokenHelper::$ineffectiveTokenCodes,
+					TokenHelper::$nameTokenCodes,
+					[T_BITWISE_OR]
+				), $previousPointer - 1);
+			}
 			if ($tokens[$previousPointer]['code'] === T_OPEN_PARENTHESIS) {
 				$catchPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
 				if ($tokens[$catchPointer]['code'] === T_CATCH) {
@@ -74,16 +85,8 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer_Sniff
 				break;
 			}
 
-			$catchedTypeNameStartPointer = $phpcsFile->findNext(TokenHelper::$nameTokenCodes, $nextCatchToken['parenthesis_opener'] + 1, $nextCatchToken['parenthesis_closer']);
-			$catchedVariablePointer = $phpcsFile->findNext(T_VARIABLE, $nextCatchToken['parenthesis_opener'] + 1, $nextCatchToken['parenthesis_closer']);
-			$catchedTypeNameEndPointer = $phpcsFile->findPrevious(TokenHelper::$nameTokenCodes, $catchedVariablePointer - 1, $nextCatchToken['parenthesis_opener']) + 1;
-			$catchedType = NamespaceHelper::resolveName(
-				$phpcsFile,
-				TokenHelper::getContent($phpcsFile, $catchedTypeNameStartPointer, $catchedTypeNameEndPointer),
-				$useStatements,
-				$catchPointer
-			);
-			if ($catchedType === '\\Throwable') {
+			$catchedTypes = CatchHelper::findCatchedTypesInCatch($phpcsFile, $useStatements, $nextCatchToken);
+			if (in_array('\\Throwable', $catchedTypes, true)) {
 				return true;
 			}
 

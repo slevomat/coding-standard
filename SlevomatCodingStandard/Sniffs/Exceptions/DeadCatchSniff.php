@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\Exceptions;
 
+use SlevomatCodingStandard\Helpers\CatchHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
@@ -30,17 +31,13 @@ class DeadCatchSniff implements \PHP_CodeSniffer_Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 		$catchToken = $tokens[$catchPointer];
-		$catchedTypeNameStartPointer = $phpcsFile->findNext(TokenHelper::$nameTokenCodes, $catchToken['parenthesis_opener'] + 1, $catchToken['parenthesis_closer']);
-		$catchedVariablePointer = $phpcsFile->findNext(T_VARIABLE, $catchToken['parenthesis_opener'] + 1, $catchToken['parenthesis_closer']);
-		$catchedTypeNameEndPointer = $phpcsFile->findPrevious(TokenHelper::$nameTokenCodes, $catchedVariablePointer - 1, $catchToken['parenthesis_opener']) + 1;
-		$catchedType = NamespaceHelper::resolveName(
+		$catchedTypes = CatchHelper::findCatchedTypesInCatch(
 			$phpcsFile,
-			TokenHelper::getContent($phpcsFile, $catchedTypeNameStartPointer, $catchedTypeNameEndPointer),
 			UseStatementHelper::getUseStatements($phpcsFile, $phpcsFile->findNext(T_OPEN_TAG, 0)),
-			$catchPointer
+			$catchToken
 		);
 
-		if ($catchedType !== '\\Throwable') {
+		if (!in_array('\\Throwable', $catchedTypes, true)) {
 			return;
 		}
 
