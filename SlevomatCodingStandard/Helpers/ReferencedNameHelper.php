@@ -56,7 +56,6 @@ class ReferencedNameHelper
 			if ($nameStartPointer === false) {
 				break;
 			}
-			$nameStartToken = $tokens[$nameStartPointer];
 			$nameEndPointer = self::findReferencedNameEndPointer($phpcsFile, $nameStartPointer);
 			if ($nameEndPointer === null) {
 				$beginSearchAtPointer = TokenHelper::findNextExcluding(
