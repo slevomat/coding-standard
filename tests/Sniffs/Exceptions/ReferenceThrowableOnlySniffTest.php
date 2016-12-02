@@ -41,4 +41,21 @@ class ReferenceThrowableOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		$this->assertSniffError($report, 32, ReferenceThrowableOnlySniff::CODE_REFERENCED_GENERAL_EXCEPTION);
 	}
 
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.uselessDocComment
+	 * @requires PHP 7.1
+	 */
+	public function testExceptionReferencesUnionTypes71()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/exception-references-71.php');
+		$this->assertNoSniffError($report, 5);
+		$this->assertNoSniffError($report, 7);
+		$this->assertNoSniffError($report, 9);
+		$this->assertNoSniffError($report, 15);
+		$this->assertNoSniffError($report, 17);
+		$this->assertNoSniffError($report, 19);
+		$this->assertSniffError($report, 25, ReferenceThrowableOnlySniff::CODE_REFERENCED_GENERAL_EXCEPTION);
+		$this->assertSniffError($report, 27, ReferenceThrowableOnlySniff::CODE_REFERENCED_GENERAL_EXCEPTION);
+	}
+
 }
