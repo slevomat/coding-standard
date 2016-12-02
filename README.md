@@ -318,3 +318,6 @@ vendor/bin/phing
 
 We are always looking forward for your bugreports, feature requests and pull requests. Thank you.
 
+## Code of Conduct
+
+This project adheres to a [Contributor Code of Conduct](https://github.com/slevomat/coding-standard/blob/master/CODE_OF_CONDUCT.md). By participating in this project and its community, you are expected to uphold this code.
