@@ -43,6 +43,12 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 
 		$tokens = $phpcsFile->getTokens();
 		$declarePointer = TokenHelper::findNextEffective($phpcsFile, $openTagPointer + 1);
+
+		if ($declarePointer === null) {
+			$this->reportMissingDeclareStrict($phpcsFile, $openTagPointer);
+			return;
+		}
+
 		if ($tokens[$declarePointer]['code'] !== T_DECLARE) {
 			$this->reportMissingDeclareStrict($phpcsFile, $openTagPointer);
 			return;
