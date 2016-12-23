@@ -32,6 +32,11 @@ interface WithoutAnnotation
 	public function withAnnotation($b, $c);
 
 	/**
+	 * @Route("/", name="homepage")
+	 */
+	public function withParametrizedAnnotation();
+
+	/**
 	 * Without annotation
 	 */
 	public function withoutAnnotation();
