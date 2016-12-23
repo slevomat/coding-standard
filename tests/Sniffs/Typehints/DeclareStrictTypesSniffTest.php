@@ -18,6 +18,10 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 				1,
 			],
 			[
+				__DIR__ . '/data/declareStrictTypesMissingEmptyFile.php',
+				1,
+			],
+			[
 				__DIR__ . '/data/declareTicks.php',
 				3,
 			],
