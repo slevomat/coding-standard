@@ -33,9 +33,7 @@ class CatchHelper
 				continue;
 			}
 
-			$endPointer = TokenHelper::findNextExcluding($phpcsFile, array_merge(
-				TokenHelper::$nameTokenCodes
-			), $nextPointer, $catchedVariablePointer);
+			$endPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $nextPointer, $catchedVariablePointer);
 			$catchedTypes[] = NamespaceHelper::resolveName(
 				$phpcsFile,
 				TokenHelper::getContent($phpcsFile, $startPointer, $endPointer),
