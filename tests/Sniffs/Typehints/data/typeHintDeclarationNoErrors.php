@@ -224,6 +224,14 @@ abstract class FooClass
 	}
 
 	/**
+	 * @return FooClass|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	public function withMock(): FooClass
+	{
+		return $this;
+	}
+
+	/**
 	 * @param string|int|null $value
 	 */
 	public function returnTypehintIsNotChecked($value): self
