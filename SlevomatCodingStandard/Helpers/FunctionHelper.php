@@ -164,7 +164,7 @@ class FunctionHelper
 	/**
 	 * @param \PHP_CodeSniffer_File $codeSnifferFile
 	 * @param int $functionPointer
-	 * @return string[]
+	 * @return \SlevomatCodingStandard\Helpers\Annotation[]
 	 */
 	public static function getParametersAnnotations(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): array
 	{
@@ -174,7 +174,7 @@ class FunctionHelper
 	/**
 	 * @param \PHP_CodeSniffer_File $codeSnifferFile
 	 * @param int $functionPointer
-	 * @return string|null
+	 * @return \SlevomatCodingStandard\Helpers\Annotation|null
 	 */
 	public static function findReturnAnnotation(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer)
 	{
