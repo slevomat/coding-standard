@@ -245,16 +245,16 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			}
 		} elseif (FunctionHelper::returnsValue($phpcsFile, $functionPointer)) {
 			$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
-			if (
-				$returnTypeHint === null
-				|| $this->isTraversableTypeHint($this->getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint))
-				|| (
-					$this->getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint) === 'self'
-					&& $returnAnnotation !== null
-					&& $this->definitionContainsStaticOrThisTypeHint($returnAnnotation->getContent())
-				)
-			) {
+			if ($returnTypeHint === null || $this->isTraversableTypeHint($this->getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint))) {
 				return;
+			}
+
+			if ($returnAnnotation !== null) {
+				if (!$this->definitionContainsOneTypeHint($returnAnnotation->getContent())) {
+					return;
+				} elseif ($this->getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint) === 'self' && $this->definitionContainsStaticOrThisTypeHint($returnAnnotation->getContent())) {
+					return;
+				}
 			}
 		}
 
@@ -332,7 +332,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	private function definitionContainsOneTypeHint(string $typeHintDefinition): bool
 	{
-		return preg_match(sprintf('~^(?:%s|(\\\\\\w+)+)(?:\[\])?$~i', implode('|', $this->getSimpleTypeHints())), $typeHintDefinition) !== 0;
+		return strpos($typeHintDefinition, '|') === false;
 	}
 
 	private function definitionContainsJustTwoTypeHints(string $typeHintDefinition): bool
