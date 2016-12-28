@@ -59,9 +59,11 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 				\Traversable::class,
 			],
 		]);
+
+		$this->assertSame(2, $report->getErrorCount());
+
 		$this->assertSniffError($report, 11, TypeHintDeclarationSniff::MISSING_PARAMETER_TYPE_HINT);
 		$this->assertSniffError($report, 11, TypeHintDeclarationSniff::MISSING_RETURN_TYPE_HINT);
-		$this->assertSniffError($report, 20, TypeHintDeclarationSniff::USELESS_DOC_COMMENT);
 	}
 
 }
