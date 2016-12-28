@@ -3,7 +3,6 @@
 namespace SlevomatCodingStandard\Sniffs\Exceptions;
 
 use SlevomatCodingStandard\Helpers\CatchHelper;
-use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
