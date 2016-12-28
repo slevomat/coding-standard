@@ -30,6 +30,13 @@ abstract class FooClass
 	}
 
 	/**
+	 * @param mixed[]|array $a
+	 */
+	public function mixedTraversableParameter($a)
+	{
+	}
+
+	/**
 	 * @param string|integer $a
 	 */
 	public function moreTypesParameter($a)
@@ -108,6 +115,11 @@ abstract class FooClass
 
 		return 0;
 	}
+
+	/**
+	 * @return array|mixed[]
+	 */
+	abstract public function mixedTraversableReturnValue();
 
 	/**
 	 * @return string|integer

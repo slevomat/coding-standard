@@ -311,7 +311,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	private function definitionContainsMixedTypeHint(string $typeHintDefinition): bool
 	{
-		return preg_match('~(?:^mixed$)|(?:^mixed\|)|(?:\|mixed\|)|(?:\|mixed$)~i', $typeHintDefinition) !== 0;
+		return preg_match('~(?:^mixed(?:\[\])?$)|(?:^mixed(?:\[\])?\|)|(?:\|mixed(?:\[\])?\|)|(?:\|mixed(?:\[\])?$)~i', $typeHintDefinition) !== 0;
 	}
 
 	private function definitionContainsNullTypeHint(string $typeHintDefinition): bool
