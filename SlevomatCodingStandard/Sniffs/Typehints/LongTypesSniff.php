@@ -58,7 +58,7 @@ class LongTypesSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		foreach ($annotations as $annotation) {
-			$annotationParts = preg_split('~\\s+~', $annotation);
+			$annotationParts = preg_split('~\\s+~', $annotation->getContent());
 			if (count($annotationParts) === 0) {
 				continue;
 			}
