@@ -64,8 +64,8 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		$parametersTypeHintsDefinitions = [];
-		foreach (FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer) as $parameterAnnotationContent) {
-			list($parameterTypeHintDefinition, $parameterName) = preg_split('~\\s+~', $parameterAnnotationContent);
+		foreach (FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer) as $parameterAnnotation) {
+			list($parameterTypeHintDefinition, $parameterName) = preg_split('~\\s+~', $parameterAnnotation->getContent());
 			$parameterName = preg_replace('~^\.{3}\\s*(\$.+)~', '\\1', $parameterName);
 			$parametersTypeHintsDefinitions[$parameterName] = $parameterTypeHintDefinition;
 		}
@@ -156,7 +156,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		$returnsVoid = FunctionHelper::returnsVoid($phpcsFile, $functionPointer);
 
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
-		if ($returnAnnotation === null) {
+		if ($returnAnnotation === null || $returnAnnotation->getContent() === null) {
 			if ($returnsValue) {
 				$phpcsFile->addError(
 					sprintf(
@@ -172,7 +172,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			return;
 		}
 
-		$returnTypeHintDefinition = preg_split('~\\s+~', $returnAnnotation)[0];
+		$returnTypeHintDefinition = preg_split('~\\s+~', $returnAnnotation->getContent())[0];
 		if ($this->definitionContainsVoidTypeHint($returnTypeHintDefinition) && $returnsVoid) {
 			$phpcsFile->addError(
 				sprintf(
@@ -239,7 +239,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
 			if (
 				($returnTypeHint !== null && $this->isTraversableTypeHint($this->getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint)))
-				|| ($returnAnnotation !== null && ($this->definitionContainsMixedTypeHint($returnAnnotation) || $this->definitionContainsNullTypeHint($returnAnnotation) || !$this->definitionContainsOneTypeHint($returnAnnotation)))
+				|| ($returnAnnotation !== null && ($this->definitionContainsMixedTypeHint($returnAnnotation->getContent()) || $this->definitionContainsNullTypeHint($returnAnnotation->getContent()) || !$this->definitionContainsOneTypeHint($returnAnnotation->getContent())))
 			) {
 				return;
 			}
@@ -251,7 +251,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 				|| (
 					$this->getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint) === 'self'
 					&& $returnAnnotation !== null
-					&& $this->definitionContainsStaticOrThisTypeHint($returnAnnotation)
+					&& $this->definitionContainsStaticOrThisTypeHint($returnAnnotation->getContent())
 				)
 			) {
 				return;
