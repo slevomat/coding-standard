@@ -311,23 +311,23 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	private function definitionContainsMixedTypeHint(string $typeHintDefinition): bool
 	{
-		return preg_match('~(?:^mixed$)|(?:^mixed\|)|(\|mixed\|)|(?:\|mixed$)~i', $typeHintDefinition) !== 0;
+		return preg_match('~(?:^mixed$)|(?:^mixed\|)|(?:\|mixed\|)|(?:\|mixed$)~i', $typeHintDefinition) !== 0;
 	}
 
 	private function definitionContainsNullTypeHint(string $typeHintDefinition): bool
 	{
-		return preg_match('~(?:^null$)|(?:^null\|)|(\|null\|)|(?:\|null$)~i', $typeHintDefinition) !== 0;
+		return preg_match('~(?:^null$)|(?:^null\|)|(?:\|null\|)|(?:\|null$)~i', $typeHintDefinition) !== 0;
 	}
 
 	private function definitionContainsVoidTypeHint(string $typeHintDefinition): bool
 	{
-		return preg_match('~(?:^void)|(?:^void\|)|(\|void\|)|(?:\|void)~i', $typeHintDefinition) !== 0;
+		return preg_match('~(?:^void)|(?:^void\|)|(?:\|void\|)|(?:\|void)~i', $typeHintDefinition) !== 0;
 	}
 
 	private function definitionContainsStaticOrThisTypeHint(string $typeHintDefinition): bool
 	{
-		return preg_match('~(?:^static$)|(?:^static\|)|(\|static\|)|(?:\|static$)~i', $typeHintDefinition) !== 0
-			|| preg_match('~(?:^\$this$)|(?:^\$this\|)|(\|\$this\|)|(?:\|\$this$)~i', $typeHintDefinition) !== 0;
+		return preg_match('~(?:^static$)|(?:^static\|)|(?:\|static\|)|(?:\|static$)~i', $typeHintDefinition) !== 0
+			|| preg_match('~(?:^\$this$)|(?:^\$this\|)|(?:\|\$this\|)|(?:\|\$this$)~i', $typeHintDefinition) !== 0;
 	}
 
 	private function definitionContainsOneTypeHint(string $typeHintDefinition): bool
