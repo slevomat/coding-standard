@@ -75,7 +75,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 			if ($tokens[$i]['code'] === T_VARIABLE && $tokens[$i]['content'] === sprintf('$%s', $name)) {
 				$propertyPointer = $codeSnifferFile->findPrevious([T_PUBLIC, T_PROTECTED, T_PRIVATE, T_STATIC], $i - 1);
 				if ($propertyPointer !== false) {
-					return $propertyPointer;
+					return $i;
 				}
 			}
 		}
