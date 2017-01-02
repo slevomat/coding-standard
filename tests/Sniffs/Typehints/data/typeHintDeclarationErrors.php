@@ -99,4 +99,8 @@ abstract class FooClass
 	 */
 	abstract public function uselessDocCommentBecauseOfReturnTypeHint(): bool;
 
+	private $boolean = true;
+
+	public $array = [];
+
 }

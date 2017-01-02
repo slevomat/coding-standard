@@ -13,6 +13,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 
 	const CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE = 'incorrectWhitespaceBetweenOpenTagAndDeclare';
 
+	/** @var int */
 	public $newlinesCountBetweenOpenTagAndDeclare = 0;
 
 	/** @var bool[] */
