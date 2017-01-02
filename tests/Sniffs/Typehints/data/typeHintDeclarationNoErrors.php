@@ -251,4 +251,10 @@ abstract class FooClass
 		return $this;
 	}
 
+	/** @var bool */
+	private $boolean = true;
+
+	/** @var array */
+	public $array = [];
+
 }

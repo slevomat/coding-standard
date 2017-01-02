@@ -5,17 +5,20 @@ namespace SlevomatCodingStandard\Helpers;
 class TokenHelper
 {
 
+	/** @var mixed[] */
 	public static $nameTokenCodes = [
 		T_NS_SEPARATOR,
 		T_STRING,
 	];
 
+	/** @var mixed[] */
 	public static $typeKeywordTokenCodes = [
 		T_CLASS,
 		T_TRAIT,
 		T_INTERFACE,
 	];
 
+	/** @var mixed[] */
 	public static $ineffectiveTokenCodes = [
 		T_WHITESPACE,
 		T_COMMENT,

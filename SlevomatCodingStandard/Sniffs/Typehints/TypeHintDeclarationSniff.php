@@ -6,6 +6,7 @@ use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
+use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
@@ -18,17 +19,41 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	const MISSING_PARAMETER_TYPE_HINT = 'missingParameterTypeHint';
 
+	const MISSING_PROPERTY_TYPE_HINT = 'missingPropertyTypeHint';
+
 	const MISSING_RETURN_TYPE_HINT = 'missingReturnTypeHint';
 
 	const USELESS_DOC_COMMENT = 'uselessDocComment';
 
+	/** @var string[] */
 	public $traversableTypeHints = [];
 
+	/** @var string[] */
 	public $usefulAnnotations = [];
 
+	/** @var int[] [string => int] */
 	private $normalizedTraversableTypeHints;
 
+	/** @var int[] [string => int] */
 	private $normalizedUsefulAnnotations;
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
+	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param int $pointer
+	 */
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $pointer)
+	{
+		$token = $phpcsFile->getTokens()[$pointer];
+
+		if ($token['code'] === T_FUNCTION) {
+			$this->checkParametersTypeHints($phpcsFile, $pointer);
+			$this->checkReturnTypeHints($phpcsFile, $pointer);
+			$this->checkUselessDocComment($phpcsFile, $pointer);
+		} elseif ($token['code'] === T_VARIABLE && PropertyHelper::isProperty($phpcsFile, $pointer)) {
+			$this->checkPropertyTypeHint($phpcsFile, $pointer);
+		}
+	}
 
 	/**
 	 * @return int[]
@@ -37,19 +62,8 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	{
 		return [
 			T_FUNCTION,
+			T_VARIABLE,
 		];
-	}
-
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param int $functionPointer
-	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $functionPointer)
-	{
-		$this->checkParametersTypeHints($phpcsFile, $functionPointer);
-		$this->checkReturnTypeHints($phpcsFile, $functionPointer);
-		$this->checkUselessDocComment($phpcsFile, $functionPointer);
 	}
 
 	private function checkParametersTypeHints(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer)
@@ -279,6 +293,21 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			$functionPointer,
 			self::USELESS_DOC_COMMENT
 		);
+	}
+
+	private function checkPropertyTypeHint(\PHP_CodeSniffer_File $phpcsFile, int $propertyPointer)
+	{
+		$varAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $propertyPointer, '@var');
+		if (count($varAnnotations) === 0) {
+			$phpcsFile->addError(
+				sprintf(
+					'Property %s does not have @var annotation.',
+					PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer)
+				),
+				$propertyPointer,
+				self::MISSING_PROPERTY_TYPE_HINT
+			);
+		}
 	}
 
 	private function getSniffName(string $sniffName): string
