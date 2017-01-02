@@ -4,7 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Typehints;
 
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
-use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\PropertyHelper;
 
 class LongTypesSniff implements \PHP_CodeSniffer_Sniff
 {
@@ -37,18 +37,7 @@ class LongTypesSniff implements \PHP_CodeSniffer_Sniff
 				$annotations[] = $return;
 			}
 		} elseif ($tokens[$pointer]['code'] === T_VARIABLE) {
-			$propertyDeterminingPointer = TokenHelper::findPreviousExcluding(
-				$phpcsFile,
-				array_merge([T_STATIC], TokenHelper::$ineffectiveTokenCodes),
-				$pointer - 1
-			);
-			if (!in_array($tokens[$propertyDeterminingPointer]['code'], [
-				T_PRIVATE,
-				T_PROTECTED,
-				T_PUBLIC,
-				T_VAR,
-				], true)
-			) {
+			if (!PropertyHelper::isProperty($phpcsFile, $pointer)) {
 				return;
 			}
 
