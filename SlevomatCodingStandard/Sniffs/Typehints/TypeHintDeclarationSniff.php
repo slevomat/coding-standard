@@ -9,8 +9,7 @@ use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
-use SlevomatCodingStandard\Helpers\UseStatement;
-use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use SlevomatCodingStandard\Helpers\TypeHintHelper;
 
 class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 {
@@ -252,28 +251,28 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		if (FunctionHelper::isAbstract($phpcsFile, $functionPointer)) {
 			$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
 			if (
-				($returnTypeHint !== null && $this->isTraversableTypeHint($this->getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint)))
+				($returnTypeHint !== null && $this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint)))
 				|| ($returnAnnotation !== null && ($this->definitionContainsMixedTypeHint($returnAnnotation->getContent()) || $this->definitionContainsNullTypeHint($returnAnnotation->getContent()) || !$this->definitionContainsOneTypeHint($returnAnnotation->getContent())))
 			) {
 				return;
 			}
 		} elseif (FunctionHelper::returnsValue($phpcsFile, $functionPointer)) {
 			$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
-			if ($returnTypeHint === null || $this->isTraversableTypeHint($this->getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint))) {
+			if ($returnTypeHint === null || $this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint))) {
 				return;
 			}
 
 			if ($returnAnnotation !== null) {
 				if (!$this->definitionContainsOneTypeHint($returnAnnotation->getContent())) {
 					return;
-				} elseif ($this->getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint) === 'self' && $this->definitionContainsStaticOrThisTypeHint($returnAnnotation->getContent())) {
+				} elseif (TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint) === 'self' && $this->definitionContainsStaticOrThisTypeHint($returnAnnotation->getContent())) {
 					return;
 				}
 			}
 		}
 
 		foreach (FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer) as $parameterTypeHint) {
-			if ($parameterTypeHint === null || $this->isTraversableTypeHint($this->getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint))) {
+			if ($parameterTypeHint === null || $this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint))) {
 				return;
 			}
 		}
@@ -315,29 +314,6 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		return sprintf('%s.%s', self::NAME, $sniffName);
 	}
 
-	private function getFullyQualifiedTypeHint(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer, string $typeHint): string
-	{
-		if (in_array($typeHint, $this->getSimpleTypeHints(), true) || NamespaceHelper::isFullyQualifiedName($typeHint)) {
-			return $typeHint;
-		}
-
-		$canonicalQualifiedTypeHint = $typeHint;
-
-		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $phpcsFile->findPrevious(T_OPEN_TAG, $functionPointer));
-		$normalizedTypeHint = UseStatement::normalizedNameAsReferencedInFile($typeHint);
-		if (isset($useStatements[$normalizedTypeHint])) {
-			$useStatement = $useStatements[$normalizedTypeHint];
-			$canonicalQualifiedTypeHint = $useStatement->getFullyQualifiedTypeName();
-		} else {
-			$fileNamespace = NamespaceHelper::findCurrentNamespaceName($phpcsFile, $functionPointer);
-			if ($fileNamespace !== null) {
-				$canonicalQualifiedTypeHint = sprintf('%s%s%s', $fileNamespace, NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint);
-			}
-		}
-
-		return sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $canonicalQualifiedTypeHint);
-	}
-
 	private function definitionContainsMixedTypeHint(string $typeHintDefinition): bool
 	{
 		return preg_match('~(?:^mixed(?:\[\])?$)|(?:^mixed(?:\[\])?\|)|(?:\|mixed(?:\[\])?\|)|(?:\|mixed(?:\[\])?$)~i', $typeHintDefinition) !== 0;
@@ -376,7 +352,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		return array_reduce(explode('|', $typeHintDefinition), function (bool $carry, string $typeHint) use ($phpcsFile, $functionPointer): bool {
-			$fullyQualifiedTypeHint = $this->getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint);
+			$fullyQualifiedTypeHint = TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint);
 			if ($this->isTraversableTypeHint($fullyQualifiedTypeHint)) {
 				$carry = true;
 			}
@@ -387,28 +363,6 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	private function isTraversableTypeHint(string $typeHint): bool
 	{
 		return in_array(strtolower($typeHint), ['array', 'iterable'], true) || array_key_exists($typeHint, $this->getNormalizedTraversableTypeHints());
-	}
-
-	/**
-	 * @return string[]
-	 */
-	private function getSimpleTypeHints(): array
-	{
-		static $simpleTypeHints = [
-			'int',
-			'integer',
-			'float',
-			'string',
-			'bool',
-			'boolean',
-			'callable',
-			'self',
-			'array',
-			'iterable',
-			'void',
-		];
-
-		return $simpleTypeHints;
 	}
 
 	/**
