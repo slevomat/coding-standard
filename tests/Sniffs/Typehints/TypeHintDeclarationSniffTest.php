@@ -8,6 +8,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 	public function testNoErrors()
 	{
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/typeHintDeclarationNoErrors.php', [
+			'enableNullableTypeHints' => false,
 			'traversableTypeHints' => [
 				\Traversable::class,
 				'\QueryResultSet',
@@ -23,6 +24,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 	public function testErrors()
 	{
 		$report = $this->checkFile(__DIR__ . '/data/typeHintDeclarationErrors.php', [
+			'enableNullableTypeHints' => false,
 			'traversableTypeHints' => [
 				\Traversable::class,
 			],
@@ -54,6 +56,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 	public function test71Typehints()
 	{
 		$report = $this->checkFile(__DIR__ . '/data/typehints71.php', [
+			'enableNullableTypeHints' => false,
 			'traversableTypeHints' => [
 				\Traversable::class,
 			],
@@ -62,6 +65,45 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$this->assertSame(2, $report->getErrorCount());
 
 		$this->assertSniffError($report, 11, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		$this->assertSniffError($report, 11, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+	}
+
+	public function testEnabledNullableTypeHintsNoErrors()
+	{
+		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/typeHintDeclarationEnabledNullableTypeHintsNoErrors.php', [
+			'enableNullableTypeHints' => true,
+		]));
+	}
+
+	public function testEnabledNullableTypeHintsErrors()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/typeHintDeclarationEnabledNullableTypeHintsErrors.php', [
+			'enableNullableTypeHints' => true,
+		]);
+
+		$this->assertSame(4, $report->getErrorCount());
+
+		$this->assertSniffError($report, 11, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		$this->assertSniffError($report, 19, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		$this->assertSniffError($report, 24, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
+		$this->assertSniffError($report, 29, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
+	}
+
+	public function testDisabledNullableTypeHintsNoErrors()
+	{
+		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/typeHintDeclarationDisabledNullableTypeHintsNoErrors.php', [
+			'enableNullableTypeHints' => false,
+		]));
+	}
+
+	public function testDisabledNullableTypeHintsErrors()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/typeHintDeclarationDisabledNullableTypeHintsErrors.php', [
+			'enableNullableTypeHints' => false,
+		]);
+
+		$this->assertSame(1, $report->getErrorCount());
+
 		$this->assertSniffError($report, 11, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 	}
 

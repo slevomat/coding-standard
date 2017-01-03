@@ -97,14 +97,6 @@ abstract class FooClass
 	}
 
 	/**
-	 * @return string|null
-	 */
-	public function nullableReturnValue()
-	{
-		return null;
-	}
-
-	/**
 	 * @return mixed
 	 */
 	public function mixedReturnValue()
@@ -119,7 +111,7 @@ abstract class FooClass
 	/**
 	 * @return array|mixed[]
 	 */
-	abstract public function mixedTraversableReturnValue();
+	abstract public function mixedTraversableReturnValue(): array;
 
 	/**
 	 * @return string|integer
@@ -216,16 +208,6 @@ abstract class FooClass
 	 * @return mixed
 	 */
 	abstract public function withMixedReturnAnnotation();
-
-	/**
-	 * @return null
-	 */
-	abstract public function withNullReturnAnnotation();
-
-	/**
-	 * @return string|null
-	 */
-	abstract public function withNullableReturnAnnotation();
 
 	/**
 	 * @phpcsSuppress Whatever
