@@ -13,11 +13,11 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 
 	const NAME = 'SlevomatCodingStandard.Classes.UnusedPrivateElements';
 
-	const CODE_UNUSED_PROPERTY = 'unusedProperty';
+	const CODE_UNUSED_PROPERTY = 'UnusedProperty';
 
-	const CODE_WRITE_ONLY_PROPERTY = 'writeOnlyProperty';
+	const CODE_WRITE_ONLY_PROPERTY = 'WriteOnlyProperty';
 
-	const CODE_UNUSED_METHOD = 'unusedMethod';
+	const CODE_UNUSED_METHOD = 'UnusedMethod';
 
 	/** @var string[] */
 	public $alwaysUsedPropertiesAnnotations = [];
@@ -71,7 +71,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $classPointer
 	 */

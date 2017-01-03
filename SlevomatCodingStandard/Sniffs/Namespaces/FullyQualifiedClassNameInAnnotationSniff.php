@@ -8,7 +8,7 @@ use SlevomatCodingStandard\Helpers\TypeHintHelper;
 class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer_Sniff
 {
 
-	const NON_FULLY_QUALIFIED_CLASS_NAME = 'NonFullyQualifiedClassName';
+	const CODE_NON_FULLY_QUALIFIED_CLASS_NAME = 'NonFullyQualifiedClassName';
 
 	/**
 	 * @return int[]
@@ -21,7 +21,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $annotationTagPointer
 	 */
@@ -53,7 +53,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer_Sniff
 					'Class name %s in %s should be referenced via a fully qualified name.',
 					$fullyQualifiedTypeHint,
 					$annotationTagName
-				), $annotationTagPointer, self::NON_FULLY_QUALIFIED_CLASS_NAME);
+				), $annotationTagPointer, self::CODE_NON_FULLY_QUALIFIED_CLASS_NAME);
 			}
 		}
 	}
