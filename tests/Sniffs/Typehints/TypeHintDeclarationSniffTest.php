@@ -52,7 +52,6 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.uselessDocComment
 	 * @requires PHP 7.1
 	 */
 	public function test71Typehints()
