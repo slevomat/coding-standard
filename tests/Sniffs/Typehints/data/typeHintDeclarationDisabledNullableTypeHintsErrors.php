@@ -13,4 +13,20 @@ abstract class FooClass
 		return 'string';
 	}
 
+	/**
+	 * @param string|null $a
+	 */
+	public function withNullableParameterTypeHint($a)
+	{
+
+	}
+
+	/**
+	 * @param string|null $a
+	 */
+	public function withNullableParameterTypeHintAndUselessDocComment(string $a = null)
+	{
+
+	}
+
 }

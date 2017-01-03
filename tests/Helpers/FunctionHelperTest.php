@@ -51,13 +51,13 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			[
 				'allParametersWithTypeHints',
 				[
-					'$string' => 'string',
-					'$int' => 'int',
-					'$bool' => 'bool',
-					'$float' => 'float',
-					'$callable' => 'callable',
-					'$array' => 'array',
-					'$object' => '\FooNamespace\FooClass',
+					'$string' => new ParameterTypeHint('string', false, false),
+					'$int' => new ParameterTypeHint('int', false, true),
+					'$bool' => new ParameterTypeHint('bool', false, false),
+					'$float' => new ParameterTypeHint('float', false, true),
+					'$callable' => new ParameterTypeHint('callable', false, false),
+					'$array' => new ParameterTypeHint('array', false, false),
+					'$object' => new ParameterTypeHint('\FooNamespace\FooClass', false, true),
 				],
 				[],
 			],
@@ -85,13 +85,13 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			[
 				'someParametersWithoutTypeHints',
 				[
-					'$string' => 'string',
+					'$string' => new ParameterTypeHint('string', false, false),
 					'$int' => null,
-					'$bool' => 'bool',
+					'$bool' => new ParameterTypeHint('bool', false, true),
 					'$float' => null,
-					'$callable' => 'callable',
+					'$callable' => new ParameterTypeHint('callable', false, false),
 					'$array' => null,
-					'$object' => '\FooNamespace\FooClass',
+					'$object' => new ParameterTypeHint('\FooNamespace\FooClass', false, false),
 				],
 				[
 					'$int',
@@ -102,10 +102,40 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		];
 	}
 
+	public function dataParametersNullableTypeHints(): array
+	{
+		return [
+			[
+				'allParametersWithNullableTypeHints',
+				[
+					'$string' => new ParameterTypeHint('string', true, false),
+					'$int' => new ParameterTypeHint('int', true, true),
+					'$bool' => new ParameterTypeHint('bool', true, false),
+					'$float' => new ParameterTypeHint('float', true, true),
+					'$callable' => new ParameterTypeHint('callable', true, false),
+					'$array' => new ParameterTypeHint('array', true, false),
+					'$object' => new ParameterTypeHint('\FooNamespace\FooClass', true, true),
+				],
+			],
+			[
+				'someParametersWithNullableTypeHints',
+				[
+					'$string' => new ParameterTypeHint('string', true, false),
+					'$int' => new ParameterTypeHint('int', false, false),
+					'$bool' => new ParameterTypeHint('bool', true, true),
+					'$float' => new ParameterTypeHint('float', false, false),
+					'$callable' => new ParameterTypeHint('callable', true, false),
+					'$array' => new ParameterTypeHint('array', false, true),
+					'$object' => new ParameterTypeHint('\FooNamespace\FooClass', true, false),
+				],
+			],
+		];
+	}
+
 	/**
 	 * @dataProvider dataParametersTypeHints
 	 * @param string $functionName
-	 * @param string[] $expectedParametersTypeHints
+	 * @param \SlevomatCodingStandard\Helpers\ParameterTypeHint[]|null[] $expectedParametersTypeHints
 	 * @param string[] $expectedParametersWithoutTypeHints
 	 */
 	public function testParametersTypeHints(
@@ -117,8 +147,44 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersTypeHints.php');
 
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, $functionName);
-		$this->assertSame($expectedParametersTypeHints, FunctionHelper::getParametersTypeHints($codeSnifferFile, $functionPointer));
+		$parametersTypeHints = FunctionHelper::getParametersTypeHints($codeSnifferFile, $functionPointer);
+		foreach ($expectedParametersTypeHints as $expectedParameterName => $expectedParameterTypeHint) {
+			$this->assertArrayHasKey($expectedParameterName, $parametersTypeHints);
+			$parameterTypeHint = $parametersTypeHints[$expectedParameterName];
+			if ($expectedParameterTypeHint === null) {
+				$this->assertNull($parameterTypeHint);
+			} else {
+				$this->assertNotNull($parameterTypeHint);
+				$this->assertSame($expectedParameterTypeHint->getTypeHint(), $parameterTypeHint->getTypeHint());
+				$this->assertSame($expectedParameterTypeHint->isNullable(), $parameterTypeHint->isNullable());
+				$this->assertSame($expectedParameterTypeHint->isOptional(), $parameterTypeHint->isOptional());
+			}
+		}
 		$this->assertSame($expectedParametersWithoutTypeHints, FunctionHelper::getParametersWithoutTypeHint($codeSnifferFile, $functionPointer));
+	}
+
+	/**
+	 * @dataProvider dataParametersNullableTypeHints
+	 * @param string $functionName
+	 * @param \SlevomatCodingStandard\Helpers\ParameterTypeHint[]|null[] $expectedParametersTypeHints
+	 */
+	public function testParametersNullableTypeHints(
+		string $functionName,
+		array $expectedParametersTypeHints
+	)
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersNullableTypeHints.php');
+
+		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, $functionName);
+		$parametersTypeHints = FunctionHelper::getParametersTypeHints($codeSnifferFile, $functionPointer);
+		foreach ($expectedParametersTypeHints as $expectedParameterName => $expectedParameterTypeHint) {
+			$this->assertArrayHasKey($expectedParameterName, $parametersTypeHints);
+			$parameterTypeHint = $parametersTypeHints[$expectedParameterName];
+			$this->assertNotNull($parameterTypeHint);
+			$this->assertSame($expectedParameterTypeHint->getTypeHint(), $parameterTypeHint->getTypeHint(), $parameterTypeHint->getTypeHint());
+			$this->assertSame($expectedParameterTypeHint->isNullable(), $parameterTypeHint->isNullable(), $parameterTypeHint->getTypeHint());
+			$this->assertSame($expectedParameterTypeHint->isOptional(), $parameterTypeHint->isOptional(), $parameterTypeHint->getTypeHint());
+		}
 	}
 
 	public function dataReturnsValueOrNot(): array
