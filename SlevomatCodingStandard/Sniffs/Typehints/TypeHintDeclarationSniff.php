@@ -27,6 +27,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	/** @var bool */
 	public $enableNullableTypeHints = PHP_VERSION_ID >= 70100;
 
+	/** @var bool */
+	public $enableVoidTypeHint = PHP_VERSION_ID >= 70100;
+
 	/** @var string[] */
 	public $traversableTypeHints = [];
 
@@ -166,7 +169,8 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		$returnTypeHintDefinition = $hasReturnAnnotation ? preg_split('~\\s+~', $returnAnnotation->getContent())[0] : null;
 
 		$returnsValue = $isAbstract ? $hasReturnAnnotation : FunctionHelper::returnsValue($phpcsFile, $functionPointer);
-		$returnsVoid = $isAbstract ? (!$hasReturnAnnotation || $returnTypeHintDefinition === 'void') : FunctionHelper::returnsVoid($phpcsFile, $functionPointer);
+
+		$methodsWithoutVoidSupport = ['__construct' => true, '__destruct' => true, '__clone' => true];
 
 		if (!$hasReturnAnnotation) {
 			if ($returnsValue) {
@@ -179,12 +183,22 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 					$functionPointer,
 					self::CODE_MISSING_RETURN_TYPE_HINT
 				);
+			} elseif ($this->enableVoidTypeHint && !array_key_exists(FunctionHelper::getName($phpcsFile, $functionPointer), $methodsWithoutVoidSupport)) {
+				$phpcsFile->addError(
+					sprintf(
+						'%s %s() does not have void return type hint.',
+						$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
+						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
+					),
+					$functionPointer,
+					self::CODE_MISSING_RETURN_TYPE_HINT
+				);
 			}
 
 			return;
 		}
 
-		if ($this->definitionContainsVoidTypeHint($returnTypeHintDefinition) && $returnsVoid) {
+		if ($this->enableVoidTypeHint && $returnTypeHintDefinition === 'void' && !$returnsValue && !array_key_exists(FunctionHelper::getName($phpcsFile, $functionPointer), $methodsWithoutVoidSupport)) {
 			$phpcsFile->addError(
 				sprintf(
 					'%s %s() does not have return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
@@ -322,11 +336,6 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	private function definitionContainsNullTypeHint(string $typeHintDefinition): bool
 	{
 		return preg_match('~(?:^null$)|(?:^null\|)|(?:\|null\|)|(?:\|null$)~i', $typeHintDefinition) !== 0;
-	}
-
-	private function definitionContainsVoidTypeHint(string $typeHintDefinition): bool
-	{
-		return preg_match('~(?:^void)|(?:^void\|)|(?:\|void\|)|(?:\|void)~i', $typeHintDefinition) !== 0;
 	}
 
 	private function definitionContainsStaticOrThisTypeHint(string $typeHintDefinition): bool
