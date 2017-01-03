@@ -37,15 +37,12 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		$this->assertEmpty($errors, sprintf('No errors expected, but %d errors found.', count($errors)));
 	}
 
-	protected function assertSniffError(\PHP_CodeSniffer_File $codeSnifferFile, int $line, string $code = null, string $message = null)
+	protected function assertSniffError(\PHP_CodeSniffer_File $codeSnifferFile, int $line, string $code, string $message = null)
 	{
 		$errors = $codeSnifferFile->getErrors();
 		$this->assertTrue(isset($errors[$line]), sprintf('Expected error on line %s, but none found.', $line));
 
-		$sniffCode = $this->getSniffName();
-		if ($code !== null) {
-			$sniffCode .= '.' . $code;
-		}
+		$sniffCode = sprintf('%s.%s', $this->getSniffName(), $code);
 
 		$this->assertTrue(
 			$this->hasError($errors[$line], $sniffCode, $message),
