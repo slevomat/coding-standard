@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 class AssignmentInConditionSniff implements \PHP_CodeSniffer_Sniff
 {
 
-	const CODE_ASSIGNMENT_IN_CONDITION = 'assignmentInCondition';
+	const CODE_ASSIGNMENT_IN_CONDITION = 'AssignmentInCondition';
 
 	/**
 	 * @return int[]
@@ -20,7 +20,7 @@ class AssignmentInConditionSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $conditionStartPointer
 	 */

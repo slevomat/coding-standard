@@ -7,11 +7,11 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 {
 
-	const CODE_DECLARE_STRICT_TYPES_MISSING = 'declareStrictTypesMissing';
+	const CODE_DECLARE_STRICT_TYPES_MISSING = 'DeclareStrictTypesMissing';
 
-	const CODE_INCORRECT_STRICT_TYPES_FORMAT = 'incorrectStrictTypesFormat';
+	const CODE_INCORRECT_STRICT_TYPES_FORMAT = 'IncorrectStrictTypesFormat';
 
-	const CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE = 'incorrectWhitespaceBetweenOpenTagAndDeclare';
+	const CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE = 'IncorrectWhitespaceBetweenOpenTagAndDeclare';
 
 	/** @var int */
 	public $newlinesCountBetweenOpenTagAndDeclare = 0;
@@ -30,7 +30,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $openTagPointer
 	 */

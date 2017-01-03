@@ -7,7 +7,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 class TrailingArrayCommaSniff implements \PHP_CodeSniffer_Sniff
 {
 
-	const CODE_MISSING_TRAILING_COMMA = 'missingTrailingComma';
+	const CODE_MISSING_TRAILING_COMMA = 'MissingTrailingComma';
 
 	/**
 	 * @return int[]
@@ -20,7 +20,7 @@ class TrailingArrayCommaSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $stackPointer
 	 */

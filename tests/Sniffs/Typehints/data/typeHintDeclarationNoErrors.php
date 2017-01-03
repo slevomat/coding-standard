@@ -8,7 +8,7 @@ abstract class FooClass
 {
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.MissingParameterTypeHint
 	 */
 	public function parametersTypeHintsSuppressed($a, $b)
 	{
@@ -72,7 +72,7 @@ abstract class FooClass
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingReturnTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	public function returnTypeHintSuppressed()
 	{
@@ -180,7 +180,7 @@ abstract class FooClass
 	abstract function returnClassFromCurrentNamespace(): ClassFromCurrentNamespace;
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.uselessDocComment
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.UselessDocComment
 	 * @param string $a
 	 * @param string $b
 	 */

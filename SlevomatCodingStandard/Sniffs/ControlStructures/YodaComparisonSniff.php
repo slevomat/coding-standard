@@ -12,7 +12,7 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 {
 
-	const CODE_YODA_COMPARISON = 'yodaComparison';
+	const CODE_YODA_COMPARISON = 'YodaComparison';
 
 	const DYNAMISM_VARIABLE = 999;
 
@@ -88,7 +88,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $comparisonTokenPointer
 	 */

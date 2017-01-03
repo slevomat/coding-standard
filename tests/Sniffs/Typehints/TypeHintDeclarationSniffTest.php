@@ -30,25 +30,25 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 
 		$this->assertSame(16, $report->getErrorCount());
 
-		$this->assertSniffError($report, 6, TypeHintDeclarationSniff::MISSING_PARAMETER_TYPE_HINT);
-		$this->assertSniffError($report, 13, TypeHintDeclarationSniff::MISSING_PARAMETER_TYPE_HINT);
-		$this->assertSniffError($report, 20, TypeHintDeclarationSniff::MISSING_PARAMETER_TYPE_HINT);
-		$this->assertSniffError($report, 27, TypeHintDeclarationSniff::MISSING_PARAMETER_TYPE_HINT);
-		$this->assertSniffError($report, 34, TypeHintDeclarationSniff::MISSING_PARAMETER_TYPE_HINT);
-		$this->assertSniffError($report, 41, TypeHintDeclarationSniff::MISSING_PARAMETER_TYPE_HINT);
+		$this->assertSniffError($report, 6, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		$this->assertSniffError($report, 13, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		$this->assertSniffError($report, 20, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		$this->assertSniffError($report, 27, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		$this->assertSniffError($report, 34, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		$this->assertSniffError($report, 41, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 
-		$this->assertSniffError($report, 45, TypeHintDeclarationSniff::MISSING_RETURN_TYPE_HINT);
-		$this->assertSniffError($report, 53, TypeHintDeclarationSniff::MISSING_RETURN_TYPE_HINT);
-		$this->assertSniffError($report, 61, TypeHintDeclarationSniff::MISSING_RETURN_TYPE_HINT);
-		$this->assertSniffError($report, 69, TypeHintDeclarationSniff::MISSING_RETURN_TYPE_HINT);
-		$this->assertSniffError($report, 77, TypeHintDeclarationSniff::MISSING_RETURN_TYPE_HINT);
-		$this->assertSniffError($report, 85, TypeHintDeclarationSniff::MISSING_RETURN_TYPE_HINT);
+		$this->assertSniffError($report, 45, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		$this->assertSniffError($report, 53, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		$this->assertSniffError($report, 61, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		$this->assertSniffError($report, 69, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		$this->assertSniffError($report, 77, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		$this->assertSniffError($report, 85, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 
-		$this->assertSniffError($report, 93, TypeHintDeclarationSniff::USELESS_DOC_COMMENT);
-		$this->assertSniffError($report, 100, TypeHintDeclarationSniff::USELESS_DOC_COMMENT);
+		$this->assertSniffError($report, 93, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
+		$this->assertSniffError($report, 100, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
 
-		$this->assertSniffError($report, 102, TypeHintDeclarationSniff::MISSING_PROPERTY_TYPE_HINT);
-		$this->assertSniffError($report, 104, TypeHintDeclarationSniff::MISSING_PROPERTY_TYPE_HINT);
+		$this->assertSniffError($report, 102, TypeHintDeclarationSniff::CODE_MISSING_PROPERTY_TYPE_HINT);
+		$this->assertSniffError($report, 104, TypeHintDeclarationSniff::CODE_MISSING_PROPERTY_TYPE_HINT);
 	}
 
 	/**
@@ -64,8 +64,8 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 
 		$this->assertSame(2, $report->getErrorCount());
 
-		$this->assertSniffError($report, 11, TypeHintDeclarationSniff::MISSING_PARAMETER_TYPE_HINT);
-		$this->assertSniffError($report, 11, TypeHintDeclarationSniff::MISSING_RETURN_TYPE_HINT);
+		$this->assertSniffError($report, 11, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		$this->assertSniffError($report, 11, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 	}
 
 }
