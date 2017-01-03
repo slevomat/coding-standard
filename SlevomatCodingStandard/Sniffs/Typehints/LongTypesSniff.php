@@ -9,6 +9,8 @@ use SlevomatCodingStandard\Helpers\PropertyHelper;
 class LongTypesSniff implements \PHP_CodeSniffer_Sniff
 {
 
+	const CODE_USED_LONG_TYPE = 'UsedLongType';
+
 	/**
 	 * @return int[]
 	 */
@@ -67,7 +69,7 @@ class LongTypesSniff implements \PHP_CodeSniffer_Sniff
 						'Expected "%s" but found "%s" in typehint annotation',
 						$suggestType,
 						$type
-					), $pointer);
+					), $pointer, self::CODE_USED_LONG_TYPE);
 				}
 			}
 		}

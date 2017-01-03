@@ -5,6 +5,10 @@ namespace SlevomatCodingStandard\Sniffs\Types;
 class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer_Sniff
 {
 
+	const CODE_NO_EMPTY_LINE_AFTER_OPENING_BRACE = 'NoEmptyLineAfterOpeningBrace';
+
+	const CODE_NO_EMPTY_LINE_BEFORE_CLOSING_BRACE = 'NoEmptyLineBeforeClosingBrace';
+
 	/**
 	 * @return int[]
 	 */
@@ -34,7 +38,7 @@ class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer_Sniff
 			$phpcsFile->addError(sprintf(
 				'There must be one empty line after %s opening brace.',
 				$typeToken['content']
-			), $nextPointerAfterOpeningBrace);
+			), $nextPointerAfterOpeningBrace, self::CODE_NO_EMPTY_LINE_AFTER_OPENING_BRACE);
 		}
 
 		$closerPointer = $typeToken['scope_closer'];
@@ -45,7 +49,7 @@ class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer_Sniff
 			$phpcsFile->addError(sprintf(
 				'There must be one empty line before %s closing brace.',
 				$typeToken['content']
-			), $previousPointerAfterClosingBrace);
+			), $previousPointerAfterClosingBrace, self::CODE_NO_EMPTY_LINE_BEFORE_CLOSING_BRACE);
 		}
 	}
 
