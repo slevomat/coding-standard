@@ -181,7 +181,9 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'withReturnTypeHint');
 		$this->assertTrue(FunctionHelper::hasReturnTypeHint($codeSnifferFile, $functionPointer));
-		$this->assertSame('\FooNamespace\FooInterface', FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer));
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer);
+		$this->assertSame('\FooNamespace\FooInterface', $returnTypeHint->getTypeHint());
+		$this->assertFalse($returnTypeHint->isNullable());
 
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'withoutReturnTypeHint');
 		$this->assertFalse(FunctionHelper::hasReturnTypeHint($codeSnifferFile, $functionPointer));
@@ -189,11 +191,30 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'abstractWithReturnTypeHint');
 		$this->assertTrue(FunctionHelper::hasReturnTypeHint($codeSnifferFile, $functionPointer));
-		$this->assertSame('bool', FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer));
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer);
+		$this->assertSame('bool', $returnTypeHint->getTypeHint());
+		$this->assertFalse($returnTypeHint->isNullable());
 
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'abstractWithoutReturnTypeHint');
 		$this->assertFalse(FunctionHelper::hasReturnTypeHint($codeSnifferFile, $functionPointer));
 		$this->assertNull(FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer));
+	}
+
+	public function testReturnNullableTypeHint()
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionReturnsNullableTypeHint.php');
+
+		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'withReturnNullableTypeHint');
+		$this->assertTrue(FunctionHelper::hasReturnTypeHint($codeSnifferFile, $functionPointer));
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer);
+		$this->assertSame('\FooNamespace\FooInterface', $returnTypeHint->getTypeHint());
+		$this->assertTrue($returnTypeHint->isNullable());
+
+		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'abstractWithReturnNullableTypeHint');
+		$this->assertTrue(FunctionHelper::hasReturnTypeHint($codeSnifferFile, $functionPointer));
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer);
+		$this->assertSame('bool', $returnTypeHint->getTypeHint());
+		$this->assertTrue($returnTypeHint->isNullable());
 	}
 
 	public function testAnnotations()
