@@ -124,7 +124,7 @@ class FunctionHelper
 	/**
 	 * @param \PHP_CodeSniffer_File $codeSnifferFile
 	 * @param int $functionPointer
-	 * @return string|null
+	 * @return \SlevomatCodingStandard\Helpers\ReturnTypeHint|null
 	 */
 	public static function findReturnTypeHint(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer)
 	{
@@ -132,28 +132,37 @@ class FunctionHelper
 
 		$isAbstract = self::isAbstract($codeSnifferFile, $functionPointer);
 
+		// PHPCS sometimes reports T_COLON as T_INLINE_ELSE
 		$colonToken = $isAbstract
-			? $codeSnifferFile->findNext(T_COLON, $tokens[$functionPointer]['parenthesis_closer'] + 1, null, false, null, true)
-			: $codeSnifferFile->findNext(T_COLON, $tokens[$functionPointer]['parenthesis_closer'] + 1, $tokens[$functionPointer]['scope_opener'] - 1);
+			? $codeSnifferFile->findNext([T_COLON, T_INLINE_ELSE], $tokens[$functionPointer]['parenthesis_closer'] + 1, null, false, null, true)
+			: $codeSnifferFile->findNext([T_COLON, T_INLINE_ELSE], $tokens[$functionPointer]['parenthesis_closer'] + 1, $tokens[$functionPointer]['scope_opener'] - 1);
 
 		if ($colonToken === false) {
 			return null;
 		}
 
-		$returnTypeHint = null;
-		$nextToken = $colonToken;
+		$abstractExcludeTokens = array_merge(TokenHelper::$ineffectiveTokenCodes, [T_SEMICOLON]);
+
+		$nullableToken = $isAbstract
+			? $codeSnifferFile->findNext($abstractExcludeTokens, $colonToken + 1, null, true, null, true)
+			: $codeSnifferFile->findNext(TokenHelper::$ineffectiveTokenCodes, $colonToken + 1, $tokens[$functionPointer]['scope_opener'] - 1, true);
+
+		$nullable = $nullableToken !== false && $tokens[$nullableToken]['content'] === '?';
+
+		$typeHint = null;
+		$nextToken = $nullable ? $nullableToken : $colonToken;
 		do {
 			$nextToken = $isAbstract
-				? $codeSnifferFile->findNext([T_WHITESPACE, T_COMMENT, T_SEMICOLON], $nextToken + 1, null, true, null, true)
-				: $codeSnifferFile->findNext([T_WHITESPACE, T_COMMENT], $nextToken + 1, $tokens[$functionPointer]['scope_opener'] - 1, true);
+				? $codeSnifferFile->findNext($abstractExcludeTokens, $nextToken + 1, null, true, null, true)
+				: $codeSnifferFile->findNext(TokenHelper::$ineffectiveTokenCodes, $nextToken + 1, $tokens[$functionPointer]['scope_opener'] - 1, true);
 
 			$isTypeHint = $nextToken !== false;
 			if ($isTypeHint) {
-				$returnTypeHint .= $tokens[$nextToken]['content'];
+				$typeHint .= $tokens[$nextToken]['content'];
 			}
 		} while ($isTypeHint);
 
-		return $returnTypeHint;
+		return $typeHint !== null ? new ReturnTypeHint($typeHint, $nullable) : null;
 	}
 
 	public static function hasReturnTypeHint(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): bool

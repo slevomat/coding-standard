@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <ruleset name="Slevomat Coding Standard">
 	<rule ref="SlevomatCodingStandard/ruleset.xml"/>
-	<rule ref="vendor/consistence/coding-standard/Consistence/ruleset.xml" />
+	<rule ref="vendor/consistence/coding-standard/Consistence/ruleset.xml">
+		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedIF"/><!-- Allow empty if statements - usually with a comment -->
+	</rule>
 	<rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly">
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Exceptions/ReferenceThrowableOnlySniff.php</exclude-pattern>
 	</rule>
@@ -30,6 +32,7 @@
 	</rule>
 	<rule ref="SlevomatCodingStandard.Typehints.TypeHintDeclaration">
 		<properties>
+			<property name="enableNullableTypeHints" value="false"/>
 			<property name="usefulAnnotations" type="array" value="
 				@dataProvider
 			"/>
