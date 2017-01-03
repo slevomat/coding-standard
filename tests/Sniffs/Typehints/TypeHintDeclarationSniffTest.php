@@ -51,10 +51,6 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$this->assertSniffError($report, 104, TypeHintDeclarationSniff::MISSING_PROPERTY_TYPE_HINT);
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.uselessDocComment
-	 * @requires PHP 7.1
-	 */
 	public function test71Typehints()
 	{
 		$report = $this->checkFile(__DIR__ . '/data/typehints71.php', [
