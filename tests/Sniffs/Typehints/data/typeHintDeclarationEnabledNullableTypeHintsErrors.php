@@ -31,4 +31,18 @@ abstract class FooClass
 		return 'string';
 	}
 
+	/**
+	 * @param string|null $a
+	 */
+	public function withNullableParameterTypeHint($a)
+	{
+	}
+
+	/**
+	 * @param int|null $a
+	 */
+	public function withNullableParameterTypeHintAndUselessDocComment(?int $a)
+	{
+	}
+
 }

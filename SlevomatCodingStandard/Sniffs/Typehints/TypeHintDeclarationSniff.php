@@ -121,22 +121,18 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 					self::CODE_MISSING_PARAMETER_TYPE_HINT
 				);
 			} elseif ($this->definitionContainsJustTwoTypeHints($parameterTypeHintDefinition)) {
-				$parameterTypeHints = explode('|', $parameterTypeHintDefinition);
-				if (strtolower($parameterTypeHints[0]) === 'null' || strtolower($parameterTypeHints[1]) === 'null') {
-					$parameterTypeHint = strtolower($parameterTypeHints[0]) === 'null' ? $parameterTypeHints[1] : $parameterTypeHints[0];
-					if ($this->definitionContainsOneTypeHint($parameterTypeHint)) {
-						$phpcsFile->addError(
-							sprintf(
-								'%s %s() does not have parameter type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
-								$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
-								FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-								$parameterName,
-								$parameterTypeHintDefinition
-							),
-							$functionPointer,
-							self::CODE_MISSING_PARAMETER_TYPE_HINT
-						);
-					}
+				if ($this->definitionContainsNullTypeHint($parameterTypeHintDefinition)) {
+					$phpcsFile->addError(
+						sprintf(
+							'%s %s() does not have parameter type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
+							$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
+							FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
+							$parameterName,
+							$parameterTypeHintDefinition
+						),
+						$functionPointer,
+						self::CODE_MISSING_PARAMETER_TYPE_HINT
+					);
 				} elseif ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $parameterTypeHintDefinition)) {
 					$phpcsFile->addError(
 						sprintf(
@@ -276,7 +272,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		foreach (FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer) as $parameterTypeHint) {
-			if ($parameterTypeHint === null || $this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint))) {
+			if ($parameterTypeHint === null || $this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()))) {
 				return;
 			}
 		}
