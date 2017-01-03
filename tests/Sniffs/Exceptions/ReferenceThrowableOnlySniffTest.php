@@ -42,7 +42,6 @@ class ReferenceThrowableOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.uselessDocComment
 	 * @requires PHP 7.1
 	 */
 	public function testExceptionReferencesUnionTypes71()
