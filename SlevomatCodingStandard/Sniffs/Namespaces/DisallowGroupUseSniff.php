@@ -5,6 +5,8 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 class DisallowGroupUseSniff implements \PHP_CodeSniffer_Sniff
 {
 
+	const CODE_DISALLOWED_GROUP_USE = 'DisallowedGroupUse';
+
 	/**
 	 * @return int[]
 	 */
@@ -22,7 +24,7 @@ class DisallowGroupUseSniff implements \PHP_CodeSniffer_Sniff
 	 */
 	public function process(\PHP_CodeSniffer_File $phpcsFile, $usePointer)
 	{
-		$phpcsFile->addError('Group use declaration is disallowed, use single use for every import.', $usePointer);
+		$phpcsFile->addError('Group use declaration is disallowed, use single use for every import.', $usePointer, self::CODE_DISALLOWED_GROUP_USE);
 	}
 
 }

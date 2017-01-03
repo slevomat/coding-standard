@@ -8,6 +8,8 @@ use SlevomatCodingStandard\Helpers\StringHelper;
 class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 {
 
+	const CODE_NO_MATCH_BETWEEN_TYPE_NAME_AND_FILE_NAME = 'NoMatchBetweenTypeNameAndFileName';
+
 	/** @var string[] path(string) => namespace */
 	public $rootNamespaces = [];
 
@@ -139,7 +141,8 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 					$typeName,
 					$phpcsFile->getFilename()
 				),
-				$namePointer
+				$namePointer,
+				self::CODE_NO_MATCH_BETWEEN_TYPE_NAME_AND_FILE_NAME
 			);
 		}
 	}
