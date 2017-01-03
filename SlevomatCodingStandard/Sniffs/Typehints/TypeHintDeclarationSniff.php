@@ -16,13 +16,13 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	const NAME = 'SlevomatCodingStandard.Typehints.TypeHintDeclaration';
 
-	const MISSING_PARAMETER_TYPE_HINT = 'missingParameterTypeHint';
+	const CODE_MISSING_PARAMETER_TYPE_HINT = 'MissingParameterTypeHint';
 
-	const MISSING_PROPERTY_TYPE_HINT = 'missingPropertyTypeHint';
+	const CODE_MISSING_PROPERTY_TYPE_HINT = 'MissingPropertyTypeHint';
 
-	const MISSING_RETURN_TYPE_HINT = 'missingReturnTypeHint';
+	const CODE_MISSING_RETURN_TYPE_HINT = 'MissingReturnTypeHint';
 
-	const USELESS_DOC_COMMENT = 'uselessDocComment';
+	const CODE_USELESS_DOC_COMMENT = 'UselessDocComment';
 
 	/** @var string[] */
 	public $traversableTypeHints = [];
@@ -37,7 +37,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	private $normalizedUsefulAnnotations;
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.missingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $pointer
 	 */
@@ -67,7 +67,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	private function checkParametersTypeHints(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer)
 	{
-		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::MISSING_PARAMETER_TYPE_HINT))) {
+		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_PARAMETER_TYPE_HINT))) {
 			return;
 		}
 
@@ -93,7 +93,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 						$parameterName
 					),
 					$functionPointer,
-					self::MISSING_PARAMETER_TYPE_HINT
+					self::CODE_MISSING_PARAMETER_TYPE_HINT
 				);
 
 				continue;
@@ -115,7 +115,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 						$parameterTypeHintDefinition
 					),
 					$functionPointer,
-					self::MISSING_PARAMETER_TYPE_HINT
+					self::CODE_MISSING_PARAMETER_TYPE_HINT
 				);
 			} elseif ($this->definitionContainsJustTwoTypeHints($parameterTypeHintDefinition)) {
 				$parameterTypeHints = explode('|', $parameterTypeHintDefinition);
@@ -131,7 +131,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 								$parameterTypeHintDefinition
 							),
 							$functionPointer,
-							self::MISSING_PARAMETER_TYPE_HINT
+							self::CODE_MISSING_PARAMETER_TYPE_HINT
 						);
 					}
 				} elseif ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $parameterTypeHintDefinition)) {
@@ -144,7 +144,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 							$parameterTypeHintDefinition
 						),
 						$functionPointer,
-						self::MISSING_PARAMETER_TYPE_HINT
+						self::CODE_MISSING_PARAMETER_TYPE_HINT
 					);
 				}
 			}
@@ -153,7 +153,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	private function checkReturnTypeHints(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer)
 	{
-		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::MISSING_RETURN_TYPE_HINT))) {
+		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_RETURN_TYPE_HINT))) {
 			return;
 		}
 
@@ -178,7 +178,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
 					),
 					$functionPointer,
-					self::MISSING_RETURN_TYPE_HINT
+					self::CODE_MISSING_RETURN_TYPE_HINT
 				);
 			}
 
@@ -195,7 +195,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 					$returnTypeHintDefinition
 				),
 				$functionPointer,
-				self::MISSING_RETURN_TYPE_HINT
+				self::CODE_MISSING_RETURN_TYPE_HINT
 			);
 			return;
 		}
@@ -217,7 +217,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 					$returnTypeHintDefinition
 				),
 				$functionPointer,
-				self::MISSING_RETURN_TYPE_HINT
+				self::CODE_MISSING_RETURN_TYPE_HINT
 			);
 		} elseif ($this->definitionContainsJustTwoTypeHints($returnTypeHintDefinition) && $this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $returnTypeHintDefinition)) {
 			$phpcsFile->addError(
@@ -228,14 +228,14 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 					$returnTypeHintDefinition
 				),
 				$functionPointer,
-				self::MISSING_RETURN_TYPE_HINT
+				self::CODE_MISSING_RETURN_TYPE_HINT
 			);
 		}
 	}
 
 	private function checkUselessDocComment(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer)
 	{
-		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::USELESS_DOC_COMMENT))) {
+		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_USELESS_DOC_COMMENT))) {
 			return;
 		}
 
@@ -290,7 +290,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 				FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
 			),
 			$functionPointer,
-			self::USELESS_DOC_COMMENT
+			self::CODE_USELESS_DOC_COMMENT
 		);
 	}
 
@@ -304,7 +304,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 					PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer)
 				),
 				$propertyPointer,
-				self::MISSING_PROPERTY_TYPE_HINT
+				self::CODE_MISSING_PROPERTY_TYPE_HINT
 			);
 		}
 	}
