@@ -33,6 +33,7 @@
 	<rule ref="SlevomatCodingStandard.Typehints.TypeHintDeclaration">
 		<properties>
 			<property name="enableNullableTypeHints" value="false"/>
+			<property name="enableVoidTypeHint" value="false"/>
 			<property name="usefulAnnotations" type="array" value="
 				@dataProvider
 			"/>

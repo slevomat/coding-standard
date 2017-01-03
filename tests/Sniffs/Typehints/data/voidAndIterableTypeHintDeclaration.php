@@ -1,12 +1,11 @@
 <?php // lint >= 7.1
 
-class Typehints71FooClass
+class VoidAndIterableClass
 {
 
 	/**
 	 * @param iterable $list
 	 * @param mixed $bar
-	 * @return void
 	 */
 	public function doFoo($list, $bar)
 	{
@@ -29,5 +28,15 @@ class Typehints71FooClass
 	{
 		return [];
 	}
+
+	/**
+	 * @return void
+	 */
+	public function returnVoid(): void
+	{
+		return;
+	}
+
+	abstract public function abstractReturnVoid(): void;
 
 }
