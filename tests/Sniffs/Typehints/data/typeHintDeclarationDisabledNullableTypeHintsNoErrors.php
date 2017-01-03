@@ -10,4 +10,9 @@ abstract class FooClass
 	 */
 	abstract public function withNullableReturnTypeHint();
 
+	public function withParameterTypeHint(string $a = null)
+	{
+
+	}
+
 }

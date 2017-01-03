@@ -55,7 +55,7 @@ class FunctionHelper
 	 */
 	public static function getParametersWithoutTypeHint(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): array
 	{
-		return array_keys(array_filter(self::getParametersTypeHints($codeSnifferFile, $functionPointer), function (string $parameterTypeHint = null): bool {
+		return array_keys(array_filter(self::getParametersTypeHints($codeSnifferFile, $functionPointer), function (ParameterTypeHint $parameterTypeHint = null): bool {
 			return $parameterTypeHint === null;
 		}));
 	}
@@ -63,7 +63,7 @@ class FunctionHelper
 	/**
 	 * @param \PHP_CodeSniffer_File $codeSnifferFile
 	 * @param int $functionPointer
-	 * @return string[]
+	 * @return \SlevomatCodingStandard\Helpers\ParameterTypeHint[]|null[]
 	 */
 	public static function getParametersTypeHints(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): array
 	{
@@ -73,18 +73,29 @@ class FunctionHelper
 		for ($i = $tokens[$functionPointer]['parenthesis_opener'] + 1; $i < $tokens[$functionPointer]['parenthesis_closer']; $i++) {
 			if ($tokens[$i]['code'] === T_VARIABLE) {
 				$parameterName = $tokens[$i]['content'];
-				$parameterTypeHint = null;
+				$typeHint = null;
+				$isNullable = false;
 
 				$previousToken = $i;
 				do {
-					$previousToken = TokenHelper::findPreviousExcluding($codeSnifferFile, [T_WHITESPACE, T_COMMENT, T_BITWISE_AND, T_ELLIPSIS], $previousToken - 1, $tokens[$functionPointer]['parenthesis_opener'] + 1);
-					$isTypeHint = $previousToken !== null && $tokens[$previousToken]['code'] !== T_COMMA;
+					$previousToken = TokenHelper::findPreviousExcluding($codeSnifferFile, array_merge(TokenHelper::$ineffectiveTokenCodes, [T_BITWISE_AND, T_ELLIPSIS]), $previousToken - 1, $tokens[$functionPointer]['parenthesis_opener'] + 1);
+					if ($previousToken !== null) {
+						$isTypeHint = $tokens[$previousToken]['code'] !== T_COMMA && $tokens[$previousToken]['content'] !== '?';
+						if ($tokens[$previousToken]['content'] === '?') {
+							$isNullable = true;
+						}
+					} else {
+						$isTypeHint = false;
+					}
 					if ($isTypeHint) {
-						$parameterTypeHint = $tokens[$previousToken]['content'] . $parameterTypeHint;
+						$typeHint = $tokens[$previousToken]['content'] . $typeHint;
 					}
 				} while ($isTypeHint);
 
-				$parametersTypeHints[$parameterName] = $parameterTypeHint;
+				$equalsPointer = TokenHelper::findNextEffective($codeSnifferFile, $i + 1, $tokens[$functionPointer]['parenthesis_closer']);
+				$isOptional = $equalsPointer !== null && $tokens[$equalsPointer]['code'] === T_EQUAL;
+
+				$parametersTypeHints[$parameterName] = $typeHint !== null ? new ParameterTypeHint($typeHint, $isNullable, $isOptional) : null;
 			}
 		}
 
