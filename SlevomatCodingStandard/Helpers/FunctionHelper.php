@@ -102,7 +102,17 @@ class FunctionHelper
 		return $parametersTypeHints;
 	}
 
-	public static function returnsValue(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer, bool $requireVoid = false): bool
+	public static function returnsValue(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): bool
+	{
+		return self::innerReturnsValue($codeSnifferFile, $functionPointer, false);
+	}
+
+	public static function returnsVoid(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): bool
+	{
+		return self::innerReturnsValue($codeSnifferFile, $functionPointer, true);
+	}
+
+	private static function innerReturnsValue(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer, bool $requireVoid): bool
 	{
 		$tokens = $codeSnifferFile->getTokens();
 
@@ -125,11 +135,6 @@ class FunctionHelper
 		}
 
 		return false;
-	}
-
-	public static function returnsVoid(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): bool
-	{
-		return self::returnsValue($codeSnifferFile, $functionPointer, true);
 	}
 
 	/**
