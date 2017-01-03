@@ -24,6 +24,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	const CODE_USELESS_DOC_COMMENT = 'UselessDocComment';
 
+	/** @var bool */
+	public $enableNullableTypeHints = PHP_VERSION_ID >= 70100;
+
 	/** @var string[] */
 	public $traversableTypeHints = [];
 
@@ -157,19 +160,19 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			return;
 		}
 
-		if (FunctionHelper::isAbstract($phpcsFile, $functionPointer)) {
-			return;
-		}
-
 		if (FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer)) {
 			return;
 		}
 
-		$returnsValue = FunctionHelper::returnsValue($phpcsFile, $functionPointer);
-		$returnsVoid = FunctionHelper::returnsVoid($phpcsFile, $functionPointer);
-
+		$isAbstract = FunctionHelper::isAbstract($phpcsFile, $functionPointer);
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
-		if ($returnAnnotation === null || $returnAnnotation->getContent() === null) {
+		$hasReturnAnnotation = $returnAnnotation !== null && $returnAnnotation->getContent() !== null;
+		$returnTypeHintDefinition = $hasReturnAnnotation ? preg_split('~\\s+~', $returnAnnotation->getContent())[0] : null;
+
+		$returnsValue = $isAbstract ? $hasReturnAnnotation : FunctionHelper::returnsValue($phpcsFile, $functionPointer);
+		$returnsVoid = $isAbstract ? (!$hasReturnAnnotation || $returnTypeHintDefinition === 'void') : FunctionHelper::returnsVoid($phpcsFile, $functionPointer);
+
+		if (!$hasReturnAnnotation) {
 			if ($returnsValue) {
 				$phpcsFile->addError(
 					sprintf(
@@ -185,7 +188,6 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			return;
 		}
 
-		$returnTypeHintDefinition = preg_split('~\\s+~', $returnAnnotation->getContent())[0];
 		if ($this->definitionContainsVoidTypeHint($returnTypeHintDefinition) && $returnsVoid) {
 			$phpcsFile->addError(
 				sprintf(
@@ -204,22 +206,22 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			return;
 		}
 
+		$error = false;
 		if ($this->definitionContainsMixedTypeHint($returnTypeHintDefinition)) {
 			return;
 		} elseif ($this->definitionContainsNullTypeHint($returnTypeHintDefinition)) {
-			return;
+			if ($this->enableNullableTypeHints && $this->definitionContainsJustTwoTypeHints($returnTypeHintDefinition)) {
+				$error = true;
+			} else {
+				return;
+			}
 		} elseif ($this->definitionContainsOneTypeHint($returnTypeHintDefinition)) {
-			$phpcsFile->addError(
-				sprintf(
-					'%s %s() does not have return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
-					$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
-					FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-					$returnTypeHintDefinition
-				),
-				$functionPointer,
-				self::CODE_MISSING_RETURN_TYPE_HINT
-			);
+			$error = true;
 		} elseif ($this->definitionContainsJustTwoTypeHints($returnTypeHintDefinition) && $this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $returnTypeHintDefinition)) {
+			$error = true;
+		}
+
+		if ($error) {
 			$phpcsFile->addError(
 				sprintf(
 					'%s %s() does not have return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
@@ -247,25 +249,27 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			return;
 		}
 
+		$isAbstract = FunctionHelper::isAbstract($phpcsFile, $functionPointer);
+
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
-		if (FunctionHelper::isAbstract($phpcsFile, $functionPointer)) {
-			$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
-			if (
-				($returnTypeHint !== null && $this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint)))
-				|| ($returnAnnotation !== null && ($this->definitionContainsMixedTypeHint($returnAnnotation->getContent()) || $this->definitionContainsNullTypeHint($returnAnnotation->getContent()) || !$this->definitionContainsOneTypeHint($returnAnnotation->getContent())))
-			) {
-				return;
-			}
-		} elseif (FunctionHelper::returnsValue($phpcsFile, $functionPointer)) {
-			$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
-			if ($returnTypeHint === null || $this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint))) {
+		if ($isAbstract || FunctionHelper::returnsValue($phpcsFile, $functionPointer)) {
+			if ($returnTypeHint === null) {
 				return;
 			}
 
+			if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()))) {
+				return;
+			}
+
+			$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
 			if ($returnAnnotation !== null) {
-				if (!$this->definitionContainsOneTypeHint($returnAnnotation->getContent())) {
+				if ($this->enableNullableTypeHints && $this->definitionContainsJustTwoTypeHints($returnAnnotation->getContent()) && $this->definitionContainsNullTypeHint($returnAnnotation->getContent())) {
+					// Report error
+				} elseif ($this->definitionContainsMixedTypeHint($returnAnnotation->getContent())) {
 					return;
-				} elseif (TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint) === 'self' && $this->definitionContainsStaticOrThisTypeHint($returnAnnotation->getContent())) {
+				} elseif (!$this->definitionContainsOneTypeHint($returnAnnotation->getContent())) {
+					return;
+				} elseif ($returnTypeHint !== null && TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()) === 'self' && $this->definitionContainsStaticOrThisTypeHint($returnAnnotation->getContent())) {
 					return;
 				}
 			}
