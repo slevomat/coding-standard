@@ -20,9 +20,48 @@ class TypeHintHelper
 		'void',
 	];
 
+	/** @var string[] */
+	public static $simpleIterableTypeHints = [
+		'array',
+		'iterable',
+	];
+
+	/** @var string[] */
+	public static $simpleUnofficialTypeHints = [
+		'null',
+		'mixed',
+		'true',
+		'false',
+		'resource',
+		'object',
+		'static',
+		'$this',
+	];
+
+	public static function isSimpleTypeHint(string $typeHint): bool
+	{
+		return in_array($typeHint, self::$simpleTypeHints, true);
+	}
+
+	public static function isSimpleIterableTypeHint(string $typeHint): bool
+	{
+		return in_array($typeHint, self::$simpleIterableTypeHints, true);
+	}
+
+	public static function convertLongSimpleTypeHintToShort(string $typeHint): string
+	{
+		$longToShort = [
+			'integer' => 'int',
+			'boolean' => 'bool',
+		];
+		return array_key_exists($typeHint, $longToShort) ? $longToShort[$typeHint] : $typeHint;
+	}
+
 	public static function getFullyQualifiedTypeHint(\PHP_CodeSniffer_File $phpcsFile, int $pointer, string $typeHint): string
 	{
-		if (in_array($typeHint, self::$simpleTypeHints, true) || NamespaceHelper::isFullyQualifiedName($typeHint)) {
+		if (self::isSimpleTypeHint($typeHint)) {
+			return self::convertLongSimpleTypeHintToShort($typeHint);
+		} elseif (NamespaceHelper::isFullyQualifiedName($typeHint)) {
 			return $typeHint;
 		}
 
