@@ -43,7 +43,8 @@ class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer_Sniff
 		$typeHints = explode('|', preg_split('~\\s+~', trim($tokens[$annotationContentPointer]['content']))[0]);
 		foreach ($typeHints as $typeHint) {
 			$typeHint = preg_replace('~(\[\])+$~', '', $typeHint);
-			if (in_array(strtolower($typeHint), ['null', 'mixed', 'true', 'false', 'resource', 'object', 'static', '$this'], true)) {
+			$lowercasedTypeHint = strtolower($typeHint);
+			if (TypeHintHelper::isSimpleTypeHint($lowercasedTypeHint) || in_array($lowercasedTypeHint, TypeHintHelper::$simpleUnofficialTypeHints, true)) {
 				continue;
 			}
 

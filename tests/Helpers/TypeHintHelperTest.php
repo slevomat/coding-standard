@@ -5,6 +5,83 @@ namespace SlevomatCodingStandard\Helpers;
 class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
+	public function dataIsSimpleTypeHint(): array
+	{
+		return [
+			['int', true],
+			['integer', true],
+			['float', true],
+			['string', true],
+			['bool', true],
+			['boolean', true],
+			['callable', true],
+			['self', true],
+			['array', true],
+			['iterable', true],
+			['void', true],
+
+			['\Traversable', false],
+			['resource', false],
+			['mixed[]', false],
+			['object', false],
+			['null', false],
+		];
+	}
+
+	/**
+	 * @dataProvider dataIsSimpleTypeHint
+	 * @param string $typeHint
+	 * @param bool $isSimple
+	 */
+	public function testIsSimpleTypeHint(string $typeHint, bool $isSimple)
+	{
+		$this->assertSame($isSimple, TypeHintHelper::isSimpleTypeHint($typeHint));
+	}
+
+	public function dataIsSimpleIterableTypeHint(): array
+	{
+		return [
+			['array', true],
+			['iterable', true],
+
+			['\Traversable', false],
+			['mixed[]', false],
+		];
+	}
+
+	/**
+	 * @dataProvider dataIsSimpleIterableTypeHint
+	 * @param string $typeHint
+	 * @param bool $isSimple
+	 */
+	public function testIsSimpleIterableTypeHint(string $typeHint, bool $isSimple)
+	{
+		$this->assertSame($isSimple, TypeHintHelper::isSimpleIterableTypeHint($typeHint));
+	}
+
+	public function dataConvertLongSimpleTypeHintToShort(): array
+	{
+		return [
+			['integer', 'int'],
+			['boolean', 'bool'],
+
+			['int', 'int'],
+			['bool', 'bool'],
+			['string', 'string'],
+			['float', 'float'],
+		];
+	}
+
+	/**
+	 * @dataProvider dataConvertLongSimpleTypeHintToShort
+	 * @param string $long
+	 * @param string $short
+	 */
+	public function testConvertLongSimpleTypeHintToShort(string $long, string $short)
+	{
+		$this->assertSame($short, TypeHintHelper::convertLongSimpleTypeHintToShort($long));
+	}
+
 	public function testFunctionAnnotationTypeHintWithNamespace()
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');

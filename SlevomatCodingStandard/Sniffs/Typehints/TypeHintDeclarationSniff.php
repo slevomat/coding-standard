@@ -371,7 +371,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	private function isTraversableTypeHint(string $typeHint): bool
 	{
-		return in_array(strtolower($typeHint), ['array', 'iterable'], true) || array_key_exists($typeHint, $this->getNormalizedTraversableTypeHints());
+		return TypeHintHelper::isSimpleIterableTypeHint($typeHint) || array_key_exists($typeHint, $this->getNormalizedTraversableTypeHints());
 	}
 
 	/**
