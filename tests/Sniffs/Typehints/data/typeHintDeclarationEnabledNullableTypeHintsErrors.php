@@ -45,4 +45,12 @@ abstract class FooClass
 	{
 	}
 
+	/**
+	 * @return string[]|null
+	 */
+	public function returnsNullableArrayOfStrings()
+	{
+		return [];
+	}
+
 }
