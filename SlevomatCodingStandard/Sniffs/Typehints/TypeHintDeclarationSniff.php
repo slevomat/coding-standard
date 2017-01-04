@@ -184,7 +184,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 					self::CODE_MISSING_RETURN_TYPE_HINT
 				);
 			} elseif ($this->enableVoidTypeHint && !array_key_exists(FunctionHelper::getName($phpcsFile, $functionPointer), $methodsWithoutVoidSupport)) {
-				$phpcsFile->addError(
+				$fix = $phpcsFile->addFixableError(
 					sprintf(
 						'%s %s() does not have void return type hint.',
 						$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
@@ -193,13 +193,18 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 					$functionPointer,
 					self::CODE_MISSING_RETURN_TYPE_HINT
 				);
+				if ($fix) {
+					$phpcsFile->fixer->beginChangeset();
+					$phpcsFile->fixer->addContent($phpcsFile->getTokens()[$functionPointer]['parenthesis_closer'], ': void');
+					$phpcsFile->fixer->endChangeset();
+				}
 			}
 
 			return;
 		}
 
 		if ($this->enableVoidTypeHint && $returnTypeHintDefinition === 'void' && !$returnsValue && !array_key_exists(FunctionHelper::getName($phpcsFile, $functionPointer), $methodsWithoutVoidSupport)) {
-			$phpcsFile->addError(
+			$fix = $phpcsFile->addFixableError(
 				sprintf(
 					'%s %s() does not have return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
 					$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
@@ -209,6 +214,11 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 				$functionPointer,
 				self::CODE_MISSING_RETURN_TYPE_HINT
 			);
+			if ($fix) {
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->addContent($phpcsFile->getTokens()[$functionPointer]['parenthesis_closer'], ': void');
+				$phpcsFile->fixer->endChangeset();
+			}
 			return;
 		}
 
@@ -216,32 +226,76 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			return;
 		}
 
-		$error = false;
-		if ($this->definitionContainsMixedTypeHint($returnTypeHintDefinition)) {
-			return;
-		} elseif ($this->definitionContainsNullTypeHint($returnTypeHintDefinition)) {
-			if ($this->enableNullableTypeHints && $this->definitionContainsJustTwoTypeHints($returnTypeHintDefinition)) {
-				$error = true;
+		if ($this->definitionContainsOneTypeHint($returnTypeHintDefinition)) {
+			if ($this->definitionContainsMixedTypeHint($returnTypeHintDefinition) && preg_match('~\[\]$~', $returnTypeHintDefinition)) {
+				$phpcsFile->addError(
+					sprintf(
+						'%s %s() does not have return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
+						$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
+						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
+						$returnTypeHintDefinition
+					),
+					$functionPointer,
+					self::CODE_MISSING_RETURN_TYPE_HINT
+				);
+				return;
+			} elseif ($this->isValidTypeHint($returnTypeHintDefinition)) {
+				$possibleReturnTypeHint = $returnTypeHintDefinition;
+				$nullableReturnTypeHint = false;
 			} else {
 				return;
 			}
-		} elseif ($this->definitionContainsOneTypeHint($returnTypeHintDefinition)) {
-			$error = true;
-		} elseif ($this->definitionContainsJustTwoTypeHints($returnTypeHintDefinition) && $this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $returnTypeHintDefinition)) {
-			$error = true;
+		} elseif ($this->definitionContainsJustTwoTypeHints($returnTypeHintDefinition)) {
+			if ($this->definitionContainsNullTypeHint($returnTypeHintDefinition)) {
+				if ($this->enableNullableTypeHints) {
+					$returnTypeHintDefinitionParts = explode('|', $returnTypeHintDefinition);
+					$possibleReturnTypeHint = strtolower($returnTypeHintDefinitionParts[0]) === 'null' ? $returnTypeHintDefinitionParts[1] : $returnTypeHintDefinitionParts[0];
+					$nullableReturnTypeHint = true;
+
+					if (preg_match('~\[\]$~', $possibleReturnTypeHint)) {
+						$phpcsFile->addError(
+							sprintf(
+								'%s %s() does not have return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
+								$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
+								FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
+								$returnTypeHintDefinition
+							),
+							$functionPointer,
+							self::CODE_MISSING_RETURN_TYPE_HINT
+						);
+						return;
+					} elseif (!$this->isValidTypeHint($possibleReturnTypeHint)) {
+						return;
+					}
+				} else {
+					return;
+				}
+			} elseif ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $returnTypeHintDefinition)) {
+				$returnTypeHintDefinitionParts = explode('|', $returnTypeHintDefinition);
+				$possibleReturnTypeHint = $this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHintDefinitionParts[0])) ? $returnTypeHintDefinitionParts[0] : $returnTypeHintDefinitionParts[1];
+				$nullableReturnTypeHint = false;
+			} else {
+				return;
+			}
+		} else {
+			return;
 		}
 
-		if ($error) {
-			$phpcsFile->addError(
-				sprintf(
-					'%s %s() does not have return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
-					$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
-					FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-					$returnTypeHintDefinition
-				),
-				$functionPointer,
-				self::CODE_MISSING_RETURN_TYPE_HINT
-			);
+		$fix = $phpcsFile->addFixableError(
+			sprintf(
+				'%s %s() does not have return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
+				$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
+				FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
+				$returnTypeHintDefinition
+			),
+			$functionPointer,
+			self::CODE_MISSING_RETURN_TYPE_HINT
+		);
+		if ($fix) {
+			$phpcsFile->fixer->beginChangeset();
+			$returnTypeHint = TypeHintHelper::isSimpleTypeHint($possibleReturnTypeHint) ? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleReturnTypeHint) : $possibleReturnTypeHint;
+			$phpcsFile->fixer->addContent($phpcsFile->getTokens()[$functionPointer]['parenthesis_closer'], sprintf(': %s%s', ($nullableReturnTypeHint ? '?' : ''), $returnTypeHint));
+			$phpcsFile->fixer->endChangeset();
 		}
 	}
 
@@ -326,6 +380,11 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	private function getSniffName(string $sniffName): string
 	{
 		return sprintf('%s.%s', self::NAME, $sniffName);
+	}
+
+	private function isValidTypeHint(string $typeHint): bool
+	{
+		return TypeHintHelper::isSimpleTypeHint($typeHint) || !in_array($typeHint, TypeHintHelper::$simpleUnofficialTypeHints, true);
 	}
 
 	private function definitionContainsMixedTypeHint(string $typeHintDefinition): bool
