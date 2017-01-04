@@ -109,7 +109,7 @@ abstract class FooClass
 	}
 
 	/**
-	 * @return array|mixed[]
+	 * @return mixed[]
 	 */
 	abstract public function mixedTraversableReturnValue(): array;
 
@@ -238,5 +238,45 @@ abstract class FooClass
 
 	/** @var array */
 	public $array = [];
+
+	/**
+	 * @return int|string|\DateTimeImmutable
+	 */
+	public function moreTypeHints()
+	{
+		return 0;
+	}
+
+	/**
+	 * @return string[]|null[]|array
+	 */
+	public function mixedArrayReturnValue(): array
+	{
+		return [];
+	}
+
+	/**
+	 * @return string[]|null
+	 */
+	public function returnsNullableArrayOfStrings()
+	{
+		return [];
+	}
+
+	/**
+	 * @return resource
+	 */
+	public function returnsResource()
+	{
+		return fopen('test.log', 'rb');
+	}
+
+	/**
+	 * @return null
+	 */
+	public function returnsNull()
+	{
+		return null;
+	}
 
 }
