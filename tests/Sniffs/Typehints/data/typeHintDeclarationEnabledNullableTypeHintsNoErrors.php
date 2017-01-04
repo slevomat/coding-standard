@@ -29,4 +29,28 @@ abstract class FooClass
 	{
 	}
 
+	/**
+	 * @return string[]|null
+	 */
+	public function returnsNullableArrayOfStrings(): ?array
+	{
+		return [];
+	}
+
+	/**
+	 * @return resource|null
+	 */
+	public function returnsNullableResource()
+	{
+		return null;
+	}
+
+	/**
+	 * @return mixed|null
+	 */
+	public function returnsNullableMixed()
+	{
+		return null;
+	}
+
 }

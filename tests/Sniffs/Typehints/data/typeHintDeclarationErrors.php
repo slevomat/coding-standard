@@ -103,4 +103,12 @@ abstract class FooClass
 
 	public $array = [];
 
+	/**
+	 * @return mixed[]
+	 */
+	public function traversableMixedReturnTypeHint()
+	{
+		return [];
+	}
+
 }
