@@ -80,4 +80,20 @@ class FooClass
 
 	}
 
+	/**
+	 * @see
+	 */
+	public function unsupportedAnnotation()
+	{
+
+	}
+
+	/**
+	 * @return
+	 */
+	public function invalidAnnotation()
+	{
+
+	}
+
 }
