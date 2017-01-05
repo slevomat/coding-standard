@@ -182,4 +182,14 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$this->assertAllFixedInFile($report);
 	}
 
+	public function testFixableUselessDocComments()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/testFixableUselessDocComments.php', [
+			'enableNullableTypeHints' => true,
+			'enableVoidTypeHint' => true,
+		], [TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT]);
+
+		$this->assertAllFixedInFile($report);
+	}
+
 }
