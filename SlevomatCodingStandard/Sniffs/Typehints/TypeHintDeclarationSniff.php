@@ -9,6 +9,7 @@ use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
+use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 
 class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
@@ -107,48 +108,101 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 			$parameterTypeHintDefinition = $parametersTypeHintsDefinitions[$parameterName];
 
-			if ($this->definitionContainsMixedTypeHint($parameterTypeHintDefinition) || strtolower($parameterTypeHintDefinition) === 'null') {
+			if (strtolower($parameterTypeHintDefinition) === 'null') {
 				continue;
 			}
 
 			if ($this->definitionContainsOneTypeHint($parameterTypeHintDefinition)) {
-				$phpcsFile->addError(
-					sprintf(
-						'%s %s() does not have parameter type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
-						$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
-						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-						$parameterName,
-						$parameterTypeHintDefinition
-					),
-					$functionPointer,
-					self::CODE_MISSING_PARAMETER_TYPE_HINT
-				);
+				if ($this->definitionContainsMixedTypeHint($parameterTypeHintDefinition) && preg_match('~\[\]$~', $parameterTypeHintDefinition)) {
+					$phpcsFile->addError(
+						sprintf(
+							'%s %s() does not have parameter type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
+							$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
+							FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
+							$parameterName,
+							$parameterTypeHintDefinition
+						),
+						$functionPointer,
+						self::CODE_MISSING_PARAMETER_TYPE_HINT
+					);
+					return;
+				} elseif ($this->isValidTypeHint($parameterTypeHintDefinition)) {
+					$possibleParameterTypeHint = $parameterTypeHintDefinition;
+					$nullableParameterTypeHint = false;
+				} else {
+					return;
+				}
 			} elseif ($this->definitionContainsJustTwoTypeHints($parameterTypeHintDefinition)) {
 				if ($this->definitionContainsNullTypeHint($parameterTypeHintDefinition)) {
-					$phpcsFile->addError(
-						sprintf(
-							'%s %s() does not have parameter type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
-							$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
-							FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-							$parameterName,
-							$parameterTypeHintDefinition
-						),
-						$functionPointer,
-						self::CODE_MISSING_PARAMETER_TYPE_HINT
-					);
+					$parameterTypeHintDefinitionParts = explode('|', $parameterTypeHintDefinition);
+					$possibleParameterTypeHint = strtolower($parameterTypeHintDefinitionParts[0]) === 'null' ? $parameterTypeHintDefinitionParts[1] : $parameterTypeHintDefinitionParts[0];
+					$nullableParameterTypeHint = true;
+					if (preg_match('~\[\]$~', $possibleParameterTypeHint)) {
+						$phpcsFile->addError(
+							sprintf(
+								'%s %s() does not have parameter type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
+								$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
+								FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
+								$parameterName,
+								$parameterTypeHintDefinition
+							),
+							$functionPointer,
+							self::CODE_MISSING_PARAMETER_TYPE_HINT
+						);
+						return;
+					} elseif (!$this->isValidTypeHint($possibleParameterTypeHint)) {
+						return;
+					}
 				} elseif ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $parameterTypeHintDefinition)) {
-					$phpcsFile->addError(
-						sprintf(
-							'%s %s() does not have parameter type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
-							$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
-							FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-							$parameterName,
-							$parameterTypeHintDefinition
-						),
-						$functionPointer,
-						self::CODE_MISSING_PARAMETER_TYPE_HINT
-					);
+					$parameterTypeHintDefinitionParts = explode('|', $parameterTypeHintDefinition);
+					$possibleParameterTypeHint = $this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHintDefinitionParts[0])) ? $parameterTypeHintDefinitionParts[0] : $parameterTypeHintDefinitionParts[1];
+					$nullableParameterTypeHint = false;
+				} else {
+					return;
 				}
+			} else {
+				return;
+			}
+
+			$fix = $phpcsFile->addFixableError(
+				sprintf(
+					'%s %s() does not have parameter type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
+					$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
+					FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
+					$parameterName,
+					$parameterTypeHintDefinition
+				),
+				$functionPointer,
+				self::CODE_MISSING_PARAMETER_TYPE_HINT
+			);
+			if ($fix) {
+				$phpcsFile->fixer->beginChangeset();
+
+				$parameterTypeHint = TypeHintHelper::isSimpleTypeHint($possibleParameterTypeHint) ? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleParameterTypeHint) : $possibleParameterTypeHint;
+
+				$tokens = $phpcsFile->getTokens();
+				$parameterPointer = $phpcsFile->findNext(T_VARIABLE, $tokens[$functionPointer]['parenthesis_opener'], $tokens[$functionPointer]['parenthesis_closer'], false, $parameterName);
+
+				$beforeParameterPointer = $parameterPointer;
+				do {
+					$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $beforeParameterPointer - 1, $tokens[$functionPointer]['parenthesis_opener'] + 1);
+					if ($previousPointer !== null && in_array($tokens[$previousPointer]['code'], [T_BITWISE_AND, T_ELLIPSIS], true)) {
+						$beforeParameterPointer = $previousPointer;
+					} else {
+						break;
+					}
+				} while (true);
+
+				if ($this->enableNullableTypeHints) {
+					$phpcsFile->fixer->addContentBefore($beforeParameterPointer, sprintf('%s%s ', ($nullableParameterTypeHint ? '?' : ''), $parameterTypeHint));
+				} else {
+					$phpcsFile->fixer->addContentBefore($beforeParameterPointer, sprintf('%s ', $parameterTypeHint));
+					if ($nullableParameterTypeHint) {
+						$phpcsFile->fixer->addContent($parameterPointer, ' = null');
+					}
+				}
+
+				$phpcsFile->fixer->endChangeset();
 			}
 		}
 	}
