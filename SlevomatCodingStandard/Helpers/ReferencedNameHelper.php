@@ -82,7 +82,7 @@ class ReferencedNameHelper
 							T_INSTANCEOF,
 							T_USE, // trait
 							T_NEW,
-							T_COLON, // return typehint
+							T_COLON, // return type hint
 						], true)
 						&& !in_array($tokens[$nextTokenAfterEndPointer]['code'], [
 							T_DOUBLE_COLON,

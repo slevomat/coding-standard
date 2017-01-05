@@ -1,6 +1,6 @@
 <?php
 
-namespace ReturnTypehint;
+namespace ReturnTypeHint;
 
 class Foo
 {

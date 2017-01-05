@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace SlevomatCodingStandard\Sniffs\Typehints;
+namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
@@ -15,7 +15,7 @@ use SlevomatCodingStandard\Helpers\TypeHintHelper;
 class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 {
 
-	const NAME = 'SlevomatCodingStandard.Typehints.TypeHintDeclaration';
+	const NAME = 'SlevomatCodingStandard.TypeHints.TypeHintDeclaration';
 
 	const CODE_MISSING_PARAMETER_TYPE_HINT = 'MissingParameterTypeHint';
 
@@ -44,7 +44,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	private $normalizedUsefulAnnotations;
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $pointer
 	 */
