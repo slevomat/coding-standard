@@ -48,10 +48,7 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer_Sniff
 			if (in_array($tokens[$previousPointer]['code'], [T_EXTENDS, T_NEW, T_INSTANCEOF], true)) {
 				continue; // allow \Exception in extends and instantiating it
 			}
-			if (
-				PHP_VERSION_ID >= 70100
-				&& $tokens[$previousPointer]['code'] === T_BITWISE_OR
-			) {
+			if ($tokens[$previousPointer]['code'] === T_BITWISE_OR) {
 				$previousPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(
 					TokenHelper::$ineffectiveTokenCodes,
 					TokenHelper::$nameTokenCodes,
