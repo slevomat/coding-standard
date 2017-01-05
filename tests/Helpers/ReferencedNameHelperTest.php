@@ -44,9 +44,6 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		}
 	}
 
-	/**
-	 * @requires PHP 7.1
-	 */
 	public function testMultipleExceptionsCatch()
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
