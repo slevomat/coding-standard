@@ -57,7 +57,7 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertNoSniffError($this->getFileReport(), 9);
 	}
 
-	public function testUsedUseInTypehint()
+	public function testUsedUseInTypeHint()
 	{
 		$this->assertNoSniffError($this->getFileReport(), 10);
 	}
@@ -83,7 +83,7 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertNoSniffError($this->getFileReport(), 18);
 	}
 
-	public function testReturnTypehint()
+	public function testReturnTypeHint()
 	{
 		$this->assertNoSniffError($this->getFileReport(), 19);
 	}

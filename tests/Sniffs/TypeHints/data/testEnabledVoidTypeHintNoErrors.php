@@ -14,7 +14,7 @@ abstract class VoidClass
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.UselessDocComment
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.UselessDocComment
 	 * @return void
 	 */
 	public function __destruct()
@@ -35,7 +35,7 @@ abstract class VoidClass
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.MissingReturnTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 */
 	public function withSuppress()
 	{

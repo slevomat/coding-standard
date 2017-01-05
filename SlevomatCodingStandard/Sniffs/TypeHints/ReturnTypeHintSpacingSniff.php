@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 
-namespace SlevomatCodingStandard\Sniffs\Typehints;
+namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use SlevomatCodingStandard\Helpers\TokenHelper;
 
-class ReturnTypehintSpacingSniff implements \PHP_CodeSniffer_Sniff
+class ReturnTypeHintSpacingSniff implements \PHP_CodeSniffer_Sniff
 {
 
 	const CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE = 'NoSpaceBetweenColonAndType';
@@ -30,7 +30,7 @@ class ReturnTypehintSpacingSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $typeHintPointer
 	 */

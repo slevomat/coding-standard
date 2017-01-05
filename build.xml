@@ -29,7 +29,7 @@
 			checkreturn="true"
 		>
 			<arg value="--exclude"/>
-			<arg path="tests/Sniffs/Typehints/data"/>
+			<arg path="tests/Sniffs/TypeHints/data"/>
 			<arg path="SlevomatCodingStandard" />
 			<arg path="tests" />
 		</exec>

@@ -21,7 +21,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $annotationTagPointer
 	 */

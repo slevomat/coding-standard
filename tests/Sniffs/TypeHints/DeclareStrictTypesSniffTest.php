@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace SlevomatCodingStandard\Sniffs\Typehints;
+namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
