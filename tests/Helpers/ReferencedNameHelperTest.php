@@ -20,7 +20,7 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			['SomeDifferentTrait', false, false],
 			['\FullyQualified\SometTotallyDifferentTrait', false, false],
 			['SomeTrait', false, false],
-			['TypehintedName', false, false],
+			['TypeHintedName', false, false],
 			['ClassInstance', false, false],
 			['StaticClass', false, false],
 			['\Foo\Bar\SpecificException', false, false],
@@ -87,7 +87,7 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertTokenPointer(T_OPEN_PARENTHESIS, 3, $codeSnifferFile, $endTokenPointer);
 	}
 
-	public function testReturnTypehint()
+	public function testReturnTypeHint()
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/return-typehint.php'

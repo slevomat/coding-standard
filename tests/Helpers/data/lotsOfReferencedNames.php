@@ -24,11 +24,11 @@ class FooClass extends \ExtendedClass implements \ImplementedInterface, \SecondI
 	private $barz;
 
 	/**
-	 * @param TypehintedName $foo
-	 * @param AnotherTypehintedName[] $bar
-	 * @return Returned_Typehinted_Underscored_Name
+	 * @param TypeHintedName $foo
+	 * @param AnotherTypeHintedName[] $bar
+	 * @return Returned_TypeHinted_Underscored_Name
 	 */
-	public function fooMethod(TypehintedName $foo, array $bar)
+	public function fooMethod(TypeHintedName $foo, array $bar)
 	{
 		try {
 			$var = new ClassInstance();

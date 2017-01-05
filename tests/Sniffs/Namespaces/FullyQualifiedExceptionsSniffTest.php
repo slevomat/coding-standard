@@ -10,7 +10,7 @@ class FullyQualifiedExceptionsSniffTest extends \SlevomatCodingStandard\Sniffs\T
 		return $this->checkFile(__DIR__ . '/data/fullyQualifiedExceptionNames.php');
 	}
 
-	public function testNonFullyQualifiedExceptionInTypehint()
+	public function testNonFullyQualifiedExceptionInTypeHint()
 	{
 		$this->assertSniffError(
 			$this->getFileReport(),
@@ -52,7 +52,7 @@ class FullyQualifiedExceptionsSniffTest extends \SlevomatCodingStandard\Sniffs\T
 		);
 	}
 
-	public function testFullyQualifiedExceptionInTypehint()
+	public function testFullyQualifiedExceptionInTypeHint()
 	{
 		$this->assertNoSniffError($this->getFileReport(), 16);
 	}

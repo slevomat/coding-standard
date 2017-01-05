@@ -13,7 +13,7 @@ abstract class FooClass
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.MissingReturnTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
 	 * @return string|null
 	 */
 	public function withSuppress()
@@ -22,7 +22,7 @@ abstract class FooClass
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.UselessDocComment
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.UselessDocComment
 	 * @param int|null $a
 	 */
 	public function withNullableParameterTypeHintAndSuppressedUselessDocComment(?int $a)

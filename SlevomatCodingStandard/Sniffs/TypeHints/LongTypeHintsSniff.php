@@ -1,12 +1,12 @@
 <?php declare(strict_types = 1);
 
-namespace SlevomatCodingStandard\Sniffs\Typehints;
+namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 
-class LongTypesSniff implements \PHP_CodeSniffer_Sniff
+class LongTypeHintsSniff implements \PHP_CodeSniffer_Sniff
 {
 
 	const CODE_USED_LONG_TYPE = 'UsedLongType';
@@ -23,7 +23,7 @@ class LongTypesSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Typehints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $pointer
 	 */
@@ -66,7 +66,7 @@ class LongTypesSniff implements \PHP_CodeSniffer_Sniff
 
 				if ($suggestType !== null) {
 					$phpcsFile->addError(sprintf(
-						'Expected "%s" but found "%s" in typehint annotation',
+						'Expected "%s" but found "%s" in type hint annotation',
 						$suggestType,
 						$type
 					), $pointer, self::CODE_USED_LONG_TYPE);
