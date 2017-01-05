@@ -8,24 +8,41 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	/**
 	 * @param string $filePath
 	 * @param mixed[] $sniffProperties
+	 * @param string[] $codesToCheck
 	 * @return \PHP_CodeSniffer_File
 	 */
-	protected function checkFile(string $filePath, array $sniffProperties = []): \PHP_CodeSniffer_File
+	protected function checkFile(string $filePath, array $sniffProperties = [], array $codesToCheck = []): \PHP_CodeSniffer_File
 	{
 		$codeSniffer = new \PHP_CodeSniffer();
 		$codeSniffer->cli->setCommandLineValues([
 			'-s',
 		]);
 
+		$propertyReflection = new \ReflectionProperty(\PHP_CodeSniffer::class, 'ruleset');
+		$propertyReflection->setAccessible(true);
+
 		if (count($sniffProperties) > 0) {
-			$propertyReflection = new \ReflectionProperty(\PHP_CodeSniffer::class, 'ruleset');
-			$propertyReflection->setAccessible(true);
 			$ruleset = $propertyReflection->getValue($codeSniffer);
 			$ruleset[$this->getSniffName()]['properties'] = $sniffProperties;
 			$propertyReflection->setValue($codeSniffer, $ruleset);
 		}
 
 		$codeSniffer->registerSniffs([$this->getSniffPath()], [], []);
+
+		if (count($codesToCheck) > 0) {
+			$classReflection = new \ReflectionClass($this->getSniffClassName());
+
+			$ruleset = $propertyReflection->getValue($codeSniffer);
+
+			foreach ($classReflection->getConstants() as $constantName => $constantValue) {
+				if (strpos($constantName, 'CODE_') === 0 && !in_array($constantValue, $codesToCheck, true)) {
+					$ruleset[sprintf('%s.%s', $this->getSniffName(), $constantValue)]['severity'] = 0;
+				}
+			}
+
+			$propertyReflection->setValue($codeSniffer, $ruleset);
+		}
+
 		$codeSniffer->populateTokenListeners();
 
 		return $codeSniffer->processFile($filePath);
