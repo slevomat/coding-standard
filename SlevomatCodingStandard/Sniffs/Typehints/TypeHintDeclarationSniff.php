@@ -383,8 +383,6 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			if ($returnAnnotation !== null) {
 				if ($this->enableNullableTypeHints && $this->definitionContainsJustTwoTypeHints($returnAnnotation->getContent()) && $this->definitionContainsNullTypeHint($returnAnnotation->getContent())) {
 					// Report error
-				} elseif ($this->definitionContainsMixedTypeHint($returnAnnotation->getContent())) {
-					return;
 				} elseif (!$this->definitionContainsOneTypeHint($returnAnnotation->getContent())) {
 					return;
 				} elseif ($returnTypeHint !== null && TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()) === 'self' && $this->definitionContainsStaticOrThisTypeHint($returnAnnotation->getContent())) {
@@ -405,7 +403,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			}
 		}
 
-		$phpcsFile->addError(
+		$fix = $phpcsFile->addFixableError(
 			sprintf(
 				'%s %s() does not need documentation comment.',
 				$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
@@ -414,6 +412,19 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			$functionPointer,
 			self::CODE_USELESS_DOC_COMMENT
 		);
+		if ($fix) {
+			$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $functionPointer);
+			$docCommentClosePointer = $phpcsFile->getTokens()[$docCommentOpenPointer]['comment_closer'];
+
+			$changeStart = $docCommentOpenPointer;
+			$changeEnd = TokenHelper::findNextEffective($phpcsFile, $docCommentClosePointer + 1) - 1;
+
+			$phpcsFile->fixer->beginChangeset();
+			for ($i = $changeStart; $i <= $changeEnd; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
+			$phpcsFile->fixer->endChangeset();
+		}
 	}
 
 	private function checkPropertyTypeHint(\PHP_CodeSniffer_File $phpcsFile, int $propertyPointer)
