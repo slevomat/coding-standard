@@ -111,4 +111,9 @@ abstract class FooClass
 		return [];
 	}
 
+	/**
+	 * @param mixed[] $a
+	 */
+	abstract function traversableMixedParameterTypeHint($a);
+
 }

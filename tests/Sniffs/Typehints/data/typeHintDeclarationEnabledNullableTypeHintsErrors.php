@@ -53,4 +53,12 @@ abstract class FooClass
 		return [];
 	}
 
+	/**
+	 * @param string[]|null $a
+	 */
+	public function parameterNullableArrayOfStrings($a)
+	{
+
+	}
+
 }

@@ -53,4 +53,20 @@ abstract class FooClass
 		return null;
 	}
 
+	/**
+	 * @param resource|null $a
+	 */
+	public function nullableResource($a)
+	{
+
+	}
+
+	/**
+	 * @param mixed|null $a
+	 */
+	public function nullableMixed($a)
+	{
+
+	}
+
 }
