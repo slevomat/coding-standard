@@ -32,7 +32,7 @@ abstract class FooClass
 	/**
 	 * @param mixed[]|array $a
 	 */
-	public function mixedTraversableParameter($a)
+	public function mixedTraversableParameter(array $a)
 	{
 	}
 
@@ -277,6 +277,30 @@ abstract class FooClass
 	public function returnsNull()
 	{
 		return null;
+	}
+
+	/**
+	 * @param resource $a
+	 */
+	public function parameterResource($a)
+	{
+
+	}
+
+	/**
+	 * @param true $a
+	 */
+	public function parameterTrue($a)
+	{
+
+	}
+
+	/**
+	 * @param mixed|null $a
+	 */
+	public function nullableMixed($a)
+	{
+
 	}
 
 }

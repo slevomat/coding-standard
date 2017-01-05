@@ -32,7 +32,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 			],
 		]);
 
-		$this->assertSame(17, $report->getErrorCount());
+		$this->assertSame(18, $report->getErrorCount());
 
 		$this->assertSniffError($report, 6, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 		$this->assertSniffError($report, 13, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
@@ -40,6 +40,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$this->assertSniffError($report, 27, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 		$this->assertSniffError($report, 34, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 		$this->assertSniffError($report, 41, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		$this->assertSniffError($report, 117, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 
 		$this->assertSniffError($report, 45, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		$this->assertSniffError($report, 53, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
@@ -109,7 +110,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 			'enableVoidTypeHint' => false,
 		]);
 
-		$this->assertSame(7, $report->getErrorCount());
+		$this->assertSame(8, $report->getErrorCount());
 
 		$this->assertSniffError($report, 11, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		$this->assertSniffError($report, 19, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
@@ -118,6 +119,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$this->assertSniffError($report, 37, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 		$this->assertSniffError($report, 44, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
 		$this->assertSniffError($report, 51, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		$this->assertSniffError($report, 59, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 	}
 
 	public function testDisabledNullableTypeHintsNoErrors()
@@ -152,6 +154,30 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 				\Traversable::class,
 			],
 		], [TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT]);
+
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableParameterTypeHintsWithEnabledNullableTypeHints()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/testFixableParameterTypeHintsWithEnabledNullableTypeHints.php', [
+			'enableNullableTypeHints' => true,
+			'enableVoidTypeHint' => false,
+			'traversableTypeHints' => [
+				\ArrayIterator::class,
+				\Traversable::class,
+			],
+		], [TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT]);
+
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableParameterTypeHintsWithDisabledNullableTypeHints()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/testFixableParameterTypeHintsWithDisabledNullableTypeHints.php', [
+			'enableNullableTypeHints' => false,
+			'enableVoidTypeHint' => false,
+		], [TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT]);
 
 		$this->assertAllFixedInFile($report);
 	}
