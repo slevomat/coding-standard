@@ -30,7 +30,7 @@
 			<property name="namespacesRequiredToUse" type="array" value="SlevomatCodingStandard"/>
 		</properties>
 	</rule>
-	<rule ref="SlevomatCodingStandard.Typehints.TypeHintDeclaration">
+	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
 		<properties>
 			<property name="enableNullableTypeHints" value="false"/>
 			<property name="enableVoidTypeHint" value="false"/>
