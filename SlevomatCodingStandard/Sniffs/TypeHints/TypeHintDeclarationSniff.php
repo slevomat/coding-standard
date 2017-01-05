@@ -397,8 +397,8 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			}
 		}
 
-		foreach (array_keys(AnnotationHelper::getAnnotations($phpcsFile, $functionPointer)) as $annotationName) {
-			if ($annotationName === SuppressHelper::ANNOTATION || array_key_exists($annotationName, $this->getNormalizedUsefulAnnotations())) {
+		foreach (AnnotationHelper::getAnnotations($phpcsFile, $functionPointer) as list($annotation)) {
+			if ($annotation->getName() === SuppressHelper::ANNOTATION || array_key_exists($annotation->getName(), $this->getNormalizedUsefulAnnotations())) {
 				return;
 			}
 		}
