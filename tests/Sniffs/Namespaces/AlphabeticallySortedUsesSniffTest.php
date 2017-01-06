@@ -54,4 +54,10 @@ class AlphabeticallySortedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\T
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/alphabeticalPatrik.php'));
 	}
 
+	public function testFixableUnusedUses()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableAlphabeticalSortedUses.php', [], [AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER]);
+		$this->assertAllFixedInFile($report);
+	}
+
 }

@@ -7,7 +7,7 @@
 function ($a)
 {
 
-}
+};
 
 class Foo
 {

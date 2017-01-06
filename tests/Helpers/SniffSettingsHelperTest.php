@@ -20,4 +20,27 @@ class SniffSettingsHelperTest extends \PHPUnit_Framework_TestCase
 		]));
 	}
 
+	public function testNormalizeAssociativeArray()
+	{
+		$this->assertSame([
+			'app/ui' => 'Slevomat\UI',
+			'app' => 'Slevomat',
+			'build/SlevomatSniffs/Sniffs' => 'SlevomatSniffs\Sniffs',
+			'tests/ui' => 'Slevomat\UI',
+			'tests' => 'Slevomat',
+		], SniffSettingsHelper::normalizeAssociativeArray([
+			'    ' => '   ',
+			'app/ui' => 'Slevomat\UI',
+			'  ' => '  ',
+			'app' => 'Slevomat',
+			'  ' => '  ',
+			'build/SlevomatSniffs/Sniffs' => 'SlevomatSniffs\Sniffs',
+			'  ' => '  ',
+			'tests/ui' => 'Slevomat\UI',
+			'  ' => '  ',
+			'tests' => 'Slevomat',
+			'  ' => '  ',
+		]));
+	}
+
 }

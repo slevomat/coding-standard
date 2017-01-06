@@ -110,6 +110,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 					if (count($leftSideTokens) > 0 & count($rightSideTokens) > 0) {
 						$phpcsFile->fixer->beginChangeset();
 						$this->write($phpcsFile, $leftSideTokens, $rightSideTokens);
+						$phpcsFile->fixer->addContent(key($leftSideTokens), ' ');
 						$this->write($phpcsFile, $rightSideTokens, $leftSideTokens);
 						$phpcsFile->fixer->endChangeset();
 					}

@@ -139,4 +139,10 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertNoSniffErrorInFile($report);
 	}
 
+	public function testFixableUnusedUses()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableUnusedUses.php', [], [UnusedUsesSniff::CODE_UNUSED_USE]);
+		$this->assertAllFixedInFile($report);
+	}
+
 }

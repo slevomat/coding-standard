@@ -142,7 +142,7 @@ function returnsNullableArrayOfStrings()
 	return [];
 }
 
-class Foo
+abstract class Foo
 {
 
 	public function __construct()
