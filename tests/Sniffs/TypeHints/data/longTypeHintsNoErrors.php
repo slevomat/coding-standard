@@ -27,4 +27,13 @@ class Foo
 		return 0;
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
+	protected function withInvalidAnnotations()
+	{
+
+	}
+
 }
