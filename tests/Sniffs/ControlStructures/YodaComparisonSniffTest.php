@@ -31,4 +31,10 @@ class YodaComparisonSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertSniffError($resultFile, $lineNumber, YodaComparisonSniff::CODE_YODA_COMPARISON);
 	}
 
+	public function testFixable()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableYodaComparisons.php', [], [YodaComparisonSniff::CODE_YODA_COMPARISON]);
+		$this->assertAllFixedInFile($report);
+	}
+
 }

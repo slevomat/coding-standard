@@ -133,7 +133,7 @@ function more(string $a, $b, int $c, $d, callable $e, $f, iterable $g)
 
 }
 
-class Foo
+abstract class Foo
 {
 
 	/**

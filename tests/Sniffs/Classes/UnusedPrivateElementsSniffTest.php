@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function testCheckFile()
+	public function testErrors()
 	{
 		$resultFile = $this->checkFile(__DIR__ . '/data/ClassWithSomeUnusedElements.php', [
 			'alwaysUsedPropertiesAnnotations' => [
@@ -64,6 +64,21 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertNoSniffError($resultFile, 81);
 		$this->assertNoSniffError($resultFile, 86);
 		$this->assertNoSniffError($resultFile, 91);
+	}
+
+	public function testOnlyPublicElements()
+	{
+		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/ClassWithOnlyPublicElements.php'));
+	}
+
+	public function testClassWithSpecialThis()
+	{
+		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/ClassWithSpecialThis.php'));
+	}
+
+	public function testClassWithSpecialSelf()
+	{
+		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/ClassWithSpecialSelf.php'));
 	}
 
 }

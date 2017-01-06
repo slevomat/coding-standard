@@ -230,7 +230,7 @@ class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$openParenthesisTokenPointer = $codeSnifferFile->findNext(T_OPEN_PARENTHESIS, 0);
 		$this->assertTokenPointer(T_OPEN_PARENTHESIS, 4, $codeSnifferFile, $openParenthesisTokenPointer);
 		$content = TokenHelper::getContent($codeSnifferFile, $variableTokenPointer, $openParenthesisTokenPointer);
-		$this->assertSame(sprintf('$i++;%sfoo', "\n"), $content); // intentionally "\n" instead of PHP_EOL
+		$this->assertSame(sprintf('$i++;%sfoo', $codeSnifferFile->eolChar), $content);
 	}
 
 	public function testGetLastTokenPointer()
