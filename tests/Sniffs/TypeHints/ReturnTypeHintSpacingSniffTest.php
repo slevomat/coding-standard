@@ -318,4 +318,13 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError($report, 130, ReturnTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL);
 	}
 
+	public function testReturnTypeHintsArrayIncorrect()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/returnTypeHintsArrayIncorrect.php');
+
+		$this->assertSame(1, $report->getErrorCount());
+
+		$this->assertSniffError($report, 6, ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON);
+	}
+
 }

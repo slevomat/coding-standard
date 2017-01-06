@@ -26,6 +26,7 @@ class ReturnTypeHintSpacingSniff implements \PHP_CodeSniffer_Sniff
 	{
 		return [
 			T_RETURN_TYPE,
+			T_ARRAY_HINT, // Workaround for https://github.com/slevomat/coding-standard/issues/65
 		];
 	}
 
@@ -39,8 +40,11 @@ class ReturnTypeHintSpacingSniff implements \PHP_CodeSniffer_Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$typeHintPointer = TokenHelper::findPreviousExcluding($phpcsFile, [T_NS_SEPARATOR, T_STRING], $typeHintPointer - 1) + 1;
-		// PHPCS sometimes reports T_COLON as T_INLINE_ELSE
-		$colonPointer = $phpcsFile->findPrevious([T_COLON, T_INLINE_ELSE], $typeHintPointer - 1);
+		// PHPCS sometimes parses T_COLON as T_INLINE_ELSE and ? is currently parsed as T_INLINE_THEN
+		$colonPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge([T_INLINE_THEN], TokenHelper::$ineffectiveTokenCodes), $typeHintPointer - 1);
+		if ($colonPointer === null || !in_array($tokens[$colonPointer]['code'], [T_COLON, T_INLINE_ELSE], true)) {
+			return;
+		}
 
 		$nullabilitySymbolPointer = null;
 		for ($i = $colonPointer + 1; $i < $typeHintPointer; $i++) {
