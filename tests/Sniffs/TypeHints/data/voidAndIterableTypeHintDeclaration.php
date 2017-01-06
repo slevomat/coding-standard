@@ -1,6 +1,6 @@
 <?php // lint >= 7.1
 
-class VoidAndIterableClass
+abstract class VoidAndIterableClass
 {
 
 	/**
