@@ -25,17 +25,17 @@ $callback = function():?Foo
 
 };
 
-$callback = function fooo() use ($test): ? Foo
+$callback = function () use ($test): ? Foo
 {
 
 };
 
-$callback = function foooo() :?Foo
+$callback = function () :?Foo
 {
 
 };
 
-$callback = function fooooo() use ($test) :  ? Foo
+$callback = function () use ($test) :  ? Foo
 {
 
 };
@@ -55,17 +55,17 @@ interface Foo
 
 	public function dooBaz($param):  ?\Foo\Bar;
 
-	public function doFoo($param) :?Foo;
+	public function doFoo2($param) :?Foo;
 
-	public function doBar($param) :?\Bar;
+	public function doBar2($param) :?\Bar;
 
-	public function doBaz($param) :?\Foo\Bar;
+	public function doBaz2($param) :?\Foo\Bar;
 
-	public function dooFoo($param) :  ?Foo;
+	public function dooFoo2($param) :  ?Foo;
 
-	public function dooBar($param) : ?  \Bar;
+	public function dooBar2($param) : ?  \Bar;
 
-	public function dooBaz($param) : ? \Foo\Bar;
+	public function dooBaz2($param) : ? \Foo\Bar;
 
 }
 
@@ -107,7 +107,7 @@ class FooBar implements Foo
 
 	}
 
-	public function doBar($param) :?\Bar
+	public function doBar2($param) :?\Bar
 	{
 
 	}

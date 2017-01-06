@@ -95,6 +95,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	protected function assertAllFixedInFile(\PHP_CodeSniffer_File $codeSnifferFile)
 	{
 		$codeSnifferFile->fixer->fixFile();
+
 		$this->assertStringEqualsFile(preg_replace('~(\\.php)$~', '.fixed\\1', $codeSnifferFile->getFilename()), $codeSnifferFile->fixer->getContents());
 	}
 

@@ -36,7 +36,7 @@ class FilepathNamespaceExtractor
 			return null;
 		}
 
-		$pathParts = explode(DIRECTORY_SEPARATOR, $path);
+		$pathParts = preg_split('~[/\\\]~', $path);
 		$rootNamespace = null;
 		while (count($pathParts) > 0) {
 			array_shift($pathParts);

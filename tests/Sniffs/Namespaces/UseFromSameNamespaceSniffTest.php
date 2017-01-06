@@ -55,4 +55,10 @@ class UseFromSameNamespaceSniffTest extends \SlevomatCodingStandard\Sniffs\TestC
 		$this->assertNoSniffError($report, 19);
 	}
 
+	public function testFixableUseFromSameNamespace()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableUseFromSameNamespace.php', [], [UseFromSameNamespaceSniff::CODE_USE_FROM_SAME_NAMESPACE]);
+		$this->assertAllFixedInFile($report);
+	}
+
 }
