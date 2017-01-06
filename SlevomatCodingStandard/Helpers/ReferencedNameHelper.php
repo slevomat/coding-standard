@@ -83,6 +83,7 @@ class ReferencedNameHelper
 							T_USE, // trait
 							T_NEW,
 							T_COLON, // return type hint
+							T_NULLABLE, // nullable type hint
 						], true)
 						&& !in_array($tokens[$nextTokenAfterEndPointer]['code'], [
 							T_DOUBLE_COLON,
