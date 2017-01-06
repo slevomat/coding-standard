@@ -32,44 +32,45 @@ class LongTypeHintsSniff implements \PHP_CodeSniffer_Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		if ($tokens[$pointer]['code'] === T_FUNCTION) {
-			$annotations = FunctionHelper::getParametersAnnotations($phpcsFile, $pointer);
+			$allAnnotations = ['@param' => FunctionHelper::getParametersAnnotations($phpcsFile, $pointer)];
 
 			$return = FunctionHelper::findReturnAnnotation($phpcsFile, $pointer);
 			if ($return !== null) {
-				$annotations[] = $return;
+				$allAnnotations['@return'] = [$return];
 			}
-		} elseif ($tokens[$pointer]['code'] === T_VARIABLE) {
+		} else {
 			if (!PropertyHelper::isProperty($phpcsFile, $pointer)) {
 				return;
 			}
 
-			$annotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $pointer, '@var');
-		} else {
-			return;
+			$allAnnotations = ['@var' => AnnotationHelper::getAnnotationsByName($phpcsFile, $pointer, '@var')];
 		}
 
-		foreach ($annotations as $annotation) {
-			$annotationParts = preg_split('~\\s+~', $annotation->getContent());
-			if (count($annotationParts) === 0) {
-				continue;
-			}
-
-			$types = $annotationParts[0];
-			foreach (explode('|', $types) as $type) {
-				$type = strtolower(trim($type, '[]'));
-				$suggestType = null;
-				if ($type === 'integer') {
-					$suggestType = 'int';
-				} elseif ($type === 'boolean') {
-					$suggestType = 'bool';
+		foreach ($allAnnotations as $annotationName => $annotations) {
+			foreach ($annotations as $annotation) {
+				$annotationParts = preg_split('~\\s+~', $annotation->getContent());
+				if (count($annotationParts) === 0) {
+					continue;
 				}
 
-				if ($suggestType !== null) {
-					$phpcsFile->addError(sprintf(
-						'Expected "%s" but found "%s" in type hint annotation',
-						$suggestType,
-						$type
-					), $pointer, self::CODE_USED_LONG_TYPE);
+				$types = $annotationParts[0];
+				foreach (explode('|', $types) as $type) {
+					$type = strtolower(trim($type, '[]'));
+					$suggestType = null;
+					if ($type === 'integer') {
+						$suggestType = 'int';
+					} elseif ($type === 'boolean') {
+						$suggestType = 'bool';
+					}
+
+					if ($suggestType !== null) {
+						$phpcsFile->addError(sprintf(
+							'Expected "%s" but found "%s" in %s annotation.',
+							$suggestType,
+							$type,
+							$annotationName
+						), $pointer, self::CODE_USED_LONG_TYPE);
+					}
 				}
 			}
 		}
