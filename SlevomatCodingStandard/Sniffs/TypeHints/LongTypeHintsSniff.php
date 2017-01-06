@@ -48,12 +48,11 @@ class LongTypeHintsSniff implements \PHP_CodeSniffer_Sniff
 
 		foreach ($allAnnotations as $annotationName => $annotations) {
 			foreach ($annotations as $annotation) {
-				$annotationParts = preg_split('~\\s+~', $annotation->getContent());
-				if (count($annotationParts) === 0) {
+				if ($annotation->getContent() === null) {
 					continue;
 				}
 
-				$types = $annotationParts[0];
+				$types = preg_split('~\\s+~', $annotation->getContent())[0];
 				foreach (explode('|', $types) as $type) {
 					$type = strtolower(trim($type, '[]'));
 					$suggestType = null;
