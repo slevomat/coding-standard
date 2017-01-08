@@ -40,18 +40,13 @@ class ReturnTypeHintSpacingSniff implements \PHP_CodeSniffer_Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$typeHintPointer = TokenHelper::findPreviousExcluding($phpcsFile, [T_NS_SEPARATOR, T_STRING], $typeHintPointer - 1) + 1;
-		// PHPCS sometimes parses T_COLON as T_INLINE_ELSE and ? is currently parsed as T_INLINE_THEN
-		$colonPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge([T_INLINE_THEN], TokenHelper::$ineffectiveTokenCodes), $typeHintPointer - 1);
-		if ($colonPointer === null || !in_array($tokens[$colonPointer]['code'], [T_COLON, T_INLINE_ELSE], true)) {
+		$colonPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge([T_NULLABLE], TokenHelper::$ineffectiveTokenCodes), $typeHintPointer - 1);
+		if ($colonPointer === null || $tokens[$colonPointer]['code'] !== T_COLON) {
 			return;
 		}
 
-		$nullabilitySymbolPointer = null;
-		for ($i = $colonPointer + 1; $i < $typeHintPointer; $i++) {
-			if ($tokens[$i]['content'] === '?') {
-				$nullabilitySymbolPointer = $i;
-			}
-		}
+		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $colonPointer + 1);
+		$nullabilitySymbolPointer = $nextPointer !== null && $tokens[$nextPointer]['code'] === T_NULLABLE ? $nextPointer : null;
 
 		if ($nullabilitySymbolPointer === null) {
 			if ($tokens[$colonPointer + 1]['code'] !== T_WHITESPACE) {
