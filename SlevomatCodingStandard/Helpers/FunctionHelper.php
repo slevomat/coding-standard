@@ -99,8 +99,8 @@ class FunctionHelper
 				do {
 					$previousToken = TokenHelper::findPreviousExcluding($codeSnifferFile, array_merge(TokenHelper::$ineffectiveTokenCodes, [T_BITWISE_AND, T_ELLIPSIS]), $previousToken - 1, $tokens[$functionPointer]['parenthesis_opener'] + 1);
 					if ($previousToken !== null) {
-						$isTypeHint = $tokens[$previousToken]['code'] !== T_COMMA && $tokens[$previousToken]['content'] !== '?';
-						if ($tokens[$previousToken]['content'] === '?') {
+						$isTypeHint = $tokens[$previousToken]['code'] !== T_COMMA && $tokens[$previousToken]['code'] !== T_NULLABLE;
+						if ($tokens[$previousToken]['code'] === T_NULLABLE) {
 							$isNullable = true;
 						}
 					} else {
@@ -167,10 +167,9 @@ class FunctionHelper
 
 		$isAbstract = self::isAbstract($codeSnifferFile, $functionPointer);
 
-		// PHPCS sometimes reports T_COLON as T_INLINE_ELSE
 		$colonToken = $isAbstract
-			? $codeSnifferFile->findNext([T_COLON, T_INLINE_ELSE], $tokens[$functionPointer]['parenthesis_closer'] + 1, null, false, null, true)
-			: $codeSnifferFile->findNext([T_COLON, T_INLINE_ELSE], $tokens[$functionPointer]['parenthesis_closer'] + 1, $tokens[$functionPointer]['scope_opener'] - 1);
+			? $codeSnifferFile->findNext(T_COLON, $tokens[$functionPointer]['parenthesis_closer'] + 1, null, false, null, true)
+			: $codeSnifferFile->findNext(T_COLON, $tokens[$functionPointer]['parenthesis_closer'] + 1, $tokens[$functionPointer]['scope_opener'] - 1);
 
 		if ($colonToken === false) {
 			return null;
@@ -182,7 +181,7 @@ class FunctionHelper
 			? $codeSnifferFile->findNext($abstractExcludeTokens, $colonToken + 1, null, true, null, true)
 			: $codeSnifferFile->findNext(TokenHelper::$ineffectiveTokenCodes, $colonToken + 1, $tokens[$functionPointer]['scope_opener'] - 1, true);
 
-		$nullable = $nullableToken !== false && $tokens[$nullableToken]['content'] === '?';
+		$nullable = $nullableToken !== false && $tokens[$nullableToken]['code'] === T_NULLABLE;
 
 		$typeHint = null;
 		$nextToken = $nullable ? $nullableToken : $colonToken;
