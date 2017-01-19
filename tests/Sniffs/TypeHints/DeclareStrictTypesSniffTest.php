@@ -10,6 +10,9 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/declareStrictTypesMultipleOpenTags.php'));
 	}
 
+	/**
+	 * @return mixed[][]
+	 */
 	public function dataDeclareStrictTypesMissing(): array
 	{
 		return [
@@ -47,6 +50,9 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		);
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function dataDeclareStrictTypesIncorrectFormat(): array
 	{
 		return [

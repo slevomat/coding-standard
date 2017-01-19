@@ -5,6 +5,9 @@ namespace SlevomatCodingStandard\Helpers;
 class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
+	/**
+	 * @return mixed[][]
+	 */
 	public function dataIsSimpleTypeHint(): array
 	{
 		return [
@@ -38,6 +41,9 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertSame($isSimple, TypeHintHelper::isSimpleTypeHint($typeHint));
 	}
 
+	/**
+	 * @return mixed[][]
+	 */
 	public function dataIsSimpleIterableTypeHint(): array
 	{
 		return [
@@ -59,6 +65,9 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertSame($isSimple, TypeHintHelper::isSimpleIterableTypeHint($typeHint));
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function dataConvertLongSimpleTypeHintToShort(): array
 	{
 		return [

@@ -45,6 +45,9 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertFalse(FunctionHelper::isMethod($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooFunction')));
 	}
 
+	/**
+	 * @return mixed[][]
+	 */
 	public function dataParametersNames(): array
 	{
 		return [
@@ -87,6 +90,9 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertSame($expectedParametersNames, FunctionHelper::getParametersNames($codeSnifferFile, $functionPointer));
 	}
 
+	/**
+	 * @return mixed[][]
+	 */
 	public function dataParametersTypeHints(): array
 	{
 		return [
@@ -144,6 +150,9 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		];
 	}
 
+	/**
+	 * @return mixed[][]
+	 */
 	public function dataParametersNullableTypeHints(): array
 	{
 		return [
@@ -229,6 +238,9 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		}
 	}
 
+	/**
+	 * @return mixed[][]
+	 */
 	public function dataReturnsValueOrNot(): array
 	{
 		return [
@@ -256,6 +268,9 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertSame($returnsValue, FunctionHelper::returnsValue($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, $functionName)));
 	}
 
+	/**
+	 * @return mixed[][]
+	 */
 	public function dataReturnsVoid(): array
 	{
 		return [
