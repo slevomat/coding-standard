@@ -40,6 +40,9 @@ class SuppressHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertFalse(SuppressHelper::isSniffSuppressed($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'isNotSuppressed'), self::CHECK_NAME));
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function dataFunctionIsSuppressed(): array
 	{
 		return [
@@ -58,6 +61,9 @@ class SuppressHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertTrue(SuppressHelper::isSniffSuppressed($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), $name), self::CHECK_NAME));
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function dataFunctionIsNotSuppressed(): array
 	{
 		return [

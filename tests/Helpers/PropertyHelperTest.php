@@ -8,6 +8,9 @@ class PropertyHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	/** @var \PHP_CodeSniffer_File */
 	private $testedCodeSnifferFile;
 
+	/**
+	 * @return mixed[][]
+	 */
 	public function dataIsProperty(): array
 	{
 		return [

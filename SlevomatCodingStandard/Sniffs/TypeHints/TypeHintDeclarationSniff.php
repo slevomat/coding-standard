@@ -23,6 +23,12 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	const CODE_MISSING_RETURN_TYPE_HINT = 'MissingReturnTypeHint';
 
+	const CODE_MISSING_TRAVERSABLE_PARAMETER_TYPE_HINT_SPECIFICATION = 'MissingTraversableParameterTypeHintSpecification';
+
+	const CODE_MISSING_TRAVERSABLE_PROPERTY_TYPE_HINT_SPECIFICATION = 'MissingTraversablePropertyTypeHintSpecification';
+
+	const CODE_MISSING_TRAVERSABLE_RETURN_TYPE_HINT_SPECIFICATION = 'MissingTraversableReturnTypeHintSpecification';
+
 	const CODE_USELESS_DOC_COMMENT = 'UselessDocComment';
 
 	/** @var bool */
@@ -74,12 +80,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	private function checkParametersTypeHints(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer)
 	{
-		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_PARAMETER_TYPE_HINT))) {
-			return;
-		}
-
-		$parametersWithoutTypeHint = FunctionHelper::getParametersWithoutTypeHint($phpcsFile, $functionPointer);
-		if (count($parametersWithoutTypeHint) === 0) {
+		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::NAME)) {
 			return;
 		}
 
@@ -96,7 +97,47 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			}
 		}
 
-		foreach ($parametersWithoutTypeHint as $parameterName) {
+		if (!SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_TRAVERSABLE_PARAMETER_TYPE_HINT_SPECIFICATION))) {
+			foreach (FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer) as $parameterName => $parameterTypeHint) {
+				if ($parameterTypeHint === null) {
+					continue;
+				}
+
+				if (!$this->isTraversableTypeHint($parameterTypeHint->getTypeHint())) {
+					continue;
+				}
+
+				if (!array_key_exists($parameterName, $parametersTypeHintsDefinitions)) {
+					$phpcsFile->addError(
+						sprintf(
+							'%s %s() does not have @param annotation for its traversable parameter %s.',
+							$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
+							FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
+							$parameterName
+						),
+						$functionPointer,
+						self::CODE_MISSING_TRAVERSABLE_PARAMETER_TYPE_HINT_SPECIFICATION
+					);
+				} elseif (!$this->definitionContainsTraversableTypeHintSpeficication($parametersTypeHintsDefinitions[$parameterName])) {
+					$phpcsFile->addError(
+						sprintf(
+							'@param annotation of %s %s() does not specify type hint for items of its traversable parameter %s.',
+							lcfirst($this->getFunctionTypeLabel($phpcsFile, $functionPointer)),
+							FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
+							$parameterName
+						),
+						$functionPointer,
+						self::CODE_MISSING_TRAVERSABLE_PARAMETER_TYPE_HINT_SPECIFICATION
+					);
+				}
+			}
+		}
+
+		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_PARAMETER_TYPE_HINT))) {
+			return;
+		}
+
+		foreach (FunctionHelper::getParametersWithoutTypeHint($phpcsFile, $functionPointer) as $parameterName) {
 			if (!isset($parametersTypeHintsDefinitions[$parameterName])) {
 				$phpcsFile->addError(
 					sprintf(
@@ -119,7 +160,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			}
 
 			if ($this->definitionContainsOneTypeHint($parameterTypeHintDefinition)) {
-				if ($this->definitionContainsMixedTypeHint($parameterTypeHintDefinition) && preg_match('~\[\]$~', $parameterTypeHintDefinition)) {
+				if ($this->definitionContainsMixedTypeHint($parameterTypeHintDefinition) && $this->definitionContainsTraversableTypeHintSpeficication($parameterTypeHintDefinition)) {
 					$phpcsFile->addError(
 						sprintf(
 							'%s %s() does not have parameter type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
@@ -143,7 +184,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 					$parameterTypeHintDefinitionParts = explode('|', $parameterTypeHintDefinition);
 					$possibleParameterTypeHint = strtolower($parameterTypeHintDefinitionParts[0]) === 'null' ? $parameterTypeHintDefinitionParts[1] : $parameterTypeHintDefinitionParts[0];
 					$nullableParameterTypeHint = true;
-					if (preg_match('~\[\]$~', $possibleParameterTypeHint)) {
+					if ($this->definitionContainsTraversableTypeHintSpeficication($possibleParameterTypeHint)) {
 						$phpcsFile->addError(
 							sprintf(
 								'%s %s() does not have parameter type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
@@ -215,18 +256,54 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	private function checkReturnTypeHints(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer)
 	{
+		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::NAME)) {
+			return;
+		}
+
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
+		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
+		$hasReturnAnnotation = $returnAnnotation !== null && $returnAnnotation->getContent() !== null;
+		$returnTypeHintDefinition = $hasReturnAnnotation ? preg_split('~\\s+~', $returnAnnotation->getContent())[0] : '';
+
+		if ($returnTypeHint !== null) {
+			if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_TRAVERSABLE_RETURN_TYPE_HINT_SPECIFICATION))) {
+				return;
+			}
+
+			if (!$this->isTraversableTypeHint($returnTypeHint->getTypeHint())) {
+				return;
+			}
+
+			if (!$hasReturnAnnotation) {
+				$phpcsFile->addError(
+					sprintf(
+						'%s %s() does not have @return annotation for its traversable return value.',
+						$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
+						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
+					),
+					$functionPointer,
+					self::CODE_MISSING_TRAVERSABLE_RETURN_TYPE_HINT_SPECIFICATION
+				);
+			} elseif (!$this->definitionContainsTraversableTypeHintSpeficication($returnTypeHintDefinition)) {
+				$phpcsFile->addError(
+					sprintf(
+						'@return annotation of %s %s() does not specify type hint for items of its traversable return value.',
+						lcfirst($this->getFunctionTypeLabel($phpcsFile, $functionPointer)),
+						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
+					),
+					$functionPointer,
+					self::CODE_MISSING_TRAVERSABLE_RETURN_TYPE_HINT_SPECIFICATION
+				);
+			}
+
+			return;
+		}
+
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_RETURN_TYPE_HINT))) {
 			return;
 		}
 
-		if (FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer)) {
-			return;
-		}
-
 		$isAbstract = FunctionHelper::isAbstract($phpcsFile, $functionPointer);
-		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
-		$hasReturnAnnotation = $returnAnnotation !== null && $returnAnnotation->getContent() !== null;
-		$returnTypeHintDefinition = $hasReturnAnnotation ? preg_split('~\\s+~', $returnAnnotation->getContent())[0] : null;
 
 		$returnsValue = $isAbstract ? ($hasReturnAnnotation && $returnTypeHintDefinition !== 'void') : FunctionHelper::returnsValue($phpcsFile, $functionPointer);
 
@@ -287,7 +364,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		if ($this->definitionContainsOneTypeHint($returnTypeHintDefinition)) {
-			if ($this->definitionContainsMixedTypeHint($returnTypeHintDefinition) && preg_match('~\[\]$~', $returnTypeHintDefinition)) {
+			if ($this->definitionContainsMixedTypeHint($returnTypeHintDefinition) && $this->definitionContainsTraversableTypeHintSpeficication($returnTypeHintDefinition)) {
 				$phpcsFile->addError(
 					sprintf(
 						'%s %s() does not have return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
@@ -312,7 +389,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 					$possibleReturnTypeHint = strtolower($returnTypeHintDefinitionParts[0]) === 'null' ? $returnTypeHintDefinitionParts[1] : $returnTypeHintDefinitionParts[0];
 					$nullableReturnTypeHint = true;
 
-					if (preg_match('~\[\]$~', $possibleReturnTypeHint)) {
+					if ($this->definitionContainsTraversableTypeHintSpeficication($possibleReturnTypeHint)) {
 						$phpcsFile->addError(
 							sprintf(
 								'%s %s() does not have return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
@@ -435,12 +512,16 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	private function checkPropertyTypeHint(\PHP_CodeSniffer_File $phpcsFile, int $propertyPointer)
 	{
-		if (SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, $this->getSniffName(self::CODE_MISSING_PROPERTY_TYPE_HINT))) {
+		if (SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, self::NAME)) {
 			return;
 		}
 
 		$varAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $propertyPointer, '@var');
 		if (count($varAnnotations) === 0) {
+			if (SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, $this->getSniffName(self::CODE_MISSING_PROPERTY_TYPE_HINT))) {
+				return;
+			}
+
 			$phpcsFile->addError(
 				sprintf(
 					'Property %s does not have @var annotation.',
@@ -449,6 +530,23 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 				$propertyPointer,
 				self::CODE_MISSING_PROPERTY_TYPE_HINT
 			);
+		} else {
+			if (SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, $this->getSniffName(self::CODE_MISSING_TRAVERSABLE_PROPERTY_TYPE_HINT_SPECIFICATION))) {
+				return;
+			}
+
+			$propertyTypeHintDefinition = preg_split('~\\s+~', (string) $varAnnotations[0]->getContent())[0];
+
+			if ($this->definitionContainsTraversableTypeHint($phpcsFile, $propertyPointer, $propertyTypeHintDefinition) && !$this->definitionContainsTraversableTypeHintSpeficication($propertyTypeHintDefinition)) {
+				$phpcsFile->addError(
+					sprintf(
+						'@var annotation of property %s does not specify type hint for its items.',
+						PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer)
+					),
+					$propertyPointer,
+					self::CODE_MISSING_TRAVERSABLE_PROPERTY_TYPE_HINT_SPECIFICATION
+				);
+			}
 		}
 	}
 
@@ -488,24 +586,22 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		return count(explode('|', $typeHintDefinition)) === 2;
 	}
 
-	private function definitionContainsTraversableTypeHint(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer, string $typeHintDefinition): bool
+	private function definitionContainsTraversableTypeHint(\PHP_CodeSniffer_File $phpcsFile, int $pointer, string $typeHintDefinition): bool
 	{
-		if (!preg_match('~\[\](?:\||$)~', $typeHintDefinition)) {
-			return false;
-		}
-
-		return array_reduce(explode('|', $typeHintDefinition), function (bool $carry, string $typeHint) use ($phpcsFile, $functionPointer): bool {
-			$fullyQualifiedTypeHint = TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint);
-			if ($this->isTraversableTypeHint($fullyQualifiedTypeHint)) {
-				$carry = true;
-			}
-			return $carry;
+		return array_reduce(explode('|', $typeHintDefinition), function (bool $carry, string $typeHint) use ($phpcsFile, $pointer): bool {
+			$fullyQualifiedTypeHint = TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeHint);
+			return $this->isTraversableTypeHint($fullyQualifiedTypeHint) ? true : $carry;
 		}, false);
 	}
 
 	private function isTraversableTypeHint(string $typeHint): bool
 	{
 		return TypeHintHelper::isSimpleIterableTypeHint($typeHint) || array_key_exists($typeHint, $this->getNormalizedTraversableTypeHints());
+	}
+
+	private function definitionContainsTraversableTypeHintSpeficication(string $typeHintDefinition): bool
+	{
+		return (bool) preg_match('~\[\](?:\||$)~', $typeHintDefinition);
 	}
 
 	/**

@@ -5,6 +5,9 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
+	/**
+	 * @return mixed[][]
+	 */
 	public function dataIgnoredNamesForIrrelevantTests(): array
 	{
 		return [
@@ -428,6 +431,9 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		);
 	}
 
+	/**
+	 * @return mixed[][]
+	 */
 	public function dataIgnoredNames(): array
 	{
 		return [
@@ -474,6 +480,9 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		$this->assertNoSniffErrorInFile($report);
 	}
 
+	/**
+	 * @return mixed[][]
+	 */
 	public function dataIgnoredNamesInNamespace(): array
 	{
 		return [
