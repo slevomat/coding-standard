@@ -71,6 +71,12 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer_Sniff
 		}
 	}
 
+	/**
+	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
+	 * @param int $catchPointer
+	 * @return bool
+	 */
 	private function searchForThrowableInNextCatches(\PHP_CodeSniffer_File $phpcsFile, array $useStatements, int $catchPointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();

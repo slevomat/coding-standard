@@ -8,6 +8,13 @@ abstract class FooClass
 {
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints
+	 */
+	public function parametersTypeHintsGlobalSuppressed($a, $b)
+	{
+	}
+
+	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 */
 	public function parametersTypeHintsSuppressed($a, $b)
@@ -69,6 +76,14 @@ abstract class FooClass
 	 */
 	public function moreTypeWithTraversableParameter(\QueryResultSet $a)
 	{
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration
+	 */
+	public function returnTypeHintGLobalSuppressed()
+	{
+		return true;
 	}
 
 	/**
@@ -236,7 +251,7 @@ abstract class FooClass
 	/** @var bool */
 	private $boolean = true;
 
-	/** @var array */
+	/** @var string[] */
 	public $array = [];
 
 	/**
@@ -304,9 +319,96 @@ abstract class FooClass
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration
+	 */
+	public $boolWithGlobalSuppress = true;
+
+	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingPropertyTypeHint
 	 */
-	public $bool = true;
+	public $boolWithSuppress = true;
+
+	/**
+	 * @return string[]
+	 */
+	public function returnTraversableArray(): array
+	{
+		return [];
+	}
+
+	/**
+	 * @return iterable|string[]
+	 */
+	private function returnTraversableIterable(): iterable
+	{
+		return [];
+	}
+
+	/**
+	 * @return string[]|\Traversable
+	 */
+	abstract public function returnTraversableTraversable(): \Traversable;
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration
+	 * @return \Traversable
+	 */
+	abstract public function returnTraversableTraversableWithGlobalSuppress(): \Traversable;
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableReturnTypeHintSpecification
+	 * @return \Traversable
+	 */
+	abstract public function returnTraversableTraversableWithSuppress(): \Traversable;
+
+	/**
+	 * @param string[] $a
+	 */
+	public function traversableArrayParameter(array $a)
+	{
+	}
+
+	/**
+	 * @param iterable|string[] $a
+	 */
+	private function taversableIterableParameter(iterable $a)
+	{
+	}
+
+	/**
+	 * @param string[]|\Traversable $a
+	 */
+	abstract public function traversableTraversableParameter(\Traversable $a);
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration
+	 * @param \Traversable $a
+	 */
+	abstract public function traversableTraversableParameterWithGlobalSuppress(\Traversable $a);
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableParameterTypeHintSpecification
+	 * @param \Traversable $a
+	 */
+	abstract public function traversableTraversableParameterWithSuppress(\Traversable $a);
+
+	/** @var string[] */
+	public $traversable = [];
+
+	/** @var string[]|\Traversable|null */
+	public $traversableWithMultipleAnnotaton = [];
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration
+	 * @var array
+	 */
+	public $traversableWithGlobalSuppress = [];
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversablePropertyTypeHintSpecification
+	 * @var array
+	 */
+	public $traversableWithSuppress = [];
 
 	/**
 	 * @param string|int Description

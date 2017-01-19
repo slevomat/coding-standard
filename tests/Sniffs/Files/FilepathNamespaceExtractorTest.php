@@ -5,6 +5,9 @@ namespace SlevomatCodingStandard\Sniffs\Files;
 class FilepathNamespaceExtractorTest extends \PHPUnit_Framework_TestCase
 {
 
+	/**
+	 * @return mixed[][]
+	 */
 	public function dataGetTypeNameFromProjectPath(): array
 	{
 		$root = '/Users/www/slevomat';
