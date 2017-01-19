@@ -429,6 +429,10 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	private function checkPropertyTypeHint(\PHP_CodeSniffer_File $phpcsFile, int $propertyPointer)
 	{
+		if (SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, $this->getSniffName(self::CODE_MISSING_PROPERTY_TYPE_HINT))) {
+			return;
+		}
+
 		$varAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $propertyPointer, '@var');
 		if (count($varAnnotations) === 0) {
 			$phpcsFile->addError(
