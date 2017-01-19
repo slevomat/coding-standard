@@ -5,6 +5,9 @@ namespace SlevomatCodingStandard\Helpers;
 class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
+	/**
+	 * @return string[][]
+	 */
 	public function dataIsFullyQualifiedName(): array
 	{
 		return [
@@ -24,6 +27,9 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertTrue(NamespaceHelper::isFullyQualifiedName($typeName));
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function dataIsNotFullyQualifiedName(): array
 	{
 		return [
@@ -43,6 +49,9 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertFalse(NamespaceHelper::isFullyQualifiedName($typeName));
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function dataHasNamespace(): array
 	{
 		return [
@@ -62,6 +71,9 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertTrue(NamespaceHelper::hasNamespace($typeName));
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function dataDoesNotHaveNamespace(): array
 	{
 		return [
@@ -81,6 +93,9 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertFalse(NamespaceHelper::hasNamespace($typeName));
 	}
 
+	/**
+	 * @return mixed[][]
+	 */
 	public function dataGetNameParts(): array
 	{
 		return [
@@ -106,7 +121,7 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	/**
 	 * @dataProvider dataGetNameParts
 	 * @param string $namespace
-	 * @param mixed[] $parts
+	 * @param string[] $parts
 	 */
 	public function testGetNameParts(string $namespace, array $parts)
 	{
@@ -150,6 +165,9 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertSame('Lorem\Ipsum', $namespace);
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function dataGetUnqualifiedNameFromFullyQualifiedName(): array
 	{
 		return [
@@ -182,6 +200,9 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertSame($unqualifiedName, NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($fullyQualifiedName));
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function dataIsQualifiedName(): array
 	{
 		return [
@@ -200,6 +221,9 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertTrue(NamespaceHelper::isQualifiedName($name));
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function dataIsNotQualifiedName(): array
 	{
 		return [
@@ -216,6 +240,9 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertFalse(NamespaceHelper::isQualifiedName($name));
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function dataNormalizeToCanonicalName(): array
 	{
 		return [
@@ -248,6 +275,9 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertSame($normalizedName, NamespaceHelper::normalizeToCanonicalName($originalName));
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function dataTypeIsInNamespace(): array
 	{
 		return [
@@ -280,6 +310,9 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertTrue(NamespaceHelper::isTypeInNamespace($typeName, $namespace));
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function dataTypeIsNotInNamespace(): array
 	{
 		return [

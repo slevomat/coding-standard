@@ -99,6 +99,12 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		$this->assertStringEqualsFile(preg_replace('~(\\.php)$~', '.fixed\\1', $codeSnifferFile->getFilename()), $codeSnifferFile->fixer->getContents());
 	}
 
+	/**
+	 * @param mixed[][][] $errorsOnLine
+	 * @param string $sniffCode
+	 * @param string|null $message
+	 * @return bool
+	 */
 	private function hasError(array $errorsOnLine, string $sniffCode, string $message = null): bool
 	{
 		foreach ($errorsOnLine as $errorsOnPosition) {
@@ -115,6 +121,9 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 		return false;
 	}
 
+	/**
+	 * @param mixed[][][] $errors
+	 */
 	private function getFormattedErrors(array $errors): string
 	{
 		return implode(PHP_EOL, array_map(function (array $errors): string {

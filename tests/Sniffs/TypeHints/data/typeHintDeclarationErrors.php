@@ -114,7 +114,7 @@ abstract class FooClass
 	/**
 	 * @param mixed[] $a
 	 */
-	abstract function traversableMixedParameterTypeHint($a);
+	abstract public function traversableMixedParameterTypeHint($a);
 
 	/**
 	 * @param string Description
@@ -132,5 +132,63 @@ abstract class FooClass
 	public function oneParameterWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, $b, float $c)
 	{
 	}
+
+	public function returnTraversableArrayWithoutAnnotation(): array
+	{
+		return [];
+	}
+
+	private function returnTraversableIterableWithoutAnnotation(): iterable
+	{
+		return [];
+	}
+
+	abstract public function returnTraversableTraversableWithoutAnnotation(): \Traversable;
+
+	/**
+	 * @return array
+	 */
+	public function returnTraversableWithUnsufficientSingleAnnotation(): array
+	{
+		return [];
+	}
+
+	/**
+	 * @return array|iterable|\Traversable
+	 */
+	public function returnTraversableWithUnsufficientMultipleAnnotation(): iterable
+	{
+		return [];
+	}
+
+	public function traversableArrayParameterWithoutAnnotation(array $a)
+	{
+	}
+
+	private function traversableIterableParameterWithoutAnnotation(iterable $a)
+	{
+	}
+
+	abstract public function traversableTraversableParameterWithoutAnnotation(\Traversable $a);
+
+	/**
+	 * @param array $a
+	 */
+	public function traversableParameterWithUnsufficientSingleAnnotation(array $a)
+	{
+	}
+
+	/**
+	 * @param array|iterable|\Traversable $a
+	 */
+	public function traversableParameterWithUnsufficientMultipleAnnotation(iterable $a)
+	{
+	}
+
+	/** @var array */
+	public $traversableWithUnsufficientSingleAnnotation = [];
+
+	/** @var array|\Traversable|null */
+	public $traversableWithUnsufficientMultipleAnnotation = [];
 
 }
