@@ -303,4 +303,9 @@ abstract class FooClass
 
 	}
 
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingPropertyTypeHint
+	 */
+	public $bool = true;
+
 }
