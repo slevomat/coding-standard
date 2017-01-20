@@ -45,6 +45,48 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertFalse(FunctionHelper::isMethod($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooFunction')));
 	}
 
+	public function dataParametersNames(): array
+	{
+		return [
+			[
+				'allParametersWithTypeHints',
+				['$string', '$int', '$bool', '$float', '$callable', '$array', '$object'],
+			],
+			[
+				'allParametersWithoutTypeHints',
+				['$string', '$int', '$bool', '$float', '$callable', '$array', '$object'],
+			],
+			[
+				'someParametersWithoutTypeHints',
+				['$string', '$int', '$bool', '$float', '$callable', '$array', '$object'],
+			],
+			[
+				'allParametersWithNullableTypeHints',
+				['$string', '$int', '$bool', '$float', '$callable', '$array', '$object'],
+			],
+			[
+				'someParametersWithNullableTypeHints',
+				['$string', '$int', '$bool', '$float', '$callable', '$array', '$object'],
+			],
+		];
+	}
+
+	/**
+	 * @dataProvider dataParametersNames
+	 * @param string $functionName
+	 * @param string[] $expectedParametersNames
+	 */
+	public function testParametersNames(
+		string $functionName,
+		array $expectedParametersNames
+	)
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersNames.php');
+
+		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, $functionName);
+		$this->assertSame($expectedParametersNames, FunctionHelper::getParametersNames($codeSnifferFile, $functionPointer));
+	}
+
 	public function dataParametersTypeHints(): array
 	{
 		return [

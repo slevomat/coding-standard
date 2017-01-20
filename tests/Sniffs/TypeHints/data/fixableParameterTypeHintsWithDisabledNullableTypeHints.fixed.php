@@ -39,6 +39,23 @@ function nullableUnofficialTypeHint($a)
 {
 }
 
+/**
+ * @param string Description
+ * @param bool|null
+ */
+function withoutTypeHintAndWithAnnotationWithoutParameterName(string $a, bool $b = null)
+{
+}
+
+/**
+ * @param string $b
+ * @param bool|null
+ * @param float $c
+ */
+function oneWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, bool $b = null, float $c)
+{
+}
+
 class Foo
 {
 
@@ -74,6 +91,23 @@ class Foo
 	 * @param resource|null $a
 	 */
 	private function nullableUnofficialTypeHint($a)
+	{
+	}
+
+	/**
+	 * @param string Description
+	 * @param bool|null
+	 */
+	public function withoutTypeHintAndWithAnnotationWithoutParameterName(string $a, bool $b = null)
+	{
+	}
+
+	/**
+	 * @param string $b
+	 * @param bool|null
+	 * @param float $c
+	 */
+	public function oneWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, bool $b = null, float $c)
 	{
 	}
 
