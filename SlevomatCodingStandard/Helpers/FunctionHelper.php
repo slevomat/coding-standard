@@ -53,6 +53,25 @@ class FunctionHelper
 	 * @param int $functionPointer
 	 * @return string[]
 	 */
+	public static function getParametersNames(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): array
+	{
+		$tokens = $codeSnifferFile->getTokens();
+
+		$parametersNames = [];
+		for ($i = $tokens[$functionPointer]['parenthesis_opener'] + 1; $i < $tokens[$functionPointer]['parenthesis_closer']; $i++) {
+			if ($tokens[$i]['code'] === T_VARIABLE) {
+				$parametersNames[] = $tokens[$i]['content'];
+			}
+		}
+
+		return $parametersNames;
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer_File $codeSnifferFile
+	 * @param int $functionPointer
+	 * @return string[]
+	 */
 	public static function getParametersWithoutTypeHint(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): array
 	{
 		return array_keys(array_filter(self::getParametersTypeHints($codeSnifferFile, $functionPointer), function (ParameterTypeHint $parameterTypeHint = null): bool {

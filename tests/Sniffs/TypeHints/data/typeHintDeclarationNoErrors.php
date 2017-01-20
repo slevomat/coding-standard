@@ -308,4 +308,21 @@ abstract class FooClass
 	 */
 	public $bool = true;
 
+	/**
+	 * @param string|int Description
+	 * @param \Traversable|string[]
+	 */
+	public function parametersWithoutTypeHintAndWithAnnotationWithoutParameterName($a, \Traversable $b)
+	{
+	}
+
+	/**
+	 * @param string $b
+	 * @param \Traversable|string[]
+	 * @param float $c
+	 */
+	public function oneParameterWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, \Traversable $b, float $c)
+	{
+	}
+
 }

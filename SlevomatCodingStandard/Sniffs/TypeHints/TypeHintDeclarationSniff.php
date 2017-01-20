@@ -83,10 +83,18 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			return;
 		}
 
+		$parametersNames = FunctionHelper::getParametersNames($phpcsFile, $functionPointer);
+
 		$parametersTypeHintsDefinitions = [];
-		foreach (FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer) as $parameterAnnotation) {
-			list($parameterTypeHintDefinition, $parameterName) = preg_split('~\\s+~', $parameterAnnotation->getContent());
-			$parameterName = preg_replace('~^\.{3}\\s*(\$.+)~', '\\1', $parameterName);
+		foreach (FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer) as $parameterAnnotationNo => $parameterAnnotation) {
+			$parameterAnnotationParts = preg_split('~\\s+~', $parameterAnnotation->getContent(), 2);
+			$parameterTypeHintDefinition = $parameterAnnotationParts[0];
+			if (isset($parameterAnnotationParts[1]) && preg_match('~^\.{3}\\s*(\$.+)~', $parameterAnnotationParts[1], $matches)) {
+				$parameterName = $matches[1];
+			} else {
+				$parameterName = $parametersNames[$parameterAnnotationNo];
+			}
+
 			$parametersTypeHintsDefinitions[$parameterName] = $parameterTypeHintDefinition;
 		}
 
