@@ -116,4 +116,21 @@ abstract class FooClass
 	 */
 	abstract function traversableMixedParameterTypeHint($a);
 
+	/**
+	 * @param string Description
+	 * @param bool|null
+	 */
+	public function parametersWithoutTypeHintAndWithAnnotationWithoutParameterName($a, $b)
+	{
+	}
+
+	/**
+	 * @param string $b
+	 * @param bool
+	 * @param float $c
+	 */
+	public function oneParameterWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, $b, float $c)
+	{
+	}
+
 }

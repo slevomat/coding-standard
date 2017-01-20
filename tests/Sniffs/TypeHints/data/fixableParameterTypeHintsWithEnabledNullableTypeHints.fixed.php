@@ -133,6 +133,23 @@ function more(string $a, bool $b, int $c, float $d, callable $e, array $f, itera
 
 }
 
+/**
+ * @param string Description
+ * @param bool|null
+ */
+function withoutTypeHintAndWithAnnotationWithoutParameterName(string $a, ?bool $b)
+{
+}
+
+/**
+ * @param string $b
+ * @param bool|null
+ * @param float $c
+ */
+function oneWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, ?bool $b, float $c)
+{
+}
+
 abstract class Foo
 {
 
@@ -275,6 +292,23 @@ abstract class Foo
 	public static function staticMethod(string $a)
 	{
 
+	}
+
+	/**
+	 * @param string Description
+	 * @param bool|null
+	 */
+	public function withoutTypeHintAndWithAnnotationWithoutParameterName(string $a, ?bool $b)
+	{
+	}
+
+	/**
+	 * @param string $b
+	 * @param bool|null
+	 * @param float $c
+	 */
+	public function oneWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, ?bool $b, float $c)
+	{
 	}
 
 }

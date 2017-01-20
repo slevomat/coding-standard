@@ -32,7 +32,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 			],
 		]);
 
-		$this->assertSame(18, $report->getErrorCount());
+		$this->assertSame(21, $report->getErrorCount());
 
 		$this->assertSniffError($report, 6, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 		$this->assertSniffError($report, 13, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
@@ -41,6 +41,9 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$this->assertSniffError($report, 34, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 		$this->assertSniffError($report, 41, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 		$this->assertSniffError($report, 117, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		$this->assertSniffError($report, 123, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT, 'Method \FooClass::parametersWithoutTypeHintAndWithAnnotationWithoutParameterName() does not have parameter type hint for its parameter $a but it should be possible to add it based on @param annotation "string".');
+		$this->assertSniffError($report, 123, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT, 'Method \FooClass::parametersWithoutTypeHintAndWithAnnotationWithoutParameterName() does not have parameter type hint for its parameter $b but it should be possible to add it based on @param annotation "bool|null".');
+		$this->assertSniffError($report, 132, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 
 		$this->assertSniffError($report, 45, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		$this->assertSniffError($report, 53, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
