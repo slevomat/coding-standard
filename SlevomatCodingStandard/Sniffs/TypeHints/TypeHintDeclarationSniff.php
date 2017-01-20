@@ -90,12 +90,10 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			$parameterAnnotationParts = preg_split('~\\s+~', $parameterAnnotation->getContent(), 2);
 			$parameterTypeHintDefinition = $parameterAnnotationParts[0];
 			if (isset($parameterAnnotationParts[1]) && preg_match('~^\.{3}\\s*(\$.+)~', $parameterAnnotationParts[1], $matches)) {
-				$parameterName = $matches[1];
-			} else {
-				$parameterName = $parametersNames[$parameterAnnotationNo];
+				$parametersTypeHintsDefinitions[$matches[1]] = $parameterTypeHintDefinition;
+			} elseif (isset($parametersNames[$parameterAnnotationNo])) {
+				$parametersTypeHintsDefinitions[$parametersNames[$parameterAnnotationNo]] = $parameterTypeHintDefinition;
 			}
-
-			$parametersTypeHintsDefinitions[$parameterName] = $parameterTypeHintDefinition;
 		}
 
 		foreach ($parametersWithoutTypeHint as $parameterName) {
