@@ -228,7 +228,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		$hasReturnAnnotation = $returnAnnotation !== null && $returnAnnotation->getContent() !== null;
 		$returnTypeHintDefinition = $hasReturnAnnotation ? preg_split('~\\s+~', $returnAnnotation->getContent())[0] : null;
 
-		$returnsValue = $isAbstract ? $hasReturnAnnotation : FunctionHelper::returnsValue($phpcsFile, $functionPointer);
+		$returnsValue = $isAbstract ? ($hasReturnAnnotation && $returnTypeHintDefinition !== 'void') : FunctionHelper::returnsValue($phpcsFile, $functionPointer);
 
 		$methodsWithoutVoidSupport = ['__construct' => true, '__destruct' => true, '__clone' => true];
 
