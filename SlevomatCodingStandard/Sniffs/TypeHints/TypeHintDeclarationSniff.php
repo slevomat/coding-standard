@@ -300,8 +300,12 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 				);
 				return;
 			} elseif ($this->isValidTypeHint($returnTypeHintDefinition)) {
-				$possibleReturnTypeHint = $returnTypeHintDefinition;
-				$nullableReturnTypeHint = false;
+				if (!$this->enableVoidTypeHint && $returnTypeHintDefinition === 'void') {
+					return;
+				} else {
+					$possibleReturnTypeHint = $returnTypeHintDefinition;
+					$nullableReturnTypeHint = false;
+				}
 			} else {
 				return;
 			}
