@@ -151,11 +151,31 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHints.php', [
 			'enableNullableTypeHints' => true,
-			'enableVoidTypeHint' => true,
+			'enableVoidTypeHint' => false,
 			'traversableTypeHints' => [
 				\ArrayIterator::class,
 				\Traversable::class,
 			],
+		], [TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT]);
+
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableReturnTypeHintsWithEnabledVoid()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintsWithEnabledVoid.php', [
+			'enableNullableTypeHints' => false,
+			'enableVoidTypeHint' => true,
+		], [TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT]);
+
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableReturnTypeHintsWithDisabledVoid()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintsWithDisabledVoid.php', [
+			'enableNullableTypeHints' => false,
+			'enableVoidTypeHint' => false,
 		], [TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT]);
 
 		$this->assertAllFixedInFile($report);

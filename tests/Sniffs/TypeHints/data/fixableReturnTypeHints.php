@@ -5,23 +5,6 @@ namespace FooNamespace;
 use ArrayIterator;
 use DateTimeImmutable;
 
-function returnsVoid()
-{
-	return;
-}
-
-function returnsNothing()
-{
-}
-
-/**
- * @return void
- */
-function voidAnnotation()
-{
-
-}
-
 /**
  * @return int
  */
@@ -144,38 +127,6 @@ function returnsNullableArrayOfStrings()
 
 abstract class Foo
 {
-
-	public function __construct()
-	{
-
-	}
-
-	public function __destruct()
-	{
-
-	}
-
-	public function __clone()
-	{
-
-	}
-
-	public function returnsVoid()
-	{
-		return;
-	}
-
-	protected function returnsNothing()
-	{
-	}
-
-	/**
-	 * @return void
-	 */
-	private function voidAnnotation()
-	{
-
-	}
 
 	/**
 	 * @return int
