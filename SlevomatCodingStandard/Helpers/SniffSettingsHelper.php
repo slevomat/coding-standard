@@ -28,8 +28,12 @@ class SniffSettingsHelper
 	{
 		$normalizedSettings = [];
 		foreach ($settings as $key => $value) {
-			$key = trim($key);
-			$value = trim($value);
+			if (is_string($key)) {
+				$key = trim($key);
+			}
+			if (is_string($value)) {
+				$value = trim($value);
+			}
 			if ($key === '' || $value === '') {
 				continue;
 			}
