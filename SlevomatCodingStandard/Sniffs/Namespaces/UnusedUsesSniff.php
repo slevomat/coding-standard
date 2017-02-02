@@ -38,7 +38,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 
 		foreach ($referencedNames as $referencedName) {
 			$name = $referencedName->getNameAsReferencedInFile();
-			$pointer = $referencedName->getPointer();
+			$pointer = $referencedName->getStartPointer();
 			$nameParts = NamespaceHelper::getNameParts($name);
 			$nameAsReferencedInFile = $nameParts[0];
 			$normalizedNameAsReferencedInFile = UseStatement::normalizedNameAsReferencedInFile($nameAsReferencedInFile);
