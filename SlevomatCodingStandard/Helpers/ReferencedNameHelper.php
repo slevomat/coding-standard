@@ -138,7 +138,7 @@ class ReferencedNameHelper
 					}
 				}
 			}
-			$types[] = new ReferencedName(TokenHelper::getContent($phpcsFile, $nameStartPointer, $nameEndPointer), $nameStartPointer, $type);
+			$types[] = new ReferencedName(TokenHelper::getContent($phpcsFile, $nameStartPointer, $nameEndPointer), $nameStartPointer, $nameEndPointer, $type);
 			$beginSearchAtPointer = $nameEndPointer + 1;
 		}
 		return $types;
