@@ -74,7 +74,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 			return;
 		}
 
-		$strictTypesContent = TokenHelper::getContent($phpcsFile, $strictTypesPointer, $numberPointer + 1);
+		$strictTypesContent = TokenHelper::getContent($phpcsFile, $strictTypesPointer, $numberPointer);
 		if ($strictTypesContent !== 'strict_types = 1') {
 			$phpcsFile->addError(
 				sprintf(

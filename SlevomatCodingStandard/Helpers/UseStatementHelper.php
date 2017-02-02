@@ -44,12 +44,13 @@ class UseStatementHelper
 
 	public static function getFullyQualifiedTypeNameFromUse(\PHP_CodeSniffer_File $phpcsFile, int $usePointer): string
 	{
-		$nameEndPointer = $phpcsFile->findNext([T_SEMICOLON, T_AS, T_COMMA], $usePointer + 1);
 		$tokens = $phpcsFile->getTokens();
-		if ($tokens[$nameEndPointer - 1]['code'] === T_WHITESPACE) {
-			$nameEndPointer = TokenHelper::findPreviousExcluding($phpcsFile, [T_WHITESPACE], $nameEndPointer - 1) + 1;
+
+		$nameEndPointer = $phpcsFile->findNext([T_SEMICOLON, T_AS, T_COMMA], $usePointer + 1) - 1;
+		if (in_array($tokens[$nameEndPointer]['code'], TokenHelper::$ineffectiveTokenCodes, true)) {
+			$nameEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $nameEndPointer);
 		}
-		$nameStartPointer = $phpcsFile->findNext(TokenHelper::$nameTokenCodes, $usePointer + 1, $nameEndPointer);
+		$nameStartPointer = TokenHelper::findPreviousExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $nameEndPointer - 1) + 1;
 		if (in_array($tokens[$nameStartPointer]['content'], ['const', 'function'], true)) {
 			$nameStartPointer = $phpcsFile->findNext(TokenHelper::$nameTokenCodes, $nameStartPointer + 1, $nameEndPointer);
 		}
