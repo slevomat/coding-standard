@@ -114,16 +114,11 @@ class TokenHelper
 	public static function getContent(\PHP_CodeSniffer_File $phpcsFile, int $startPointer, int $endPointer = null): string
 	{
 		$tokens = $phpcsFile->getTokens();
-		$content = '';
-		while (true) {
-			$pointer = self::findNextAnyToken($phpcsFile, $startPointer, $endPointer);
-			if ($pointer === null) {
-				break;
-			}
-			$token = $tokens[$pointer];
-			$content .= $token['content'];
+		$endPointer = $endPointer ?: self::getLastTokenPointer($phpcsFile);
 
-			$startPointer = $pointer + 1;
+		$content = '';
+		for ($i = $startPointer; $i < $endPointer; $i++) {
+			$content .= $tokens[$i]['content'];
 		}
 
 		return $content;
