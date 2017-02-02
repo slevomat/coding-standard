@@ -13,15 +13,19 @@ class ReferencedName
 	private $nameAsReferencedInFile;
 
 	/** @var int */
-	private $pointer;
+	private $startPointer;
+
+	/** @var int */
+	private $endPointer;
 
 	/** @var string */
 	private $type;
 
-	public function __construct(string $nameAsReferencedInFile, int $pointer, string $type)
+	public function __construct(string $nameAsReferencedInFile, int $startPointer, int $endPointer, string $type)
 	{
 		$this->nameAsReferencedInFile = $nameAsReferencedInFile;
-		$this->pointer = $pointer;
+		$this->startPointer = $startPointer;
+		$this->endPointer = $endPointer;
 		$this->type = $type;
 	}
 
@@ -30,9 +34,14 @@ class ReferencedName
 		return $this->nameAsReferencedInFile;
 	}
 
-	public function getPointer(): int
+	public function getStartPointer(): int
 	{
-		return $this->pointer;
+		return $this->startPointer;
+	}
+
+	public function getEndPointer(): int
+	{
+		return $this->endPointer;
 	}
 
 	public function isConstant(): bool
