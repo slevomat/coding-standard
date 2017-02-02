@@ -16,6 +16,8 @@ Foo::BAR === $foo + 2;
 Foo::BAR === $this->foo();
 -1 === $foo;
 +1 === $foo;
+(int) FOO === $bar;
+FOO === (int) $bar;
 (BAR === foo() || (
 	['test'] === Foo::BAR
 )) ? 123.0 === Foo::BAR

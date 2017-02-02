@@ -20,6 +20,8 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 
 	const DYNAMISM_FUNCTION_CALL = self::DYNAMISM_VARIABLE;
 
+	const DYNAMISM_CAST = self::DYNAMISM_VARIABLE;
+
 	/** @var integer[] */
 	private $tokenDynamism;
 
@@ -58,7 +60,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 				T_STRING => self::DYNAMISM_FUNCTION_CALL,
 			];
 
-			$this->tokenDynamism = $this->tokenDynamism + array_fill_keys(array_keys(\PHP_CodeSniffer_Tokens::$castTokens), 3);
+			$this->tokenDynamism = $this->tokenDynamism + array_fill_keys(array_keys(\PHP_CodeSniffer_Tokens::$castTokens), self::DYNAMISM_CAST);
 		}
 
 		return $this->tokenDynamism;
