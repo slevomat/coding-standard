@@ -117,7 +117,7 @@ class TokenHelper
 		$endPointer = $endPointer ?: self::getLastTokenPointer($phpcsFile);
 
 		$content = '';
-		for ($i = $startPointer; $i < $endPointer; $i++) {
+		for ($i = $startPointer; $i <= $endPointer; $i++) {
 			$content .= $tokens[$i]['content'];
 		}
 

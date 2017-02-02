@@ -104,7 +104,7 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		);
 		$backslashTokenPointer = $codeSnifferFile->findNext(T_NS_SEPARATOR, 0);
 		$endTokenPointer = ReferencedNameHelper::findReferencedNameEndPointer($codeSnifferFile, $backslashTokenPointer);
-		$this->assertTokenPointer(T_OPEN_PARENTHESIS, 3, $codeSnifferFile, $endTokenPointer);
+		$this->assertTokenPointer(T_STRING, 3, $codeSnifferFile, $endTokenPointer);
 	}
 
 	public function testReturnTypeHint()
