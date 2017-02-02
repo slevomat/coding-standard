@@ -60,13 +60,13 @@ class ReferencedNameHelper
 			if ($nameEndPointer === null) {
 				$beginSearchAtPointer = TokenHelper::findNextExcluding(
 					$phpcsFile,
-					array_merge([T_WHITESPACE, T_RETURN_TYPE], TokenHelper::$nameTokenCodes),
-					$nameStartPointer
+					array_merge(TokenHelper::$ineffectiveTokenCodes, [T_RETURN_TYPE], TokenHelper::$nameTokenCodes),
+					$nameStartPointer + 1
 				);
 				continue;
 			}
 
-			$nextTokenAfterEndPointer = TokenHelper::findNextEffective($phpcsFile, $nameEndPointer);
+			$nextTokenAfterEndPointer = TokenHelper::findNextEffective($phpcsFile, $nameEndPointer + 1);
 			$previousTokenBeforeStartPointer = TokenHelper::findPreviousEffective($phpcsFile, $nameStartPointer - 1);
 			$type = ReferencedName::TYPE_DEFAULT;
 			if ($nextTokenAfterEndPointer !== null && $previousTokenBeforeStartPointer !== null) {
@@ -148,7 +148,8 @@ class ReferencedNameHelper
 			return null;
 		}
 
-		return TokenHelper::findNextExcluding($phpcsFile, array_merge([T_RETURN_TYPE], TokenHelper::$nameTokenCodes), $startPointer + 1);
+		$pointerAfterEndPointer = TokenHelper::findNextExcluding($phpcsFile, array_merge([T_RETURN_TYPE], TokenHelper::$nameTokenCodes), $startPointer + 1);
+		return $pointerAfterEndPointer === null ? $startPointer : $pointerAfterEndPointer - 1;
 	}
 
 	private static function isReferencedName(\PHP_CodeSniffer_File $phpcsFile, int $startPointer): bool
