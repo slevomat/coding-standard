@@ -43,4 +43,16 @@ class SniffSettingsHelperTest extends \PHPUnit_Framework_TestCase
 		]));
 	}
 
+	public function testNormalizeAssociativeArrayWithIntegerKeys()
+	{
+		$this->assertSame([
+			'app/ui' => 'Slevomat\UI',
+			'app' => 'Slevomat',
+		], SniffSettingsHelper::normalizeAssociativeArray([
+			'app/ui' => 'Slevomat\UI',
+			'app' => 'Slevomat',
+			0 => '  ',
+		]));
+	}
+
 }
