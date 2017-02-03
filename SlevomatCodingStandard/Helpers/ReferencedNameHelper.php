@@ -85,9 +85,7 @@ class ReferencedNameHelper
 							T_COLON, // return type hint
 							T_NULLABLE, // nullable type hint
 						], true)
-						&& !in_array($tokens[$nextTokenAfterEndPointer]['code'], [
-							T_DOUBLE_COLON,
-						], true)
+						&& $tokens[$nextTokenAfterEndPointer]['code'] !== T_DOUBLE_COLON
 					) {
 						if ($tokens[$previousTokenBeforeStartPointer]['code'] === T_COMMA) {
 							$precedingTokenPointer = TokenHelper::findPreviousExcluding(
@@ -100,7 +98,7 @@ class ReferencedNameHelper
 									T_IMPLEMENTS,
 									T_EXTENDS,
 									T_USE,
-								])
+								], true)
 							) {
 								$type = ReferencedName::TYPE_CONSTANT;
 							}
