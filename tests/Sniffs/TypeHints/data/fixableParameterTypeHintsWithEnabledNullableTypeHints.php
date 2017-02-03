@@ -150,6 +150,30 @@ function oneWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, $b, 
 {
 }
 
+/**
+ * @param mixed[] $a
+ */
+function traversableMixed($a)
+{
+
+}
+
+/**
+ * @param string[] $a
+ */
+function traversableStrings($a)
+{
+
+}
+
+/**
+ * @param \DateTimeImmutable[] $a
+ */
+function traversableDateTimeImmutable($a)
+{
+
+}
+
 abstract class Foo
 {
 
@@ -309,6 +333,27 @@ abstract class Foo
 	 */
 	public function oneWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, $b, float $c)
 	{
+	}
+
+	/**
+	 * @param mixed[] $a
+	 */
+	public function traversableMixed($a)
+	{
+
+	}
+
+	/**
+	 * @param string[] $a
+	 */
+	abstract public function traversableStrings($a);
+
+	/**
+	 * @param \DateTimeImmutable[] $a
+	 */
+	protected function traversableDateTimeImmutable($a)
+	{
+
 	}
 
 }
