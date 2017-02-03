@@ -125,6 +125,30 @@ function returnsNullableArrayOfStrings()
 	return [];
 }
 
+/**
+ * @return mixed[]
+ */
+function returnsTraversableMixed()
+{
+	return [];
+}
+
+/**
+ * @return string[]
+ */
+function returnsTraversableStrings()
+{
+	return [];
+}
+
+/**
+ * @return \DateTimeImmutable[]
+ */
+function returnsTraversableDateTimeImmutable()
+{
+	return [];
+}
+
 abstract class Foo
 {
 
@@ -260,5 +284,26 @@ abstract class Foo
 	{
 		return [];
 	}
+
+	/**
+	 * @return mixed[]
+	 */
+	private function returnsTraversableMixed()
+	{
+		return [];
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public static function returnsTraversableStrings()
+	{
+		return [];
+	}
+
+	/**
+	 * @return \DateTimeImmutable[]
+	 */
+	abstract function returnsTraversableDateTimeImmutable();
 
 }
