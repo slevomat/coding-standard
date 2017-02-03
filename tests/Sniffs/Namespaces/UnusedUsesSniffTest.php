@@ -119,6 +119,11 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertNoSniffError($report, 5);
 	}
 
+	public function testUsedNullableReturnTypeHint()
+	{
+		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/usedNullableReturnTypeHint.php'));
+	}
+
 	public function testTypeWithUnderscoresInAnnotation()
 	{
 		$report = $this->checkFile(__DIR__ . '/data/unusedUsesAnnotationUnderscores.php', [
