@@ -40,13 +40,17 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 		$tokens = $phpcsFile->getTokens();
 		$declarePointer = TokenHelper::findNextEffective($phpcsFile, $openTagPointer + 1);
 
-		if ($declarePointer === null) {
-			$this->reportMissingDeclareStrict($phpcsFile, $openTagPointer);
-			return;
-		}
-
-		if ($tokens[$declarePointer]['code'] !== T_DECLARE) {
-			$this->reportMissingDeclareStrict($phpcsFile, $openTagPointer);
+		if ($declarePointer === null || $tokens[$declarePointer]['code'] !== T_DECLARE) {
+			$fix = $phpcsFile->addFixableError(
+				'Missing declare(strict_types = 1).',
+				$openTagPointer,
+				self::CODE_DECLARE_STRICT_TYPES_MISSING
+			);
+			if ($fix) {
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->addContent($openTagPointer, sprintf('declare(strict_types = 1);%s', $phpcsFile->eolChar));
+				$phpcsFile->fixer->endChangeset();
+			}
 			return;
 		}
 
@@ -59,19 +63,40 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		if ($strictTypesPointer === null) {
-			$this->reportMissingDeclareStrict($phpcsFile, $declarePointer);
+			$fix = $phpcsFile->addFixableError(
+				'Missing declare(strict_types = 1).',
+				$declarePointer,
+				self::CODE_DECLARE_STRICT_TYPES_MISSING
+			);
+			if ($fix) {
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->addContentBefore($tokens[$declarePointer]['parenthesis_closer'], ', strict_types = 1');
+				$phpcsFile->fixer->endChangeset();
+			}
 			return;
 		}
 
 		$numberPointer = $phpcsFile->findNext(T_LNUMBER, $strictTypesPointer + 1);
 		if ($tokens[$numberPointer]['content'] !== '1') {
-			$this->reportMissingDeclareStrict($phpcsFile, $declarePointer);
+			$fix = $phpcsFile->addFixableError(
+				sprintf(
+					'Expected strict_types = 1, found %s.',
+					TokenHelper::getContent($phpcsFile, $strictTypesPointer, $numberPointer)
+				),
+				$declarePointer,
+				self::CODE_DECLARE_STRICT_TYPES_MISSING
+			);
+			if ($fix) {
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->replaceToken($numberPointer, '1');
+				$phpcsFile->fixer->endChangeset();
+			}
 			return;
 		}
 
 		$strictTypesContent = TokenHelper::getContent($phpcsFile, $strictTypesPointer, $numberPointer);
 		if ($strictTypesContent !== 'strict_types = 1') {
-			$phpcsFile->addError(
+			$fix = $phpcsFile->addFixableError(
 				sprintf(
 					'Expected strict_types = 1, found %s.',
 					$strictTypesContent
@@ -79,17 +104,33 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 				$strictTypesPointer,
 				self::CODE_INCORRECT_STRICT_TYPES_FORMAT
 			);
+			if ($fix) {
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->replaceToken($strictTypesPointer, 'strict_types = 1');
+				for ($i = $strictTypesPointer + 1; $i <= $numberPointer; $i++) {
+					$phpcsFile->fixer->replaceToken($i, '');
+				}
+				$phpcsFile->fixer->endChangeset();
+			}
 		}
 
 		$openingWhitespace = substr($tokens[$openTagPointer]['content'], strlen('<?php'));
 		$newlinesCountBetweenOpenTagAndDeclare = (int) trim((string) $this->newlinesCountBetweenOpenTagAndDeclare);
 		if ($newlinesCountBetweenOpenTagAndDeclare === 0) {
 			if ($openingWhitespace !== ' ') {
-				$phpcsFile->addError(
+				$fix = $phpcsFile->addFixableError(
 					'There must be a single space between the PHP open tag and declare statement.',
 					$declarePointer,
 					self::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE
 				);
+				if ($fix) {
+					$phpcsFile->fixer->beginChangeset();
+					$phpcsFile->fixer->replaceToken($openTagPointer, '<?php ');
+					for ($i = $openTagPointer + 1; $i < $declarePointer; $i++) {
+						$phpcsFile->fixer->replaceToken($i, '');
+					}
+					$phpcsFile->fixer->endChangeset();
+				}
 			}
 		} else {
 			$startToken = $openTagPointer + 1;
@@ -102,7 +143,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 			} while ($possibleWhitespacePointer !== null && $tokens[$possibleWhitespacePointer]['code'] === T_WHITESPACE);
 			$newlinesCount = substr_count($openingWhitespace, $phpcsFile->eolChar);
 			if ($newlinesCount !== $newlinesCountBetweenOpenTagAndDeclare) {
-				$phpcsFile->addError(
+				$fix = $phpcsFile->addFixableError(
 					sprintf(
 						'Expected %d newlines between PHP open tag and declare statement, found %d.',
 						$newlinesCountBetweenOpenTagAndDeclare,
@@ -111,17 +152,19 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 					$declarePointer,
 					self::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE
 				);
+				if ($fix) {
+					$phpcsFile->fixer->beginChangeset();
+					$phpcsFile->fixer->replaceToken($openTagPointer, '<?php');
+					for ($i = $openTagPointer + 1; $i < $declarePointer; $i++) {
+						$phpcsFile->fixer->replaceToken($i, '');
+					}
+					for ($i = 0; $i < $newlinesCountBetweenOpenTagAndDeclare; $i++) {
+						$phpcsFile->fixer->addNewline($openTagPointer);
+					}
+					$phpcsFile->fixer->endChangeset();
+				}
 			}
 		}
-	}
-
-	private function reportMissingDeclareStrict(\PHP_CodeSniffer_File $phpcsFile, int $openTagPointer)
-	{
-		$phpcsFile->addError(
-			'Missing declare(strict_types = 1).',
-			$openTagPointer,
-			self::CODE_DECLARE_STRICT_TYPES_MISSING
-		);
 	}
 
 }
