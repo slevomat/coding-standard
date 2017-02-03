@@ -31,6 +31,15 @@ class ReferencedNameHelper
 	public static function getAllReferencedNames(\PHP_CodeSniffer_File $phpcsFile, int $openTagPointer): array
 	{
 		$cacheKey = $phpcsFile->getFilename() . '-' . $openTagPointer;
+
+		$fixerLoops = $phpcsFile->fixer !== null ? $phpcsFile->fixer->loops : null;
+		if ($fixerLoops !== null) {
+			$cacheKey .= '-loop' . $fixerLoops;
+			if ($fixerLoops > 0) {
+				unset(self::$allReferencedTypesCache[$cacheKey . '-loop' . ($fixerLoops - 1)]);
+			}
+		}
+
 		if (!isset(self::$allReferencedTypesCache[$cacheKey])) {
 			self::$allReferencedTypesCache[$cacheKey] = self::createAllReferencedNames($phpcsFile, $openTagPointer);
 		}
