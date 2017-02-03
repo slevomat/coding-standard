@@ -83,10 +83,8 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 
 		foreach ($unusedNames as $value) {
 			$fullName = $value->getFullyQualifiedTypeName();
-			if ($value->getNameAsReferencedInFile() !== $fullName) {
-				if ($value->getNameAsReferencedInFile() !== NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($fullName)) {
-					$fullName .= sprintf(' (as %s)', $value->getNameAsReferencedInFile());
-				}
+			if ($value->getNameAsReferencedInFile() !== $fullName && $value->getNameAsReferencedInFile() !== NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($fullName)) {
+				$fullName .= sprintf(' (as %s)', $value->getNameAsReferencedInFile());
 			}
 			$fix = $phpcsFile->addFixableError(sprintf(
 				'Type %s is not used in this file',

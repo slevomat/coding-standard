@@ -7,12 +7,12 @@ class StringHelper
 
 	public static function startsWith(string $haystack, string $needle): bool
 	{
-		return strncmp($haystack, $needle, strlen($needle)) === 0;
+		return $needle === '' || strpos($haystack, $needle) === 0;
 	}
 
 	public static function endsWith(string $haystack, string $needle): bool
 	{
-		return strlen($needle) === 0 || substr($haystack, -strlen($needle)) === $needle;
+		return $needle === '' || substr($haystack, -strlen($needle)) === $needle;
 	}
 
 }

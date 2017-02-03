@@ -58,7 +58,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 				T_STRING => self::DYNAMISM_FUNCTION_CALL,
 			];
 
-			$this->tokenDynamism = $this->tokenDynamism + array_fill_keys(array_keys(\PHP_CodeSniffer_Tokens::$castTokens), 3);
+			$this->tokenDynamism += array_fill_keys(array_keys(\PHP_CodeSniffer_Tokens::$castTokens), 3);
 		}
 
 		return $this->tokenDynamism;
@@ -81,7 +81,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 				T_COMMA => true,
 			];
 
-			$this->stopTokenCodes = $this->stopTokenCodes + array_fill_keys(array_keys(\PHP_CodeSniffer_Tokens::$assignmentTokens), true);
+			$this->stopTokenCodes += array_fill_keys(array_keys(\PHP_CodeSniffer_Tokens::$assignmentTokens), true);
 		}
 
 		return $this->stopTokenCodes;
@@ -240,15 +240,13 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 			}
 		}
 
-		if (count($sideTokens) > 2) {
-			if ($sideTokens[count($sideTokens) - 2]['code'] === T_DOUBLE_COLON) {
-				if ($sideTokens[count($sideTokens) - 1]['code'] === T_VARIABLE) {
-					// static property access
-					return self::DYNAMISM_VARIABLE;
-				} elseif ($sideTokens[count($sideTokens) - 1]['code'] === T_STRING) {
-					// class constant
-					return self::DYNAMISM_CONSTANT;
-				}
+		if (count($sideTokens) > 2 && $sideTokens[count($sideTokens) - 2]['code'] === T_DOUBLE_COLON) {
+			if ($sideTokens[count($sideTokens) - 1]['code'] === T_VARIABLE) {
+				// static property access
+				return self::DYNAMISM_VARIABLE;
+			} elseif ($sideTokens[count($sideTokens) - 1]['code'] === T_STRING) {
+				// class constant
+				return self::DYNAMISM_CONSTANT;
 			}
 		}
 

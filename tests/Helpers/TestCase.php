@@ -107,7 +107,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 */
 	private function findTokenName($code)
 	{
-		if (is_integer($code)) {
+		if (is_int($code)) {
 			$tokenName = token_name($code);
 			if ($tokenName !== self::UNKNOWN_PHP_TOKEN) {
 				return $tokenName;

@@ -79,7 +79,7 @@ class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer_Sniff
 					in_array($useStatement->getFullyQualifiedTypeName(), $this->getIgnoredNames(), true)
 					|| (
 						!StringHelper::endsWith($useStatement->getFullyQualifiedTypeName(), 'Exception')
-						&& $useStatement->getFullyQualifiedTypeName() !== 'Throwable'
+						&& $useStatement->getFullyQualifiedTypeName() !== \Throwable::class
 						&& (!StringHelper::endsWith($useStatement->getFullyQualifiedTypeName(), 'Error') || NamespaceHelper::hasNamespace($useStatement->getFullyQualifiedTypeName()))
 						&& !in_array($useStatement->getFullyQualifiedTypeName(), $this->getSpecialExceptionNames(), true)
 					)
@@ -96,7 +96,7 @@ class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer_Sniff
 					in_array($canonicalName, $this->getIgnoredNames(), true)
 					|| (
 						!StringHelper::endsWith($name, 'Exception')
-						&& $name !== 'Throwable'
+						&& $name !== \Throwable::class
 						&& (!StringHelper::endsWith($canonicalName, 'Error') || NamespaceHelper::hasNamespace($canonicalName))
 						&& !in_array($canonicalName, $this->getSpecialExceptionNames(), true)
 					)
