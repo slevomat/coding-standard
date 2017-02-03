@@ -427,4 +427,25 @@ abstract class FooClass
 	{
 	}
 
+	/**
+	 * @param string $a A
+	 */
+	public function withParameterDescriptionWithParameterNameInAnnotation(string $a)
+	{
+	}
+
+	/**
+	 * @param string ...$a A
+	 */
+	public function varadicWithParameterDescriptionWithParameterNameInAnnotation(string ...$a)
+	{
+	}
+
+	/**
+	 * @param string A
+	 */
+	public function withParameterDescriptionWithoutParameterNameInAnnotation(string $a)
+	{
+	}
+
 }

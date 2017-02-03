@@ -450,6 +450,12 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			return;
 		}
 
+		foreach (FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer) as $parameterAnnotation) {
+			if (preg_match('~^\\S+\\s+(?:(?:\.{3}\\s*)?\$\\S+\\s+)?[^$]~', $parameterAnnotation->getContent())) {
+				return;
+			}
+		}
+
 		$isAbstract = FunctionHelper::isAbstract($phpcsFile, $functionPointer);
 
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);

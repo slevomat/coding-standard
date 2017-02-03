@@ -20,6 +20,30 @@ function useful(array $a): array
 	return [];
 }
 
+/**
+ * @param string $a A
+ */
+function usefulWithParameterDescription(string $a)
+{
+
+}
+
+/**
+ * @param string ...$a A
+ */
+function usefulVaradicWithParameterDescription(string $a)
+{
+
+}
+
+/**
+ * @param string A
+ */
+function usefulWithoutParameterNameInAnnotation(string $a)
+{
+
+}
+
 abstract class FooClass
 {
 
