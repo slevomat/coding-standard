@@ -160,7 +160,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			}
 
 			if ($this->definitionContainsOneTypeHint($parameterTypeHintDefinition)) {
-				if ($this->definitionContainsMixedTypeHint($parameterTypeHintDefinition) && $this->definitionContainsTraversableTypeHintSpeficication($parameterTypeHintDefinition)) {
+				if ($this->definitionContainsTraversableTypeHintSpeficication($parameterTypeHintDefinition)) {
 					$phpcsFile->addError(
 						sprintf(
 							'%s %s() does not have parameter type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
@@ -364,7 +364,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		if ($this->definitionContainsOneTypeHint($returnTypeHintDefinition)) {
-			if ($this->definitionContainsMixedTypeHint($returnTypeHintDefinition) && $this->definitionContainsTraversableTypeHintSpeficication($returnTypeHintDefinition)) {
+			if ($this->definitionContainsTraversableTypeHintSpeficication($returnTypeHintDefinition)) {
 				$phpcsFile->addError(
 					sprintf(
 						'%s %s() does not have return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
@@ -564,11 +564,6 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	private function isValidTypeHint(string $typeHint): bool
 	{
 		return TypeHintHelper::isSimpleTypeHint($typeHint) || !in_array($typeHint, TypeHintHelper::$simpleUnofficialTypeHints, true);
-	}
-
-	private function definitionContainsMixedTypeHint(string $typeHintDefinition): bool
-	{
-		return preg_match('~(?:^mixed(?:\[\])?$)|(?:^mixed(?:\[\])?\|)|(?:\|mixed(?:\[\])?\|)|(?:\|mixed(?:\[\])?$)~i', $typeHintDefinition) !== 0;
 	}
 
 	private function definitionContainsNullTypeHint(string $typeHintDefinition): bool
