@@ -42,13 +42,13 @@ class FullyQualifiedExceptionsSniffTest extends \SlevomatCodingStandard\Sniffs\T
 			$this->getFileReport(),
 			9,
 			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
-			'Throwable'
+			\Throwable::class
 		);
 		$this->assertSniffError(
 			$this->getFileReport(),
 			11,
 			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
-			'TypeError'
+			\TypeError::class
 		);
 	}
 
