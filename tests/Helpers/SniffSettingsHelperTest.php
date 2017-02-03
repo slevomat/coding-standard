@@ -2,7 +2,7 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class SniffSettingsHelperTest extends \PHPUnit_Framework_TestCase
+class SniffSettingsHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
 	public function testNormalizeArray()

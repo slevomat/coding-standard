@@ -4,7 +4,7 @@
 	colors="true"
 	backupGlobals="false"
 	backupStaticAttributes="false"
-	beStrictAboutChangesToGlobalState="true"
+	beStrictAboutChangesToGlobalState="false"
 	beStrictAboutOutputDuringTests="true"
 	beStrictAboutTestsThatDoNotTestAnything="true"
 	beStrictAboutTodoAnnotatedTests="true"

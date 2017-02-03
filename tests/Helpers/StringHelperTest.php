@@ -2,7 +2,7 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class StringHelperTest extends \PHPUnit_Framework_TestCase
+class StringHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
 	/**
