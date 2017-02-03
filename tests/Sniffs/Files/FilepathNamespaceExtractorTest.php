@@ -2,7 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\Files;
 
-class FilepathNamespaceExtractorTest extends \PHPUnit_Framework_TestCase
+class FilepathNamespaceExtractorTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
 	/**
