@@ -327,4 +327,40 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError($report, 6, ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON);
 	}
 
+	public function testFixableReturnTypeHintNoSpaceBetweenColonAndType()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintNoSpaceBetweenColonAndType.php', [], [ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE]);
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableReturnTypeHintMultipleSpacesBetweenColonAndType()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintMultipleSpacesBetweenColonAndType.php', [], [ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE]);
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableReturnTypeHintNoSpaceBetweenColonAndNullabilitySymbol()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintNoSpaceBetweenColonAndNullabilitySymbol.php', [], [ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_NULLABILITY_SYMBOL]);
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableReturnTypeHintMultipleSpacesBetweenColonAndNullabilitySymbol()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintMultipleSpacesBetweenColonAndNullabilitySymbol.php', [], [ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_NULLABILITY_SYMBOL]);
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableReturnTypeHintWhitespaceAfterNullabilitySymbol()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintWhitespaceAfterNullabilitySymbol.php', [], [ReturnTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL]);
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableReturnTypeHintWhitespaceBeforeColon()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintWhitespaceBeforeColon.php', [], [ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON]);
+		$this->assertAllFixedInFile($report);
+	}
+
 }
