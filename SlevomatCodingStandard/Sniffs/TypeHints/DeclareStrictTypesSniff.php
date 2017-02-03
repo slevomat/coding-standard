@@ -16,9 +16,6 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 	/** @var int */
 	public $newlinesCountBetweenOpenTagAndDeclare = 0;
 
-	/** @var bool[] */
-	private static $alreadyProcessedFiles = [];
-
 	/**
 	 * @return int[]
 	 */
@@ -36,11 +33,9 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 	 */
 	public function process(\PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
-		if (isset(self::$alreadyProcessedFiles[$phpcsFile->getFilename()])) {
+		if ($phpcsFile->findPrevious(T_OPEN_TAG, $openTagPointer - 1) !== false) {
 			return;
 		}
-
-		self::$alreadyProcessedFiles[$phpcsFile->getFilename()] = true;
 
 		$tokens = $phpcsFile->getTokens();
 		$declarePointer = TokenHelper::findNextEffective($phpcsFile, $openTagPointer + 1);
