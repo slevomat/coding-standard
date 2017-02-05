@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
+use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
+use SlevomatCodingStandard\Helpers\ReferencedName;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
@@ -51,6 +53,9 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 
 	/** @var string[]|null */
 	private $normalizedNamespacesRequiredToUse;
+
+	/** @var bool */
+	public $allowFullyQualifiedNameForCollidingClasses = false;
 
 	/**
 	 * @return int[]
@@ -125,10 +130,31 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
+
+		if ($this->allowFullyQualifiedNameForCollidingClasses) {
+			$referencesIndex = array_flip(
+				array_map(
+					function (ReferencedName $referencedName): string {
+						return $referencedName->getNameAsReferencedInFile();
+					},
+					$referencedNames
+				)
+			);
+			$definedClassesIndex = array_flip(ClassHelper::getAllNames($phpcsFile));
+		}
+
 		foreach ($referencedNames as $referencedName) {
 			$name = $referencedName->getNameAsReferencedInFile();
 			$nameStartPointer = $referencedName->getStartPointer();
 			$canonicalName = NamespaceHelper::normalizeToCanonicalName($name);
+
+			if ($this->allowFullyQualifiedNameForCollidingClasses) {
+				$unqualifiedClassName = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($referencedName->getNameAsReferencedInFile());
+				if (isset($referencesIndex[$unqualifiedClassName]) || in_array($unqualifiedClassName, $definedClassesIndex ?? [], true)) {
+					continue;
+				}
+			}
+
 			if (NamespaceHelper::isFullyQualifiedName($name)) {
 				$isExceptionByName = StringHelper::endsWith($name, 'Exception')
 					|| $name === '\Throwable'

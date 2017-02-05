@@ -18,4 +18,31 @@ class ClassHelper
 		return $tokens[$codeSnifferFile->findNext(T_STRING, $classPointer + 1, $tokens[$classPointer]['scope_opener'])]['content'];
 	}
 
+	/**
+	 * @param \PHP_CodeSniffer_File $codeSnifferFile
+	 * @return string[]
+	 */
+	public static function getAllNames(\PHP_CodeSniffer_File $codeSnifferFile): array
+	{
+		$previousClassPointer = 0;
+
+		return array_map(
+			function (int $classPointer) use ($codeSnifferFile): string {
+				return self::getName($codeSnifferFile, $classPointer);
+			},
+			iterator_to_array(self::getAllClassPointers($codeSnifferFile, $previousClassPointer))
+		);
+	}
+
+	private static function getAllClassPointers(\PHP_CodeSniffer_File $codeSnifferFile, int &$previousClassPointer): \Generator
+	{
+		do {
+			$nextClassPointer = $codeSnifferFile->findNext(TokenHelper::$typeKeywordTokenCodes, $previousClassPointer + 1);
+			if ($nextClassPointer !== false) {
+				$previousClassPointer = $nextClassPointer;
+				yield $nextClassPointer;
+			}
+		} while ($nextClassPointer !== false);
+	}
+
 }
