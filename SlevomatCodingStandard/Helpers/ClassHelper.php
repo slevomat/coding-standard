@@ -24,20 +24,30 @@ class ClassHelper
 	 */
 	public static function getAllNames(\PHP_CodeSniffer_File $codeSnifferFile): array
 	{
-		$getAllClassPointers = function (\PHP_CodeSniffer_File $codeSnifferFile, &$previousClassPointer): \Generator {
-			$previousClassPointer = $nextClassPointer = $codeSnifferFile->findNext(TokenHelper::$typeKeywordTokenCodes, $previousClassPointer + 1);
-			if ($nextClassPointer !== null) {
-				yield $nextClassPointer;
-			}
-		};
 		$previousClassPointer = 0;
 
 		return array_map(
-			function (int $classPointer) use ($codeSnifferFile) {
+			function (int $classPointer) use ($codeSnifferFile): string {
 				return self::getName($codeSnifferFile, $classPointer);
 			},
-			iterator_to_array($getAllClassPointers($codeSnifferFile, $previousClassPointer))
+			iterator_to_array(self::getAllClassPointers($codeSnifferFile, $previousClassPointer))
 		);
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer_File $codeSnifferFile
+	 * @param int|bool $previousClassPointer
+	 *
+	 * @return \Generator
+	 */
+	private static function getAllClassPointers(\PHP_CodeSniffer_File $codeSnifferFile, &$previousClassPointer): \Generator
+	{
+		while ($previousClassPointer !== false) {
+			$previousClassPointer = $codeSnifferFile->findNext(TokenHelper::$typeKeywordTokenCodes, $previousClassPointer + 1);
+			if ($previousClassPointer !== false) {
+				yield $previousClassPointer;
+			}
+		}
 	}
 
 }
