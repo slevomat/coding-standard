@@ -54,4 +54,28 @@ class ReferenceThrowableOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		$this->assertSniffError($report, 27, ReferenceThrowableOnlySniff::CODE_REFERENCED_GENERAL_EXCEPTION);
 	}
 
+	public function testFixableExceptionReference()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableExceptionReference.php', [], [ReferenceThrowableOnlySniff::CODE_REFERENCED_GENERAL_EXCEPTION]);
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableExceptionReferenceWithoutNamespace()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableExceptionReferenceWithoutNamespace.php', [], [ReferenceThrowableOnlySniff::CODE_REFERENCED_GENERAL_EXCEPTION]);
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableExceptionReference71()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableExceptionReference71.php', [], [ReferenceThrowableOnlySniff::CODE_REFERENCED_GENERAL_EXCEPTION]);
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableExceptionReferenceWithoutNamespace71()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableExceptionReferenceWithoutNamespace71.php', [], [ReferenceThrowableOnlySniff::CODE_REFERENCED_GENERAL_EXCEPTION]);
+		$this->assertAllFixedInFile($report);
+	}
+
 }
