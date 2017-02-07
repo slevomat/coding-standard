@@ -63,11 +63,17 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer_Sniff
 					}
 				}
 			}
-			$phpcsFile->addError(
+
+			$fix = $phpcsFile->addFixableError(
 				$message,
 				$referencedName->getStartPointer(),
 				self::CODE_REFERENCED_GENERAL_EXCEPTION
 			);
+			if ($fix) {
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->replaceToken($referencedName->getEndPointer(), 'Throwable');
+				$phpcsFile->fixer->endChangeset();
+			}
 		}
 	}
 
