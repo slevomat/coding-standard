@@ -7,7 +7,7 @@ class ReferenceThrowableOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 
 	public function testExceptionReferences()
 	{
-		$report = $this->checkFile(__DIR__ . '/data/exception-references.php');
+		$report = $this->checkFile(__DIR__ . '/data/exceptionReferences.php');
 		$this->assertNoSniffError($report, 5);
 		$this->assertNoSniffError($report, 6);
 		$this->assertNoSniffError($report, 8);
@@ -26,7 +26,7 @@ class ReferenceThrowableOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 
 	public function testExceptionReferencesWithoutNamespace()
 	{
-		$report = $this->checkFile(__DIR__ . '/data/exception-references-without-namespace.php');
+		$report = $this->checkFile(__DIR__ . '/data/exceptionReferencesWithoutNamespace.php');
 		$this->assertNoSniffError($report, 3);
 		$this->assertNoSniffError($report, 5);
 		$this->assertSniffError($report, 9, ReferenceThrowableOnlySniff::CODE_REFERENCED_GENERAL_EXCEPTION);
@@ -43,7 +43,7 @@ class ReferenceThrowableOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 
 	public function testExceptionReferencesUnionTypes71()
 	{
-		$report = $this->checkFile(__DIR__ . '/data/exception-references-71.php');
+		$report = $this->checkFile(__DIR__ . '/data/exceptionReferences71.php');
 		$this->assertNoSniffError($report, 5);
 		$this->assertNoSniffError($report, 7);
 		$this->assertNoSniffError($report, 9);

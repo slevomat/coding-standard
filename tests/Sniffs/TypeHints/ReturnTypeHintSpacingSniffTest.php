@@ -16,12 +16,12 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			3,
-			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
 			8,
-			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
@@ -31,7 +31,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			13,
-			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
@@ -41,12 +41,12 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			23,
-			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
 			28,
-			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
@@ -56,7 +56,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			33,
-			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
@@ -66,32 +66,32 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			75,
-			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
 			80,
-			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
 			85,
-			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
 			90,
-			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
 			95,
-			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
 			100,
-			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
@@ -101,7 +101,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			105,
-			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
@@ -111,7 +111,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			110,
-			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
@@ -121,7 +121,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			115,
-			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
@@ -131,7 +131,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			120,
-			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
@@ -141,7 +141,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			125,
-			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
@@ -151,7 +151,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			130,
-			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT
 		);
 	}
 
@@ -161,32 +161,32 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			46,
-			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
 			48,
-			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
 			50,
-			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
 			52,
-			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
 			54,
-			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
 			56,
-			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
@@ -196,7 +196,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			58,
-			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
@@ -206,7 +206,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			60,
-			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
@@ -216,7 +216,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			62,
-			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
@@ -226,7 +226,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			64,
-			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
@@ -236,7 +236,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			66,
-			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT
 		);
 		$this->assertSniffError(
 			$report,
@@ -246,7 +246,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError(
 			$report,
 			68,
-			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE
+			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT
 		);
 	}
 
@@ -329,13 +329,13 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 
 	public function testFixableReturnTypeHintNoSpaceBetweenColonAndType()
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintNoSpaceBetweenColonAndType.php', [], [ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE]);
+		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintNoSpaceBetweenColonAndType.php', [], [ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT]);
 		$this->assertAllFixedInFile($report);
 	}
 
 	public function testFixableReturnTypeHintMultipleSpacesBetweenColonAndType()
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintMultipleSpacesBetweenColonAndType.php', [], [ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE]);
+		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintMultipleSpacesBetweenColonAndType.php', [], [ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT]);
 		$this->assertAllFixedInFile($report);
 	}
 

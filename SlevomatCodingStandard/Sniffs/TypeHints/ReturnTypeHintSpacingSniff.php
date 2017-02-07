@@ -7,9 +7,9 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 class ReturnTypeHintSpacingSniff implements \PHP_CodeSniffer_Sniff
 {
 
-	const CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE = 'NoSpaceBetweenColonAndType';
+	const CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT = 'NoSpaceBetweenColonAndTypeHint';
 
-	const CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE = 'MultipleSpacesBetweenColonAndType';
+	const CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT = 'MultipleSpacesBetweenColonAndTypeHint';
 
 	const CODE_NO_SPACE_BETWEEN_COLON_AND_NULLABILITY_SYMBOL = 'NoSpaceBetweenColonAndNullabilitySymbol';
 
@@ -46,14 +46,14 @@ class ReturnTypeHintSpacingSniff implements \PHP_CodeSniffer_Sniff
 
 		if ($nullabilitySymbolPointer === null) {
 			if ($tokens[$colonPointer + 1]['code'] !== T_WHITESPACE) {
-				$fix = $phpcsFile->addFixableError('There must be exactly one space between return type hint colon and return type hint.', $typeHintPointer, self::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE);
+				$fix = $phpcsFile->addFixableError('There must be exactly one space between return type hint colon and return type hint.', $typeHintPointer, self::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT);
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
 					$phpcsFile->fixer->addContent($colonPointer, ' ');
 					$phpcsFile->fixer->endChangeset();
 				}
 			} elseif ($tokens[$colonPointer + 1]['content'] !== ' ') {
-				$fix = $phpcsFile->addFixableError('There must be exactly one space between return type hint colon and return type hint.', $typeHintPointer, self::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE);
+				$fix = $phpcsFile->addFixableError('There must be exactly one space between return type hint colon and return type hint.', $typeHintPointer, self::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT);
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
 					$phpcsFile->fixer->replaceToken($colonPointer + 1, ' ');

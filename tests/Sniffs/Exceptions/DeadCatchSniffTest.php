@@ -7,13 +7,13 @@ class DeadCatchSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 
 	public function testNoDeadCatches()
 	{
-		$report = $this->checkFile(__DIR__ . '/data/no-dead-catches.php');
+		$report = $this->checkFile(__DIR__ . '/data/noDeadCatches.php');
 		$this->assertNoSniffErrorInFile($report);
 	}
 
 	public function testDeadCatchesWithoutNamespace()
 	{
-		$report = $this->checkFile(__DIR__ . '/data/dead-catches-without-namespace.php');
+		$report = $this->checkFile(__DIR__ . '/data/deadCatchesWithoutNamespace.php');
 		$this->assertNoSniffError($report, 5);
 		$this->assertNoSniffError($report, 7);
 		$this->assertSniffError($report, 9, DeadCatchSniff::CODE_CATCH_AFTER_THROWABLE_CATCH);
@@ -35,7 +35,7 @@ class DeadCatchSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 
 	public function testDeadCatchesInNamespace()
 	{
-		$report = $this->checkFile(__DIR__ . '/data/dead-catches.php');
+		$report = $this->checkFile(__DIR__ . '/data/deadCatches.php');
 		$this->assertNoSniffError($report, 9);
 		$this->assertNoSniffError($report, 15);
 		$this->assertNoSniffError($report, 21);
