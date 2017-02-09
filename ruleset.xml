@@ -6,6 +6,17 @@
 	<rule ref="vendor/consistence/coding-standard/Consistence/ruleset.xml">
 		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedIF"/><!-- Allow empty if statements - usually with a comment -->
 	</rule>
+	<rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
+		<property name="forbiddenAnnotations" type="array" value="
+			@author,
+			@created,
+			@copyright,
+			@license,
+			@package,
+			@throws,
+			@version
+		"/>
+	</rule>
 	<rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly">
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Exceptions/ReferenceThrowableOnlySniff.php</exclude-pattern>
 	</rule>
