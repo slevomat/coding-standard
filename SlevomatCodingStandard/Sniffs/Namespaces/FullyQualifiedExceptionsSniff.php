@@ -107,7 +107,7 @@ class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer_Sniff
 
 			if (!NamespaceHelper::isFullyQualifiedName($name)) {
 				$phpcsFile->addError(sprintf(
-					'Exception %s should be referenced via a fully qualified name',
+					'Exception %s should be referenced via a fully qualified name.',
 					$name
 				), $pointer, self::CODE_NON_FULLY_QUALIFIED_EXCEPTION);
 			}

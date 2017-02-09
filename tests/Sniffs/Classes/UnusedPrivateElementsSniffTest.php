@@ -29,26 +29,26 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 			$resultFile,
 			26,
 			UnusedPrivateElementsSniff::CODE_UNUSED_PROPERTY,
-			'Class ClassWithSomeUnusedProperties contains unused property: $unusedProperty'
+			'Class ClassWithSomeUnusedProperties contains unused property $unusedProperty.'
 		);
 		$this->assertSniffError(
 			$resultFile,
 			28,
 			UnusedPrivateElementsSniff::CODE_UNUSED_PROPERTY,
-			'Class ClassWithSomeUnusedProperties contains unused property: $unusedPropertyWhichNameIsAlsoAFunction'
+			'Class ClassWithSomeUnusedProperties contains unused property $unusedPropertyWhichNameIsAlsoAFunction.'
 		);
 		$this->assertSniffError(
 			$resultFile,
 			30,
 			UnusedPrivateElementsSniff::CODE_WRITE_ONLY_PROPERTY,
-			'Class ClassWithSomeUnusedProperties contains write-only property: $writeOnlyProperty'
+			'Class ClassWithSomeUnusedProperties contains write-only property $writeOnlyProperty.'
 		);
 		$this->assertNoSniffError($resultFile, 33);
 		$this->assertSniffError(
 			$resultFile,
 			48,
 			UnusedPrivateElementsSniff::CODE_UNUSED_METHOD,
-			'Class ClassWithSomeUnusedProperties contains unused private method: unusedPrivateMethod'
+			'Class ClassWithSomeUnusedProperties contains unused private method unusedPrivateMethod().'
 		);
 		$this->assertNoSniffError($resultFile, 51);
 		$this->assertNoSniffError($resultFile, 58);
@@ -57,7 +57,7 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 			$resultFile,
 			68,
 			UnusedPrivateElementsSniff::CODE_UNUSED_METHOD,
-			'Class ClassWithSomeUnusedProperties contains unused private method: unusedStaticPrivateMethod'
+			'Class ClassWithSomeUnusedProperties contains unused private method unusedStaticPrivateMethod().'
 		);
 		$this->assertNoSniffError($resultFile, 73);
 
