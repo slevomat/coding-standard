@@ -331,11 +331,6 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			}
 
 			$namePointer = TokenHelper::findNextEffective($phpcsFile, $constantTokenPointer + 1);
-			if ($namePointer === null) {
-				$findConstantsStartTokenPointer = $constantTokenPointer + 1;
-				continue;
-			}
-
 			$constantName = $tokens[$namePointer]['content'];
 			$reportedConstants[$constantName] = $constantTokenPointer;
 
