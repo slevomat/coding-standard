@@ -97,7 +97,7 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 			$resultFile,
 			10,
 			UnusedPrivateElementsSniff::CODE_UNUSED_CONSTANT,
-			'Class ClassWithConstants contains unused private constant: PRIVATE_FOO'
+			'Class ClassWithConstants contains unused private constant PRIVATE_FOO.'
 		);
 	}
 

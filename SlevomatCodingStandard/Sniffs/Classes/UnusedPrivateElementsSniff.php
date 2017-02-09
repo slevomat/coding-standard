@@ -219,7 +219,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 		foreach ($reportedConstants as $name => $constantTokenPointer) {
 			if (!SuppressHelper::isSniffSuppressed($phpcsFile, $constantTokenPointer, $this->getSniffName(self::CODE_UNUSED_CONSTANT))) {
 				$phpcsFile->addError(sprintf(
-					'Class %s contains unused private constant: %s',
+					'Class %s contains unused private constant %s.',
 					$className,
 					$name
 				), $constantTokenPointer, self::CODE_UNUSED_CONSTANT);
