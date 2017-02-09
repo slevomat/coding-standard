@@ -181,7 +181,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 							&& NamespaceHelper::findCurrentNamespaceName($phpcsFile, $nameStartPointer) === null
 						) {
 							$fix = $phpcsFile->addFixableError(sprintf(
-								'Type %s should not be referenced via a fully qualified name, but via an unqualified name without the leading \\, because the file does not have a namespace and the type cannot be put in a use statement',
+								'Type %s should not be referenced via a fully qualified name, but via an unqualified name without the leading \\, because the file does not have a namespace and the type cannot be put in a use statement.',
 								$name
 							), $nameStartPointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE);
 							if ($fix) {
@@ -191,7 +191,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 							}
 						} else {
 							$fix = $phpcsFile->addFixableError(sprintf(
-								'Type %s should not be referenced via a fully qualified name, but via a use statement',
+								'Type %s should not be referenced via a fully qualified name, but via a use statement.',
 								$name
 							), $nameStartPointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
 							if ($fix) {
@@ -233,7 +233,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 			} elseif (!$this->allowPartialUses) {
 				if (NamespaceHelper::isQualifiedName($name)) {
 					$phpcsFile->addError(sprintf(
-						'Partial use statements are not allowed, but referencing %s found',
+						'Partial use statements are not allowed, but referencing %s found.',
 						$name
 					), $nameStartPointer, self::CODE_PARTIAL_USE);
 				}

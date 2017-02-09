@@ -31,7 +31,7 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer_Sniff
 	public function process(\PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
 		$tokens = $phpcsFile->getTokens();
-		$message = sprintf('Referencing general \%s; use \%s instead', \Exception::class, \Throwable::class);
+		$message = sprintf('Referencing general \%s; use \%s instead.', \Exception::class, \Throwable::class);
 		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
 		foreach ($referencedNames as $referencedName) {

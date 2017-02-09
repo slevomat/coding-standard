@@ -68,7 +68,7 @@ class UseOnlyWhitelistedNamespacesSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		$phpcsFile->addError(sprintf(
-			'Type %s should not be used, but referenced via a fully qualified name',
+			'Type %s should not be used, but referenced via a fully qualified name.',
 			$className
 		), $usePointer, self::CODE_NON_FULLY_QUALIFIED);
 	}

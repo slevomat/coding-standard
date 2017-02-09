@@ -182,7 +182,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			if (isset($writeOnlyProperties[$name])) {
 				if (!SuppressHelper::isSniffSuppressed($phpcsFile, $propertyTokenPointer, $this->getSniffName(self::CODE_WRITE_ONLY_PROPERTY))) {
 					$phpcsFile->addError(sprintf(
-						'Class %s contains write-only property: $%s',
+						'Class %s contains write-only property $%s.',
 						$className,
 						$name
 					), $propertyTokenPointer, self::CODE_WRITE_ONLY_PROPERTY);
@@ -190,7 +190,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			} else {
 				if (!SuppressHelper::isSniffSuppressed($phpcsFile, $propertyTokenPointer, $this->getSniffName(self::CODE_UNUSED_PROPERTY))) {
 					$phpcsFile->addError(sprintf(
-						'Class %s contains unused property: $%s',
+						'Class %s contains unused property $%s.',
 						$className,
 						$name
 					), $propertyTokenPointer, self::CODE_UNUSED_PROPERTY);
@@ -201,7 +201,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 		foreach ($reportedMethods as $name => $methodTokenPointer) {
 			if (!SuppressHelper::isSniffSuppressed($phpcsFile, $methodTokenPointer, $this->getSniffName(self::CODE_UNUSED_METHOD))) {
 				$phpcsFile->addError(sprintf(
-					'Class %s contains unused private method: %s',
+					'Class %s contains unused private method %s().',
 					$className,
 					$name
 				), $methodTokenPointer, self::CODE_UNUSED_METHOD);

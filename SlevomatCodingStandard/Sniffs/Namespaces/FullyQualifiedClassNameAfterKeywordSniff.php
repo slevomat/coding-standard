@@ -90,7 +90,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 			$name = TokenHelper::getContent($phpcsFile, $nameStartPointer, $endPointer);
 			$keyword = $tokens[$keywordPointer]['content'];
 			$phpcsFile->addError(sprintf(
-				'Type %s in %s statement should be referenced via a fully qualified name',
+				'Type %s in %s statement should be referenced via a fully qualified name.',
 				$name,
 				$keyword
 			), $keywordPointer, self::getErrorCode($keyword));

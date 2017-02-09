@@ -57,7 +57,7 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
 
 		if (!NamespaceHelper::hasNamespace($usedTypeNameRest)) {
 			$fix = $phpcsFile->addFixableError(sprintf(
-				'Use %s is from the same namespace – that is prohibited',
+				'Use %s is from the same namespace – that is prohibited.',
 				$usedTypeName
 			), $usePointer, self::CODE_USE_FROM_SAME_NAMESPACE);
 			if ($fix) {

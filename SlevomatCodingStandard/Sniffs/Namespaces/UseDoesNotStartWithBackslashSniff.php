@@ -40,7 +40,7 @@ class UseDoesNotStartWithBackslashSniff implements \PHP_CodeSniffer_Sniff
 
 		if ($nextToken['code'] === T_NS_SEPARATOR) {
 			$phpcsFile->addError(
-				'Use statement cannot start with a backslash',
+				'Use statement cannot start with a backslash.',
 				$nextTokenPointer,
 				self::CODE_STARTS_WITH_BACKSLASH
 			);

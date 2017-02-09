@@ -39,7 +39,7 @@ class MultipleUsesPerLineSniff implements \PHP_CodeSniffer_Sniff
 
 		if ($commaPointer !== false) {
 			$phpcsFile->addError(
-				'Multiple used types per use statement are forbidden',
+				'Multiple used types per use statement are forbidden.',
 				$commaPointer,
 				self::CODE_MULTIPLE_USES_PER_LINE
 			);
