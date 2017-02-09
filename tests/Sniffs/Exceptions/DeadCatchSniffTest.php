@@ -58,4 +58,14 @@ class DeadCatchSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertNoSniffError($report, 75);
 	}
 
+	public function testDeadUnionCatches()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/deadUnionCatches.php');
+
+		$this->assertSame(2, $report->getErrorCount());
+
+		$this->assertSniffError($report, 31, DeadCatchSniff::CODE_CATCH_AFTER_THROWABLE_CATCH);
+		$this->assertSniffError($report, 41, DeadCatchSniff::CODE_CATCH_AFTER_THROWABLE_CATCH);
+	}
+
 }
