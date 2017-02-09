@@ -65,10 +65,6 @@ class FilepathNamespaceExtractor
 			return null;
 		}
 
-		if (count($pathParts) === 0) {
-			return null;
-		}
-
 		array_unshift($pathParts, $rootNamespace);
 
 		$typeName = implode('\\', array_filter($pathParts, function (string $pathPart): bool {

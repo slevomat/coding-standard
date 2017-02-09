@@ -51,9 +51,7 @@ class UseStatementHelper
 			$nameEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $nameEndPointer);
 		}
 		$nameStartPointer = TokenHelper::findPreviousExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $nameEndPointer - 1) + 1;
-		if (in_array($tokens[$nameStartPointer]['content'], ['const', 'function'], true)) {
-			$nameStartPointer = $phpcsFile->findNext(TokenHelper::$nameTokenCodes, $nameStartPointer + 1, $nameEndPointer);
-		}
+
 		$name = TokenHelper::getContent($phpcsFile, $nameStartPointer, $nameEndPointer);
 
 		return NamespaceHelper::normalizeToCanonicalName($name);
