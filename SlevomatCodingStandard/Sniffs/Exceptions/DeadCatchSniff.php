@@ -48,7 +48,7 @@ class DeadCatchSniff implements \PHP_CodeSniffer_Sniff
 				break;
 			}
 
-			$phpcsFile->addError('Unreachable catch block', $nextCatchPointer, self::CODE_CATCH_AFTER_THROWABLE_CATCH);
+			$phpcsFile->addError('Unreachable catch block.', $nextCatchPointer, self::CODE_CATCH_AFTER_THROWABLE_CATCH);
 
 			$nextCatchPointer = TokenHelper::findNextEffective($phpcsFile, $nextCatchToken['scope_closer'] + 1);
 		}

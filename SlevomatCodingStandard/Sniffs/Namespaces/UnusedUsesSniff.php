@@ -51,7 +51,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 				}
 				if ($unusedNames[$normalizedNameAsReferencedInFile]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
 					$phpcsFile->addError(sprintf(
-						'Case of reference name %s and use statement %s do not match',
+						'Case of reference name %s and use statement %s do not match.',
 						$nameAsReferencedInFile,
 						$unusedNames[$normalizedNameAsReferencedInFile]->getNameAsReferencedInFile()
 					), $pointer, self::CODE_MISMATCHING_CASE);
@@ -87,7 +87,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 				$fullName .= sprintf(' (as %s)', $value->getNameAsReferencedInFile());
 			}
 			$fix = $phpcsFile->addFixableError(sprintf(
-				'Type %s is not used in this file',
+				'Type %s is not used in this file.',
 				$fullName
 			), $value->getPointer(), self::CODE_UNUSED_USE);
 			if ($fix) {
