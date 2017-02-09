@@ -179,10 +179,6 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			}
 		}
 
-		if (count($reportedProperties) + count($reportedMethods) + count($reportedConstants) === 0) {
-			return;
-		}
-
 		$classNamePointer = $phpcsFile->findNext(T_STRING, $classPointer);
 		$className = $tokens[$classNamePointer]['content'];
 
@@ -297,11 +293,6 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			}
 
 			$namePointer = TokenHelper::findNextEffective($phpcsFile, $methodTokenPointer + 1);
-			if ($namePointer === null) {
-				$findMethodsStartTokenPointer = $methodTokenPointer + 1;
-				continue;
-			}
-
 			$methodName = $tokens[$namePointer]['content'];
 
 			if ($methodName !== '__construct') {
@@ -331,11 +322,6 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			}
 
 			$namePointer = TokenHelper::findNextEffective($phpcsFile, $constantTokenPointer + 1);
-			if ($namePointer === null) {
-				$findConstantsStartTokenPointer = $constantTokenPointer + 1;
-				continue;
-			}
-
 			$constantName = $tokens[$namePointer]['content'];
 			$reportedConstants[$constantName] = $constantTokenPointer;
 
