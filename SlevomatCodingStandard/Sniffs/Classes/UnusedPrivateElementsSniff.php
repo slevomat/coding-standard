@@ -19,6 +19,8 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 
 	const CODE_UNUSED_METHOD = 'UnusedMethod';
 
+	const CODE_UNUSED_CONSTANT = 'UnusedConstant';
+
 	/** @var string[] */
 	public $alwaysUsedPropertiesAnnotations = [];
 
@@ -81,8 +83,9 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 		$classToken = $tokens[$classPointer];
 		$reportedProperties = $this->getProperties($phpcsFile, $tokens, $classToken);
 		$reportedMethods = $this->getMethods($phpcsFile, $tokens, $classToken);
+		$reportedConstants = $this->getConstants($phpcsFile, $tokens, $classToken);
 
-		if (count($reportedProperties) + count($reportedMethods) === 0) {
+		if (count($reportedProperties) + count($reportedMethods) + count($reportedConstants) === 0) {
 			return;
 		}
 
@@ -151,6 +154,11 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 				$methodCallTokenPointer = TokenHelper::findNextEffective($phpcsFile, $methodNameTokenPointer + 1);
 				$methodCallToken = $tokens[$methodCallTokenPointer];
 				if ($methodCallToken['code'] !== T_OPEN_PARENTHESIS) {
+					$name = $methodNameToken['content'];
+					if (isset($reportedConstants[$name])) {
+						unset($reportedConstants[$name]);
+					}
+
 					// self::string or static::string not followed by ( - possible constant access
 					$findUsagesStartTokenPointer = $methodCallTokenPointer + 1;
 					continue;
@@ -166,12 +174,12 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 				$findUsagesStartTokenPointer = $propertyAccessTokenPointer + 1;
 			}
 
-			if (count($reportedProperties) + count($reportedMethods) === 0) {
+			if (count($reportedProperties) + count($reportedMethods) + count($reportedConstants) === 0) {
 				return;
 			}
 		}
 
-		if (count($reportedProperties) + count($reportedMethods) === 0) {
+		if (count($reportedProperties) + count($reportedMethods) + count($reportedConstants) === 0) {
 			return;
 		}
 
@@ -205,6 +213,16 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 					$className,
 					$name
 				), $methodTokenPointer, self::CODE_UNUSED_METHOD);
+			}
+		}
+
+		foreach ($reportedConstants as $name => $constantTokenPointer) {
+			if (!SuppressHelper::isSniffSuppressed($phpcsFile, $constantTokenPointer, $this->getSniffName(self::CODE_UNUSED_CONSTANT))) {
+				$phpcsFile->addError(sprintf(
+					'Class %s contains unused private constant: %s',
+					$className,
+					$name
+				), $constantTokenPointer, self::CODE_UNUSED_CONSTANT);
 			}
 		}
 	}
@@ -293,6 +311,38 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		return $reportedMethods;
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param mixed[] $tokens
+	 * @param mixed[] $classToken
+	 * @return int[] string(name) => pointer
+	 */
+	private function getConstants(\PHP_CodeSniffer_File $phpcsFile, array $tokens, array $classToken): array
+	{
+		$reportedConstants = [];
+		$findConstantsStartTokenPointer = $classToken['scope_opener'] + 1;
+		while (($constantTokenPointer = $phpcsFile->findNext(T_CONST, $findConstantsStartTokenPointer, $classToken['scope_closer'])) !== false) {
+			$visibilityModifier = $this->findVisibilityModifier($phpcsFile, $tokens, $constantTokenPointer);
+			if ($visibilityModifier === null || $visibilityModifier !== T_PRIVATE) {
+				$findConstantsStartTokenPointer = $constantTokenPointer + 1;
+				continue;
+			}
+
+			$namePointer = TokenHelper::findNextEffective($phpcsFile, $constantTokenPointer + 1);
+			if ($namePointer === null) {
+				$findConstantsStartTokenPointer = $constantTokenPointer + 1;
+				continue;
+			}
+
+			$constantName = $tokens[$namePointer]['content'];
+			$reportedConstants[$constantName] = $constantTokenPointer;
+
+			$findConstantsStartTokenPointer = $constantTokenPointer + 1;
+		}
+
+		return $reportedConstants;
 	}
 
 	/**
