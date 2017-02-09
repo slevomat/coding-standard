@@ -81,4 +81,24 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/classWithSpecialSelf.php'));
 	}
 
+	public function testClassWithConstants()
+	{
+		$resultFile = $this->checkFile(__DIR__ . '/data/classWithConstants.php');
+
+		$this->assertSame(1, $resultFile->getErrorCount());
+
+		$this->assertNoSniffError($resultFile, 6);
+		$this->assertNoSniffError($resultFile, 7);
+		$this->assertNoSniffError($resultFile, 9);
+		$this->assertNoSniffError($resultFile, 11);
+		$this->assertNoSniffError($resultFile, 12);
+
+		$this->assertSniffError(
+			$resultFile,
+			10,
+			UnusedPrivateElementsSniff::CODE_UNUSED_CONSTANT,
+			'Class ClassWithConstants contains unused private constant: PRIVATE_FOO'
+		);
+	}
+
 }
