@@ -297,11 +297,6 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			}
 
 			$namePointer = TokenHelper::findNextEffective($phpcsFile, $methodTokenPointer + 1);
-			if ($namePointer === null) {
-				$findMethodsStartTokenPointer = $methodTokenPointer + 1;
-				continue;
-			}
-
 			$methodName = $tokens[$namePointer]['content'];
 
 			if ($methodName !== '__construct') {
