@@ -43,6 +43,8 @@ class FooClass extends \ExtendedClass implements \ImplementedInterface, \SecondI
 		$baz = BAZ_CONSTANT;
 		$lorem = new LoremClass;
 		$ipsum = IpsumClass::IPSUM_CONSTANT;
+
+		$array = [Hoo::HOO_CONSTANT, BAR_CONSTANT];
 	}
 
 }

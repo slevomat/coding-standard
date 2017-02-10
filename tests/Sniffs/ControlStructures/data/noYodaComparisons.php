@@ -32,3 +32,4 @@ if (
 }
 
 (int) $foo === $bar;
+Foo::$bar === $foo;
