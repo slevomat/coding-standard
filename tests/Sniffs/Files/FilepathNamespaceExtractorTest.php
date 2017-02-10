@@ -14,6 +14,11 @@ class FilepathNamespaceExtractorTest extends \SlevomatCodingStandard\Sniffs\Test
 
 		return [
 			[
+				'unknown.php',
+				null,
+				['php'],
+			],
+			[
 				$root . '/unknown',
 				null,
 				['php'],

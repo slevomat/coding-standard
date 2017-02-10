@@ -49,11 +49,7 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer_Sniff
 				continue; // allow \Exception in extends and instantiating it
 			}
 			if ($tokens[$previousPointer]['code'] === T_BITWISE_OR) {
-				$previousPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(
-					TokenHelper::$ineffectiveTokenCodes,
-					TokenHelper::$nameTokenCodes,
-					[T_BITWISE_OR]
-				), $previousPointer - 1);
+				$previousPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::$nameTokenCodes, [T_BITWISE_OR]), $previousPointer - 1);
 			}
 			if ($tokens[$previousPointer]['code'] === T_OPEN_PARENTHESIS) {
 				$catchPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);

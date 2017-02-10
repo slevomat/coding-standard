@@ -69,6 +69,12 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 		$loremIpsumUsePointer = $codeSnifferFile->findNext(T_USE, $fooUsePointer + 1);
 		$this->assertSame('Lorem\Ipsum', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $loremIpsumUsePointer));
+
+		$rasmusFooConstantUsePointer = $codeSnifferFile->findNext(T_USE, $loremIpsumUsePointer + 1);
+		$this->assertSame('Rasmus\FOO_CONSTANT', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $rasmusFooConstantUsePointer));
+
+		$lerdorfIsBarPointer = $codeSnifferFile->findNext(T_USE, $rasmusFooConstantUsePointer + 1);
+		$this->assertSame('Lerdorf\isBar', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $lerdorfIsBarPointer));
 	}
 
 	public function testGetUseStatements()

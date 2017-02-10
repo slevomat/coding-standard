@@ -44,4 +44,9 @@ class TypeNameMatchesFileNameSniffTest extends \SlevomatCodingStandard\Sniffs\Te
 		]));
 	}
 
+	public function testNoNamespace()
+	{
+		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/noNamespace.php'));
+	}
+
 }
