@@ -470,7 +470,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 			$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
 			if ($returnAnnotation !== null) {
-				if ($this->enableNullableTypeHints && $this->definitionContainsJustTwoTypeHints($returnAnnotation->getContent()) && $this->definitionContainsNullTypeHint($returnAnnotation->getContent())) {
+				if (preg_match('~^\\S+\\s+\\S+~', $returnAnnotation->getContent())) {
+					return;
+				} elseif ($this->enableNullableTypeHints && $this->definitionContainsJustTwoTypeHints($returnAnnotation->getContent()) && $this->definitionContainsNullTypeHint($returnAnnotation->getContent())) {
 					// Report error
 				} elseif (!$this->definitionContainsOneTypeHint($returnAnnotation->getContent())) {
 					return;

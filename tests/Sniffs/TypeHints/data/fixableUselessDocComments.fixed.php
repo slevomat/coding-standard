@@ -40,6 +40,14 @@ function usefulWithoutParameterNameInAnnotation(string $a)
 
 }
 
+/**
+ * @return string Decription
+ */
+function usefulWithReturnDescription(): string
+{
+	return '';
+}
+
 abstract class FooClass
 {
 
