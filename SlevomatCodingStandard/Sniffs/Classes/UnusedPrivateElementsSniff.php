@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
+use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
@@ -179,8 +180,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			}
 		}
 
-		$classNamePointer = $phpcsFile->findNext(T_STRING, $classPointer);
-		$className = $tokens[$classNamePointer]['content'];
+		$className = ClassHelper::getName($phpcsFile, $classPointer);
 
 		foreach ($reportedProperties as $name => $propertyTokenPointer) {
 			if (isset($writeOnlyProperties[$name])) {
