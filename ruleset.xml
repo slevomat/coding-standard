@@ -9,7 +9,7 @@
 	<rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
 		<property name="forbiddenAnnotations" type="array" value="
 			@author,
-			@@created,
+			@created,
 			@copyright,
 			@license,
 			@package,
