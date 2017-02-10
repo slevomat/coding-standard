@@ -17,7 +17,7 @@ class YodaComparisonSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 	public function dataIncorrectFile(): array
 	{
 		$lineNumbers = [];
-		foreach (range(3, 22) as $lineNumber) {
+		foreach (range(3, 23) as $lineNumber) {
 			$lineNumbers[$lineNumber] = [$lineNumber];
 		}
 

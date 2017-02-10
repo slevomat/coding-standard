@@ -20,3 +20,4 @@ Foo::BAR === $this->foo();
 	['test'] === Foo::BAR
 )) ? 123.0 === Foo::BAR
 	: null === $foo;
+FOO === (int) $bar;

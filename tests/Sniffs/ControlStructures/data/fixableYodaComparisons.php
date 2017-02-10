@@ -28,3 +28,12 @@ if (
 	)
 ) {
 }
+$x = $a ?? 123 === $b;
+
+switch ($c) {
+	case 123 === $d:
+		break;
+}
+
+$$a === $x;
+FOO === (int) $bar;
