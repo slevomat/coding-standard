@@ -448,4 +448,12 @@ abstract class FooClass
 	{
 	}
 
+	/**
+	 * @return string Decription
+	 */
+	public function withReturnDescription(): string
+	{
+		return '';
+	}
+
 }
