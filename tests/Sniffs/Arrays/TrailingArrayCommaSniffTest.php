@@ -16,4 +16,9 @@ class TrailingArrayCommaSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		$this->assertNoSniffError($resultFile, 28);
 	}
 
+	public function testObvious()
+	{
+		$this->assertTrue(true);
+	}
+
 }
