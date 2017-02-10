@@ -179,10 +179,6 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			}
 		}
 
-		if (count($reportedProperties) + count($reportedMethods) + count($reportedConstants) === 0) {
-			return;
-		}
-
 		$classNamePointer = $phpcsFile->findNext(T_STRING, $classPointer);
 		$className = $tokens[$classNamePointer]['content'];
 
