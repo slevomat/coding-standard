@@ -2,6 +2,8 @@
 
 namespace SlevomatCodingStandard\Sniffs\Files;
 
+use SlevomatCodingStandard\Helpers\ClassHelper;
+use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 
@@ -98,35 +100,20 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param int $stackPointer
+	 * @param int $typePointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $stackPointer)
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $typePointer)
 	{
 		$tokens = $phpcsFile->getTokens();
-		$namePointer = $phpcsFile->findNext(T_STRING, $stackPointer + 1);
-		$nameToken = $tokens[$namePointer];
-		$typeName = $nameToken['content'];
-		$namespacePointer = $phpcsFile->findPrevious(T_NAMESPACE, $stackPointer - 1);
-		if ($namespacePointer !== false) {
-			$namespaceName = '';
-			while (true) {
-				$namespaceNamePartPointer = $phpcsFile->findNext([T_STRING, T_NS_SEPARATOR, T_SEMICOLON], $namespacePointer + 1);
-				if ($namespaceNamePartPointer === false) {
-					break;
-				}
-				$namespaceNamePartToken = $tokens[$namespaceNamePartPointer];
-				if ($namespaceNamePartToken['code'] === T_SEMICOLON) {
-					break;
-				}
-				$namespaceName .= $namespaceNamePartToken['content'];
-				$namespacePointer = $namespaceNamePartPointer;
-			}
+		$namePointer = $phpcsFile->findNext(T_STRING, $typePointer + 1);
 
-			$typeName = $namespaceName . '\\' . $typeName;
-		} else {
-			// skip types without a namespace
+		$namespacePointer = $phpcsFile->findPrevious(T_NAMESPACE, $typePointer - 1);
+		if ($namespacePointer === false) {
+			// Skip types without a namespace
 			return;
 		}
+
+		$typeName = NamespaceHelper::normalizeToCanonicalName(ClassHelper::getFullyQualifiedName($phpcsFile, $typePointer));
 
 		foreach ($this->getIgnoredNamespaces() as $ignoredNamespace) {
 			if (StringHelper::startsWith($typeName, $ignoredNamespace . '\\')) {
@@ -141,7 +128,7 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 			$phpcsFile->addError(
 				sprintf(
 					'%s name %s does not match filepath %s.',
-					ucfirst($tokens[$stackPointer]['content']),
+					ucfirst($tokens[$typePointer]['content']),
 					$typeName,
 					$phpcsFile->getFilename()
 				),
