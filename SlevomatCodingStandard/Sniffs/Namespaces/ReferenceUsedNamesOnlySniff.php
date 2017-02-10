@@ -169,13 +169,8 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 						|| $inIgnoredNames
 					)
 				) {
-					$previousKeywordPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(
-						TokenHelper::$nameTokenCodes,
-						[T_WHITESPACE, T_COMMA]
-					), $nameStartPointer - 1);
-					if (
-						!in_array($tokens[$previousKeywordPointer]['code'], $this->getFullyQualifiedKeywords(), true)
-					) {
+					$previousKeywordPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(TokenHelper::$nameTokenCodes, [T_WHITESPACE, T_COMMA]), $nameStartPointer - 1);
+					if (!in_array($tokens[$previousKeywordPointer]['code'], $this->getFullyQualifiedKeywords(), true)) {
 						if (
 							!NamespaceHelper::hasNamespace($name)
 							&& NamespaceHelper::findCurrentNamespaceName($phpcsFile, $nameStartPointer) === null
