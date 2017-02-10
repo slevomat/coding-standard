@@ -77,8 +77,12 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 				T_OPEN_TAG => true,
 				T_INLINE_THEN => true,
 				T_INLINE_ELSE => true,
+				T_COALESCE => true,
+				T_CASE => true,
+				T_COLON => true,
 				T_RETURN => true,
 				T_COMMA => true,
+				T_CLOSE_CURLY_BRACKET => true,
 			];
 
 			$this->stopTokenCodes += array_fill_keys(array_keys(\PHP_CodeSniffer_Tokens::$assignmentTokens), true);
@@ -100,14 +104,11 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 		$leftDynamism = $this->getDynamismForTokens($leftSideTokens);
 		$rightDynamism = $this->getDynamismForTokens($rightSideTokens);
 
-		if ($leftDynamism === null) {
+		if ($leftDynamism === null || $rightDynamism === null) {
 			return;
 		}
 
-		if (
-			$rightDynamism === null
-			|| $leftDynamism < $rightDynamism
-		) {
+		if ($leftDynamism < $rightDynamism) {
 			$fix = $phpcsFile->addFixableError('Yoda comparisons are prohibited.', $comparisonTokenPointer, self::CODE_YODA_COMPARISON);
 			if ($fix) {
 				if (count($leftSideTokens) > 0 & count($rightSideTokens) > 0) {
@@ -217,7 +218,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 	private function getDynamismForTokens(array $sideTokens)
 	{
 		$sideTokens = array_values(array_filter($sideTokens, function (array $token): bool {
-			return !in_array($token['code'], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT, T_NS_SEPARATOR, T_PLUS, T_MINUS], true);
+			return !in_array($token['code'], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT, T_NS_SEPARATOR, T_PLUS, T_MINUS, T_INT_CAST, T_DOUBLE_CAST, T_STRING_CAST, T_ARRAY_CAST, T_OBJECT_CAST, T_BOOL_CAST, T_UNSET_CAST], true);
 		}));
 
 		$sideTokensCount = count($sideTokens);
