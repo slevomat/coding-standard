@@ -3,6 +3,7 @@
 [![Latest Stable Version](https://poser.pugx.org/slevomat/coding-standard/v/stable)](https://packagist.org/packages/slevomat/coding-standard)
 [![Build Status](https://travis-ci.org/slevomat/coding-standard.svg?branch=master)](https://travis-ci.org/slevomat/coding-standard)
 [![Coverage Status](https://coveralls.io/repos/slevomat/coding-standard/badge.svg?branch=master&service=github)](https://coveralls.io/github/slevomat/coding-standard?branch=master)
+[![Downloads](https://img.shields.io/packagist/dt/slevomat/coding-standard.svg)](https://packagist.org/packages/slevomat/coding-standard)
 
 Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) extends [Consistence Coding Standard](https://github.com/consistence/coding-standard) by providing sniffs with additional checks.
 
