@@ -70,11 +70,11 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 				}
 
 				foreach ($unusedNames as $i => $useStatement) {
-					if (strpos($tokens[$phpDocTokenPointer]['content'], $useStatement->getNameAsReferencedInFile()) === false) {
-						continue;
+					if ($tokens[$phpDocTokenPointer]['code'] === T_DOC_COMMENT_TAG && preg_match('~^@' . preg_quote($useStatement->getNameAsReferencedInFile(), '~') . '(?:[^a-z\\d]|$)~i', $tokens[$phpDocTokenPointer]['content'])) {
+						unset($unusedNames[$i]);
+					} elseif ($tokens[$phpDocTokenPointer]['code'] === T_DOC_COMMENT_STRING && preg_match('~(?:^|[^a-z\\d\\\\])' . preg_quote($useStatement->getNameAsReferencedInFile(), '~') . '(?:[^a-z\\d\\\\]|$)~i', $tokens[$phpDocTokenPointer]['content'])) {
+						unset($unusedNames[$i]);
 					}
-
-					unset($unusedNames[$i]);
 				}
 
 				$searchAnnotationsPointer = $phpDocTokenPointer + 1;
