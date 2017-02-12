@@ -21,9 +21,6 @@ use Zetta\Rasmus;
 class TestClass implements FirstInterface, SecondInterface
 {
 
-	/**
-	 * @Assert\NotBlank(groups={X::SOME_CONSTANT}
-	 */
 	public function test(S $s): Rasmus
 	{
 		new \Test\Foo\Bar();
