@@ -32,9 +32,12 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			['IpsumClass', false, false],
 			['Hoo', false, false],
 			['BAR_CONSTANT', false, true],
+			['Integer', false, false],
+			['Boolean', false, false],
 			['\ExtendedInterface', false, false],
 			['\SecondExtendedInterface', false, false],
 			['\ThirdExtendedInterface', false, false],
+			['SomeTrait', false, false],
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
@@ -66,6 +69,14 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		}
 	}
 
+	public function testGetAllReferencedNamesOnNonReferencedName()
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/fileWithoutReferencedName.php'
+		);
+		$this->assertCount(0, ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0));
+	}
+
 	public function testMultipleExceptionsCatch()
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
@@ -90,22 +101,13 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		}
 	}
 
-	public function testFindReferencedNameEndPointerOnNonReferencedName()
-	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/fileWithoutReferencedName.php'
-		);
-		$stringTokenPointer = $codeSnifferFile->findNext(T_STRING, 0);
-		$this->assertNull(ReferencedNameHelper::findReferencedNameEndPointer($codeSnifferFile, $stringTokenPointer));
-	}
-
-	public function testFindReferencedNameEndPointer()
+	public function testGetReferencedNameEndPointer()
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/referencedName.php'
 		);
 		$backslashTokenPointer = $codeSnifferFile->findNext(T_NS_SEPARATOR, 0);
-		$endTokenPointer = ReferencedNameHelper::findReferencedNameEndPointer($codeSnifferFile, $backslashTokenPointer);
+		$endTokenPointer = ReferencedNameHelper::getReferencedNameEndPointer($codeSnifferFile, $backslashTokenPointer);
 		$this->assertTokenPointer(T_STRING, 3, $codeSnifferFile, $endTokenPointer);
 	}
 
