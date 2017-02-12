@@ -45,10 +45,20 @@ class FooClass extends \ExtendedClass implements \ImplementedInterface, \SecondI
 		$ipsum = IpsumClass::IPSUM_CONSTANT;
 
 		$array = [Hoo::HOO_CONSTANT, BAR_CONSTANT];
+
+		new Integer();
+		new Boolean();
 	}
 
 }
 
 interface FooInterface extends \ExtendedInterface, \SecondExtendedInterface, \ThirdExtendedInterface
 {
+}
+
+trait FooTrait
+{
+
+	use SomeTrait;
+
 }
