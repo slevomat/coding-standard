@@ -1,7 +1,4 @@
 language: php
-php:
-  - 7.0
-  - 7.1
 matrix:
   include:
     - php: 7.0
@@ -14,7 +11,6 @@ matrix:
       env: dependencies=highest
 before_script:
   - composer self-update
-  - if [ -z "$dependencies" ]; then composer install; fi;
   - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest -n; fi;
   - if [ "$dependencies" = "highest" ]; then composer update -n; fi;
 script:
