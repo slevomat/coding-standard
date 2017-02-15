@@ -21,3 +21,5 @@ script:
   - bin/phing
 after_script:
   - php bin/coveralls -v
+notifications:
+  email: false
