@@ -18,7 +18,6 @@ before_script:
   - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest -n; fi;
   - if [ "$dependencies" = "highest" ]; then composer update -n; fi;
 script:
-  - composer install --ignore-platform-reqs
   - bin/phing
 after_script:
   - php bin/coveralls -v
