@@ -22,6 +22,8 @@ count($cartItem->getReservations()) !== $neededReservationsAmount;
 $optionalPartOpeningBracePosition !== strlen($part) - 1;
 $optionalPartOpeningBracePosition !== \Nette\Utils\Strings::length($part) - 1;
 foo() + 2 === Foo::BAR;
+(int) $foo === $bar;
+$foo === (int) $bar;
 
 if (
 	$foo($bar) === [Foo::BAR, Foo::BAZ] && (
