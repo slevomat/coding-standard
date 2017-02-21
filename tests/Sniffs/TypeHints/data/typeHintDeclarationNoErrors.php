@@ -229,6 +229,15 @@ abstract class FooClass
 	}
 
 	/**
+	 * @Something\Whatever()
+	 * @param string $a
+	 * @param string $b
+	 */
+	public function withUsefulComplexAnnotationOnlyPrefixed(string $a, string $b)
+	{
+	}
+
+	/**
 	 * @return mixed
 	 */
 	abstract public function withMixedReturnAnnotation();
