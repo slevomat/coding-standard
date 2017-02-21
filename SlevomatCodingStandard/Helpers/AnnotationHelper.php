@@ -52,9 +52,9 @@ class AnnotationHelper
 				$annotationName = $tokens[$i]['content'];
 				$annotationParameters = null;
 				$annotationContent = null;
-				if (preg_match('~^(@[a-zA-Z\\\\]+)(?:\(([^)]+)\))?(?:\\s+(.+))?$~s', $annotationCode, $matches)) {
+				if (preg_match('~^(@[a-zA-Z\\\\]+)(?:\(([^)]*)\))?(?:\\s+(.+))?$~s', $annotationCode, $matches)) {
 					$annotationName = $matches[1];
-					$annotationParameters = $matches[2] ?? null;
+					$annotationParameters = $matches[2] ?: null;
 					if (isset($matches[3])) {
 						$annotationContent = trim($matches[3]);
 						if ($annotationContent === '') {
