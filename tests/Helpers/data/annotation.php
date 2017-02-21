@@ -37,6 +37,11 @@ interface WithoutAnnotation
 	public function withParametrizedAnnotation();
 
 	/**
+	 * @Assert\Callback()
+	 */
+	public function withParametrizedAnnotationWithoutParameters();
+
+	/**
 	 * Without annotation
 	 */
 	public function withoutAnnotation();

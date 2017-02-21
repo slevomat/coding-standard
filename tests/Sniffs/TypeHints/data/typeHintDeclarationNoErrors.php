@@ -220,6 +220,15 @@ abstract class FooClass
 	}
 
 	/**
+	 * @Assert\Callback()
+	 * @param string $a
+	 * @param string $b
+	 */
+	public function withUsefulComplexAnnotation(string $a, string $b)
+	{
+	}
+
+	/**
 	 * @return mixed
 	 */
 	abstract public function withMixedReturnAnnotation();
