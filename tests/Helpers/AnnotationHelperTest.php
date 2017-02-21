@@ -57,6 +57,15 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withParametrizedAnnotation'), '@Route');
 		$this->assertCount(1, $annotations);
 		$this->assertSame('"/", name="homepage"', $annotations[0]->getParameters());
+		$this->assertNull($annotations[0]->getContent());
+	}
+
+	public function testFunctionWithParametrizedAnnotationWithoutParameters()
+	{
+		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withParametrizedAnnotationWithoutParameters'), '@Assert\Callback');
+		$this->assertCount(1, $annotations);
+		$this->assertNull($annotations[0]->getParameters());
+		$this->assertNull($annotations[0]->getContent());
 	}
 
 	public function testFunctionWithoutAnnotation()

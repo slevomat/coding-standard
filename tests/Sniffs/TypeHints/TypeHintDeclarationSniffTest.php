@@ -18,6 +18,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 			],
 			'usefulAnnotations' => [
 				'@see',
+				'@Assert\Callback',
 			],
 		]));
 	}
