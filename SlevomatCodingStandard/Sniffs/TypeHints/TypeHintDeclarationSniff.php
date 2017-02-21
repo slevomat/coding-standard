@@ -46,7 +46,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	/** @var int[] [string => int] */
 	private $normalizedTraversableTypeHints;
 
-	/** @var int[] [string => int] */
+	/** @var string[] */
 	private $normalizedUsefulAnnotations;
 
 	/**
@@ -489,8 +489,18 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		foreach (AnnotationHelper::getAnnotations($phpcsFile, $functionPointer) as list($annotation)) {
-			if ($annotation->getName() === SuppressHelper::ANNOTATION || array_key_exists($annotation->getName(), $this->getNormalizedUsefulAnnotations())) {
+			if ($annotation->getName() === SuppressHelper::ANNOTATION) {
 				return;
+			}
+
+			foreach ($this->getNormalizedUsefulAnnotations() as $usefulAnnotation) {
+				if ($annotation->getName() === $usefulAnnotation) {
+					return;
+				}
+
+				if (substr($usefulAnnotation, -1) === '\\' && strpos($annotation->getName(), $usefulAnnotation) === 0) {
+					return;
+				}
 			}
 		}
 
@@ -621,12 +631,12 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @return int[] [string => int]
+	 * @return string[]
 	 */
 	private function getNormalizedUsefulAnnotations(): array
 	{
 		if ($this->normalizedUsefulAnnotations === null) {
-			$this->normalizedUsefulAnnotations = array_flip(SniffSettingsHelper::normalizeArray($this->usefulAnnotations));
+			$this->normalizedUsefulAnnotations = SniffSettingsHelper::normalizeArray($this->usefulAnnotations);
 		}
 		return $this->normalizedUsefulAnnotations;
 	}
