@@ -169,6 +169,13 @@ abstract class FooClass
 	}
 
 	/**
+	 * @param static $a
+	 */
+	public function staticAsSelf(self $a)
+	{
+	}
+
+	/**
 	 * @return $this
 	 */
 	public function returnsThisAsSelf(): self
@@ -472,6 +479,73 @@ abstract class FooClass
 	public function withReturnDescription(): string
 	{
 		return '';
+	}
+
+	/**
+	 * @return \SomethingElse
+	 */
+	public function withMoreSpecificReturnAnnotation(): \Something
+	{
+		return new \Something();
+	}
+
+	/**
+	 * @param \SomethingElse $a
+	 */
+	public function withMoreSpecificParameterAnnotation(\Something $a)
+	{
+	}
+
+	/**
+	 * @return bool[][]|array[]
+	 */
+	private function returnMultidimensionalArray(): array
+	{
+		return [];
+	}
+
+	/**
+	 * @return \Traversable[]|mixed[][]
+	 */
+	private function returnMultidimensionalTraversable(): array
+	{
+		return [];
+	}
+
+	/**
+	 * @param bool[][]|array[] $a
+	 */
+	private function multidimensionalArrayParameter(array $a)
+	{
+	}
+
+	/**
+	 * @param \Traversable[]|mixed[][] $a
+	 */
+	private function multidimensionalTraversable(array $a)
+	{
+	}
+
+	/**
+	 * @var bool[][]|array[]
+	 */
+	public $multidimensionalArray = [];
+
+	/**
+	 * @var \Traversable[]|mixed[][]
+	 */
+	private $multidimensionalTraversable = [];
+
+	/**
+	 * @var array[]|string[][]|null
+	 */
+	public $nullableMultidimensionalArray = [];
+
+	/**
+	 * @param int[][]|array[]|null $a
+	 */
+	private function nullableMultidimensionalArrayParameter($a)
+	{
 	}
 
 }

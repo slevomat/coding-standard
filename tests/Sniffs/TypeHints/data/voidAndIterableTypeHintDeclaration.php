@@ -4,7 +4,7 @@ abstract class VoidAndIterableClass
 {
 
 	/**
-	 * @param iterable $list
+	 * @param iterable|string[] $list
 	 * @param mixed $bar
 	 */
 	public function doFoo($list, $bar)

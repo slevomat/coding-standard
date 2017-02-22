@@ -2,6 +2,8 @@
 
 namespace FooNamespace;
 
+use AnyNamespace\Anything;
+
 abstract class FooClass
 {
 
@@ -59,6 +61,51 @@ abstract class FooClass
 	public function parameterNullableArrayOfStrings($a)
 	{
 
+	}
+
+	/**
+	 * @return \Something|null
+	 */
+	public function returnTypeHintEqualsAnnotationBothFullyQualified(): ?\Something
+	{
+		return new \Something();
+	}
+
+	/**
+	 * @return null|\AnyNamespace\Anything
+	 */
+	public function returnTypeHintEqualsAnnotationWithOnlyAnnotationFullyQualified(): ?Anything
+	{
+		return new Anything();
+	}
+
+	/**
+	 * @return Anything|null
+	 */
+	public function returnTypeHintEqualsAnnotationWithOnlyTypeHintFullyQualified(): ?\AnyNamespace\Anything
+	{
+		return new Anything();
+	}
+
+	/**
+	 * @param \Something|null $a
+	 */
+	public function parameterTypeHintEqualsAnnotationBothFullyQualified(?\Something $a)
+	{
+	}
+
+	/**
+	 * @param null|\AnyNamespace\Anything $a
+	 */
+	public function parameterTypeHintEqualsAnnotationWithOnlyAnnotationFullyQualified(?Anything $a)
+	{
+	}
+
+	/**
+	 * @param Anything|null $a
+	 */
+	public function parameterTypeHintEqualsAnnotationWithOnlyTypeHintFullyQualified(?\AnyNamespace\Anything $a)
+	{
 	}
 
 }
