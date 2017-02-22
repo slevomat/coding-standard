@@ -99,11 +99,14 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 		if (!SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_TRAVERSABLE_PARAMETER_TYPE_HINT_SPECIFICATION))) {
 			foreach (FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer) as $parameterName => $parameterTypeHint) {
-				if ($parameterTypeHint === null) {
-					continue;
+				$traversableTypeHint = false;
+				if ($parameterTypeHint !== null && $this->isTraversableTypeHint($parameterTypeHint->getTypeHint())) {
+					$traversableTypeHint = true;
+				} elseif (array_key_exists($parameterName, $parametersTypeHintsDefinitions) && $this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $parametersTypeHintsDefinitions[$parameterName])) {
+					$traversableTypeHint = true;
 				}
 
-				if (!$this->isTraversableTypeHint($parameterTypeHint->getTypeHint())) {
+				if (!$traversableTypeHint) {
 					continue;
 				}
 
@@ -265,15 +268,14 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		$hasReturnAnnotation = $returnAnnotation !== null && $returnAnnotation->getContent() !== null;
 		$returnTypeHintDefinition = $hasReturnAnnotation ? preg_split('~\\s+~', $returnAnnotation->getContent())[0] : '';
 
-		if ($returnTypeHint !== null) {
-			if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_TRAVERSABLE_RETURN_TYPE_HINT_SPECIFICATION))) {
-				return;
-			}
+		$traversableTypeHint = false;
+		if ($returnTypeHint !== null && $this->isTraversableTypeHint($returnTypeHint->getTypeHint())) {
+			$traversableTypeHint = true;
+		} elseif ($hasReturnAnnotation && $this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $returnTypeHintDefinition)) {
+			$traversableTypeHint = true;
+		}
 
-			if (!$this->isTraversableTypeHint($returnTypeHint->getTypeHint())) {
-				return;
-			}
-
+		if ($traversableTypeHint && !SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_TRAVERSABLE_RETURN_TYPE_HINT_SPECIFICATION))) {
 			if (!$hasReturnAnnotation) {
 				$phpcsFile->addError(
 					sprintf(
@@ -295,11 +297,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 					self::CODE_MISSING_TRAVERSABLE_RETURN_TYPE_HINT_SPECIFICATION
 				);
 			}
-
-			return;
 		}
 
-		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_RETURN_TYPE_HINT))) {
+		if ($returnTypeHint !== null || SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_RETURN_TYPE_HINT))) {
 			return;
 		}
 

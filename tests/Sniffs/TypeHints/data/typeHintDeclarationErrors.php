@@ -191,4 +191,19 @@ abstract class FooClass
 	/** @var array|\Traversable|null */
 	public $traversableWithUnsufficientMultipleAnnotation = [];
 
+	/**
+	 * @return array|null
+	 */
+	public function returnTraversableOrNull()
+	{
+		return [];
+	}
+
+	/**
+	 * @param array|null $a
+	 */
+	public function traversableNullableParameter($a)
+	{
+	}
+
 }
