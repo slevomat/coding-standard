@@ -15,4 +15,12 @@ abstract class FooClass
 
 	}
 
+	/**
+	 * @param static|null $a
+	 */
+	public function nullableStaticAsSelf(self $a = null)
+	{
+
+	}
+
 }
