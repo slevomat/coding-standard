@@ -1,5 +1,7 @@
 <?php
 
+use AnyNamespace\Anything;
+
 abstract class FooClass
 {
 
@@ -203,6 +205,58 @@ abstract class FooClass
 	 * @param array|null $a
 	 */
 	public function traversableNullableParameter($a)
+	{
+	}
+
+	/**
+	 * @return \Something
+	 */
+	public function returnTypeHintEqualsAnnotationBothFullyQualified(): \Something
+	{
+		return new \Something();
+	}
+
+	/**
+	 * @return \AnyNamespace\Anything
+	 */
+	public function returnTypeHintEqualsAnnotationWithOnlyAnnotationFullyQualified(): Anything
+	{
+		return new Anything();
+	}
+
+	/**
+	 * @return Anything
+	 */
+	public function returnTypeHintEqualsAnnotationWithOnlyTypeHintFullyQualified(): \AnyNamespace\Anything
+	{
+		return new Anything();
+	}
+
+	/**
+	 * @param \Something $a
+	 */
+	public function parameterTypeHintEqualsAnnotationBothFullyQualified(\Something $a)
+	{
+	}
+
+	/**
+	 * @param \AnyNamespace\Anything $a
+	 */
+	public function parameterTypeHintEqualsAnnotationWithOnlyAnnotationFullyQualified(Anything $a)
+	{
+	}
+
+	/**
+	 * @param Anything $a
+	 */
+	public function parameterTypeHintEqualsAnnotationWithOnlyTypeHintFullyQualified(\AnyNamespace\Anything $a)
+	{
+	}
+
+	/**
+	 * @param \DateTime|\DateTimeImmutable $a
+	 */
+	public function multipleParameterTypeHints(\DateTimeInterface $a)
 	{
 	}
 

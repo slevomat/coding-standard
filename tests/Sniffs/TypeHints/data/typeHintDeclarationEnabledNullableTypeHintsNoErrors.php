@@ -38,6 +38,14 @@ abstract class FooClass
 	}
 
 	/**
+	 * @return static|null
+	 */
+	public function returnsNullableStaticAsSelf(): ?self
+	{
+		return null;
+	}
+
+	/**
 	 * @return resource|null
 	 */
 	public function returnsNullableResource()
@@ -67,6 +75,29 @@ abstract class FooClass
 	public function nullableMixed($a)
 	{
 
+	}
+
+	/**
+	 * @param static|null $a
+	 */
+	public function nullableStaticAsSelf(?self $a)
+	{
+
+	}
+
+	/**
+	 * @return \SomethingElse|null
+	 */
+	public function withMoreSpecificAnnotation(): ?\Something
+	{
+		return new \Something();
+	}
+
+	/**
+	 * @param \SomethingElse|null $a
+	 */
+	public function withMoreSpecificParameterAnnotation(?\Something $a)
+	{
 	}
 
 }
