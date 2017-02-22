@@ -205,15 +205,17 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 									$phpcsFile->fixer->replaceToken($i, '');
 								}
 
-								$phpcsFile->fixer->addContent($referencedName->getStartPointer(), NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name));
-
+								$nameToReference = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name);
 								$alreadyUsed = false;
 								foreach ($useStatements as $useStatement) {
 									if ($useStatement->getFullyQualifiedTypeName() === $canonicalName) {
+										$nameToReference = $useStatement->getNameAsReferencedInFile();
 										$alreadyUsed = true;
 										break;
 									}
 								}
+
+								$phpcsFile->fixer->addContent($referencedName->getStartPointer(), $nameToReference);
 
 								if (!$alreadyUsed) {
 									$phpcsFile->fixer->addNewline($useStatementPlacePointer);

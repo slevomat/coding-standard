@@ -1,6 +1,8 @@
 <?php
 
 namespace Foo\Test\Bla;
+
+use Doctrine\ORM\Mapping\Column as DoctrineColumn;
 use Iterator;
 use Some\ConstantClass;
 use Foo\SomeError;
@@ -19,7 +21,7 @@ class Bar extends \Object implements Iterator
 		new Object();
 	}
 
-	public function foo(): Object
+	public function foo(DoctrineColumn $doctrineColumn): Object
 	{
 		return new Object();
 	}
