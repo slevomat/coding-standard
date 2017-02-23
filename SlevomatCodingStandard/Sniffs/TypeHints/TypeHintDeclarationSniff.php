@@ -110,7 +110,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 						$functionPointer,
 						self::CODE_MISSING_TRAVERSABLE_PARAMETER_TYPE_HINT_SPECIFICATION
 					);
-				} elseif (!$this->definitionContainsTraversableTypeHintSpeficication($parametersTypeHintsDefinitions[$parameterName])) {
+				} elseif (!$this->definitionContainsTraversableTypeHintSpeficication($parametersTypeHintsDefinitions[$parameterName]) || !$this->definitionContainsItemsSpecificationForTraversable($parametersTypeHintsDefinitions[$parameterName])) {
 					$phpcsFile->addError(
 						sprintf(
 							'@param annotation of %s %s() does not specify type hint for items of its traversable parameter %s.',
@@ -275,7 +275,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 					$functionPointer,
 					self::CODE_MISSING_TRAVERSABLE_RETURN_TYPE_HINT_SPECIFICATION
 				);
-			} elseif (!$this->definitionContainsTraversableTypeHintSpeficication($returnTypeHintDefinition)) {
+			} elseif (!$this->definitionContainsTraversableTypeHintSpeficication($returnTypeHintDefinition) || !$this->definitionContainsItemsSpecificationForTraversable($returnTypeHintDefinition)) {
 				$phpcsFile->addError(
 					sprintf(
 						'@return annotation of %s %s() does not specify type hint for items of its traversable return value.',
@@ -639,6 +639,19 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	private function definitionContainsTraversableTypeHintSpeficication(string $typeHintDefinition): bool
 	{
 		return (bool) preg_match('~\[\](?:\||$)~', $typeHintDefinition);
+	}
+
+	private function definitionContainsItemsSpecificationForTraversable(string $typeHintDefinition): bool
+	{
+		if (preg_match_all('~(?<=^|\|)(.+?)\[\](?=\||$)~', $typeHintDefinition, $matches)) {
+			foreach ($matches[1] as $returnTypeHintPart) {
+				if (!$this->isTraversableTypeHint($returnTypeHintPart)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**

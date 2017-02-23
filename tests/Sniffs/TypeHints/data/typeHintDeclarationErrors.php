@@ -260,4 +260,34 @@ abstract class FooClass
 	{
 	}
 
+	/**
+	 * @return array[]
+	 */
+	private function returnMultidimensionalArray(): array
+	{
+		return [];
+	}
+
+	/**
+	 * @return \Traversable[]
+	 */
+	private function returnMultidimensionalTraversable(): array
+	{
+		return [];
+	}
+
+	/**
+	 * @param array[] $a
+	 */
+	private function multidimensionalArrayParameter(array $a)
+	{
+	}
+
+	/**
+	 * @param \Traversable[] $a
+	 */
+	private function multidimensionalTraversable(array $a)
+	{
+	}
+
 }
