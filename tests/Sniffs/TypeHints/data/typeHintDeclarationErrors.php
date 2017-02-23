@@ -305,4 +305,20 @@ abstract class FooClass
 	 */
 	public $nullableMultidimensionalArray = [];
 
+	/**
+	 * @return array[]|null
+	 */
+	private function returnNullableMultidimensionalArray()
+	{
+		return [];
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @param array[]|null $a
+	 */
+	private function nullableMultidimensionalArrayParameter($a)
+	{
+	}
+
 }

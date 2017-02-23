@@ -95,11 +95,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 					$traversableTypeHint = true;
 				}
 
-				if (!$traversableTypeHint) {
-					continue;
-				}
-
-				if (!array_key_exists($parameterName, $parametersTypeHintsDefinitions)) {
+				if ($traversableTypeHint && !array_key_exists($parameterName, $parametersTypeHintsDefinitions)) {
 					$phpcsFile->addError(
 						sprintf(
 							'%s %s() does not have @param annotation for its traversable parameter %s.',
@@ -110,7 +106,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 						$functionPointer,
 						self::CODE_MISSING_TRAVERSABLE_PARAMETER_TYPE_HINT_SPECIFICATION
 					);
-				} elseif (!$this->definitionContainsTraversableTypeHintSpeficication($parametersTypeHintsDefinitions[$parameterName]) || !$this->definitionContainsItemsSpecificationForTraversable($parametersTypeHintsDefinitions[$parameterName])) {
+				} elseif (($traversableTypeHint && !$this->definitionContainsTraversableTypeHintSpeficication($parametersTypeHintsDefinitions[$parameterName]))
+					|| (array_key_exists($parameterName, $parametersTypeHintsDefinitions) && $this->definitionContainsTraversableTypeHintSpeficication($parametersTypeHintsDefinitions[$parameterName]) && !$this->definitionContainsItemsSpecificationForTraversable($parametersTypeHintsDefinitions[$parameterName]))
+				) {
 					$phpcsFile->addError(
 						sprintf(
 							'@param annotation of %s %s() does not specify type hint for items of its traversable parameter %s.',
@@ -264,8 +262,8 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			$traversableTypeHint = true;
 		}
 
-		if ($traversableTypeHint && !SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_TRAVERSABLE_RETURN_TYPE_HINT_SPECIFICATION))) {
-			if (!$hasReturnAnnotation) {
+		if (!SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_TRAVERSABLE_RETURN_TYPE_HINT_SPECIFICATION))) {
+			if ($traversableTypeHint && !$hasReturnAnnotation) {
 				$phpcsFile->addError(
 					sprintf(
 						'%s %s() does not have @return annotation for its traversable return value.',
@@ -275,7 +273,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 					$functionPointer,
 					self::CODE_MISSING_TRAVERSABLE_RETURN_TYPE_HINT_SPECIFICATION
 				);
-			} elseif (!$this->definitionContainsTraversableTypeHintSpeficication($returnTypeHintDefinition) || !$this->definitionContainsItemsSpecificationForTraversable($returnTypeHintDefinition)) {
+			} elseif (($traversableTypeHint && !$this->definitionContainsTraversableTypeHintSpeficication($returnTypeHintDefinition))
+				|| ($this->definitionContainsTraversableTypeHintSpeficication($returnTypeHintDefinition) && !$this->definitionContainsItemsSpecificationForTraversable($returnTypeHintDefinition))
+			) {
 				$phpcsFile->addError(
 					sprintf(
 						'@return annotation of %s %s() does not specify type hint for items of its traversable return value.',

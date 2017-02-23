@@ -541,4 +541,11 @@ abstract class FooClass
 	 */
 	public $nullableMultidimensionalArray = [];
 
+	/**
+	 * @param int[][]|array[]|null $a
+	 */
+	private function nullableMultidimensionalArrayParameter($a)
+	{
+	}
+
 }
