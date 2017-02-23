@@ -579,7 +579,8 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 			$propertyTypeHintDefinition = preg_split('~\\s+~', (string) $varAnnotations[0]->getContent())[0];
 
-			if ($this->definitionContainsTraversableTypeHint($phpcsFile, $propertyPointer, $propertyTypeHintDefinition) && !$this->definitionContainsTraversableTypeHintSpeficication($propertyTypeHintDefinition)) {
+			if (($this->definitionContainsTraversableTypeHint($phpcsFile, $propertyPointer, $propertyTypeHintDefinition) && !$this->definitionContainsTraversableTypeHintSpeficication($propertyTypeHintDefinition))
+				|| ($this->definitionContainsTraversableTypeHintSpeficication($propertyTypeHintDefinition) && !$this->definitionContainsItemsSpecificationForTraversable($propertyTypeHintDefinition))) {
 				$phpcsFile->addError(
 					sprintf(
 						'@var annotation of property %s does not specify type hint for its items.',

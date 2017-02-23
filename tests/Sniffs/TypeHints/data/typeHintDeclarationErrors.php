@@ -290,4 +290,19 @@ abstract class FooClass
 	{
 	}
 
+	/**
+	 * @var array[]
+	 */
+	public $multidimensionalArray = [];
+
+	/**
+	 * @var \Traversable[]
+	 */
+	private $multidimensionalTraversable = [];
+
+	/**
+	 * @var array[]|null
+	 */
+	public $nullableMultidimensionalArray = [];
+
 }
