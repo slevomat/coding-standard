@@ -82,6 +82,18 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		);
 	}
 
+	public function testDeclareStrictTypesIncorrectFormatNoSpaces()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/declareStrictTypesIncorrectFormatNoSpaces.php', [
+			'spacesCountAroundEqualsSign' => 0,
+		]);
+		$this->assertSniffError(
+			$report,
+			1,
+			DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT
+		);
+	}
+
 	public function testDeclareStrictTwoNewlines()
 	{
 		$file = __DIR__ . '/data/declareStrictTypesTwoNewlines.php';
@@ -172,9 +184,25 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableMissingIncorrectFormat()
+	public function testFixableMissingIncorrectFormatOneSpace()
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormat.php', [], [DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT]);
+		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatOneSpace.php', [], [DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT]);
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableMissingIncorrectFormatNoSpaces()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatNoSpaces.php', [
+			'spacesCountAroundEqualsSign' => 0,
+		], [DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT]);
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableMissingIncorrectFormatMoreSpaces()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatMoreSpaces.php', [
+			'spacesCountAroundEqualsSign' => 4,
+		], [DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT]);
 		$this->assertAllFixedInFile($report);
 	}
 
