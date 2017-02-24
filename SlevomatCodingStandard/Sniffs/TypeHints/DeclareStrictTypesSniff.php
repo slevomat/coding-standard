@@ -16,6 +16,9 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 	/** @var int */
 	public $newlinesCountBetweenOpenTagAndDeclare = 0;
 
+	/** @var int */
+	public $spacesCountAroundEqualsSign = 1;
+
 	/**
 	 * @return int[]
 	 */
@@ -95,10 +98,12 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		$strictTypesContent = TokenHelper::getContent($phpcsFile, $strictTypesPointer, $numberPointer);
-		if ($strictTypesContent !== 'strict_types = 1') {
+		$format = sprintf('strict_types%1$s=%1$s1', str_repeat(' ', $this->spacesCountAroundEqualsSign));
+		if ($strictTypesContent !== $format) {
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
-					'Expected strict_types = 1, found %s.',
+					'Expected %s, found %s.',
+					$format,
 					$strictTypesContent
 				),
 				$strictTypesPointer,
@@ -106,7 +111,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->replaceToken($strictTypesPointer, 'strict_types = 1');
+				$phpcsFile->fixer->replaceToken($strictTypesPointer, $format);
 				for ($i = $strictTypesPointer + 1; $i <= $numberPointer; $i++) {
 					$phpcsFile->fixer->replaceToken($i, '');
 				}
