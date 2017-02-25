@@ -31,6 +31,16 @@ class TokenHelper
 		T_DOC_COMMENT_WHITESPACE,
 	];
 
+	/** @var mixed[] */
+	public static $typeHintTokenCodes = [
+		T_NS_SEPARATOR,
+		T_STRING,
+		T_SELF,
+		T_PARENT,
+		T_ARRAY_HINT,
+		T_CALLABLE,
+	];
+
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $startPointer search starts at this token, inclusive

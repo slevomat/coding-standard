@@ -48,15 +48,14 @@ class NullableTypeForNullDefaultValueSniff implements \PHP_CodeSniffer_Sniff
 				continue;
 			}
 
-			$typeHintTokens = [T_NS_SEPARATOR, T_STRING, T_SELF, T_PARENT, T_ARRAY_HINT, T_CALLABLE];
 			$ignoreTokensToFindTypeHint = array_merge(TokenHelper::$ineffectiveTokenCodes, [T_BITWISE_AND, T_ELLIPSIS]);
 			$typeHintPointer = TokenHelper::findPreviousExcluding($phpcsFile, $ignoreTokensToFindTypeHint, $i - 1, $startPointer);
 
-			if ($typeHintPointer === null || !in_array($tokens[$typeHintPointer]['code'], $typeHintTokens, true)) {
+			if ($typeHintPointer === null || !in_array($tokens[$typeHintPointer]['code'], TokenHelper::$typeHintTokenCodes, true)) {
 				continue;
 			};
 
-			$ignoreTokensToSkipTypeHint = array_merge(TokenHelper::$ineffectiveTokenCodes, $typeHintTokens);
+			$ignoreTokensToSkipTypeHint = array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::$typeHintTokenCodes);
 			$beforeTypeHintPointer = TokenHelper::findPreviousExcluding($phpcsFile, $ignoreTokensToSkipTypeHint, $typeHintPointer - 1, $startPointer);
 
 			if ($beforeTypeHintPointer !== null && $tokens[$beforeTypeHintPointer]['code'] === T_NULLABLE) {
