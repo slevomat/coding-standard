@@ -1,16 +1,16 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 class AssignmentInConditionSniff implements \PHP_CodeSniffer_Sniff
 {
 
-	const CODE_ASSIGNMENT_IN_CONDITION = 'assignmentInCondition';
+	const CODE_ASSIGNMENT_IN_CONDITION = 'AssignmentInCondition';
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_IF,
@@ -20,8 +20,9 @@ class AssignmentInConditionSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $conditionStartPointer
+	 * @param int $conditionStartPointer
 	 */
 	public function process(\PHP_CodeSniffer_File $phpcsFile, $conditionStartPointer)
 	{
@@ -41,23 +42,17 @@ class AssignmentInConditionSniff implements \PHP_CodeSniffer_Sniff
 		$this->processCondition($phpcsFile, $parenthesisOpener, $parenthesisCloser, $type);
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $parenthesisOpener
-	 * @param integer $parenthesisCloser
-	 * @param string $conditionType
-	 */
 	private function processCondition(
 		\PHP_CodeSniffer_File $phpcsFile,
-		$parenthesisOpener,
-		$parenthesisCloser,
-		$conditionType
+		int $parenthesisOpener,
+		int $parenthesisCloser,
+		string $conditionType
 	)
 	{
 		$equalsTokenPointer = $phpcsFile->findNext(T_EQUAL, $parenthesisOpener + 1, $parenthesisCloser);
 		if ($equalsTokenPointer !== false) {
 			$phpcsFile->addError(
-				sprintf('Assignment in %s condition is not allowed', $conditionType),
+				sprintf('Assignment in %s condition is not allowed.', $conditionType),
 				$equalsTokenPointer,
 				self::CODE_ASSIGNMENT_IN_CONDITION
 			);

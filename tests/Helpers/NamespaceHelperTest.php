@@ -1,11 +1,14 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Helpers;
 
 class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
-	public function dataIsFullyQualifiedName()
+	/**
+	 * @return string[][]
+	 */
+	public function dataIsFullyQualifiedName(): array
 	{
 		return [
 			[
@@ -19,12 +22,15 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 * @dataProvider dataIsFullyQualifiedName
 	 * @param string $typeName
 	 */
-	public function testIsFullyQualifiedName($typeName)
+	public function testIsFullyQualifiedName(string $typeName)
 	{
 		$this->assertTrue(NamespaceHelper::isFullyQualifiedName($typeName));
 	}
 
-	public function dataIsNotFullyQualifiedName()
+	/**
+	 * @return string[][]
+	 */
+	public function dataIsNotFullyQualifiedName(): array
 	{
 		return [
 			[
@@ -38,12 +44,15 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 * @dataProvider dataIsNotFullyQualifiedName
 	 * @param string $typeName
 	 */
-	public function testIsNotFullyQualifiedName($typeName)
+	public function testIsNotFullyQualifiedName(string $typeName)
 	{
 		$this->assertFalse(NamespaceHelper::isFullyQualifiedName($typeName));
 	}
 
-	public function dataHasNamespace()
+	/**
+	 * @return string[][]
+	 */
+	public function dataHasNamespace(): array
 	{
 		return [
 			[
@@ -57,12 +66,15 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 * @dataProvider dataHasNamespace
 	 * @param string $typeName
 	 */
-	public function testHasNamespace($typeName)
+	public function testHasNamespace(string $typeName)
 	{
 		$this->assertTrue(NamespaceHelper::hasNamespace($typeName));
 	}
 
-	public function dataDoesNotHaveNamespace()
+	/**
+	 * @return string[][]
+	 */
+	public function dataDoesNotHaveNamespace(): array
 	{
 		return [
 			[
@@ -76,12 +88,15 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 * @dataProvider dataDoesNotHaveNamespace
 	 * @param string $typeName
 	 */
-	public function testDoesNotHaveNamespace($typeName)
+	public function testDoesNotHaveNamespace(string $typeName)
 	{
 		$this->assertFalse(NamespaceHelper::hasNamespace($typeName));
 	}
 
-	public function dataGetNameParts()
+	/**
+	 * @return mixed[][]
+	 */
+	public function dataGetNameParts(): array
 	{
 		return [
 			[
@@ -106,9 +121,9 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	/**
 	 * @dataProvider dataGetNameParts
 	 * @param string $namespace
-	 * @param mixed[] $parts
+	 * @param string[] $parts
 	 */
-	public function testGetNameParts($namespace, array $parts)
+	public function testGetNameParts(string $namespace, array $parts)
 	{
 		$this->assertSame($parts, NamespaceHelper::getNameParts($namespace));
 	}
@@ -150,7 +165,10 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertSame('Lorem\Ipsum', $namespace);
 	}
 
-	public function dataGetUnqualifiedNameFromFullyQualifiedName()
+	/**
+	 * @return string[][]
+	 */
+	public function dataGetUnqualifiedNameFromFullyQualifiedName(): array
 	{
 		return [
 			[
@@ -177,12 +195,15 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 * @param string $unqualifiedName
 	 * @param string $fullyQualifiedName
 	 */
-	public function testGetUnqualifiedNameFromFullyQualifiedName($unqualifiedName, $fullyQualifiedName)
+	public function testGetUnqualifiedNameFromFullyQualifiedName(string $unqualifiedName, string $fullyQualifiedName)
 	{
 		$this->assertSame($unqualifiedName, NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($fullyQualifiedName));
 	}
 
-	public function dataIsQualifiedName()
+	/**
+	 * @return string[][]
+	 */
+	public function dataIsQualifiedName(): array
 	{
 		return [
 			['\Foo'],
@@ -195,12 +216,15 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 * @dataProvider dataIsQualifiedName
 	 * @param string $name
 	 */
-	public function testIsQualifiedName($name)
+	public function testIsQualifiedName(string $name)
 	{
 		$this->assertTrue(NamespaceHelper::isQualifiedName($name));
 	}
 
-	public function dataIsNotQualifiedName()
+	/**
+	 * @return string[][]
+	 */
+	public function dataIsNotQualifiedName(): array
 	{
 		return [
 			['Foo'],
@@ -211,12 +235,15 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 * @dataProvider dataIsNotQualifiedName
 	 * @param string $name
 	 */
-	public function testIsNotQualifiedName($name)
+	public function testIsNotQualifiedName(string $name)
 	{
 		$this->assertFalse(NamespaceHelper::isQualifiedName($name));
 	}
 
-	public function dataNormalizeToCanonicalName()
+	/**
+	 * @return string[][]
+	 */
+	public function dataNormalizeToCanonicalName(): array
 	{
 		return [
 			[
@@ -243,12 +270,15 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 * @param string $normalizedName
 	 * @param string $originalName
 	 */
-	public function testNormalizeToCanonicalName($normalizedName, $originalName)
+	public function testNormalizeToCanonicalName(string $normalizedName, string $originalName)
 	{
 		$this->assertSame($normalizedName, NamespaceHelper::normalizeToCanonicalName($originalName));
 	}
 
-	public function dataTypeIsInNamespace()
+	/**
+	 * @return string[][]
+	 */
+	public function dataTypeIsInNamespace(): array
 	{
 		return [
 			[
@@ -275,12 +305,15 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 * @param string $typeName
 	 * @param string $namespace
 	 */
-	public function testTypeIsInNamespace($typeName, $namespace)
+	public function testTypeIsInNamespace(string $typeName, string $namespace)
 	{
 		$this->assertTrue(NamespaceHelper::isTypeInNamespace($typeName, $namespace));
 	}
 
-	public function dataTypeIsNotInNamespace()
+	/**
+	 * @return string[][]
+	 */
+	public function dataTypeIsNotInNamespace(): array
 	{
 		return [
 			[
@@ -315,7 +348,7 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 * @param string $typeName
 	 * @param string $namespace
 	 */
-	public function testTypeIsNotInNamespace($typeName, $namespace)
+	public function testTypeIsNotInNamespace(string $typeName, string $namespace)
 	{
 		$this->assertFalse(NamespaceHelper::isTypeInNamespace($typeName, $namespace));
 	}

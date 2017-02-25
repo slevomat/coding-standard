@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
@@ -52,6 +52,12 @@ class AlphabeticallySortedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\T
 	public function testPatrikOrder()
 	{
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/alphabeticalPatrik.php'));
+	}
+
+	public function testFixableUnusedUses()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableAlphabeticalSortedUses.php', [], [AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER]);
+		$this->assertAllFixedInFile($report);
 	}
 
 }

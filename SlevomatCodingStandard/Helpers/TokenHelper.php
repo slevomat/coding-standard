@@ -1,23 +1,24 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Helpers;
-
-use PHP_CodeSniffer_File;
 
 class TokenHelper
 {
 
+	/** @var mixed[] */
 	public static $nameTokenCodes = [
 		T_NS_SEPARATOR,
 		T_STRING,
 	];
 
+	/** @var mixed[] */
 	public static $typeKeywordTokenCodes = [
 		T_CLASS,
 		T_TRAIT,
 		T_INTERFACE,
 	];
 
+	/** @var mixed[] */
 	public static $ineffectiveTokenCodes = [
 		T_WHITESPACE,
 		T_COMMENT,
@@ -30,25 +31,35 @@ class TokenHelper
 		T_DOC_COMMENT_WHITESPACE,
 	];
 
+	/** @var mixed[] */
+	public static $typeHintTokenCodes = [
+		T_NS_SEPARATOR,
+		T_STRING,
+		T_SELF,
+		T_PARENT,
+		T_ARRAY_HINT,
+		T_CALLABLE,
+	];
+
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $startPointer search starts at this token, inclusive
-	 * @param integer|null $endPointer search ends at this token, exclusive
-	 * @return integer|null
+	 * @param int $startPointer search starts at this token, inclusive
+	 * @param int|null $endPointer search ends at this token, exclusive
+	 * @return int|null
 	 */
-	public static function findNextEffective(PHP_CodeSniffer_File $phpcsFile, $startPointer, $endPointer = null)
+	public static function findNextEffective(\PHP_CodeSniffer_File $phpcsFile, int $startPointer, int $endPointer = null)
 	{
 		return self::findNextExcluding($phpcsFile, self::$ineffectiveTokenCodes, $startPointer, $endPointer);
 	}
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer|integer[] $types
-	 * @param integer $startPointer search starts at this token, inclusive
-	 * @param integer|null $endPointer search ends at this token, exclusive
-	 * @return integer|null
+	 * @param int|int[] $types
+	 * @param int $startPointer search starts at this token, inclusive
+	 * @param int|null $endPointer search ends at this token, exclusive
+	 * @return int|null
 	 */
-	public static function findNextExcluding(PHP_CodeSniffer_File $phpcsFile, $types, $startPointer, $endPointer = null)
+	public static function findNextExcluding(\PHP_CodeSniffer_File $phpcsFile, $types, int $startPointer, int $endPointer = null)
 	{
 		$token = $phpcsFile->findNext($types, $startPointer, $endPointer, true);
 		if ($token === false) {
@@ -59,34 +70,34 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $startPointer search starts at this token, inclusive
-	 * @param integer|null $endPointer search ends at this token, exclusive
-	 * @return integer|null
+	 * @param int $startPointer search starts at this token, inclusive
+	 * @param int|null $endPointer search ends at this token, exclusive
+	 * @return int|null
 	 */
-	public static function findNextAnyToken(PHP_CodeSniffer_File $phpcsFile, $startPointer, $endPointer = null)
+	public static function findNextAnyToken(\PHP_CodeSniffer_File $phpcsFile, int $startPointer, int $endPointer = null)
 	{
 		return self::findNextExcluding($phpcsFile, [], $startPointer, $endPointer);
 	}
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $startPointer search starts at this token, inclusive
-	 * @param integer|null $endPointer search ends at this token, exclusive
-	 * @return integer|null
+	 * @param int $startPointer search starts at this token, inclusive
+	 * @param int|null $endPointer search ends at this token, exclusive
+	 * @return int|null
 	 */
-	public static function findPreviousEffective(PHP_CodeSniffer_File $phpcsFile, $startPointer, $endPointer = null)
+	public static function findPreviousEffective(\PHP_CodeSniffer_File $phpcsFile, int $startPointer, int $endPointer = null)
 	{
 		return self::findPreviousExcluding($phpcsFile, self::$ineffectiveTokenCodes, $startPointer, $endPointer);
 	}
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer[]|integer $types
-	 * @param integer $startPointer search starts at this token, inclusive
-	 * @param integer|null $endPointer search ends at this token, exclusive
-	 * @return integer|null
+	 * @param int[]|int $types
+	 * @param int $startPointer search starts at this token, inclusive
+	 * @param int|null $endPointer search ends at this token, exclusive
+	 * @return int|null
 	 */
-	public static function findPreviousExcluding(PHP_CodeSniffer_File $phpcsFile, $types, $startPointer, $endPointer = null)
+	public static function findPreviousExcluding(\PHP_CodeSniffer_File $phpcsFile, $types, int $startPointer, int $endPointer = null)
 	{
 		$token = $phpcsFile->findPrevious($types, $startPointer, $endPointer, true);
 		if ($token === false) {
@@ -97,10 +108,10 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $pointer search starts at this token, inclusive
-	 * @return integer|null
+	 * @param int $pointer search starts at this token, inclusive
+	 * @return int|null
 	 */
-	public static function findFirstTokenOnNextLine(PHP_CodeSniffer_File $phpcsFile, $pointer)
+	public static function findFirstTokenOnNextLine(\PHP_CodeSniffer_File $phpcsFile, int $pointer)
 	{
 		$newLinePointer = $phpcsFile->findNext(T_WHITESPACE, $pointer, null, false, $phpcsFile->eolChar);
 		if ($newLinePointer === false) {
@@ -110,35 +121,20 @@ class TokenHelper
 		return isset($tokens[$newLinePointer + 1]) ? $newLinePointer + 1 : null;
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $startPointer search starts at this token, inclusive
-	 * @param integer|null $endPointer search ends at this token, exclusive
-	 * @return string
-	 */
-	public static function getContent(PHP_CodeSniffer_File $phpcsFile, $startPointer, $endPointer = null)
+	public static function getContent(\PHP_CodeSniffer_File $phpcsFile, int $startPointer, int $endPointer = null): string
 	{
 		$tokens = $phpcsFile->getTokens();
-		$content = '';
-		while (true) {
-			$pointer = self::findNextAnyToken($phpcsFile, $startPointer, $endPointer);
-			if ($pointer === null) {
-				break;
-			}
-			$token = $tokens[$pointer];
-			$content .= $token['content'];
+		$endPointer = $endPointer ?: self::getLastTokenPointer($phpcsFile);
 
-			$startPointer = $pointer + 1;
+		$content = '';
+		for ($i = $startPointer; $i <= $endPointer; $i++) {
+			$content .= $tokens[$i]['content'];
 		}
 
 		return $content;
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @return integer
-	 */
-	public static function getLastTokenPointer(PHP_CodeSniffer_File $phpcsFile)
+	public static function getLastTokenPointer(\PHP_CodeSniffer_File $phpcsFile): int
 	{
 		$tokenCount = count($phpcsFile->getTokens());
 		if ($tokenCount === 0) {

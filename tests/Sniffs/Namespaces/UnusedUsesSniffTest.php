@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	private function getFileReport()
+	private function getFileReport(): \PHP_CodeSniffer_File
 	{
 		return $this->checkFile(__DIR__ . '/data/unusedUses.php');
 	}
@@ -57,7 +57,7 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertNoSniffError($this->getFileReport(), 9);
 	}
 
-	public function testUsedUseInTypehint()
+	public function testUsedUseInTypeHint()
 	{
 		$this->assertNoSniffError($this->getFileReport(), 10);
 	}
@@ -83,20 +83,59 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertNoSniffError($this->getFileReport(), 18);
 	}
 
-	public function testReturnTypehint()
+	public function testReturnTypeHint()
 	{
-		if (PHP_VERSION_ID < 70000) {
-			$this->markTestSkipped('Available on PHP7 only');
-		}
-		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/php7/unusedUses.php'));
+		$this->assertNoSniffError($this->getFileReport(), 19);
 	}
 
-	public function testUsedUseInsideAnnotation()
+	public function testUsedUseInAnnotationWithDisabledSearchAnnotations()
 	{
-		$report = $this->checkFile(__DIR__ . '/data/unusedUses.php', [
+		$report = $this->checkFile(__DIR__ . '/data/unusedUsesInAnnotation.php', [
+			'searchAnnotations' => false,
+		]);
+
+		$this->assertSame(4, $report->getErrorCount());
+
+		$this->assertSniffError(
+			$report,
+			5,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'Type Assert is not used in this file.'
+		);
+		$this->assertSniffError(
+			$report,
+			6,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'Type Doctrine\ORM\Mapping (as ORM) is not used in this file.'
+		);
+		$this->assertSniffError(
+			$report,
+			7,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'Type X is not used in this file.'
+		);
+		$this->assertSniffError(
+			$report,
+			8,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'Type XX is not used in this file.'
+		);
+	}
+
+	public function testUsedUseInAnnotationWithEnabledSearchAnnotations()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/unusedUsesInAnnotation.php', [
 			'searchAnnotations' => true,
 		]);
-		$this->assertNoSniffError($report, 16);
+
+		$this->assertSame(1, $report->getErrorCount());
+
+		$this->assertSniffError(
+			$report,
+			8,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'Type XX is not used in this file.'
+		);
 	}
 
 	public function testFindCaseInsensitiveUse()
@@ -140,6 +179,12 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 	{
 		$report = $this->checkFile(__DIR__ . '/data/matchingCaseOfUseAndPhpFunction.php');
 		$this->assertNoSniffErrorInFile($report);
+	}
+
+	public function testFixableUnusedUses()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableUnusedUses.php', [], [UnusedUsesSniff::CODE_UNUSED_USE]);
+		$this->assertAllFixedInFile($report);
 	}
 
 }

@@ -23,15 +23,11 @@
 
 	<target name="lint">
 		<exec
-			executable="vendor/bin/parallel-lint"
+			executable="bin/parallel-lint"
 			logoutput="true"
 			passthru="true"
 			checkreturn="true"
 		>
-			<arg value="--exclude"/>
-			<arg path="tests/Helpers/data/php7"/>
-			<arg value="--exclude"/>
-			<arg path="tests/Sniffs/Namespaces/data/php7"/>
 			<arg path="SlevomatCodingStandard" />
 			<arg path="tests" />
 		</exec>
@@ -39,7 +35,7 @@
 
 	<target name="cs">
 		<exec
-			executable="vendor/bin/phpcs"
+			executable="bin/phpcs"
 			logoutput="true"
 			passthru="true"
 			checkreturn="true"
@@ -57,7 +53,7 @@
 
 	<target name="cs-fix">
 		<exec
-				executable="vendor/bin/phpcbf"
+				executable="bin/phpcbf"
 				logoutput="true"
 				passthru="true"
 				checkreturn="true"
@@ -74,7 +70,7 @@
 
 	<target name="tests">
 		<exec
-			executable="vendor/bin/phpunit"
+			executable="bin/phpunit"
 			logoutput="true"
 			passthru="true"
 			checkreturn="true"
@@ -86,27 +82,20 @@
 	</target>
 
 	<target name="phpstan">
-		<php expression="PHP_VERSION_ID >= 70000 ?'true':'false'" returnProperty="isPHP7" level="verbose" />
-		<if>
-			<equals arg1="${isPHP7}" arg2="true" />
-			<then>
-				<exec
-					executable="vendor/bin/phpstan"
-					logoutput="true"
-					passthru="true"
-					checkreturn="true"
-				>
-					<arg value="analyse"/>
-					<arg value="-c"/>
-					<arg path="phpstan.neon"/>
-					<arg path="SlevomatCodingStandard"/>
-					<arg path="tests"/>
-				</exec>
-			</then>
-			<else>
-				<echo message="PHPStan requires PHP 7." />
-			</else>
-		</if>
+		<exec
+			executable="bin/phpstan"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
+		>
+			<arg value="analyse"/>
+			<arg value="-l"/>
+			<arg value="4"/>
+			<arg value="-c"/>
+			<arg path="phpstan.neon"/>
+			<arg path="SlevomatCodingStandard"/>
+			<arg path="tests"/>
+		</exec>
 	</target>
 
 </project>

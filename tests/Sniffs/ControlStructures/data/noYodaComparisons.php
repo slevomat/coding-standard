@@ -30,3 +30,24 @@ if (
 	)
 ) {
 }
+
+(int) $foo === $bar;
+$foo === (int) $bar;
+Foo::$bar === $foo;
+
+switch (true) {
+	case $parsedTime['is_localtime'] && $parsedTime['zone_type'] === self::TIMEZONE_PHP_TYPE_OFFSET:
+		$timezoneOffsetInMinutes = (-1) * $parsedTime['zone'];
+		$timezoneOffsetHours = (int) floor($timezoneOffsetInMinutes / 60);
+		$timezoneOffsetMinutes = $timezoneOffsetInMinutes % 60;
+		$timezone = sprintf('%+02d:%02d', $timezoneOffsetHours, $timezoneOffsetMinutes);
+		break;
+	case $parsedTime['is_localtime'] && $parsedTime['zone_type'] === self::TIMEZONE_PHP_TYPE_ABBREVIATION:
+		$timezone = $parsedTime['tz_abbr'];
+		break;
+	case $parsedTime['is_localtime'] && $parsedTime['zone_type'] === self::TIMEZONE_PHP_TYPE_IDENTIFIER:
+		$timezone = $parsedTime['tz_id'];
+		break;
+	default:
+		$timezone = 'UTC';
+}

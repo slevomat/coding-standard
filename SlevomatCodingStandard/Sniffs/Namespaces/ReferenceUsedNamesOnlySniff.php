@@ -1,13 +1,15 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-use PHP_CodeSniffer_File;
+use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
+use SlevomatCodingStandard\Helpers\ReferencedName;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
 class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 {
@@ -24,7 +26,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	/** @var string[] */
 	private $normalizedFullyQualifiedKeywords;
 
-	/** @var boolean */
+	/** @var bool */
 	public $allowFullyQualifiedExceptions = false;
 
 	/** @var string[] */
@@ -39,7 +41,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	/** @var string[] */
 	private $normalizedIgnoredNames;
 
-	/** @var boolean */
+	/** @var bool */
 	public $allowPartialUses = true;
 
 	/**
@@ -52,10 +54,13 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	/** @var string[]|null */
 	private $normalizedNamespacesRequiredToUse;
 
+	/** @var bool */
+	public $allowFullyQualifiedNameForCollidingClasses = false;
+
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_OPEN_TAG,
@@ -65,7 +70,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @return string[]
 	 */
-	private function getSpecialExceptionNames()
+	private function getSpecialExceptionNames(): array
 	{
 		if ($this->normalizedSpecialExceptionNames === null) {
 			$this->normalizedSpecialExceptionNames = SniffSettingsHelper::normalizeArray($this->specialExceptionNames);
@@ -77,7 +82,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @return string[]
 	 */
-	private function getIgnoredNames()
+	private function getIgnoredNames(): array
 	{
 		if ($this->normalizedIgnoredNames === null) {
 			$this->normalizedIgnoredNames = SniffSettingsHelper::normalizeArray($this->ignoredNames);
@@ -89,7 +94,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @return string[]
 	 */
-	private function getNamespacesRequiredToUse()
+	private function getNamespacesRequiredToUse(): array
 	{
 		if ($this->namespacesRequiredToUse !== null && $this->normalizedNamespacesRequiredToUse === null) {
 			$this->normalizedNamespacesRequiredToUse = SniffSettingsHelper::normalizeArray($this->namespacesRequiredToUse);
@@ -101,10 +106,10 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @return string[]
 	 */
-	private function getFullyQualifiedKeywords()
+	private function getFullyQualifiedKeywords(): array
 	{
 		if ($this->normalizedFullyQualifiedKeywords === null) {
-			$this->normalizedFullyQualifiedKeywords = array_map(function ($keyword) {
+			$this->normalizedFullyQualifiedKeywords = array_map(function (string $keyword) {
 				if (!defined($keyword)) {
 					throw new \SlevomatCodingStandard\Sniffs\Namespaces\UndefinedKeywordTokenException($keyword);
 				}
@@ -116,17 +121,40 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $openTagPointer
+	 * @param int $openTagPointer
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
 		$tokens = $phpcsFile->getTokens();
+
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
+
+		if ($this->allowFullyQualifiedNameForCollidingClasses) {
+			$referencesIndex = array_flip(
+				array_map(
+					function (ReferencedName $referencedName): string {
+						return $referencedName->getNameAsReferencedInFile();
+					},
+					$referencedNames
+				)
+			);
+			$definedClassesIndex = array_flip(ClassHelper::getAllNames($phpcsFile));
+		}
+
 		foreach ($referencedNames as $referencedName) {
 			$name = $referencedName->getNameAsReferencedInFile();
-			$pointer = $referencedName->getPointer();
+			$nameStartPointer = $referencedName->getStartPointer();
 			$canonicalName = NamespaceHelper::normalizeToCanonicalName($name);
+
+			if ($this->allowFullyQualifiedNameForCollidingClasses) {
+				$unqualifiedClassName = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($referencedName->getNameAsReferencedInFile());
+				if (isset($referencesIndex[$unqualifiedClassName]) || in_array($unqualifiedClassName, $definedClassesIndex ?? [], true)) {
+					continue;
+				}
+			}
+
 			if (NamespaceHelper::isFullyQualifiedName($name)) {
 				$isExceptionByName = StringHelper::endsWith($name, 'Exception')
 					|| $name === '\Throwable'
@@ -141,45 +169,76 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 						|| $inIgnoredNames
 					)
 				) {
-					$previousKeywordPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(
-						TokenHelper::$nameTokenCodes,
-						[T_WHITESPACE, T_COMMA]
-					), $pointer - 1);
-					if (
-						!in_array($tokens[$previousKeywordPointer]['code'], $this->getFullyQualifiedKeywords(), true)
-					) {
+					$previousKeywordPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(TokenHelper::$nameTokenCodes, [T_WHITESPACE, T_COMMA]), $nameStartPointer - 1);
+					if (!in_array($tokens[$previousKeywordPointer]['code'], $this->getFullyQualifiedKeywords(), true)) {
 						if (
 							!NamespaceHelper::hasNamespace($name)
-							&& NamespaceHelper::findCurrentNamespaceName($phpcsFile, $pointer) === null
+							&& NamespaceHelper::findCurrentNamespaceName($phpcsFile, $nameStartPointer) === null
 						) {
-							$phpcsFile->addError(sprintf(
-								'Type %s should not be referenced via a fully qualified name, but via an unqualified name without the leading \\, because the file does not have a namespace and the type cannot be put in a use statement',
+							$fix = $phpcsFile->addFixableError(sprintf(
+								'Type %s should not be referenced via a fully qualified name, but via an unqualified name without the leading \\, because the file does not have a namespace and the type cannot be put in a use statement.',
 								$name
-							), $pointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE);
+							), $nameStartPointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE);
+							if ($fix) {
+								$phpcsFile->fixer->beginChangeset();
+								$phpcsFile->fixer->replaceToken($nameStartPointer, substr($tokens[$nameStartPointer]['content'], 1));
+								$phpcsFile->fixer->endChangeset();
+							}
 						} else {
-							$phpcsFile->addError(sprintf(
-								'Type %s should not be referenced via a fully qualified name, but via a use statement',
+							$fix = $phpcsFile->addFixableError(sprintf(
+								'Type %s should not be referenced via a fully qualified name, but via a use statement.',
 								$name
-							), $pointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+							), $nameStartPointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+							if ($fix) {
+								$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
+								if (count($useStatements) === 0) {
+									$namespacePointer = $phpcsFile->findNext(T_NAMESPACE, $openTagPointer);
+									$useStatementPlacePointer = $phpcsFile->findNext([T_SEMICOLON, T_OPEN_CURLY_BRACKET], $namespacePointer + 1);
+								} else {
+									$lastUseStatement = array_values($useStatements)[count($useStatements) - 1];
+									$useStatementPlacePointer = $phpcsFile->findNext(T_SEMICOLON, $lastUseStatement->getPointer() + 1);
+								}
+
+								$phpcsFile->fixer->beginChangeset();
+
+								for ($i = $referencedName->getStartPointer(); $i <= $referencedName->getEndPointer(); $i++) {
+									$phpcsFile->fixer->replaceToken($i, '');
+								}
+
+								$nameToReference = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name);
+								$alreadyUsed = false;
+								foreach ($useStatements as $useStatement) {
+									if ($useStatement->getFullyQualifiedTypeName() === $canonicalName) {
+										$nameToReference = $useStatement->getNameAsReferencedInFile();
+										$alreadyUsed = true;
+										break;
+									}
+								}
+
+								$phpcsFile->fixer->addContent($referencedName->getStartPointer(), $nameToReference);
+
+								if (!$alreadyUsed) {
+									$phpcsFile->fixer->addNewline($useStatementPlacePointer);
+									$phpcsFile->fixer->addContent($useStatementPlacePointer, sprintf('use %s;', $canonicalName));
+								}
+
+								$phpcsFile->fixer->endChangeset();
+							}
 						}
 					}
 				}
 			} elseif (!$this->allowPartialUses) {
 				if (NamespaceHelper::isQualifiedName($name)) {
 					$phpcsFile->addError(sprintf(
-						'Partial use statements are not allowed, but referencing %s found',
+						'Partial use statements are not allowed, but referencing %s found.',
 						$name
-					), $pointer, self::CODE_PARTIAL_USE);
+					), $nameStartPointer, self::CODE_PARTIAL_USE);
 				}
 			}
 		}
 	}
 
-	/**
-	 * @param string $name
-	 * @return boolean
-	 */
-	private function isClassRequiredToBeUsed($name)
+	private function isClassRequiredToBeUsed(string $name): bool
 	{
 		if ($this->namespacesRequiredToUse === null) {
 			return true;

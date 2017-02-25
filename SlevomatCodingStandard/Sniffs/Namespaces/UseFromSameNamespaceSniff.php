@@ -1,8 +1,7 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-use PHP_CodeSniffer_File;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
@@ -13,9 +12,9 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
 	const CODE_USE_FROM_SAME_NAMESPACE = 'UseFromSameNamespace';
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_USE,
@@ -23,10 +22,11 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $usePointer
+	 * @param int $usePointer
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $usePointer)
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $usePointer)
 	{
 		if (
 			UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer)
@@ -57,7 +57,7 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
 
 		if (!NamespaceHelper::hasNamespace($usedTypeNameRest)) {
 			$fix = $phpcsFile->addFixableError(sprintf(
-				'Use %s is from the same namespace – that is prohibited',
+				'Use %s is from the same namespace – that is prohibited.',
 				$usedTypeName
 			), $usePointer, self::CODE_USE_FROM_SAME_NAMESPACE);
 			if ($fix) {
@@ -73,10 +73,10 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $startPointer
-	 * @return integer|null
+	 * @param int $startPointer
+	 * @return int|null
 	 */
-	private function findAsPointer(PHP_CodeSniffer_File $phpcsFile, $startPointer)
+	private function findAsPointer(\PHP_CodeSniffer_File $phpcsFile, int $startPointer)
 	{
 		$asPointer = $phpcsFile->findNext(T_AS, $startPointer, null, false, null, true);
 		if ($asPointer === false) {

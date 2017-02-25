@@ -1,16 +1,16 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 class FullyQualifiedExceptionsSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	private function getFileReport()
+	private function getFileReport(): \PHP_CodeSniffer_File
 	{
 		return $this->checkFile(__DIR__ . '/data/fullyQualifiedExceptionNames.php');
 	}
 
-	public function testNonFullyQualifiedExceptionInTypehint()
+	public function testNonFullyQualifiedExceptionInTypeHint()
 	{
 		$this->assertSniffError(
 			$this->getFileReport(),
@@ -42,17 +42,17 @@ class FullyQualifiedExceptionsSniffTest extends \SlevomatCodingStandard\Sniffs\T
 			$this->getFileReport(),
 			9,
 			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
-			'Throwable'
+			\Throwable::class
 		);
 		$this->assertSniffError(
 			$this->getFileReport(),
 			11,
 			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
-			'TypeError'
+			\TypeError::class
 		);
 	}
 
-	public function testFullyQualifiedExceptionInTypehint()
+	public function testFullyQualifiedExceptionInTypeHint()
 	{
 		$this->assertNoSniffError($this->getFileReport(), 16);
 	}

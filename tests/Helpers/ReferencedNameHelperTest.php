@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Helpers;
 
@@ -20,7 +20,7 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			['SomeDifferentTrait', false, false],
 			['\FullyQualified\SometTotallyDifferentTrait', false, false],
 			['SomeTrait', false, false],
-			['TypehintedName', false, false],
+			['TypeHintedName', false, false],
 			['ClassInstance', false, false],
 			['StaticClass', false, false],
 			['\Foo\Bar\SpecificException', false, false],
@@ -30,9 +30,14 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			['BAZ_CONSTANT', false, true],
 			['LoremClass', false, false],
 			['IpsumClass', false, false],
+			['Hoo', false, false],
+			['BAR_CONSTANT', false, true],
+			['Integer', false, false],
+			['Boolean', false, false],
 			['\ExtendedInterface', false, false],
 			['\SecondExtendedInterface', false, false],
 			['\ThirdExtendedInterface', false, false],
+			['SomeTrait', false, false],
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
@@ -44,9 +49,34 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		}
 	}
 
-	/**
-	 * @requires PHP 7.1
-	 */
+	public function testGetAllReferencedNamesWithNullableTypehints()
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/referencedNamesWithNullableTypeHints.php'
+		);
+
+		$foundTypes = [
+			['NullableParameterTypeHint', false, false],
+			['NullableReturnTypeHint', false, false],
+		];
+
+		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
+		$this->assertCount(count($foundTypes), $names);
+		foreach ($names as $i => $referencedName) {
+			$this->assertSame($foundTypes[$i][0], $referencedName->getNameAsReferencedInFile());
+			$this->assertSame($foundTypes[$i][1], $referencedName->isFunction(), $foundTypes[$i][0]);
+			$this->assertSame($foundTypes[$i][2], $referencedName->isConstant(), $foundTypes[$i][0]);
+		}
+	}
+
+	public function testGetAllReferencedNamesOnNonReferencedName()
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/fileWithoutReferencedName.php'
+		);
+		$this->assertCount(0, ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0));
+	}
+
 	public function testMultipleExceptionsCatch()
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
@@ -71,33 +101,20 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		}
 	}
 
-	public function testFindReferencedNameEndPointerOnNonReferencedName()
-	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/fileWithoutReferencedName.php'
-		);
-		$stringTokenPointer = $codeSnifferFile->findNext(T_STRING, 0);
-		$this->assertNull(ReferencedNameHelper::findReferencedNameEndPointer($codeSnifferFile, $stringTokenPointer));
-	}
-
-	public function testFindReferencedNameEndPointer()
+	public function testGetReferencedNameEndPointer()
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/referencedName.php'
 		);
 		$backslashTokenPointer = $codeSnifferFile->findNext(T_NS_SEPARATOR, 0);
-		$endTokenPointer = ReferencedNameHelper::findReferencedNameEndPointer($codeSnifferFile, $backslashTokenPointer);
-		$this->assertTokenPointer(T_OPEN_PARENTHESIS, 3, $codeSnifferFile, $endTokenPointer);
+		$endTokenPointer = ReferencedNameHelper::getReferencedNameEndPointer($codeSnifferFile, $backslashTokenPointer);
+		$this->assertTokenPointer(T_STRING, 3, $codeSnifferFile, $endTokenPointer);
 	}
 
-	public function testReturnTypehint()
+	public function testReturnTypeHint()
 	{
-		if (PHP_VERSION_ID < 70000) {
-			$this->markTestSkipped('Available on PHP7 only');
-		}
-
 		$codeSnifferFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/php7/return-typehint.php'
+			__DIR__ . '/data/return-typehint.php'
 		);
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
 		$this->assertCount(2, $names);

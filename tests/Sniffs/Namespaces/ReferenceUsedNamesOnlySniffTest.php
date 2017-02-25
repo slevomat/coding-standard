@@ -1,11 +1,14 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function dataIgnoredNamesForIrrelevantTests()
+	/**
+	 * @return mixed[][]
+	 */
+	public function dataIgnoredNamesForIrrelevantTests(): array
 	{
 		return [
 			[
@@ -428,7 +431,10 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		);
 	}
 
-	public function dataIgnoredNames()
+	/**
+	 * @return mixed[][]
+	 */
+	public function dataIgnoredNames(): array
 	{
 		return [
 			[
@@ -447,10 +453,10 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 
 	/**
 	 * @dataProvider dataIgnoredNames
-	 * @param boolean $allowFullyQualifiedExceptions
+	 * @param bool $allowFullyQualifiedExceptions
 	 * @param string[] $ignoredNames
 	 */
-	public function testIgnoredNames($allowFullyQualifiedExceptions, array $ignoredNames)
+	public function testIgnoredNames(bool $allowFullyQualifiedExceptions, array $ignoredNames)
 	{
 		$report = $this->checkFile(
 			__DIR__ . '/data/ignoredNames.php',
@@ -474,7 +480,10 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		$this->assertNoSniffErrorInFile($report);
 	}
 
-	public function dataIgnoredNamesInNamespace()
+	/**
+	 * @return mixed[][]
+	 */
+	public function dataIgnoredNamesInNamespace(): array
 	{
 		return [
 			[
@@ -493,10 +502,10 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 
 	/**
 	 * @dataProvider dataIgnoredNamesInNamespace
-	 * @param boolean $allowFullyQualifiedExceptions
+	 * @param bool $allowFullyQualifiedExceptions
 	 * @param string[] $ignoredNames
 	 */
-	public function testIgnoredNamesInNamespace($allowFullyQualifiedExceptions, array $ignoredNames)
+	public function testIgnoredNamesInNamespace(bool $allowFullyQualifiedExceptions, array $ignoredNames)
 	{
 		$report = $this->checkFile(
 			__DIR__ . '/data/ignoredNamesInNamespace.php',
@@ -518,6 +527,82 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 			['allowFullyQualifiedExceptions' => true]
 		);
 		$this->assertNoSniffErrorInFile($report);
+	}
+
+
+	public function testFixableReferenceViaFullyQualifiedName()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableReferenceViaFullyQualifiedName.php', [
+			'fullyQualifiedKeywords' => ['T_EXTENDS'],
+			'allowFullyQualifiedExceptions' => true,
+		], [ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME]);
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableReferenceViaFullyQualifiedNameNoUseStatements()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableReferenceViaFullyQualifiedNameNoUseStatements.php', [
+			'fullyQualifiedKeywords' => ['T_EXTENDS', 'T_IMPLEMENTS'],
+		], [ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME]);
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableReferenceViaFullyQualifiedNameWithoutNamespace()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableReferenceViaFullyQualifiedNameWithoutNamespace.php', [
+			'fullyQualifiedKeywords' => ['T_IMPLEMENTS'],
+			'allowFullyQualifiedExceptions' => false,
+			'specialExceptionNames' => [
+				'BarErrorX',
+			],
+		], [ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE]);
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testCollidingClassNameDifferentNamespacesAllowed()
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/collidingClassNameDifferentNamespaces.php',
+			['allowFullyQualifiedNameForCollidingClasses' => true]
+		);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
+	public function testCollidingClassNameDifferentNamespacesDisallowed()
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/collidingClassNameDifferentNamespaces.php',
+			['allowFullyQualifiedNameForCollidingClasses' => false]
+		);
+
+		$this->assertSame(2, $report->getErrorCount());
+
+		$this->assertSniffError($report, 14, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+		$this->assertSniffError($report, 16, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+	}
+
+	public function testCollidingClassNameDifferentNamespacesMoreClassesAllowed()
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/collidingClassNameDifferentNamespacesMoreClasses.php',
+			['allowFullyQualifiedNameForCollidingClasses' => true]
+		);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
+	public function testCollidingClassNameDifferentNamespacesMoreClassesDisallowed()
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/collidingClassNameDifferentNamespacesMoreClasses.php',
+			['allowFullyQualifiedNameForCollidingClasses' => false]
+		);
+
+		$this->assertSame(4, $report->getErrorCount());
+
+		$this->assertSniffError($report, 7, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+		$this->assertSniffError($report, 9, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+		$this->assertSniffError($report, 12, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+		$this->assertSniffError($report, 14, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
 	}
 
 }

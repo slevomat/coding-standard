@@ -1,7 +1,27 @@
 <?xml version="1.0"?>
 <ruleset name="Slevomat Coding Standard">
-	<rule ref="SlevomatCodingStandard/ruleset.xml" />
-	<rule ref="vendor/consistence/coding-standard/Consistence/ruleset.xml" />
+	<rule ref="SlevomatCodingStandard/ruleset.xml">
+		<exclude name="SlevomatCodingStandard.Classes.ClassConstantVisibility"/><!-- PHP >= 7.1 only -->
+		<exclude name="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue"/><!-- PHP >= 7.1 only -->
+	</rule>
+	<rule ref="vendor/consistence/coding-standard/Consistence/ruleset.xml">
+		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedIF"/><!-- Allow empty if statements - usually with a comment -->
+		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedELSEIF"/><!-- Allow empty elseif statements - usually with a comment -->
+	</rule>
+	<rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
+		<property name="forbiddenAnnotations" type="array" value="
+			@author,
+			@created,
+			@copyright,
+			@license,
+			@package,
+			@throws,
+			@version
+		"/>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly">
+		<exclude-pattern>SlevomatCodingStandard/Sniffs/Exceptions/ReferenceThrowableOnlySniff.php</exclude-pattern>
+	</rule>
 	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
 		<properties>
 			<property name="rootNamespaces" type="array" value="SlevomatCodingStandard=>SlevomatCodingStandard,tests=>SlevomatCodingStandard"/>
@@ -22,8 +42,16 @@
 	</rule>
 	<rule ref="SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces">
 		<properties>
-			<property name="allowUseFromRootNamespace" value="true"/>
 			<property name="namespacesRequiredToUse" type="array" value="SlevomatCodingStandard"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
+		<properties>
+			<property name="enableNullableTypeHints" value="false"/>
+			<property name="enableVoidTypeHint" value="false"/>
+			<property name="usefulAnnotations" type="array" value="
+				@dataProvider
+			"/>
 		</properties>
 	</rule>
 </ruleset>

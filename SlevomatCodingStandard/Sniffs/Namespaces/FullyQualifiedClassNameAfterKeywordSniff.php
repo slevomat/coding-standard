@@ -1,8 +1,7 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-use PHP_CodeSniffer_File;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -25,7 +24,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 	/**
 	 * @return string[]
 	 */
-	private function getKeywordsToCheck()
+	private function getKeywordsToCheck(): array
 	{
 		if ($this->normalizedKeywordsToCheck === null) {
 			$this->normalizedKeywordsToCheck = SniffSettingsHelper::normalizeArray($this->keywordsToCheck);
@@ -35,14 +34,14 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		if (count($this->getKeywordsToCheck()) === 0) {
 			throw new \SlevomatCodingStandard\Sniffs\Namespaces\NoKeywordsException(self::class, 'keywordsToCheck');
 		}
-		return array_map(function ($keyword) {
+		return array_map(function (string $keyword) {
 			if (!defined($keyword)) {
 				throw new \SlevomatCodingStandard\Sniffs\Namespaces\UndefinedKeywordTokenException($keyword);
 			}
@@ -51,10 +50,11 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $keywordPointer
+	 * @param int $keywordPointer
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $keywordPointer)
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $keywordPointer)
 	{
 		$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $keywordPointer + 1);
 		$this->checkReferencedName($phpcsFile, $keywordPointer, $nameStartPointer);
@@ -63,10 +63,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 		if ($tokens[$keywordPointer]['code'] === T_IMPLEMENTS) {
 			$possibleCommaPointer = $keywordPointer + 1;
 			while (true) {
-				$possibleCommaPointer = TokenHelper::findNextExcluding($phpcsFile, array_merge(
-					TokenHelper::$nameTokenCodes,
-					[T_WHITESPACE]
-				), $possibleCommaPointer);
+				$possibleCommaPointer = TokenHelper::findNextExcluding($phpcsFile, array_merge(TokenHelper::$nameTokenCodes, [T_WHITESPACE]), $possibleCommaPointer);
 				if ($possibleCommaPointer !== null) {
 					$possibleCommaToken = $tokens[$possibleCommaPointer];
 					if ($possibleCommaToken['code'] === T_COMMA) {
@@ -81,22 +78,16 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 		}
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $keywordPointer
-	 * @param integer $nameStartPointer
-	 * @return integer Referenced name end pointer (exclusive)
-	 */
-	private function checkReferencedName(PHP_CodeSniffer_File $phpcsFile, $keywordPointer, $nameStartPointer)
+	private function checkReferencedName(\PHP_CodeSniffer_File $phpcsFile, int $keywordPointer, int $nameStartPointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
 		$nameStartToken = $tokens[$nameStartPointer];
-		$endPointer = ReferencedNameHelper::findReferencedNameEndPointer($phpcsFile, $nameStartPointer);
+		$endPointer = ReferencedNameHelper::getReferencedNameEndPointer($phpcsFile, $nameStartPointer);
 		if ($nameStartToken['code'] !== T_NS_SEPARATOR) {
 			$name = TokenHelper::getContent($phpcsFile, $nameStartPointer, $endPointer);
 			$keyword = $tokens[$keywordPointer]['content'];
 			$phpcsFile->addError(sprintf(
-				'Type %s in %s statement should be referenced via a fully qualified name',
+				'Type %s in %s statement should be referenced via a fully qualified name.',
 				$name,
 				$keyword
 			), $keywordPointer, self::getErrorCode($keyword));
@@ -105,11 +96,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 		return $endPointer;
 	}
 
-	/**
-	 * @param string $keyword
-	 * @return string
-	 */
-	public static function getErrorCode($keyword)
+	public static function getErrorCode(string $keyword): string
 	{
 		return sprintf(self::CODE_NON_FULLY_QUALIFIED, ucfirst($keyword));
 	}

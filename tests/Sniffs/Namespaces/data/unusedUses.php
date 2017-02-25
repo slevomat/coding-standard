@@ -16,14 +16,12 @@ use const LoremIpsum\USED_CONSTANT;
 use X;
 use Lorem\FirstInterface;
 use Ipsum\SecondInterface;
+use Zetta\Rasmus;
 
 class TestClass implements FirstInterface, SecondInterface
 {
 
-	/**
-	 * @Assert\NotBlank(groups={X::SOME_CONSTANT}
-	 */
-	public function test(S $s)
+	public function test(S $s): Rasmus
 	{
 		new \Test\Foo\Bar();
 		$date = T::today();

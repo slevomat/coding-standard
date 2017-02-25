@@ -2,6 +2,7 @@
 
 [![Latest Stable Version](https://poser.pugx.org/slevomat/coding-standard/v/stable)](https://packagist.org/packages/slevomat/coding-standard)
 [![Build Status](https://travis-ci.org/slevomat/coding-standard.svg?branch=master)](https://travis-ci.org/slevomat/coding-standard)
+[![Build status](https://ci.appveyor.com/api/projects/status/8t8b3ph3u1slskah/branch/master?svg=true)](https://ci.appveyor.com/project/slevomat/coding-standard)
 [![Coverage Status](https://coveralls.io/repos/slevomat/coding-standard/badge.svg?branch=master&service=github)](https://coveralls.io/github/slevomat/coding-standard?branch=master)
 [![Downloads](https://img.shields.io/packagist/dt/slevomat/coding-standard.svg)](https://packagist.org/packages/slevomat/coding-standard)
 
@@ -319,3 +320,6 @@ vendor/bin/phing
 
 We are always looking forward for your bugreports, feature requests and pull requests. Thank you.
 
+## Code of Conduct
+
+This project adheres to a [Contributor Code of Conduct](https://github.com/slevomat/coding-standard/blob/master/CODE_OF_CONDUCT.md). By participating in this project and its community, you are expected to uphold this code.

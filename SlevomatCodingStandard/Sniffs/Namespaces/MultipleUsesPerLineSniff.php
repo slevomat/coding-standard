@@ -1,8 +1,7 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-use PHP_CodeSniffer_File;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
 class MultipleUsesPerLineSniff implements \PHP_CodeSniffer_Sniff
@@ -11,9 +10,9 @@ class MultipleUsesPerLineSniff implements \PHP_CodeSniffer_Sniff
 	const CODE_MULTIPLE_USES_PER_LINE = 'MultipleUsesPerLine';
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_USE,
@@ -21,10 +20,12 @@ class MultipleUsesPerLineSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $usePointer
+	 * @param int $usePointer
+	 * @return int|null
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $usePointer)
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $usePointer)
 	{
 		if (
 			UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer)
@@ -38,7 +39,7 @@ class MultipleUsesPerLineSniff implements \PHP_CodeSniffer_Sniff
 
 		if ($commaPointer !== false) {
 			$phpcsFile->addError(
-				'Multiple used types per use statement are forbidden',
+				'Multiple used types per use statement are forbidden.',
 				$commaPointer,
 				self::CODE_MULTIPLE_USES_PER_LINE
 			);

@@ -1,19 +1,16 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 class FullyQualifiedClassNameAfterKeywordSniffImplementsTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	/**
-	 * @return string
-	 */
-	protected function getSniffClassName()
+	protected function getSniffClassName(): string
 	{
 		return FullyQualifiedClassNameAfterKeywordSniff::class;
 	}
 
-	private function getFileReport()
+	private function getFileReport(): \PHP_CodeSniffer_File
 	{
 		return $this->checkFile(
 			__DIR__ . '/data/fullyQualifiedImplements.php',

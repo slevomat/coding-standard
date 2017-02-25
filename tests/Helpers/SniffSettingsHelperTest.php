@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Helpers;
 
-class SniffSettingsHelperTest extends \PHPUnit_Framework_TestCase
+class SniffSettingsHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
 	public function testNormalizeArray()
@@ -17,6 +17,41 @@ class SniffSettingsHelperTest extends \PHPUnit_Framework_TestCase
 			' Foo\Bar\BazException  ',
 			'',
 			'  ',
+		]));
+	}
+
+	public function testNormalizeAssociativeArray()
+	{
+		$this->assertSame([
+			'app/ui' => 'Slevomat\UI',
+			'app' => 'Slevomat',
+			'build/SlevomatSniffs/Sniffs' => 'SlevomatSniffs\Sniffs',
+			'tests/ui' => 'Slevomat\UI',
+			'tests' => 'Slevomat',
+		], SniffSettingsHelper::normalizeAssociativeArray([
+			'    ' => '   ',
+			'app/ui' => 'Slevomat\UI',
+			'  ' => '  ',
+			'app' => 'Slevomat',
+			'  ' => '  ',
+			'build/SlevomatSniffs/Sniffs' => 'SlevomatSniffs\Sniffs',
+			'  ' => '  ',
+			'tests/ui' => 'Slevomat\UI',
+			'  ' => '  ',
+			'tests' => 'Slevomat',
+			'  ' => '  ',
+		]));
+	}
+
+	public function testNormalizeAssociativeArrayWithIntegerKeys()
+	{
+		$this->assertSame([
+			'app/ui' => 'Slevomat\UI',
+			'app' => 'Slevomat',
+		], SniffSettingsHelper::normalizeAssociativeArray([
+			'app/ui' => 'Slevomat\UI',
+			'app' => 'Slevomat',
+			0 => '  ',
 		]));
 	}
 

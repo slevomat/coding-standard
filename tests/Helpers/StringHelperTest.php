@@ -1,11 +1,14 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Helpers;
 
-class StringHelperTest extends \PHPUnit_Framework_TestCase
+class StringHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
-	public function dataStartsWith()
+	/**
+	 * @return string[][]
+	 */
+	public function dataStartsWith(): array
 	{
 		return [
 			[
@@ -28,12 +31,15 @@ class StringHelperTest extends \PHPUnit_Framework_TestCase
 	 * @param string $haystack
 	 * @param string $needle
 	 */
-	public function testStartsWith($haystack, $needle)
+	public function testStartsWith(string $haystack, string $needle)
 	{
 		$this->assertTrue(StringHelper::startsWith($haystack, $needle));
 	}
 
-	public function dataNotStartsWith()
+	/**
+	 * @return string[][]
+	 */
+	public function dataNotStartsWith(): array
 	{
 		return [
 			[
@@ -60,12 +66,15 @@ class StringHelperTest extends \PHPUnit_Framework_TestCase
 	 * @param string $haystack
 	 * @param string $needle
 	 */
-	public function testNotStartsWith($haystack, $needle)
+	public function testNotStartsWith(string $haystack, string $needle)
 	{
 		$this->assertFalse(StringHelper::startsWith($haystack, $needle));
 	}
 
-	public function dataEndsWith()
+	/**
+	 * @return string[][]
+	 */
+	public function dataEndsWith(): array
 	{
 		return [
 			[
@@ -88,12 +97,15 @@ class StringHelperTest extends \PHPUnit_Framework_TestCase
 	 * @param string $haystack
 	 * @param string $needle
 	 */
-	public function testEndsWith($haystack, $needle)
+	public function testEndsWith(string $haystack, string $needle)
 	{
 		$this->assertTrue(StringHelper::endsWith($haystack, $needle));
 	}
 
-	public function dataNotEndsWith()
+	/**
+	 * @return string[][]
+	 */
+	public function dataNotEndsWith(): array
 	{
 		return [
 			[
@@ -120,7 +132,7 @@ class StringHelperTest extends \PHPUnit_Framework_TestCase
 	 * @param string $haystack
 	 * @param string $needle
 	 */
-	public function testNotEndsWith($haystack, $needle)
+	public function testNotEndsWith(string $haystack, string $needle)
 	{
 		$this->assertFalse(StringHelper::endsWith($haystack, $needle));
 	}

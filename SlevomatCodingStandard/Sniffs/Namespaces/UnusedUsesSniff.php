@@ -1,8 +1,7 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-use PHP_CodeSniffer_File;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
@@ -14,13 +13,13 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 	const CODE_UNUSED_USE = 'UnusedUse';
 	const CODE_MISMATCHING_CASE = 'MismatchingCaseSensitivity';
 
-	/** @var boolean */
+	/** @var bool */
 	public $searchAnnotations = false;
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_OPEN_TAG,
@@ -28,17 +27,18 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $openTagPointer
+	 * @param int $openTagPointer
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
 		$unusedNames = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
 
 		foreach ($referencedNames as $referencedName) {
 			$name = $referencedName->getNameAsReferencedInFile();
-			$pointer = $referencedName->getPointer();
+			$pointer = $referencedName->getStartPointer();
 			$nameParts = NamespaceHelper::getNameParts($name);
 			$nameAsReferencedInFile = $nameParts[0];
 			$normalizedNameAsReferencedInFile = UseStatement::normalizedNameAsReferencedInFile($nameAsReferencedInFile);
@@ -51,7 +51,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 				}
 				if ($unusedNames[$normalizedNameAsReferencedInFile]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
 					$phpcsFile->addError(sprintf(
-						'Case of reference name %s and use statement %s do not match',
+						'Case of reference name %s and use statement %s do not match.',
 						$nameAsReferencedInFile,
 						$unusedNames[$normalizedNameAsReferencedInFile]->getNameAsReferencedInFile()
 					), $pointer, self::CODE_MISMATCHING_CASE);
@@ -70,11 +70,11 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 				}
 
 				foreach ($unusedNames as $i => $useStatement) {
-					if (strpos($tokens[$phpDocTokenPointer]['content'], $useStatement->getNameAsReferencedInFile()) === false) {
-						continue;
+					if ($tokens[$phpDocTokenPointer]['code'] === T_DOC_COMMENT_TAG && preg_match('~^@' . preg_quote($useStatement->getNameAsReferencedInFile(), '~') . '(?:[^a-z\\d]|$)~i', $tokens[$phpDocTokenPointer]['content'])) {
+						unset($unusedNames[$i]);
+					} elseif ($tokens[$phpDocTokenPointer]['code'] === T_DOC_COMMENT_STRING && preg_match('~(?:^|[^a-z\\d\\\\])' . preg_quote($useStatement->getNameAsReferencedInFile(), '~') . '(?:[^a-z\\d\\\\]|$)~i', $tokens[$phpDocTokenPointer]['content'])) {
+						unset($unusedNames[$i]);
 					}
-
-					unset($unusedNames[$i]);
 				}
 
 				$searchAnnotationsPointer = $phpDocTokenPointer + 1;
@@ -83,13 +83,11 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 
 		foreach ($unusedNames as $value) {
 			$fullName = $value->getFullyQualifiedTypeName();
-			if ($value->getNameAsReferencedInFile() !== $fullName) {
-				if ($value->getNameAsReferencedInFile() !== NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($fullName)) {
-					$fullName .= sprintf(' (as %s)', $value->getNameAsReferencedInFile());
-				}
+			if ($value->getNameAsReferencedInFile() !== $fullName && $value->getNameAsReferencedInFile() !== NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($fullName)) {
+				$fullName .= sprintf(' (as %s)', $value->getNameAsReferencedInFile());
 			}
 			$fix = $phpcsFile->addFixableError(sprintf(
-				'Type %s is not used in this file',
+				'Type %s is not used in this file.',
 				$fullName
 			), $value->getPointer(), self::CODE_UNUSED_USE);
 			if ($fix) {

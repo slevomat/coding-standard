@@ -1,12 +1,21 @@
 language: php
-php:
-  - 5.6
-  - 7.0
-  - 7.1
+matrix:
+  include:
+    - php: 7.0
+      env: dependencies=lowest
+    - php: 7.0
+      env: dependencies=highest
+    - php: 7.1
+      env: dependencies=lowest
+    - php: 7.1
+      env: dependencies=highest
 before_script:
   - composer self-update
+  - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest -n; fi;
+  - if [ "$dependencies" = "highest" ]; then composer update -n; fi;
 script:
-  - composer install --ignore-platform-reqs
-  - vendor/bin/phing
+  - bin/phing
 after_script:
-  - php vendor/bin/coveralls -v
+  - php bin/coveralls -v
+notifications:
+  email: false

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Helpers;
 
@@ -12,61 +12,49 @@ class ReferencedName
 	/** @var string */
 	private $nameAsReferencedInFile;
 
-	/** @var integer */
-	private $pointer;
+	/** @var int */
+	private $startPointer;
+
+	/** @var int */
+	private $endPointer;
 
 	/** @var string */
 	private $type;
 
-	/**
-	 * @param string $nameAsReferencedInFile
-	 * @param integer $pointer
-	 * @param string $type
-	 */
-	public function __construct($nameAsReferencedInFile, $pointer, $type)
+	public function __construct(string $nameAsReferencedInFile, int $startPointer, int $endPointer, string $type)
 	{
 		$this->nameAsReferencedInFile = $nameAsReferencedInFile;
-		$this->pointer = $pointer;
+		$this->startPointer = $startPointer;
+		$this->endPointer = $endPointer;
 		$this->type = $type;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getNameAsReferencedInFile()
+	public function getNameAsReferencedInFile(): string
 	{
 		return $this->nameAsReferencedInFile;
 	}
 
-	/**
-	 * @return integer
-	 */
-	public function getPointer()
+	public function getStartPointer(): int
 	{
-		return $this->pointer;
+		return $this->startPointer;
 	}
 
-	/**
-	 * @return boolean
-	 */
-	public function isConstant()
+	public function getEndPointer(): int
+	{
+		return $this->endPointer;
+	}
+
+	public function isConstant(): bool
 	{
 		return $this->type === self::TYPE_CONSTANT;
 	}
 
-	/**
-	 * @return boolean
-	 */
-	public function isFunction()
+	public function isFunction(): bool
 	{
 		return $this->type === self::TYPE_FUNCTION;
 	}
 
-	/**
-	 * @param \SlevomatCodingStandard\Helpers\UseStatement $useStatement
-	 * @return boolean
-	 */
-	public function hasSameUseStatementType(UseStatement $useStatement)
+	public function hasSameUseStatementType(UseStatement $useStatement): bool
 	{
 		return $this->isConstant() === $useStatement->isConstant()
 			&& $this->isFunction() === $useStatement->isFunction();

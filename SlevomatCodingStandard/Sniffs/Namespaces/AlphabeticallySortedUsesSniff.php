@@ -1,8 +1,7 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-use PHP_CodeSniffer_File;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
@@ -16,9 +15,9 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 	private $lastUse;
 
 	/**
-	 * @return integer[]
+	 * @return int[]
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_OPEN_TAG,
@@ -26,10 +25,11 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $openTagPointer
+	 * @param int $openTagPointer
 	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
+	public function process(\PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
 	{
 		$this->lastUse = null;
 		$useStatements = UseStatementHelper::getUseStatements(
@@ -43,7 +43,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 				$order = $this->compareUseStatements($useStatement, $this->lastUse);
 				if ($order < 0) {
 					$fix = $phpcsFile->addFixableError(
-						sprintf('Use statements are incorrectly ordered. The first wrong one is %s', $useStatement->getFullyQualifiedTypeName()),
+						sprintf('Use statements are incorrectly ordered. The first wrong one is %s.', $useStatement->getFullyQualifiedTypeName()),
 						$useStatement->getPointer(),
 						self::CODE_INCORRECT_ORDER
 					);
@@ -64,7 +64,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
 	 */
 	private function fixAlphabeticalOrder(
-		PHP_CodeSniffer_File $phpcsFile,
+		\PHP_CodeSniffer_File $phpcsFile,
 		array $useStatements
 	)
 	{
@@ -80,7 +80,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 			return $this->compareUseStatements($a, $b);
 		});
 
-		$phpcsFile->fixer->addContent($firstUseStatement->getPointer(), implode(PHP_EOL, array_map(function (UseStatement $useStatement) {
+		$phpcsFile->fixer->addContent($firstUseStatement->getPointer(), implode($phpcsFile->eolChar, array_map(function (UseStatement $useStatement): string {
 			$unqualifiedName = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($useStatement->getFullyQualifiedTypeName());
 			if ($unqualifiedName === $useStatement->getNameAsReferencedInFile()) {
 				return sprintf('use %s;', $useStatement->getFullyQualifiedTypeName());
@@ -91,12 +91,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
-	/**
-	 * @param \SlevomatCodingStandard\Helpers\UseStatement $a
-	 * @param \SlevomatCodingStandard\Helpers\UseStatement $b
-	 * @return integer
-	 */
-	private function compareUseStatements(UseStatement $a, UseStatement $b)
+	private function compareUseStatements(UseStatement $a, UseStatement $b): int
 	{
 		if (!$a->hasSameType($b)) {
 			return $a->compareByType($b);
@@ -128,11 +123,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 		return strnatcasecmp(substr($aName, $i), substr($bName, $i));
 	}
 
-	/**
-	 * @param string $character String of length 1
-	 * @return boolean
-	 */
-	private function isSpecialCharacter($character)
+	private function isSpecialCharacter(string $character): bool
 	{
 		return in_array($character, ['\\', '_'], true);
 	}

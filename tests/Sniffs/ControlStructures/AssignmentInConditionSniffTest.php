@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
@@ -11,7 +11,10 @@ class AssignmentInConditionSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertNoSniffErrorInFile($resultFile);
 	}
 
-	public function dataIncorrectFile()
+	/**
+	 * @return int[][]
+	 */
+	public function dataIncorrectFile(): array
 	{
 		$lineNumbers = [];
 		foreach (range(3, 6) as $lineNumber) {
@@ -23,9 +26,9 @@ class AssignmentInConditionSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 
 	/**
 	 * @dataProvider dataIncorrectFile
-	 * @param integer $lineNumber
+	 * @param int $lineNumber
 	 */
-	public function testIncorrectFile($lineNumber)
+	public function testIncorrectFile(int $lineNumber)
 	{
 		$resultFile = $this->checkFile(__DIR__ . '/data/allAssignmentsInConditions.php');
 		$this->assertSniffError($resultFile, $lineNumber, AssignmentInConditionSniff::CODE_ASSIGNMENT_IN_CONDITION);

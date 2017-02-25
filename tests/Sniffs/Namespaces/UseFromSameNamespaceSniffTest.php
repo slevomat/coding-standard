@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 class UseFromSameNamespaceSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	private function getFileReport()
+	private function getFileReport(): \PHP_CodeSniffer_File
 	{
 		return $this->checkFile(__DIR__ . '/data/useFromSameNamespace.php');
 	}
@@ -53,6 +53,12 @@ class UseFromSameNamespaceSniffTest extends \SlevomatCodingStandard\Sniffs\TestC
 			'Bar\Baz\Test'
 		);
 		$this->assertNoSniffError($report, 19);
+	}
+
+	public function testFixableUseFromSameNamespace()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableUseFromSameNamespace.php', [], [UseFromSameNamespaceSniff::CODE_USE_FROM_SAME_NAMESPACE]);
+		$this->assertAllFixedInFile($report);
 	}
 
 }

@@ -1,58 +1,97 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\Files;
 
-class FilepathNamespaceExtractorTest extends \PHPUnit_Framework_TestCase
+class FilepathNamespaceExtractorTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function dataGetTypeNameFromProjectPath()
+	/**
+	 * @return mixed[][]
+	 */
+	public function dataGetTypeNameFromProjectPath(): array
 	{
 		$root = '/Users/www/slevomat';
 
 		return [
 			[
+				'unknown.php',
+				null,
+				['php'],
+			],
+			[
 				$root . '/unknown',
 				null,
+				['php'],
 			],
 			[
 				$root . '/app',
 				null,
+				['php'],
 			],
 			[
 				$root . '/app/components',
 				null,
+				['php'],
 			],
 			[
 				$root . '/app/components.php',
 				'Slevomat\\components',
+				['php'],
 			],
 			[
 				$root . '/app/Foo/Foo.swift',
 				null,
+				['php'],
 			],
 			[
 				$root . '/app/Foo/Foo.php',
 				'Slevomat\\Foo\\Foo',
+				['php'],
 			],
 			[
 				$root . '/tests/UnitTestCase.php',
 				'Slevomat\\UnitTestCase',
+				['php'],
 			],
 			[
 				$root . '/app/model/Auth/DatabaseAuthenticator.php',
 				'Slevomat\\Auth\\DatabaseAuthenticator',
+				['php'],
 			],
 			[
 				$root . '/app/services/Delivery/Premise/AbstractPremiseImporter.php',
 				'Slevomat\\Delivery\\Premise\\AbstractPremiseImporter',
+				['php'],
 			],
 			[
 				$root . '/app/ui/Admin/Newsletter/CreatePresenter.php',
 				'Slevomat\\UI\\Admin\\Newsletter\\CreatePresenter',
+				['php'],
 			],
 			[
 				$root . '/tests/services/Delivery/Goods3rd/data/StatusEnum.php',
 				'Slevomat\\Delivery\\Goods3rd\\StatusEnum',
+				['php'],
+			],
+			[
+				$root . '/tests/services/Delivery/Goods3rd/data/StatusEnum.PHP',
+				'Slevomat\\Delivery\\Goods3rd\\StatusEnum',
+				['php'],
+			],
+			[
+				$root . '/tests/services/Delivery/Goods3rd/data/StatusEnum.php',
+				'Slevomat\\Delivery\\Goods3rd\\StatusEnum',
+				['PHP'],
+			],
+			[
+				$root . '/tests/services/Delivery/Goods3rd/data/StatusEnum.php',
+				'Slevomat\\Delivery\\Goods3rd\\StatusEnum',
+				['php', 'lsp'],
+			],
+			[
+				$root . '/app/Foo/FooTest.phpt',
+				'Slevomat\\Foo\\FooTest',
+				['php', 'phpt'],
 			],
 		];
 	}
@@ -60,9 +99,10 @@ class FilepathNamespaceExtractorTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @dataProvider dataGetTypeNameFromProjectPath
 	 * @param string $path
-	 * @param string $expectedNamespace
+	 * @param string|null $expectedNamespace
+	 * @param string[] $extensions
 	 */
-	public function testGetTypeNameFromProjectPath($path, $expectedNamespace)
+	public function testGetTypeNameFromProjectPath(string $path, string $expectedNamespace = null, array $extensions)
 	{
 		$extractor = new FilepathNamespaceExtractor(
 			[
@@ -70,7 +110,8 @@ class FilepathNamespaceExtractorTest extends \PHPUnit_Framework_TestCase
 				'app' => 'Slevomat',
 				'tests' => 'Slevomat',
 			],
-			['components', 'forms', 'model', 'models', 'services', 'stubs', 'data']
+			['components', 'forms', 'model', 'models', 'services', 'stubs', 'data'],
+			$extensions
 		);
 		$path = str_replace('/', DIRECTORY_SEPARATOR, $path);
 		$this->assertSame($expectedNamespace, $extractor->getTypeNameFromProjectPath($path));

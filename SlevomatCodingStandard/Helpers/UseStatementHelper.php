@@ -1,18 +1,11 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Helpers;
-
-use PHP_CodeSniffer_File;
 
 class UseStatementHelper
 {
 
-	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $usePointer
-	 * @return boolean
-	 */
-	public static function isAnonymousFunctionUse(PHP_CodeSniffer_File $phpcsFile, $usePointer)
+	public static function isAnonymousFunctionUse(\PHP_CodeSniffer_File $phpcsFile, int $usePointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
@@ -21,12 +14,7 @@ class UseStatementHelper
 		return $nextToken['code'] === T_OPEN_PARENTHESIS;
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $usePointer
-	 * @return boolean
-	 */
-	public static function isTraitUse(PHP_CodeSniffer_File $phpcsFile, $usePointer)
+	public static function isTraitUse(\PHP_CodeSniffer_File $phpcsFile, int $usePointer): bool
 	{
 		$typePointer = $phpcsFile->findPrevious(TokenHelper::$typeKeywordTokenCodes, $usePointer);
 		if ($typePointer !== false) {
@@ -41,12 +29,7 @@ class UseStatementHelper
 		return false;
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $usePointer
-	 * @return string
-	 */
-	public static function getNameAsReferencedInClassFromUse(PHP_CodeSniffer_File $phpcsFile, $usePointer)
+	public static function getNameAsReferencedInClassFromUse(\PHP_CodeSniffer_File $phpcsFile, int $usePointer): string
 	{
 		$endPointer = $phpcsFile->findNext([T_SEMICOLON, T_COMMA], $usePointer + 1);
 		$asPointer = $phpcsFile->findNext(T_AS, $usePointer + 1, $endPointer);
@@ -59,22 +42,16 @@ class UseStatementHelper
 		return NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name);
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $usePointer
-	 * @return string
-	 */
-	public static function getFullyQualifiedTypeNameFromUse(PHP_CodeSniffer_File $phpcsFile, $usePointer)
+	public static function getFullyQualifiedTypeNameFromUse(\PHP_CodeSniffer_File $phpcsFile, int $usePointer): string
 	{
-		$nameEndPointer = $phpcsFile->findNext([T_SEMICOLON, T_AS, T_COMMA], $usePointer + 1);
 		$tokens = $phpcsFile->getTokens();
-		if ($tokens[$nameEndPointer - 1]['code'] === T_WHITESPACE) {
-			$nameEndPointer = TokenHelper::findPreviousExcluding($phpcsFile, [T_WHITESPACE], $nameEndPointer - 1) + 1;
+
+		$nameEndPointer = $phpcsFile->findNext([T_SEMICOLON, T_AS, T_COMMA], $usePointer + 1) - 1;
+		if (in_array($tokens[$nameEndPointer]['code'], TokenHelper::$ineffectiveTokenCodes, true)) {
+			$nameEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $nameEndPointer);
 		}
-		$nameStartPointer = $phpcsFile->findNext(TokenHelper::$nameTokenCodes, $usePointer + 1, $nameEndPointer);
-		if (in_array($tokens[$nameStartPointer]['content'], ['const', 'function'], true)) {
-			$nameStartPointer = $phpcsFile->findNext(TokenHelper::$nameTokenCodes, $nameStartPointer + 1, $nameEndPointer);
-		}
+		$nameStartPointer = TokenHelper::findPreviousExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $nameEndPointer - 1) + 1;
+
 		$name = TokenHelper::getContent($phpcsFile, $nameStartPointer, $nameEndPointer);
 
 		return NamespaceHelper::normalizeToCanonicalName($name);
@@ -82,10 +59,10 @@ class UseStatementHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $openTagPointer
+	 * @param int $openTagPointer
 	 * @return \SlevomatCodingStandard\Helpers\UseStatement[] canonicalName(string) => useStatement(\SlevomatCodingStandard\Helpers\UseStatement)
 	 */
-	public static function getUseStatements(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
+	public static function getUseStatements(\PHP_CodeSniffer_File $phpcsFile, int $openTagPointer): array
 	{
 		$names = [];
 		$tokens = $phpcsFile->getTokens();
@@ -116,10 +93,10 @@ class UseStatementHelper
 	 * Searches for all use statements in a file, skips bodies of classes and traits.
 	 *
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param integer $openTagPointer
-	 * @return integer[]
+	 * @param int $openTagPointer
+	 * @return int[]
 	 */
-	private static function getUseStatementPointers(PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
+	private static function getUseStatementPointers(\PHP_CodeSniffer_File $phpcsFile, int $openTagPointer): array
 	{
 		$tokens = $phpcsFile->getTokens();
 		$pointer = $openTagPointer + 1;

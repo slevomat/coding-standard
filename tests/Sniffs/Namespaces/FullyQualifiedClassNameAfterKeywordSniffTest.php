@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
@@ -26,7 +26,7 @@ class FullyQualifiedClassNameAfterKeywordSniffTest extends \SlevomatCodingStanda
 			$this->fail();
 		} catch (\SlevomatCodingStandard\Sniffs\Namespaces\NoKeywordsException $e) {
 			$this->assertSame('Sniff SlevomatCodingStandard\Sniffs\Namespaces\FullyQualifiedClassNameAfterKeywordSniff requires an array of keywords set in property keywordsToCheck', $e->getMessage());
-			$this->assertSame('SlevomatCodingStandard\Sniffs\Namespaces\FullyQualifiedClassNameAfterKeywordSniff', $e->getSniffClassName());
+			$this->assertSame(FullyQualifiedClassNameAfterKeywordSniff::class, $e->getSniffClassName());
 			$this->assertSame('keywordsToCheck', $e->getPropertyName());
 		}
 	}

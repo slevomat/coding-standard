@@ -24,11 +24,11 @@ class FooClass extends \ExtendedClass implements \ImplementedInterface, \SecondI
 	private $barz;
 
 	/**
-	 * @param TypehintedName $foo
-	 * @param AnotherTypehintedName[] $bar
-	 * @return Returned_Typehinted_Underscored_Name
+	 * @param TypeHintedName $foo
+	 * @param AnotherTypeHintedName[] $bar
+	 * @return Returned_TypeHinted_Underscored_Name
 	 */
-	public function fooMethod(TypehintedName $foo, array $bar)
+	public function fooMethod(TypeHintedName $foo, array $bar)
 	{
 		try {
 			$var = new ClassInstance();
@@ -43,10 +43,22 @@ class FooClass extends \ExtendedClass implements \ImplementedInterface, \SecondI
 		$baz = BAZ_CONSTANT;
 		$lorem = new LoremClass;
 		$ipsum = IpsumClass::IPSUM_CONSTANT;
+
+		$array = [Hoo::HOO_CONSTANT, BAR_CONSTANT];
+
+		new Integer();
+		new Boolean();
 	}
 
 }
 
 interface FooInterface extends \ExtendedInterface, \SecondExtendedInterface, \ThirdExtendedInterface
 {
+}
+
+trait FooTrait
+{
+
+	use SomeTrait;
+
 }
