@@ -1,10 +1,10 @@
 # Slevomat Coding Standard
 
-[![Latest Stable Version](https://poser.pugx.org/slevomat/coding-standard/v/stable)](https://packagist.org/packages/slevomat/coding-standard)
-[![Build Status](https://travis-ci.org/slevomat/coding-standard.svg?branch=master)](https://travis-ci.org/slevomat/coding-standard)
-[![Build status](https://ci.appveyor.com/api/projects/status/8t8b3ph3u1slskah/branch/master?svg=true)](https://ci.appveyor.com/project/slevomat/coding-standard)
-[![Coverage Status](https://coveralls.io/repos/slevomat/coding-standard/badge.svg?branch=master&service=github)](https://coveralls.io/github/slevomat/coding-standard?branch=master)
-[![Downloads](https://img.shields.io/packagist/dt/slevomat/coding-standard.svg)](https://packagist.org/packages/slevomat/coding-standard)
+[![Latest version](https://img.shields.io/packagist/v/slevomat/coding-standard.svg?style=flat-square&colorB=007EC6)](https://packagist.org/packages/slevomat/coding-standard)
+[![Downloads](https://img.shields.io/packagist/dt/slevomat/coding-standard.svg?style=flat-square&colorB=007EC6)](https://packagist.org/packages/slevomat/coding-standard)
+[![Travis build status](https://img.shields.io/travis/slevomat/coding-standard/master.svg?label=travis&style=flat-square)](https://travis-ci.org/slevomat/coding-standard)
+[![AppVeyor build status](https://img.shields.io/appveyor/ci/slevomat/coding-standard/master.svg?label=appveyor&style=flat-square)](https://ci.appveyor.com/project/slevomat/coding-standard)
+[![Code coverage](https://img.shields.io/coveralls/slevomat/coding-standard/master.svg?style=flat-square)](https://coveralls.io/github/slevomat/coding-standard?branch=master)
 
 Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) extends [Consistence Coding Standard](https://github.com/consistence/coding-standard) by providing sniffs with additional checks.
 
