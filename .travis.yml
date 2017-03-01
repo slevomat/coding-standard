@@ -9,10 +9,13 @@ matrix:
       env: dependencies=lowest
     - php: 7.1
       env: dependencies=highest
+cache:
+  directories:
+    - $HOME/.composer/cache
 before_script:
   - composer self-update
-  - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest -n; fi;
-  - if [ "$dependencies" = "highest" ]; then composer update -n; fi;
+  - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest --prefer-dist --no-interaction --no-progress; fi;
+  - if [ "$dependencies" = "highest" ]; then composer update --prefer-dist --no-interaction --no-progress; fi;
 script:
   - bin/phing
 after_script:

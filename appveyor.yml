@@ -56,8 +56,8 @@ install:
 
   # Install dependencies
   - ps: cd $Env:project_directory
-  - IF %dependencies%==lowest composer update --prefer-lowest --prefer-stable --no-interaction --no-progress
-  - IF %dependencies%==highest composer update --prefer-stable --no-interaction --no-progress
+  - IF %dependencies%==lowest composer update --prefer-lowest --prefer-dist --no-interaction --no-progress
+  - IF %dependencies%==highest composer update --prefer-dist --no-interaction --no-progress
 
   # Apply patch to jakub-onderka/php-parallel-lint
   - ps: appveyor-retry appveyor DownloadFile https://github.com/slevomat/PHP-Parallel-Lint/commit/50e939edf81619be100186f9c6192d97decad173.diff -FileName php-parallel-lint.patch
