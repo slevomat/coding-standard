@@ -605,4 +605,23 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		$this->assertSniffError($report, 14, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
 	}
 
+	public function testCollidingClassNameExtendsAllowed()
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/collidingClassNameExtends.php',
+			['allowFullyQualifiedNameForCollidingClasses' => true]
+		);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
+	public function testCollidingClassNameExtendsDisabled()
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/collidingClassNameExtends.php',
+			['allowFullyQualifiedNameForCollidingClasses' => false]
+		);
+		$this->assertSame(1, $report->getErrorCount());
+		$this->assertSniffError($report, 5, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+	}
+
 }
