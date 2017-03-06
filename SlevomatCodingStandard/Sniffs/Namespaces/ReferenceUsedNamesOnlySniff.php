@@ -150,7 +150,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 
 			if ($this->allowFullyQualifiedNameForCollidingClasses) {
 				$unqualifiedClassName = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name);
-				if (isset($referencesIndex[$unqualifiedClassName]) || in_array($unqualifiedClassName, $definedClassesIndex ?? [], true)) {
+				if (isset($referencesIndex[$unqualifiedClassName]) || array_key_exists($unqualifiedClassName, $definedClassesIndex ?? [])) {
 					continue;
 				}
 			}
