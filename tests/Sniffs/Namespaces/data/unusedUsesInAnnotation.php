@@ -4,6 +4,7 @@ namespace Foo;
 
 use Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Foo\Bar;
 use X;
 use XX;
 
@@ -19,8 +20,14 @@ class Boo
 	public $id;
 
 	/**
+	 * @ORM\OneToMany(targetEntity=Bar::class, mappedBy="boo")
+	 * @var \Foo\Bar[]
+	 */
+	private $bars;
+
+	/**
 	 * @Assert
-	 * @Assert\NotBlank(groups={X::SOME_CONSTANT}
+	 * @Assert\NotBlank(groups={X::SOME_CONSTANT})
 	 */
 	public function foo()
 	{
