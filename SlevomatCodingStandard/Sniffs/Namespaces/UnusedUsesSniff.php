@@ -64,20 +64,22 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 			$tokens = $phpcsFile->getTokens();
 			$searchAnnotationsPointer = $openTagPointer + 1;
 			while (true) {
-				$phpDocTokenPointer = $phpcsFile->findNext([T_DOC_COMMENT_TAG, T_DOC_COMMENT_STRING], $searchAnnotationsPointer);
-				if ($phpDocTokenPointer === false) {
+				$docCommentPointer = $phpcsFile->findNext([T_DOC_COMMENT_TAG, T_DOC_COMMENT_STRING], $searchAnnotationsPointer);
+				if ($docCommentPointer === false) {
 					break;
 				}
 
 				foreach ($unusedNames as $i => $useStatement) {
-					if ($tokens[$phpDocTokenPointer]['code'] === T_DOC_COMMENT_TAG && preg_match('~^@' . preg_quote($useStatement->getNameAsReferencedInFile(), '~') . '(?:[^a-z\\d]|$)~i', $tokens[$phpDocTokenPointer]['content'])) {
-						unset($unusedNames[$i]);
-					} elseif ($tokens[$phpDocTokenPointer]['code'] === T_DOC_COMMENT_STRING && preg_match('~(?:^|[^a-z\\d\\\\])' . preg_quote($useStatement->getNameAsReferencedInFile(), '~') . '(?:[^a-z\\d\\\\]|$)~i', $tokens[$phpDocTokenPointer]['content'])) {
+					$nameAsReferencedInFile = $useStatement->getNameAsReferencedInFile();
+					if (
+						preg_match('~^@' . preg_quote($nameAsReferencedInFile, '~') . '(?=[^a-z\\d]|$)~i', $tokens[$docCommentPointer]['content'])
+						|| preg_match('~(?<=^|[^a-z\\d\\\\])' . preg_quote($nameAsReferencedInFile, '~') . '(?=[^a-z\\d\\\\]|$)~i', $tokens[$docCommentPointer]['content'])
+					) {
 						unset($unusedNames[$i]);
 					}
 				}
 
-				$searchAnnotationsPointer = $phpDocTokenPointer + 1;
+				$searchAnnotationsPointer = $docCommentPointer + 1;
 			}
 		}
 
