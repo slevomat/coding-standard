@@ -440,7 +440,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		foreach (FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer) as $parameterAnnotation) {
-			if (preg_match('~^\\S+\\s+(?:(?:\.{3}\\s*)?\$\\S+\\s+)?[^$]~', $parameterAnnotation->getContent())) {
+			if ($parameterAnnotation->getContent() !== null && preg_match('~^\\S+\\s+(?:(?:\.{3}\\s*)?\$\\S+\\s+)?[^$]~', $parameterAnnotation->getContent())) {
 				return;
 			}
 		}
@@ -694,6 +694,10 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		$parametersNames = FunctionHelper::getParametersNames($phpcsFile, $functionPointer);
 		$parametersTypeHintsDefinitions = [];
 		foreach (FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer) as $parameterAnnotationNo => $parameterAnnotation) {
+			if ($parameterAnnotation->getContent() === null) {
+				continue;
+			}
+
 			$parameterAnnotationParts = preg_split('~\\s+~', $parameterAnnotation->getContent(), 2);
 			$parameterTypeHintDefinition = $parameterAnnotationParts[0];
 			if (isset($parameterAnnotationParts[1]) && preg_match('~^(?:\.{3}\\s*)?(\$\\S+)~', $parameterAnnotationParts[1], $matches)) {

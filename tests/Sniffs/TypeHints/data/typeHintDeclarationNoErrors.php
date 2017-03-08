@@ -548,4 +548,10 @@ abstract class FooClass
 	{
 	}
 
+	/**
+	 * @param
+	 * @return
+	 */
+	abstract public function invalidAnnotations();
+
 }
