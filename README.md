@@ -487,13 +487,13 @@ To make this repository work on your machine, clone it and run these two command
 
 ```
 composer install
-vendor/bin/phing
+bin/phing
 ```
 
 After writing some code and editing or adding unit tests, run phing again to check that everything is OK:
 
 ```
-vendor/bin/phing
+bin/phing
 ```
 
 We are always looking forward for your bugreports, feature requests and pull requests. Thank you.
