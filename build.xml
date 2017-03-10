@@ -90,7 +90,7 @@
 		>
 			<arg value="analyse"/>
 			<arg value="-l"/>
-			<arg value="4"/>
+			<arg value="5"/>
 			<arg value="-c"/>
 			<arg path="phpstan.neon"/>
 			<arg path="SlevomatCodingStandard"/>

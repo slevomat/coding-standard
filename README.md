@@ -5,7 +5,7 @@
 [![Travis build status](https://img.shields.io/travis/slevomat/coding-standard/master.svg?label=travis&style=flat-square)](https://travis-ci.org/slevomat/coding-standard)
 [![AppVeyor build status](https://img.shields.io/appveyor/ci/slevomat/coding-standard/master.svg?label=appveyor&style=flat-square)](https://ci.appveyor.com/project/slevomat/coding-standard)
 [![Code coverage](https://img.shields.io/coveralls/slevomat/coding-standard/master.svg?style=flat-square)](https://coveralls.io/github/slevomat/coding-standard?branch=master)
-![PHPStan](https://img.shields.io/badge/style-level%204-brightgreen.svg?style=flat-square&label=phpstan)
+![PHPStan](https://img.shields.io/badge/style-level%205-brightgreen.svg?style=flat-square&label=phpstan)
 
 Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) extends [Consistence Coding Standard](https://github.com/consistence/coding-standard) by providing sniffs with additional checks.
 

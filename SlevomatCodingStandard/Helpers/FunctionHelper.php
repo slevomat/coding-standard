@@ -183,7 +183,7 @@ class FunctionHelper
 
 		$nullable = $nullableToken !== false && $tokens[$nullableToken]['code'] === T_NULLABLE;
 
-		$typeHint = null;
+		$typeHint = '';
 		$nextToken = $nullable ? $nullableToken : $colonToken;
 		do {
 			$nextToken = $isAbstract
@@ -196,7 +196,7 @@ class FunctionHelper
 			}
 		} while ($isTypeHint);
 
-		return $typeHint !== null ? new ReturnTypeHint($typeHint, $nullable) : null;
+		return $typeHint !== '' ? new ReturnTypeHint($typeHint, $nullable) : null;
 	}
 
 	public static function hasReturnTypeHint(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): bool
