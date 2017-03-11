@@ -93,8 +93,18 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 		$writeOnlyProperties = [];
 		$findUsagesStartTokenPointer = $classToken['scope_opener'] + 1;
 
-		while (($propertyAccessTokenPointer = $phpcsFile->findNext([T_VARIABLE, T_SELF, T_STATIC], $findUsagesStartTokenPointer, $classToken['scope_closer'])) !== false) {
+		while (($propertyAccessTokenPointer = $phpcsFile->findNext([T_VARIABLE, T_SELF, T_STATIC, T_DOUBLE_QUOTED_STRING], $findUsagesStartTokenPointer, $classToken['scope_closer'])) !== false) {
 			$propertyAccessToken = $tokens[$propertyAccessTokenPointer];
+			if ($propertyAccessToken['code'] === T_DOUBLE_QUOTED_STRING) {
+				$properitiesInString = $this->findPropertyReadsInsideString($propertyAccessToken['content']);
+				foreach ($properitiesInString as $propertyInString) {
+					if (isset($reportedProperties[$propertyInString])) {
+						unset($reportedProperties[$propertyInString]);
+					}
+				}
+				$findUsagesStartTokenPointer = $propertyAccessTokenPointer + 1;
+				continue;
+			}
 			if ($propertyAccessToken['content'] === '$this') {
 				$objectOperatorTokenPointer = TokenHelper::findNextEffective($phpcsFile, $propertyAccessTokenPointer + 1);
 				$objectOperatorToken = $tokens[$objectOperatorTokenPointer];
@@ -348,6 +358,35 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		return null;
+	}
+
+	/**
+	 * @param string $string
+	 * @return string[]
+	 */
+	private function findPropertyReadsInsideString(string $string): array
+	{
+		$tokens = token_get_all('<?php ' . $string);
+		$variableIndexes = array_filter(
+			$tokens,
+			function ($token, $index) use ($tokens): bool {
+				return is_array($token)
+					&& $token[0] === T_VARIABLE
+					&& $token[1] === '$this'
+					&& isset($tokens[$index + 1])
+					&& $tokens[$index + 1][0] === T_OBJECT_OPERATOR
+					&& isset($tokens[$index + 2])
+					&& $tokens[$index + 2][0] === T_STRING;
+			},
+			ARRAY_FILTER_USE_BOTH
+		);
+
+		return array_map(
+			function (int $index) use ($tokens): string {
+				return $tokens[$index + 2][1];
+			},
+			array_keys($variableIndexes)
+		);
 	}
 
 }

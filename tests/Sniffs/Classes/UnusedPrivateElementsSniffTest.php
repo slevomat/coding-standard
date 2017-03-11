@@ -101,4 +101,9 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		);
 	}
 
+	public function testClassWithPropertyReadInString()
+	{
+		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/classWithPropertyReadInString.php'));
+	}
+
 }
