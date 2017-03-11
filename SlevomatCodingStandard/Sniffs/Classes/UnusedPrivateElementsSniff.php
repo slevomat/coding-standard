@@ -93,9 +93,26 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 		$writeOnlyProperties = [];
 		$findUsagesStartTokenPointer = $classToken['scope_opener'] + 1;
 
-		while (($propertyAccessTokenPointer = $phpcsFile->findNext([T_VARIABLE, T_SELF, T_STATIC], $findUsagesStartTokenPointer, $classToken['scope_closer'])) !== false) {
+		while (($propertyAccessTokenPointer = $phpcsFile->findNext([T_VARIABLE, T_SELF, T_STATIC, T_DOUBLE_QUOTED_STRING], $findUsagesStartTokenPointer, $classToken['scope_closer'])) !== false) {
 			$propertyAccessToken = $tokens[$propertyAccessTokenPointer];
-			if ($propertyAccessToken['content'] === '$this') {
+			if ($propertyAccessToken['code'] === T_DOUBLE_QUOTED_STRING) {
+				if (preg_match_all('~(?<!\\\\)\$this->(.+?\b)(?!\()~', $propertyAccessToken['content'], $matches, PREG_PATTERN_ORDER)) {
+					foreach ($matches[1] as $propertyInString) {
+						if (isset($reportedProperties[$propertyInString])) {
+							unset($reportedProperties[$propertyInString]);
+						}
+					}
+				}
+				if (preg_match_all('~(?<=\{)\$this->(.+?\b)(?=\()~', $propertyAccessToken['content'], $matches, PREG_PATTERN_ORDER)) {
+					foreach ($matches[1] as $methodInString) {
+						if (isset($reportedMethods[$methodInString])) {
+							unset($reportedMethods[$methodInString]);
+						}
+					}
+				}
+
+				$findUsagesStartTokenPointer = $propertyAccessTokenPointer + 1;
+			} elseif ($propertyAccessToken['content'] === '$this') {
 				$objectOperatorTokenPointer = TokenHelper::findNextEffective($phpcsFile, $propertyAccessTokenPointer + 1);
 				$objectOperatorToken = $tokens[$objectOperatorTokenPointer];
 				if ($objectOperatorToken['code'] !== T_OBJECT_OPERATOR) {

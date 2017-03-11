@@ -101,4 +101,32 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		);
 	}
 
+	public function testClassWithPropertyUsedInString()
+	{
+		$resultFile = $this->checkFile(__DIR__ . '/data/classWithPropertyUsedInString.php');
+
+		$this->assertSame(1, $resultFile->getErrorCount());
+
+		$this->assertSniffError(
+			$resultFile,
+			8,
+			UnusedPrivateElementsSniff::CODE_WRITE_ONLY_PROPERTY,
+			'Class Foo contains write-only property $hoo.'
+		);
+	}
+
+	public function testClassWithMethodUsedInString()
+	{
+		$resultFile = $this->checkFile(__DIR__ . '/data/classWithMethodUsedInString.php');
+
+		$this->assertSame(1, $resultFile->getErrorCount());
+
+		$this->assertSniffError(
+			$resultFile,
+			10,
+			UnusedPrivateElementsSniff::CODE_UNUSED_METHOD,
+			'Class Foo contains unused private method foo().'
+		);
+	}
+
 }
