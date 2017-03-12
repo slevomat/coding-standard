@@ -103,7 +103,15 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 
 	public function testClassWithPropertyReadInString()
 	{
-		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/classWithPropertyReadInString.php'));
+		$resultFile = $this->checkFile(__DIR__ . '/data/classWithPropertyReadInString.php');
+
+		$this->assertNoSniffError($resultFile, 6);
+		$this->assertSniffError(
+			$resultFile,
+			7,
+			UnusedPrivateElementsSniff::CODE_WRITE_ONLY_PROPERTY,
+			'Class Foo contains write-only property $foo.'
+		);
 	}
 
 }

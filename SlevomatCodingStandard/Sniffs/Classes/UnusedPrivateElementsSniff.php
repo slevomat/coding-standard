@@ -376,7 +376,8 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 					&& isset($tokens[$index + 1])
 					&& $tokens[$index + 1][0] === T_OBJECT_OPERATOR
 					&& isset($tokens[$index + 2])
-					&& $tokens[$index + 2][0] === T_STRING;
+					&& $tokens[$index + 2][0] === T_STRING
+					&& (!isset($tokens[$index + 3]) || is_array($tokens[$index + 3]) || $tokens[$index + 3] !== '(');
 			},
 			ARRAY_FILTER_USE_BOTH
 		);
