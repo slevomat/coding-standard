@@ -26,7 +26,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_
 
 🔧 = [Automatic errors fixing](#fixing-errors-automatically)
 
-🚧 = Sniff check can be suppressed locally
+🚧 = [Sniff check can be suppressed locally](#suppressing-sniffs-locally)
 
 ### Functional - improving the safety and behaviour of code
 
