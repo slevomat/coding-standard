@@ -123,32 +123,19 @@ class FunctionHelper
 
 	public static function returnsValue(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): bool
 	{
-		return self::innerReturnsValue($codeSnifferFile, $functionPointer, false);
-	}
-
-	public static function returnsVoid(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer): bool
-	{
-		return self::innerReturnsValue($codeSnifferFile, $functionPointer, true);
-	}
-
-	private static function innerReturnsValue(\PHP_CodeSniffer_File $codeSnifferFile, int $functionPointer, bool $requireVoid): bool
-	{
 		$tokens = $codeSnifferFile->getTokens();
 
 		for ($i = $tokens[$functionPointer]['scope_opener'] + 1; $i < $tokens[$functionPointer]['scope_closer']; $i++) {
-			$nextEffectiveTokenCode = $tokens[TokenHelper::findNextEffective($codeSnifferFile, $i + 1)]['code'];
-			if ($requireVoid) {
-				$checkReturn = $nextEffectiveTokenCode === T_SEMICOLON;
-			} else {
-				$checkReturn = $nextEffectiveTokenCode !== T_SEMICOLON;
+			if ($tokens[$i]['code'] !== T_RETURN) {
+				continue;
 			}
-			if ($tokens[$i]['code'] === T_RETURN && $checkReturn) {
-				foreach (array_reverse($tokens[$i]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
-					if ($conditionTokenCode === T_CLOSURE || $conditionTokenCode === T_ANON_CLASS) {
-						continue 2;
-					} elseif ($conditionPointer === $functionPointer) {
-						return true;
-					}
+
+			foreach (array_reverse($tokens[$i]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
+				if ($conditionTokenCode === T_CLOSURE || $conditionTokenCode === T_ANON_CLASS) {
+					continue 2;
+				} elseif ($conditionPointer === $functionPointer) {
+					$nextEffectiveTokenPointer = TokenHelper::findNextEffective($codeSnifferFile, $i + 1);
+					return $tokens[$nextEffectiveTokenPointer]['code'] !== T_SEMICOLON;
 				}
 			}
 		}
