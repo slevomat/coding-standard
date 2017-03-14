@@ -125,18 +125,27 @@ class FunctionHelper
 	{
 		$tokens = $codeSnifferFile->getTokens();
 
-		for ($i = $tokens[$functionPointer]['scope_opener'] + 1; $i < $tokens[$functionPointer]['scope_closer']; $i++) {
-			if ($tokens[$i]['code'] !== T_RETURN) {
-				continue;
-			}
-
-			foreach (array_reverse($tokens[$i]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
+		$isInSameLevel = function (int $pointer) use ($functionPointer, $tokens): bool {
+			foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
 				if ($conditionTokenCode === T_CLOSURE || $conditionTokenCode === T_ANON_CLASS) {
-					continue 2;
+					return false;
 				} elseif ($conditionPointer === $functionPointer) {
-					$nextEffectiveTokenPointer = TokenHelper::findNextEffective($codeSnifferFile, $i + 1);
-					return $tokens[$nextEffectiveTokenPointer]['code'] !== T_SEMICOLON;
+					break;
 				}
+			}
+			return true;
+		};
+
+		for ($i = $tokens[$functionPointer]['scope_opener'] + 1; $i < $tokens[$functionPointer]['scope_closer']; $i++) {
+			if ($tokens[$i]['code'] === T_YIELD && $isInSameLevel($i)) {
+				return true;
+			}
+		}
+
+		for ($i = $tokens[$functionPointer]['scope_opener'] + 1; $i < $tokens[$functionPointer]['scope_closer']; $i++) {
+			if ($tokens[$i]['code'] === T_RETURN && $isInSameLevel($i)) {
+				$nextEffectiveTokenPointer = TokenHelper::findNextEffective($codeSnifferFile, $i + 1);
+				return $tokens[$nextEffectiveTokenPointer]['code'] !== T_SEMICOLON;
 			}
 		}
 
