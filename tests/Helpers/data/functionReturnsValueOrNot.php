@@ -23,6 +23,35 @@ class FooClass
 		}
 	}
 
+	public function returnsGenerator(): \Generator
+	{
+		yield [];
+	}
+
+	public function returnsGeneratorWithEarlyTermination(): \Generator
+	{
+		if (true) {
+			yield [];
+			return;
+		}
+
+		yield [];
+	}
+
+	public function returnsGeneratorWithVeryEarlyTermination()
+	{
+		return;
+
+		yield [];
+	}
+
+	public function generatorIsInClosure()
+	{
+		$x = function (): \Generator {
+			yield [];
+		};
+	}
+
 	public function noReturn()
 	{
 		// Nothing
