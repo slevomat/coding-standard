@@ -156,74 +156,74 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 			}
 
 			if (NamespaceHelper::isFullyQualifiedName($name)) {
+				if (!$this->isClassRequiredToBeUsed($name)) {
+					continue;
+				}
+
 				$isExceptionByName = StringHelper::endsWith($name, 'Exception')
 					|| $name === '\Throwable'
 					|| (StringHelper::endsWith($name, 'Error') && !NamespaceHelper::hasNamespace($name))
 					|| in_array($canonicalName, $this->getSpecialExceptionNames(), true);
 				$inIgnoredNames = in_array($canonicalName, $this->getIgnoredNames(), true);
-				if (
-					$this->isClassRequiredToBeUsed($name) &&
-					(
-						!$this->allowFullyQualifiedExceptions
-						|| !$isExceptionByName
-						|| $inIgnoredNames
-					)
-				) {
-					$previousKeywordPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(TokenHelper::$nameTokenCodes, [T_WHITESPACE, T_COMMA]), $nameStartPointer - 1);
-					if (!in_array($tokens[$previousKeywordPointer]['code'], $this->getFullyQualifiedKeywords(), true)) {
-						if (
-							!NamespaceHelper::hasNamespace($name)
-							&& NamespaceHelper::findCurrentNamespaceName($phpcsFile, $nameStartPointer) === null
-						) {
-							$fix = $phpcsFile->addFixableError(sprintf(
-								'Type %s should not be referenced via a fully qualified name, but via an unqualified name without the leading \\, because the file does not have a namespace and the type cannot be put in a use statement.',
-								$name
-							), $nameStartPointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE);
-							if ($fix) {
-								$phpcsFile->fixer->beginChangeset();
-								$phpcsFile->fixer->replaceToken($nameStartPointer, substr($tokens[$nameStartPointer]['content'], 1));
-								$phpcsFile->fixer->endChangeset();
+
+				if ($isExceptionByName && !$inIgnoredNames && $this->allowFullyQualifiedExceptions) {
+					continue;
+				}
+
+				$previousKeywordPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(TokenHelper::$nameTokenCodes, [T_WHITESPACE, T_COMMA]), $nameStartPointer - 1);
+				if (!in_array($tokens[$previousKeywordPointer]['code'], $this->getFullyQualifiedKeywords(), true)) {
+					if (
+						!NamespaceHelper::hasNamespace($name)
+						&& NamespaceHelper::findCurrentNamespaceName($phpcsFile, $nameStartPointer) === null
+					) {
+						$fix = $phpcsFile->addFixableError(sprintf(
+							'Type %s should not be referenced via a fully qualified name, but via an unqualified name without the leading \\, because the file does not have a namespace and the type cannot be put in a use statement.',
+							$name
+						), $nameStartPointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE);
+						if ($fix) {
+							$phpcsFile->fixer->beginChangeset();
+							$phpcsFile->fixer->replaceToken($nameStartPointer, substr($tokens[$nameStartPointer]['content'], 1));
+							$phpcsFile->fixer->endChangeset();
+						}
+					} else {
+						$fix = $phpcsFile->addFixableError(sprintf(
+							'Type %s should not be referenced via a fully qualified name, but via a use statement.',
+							$name
+						), $nameStartPointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+						if ($fix) {
+							$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
+							if (count($useStatements) === 0) {
+								$namespacePointer = $phpcsFile->findNext(T_NAMESPACE, $openTagPointer);
+								$useStatementPlacePointer = $phpcsFile->findNext([T_SEMICOLON, T_OPEN_CURLY_BRACKET], $namespacePointer + 1);
+							} else {
+								$lastUseStatement = array_values($useStatements)[count($useStatements) - 1];
+								$useStatementPlacePointer = $phpcsFile->findNext(T_SEMICOLON, $lastUseStatement->getPointer() + 1);
 							}
-						} else {
-							$fix = $phpcsFile->addFixableError(sprintf(
-								'Type %s should not be referenced via a fully qualified name, but via a use statement.',
-								$name
-							), $nameStartPointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
-							if ($fix) {
-								$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
-								if (count($useStatements) === 0) {
-									$namespacePointer = $phpcsFile->findNext(T_NAMESPACE, $openTagPointer);
-									$useStatementPlacePointer = $phpcsFile->findNext([T_SEMICOLON, T_OPEN_CURLY_BRACKET], $namespacePointer + 1);
-								} else {
-									$lastUseStatement = array_values($useStatements)[count($useStatements) - 1];
-									$useStatementPlacePointer = $phpcsFile->findNext(T_SEMICOLON, $lastUseStatement->getPointer() + 1);
-								}
 
-								$phpcsFile->fixer->beginChangeset();
+							$phpcsFile->fixer->beginChangeset();
 
-								for ($i = $referencedName->getStartPointer(); $i <= $referencedName->getEndPointer(); $i++) {
-									$phpcsFile->fixer->replaceToken($i, '');
-								}
-
-								$nameToReference = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name);
-								$alreadyUsed = false;
-								foreach ($useStatements as $useStatement) {
-									if ($useStatement->getFullyQualifiedTypeName() === $canonicalName) {
-										$nameToReference = $useStatement->getNameAsReferencedInFile();
-										$alreadyUsed = true;
-										break;
-									}
-								}
-
-								$phpcsFile->fixer->addContent($referencedName->getStartPointer(), $nameToReference);
-
-								if (!$alreadyUsed) {
-									$phpcsFile->fixer->addNewline($useStatementPlacePointer);
-									$phpcsFile->fixer->addContent($useStatementPlacePointer, sprintf('use %s;', $canonicalName));
-								}
-
-								$phpcsFile->fixer->endChangeset();
+							for ($i = $referencedName->getStartPointer(); $i <= $referencedName->getEndPointer(); $i++) {
+								$phpcsFile->fixer->replaceToken($i, '');
 							}
+
+							$nameToReference = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name);
+							$alreadyUsed = false;
+							foreach ($useStatements as $useStatement) {
+								if ($useStatement->getFullyQualifiedTypeName() === $canonicalName) {
+									$nameToReference = $useStatement->getNameAsReferencedInFile();
+									$alreadyUsed = true;
+									break;
+								}
+							}
+
+							$phpcsFile->fixer->addContent($referencedName->getStartPointer(), $nameToReference);
+
+							if (!$alreadyUsed) {
+								$phpcsFile->fixer->addNewline($useStatementPlacePointer);
+								$phpcsFile->fixer->addContent($useStatementPlacePointer, sprintf('use %s;', $canonicalName));
+							}
+
+							$phpcsFile->fixer->endChangeset();
 						}
 					}
 				}
