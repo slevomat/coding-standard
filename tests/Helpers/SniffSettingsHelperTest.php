@@ -5,6 +5,13 @@ namespace SlevomatCodingStandard\Helpers;
 class SniffSettingsHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
+	public function testNormalizeInteger()
+	{
+		$this->assertSame(2, SniffSettingsHelper::normalizeInteger(2));
+		$this->assertSame(2, SniffSettingsHelper::normalizeInteger('2'));
+		$this->assertSame(2, SniffSettingsHelper::normalizeInteger('  2  '));
+	}
+
 	public function testNormalizeArray()
 	{
 		$this->assertSame([

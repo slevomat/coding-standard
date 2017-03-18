@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 
 class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
@@ -98,7 +99,8 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		$strictTypesContent = TokenHelper::getContent($phpcsFile, $strictTypesPointer, $numberPointer);
-		$format = sprintf('strict_types%1$s=%1$s1', str_repeat(' ', $this->spacesCountAroundEqualsSign));
+		$spacesCountAroundEqualsSign = SniffSettingsHelper::normalizeInteger($this->spacesCountAroundEqualsSign);
+		$format = sprintf('strict_types%1$s=%1$s1', str_repeat(' ', $spacesCountAroundEqualsSign));
 		if ($strictTypesContent !== $format) {
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
@@ -120,7 +122,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		$openingWhitespace = substr($tokens[$openTagPointer]['content'], strlen('<?php'));
-		$newlinesCountBetweenOpenTagAndDeclare = (int) trim((string) $this->newlinesCountBetweenOpenTagAndDeclare);
+		$newlinesCountBetweenOpenTagAndDeclare = SniffSettingsHelper::normalizeInteger($this->newlinesCountBetweenOpenTagAndDeclare);
 		if ($newlinesCountBetweenOpenTagAndDeclare === 0) {
 			if ($openingWhitespace !== ' ') {
 				$fix = $phpcsFile->addFixableError(

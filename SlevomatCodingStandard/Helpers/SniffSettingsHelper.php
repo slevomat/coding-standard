@@ -6,6 +6,15 @@ class SniffSettingsHelper
 {
 
 	/**
+	 * @param string|int $settings
+	 * @return int
+	 */
+	public static function normalizeInteger($settings): int
+	{
+		return (int) trim((string) $settings);
+	}
+
+	/**
 	 * @param mixed[] $settings
 	 * @return mixed[]
 	 */
