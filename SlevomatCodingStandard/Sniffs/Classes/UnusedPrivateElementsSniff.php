@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\ClassHelper;
+use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
@@ -309,8 +310,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 				continue;
 			}
 
-			$namePointer = TokenHelper::findNextEffective($phpcsFile, $methodTokenPointer + 1);
-			$methodName = $tokens[$namePointer]['content'];
+			$methodName = FunctionHelper::getName($phpcsFile, $methodTokenPointer);
 
 			if ($methodName !== '__construct') {
 				$reportedMethods[$methodName] = $methodTokenPointer;

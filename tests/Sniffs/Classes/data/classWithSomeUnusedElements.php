@@ -93,4 +93,9 @@ class ClassWithSomeUnusedProperties extends \Consistence\Object
 		$this->writeOnlyPropertyWithSuppress = true;
 	}
 
+	private function &unusedMethodReturningReference()
+	{
+		return [];
+	}
+
 }

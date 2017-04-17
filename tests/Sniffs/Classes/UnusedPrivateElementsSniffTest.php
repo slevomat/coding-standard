@@ -64,6 +64,13 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertNoSniffError($resultFile, 81);
 		$this->assertNoSniffError($resultFile, 86);
 		$this->assertNoSniffError($resultFile, 91);
+
+		$this->assertSniffError(
+			$resultFile,
+			96,
+			UnusedPrivateElementsSniff::CODE_UNUSED_METHOD,
+			'Class ClassWithSomeUnusedProperties contains unused private method unusedMethodReturningReference().'
+		);
 	}
 
 	public function testOnlyPublicElements()
