@@ -554,4 +554,21 @@ abstract class FooClass
 	 */
 	abstract public function invalidAnnotations();
 
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableParameterTypeHintSpecification
+	 * @param string|array $a
+	 */
+	public function mixedContainingTraversable($a)
+	{
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableReturnTypeHintSpecification
+	 * @return string|array
+	 */
+	public function returnsMixedContainingTraversable()
+	{
+		return [];
+	}
+
 }

@@ -192,8 +192,20 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 					}
 				} elseif ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $parameterTypeHintDefinition)) {
 					$parameterTypeHintDefinitionParts = explode('|', $parameterTypeHintDefinition);
-					$possibleParameterTypeHint = $this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHintDefinitionParts[0])) ? $parameterTypeHintDefinitionParts[0] : $parameterTypeHintDefinitionParts[1];
 					$nullableParameterTypeHint = false;
+
+					if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHintDefinitionParts[0]))) {
+						$possibleParameterTypeHint = $parameterTypeHintDefinitionParts[0];
+						$itemsTypeHintDefinition = $parameterTypeHintDefinitionParts[1];
+					} else {
+						$possibleParameterTypeHint = $parameterTypeHintDefinitionParts[1];
+						$itemsTypeHintDefinition = $parameterTypeHintDefinitionParts[0];
+					}
+
+					if (!$this->definitionContainsTraversableTypeHintSpeficication($itemsTypeHintDefinition)) {
+						return;
+					}
+
 				} else {
 					return;
 				}
@@ -398,8 +410,20 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 				}
 			} elseif ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $returnTypeHintDefinition)) {
 				$returnTypeHintDefinitionParts = explode('|', $returnTypeHintDefinition);
-				$possibleReturnTypeHint = $this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHintDefinitionParts[0])) ? $returnTypeHintDefinitionParts[0] : $returnTypeHintDefinitionParts[1];
 				$nullableReturnTypeHint = false;
+
+				if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHintDefinitionParts[0]))) {
+					$possibleReturnTypeHint = $returnTypeHintDefinitionParts[0];
+					$itemsTypeHintDefinition = $returnTypeHintDefinitionParts[1];
+				} else {
+					$possibleReturnTypeHint = $returnTypeHintDefinitionParts[1];
+					$itemsTypeHintDefinition = $returnTypeHintDefinitionParts[0];
+				}
+
+				if (!$this->definitionContainsTraversableTypeHintSpeficication($itemsTypeHintDefinition)) {
+					return;
+				}
+
 			} else {
 				return;
 			}
