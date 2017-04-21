@@ -29,6 +29,9 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	/** @var bool */
 	public $allowFullyQualifiedExceptions = false;
 
+	/** @var bool */
+	public $allowFullyQualifiedGlobalClasses = false;
+
 	/** @var string[] */
 	public $specialExceptionNames = [];
 
@@ -185,7 +188,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 							$phpcsFile->fixer->replaceToken($nameStartPointer, substr($tokens[$nameStartPointer]['content'], 1));
 							$phpcsFile->fixer->endChangeset();
 						}
-					} else {
+					} elseif (!$this->allowFullyQualifiedGlobalClasses || NamespaceHelper::hasNamespace($name)) {
 						$fix = $phpcsFile->addFixableError(sprintf(
 							'Type %s should not be referenced via a fully qualified name, but via a use statement.',
 							$name

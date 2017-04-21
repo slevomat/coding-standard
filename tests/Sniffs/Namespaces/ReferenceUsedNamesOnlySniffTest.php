@@ -541,6 +541,17 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		$this->assertContains('Value for keyword token not found, constant "T_FOO" is not defined', $report->getErrors()[1][1][0]['message']);
 	}
 
+	public function testAllowingFullyQualifiedGlobalTypes()
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/fullyQualifiedGlobalClassesInNamespace.php',
+			[
+				'allowFullyQualifiedGlobalClasses' => true,
+			]
+		);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
 
 	public function testFixableReferenceViaFullyQualifiedName()
 	{
