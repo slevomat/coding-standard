@@ -9,15 +9,17 @@
 		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedELSEIF"/><!-- Allow empty elseif statements - usually with a comment -->
 	</rule>
 	<rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
-		<property name="forbiddenAnnotations" type="array" value="
-			@author,
-			@created,
-			@copyright,
-			@license,
-			@package,
-			@throws,
-			@version
-		"/>
+		<properties>
+			<property name="forbiddenAnnotations" type="array" value="
+				@author,
+				@created,
+				@copyright,
+				@license,
+				@package,
+				@throws,
+				@version
+			"/>
+		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly">
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Exceptions/ReferenceThrowableOnlySniff.php</exclude-pattern>
