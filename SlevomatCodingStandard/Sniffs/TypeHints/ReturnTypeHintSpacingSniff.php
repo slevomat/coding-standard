@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 
 class ReturnTypeHintSpacingSniff implements \PHP_CodeSniffer_Sniff
@@ -17,7 +18,12 @@ class ReturnTypeHintSpacingSniff implements \PHP_CodeSniffer_Sniff
 
 	const CODE_WHITESPACE_BEFORE_COLON = 'WhitespaceBeforeColon';
 
+	const CODE_INCORRECT_SPACES_BEFORE_COLON = 'IncorrectWhitespaceBeforeColon';
+
 	const CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL = 'WhitespaceAfterNullabilitySymbol';
+
+	/** @var int */
+	public $spacesCountBeforeColon = 0;
 
 	/**
 	 * @return int[]
@@ -87,11 +93,33 @@ class ReturnTypeHintSpacingSniff implements \PHP_CodeSniffer_Sniff
 			}
 		}
 
-		if ($tokens[$colonPointer - 1]['code'] !== T_CLOSE_PARENTHESIS) {
-			$fix = $phpcsFile->addFixableError('There must be no whitespace between closing parenthesis and return type colon.', $typeHintPointer, self::CODE_WHITESPACE_BEFORE_COLON);
+		$spacesCountBeforeColon = SniffSettingsHelper::normalizeInteger($this->spacesCountBeforeColon);
+		$expectedSpaces = str_repeat(' ', $spacesCountBeforeColon);
+
+		if ($tokens[$colonPointer - 1]['code'] !== T_CLOSE_PARENTHESIS && $tokens[$colonPointer - 1]['content'] !== $expectedSpaces) {
+			if ($spacesCountBeforeColon === 0) {
+				$fix = $phpcsFile->addFixableError('There must be no whitespace between closing parenthesis and return type colon.', $typeHintPointer, self::CODE_WHITESPACE_BEFORE_COLON);
+			} else {
+				$fix = $phpcsFile->addFixableError(
+					sprintf('There must be exactly %d whitespace%s between closing parenthesis and return type colon.', $spacesCountBeforeColon, $spacesCountBeforeColon !== 1 ? 's' : ''),
+					$typeHintPointer,
+					self::CODE_INCORRECT_SPACES_BEFORE_COLON
+				);
+			}
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->replaceToken($colonPointer - 1, '');
+				$phpcsFile->fixer->replaceToken($colonPointer - 1, $expectedSpaces);
+				$phpcsFile->fixer->endChangeset();
+			}
+		} elseif ($tokens[$colonPointer - 1]['code'] === T_CLOSE_PARENTHESIS && $spacesCountBeforeColon !== 0) {
+			$fix = $phpcsFile->addFixableError(
+				sprintf('There must be exactly %d whitespace%s between closing parenthesis and return type colon.', $spacesCountBeforeColon, $spacesCountBeforeColon !== 1 ? 's' : ''),
+				$typeHintPointer,
+				self::CODE_INCORRECT_SPACES_BEFORE_COLON
+			);
+			if ($fix) {
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->addContent($colonPointer - 1, $expectedSpaces);
 				$phpcsFile->fixer->endChangeset();
 			}
 		}

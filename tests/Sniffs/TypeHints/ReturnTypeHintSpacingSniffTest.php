@@ -327,6 +327,50 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError($report, 6, ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON);
 	}
 
+	public function testCorrectSpacingWithSpaceBeforeColon()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/returnTypeHintsCorrectSpaceBeforeColon.php', [
+			'spacesCountBeforeColon' => 1,
+		]);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
+	public function testIncorrectSpacingWithSpaceBeforeColon()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/returnTypeHintsIncorrectSpaceBeforeColon.php', [
+			'spacesCountBeforeColon' => 1,
+		]);
+
+		$this->assertSame(24, $report->getErrorCount());
+
+		$message = 'There must be exactly 1 whitespace between closing parenthesis and return type colon.';
+
+		$this->assertSniffError($report, 3, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 8, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 13, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 18, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 23, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 28, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 36, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 38, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 40, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 42, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 44, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 46, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 48, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 50, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 52, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 54, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 56, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 58, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 65, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 70, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 75, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 80, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 85, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		$this->assertSniffError($report, 90, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+	}
+
 	public function testFixableReturnTypeHintNoSpaceBetweenColonAndType()
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintNoSpaceBetweenColonAndType.php', [], [ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT]);
@@ -360,6 +404,16 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 	public function testFixableReturnTypeHintWhitespaceBeforeColon()
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintWhitespaceBeforeColon.php', [], [ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON]);
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableReturnTypeHintWhitespaceBeforeColonWithSpace()
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/fixableReturnTypeHintWhitespaceBeforeColonWithSpace.php',
+			['spacesCountBeforeColon' => 1],
+			[ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON]
+		);
 		$this->assertAllFixedInFile($report);
 	}
 
