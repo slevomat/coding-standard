@@ -246,7 +246,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 					$phpcsFile->fixer->addContentBefore($beforeParameterPointer, sprintf('%s%s ', ($nullableParameterTypeHint ? '?' : ''), $parameterTypeHint));
 				} else {
 					$phpcsFile->fixer->addContentBefore($beforeParameterPointer, sprintf('%s ', $parameterTypeHint));
-					if ($nullableParameterTypeHint) {
+					if ($nullableParameterTypeHint && $tokens[TokenHelper::findNextEffective($phpcsFile, $parameterPointer + 1)]['code'] !== T_EQUAL) {
 						$phpcsFile->fixer->addContent($parameterPointer, ' = null');
 					}
 				}

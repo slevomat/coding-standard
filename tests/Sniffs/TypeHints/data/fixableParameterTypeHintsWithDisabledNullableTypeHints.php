@@ -56,6 +56,14 @@ function oneWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, $b, 
 {
 }
 
+/**
+ * @param string|null $a
+ */
+function optionalWithoutTypeHint($a = null)
+{
+
+}
+
 class Foo
 {
 
@@ -109,6 +117,14 @@ class Foo
 	 */
 	public function oneWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, $b, float $c)
 	{
+	}
+
+	/**
+	 * @param string|null $a
+	 */
+	public function optionalWithoutTypeHint($a = null)
+	{
+
 	}
 
 }
