@@ -2,11 +2,13 @@
 
 namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
+use SlevomatCodingStandard\Helpers\Annotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
+use SlevomatCodingStandard\Helpers\ReturnTypeHint;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -29,6 +31,10 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	const CODE_MISSING_TRAVERSABLE_RETURN_TYPE_HINT_SPECIFICATION = 'MissingTraversableReturnTypeHintSpecification';
 
+	const CODE_USELESS_PARAMETER_ANNOTATION = 'UselessParameterAnnotation';
+
+	const CODE_USELESS_RETURN_ANNOTATION = 'UselessReturnAnnotation';
+
 	const CODE_USELESS_DOC_COMMENT = 'UselessDocComment';
 
 	/** @var bool */
@@ -36,6 +42,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	/** @var bool */
 	public $enableVoidTypeHint = PHP_VERSION_ID >= 70100;
+
+	/** @var bool */
+	public $enableEachParameterAndReturnInspection = false;
 
 	/** @var string[] */
 	public $traversableTypeHints = [];
@@ -451,7 +460,11 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	private function checkUselessDocComment(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer)
 	{
-		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_USELESS_DOC_COMMENT))) {
+		$docCommentSniffSuppressed = SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_USELESS_DOC_COMMENT));
+		$returnSniffSuppressed = SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_USELESS_RETURN_ANNOTATION));
+		$parameterSniffSuppressed = SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_USELESS_PARAMETER_ANNOTATION));
+
+		if ($docCommentSniffSuppressed && $returnSniffSuppressed && $parameterSniffSuppressed) {
 			return;
 		}
 
@@ -459,104 +472,143 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			return;
 		}
 
-		if (DocCommentHelper::hasDocCommentDescription($phpcsFile, $functionPointer)) {
-			return;
-		}
+		$containsUsefulInformation = DocCommentHelper::hasDocCommentDescription($phpcsFile, $functionPointer);
 
 		foreach (FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer) as $parameterAnnotation) {
 			if ($parameterAnnotation->getContent() !== null && preg_match('~^\\S+\\s+(?:(?:\.{3}\\s*)?\$\\S+\\s+)?[^$]~', $parameterAnnotation->getContent())) {
-				return;
+				$containsUsefulInformation = true;
+				break;
 			}
 		}
 
-		$isAbstract = FunctionHelper::isAbstract($phpcsFile, $functionPointer);
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
+		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
+		$isReturnAnnotationUseless = $this->isReturnAnnotationUseless($phpcsFile, $functionPointer, $returnTypeHint, $returnAnnotation);
 
-		$typeHintEqualsAnnotation = function (string $typeHint, string $typeHintInAnnotation) use ($phpcsFile, $functionPointer): bool {
-			return TypeHintHelper::isSimpleTypeHint($typeHint) || TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint) === TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHintInAnnotation);
-		};
-
-		if ($isAbstract || FunctionHelper::returnsValue($phpcsFile, $functionPointer)) {
-			$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
-			$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
-
-			if ($returnAnnotation !== null) {
-				if ($returnTypeHint === null) {
-					return;
-				}
-
-				if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()))) {
-					return;
-				}
-
-				if ($returnAnnotation !== null) {
-					if (preg_match('~^\\S+\\s+\\S+~', $returnAnnotation->getContent())) {
-						return;
-					}
-
-					$returnTypeHintsDefinition = preg_split('~\\s+~', $returnAnnotation->getContent())[0];
-					if ($this->definitionContainsStaticOrThisTypeHint($returnTypeHintsDefinition)) {
-						return;
-					} elseif ($this->enableNullableTypeHints && $this->definitionContainsJustTwoTypeHints($returnTypeHintsDefinition) && $this->definitionContainsNullTypeHint($returnTypeHintsDefinition)) {
-						$returnTypeHintDefinitionParts = explode('|', $returnTypeHintsDefinition);
-						$returnTypeHintInAnnotation = strtolower($returnTypeHintDefinitionParts[0]) === 'null' ? $returnTypeHintDefinitionParts[1] : $returnTypeHintDefinitionParts[0];
-						if (!$typeHintEqualsAnnotation($returnTypeHint->getTypeHint(), $returnTypeHintInAnnotation)) {
-							return;
-						}
-					} elseif (!$this->definitionContainsOneTypeHint($returnTypeHintsDefinition)) {
-						return;
-					} elseif (!$typeHintEqualsAnnotation($returnTypeHint->getTypeHint(), $returnTypeHintsDefinition)) {
-						return;
-					}
-				}
-			}
-		}
-
-		$parametersTypeHintsDefinitions = $this->getFunctionParameterTypeHintsDefinitions($phpcsFile, $functionPointer);
-		foreach (FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer) as $parameterName => $parameterTypeHint) {
-			if ($parameterTypeHint === null) {
-				if (array_key_exists($parameterName, $parametersTypeHintsDefinitions)) {
-					return;
-				} else {
-					continue;
-				}
-			}
-
-			if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()))) {
-				return;
-			}
-
-			if (array_key_exists($parameterName, $parametersTypeHintsDefinitions)) {
-				$parameterTypeHintDefinition = $parametersTypeHintsDefinitions[$parameterName];
-				if ($this->definitionContainsStaticOrThisTypeHint($parameterTypeHintDefinition)) {
-					return;
-				} elseif ($this->definitionContainsJustTwoTypeHints($parameterTypeHintDefinition) && $this->definitionContainsNullTypeHint($parameterTypeHintDefinition)) {
-					$parameterTypeHintDefinitionParts = explode('|', $parameterTypeHintDefinition);
-					$parameterTypeHintInAnnotation = strtolower($parameterTypeHintDefinitionParts[0]) === 'null' ? $parameterTypeHintDefinitionParts[1] : $parameterTypeHintDefinitionParts[0];
-					if (!$typeHintEqualsAnnotation($parameterTypeHint->getTypeHint(), $parameterTypeHintInAnnotation)) {
-						return;
-					}
-				} elseif (!$this->definitionContainsOneTypeHint($parameterTypeHintDefinition)) {
-					return;
-				} elseif (!$typeHintEqualsAnnotation($parameterTypeHint->getTypeHint(), $parameterTypeHintDefinition)) {
-					return;
-				}
-			}
-		}
+		$parameterTypeHints = FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer);
+		$parametersAnnotationTypeHints = $this->getFunctionParameterTypeHintsDefinitions($phpcsFile, $functionPointer);
+		$uselessParameterNames = $this->getUselessParameterNames($phpcsFile, $functionPointer, $parameterTypeHints, $parametersAnnotationTypeHints);
 
 		foreach (AnnotationHelper::getAnnotations($phpcsFile, $functionPointer) as list($annotation)) {
 			if ($annotation->getName() === SuppressHelper::ANNOTATION) {
-				return;
+				$containsUsefulInformation = true;
+				break;
 			}
 
 			foreach ($this->getNormalizedUsefulAnnotations() as $usefulAnnotation) {
 				if ($annotation->getName() === $usefulAnnotation) {
-					return;
+					$containsUsefulInformation = true;
+					break;
 				}
 
 				if (substr($usefulAnnotation, -1) === '\\' && strpos($annotation->getName(), $usefulAnnotation) === 0) {
-					return;
+					$containsUsefulInformation = true;
+					break;
 				}
 			}
+		}
+
+		$isWholeDocCommentUseless = !$containsUsefulInformation
+			&& ($returnAnnotation === null || $isReturnAnnotationUseless)
+			&& count($uselessParameterNames) === count($parametersAnnotationTypeHints);
+
+		if ($this->enableEachParameterAndReturnInspection && (!$isWholeDocCommentUseless || $docCommentSniffSuppressed)) {
+			if ($returnAnnotation !== null && $isReturnAnnotationUseless && !$returnSniffSuppressed) {
+				$fix = $phpcsFile->addFixableError(
+					sprintf(
+						'%s %s() has useless @return annotation.',
+						$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
+						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
+					),
+					$functionPointer,
+					self::CODE_USELESS_RETURN_ANNOTATION
+				);
+				if ($fix) {
+					$tokens = $phpcsFile->getTokens();
+					$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $functionPointer);
+					$docCommentClosePointer = $tokens[$docCommentOpenPointer]['comment_closer'];
+
+					for ($i = $docCommentOpenPointer + 1; $i < $docCommentClosePointer; $i++) {
+						if ($tokens[$i]['code'] !== T_DOC_COMMENT_TAG) {
+							continue;
+						}
+
+						if ($tokens[$i]['content'] !== '@return') {
+							continue;
+						}
+
+						$changeStart = $phpcsFile->findPrevious([T_DOC_COMMENT_STAR], $i - 1, $docCommentOpenPointer);
+						$changeEnd = $phpcsFile->findNext([T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR], $i - 1, $docCommentClosePointer + 1) - 1;
+						$phpcsFile->fixer->beginChangeset();
+						for ($j = $changeStart; $j <= $changeEnd; $j++) {
+							$phpcsFile->fixer->replaceToken($j, '');
+						}
+						$phpcsFile->fixer->endChangeset();
+
+						break;
+					}
+				}
+			}
+
+			if (!$parameterSniffSuppressed) {
+				foreach ($uselessParameterNames as $uselessParameterName) {
+					$fix = $phpcsFile->addFixableError(
+						sprintf(
+							'%s %s() has useless @param annotation for parameter %s.',
+							$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
+							FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
+							$uselessParameterName
+						),
+						$functionPointer,
+						self::CODE_USELESS_PARAMETER_ANNOTATION
+					);
+					if ($fix) {
+						$tokens = $phpcsFile->getTokens();
+						$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $functionPointer);
+						$docCommentClosePointer = $tokens[$docCommentOpenPointer]['comment_closer'];
+
+						for ($i = $docCommentOpenPointer + 1; $i < $docCommentClosePointer; $i++) {
+							if ($tokens[$i]['code'] !== T_DOC_COMMENT_TAG) {
+								continue;
+							}
+
+							if ($tokens[$i]['content'] !== '@param') {
+								continue;
+							}
+
+							$parameterInformationPointer = $phpcsFile->findNext([T_DOC_COMMENT_WHITESPACE], $i + 1, $docCommentClosePointer + 1, true);
+
+							if ($parameterInformationPointer === false || $tokens[$parameterInformationPointer]['code'] !== T_DOC_COMMENT_STRING) {
+								continue;
+							}
+
+							if (!preg_match('~\S+\s+(\$\S+)~', $tokens[$parameterInformationPointer]['content'], $match)) {
+								continue;
+							}
+
+							if (!in_array($match[1], $uselessParameterNames, true)) {
+								continue;
+							}
+
+							$changeStart = $phpcsFile->findPrevious([T_DOC_COMMENT_STAR], $i - 1);
+							$changeEnd = $phpcsFile->findNext([T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR], $i - 1) - 1;
+							$phpcsFile->fixer->beginChangeset();
+							for ($j = $changeStart; $j <= $changeEnd; $j++) {
+								$phpcsFile->fixer->replaceToken($j, '');
+							}
+							$phpcsFile->fixer->endChangeset();
+
+							break;
+						}
+					}
+				}
+			}
+
+			return;
+		}
+
+		if (!$isWholeDocCommentUseless || $docCommentSniffSuppressed) {
+			return;
 		}
 
 		$fix = $phpcsFile->addFixableError(
@@ -739,6 +791,105 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		return $parametersTypeHintsDefinitions;
+	}
+
+	private function typeHintEqualsAnnotation(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer, string $typeHint, string $typeHintInAnnotation): bool
+	{
+		return TypeHintHelper::isSimpleTypeHint($typeHint)
+			|| TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint) === TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHintInAnnotation);
+	}
+
+	private function isReturnAnnotationUseless(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer, ReturnTypeHint $returnTypeHint = null, Annotation $returnAnnotation = null): bool
+	{
+		if (!FunctionHelper::isAbstract($phpcsFile, $functionPointer) && !FunctionHelper::returnsValue($phpcsFile, $functionPointer) && $returnTypeHint === null) {
+			return true;
+		}
+
+		if ($returnTypeHint === null || $returnAnnotation === null || $returnAnnotation->getContent() === null) {
+			return false;
+		}
+
+		if (preg_match('~^\\S+\\s+\\S+~', $returnAnnotation->getContent())) {
+			return false;
+		}
+
+		$returnTypeHintDefinition = preg_split('~\\s+~', $returnAnnotation->getContent())[0];
+
+		if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()))) {
+			return false;
+		}
+
+		if ($this->definitionContainsStaticOrThisTypeHint($returnTypeHintDefinition)) {
+			return false;
+		}
+
+		if ($this->enableNullableTypeHints && $this->isTypeHintDefinitionCompoundOfNull($returnTypeHintDefinition)) {
+			return $this->typeHintEqualsAnnotation($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint(), $this->getTypeFromNullableTypeHintDefinition($returnTypeHintDefinition));
+		}
+
+		if (!$this->definitionContainsOneTypeHint($returnTypeHintDefinition)) {
+			return false;
+		}
+
+		if (!$this->typeHintEqualsAnnotation($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint(), $returnTypeHintDefinition)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private function isTypeHintDefinitionCompoundOfNull(string $definition): bool
+	{
+		return $this->definitionContainsJustTwoTypeHints($definition) && $this->definitionContainsNullTypeHint($definition);
+	}
+
+	private function getTypeFromNullableTypeHintDefinition(string $definition): string
+	{
+		$defitionParts = explode('|', $definition);
+		return strtolower($defitionParts[0]) === 'null' ? $defitionParts[1] : $defitionParts[0];
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param int $functionPointer
+	 * @param \SlevomatCodingStandard\Helpers\ParameterTypeHint[]|null[] $functionTypeHints
+	 * @param string[]|null[] $parametersTypeHintsDefinitions
+	 * @return string[] names of parameters with useless annotation hint
+	 */
+	private function getUselessParameterNames(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer, array $functionTypeHints, array $parametersTypeHintsDefinitions): array
+	{
+		$uselessParameterNames = [];
+
+		foreach ($functionTypeHints as $parameterName => $parameterTypeHint) {
+			if ($parameterTypeHint === null) {
+				continue;
+			}
+
+			if (!array_key_exists($parameterName, $parametersTypeHintsDefinitions)) {
+				continue;
+			}
+
+			if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()))) {
+				continue;
+			}
+
+			$parameterTypeHintDefinition = $parametersTypeHintsDefinitions[$parameterName];
+			if ($this->definitionContainsStaticOrThisTypeHint($parameterTypeHintDefinition)) {
+				continue;
+			} elseif ($this->isTypeHintDefinitionCompoundOfNull($parameterTypeHintDefinition)) {
+				if (!$this->typeHintEqualsAnnotation($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint(), $this->getTypeFromNullableTypeHintDefinition($parameterTypeHintDefinition))) {
+					continue;
+				}
+			} elseif (!$this->definitionContainsOneTypeHint($parameterTypeHintDefinition)) {
+				continue;
+			} elseif (!$this->typeHintEqualsAnnotation($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint(), $parameterTypeHintDefinition)) {
+				continue;
+			}
+
+			$uselessParameterNames[] = $parameterName;
+		}
+
+		return $uselessParameterNames;
 	}
 
 }
