@@ -191,6 +191,43 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$this->assertSniffError($report, 27, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
 	}
 
+	public function testEnabledEachParameterAndReturnInspectionNoErrors()
+	{
+		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/typeHintDeclarationEnabledEachParameterAndReturnInspectionNoErrors.php', [
+			'enableNullableTypeHints' => false,
+			'enableVoidTypeHint' => false,
+			'enableEachParameterAndReturnInspection' => true,
+		]));
+	}
+
+	public function testEnabledEachParameterAndReturnInspectionErrors()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/typeHintDeclarationEnabledEachParameterAndReturnInspectionErrors.php', [
+			'enableNullableTypeHints' => false,
+			'enableVoidTypeHint' => false,
+			'usefulAnnotations' => ['@useful'],
+			'enableEachParameterAndReturnInspection' => true,
+		]);
+
+		$this->assertSame(11, $report->getErrorCount());
+
+		$parameterMessage = function (string $method, string $parameter): string {
+			return sprintf('Method \FooNamespace\FooClass::%s() has useless @param annotation for parameter $%s.', $method, $parameter);
+		};
+
+		$this->assertSniffError($report, 11, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
+		$this->assertSniffError($report, 18, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
+		$this->assertSniffError($report, 27, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
+		$this->assertSniffError($report, 35, TypeHintDeclarationSniff::CODE_USELESS_PARAMETER_ANNOTATION, $parameterMessage('withUselessParameterButRequiredReturn', 'foo'));
+		$this->assertSniffError($report, 45, TypeHintDeclarationSniff::CODE_USELESS_PARAMETER_ANNOTATION, $parameterMessage('withMultipleUselessParametersAndReturn', 'foo'));
+		$this->assertSniffError($report, 45, TypeHintDeclarationSniff::CODE_USELESS_PARAMETER_ANNOTATION, $parameterMessage('withMultipleUselessParametersAndReturn', 'baz'));
+		$this->assertSniffError($report, 45, TypeHintDeclarationSniff::CODE_USELESS_RETURN_ANNOTATION);
+		$this->assertSniffError($report, 53, TypeHintDeclarationSniff::CODE_USELESS_PARAMETER_ANNOTATION, $parameterMessage('withDescriptionAndUselessParameter', 'foo'));
+		$this->assertSniffError($report, 61, TypeHintDeclarationSniff::CODE_USELESS_RETURN_ANNOTATION);
+		$this->assertSniffError($report, 69, TypeHintDeclarationSniff::CODE_USELESS_PARAMETER_ANNOTATION, $parameterMessage('withUsefulAnnotationAndUselessParameter', 'foo'));
+		$this->assertSniffError($report, 77, TypeHintDeclarationSniff::CODE_USELESS_RETURN_ANNOTATION);
+	}
+
 	public function testFixableReturnTypeHints()
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHints.php', [
@@ -255,6 +292,18 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 			'enableNullableTypeHints' => true,
 			'enableVoidTypeHint' => true,
 		], [TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT]);
+
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testFixableEnableEachParameterAndReturnInspection()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableEnableEachParameterAndReturnInspection.php', [
+			'enableNullableTypeHints' => false,
+			'enableVoidTypeHint' => false,
+			'enableEachParameterAndReturnInspection' => true,
+			'usefulAnnotations' => ['@useful'],
+		], [TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT, TypeHintDeclarationSniff::CODE_USELESS_PARAMETER_ANNOTATION, TypeHintDeclarationSniff::CODE_USELESS_RETURN_ANNOTATION]);
 
 		$this->assertAllFixedInFile($report);
 	}
