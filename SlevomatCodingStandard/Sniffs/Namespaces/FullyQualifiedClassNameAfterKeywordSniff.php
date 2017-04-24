@@ -39,7 +39,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 	public function register(): array
 	{
 		if (count($this->getKeywordsToCheck()) === 0) {
-			throw new \SlevomatCodingStandard\Sniffs\Namespaces\NoKeywordsException(self::class, 'keywordsToCheck');
+			return [];
 		}
 		return array_map(function (string $keyword) {
 			if (!defined($keyword)) {
