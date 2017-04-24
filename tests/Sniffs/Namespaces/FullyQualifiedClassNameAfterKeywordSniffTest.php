@@ -19,16 +19,10 @@ class FullyQualifiedClassNameAfterKeywordSniffTest extends \SlevomatCodingStanda
 		}
 	}
 
-	public function testThrowExceptionWhenNoKeywordsAreConfigured()
+	public function testCheckNothingWhenNoKeywordsAreConfigured()
 	{
-		try {
-			$this->checkFile(__DIR__ . '/data/fullyQualifiedExtends.php');
-			$this->fail();
-		} catch (\SlevomatCodingStandard\Sniffs\Namespaces\NoKeywordsException $e) {
-			$this->assertSame('Sniff SlevomatCodingStandard\Sniffs\Namespaces\FullyQualifiedClassNameAfterKeywordSniff requires an array of keywords set in property keywordsToCheck', $e->getMessage());
-			$this->assertSame(FullyQualifiedClassNameAfterKeywordSniff::class, $e->getSniffClassName());
-			$this->assertSame('keywordsToCheck', $e->getPropertyName());
-		}
+		$fileReport = $this->checkFile(__DIR__ . '/data/fullyQualifiedExtends.php');
+		$this->assertEmpty($fileReport->getErrors());
 	}
 
 }
