@@ -192,8 +192,6 @@ const FOO = 1; // visibility missing!
 public const BAR = 2; // correct
 ```
 
-On PHP 7.0, this sniff must be manually excluded.
-
 #### SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing 🔧
 
 Enforces consistent formatting of return typehints, like this:
@@ -201,6 +199,10 @@ Enforces consistent formatting of return typehints, like this:
 ```php
 function foo(): ?int
 ```
+
+Sniff provides the following settings:
+
+* `spacesCountBeforeColon` - the number of spaces expected between closing brace and colon
 
 #### SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue 🔧
 
@@ -214,8 +216,6 @@ function foo(
 
 }
 ```
-
-On PHP 7.0, this sniff must be manually excluded.
 
 #### SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing 🔧
 
@@ -297,6 +297,8 @@ new Foo\Bar();
 
 `allowFullyQualifiedNameForCollidingClasses` - allow fully qualified name for a class with a colliding use statement
 
+`allowFullyQualifiedGlobalClasses` - allows using fully qualified names from global space (i.e. \DateTimeImmutable)
+
 #### SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces
 
 Disallows uses of other than configured namespaces.
@@ -338,6 +340,8 @@ Reports forbidden annotations. No annotations are forbidden by default, the conf
 Sniff provides the following settings:
 
 * `forbiddenAnnotations`: allows to configure which annotations are forbidden to be used
+* `linesCountAfterOpeningBrace`: allows to configure the number of lines after opening brace
+* `linesCountBeforeClosingBrace`: allows to configure the number of lines before closing brace
 
 ## Installation
 
