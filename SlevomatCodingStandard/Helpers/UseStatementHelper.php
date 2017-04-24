@@ -16,7 +16,7 @@ class UseStatementHelper
 
 	public static function isTraitUse(\PHP_CodeSniffer_File $phpcsFile, int $usePointer): bool
 	{
-		$typePointer = $phpcsFile->findPrevious(TokenHelper::$typeKeywordTokenCodes, $usePointer);
+		$typePointer = $phpcsFile->findPrevious(array_merge(TokenHelper::$typeKeywordTokenCodes, [T_ANON_CLASS]), $usePointer);
 		if ($typePointer !== false) {
 			$tokens = $phpcsFile->getTokens();
 			$typeToken = $tokens[$typePointer];

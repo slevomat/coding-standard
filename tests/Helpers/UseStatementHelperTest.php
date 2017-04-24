@@ -32,6 +32,15 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertTrue(UseStatementHelper::isTraitUse($codeSnifferFile, $usePointer));
 	}
 
+	public function testIsTraitUseInAnonymousClass()
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/anonymousClassWithTrait.php'
+		);
+		$usePointer = $codeSnifferFile->findNext(T_USE, 0);
+		$this->assertTrue(UseStatementHelper::isTraitUse($codeSnifferFile, $usePointer));
+	}
+
 	public function testIsNotTraitUse()
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
