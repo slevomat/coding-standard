@@ -11,10 +11,21 @@ class ClassConstantVisibilitySniff implements \PHP_CodeSniffer_Sniff
 	const CODE_MISSING_CONSTANT_VISIBILITY = 'MissingConstantVisibility';
 
 	/**
+	 * Automatically disables the sniff on unusable version, to be removed when only PHP 7.1+ is supported
+	 *
+	 * @var bool
+	 */
+	public $enabled = PHP_VERSION_ID >= 70100;
+
+	/**
 	 * @return int[]
 	 */
 	public function register(): array
 	{
+		if (!$this->enabled) {
+			return [];
+		}
+
 		return [
 			T_CONST,
 		];
