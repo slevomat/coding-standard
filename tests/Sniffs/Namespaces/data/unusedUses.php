@@ -17,6 +17,9 @@ use X;
 use Lorem\FirstInterface;
 use Ipsum\SecondInterface;
 use Zetta\Rasmus;
+use My\PartialClass;
+use My\PartialFunction;
+use My\PartialConstant;
 
 class TestClass implements FirstInterface, SecondInterface
 {
@@ -32,6 +35,10 @@ class TestClass implements FirstInterface, SecondInterface
 		$unusedConstant = new UNUSED_CONSTANT();
 		UsedFunction();
 		doFoo(USED_CONSTANT);
+
+		new PartialClass\UsedClass();
+		PartialFunction\usedFunction();
+		PartialConstant\USED_CONSTANT;
 
 		return new NewObject();
 	}
