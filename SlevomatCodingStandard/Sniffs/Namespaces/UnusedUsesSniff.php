@@ -41,12 +41,13 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 			$pointer = $referencedName->getStartPointer();
 			$nameParts = NamespaceHelper::getNameParts($name);
 			$nameAsReferencedInFile = $nameParts[0];
+			$nameReferencedWithoutSubNamespace = count($nameParts) === 1;
 			$normalizedNameAsReferencedInFile = UseStatement::normalizedNameAsReferencedInFile($nameAsReferencedInFile);
 			if (
 				!NamespaceHelper::isFullyQualifiedName($name)
 				&& isset($unusedNames[$normalizedNameAsReferencedInFile])
 			) {
-				if (!$referencedName->hasSameUseStatementType($unusedNames[$normalizedNameAsReferencedInFile])) {
+				if ($nameReferencedWithoutSubNamespace && !$referencedName->hasSameUseStatementType($unusedNames[$normalizedNameAsReferencedInFile])) {
 					continue;
 				}
 				if ($unusedNames[$normalizedNameAsReferencedInFile]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {

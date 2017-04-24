@@ -88,6 +88,13 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertNoSniffError($this->getFileReport(), 19);
 	}
 
+	public function testPartialuses()
+	{
+		$this->assertNoSniffError($this->getFileReport(), 20);
+		$this->assertNoSniffError($this->getFileReport(), 21);
+		$this->assertNoSniffError($this->getFileReport(), 22);
+	}
+
 	public function testUsedUseInAnnotationWithDisabledSearchAnnotations()
 	{
 		$report = $this->checkFile(__DIR__ . '/data/unusedUsesInAnnotation.php', [
