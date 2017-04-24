@@ -475,35 +475,38 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			return TypeHintHelper::isSimpleTypeHint($typeHint) || TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint) === TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHintInAnnotation);
 		};
 
-		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 		if ($isAbstract || FunctionHelper::returnsValue($phpcsFile, $functionPointer)) {
-			if ($returnTypeHint === null) {
-				return;
-			}
-
-			if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()))) {
-				return;
-			}
-
+			$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 			$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
+
 			if ($returnAnnotation !== null) {
-				if (preg_match('~^\\S+\\s+\\S+~', $returnAnnotation->getContent())) {
+				if ($returnTypeHint === null) {
 					return;
 				}
 
-				$returnTypeHintsDefinition = preg_split('~\\s+~', $returnAnnotation->getContent())[0];
-				if ($this->definitionContainsStaticOrThisTypeHint($returnTypeHintsDefinition)) {
+				if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()))) {
 					return;
-				} elseif ($this->enableNullableTypeHints && $this->definitionContainsJustTwoTypeHints($returnTypeHintsDefinition) && $this->definitionContainsNullTypeHint($returnTypeHintsDefinition)) {
-					$returnTypeHintDefinitionParts = explode('|', $returnTypeHintsDefinition);
-					$returnTypeHintInAnnotation = strtolower($returnTypeHintDefinitionParts[0]) === 'null' ? $returnTypeHintDefinitionParts[1] : $returnTypeHintDefinitionParts[0];
-					if (!$typeHintEqualsAnnotation($returnTypeHint->getTypeHint(), $returnTypeHintInAnnotation)) {
+				}
+
+				if ($returnAnnotation !== null) {
+					if (preg_match('~^\\S+\\s+\\S+~', $returnAnnotation->getContent())) {
 						return;
 					}
-				} elseif (!$this->definitionContainsOneTypeHint($returnTypeHintsDefinition)) {
-					return;
-				} elseif (!$typeHintEqualsAnnotation($returnTypeHint->getTypeHint(), $returnTypeHintsDefinition)) {
-					return;
+
+					$returnTypeHintsDefinition = preg_split('~\\s+~', $returnAnnotation->getContent())[0];
+					if ($this->definitionContainsStaticOrThisTypeHint($returnTypeHintsDefinition)) {
+						return;
+					} elseif ($this->enableNullableTypeHints && $this->definitionContainsJustTwoTypeHints($returnTypeHintsDefinition) && $this->definitionContainsNullTypeHint($returnTypeHintsDefinition)) {
+						$returnTypeHintDefinitionParts = explode('|', $returnTypeHintsDefinition);
+						$returnTypeHintInAnnotation = strtolower($returnTypeHintDefinitionParts[0]) === 'null' ? $returnTypeHintDefinitionParts[1] : $returnTypeHintDefinitionParts[0];
+						if (!$typeHintEqualsAnnotation($returnTypeHint->getTypeHint(), $returnTypeHintInAnnotation)) {
+							return;
+						}
+					} elseif (!$this->definitionContainsOneTypeHint($returnTypeHintsDefinition)) {
+						return;
+					} elseif (!$typeHintEqualsAnnotation($returnTypeHint->getTypeHint(), $returnTypeHintsDefinition)) {
+						return;
+					}
 				}
 			}
 		}
@@ -511,7 +514,11 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		$parametersTypeHintsDefinitions = $this->getFunctionParameterTypeHintsDefinitions($phpcsFile, $functionPointer);
 		foreach (FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer) as $parameterName => $parameterTypeHint) {
 			if ($parameterTypeHint === null) {
-				return;
+				if (array_key_exists($parameterName, $parametersTypeHintsDefinitions)) {
+					return;
+				} else {
+					continue;
+				}
 			}
 
 			if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()))) {
