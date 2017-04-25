@@ -56,12 +56,16 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 	 */
 	public function process(\PHP_CodeSniffer_File $phpcsFile, $keywordPointer)
 	{
-		$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $keywordPointer + 1);
-		$this->checkReferencedName($phpcsFile, $keywordPointer, $nameStartPointer);
-
 		$tokens = $phpcsFile->getTokens();
-		if ($tokens[$keywordPointer]['code'] === T_IMPLEMENTS) {
-			$possibleCommaPointer = $keywordPointer + 1;
+
+		$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $keywordPointer + 1);
+		if (!in_array($tokens[$nameStartPointer]['code'], TokenHelper::$nameTokenCodes, true)) {
+			return;
+		}
+
+		$possibleCommaPointer = $this->checkReferencedName($phpcsFile, $keywordPointer, $nameStartPointer);
+
+		if (in_array($tokens[$keywordPointer]['code'], [T_IMPLEMENTS, T_USE], true)) {
 			while (true) {
 				$possibleCommaPointer = TokenHelper::findNextExcluding($phpcsFile, array_merge(TokenHelper::$nameTokenCodes, [T_WHITESPACE]), $possibleCommaPointer);
 				if ($possibleCommaPointer !== null) {
@@ -81,6 +85,20 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 	private function checkReferencedName(\PHP_CodeSniffer_File $phpcsFile, int $keywordPointer, int $nameStartPointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
+
+		if ($tokens[$keywordPointer]['code'] === T_USE) {
+			$conditions = $tokens[$keywordPointer]['conditions'];
+
+			if (count($conditions) === 0) {
+				return $nameStartPointer + 1;
+			}
+
+			$lastCondition = array_values($conditions)[count($conditions) - 1];
+			if ($lastCondition === T_NAMESPACE) {
+				return $nameStartPointer + 1;
+			}
+		}
+
 		$nameStartToken = $tokens[$nameStartPointer];
 		$endPointer = ReferencedNameHelper::getReferencedNameEndPointer($phpcsFile, $nameStartPointer);
 		if ($nameStartToken['code'] !== T_NS_SEPARATOR) {
