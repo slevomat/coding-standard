@@ -191,6 +191,16 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$this->assertSniffError($report, 27, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
 	}
 
+	public function testMissingParameterTypeHintCheckHonorsCompatibilityWithParent()
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/typeHintDeclarationParameterTypeHintParentCompatibilityNoErrors.php',
+			[],
+			[TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT]
+		);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
 	public function testFixableReturnTypeHints()
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHints.php', [
