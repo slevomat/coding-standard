@@ -7,7 +7,7 @@
 [![Code coverage](https://img.shields.io/coveralls/slevomat/coding-standard/master.svg?style=flat-square)](https://coveralls.io/github/slevomat/coding-standard?branch=master)
 ![PHPStan](https://img.shields.io/badge/style-level%205-brightgreen.svg?style=flat-square&label=phpstan)
 
-Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) extends [Consistence Coding Standard](https://github.com/consistence/coding-standard) by providing sniffs with additional checks.
+Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) complements [Consistence Coding Standard](https://github.com/consistence/coding-standard) by providing sniffs with additional checks.
 
 ## Table of contents
 
