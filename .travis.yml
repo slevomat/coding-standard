@@ -19,6 +19,6 @@ before_script:
 script:
   - bin/phing
 after_script:
-  - php bin/coveralls -v
+  - php bin/coveralls -v --config build/coveralls.yml
 notifications:
   email: false
