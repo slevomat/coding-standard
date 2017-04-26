@@ -4,7 +4,7 @@
 		<exclude name="SlevomatCodingStandard.Classes.ClassConstantVisibility"/><!-- PHP >= 7.1 only -->
 		<exclude name="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue"/><!-- PHP >= 7.1 only -->
 	</rule>
-	<rule ref="vendor/consistence/coding-standard/Consistence/ruleset.xml">
+	<rule ref="./ruleset-consistence.xml">
 		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedIF"/><!-- Allow empty if statements - usually with a comment -->
 		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedELSEIF"/><!-- Allow empty elseif statements - usually with a comment -->
 	</rule>
