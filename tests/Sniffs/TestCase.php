@@ -30,11 +30,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$codeSniffer->registerSniffs([$this->getSniffPath()], [], []);
 
 		if (count($codesToCheck) > 0) {
-			$classReflection = new \ReflectionClass($this->getSniffClassName());
-
 			$ruleset = $propertyReflection->getValue($codeSniffer);
 
-			foreach ($classReflection->getConstants() as $constantName => $constantValue) {
+			foreach ($this->getSniffClassReflection()->getConstants() as $constantName => $constantValue) {
 				if (strpos($constantName, 'CODE_') === 0 && !in_array($constantValue, $codesToCheck, true)) {
 					$ruleset[sprintf('%s.%s', $this->getSniffName(), $constantValue)]['severity'] = 0;
 				}
@@ -157,14 +155,18 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
 	protected function getSniffPath(): string
 	{
-		$path = $this->getSniffClassName();
+		return $this->getSniffClassReflection()->getFileName();
+	}
 
-		$path = str_replace('\\', '/', $path);
-		$path = str_replace('SlevomatCodingStandard', __DIR__ . '/../../SlevomatCodingStandard', $path);
+	protected function getSniffClassReflection(): \ReflectionClass
+	{
+		static $reflection;
 
-		$path .= '.php';
+		if ($reflection === null) {
+			$reflection = new \ReflectionClass($this->getSniffClassName());
+		}
 
-		return realpath($path);
+		return $reflection;
 	}
 
 }
