@@ -19,6 +19,9 @@ before_script:
 script:
   - bin/phing
 after_script:
-  - php bin/coveralls -v --config build/coveralls.yml
+  - if [ "${TRAVIS_ALLOW_FAILURE}" = false ]; then
+        wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.0/coveralls.phar
+        && php coveralls.phar --verbose --config build/coveralls.yml;
+    fi
 notifications:
   email: false
