@@ -49,4 +49,14 @@ class ClassConstantVisibilitySniffTest extends \SlevomatCodingStandard\Sniffs\Te
 		$this->assertNoSniffErrorInFile($report);
 	}
 
+	public function testFixableMissingVisibility()
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/fixableMissingVisibility.php',
+			[],
+			[ClassConstantVisibilitySniff::CODE_MISSING_CONSTANT_VISIBILITY]
+		);
+		$this->assertAllFixedInFile($report);
+	}
+
 }
