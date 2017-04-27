@@ -323,7 +323,12 @@ use \Foo\Bar;
 
 #### SlevomatCodingStandard.Types.EmptyLinesAroundTypeBraces
 
-Enforces one empty line after opening class/interface/trait brace and one empty line before the closing brace.
+Enforces one configurable number of lines after opening class/interface/trait brace and one empty line before the closing brace.
+
+Sniff provides the following settings:
+
+* `linesCountAfterOpeningBrace`: allows to configure the number of lines after opening brace
+* `linesCountBeforeClosingBrace`: allows to configure the number of lines before closing brace
 
 #### SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation
 
@@ -341,8 +346,6 @@ Reports forbidden annotations. No annotations are forbidden by default, the conf
 Sniff provides the following settings:
 
 * `forbiddenAnnotations`: allows to configure which annotations are forbidden to be used
-* `linesCountAfterOpeningBrace`: allows to configure the number of lines after opening brace
-* `linesCountBeforeClosingBrace`: allows to configure the number of lines before closing brace
 
 ## Installation
 
