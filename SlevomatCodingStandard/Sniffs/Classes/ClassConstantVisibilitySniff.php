@@ -51,7 +51,7 @@ class ClassConstantVisibilitySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$visibilityPointer = TokenHelper::findPreviousEffective($phpcsFile, $constantPointer - 1);
 		if (!in_array($tokens[$visibilityPointer]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE], true)) {
-			$phpcsFile->addError(
+			$fix = $phpcsFile->addFixableError(
 				sprintf(
 					'Constant %s::%s visibility missing.',
 					ClassHelper::getFullyQualifiedName($phpcsFile, $classPointer),
@@ -60,6 +60,11 @@ class ClassConstantVisibilitySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				$constantPointer,
 				self::CODE_MISSING_CONSTANT_VISIBILITY
 			);
+			if ($fix) {
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->addContentBefore($constantPointer, 'public ');
+				$phpcsFile->fixer->endChangeset();
+			}
 		}
 	}
 

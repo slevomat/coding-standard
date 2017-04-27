@@ -205,7 +205,7 @@ Sniff provides the following settings:
 * `extensions` - allow different file extensions. Default is `php`.
 * `ignoredNamespaces` - sniff is not performed on these namespaces
 
-#### SlevomatCodingStandard.Classes.ClassConstantVisibility
+#### SlevomatCodingStandard.Classes.ClassConstantVisibility 🔧
 
 In PHP 7.1 it's possible to declare [visibility of class constants](https://wiki.php.net/rfc/class_const_visibility). In a similar vein to optional declaration of visibility for properties and methods which is actually required in sane coding standards, this sniff also requires declaring visibility for all class constants.
 
