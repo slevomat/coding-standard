@@ -10,7 +10,7 @@ class FullyQualifiedExceptionsSniffWithSpecialNamesTest extends \SlevomatCodingS
 		return FullyQualifiedExceptionsSniff::class;
 	}
 
-	private function getFileReport(): \PHP_CodeSniffer_File
+	private function getFileReport(): \PHP_CodeSniffer\Files\File
 	{
 		return $this->checkFile(
 			__DIR__ . '/data/fullyQualifiedSpecialExceptionNames.php',

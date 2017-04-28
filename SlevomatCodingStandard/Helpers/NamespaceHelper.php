@@ -37,11 +37,11 @@ class NamespaceHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $anyPointer any pointer type where the search begins from (backwards)
 	 * @return string|null
 	 */
-	public static function findCurrentNamespaceName(\PHP_CodeSniffer_File $phpcsFile, int $anyPointer)
+	public static function findCurrentNamespaceName(\PHP_CodeSniffer\Files\File $phpcsFile, int $anyPointer)
 	{
 		$namespacePointer = $phpcsFile->findPrevious(T_NAMESPACE, $anyPointer);
 		if ($namespacePointer === false) {
@@ -79,14 +79,14 @@ class NamespaceHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param string $nameAsReferencedInFile
 	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
 	 * @param int $currentPointer
 	 * @return string
 	 */
 	public static function resolveName(
-		\PHP_CodeSniffer_File $phpcsFile,
+		\PHP_CodeSniffer\Files\File $phpcsFile,
 		string $nameAsReferencedInFile,
 		array $useStatements,
 		int $currentPointer

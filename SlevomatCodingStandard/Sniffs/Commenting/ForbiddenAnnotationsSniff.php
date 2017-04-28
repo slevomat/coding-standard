@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Commenting;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 
-class ForbiddenAnnotationsSniff implements \PHP_CodeSniffer_Sniff
+class ForbiddenAnnotationsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_ANNOTATION_FORBIDDEN = 'AnnotationForbidden';
@@ -28,10 +28,10 @@ class ForbiddenAnnotationsSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $annotationPointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $annotationPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $annotationPointer)
 	{
 		$tokens = $phpcsFile->getTokens();
 

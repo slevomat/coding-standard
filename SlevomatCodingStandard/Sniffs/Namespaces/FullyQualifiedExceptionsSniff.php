@@ -9,7 +9,7 @@ use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
-class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer_Sniff
+class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_NON_FULLY_QUALIFIED_EXCEPTION = 'NonFullyQualifiedException';
@@ -62,10 +62,10 @@ class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $openTagPointer)
 	{
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
 		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);

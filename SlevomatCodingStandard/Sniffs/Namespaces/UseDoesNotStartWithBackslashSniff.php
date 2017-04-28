@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
-class UseDoesNotStartWithBackslashSniff implements \PHP_CodeSniffer_Sniff
+class UseDoesNotStartWithBackslashSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_STARTS_WITH_BACKSLASH = 'UseStartsWithBackslash';
@@ -22,10 +22,10 @@ class UseDoesNotStartWithBackslashSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $usePointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $usePointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $usePointer)
 	{
 		if (
 			UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer)

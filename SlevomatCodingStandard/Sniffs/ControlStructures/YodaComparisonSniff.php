@@ -9,7 +9,7 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
  *  > (Foo::BAR, BAR)
  *  > (true, false, null, 1, 1.0, arrays, 'foo')
  */
-class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
+class YodaComparisonSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_YODA_COMPARISON = 'YodaComparison';
@@ -58,7 +58,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 				T_STRING => self::DYNAMISM_FUNCTION_CALL,
 			];
 
-			$this->tokenDynamism += array_fill_keys(array_keys(\PHP_CodeSniffer_Tokens::$castTokens), 3);
+			$this->tokenDynamism += array_fill_keys(array_keys(\PHP_CodeSniffer\Util\Tokens::$castTokens), 3);
 		}
 
 		return $this->tokenDynamism;
@@ -85,7 +85,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 				T_CLOSE_CURLY_BRACKET => true,
 			];
 
-			$this->stopTokenCodes += array_fill_keys(array_keys(\PHP_CodeSniffer_Tokens::$assignmentTokens), true);
+			$this->stopTokenCodes += array_fill_keys(array_keys(\PHP_CodeSniffer\Util\Tokens::$assignmentTokens), true);
 		}
 
 		return $this->stopTokenCodes;
@@ -93,10 +93,10 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $comparisonTokenPointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $comparisonTokenPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $comparisonTokenPointer)
 	{
 		$tokens = $phpcsFile->getTokens();
 		$leftSideTokens = $this->getLeftSideTokens($tokens, $comparisonTokenPointer);
@@ -123,11 +123,11 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param mixed[] $leftSideTokens
 	 * @param mixed[] $rightSideTokens
 	 */
-	private function write(\PHP_CodeSniffer_File $phpcsFile, array $leftSideTokens, array $rightSideTokens)
+	private function write(\PHP_CodeSniffer\Files\File $phpcsFile, array $leftSideTokens, array $rightSideTokens)
 	{
 		current($leftSideTokens);
 		$firstLeftPointer = key($leftSideTokens);

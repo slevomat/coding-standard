@@ -4,7 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Types;
 
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 
-class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer_Sniff
+class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_NO_EMPTY_LINE_AFTER_OPENING_BRACE = 'NoEmptyLineAfterOpeningBrace';
@@ -39,16 +39,16 @@ class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $stackPointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $stackPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $stackPointer)
 	{
 		$this->processOpeningBrace($phpcsFile, $stackPointer);
 		$this->processClosingBrace($phpcsFile, $stackPointer);
 	}
 
-	private function processOpeningBrace(\PHP_CodeSniffer_File $phpcsFile, int $stackPointer)
+	private function processOpeningBrace(\PHP_CodeSniffer\Files\File $phpcsFile, int $stackPointer)
 	{
 		$tokens = $phpcsFile->getTokens();
 		$typeToken = $tokens[$stackPointer];
@@ -105,7 +105,7 @@ class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer_Sniff
 		}
 	}
 
-	private function processClosingBrace(\PHP_CodeSniffer_File $phpcsFile, int $stackPointer)
+	private function processClosingBrace(\PHP_CodeSniffer\Files\File $phpcsFile, int $stackPointer)
 	{
 		$tokens = $phpcsFile->getTokens();
 		$typeToken = $tokens[$stackPointer];

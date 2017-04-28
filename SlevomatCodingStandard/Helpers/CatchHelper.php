@@ -6,12 +6,12 @@ class CatchHelper
 {
 
 	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
 	 * @param mixed[] $catchToken
 	 * @return string[]
 	 */
-	public static function findCatchedTypesInCatch(\PHP_CodeSniffer_File $phpcsFile, array $useStatements, array $catchToken): array
+	public static function findCatchedTypesInCatch(\PHP_CodeSniffer\Files\File $phpcsFile, array $useStatements, array $catchToken): array
 	{
 		$nameEndPointer = $catchToken['parenthesis_opener'];
 		$tokens = $phpcsFile->getTokens();

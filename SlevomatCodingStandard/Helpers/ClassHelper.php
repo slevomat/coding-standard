@@ -5,24 +5,24 @@ namespace SlevomatCodingStandard\Helpers;
 class ClassHelper
 {
 
-	public static function getFullyQualifiedName(\PHP_CodeSniffer_File $codeSnifferFile, int $classPointer): string
+	public static function getFullyQualifiedName(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $classPointer): string
 	{
 		$name = sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, self::getName($codeSnifferFile, $classPointer));
 		$namespace = NamespaceHelper::findCurrentNamespaceName($codeSnifferFile, $classPointer);
 		return $namespace !== null ? sprintf('%s%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $namespace, $name) : $name;
 	}
 
-	public static function getName(\PHP_CodeSniffer_File $codeSnifferFile, int $classPointer): string
+	public static function getName(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $classPointer): string
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		return $tokens[$codeSnifferFile->findNext(T_STRING, $classPointer + 1, $tokens[$classPointer]['scope_opener'])]['content'];
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
 	 * @return string[]
 	 */
-	public static function getAllNames(\PHP_CodeSniffer_File $codeSnifferFile): array
+	public static function getAllNames(\PHP_CodeSniffer\Files\File $codeSnifferFile): array
 	{
 		$previousClassPointer = 0;
 
@@ -34,7 +34,7 @@ class ClassHelper
 		);
 	}
 
-	private static function getAllClassPointers(\PHP_CodeSniffer_File $codeSnifferFile, int &$previousClassPointer): \Generator
+	private static function getAllClassPointers(\PHP_CodeSniffer\Files\File $codeSnifferFile, int &$previousClassPointer): \Generator
 	{
 		do {
 			$nextClassPointer = $codeSnifferFile->findNext(TokenHelper::$typeKeywordTokenCodes, $previousClassPointer + 1);

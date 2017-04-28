@@ -4,7 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use SlevomatCodingStandard\Helpers\TokenHelper;
 
-class NullableTypeForNullDefaultValueSniff implements \PHP_CodeSniffer_Sniff
+class NullableTypeForNullDefaultValueSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_NULLABILITY_SYMBOL_REQUIRED = 'NullabilitySymbolRequired';
@@ -33,10 +33,10 @@ class NullableTypeForNullDefaultValueSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $functionPointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $functionPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $functionPointer)
 	{
 		$tokens = $phpcsFile->getTokens();
 		$startPointer = $tokens[$functionPointer]['parenthesis_opener'] + 1;

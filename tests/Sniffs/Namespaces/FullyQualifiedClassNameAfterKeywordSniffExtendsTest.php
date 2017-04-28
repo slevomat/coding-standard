@@ -10,7 +10,7 @@ class FullyQualifiedClassNameAfterKeywordSniffExtendsTest extends \SlevomatCodin
 		return FullyQualifiedClassNameAfterKeywordSniff::class;
 	}
 
-	private function getFileReport(): \PHP_CodeSniffer_File
+	private function getFileReport(): \PHP_CodeSniffer\Files\File
 	{
 		return $this->checkFile(
 			__DIR__ . '/data/fullyQualifiedExtends.php',

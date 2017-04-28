@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 
-class ClassConstantVisibilitySniff implements \PHP_CodeSniffer_Sniff
+class ClassConstantVisibilitySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_MISSING_CONSTANT_VISIBILITY = 'MissingConstantVisibility';
@@ -33,10 +33,10 @@ class ClassConstantVisibilitySniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $constantPointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $constantPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $constantPointer)
 	{
 		$tokens = $phpcsFile->getTokens();
 

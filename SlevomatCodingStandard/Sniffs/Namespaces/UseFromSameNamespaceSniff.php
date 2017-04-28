@@ -6,7 +6,7 @@ use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
-class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
+class UseFromSameNamespaceSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_USE_FROM_SAME_NAMESPACE = 'UseFromSameNamespace';
@@ -23,10 +23,10 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $usePointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $usePointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $usePointer)
 	{
 		if (
 			UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer)
@@ -72,11 +72,11 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $startPointer
 	 * @return int|null
 	 */
-	private function findAsPointer(\PHP_CodeSniffer_File $phpcsFile, int $startPointer)
+	private function findAsPointer(\PHP_CodeSniffer\Files\File $phpcsFile, int $startPointer)
 	{
 		$asPointer = $phpcsFile->findNext(T_AS, $startPointer, null, false, null, true);
 		if ($asPointer === false) {
