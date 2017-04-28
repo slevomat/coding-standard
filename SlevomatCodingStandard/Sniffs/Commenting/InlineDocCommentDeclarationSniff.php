@@ -6,7 +6,7 @@ use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 
-class InlineDocCommentDeclarationSniff implements \PHP_CodeSniffer_Sniff
+class InlineDocCommentDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_INVALID_FORMAT = 'InvalidFormat';
@@ -23,10 +23,10 @@ class InlineDocCommentDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $variablePointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $variablePointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $variablePointer)
 	{
 		if (PropertyHelper::isProperty($phpcsFile, $variablePointer)) {
 			return;

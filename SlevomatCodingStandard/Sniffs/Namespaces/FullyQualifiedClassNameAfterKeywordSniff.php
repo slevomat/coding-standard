@@ -6,7 +6,7 @@ use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 
-class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
+class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified%s';
@@ -51,10 +51,10 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $keywordPointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $keywordPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $keywordPointer)
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -82,7 +82,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer_Sniff
 		}
 	}
 
-	private function checkReferencedName(\PHP_CodeSniffer_File $phpcsFile, int $keywordPointer, int $nameStartPointer): int
+	private function checkReferencedName(\PHP_CodeSniffer\Files\File $phpcsFile, int $keywordPointer, int $nameStartPointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
 

@@ -9,50 +9,45 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 * @param string $filePath
 	 * @param mixed[] $sniffProperties
 	 * @param string[] $codesToCheck
-	 * @return \PHP_CodeSniffer_File
+	 * @return \PHP_CodeSniffer\Files\File
 	 */
-	protected function checkFile(string $filePath, array $sniffProperties = [], array $codesToCheck = []): \PHP_CodeSniffer_File
+	protected function checkFile(string $filePath, array $sniffProperties = [], array $codesToCheck = []): \PHP_CodeSniffer\Files\File
 	{
-		$codeSniffer = new \PHP_CodeSniffer();
-		$codeSniffer->cli->setCommandLineValues([
+		$codeSniffer = new \PHP_CodeSniffer\Runner();
+		$codeSniffer->config = new \PHP_CodeSniffer\Config([
 			'-s',
 		]);
-
-		$propertyReflection = new \ReflectionProperty(\PHP_CodeSniffer::class, 'ruleset');
-		$propertyReflection->setAccessible(true);
+		$codeSniffer->init();
 
 		if (count($sniffProperties) > 0) {
-			$ruleset = $propertyReflection->getValue($codeSniffer);
-			$ruleset[$this->getSniffName()]['properties'] = $sniffProperties;
-			$propertyReflection->setValue($codeSniffer, $ruleset);
+			$codeSniffer->ruleset->ruleset[$this->getSniffName()]['properties'] = $sniffProperties;
 		}
 
-		$codeSniffer->registerSniffs([$this->getSniffPath()], [], []);
+		$codeSniffer->ruleset->sniffs = [$this->getSniffClassName() => $this->getSniffClassName()];
 
 		if (count($codesToCheck) > 0) {
-			$ruleset = $propertyReflection->getValue($codeSniffer);
-
 			foreach ($this->getSniffClassReflection()->getConstants() as $constantName => $constantValue) {
 				if (strpos($constantName, 'CODE_') === 0 && !in_array($constantValue, $codesToCheck, true)) {
-					$ruleset[sprintf('%s.%s', $this->getSniffName(), $constantValue)]['severity'] = 0;
+					$codeSniffer->ruleset->ruleset[sprintf('%s.%s', $this->getSniffName(), $constantValue)]['severity'] = 0;
 				}
 			}
-
-			$propertyReflection->setValue($codeSniffer, $ruleset);
 		}
 
-		$codeSniffer->populateTokenListeners();
+		$codeSniffer->ruleset->populateTokenListeners();
 
-		return $codeSniffer->processFile($filePath);
+		$file = new \PHP_CodeSniffer\Files\LocalFile($filePath, $codeSniffer->ruleset, $codeSniffer->config);
+		$file->process();
+
+		return $file;
 	}
 
-	protected function assertNoSniffErrorInFile(\PHP_CodeSniffer_File $file)
+	protected function assertNoSniffErrorInFile(\PHP_CodeSniffer\Files\File $file)
 	{
 		$errors = $file->getErrors();
 		$this->assertEmpty($errors, sprintf('No errors expected, but %d errors found.', count($errors)));
 	}
 
-	protected function assertSniffError(\PHP_CodeSniffer_File $codeSnifferFile, int $line, string $code, string $message = null)
+	protected function assertSniffError(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $line, string $code, string $message = null)
 	{
 		$errors = $codeSnifferFile->getErrors();
 		$this->assertTrue(isset($errors[$line]), sprintf('Expected error on line %s, but none found.', $line));
@@ -75,7 +70,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		);
 	}
 
-	protected function assertNoSniffError(\PHP_CodeSniffer_File $codeSnifferFile, int $line)
+	protected function assertNoSniffError(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $line)
 	{
 		$errors = $codeSnifferFile->getErrors();
 		$this->assertFalse(
@@ -90,7 +85,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		);
 	}
 
-	protected function assertAllFixedInFile(\PHP_CodeSniffer_File $codeSnifferFile)
+	protected function assertAllFixedInFile(\PHP_CodeSniffer\Files\File $codeSnifferFile)
 	{
 		$codeSnifferFile->fixer->fixFile();
 
@@ -151,11 +146,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	protected function getSniffClassName(): string
 	{
 		return substr(get_class($this), 0, -strlen('Test'));
-	}
-
-	protected function getSniffPath(): string
-	{
-		return $this->getSniffClassReflection()->getFileName();
 	}
 
 	protected function getSniffClassReflection(): \ReflectionClass

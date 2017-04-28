@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	private function getFileReport(): \PHP_CodeSniffer_File
+	private function getFileReport(): \PHP_CodeSniffer\Files\File
 	{
 		return $this->checkFile(__DIR__ . '/data/unusedUses.php');
 	}

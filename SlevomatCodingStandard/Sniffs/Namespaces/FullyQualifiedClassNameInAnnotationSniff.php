@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 
-class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer_Sniff
+class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_NON_FULLY_QUALIFIED_CLASS_NAME = 'NonFullyQualifiedClassName';
@@ -22,10 +22,10 @@ class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $annotationTagPointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $annotationTagPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $annotationTagPointer)
 	{
 		$tokens = $phpcsFile->getTokens();
 

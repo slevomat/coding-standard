@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 
-class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
+class DeclareStrictTypesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_DECLARE_STRICT_TYPES_MISSING = 'DeclareStrictTypesMissing';
@@ -32,10 +32,10 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $openTagPointer)
 	{
 		if ($phpcsFile->findPrevious(T_OPEN_TAG, $openTagPointer - 1) !== false) {
 			return;

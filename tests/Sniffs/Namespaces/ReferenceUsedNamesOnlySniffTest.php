@@ -531,13 +531,13 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 
 	public function testThrowExceptionForUndefinedKeyword()
 	{
-		$report = $this->checkFile(
+		$this->expectException(\SlevomatCodingStandard\Sniffs\Namespaces\UndefinedKeywordTokenException::class);
+		$this->expectExceptionMessage('Value for keyword token not found, constant "T_FOO" is not defined');
+
+		$this->checkFile(
 			__DIR__ . '/data/unknownKeyword.php',
 			['fullyQualifiedKeywords' => ['T_FOO']]
 		);
-
-		$this->assertSame(1, $report->getErrorCount());
-		$this->assertContains('Value for keyword token not found, constant "T_FOO" is not defined', $report->getErrors()[1][1][0]['message']);
 	}
 
 	public function testAllowingFullyQualifiedGlobalTypes()

@@ -6,12 +6,12 @@ class AnnotationHelper
 {
 
 	/**
-	 * @param \PHP_CodeSniffer_File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
 	 * @param int $pointer
 	 * @param string $annotationName
 	 * @return \SlevomatCodingStandard\Helpers\Annotation[]
 	 */
-	public static function getAnnotationsByName(\PHP_CodeSniffer_File $codeSnifferFile, int $pointer, string $annotationName): array
+	public static function getAnnotationsByName(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $pointer, string $annotationName): array
 	{
 		$annotations = self::getAnnotations($codeSnifferFile, $pointer);
 
@@ -23,11 +23,11 @@ class AnnotationHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
 	 * @param int $pointer
 	 * @return \SlevomatCodingStandard\Helpers\Annotation[][]
 	 */
-	public static function getAnnotations(\PHP_CodeSniffer_File $codeSnifferFile, int $pointer): array
+	public static function getAnnotations(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $pointer): array
 	{
 		$annotations = [];
 

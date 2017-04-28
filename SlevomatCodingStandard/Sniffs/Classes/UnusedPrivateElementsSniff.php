@@ -10,7 +10,7 @@ use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 
-class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
+class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const NAME = 'SlevomatCodingStandard.Classes.UnusedPrivateElements';
@@ -76,10 +76,10 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $classPointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $classPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $classPointer)
 	{
 		$tokens = $phpcsFile->getTokens();
 		$classToken = $tokens[$classPointer];
@@ -242,12 +242,12 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param mixed[] $tokens
 	 * @param mixed[] $classToken
 	 * @return int[] string(name) => pointer
 	 */
-	private function getProperties(\PHP_CodeSniffer_File $phpcsFile, array $tokens, array $classToken): array
+	private function getProperties(\PHP_CodeSniffer\Files\File $phpcsFile, array $tokens, array $classToken): array
 	{
 		$reportedProperties = [];
 		$findPropertiesStartTokenPointer = $classToken['scope_opener'] + 1;
@@ -284,22 +284,22 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $privateTokenPointer
 	 * @return string[]
 	 */
-	private function getPhpDocTags(\PHP_CodeSniffer_File $phpcsFile, int $privateTokenPointer): array
+	private function getPhpDocTags(\PHP_CodeSniffer\Files\File $phpcsFile, int $privateTokenPointer): array
 	{
 		return array_keys(AnnotationHelper::getAnnotations($phpcsFile, $privateTokenPointer));
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param mixed[] $tokens
 	 * @param mixed[] $classToken
 	 * @return int[] string(name) => pointer
 	 */
-	private function getMethods(\PHP_CodeSniffer_File $phpcsFile, array $tokens, array $classToken): array
+	private function getMethods(\PHP_CodeSniffer\Files\File $phpcsFile, array $tokens, array $classToken): array
 	{
 		$reportedMethods = [];
 		$findMethodsStartTokenPointer = $classToken['scope_opener'] + 1;
@@ -322,12 +322,12 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param mixed[] $tokens
 	 * @param mixed[] $classToken
 	 * @return int[] string(name) => pointer
 	 */
-	private function getConstants(\PHP_CodeSniffer_File $phpcsFile, array $tokens, array $classToken): array
+	private function getConstants(\PHP_CodeSniffer\Files\File $phpcsFile, array $tokens, array $classToken): array
 	{
 		$reportedConstants = [];
 		$findConstantsStartTokenPointer = $classToken['scope_opener'] + 1;
@@ -349,12 +349,12 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param mixed[] $tokens
 	 * @param int $methodTokenPointer
 	 * @return int|null
 	 */
-	private function findVisibilityModifier(\PHP_CodeSniffer_File $phpcsFile, array $tokens, int $methodTokenPointer)
+	private function findVisibilityModifier(\PHP_CodeSniffer\Files\File $phpcsFile, array $tokens, int $methodTokenPointer)
 	{
 		$visibilityModifiedTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $methodTokenPointer - 1);
 		$visibilityModifiedToken = $tokens[$visibilityModifiedTokenPointer];

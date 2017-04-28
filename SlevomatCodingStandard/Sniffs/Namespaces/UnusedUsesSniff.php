@@ -7,7 +7,7 @@ use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
-class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
+class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_UNUSED_USE = 'UnusedUse';
@@ -28,10 +28,10 @@ class UnusedUsesSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $openTagPointer)
 	{
 		$unusedNames = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);

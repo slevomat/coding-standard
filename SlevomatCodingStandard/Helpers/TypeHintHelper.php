@@ -57,7 +57,7 @@ class TypeHintHelper
 		return array_key_exists($typeHint, $longToShort) ? $longToShort[$typeHint] : $typeHint;
 	}
 
-	public static function getFullyQualifiedTypeHint(\PHP_CodeSniffer_File $phpcsFile, int $pointer, string $typeHint): string
+	public static function getFullyQualifiedTypeHint(\PHP_CodeSniffer\Files\File $phpcsFile, int $pointer, string $typeHint): string
 	{
 		if (self::isSimpleTypeHint($typeHint)) {
 			return self::convertLongSimpleTypeHintToShort($typeHint);

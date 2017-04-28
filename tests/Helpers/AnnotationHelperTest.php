@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Helpers;
 class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
-	/** @var \PHP_CodeSniffer_File */
+	/** @var \PHP_CodeSniffer\Files\File */
 	private $testedCodeSnifferFile;
 
 	public function testClassWithAnnotation()
@@ -73,7 +73,7 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertCount(0, AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withoutAnnotation'), '@param'));
 	}
 
-	private function getTestedCodeSnifferFile(): \PHP_CodeSniffer_File
+	private function getTestedCodeSnifferFile(): \PHP_CodeSniffer\Files\File
 	{
 		if ($this->testedCodeSnifferFile === null) {
 			$this->testedCodeSnifferFile = $this->getCodeSnifferFile(

@@ -7,7 +7,7 @@ class SuppressHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 	const CHECK_NAME = 'Sniff.Sniff.Sniff.check';
 
-	/** @var \PHP_CodeSniffer_File */
+	/** @var \PHP_CodeSniffer\Files\File */
 	private $testedCodeSnifferFile;
 
 	public function testClassIsSuppressed()
@@ -82,7 +82,7 @@ class SuppressHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertFalse(SuppressHelper::isSniffSuppressed($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), $name), self::CHECK_NAME));
 	}
 
-	private function getTestedCodeSnifferFile(): \PHP_CodeSniffer_File
+	private function getTestedCodeSnifferFile(): \PHP_CodeSniffer\Files\File
 	{
 		if ($this->testedCodeSnifferFile === null) {
 			$this->testedCodeSnifferFile = $this->getCodeSnifferFile(

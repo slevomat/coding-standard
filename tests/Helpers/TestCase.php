@@ -10,10 +10,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	/**
 	 * @param int|string $code
 	 * @param int $line
-	 * @param \PHP_CodeSniffer_File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
 	 * @param int|null $tokenPointer
 	 */
-	protected function assertTokenPointer($code, int $line, \PHP_CodeSniffer_File $codeSnifferFile, int $tokenPointer = null)
+	protected function assertTokenPointer($code, int $line, \PHP_CodeSniffer\Files\File $codeSnifferFile, int $tokenPointer = null)
 	{
 		$token = $this->getTokenFromPointer($codeSnifferFile, $tokenPointer);
 		$expectedTokenName = $this->findTokenName($code);
@@ -26,11 +26,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
 	 * @param string $name
 	 * @return int|null
 	 */
-	protected function findClassPointerByName(\PHP_CodeSniffer_File $codeSnifferFile, string $name)
+	protected function findClassPointerByName(\PHP_CodeSniffer\Files\File $codeSnifferFile, string $name)
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
@@ -45,11 +45,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
 	 * @param string $name
 	 * @return int|null
 	 */
-	protected function findConstantPointerByName(\PHP_CodeSniffer_File $codeSnifferFile, string $name)
+	protected function findConstantPointerByName(\PHP_CodeSniffer\Files\File $codeSnifferFile, string $name)
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
@@ -64,11 +64,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
 	 * @param string $name
 	 * @return int|null
 	 */
-	protected function findPropertyPointerByName(\PHP_CodeSniffer_File $codeSnifferFile, string $name)
+	protected function findPropertyPointerByName(\PHP_CodeSniffer\Files\File $codeSnifferFile, string $name)
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
@@ -83,11 +83,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
 	 * @param string $name
 	 * @return int|null
 	 */
-	protected function findFunctionPointerByName(\PHP_CodeSniffer_File $codeSnifferFile, string $name)
+	protected function findFunctionPointerByName(\PHP_CodeSniffer\Files\File $codeSnifferFile, string $name)
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
@@ -126,12 +126,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
 	 * @param int|null $tokenPointer
 	 * @return mixed[]
 	 */
 	private function getTokenFromPointer(
-		\PHP_CodeSniffer_File $codeSnifferFile,
+		\PHP_CodeSniffer\Files\File $codeSnifferFile,
 		int $tokenPointer = null
 	): array
 	{
@@ -150,16 +150,21 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		return $tokens[$tokenPointer];
 	}
 
-	protected function getCodeSnifferFile(string $filename): \PHP_CodeSniffer_File
+	protected function getCodeSnifferFile(string $filename): \PHP_CodeSniffer\Files\File
 	{
-		$codeSniffer = new \PHP_CodeSniffer();
-		$codeSnifferFile = new \PHP_CodeSniffer_File(
+		$codeSniffer = new \PHP_CodeSniffer\Runner();
+		$codeSniffer->config = new \PHP_CodeSniffer\Config([
+			'-s',
+		]);
+		$codeSniffer->init();
+
+		$codeSnifferFile = new \PHP_CodeSniffer\Files\LocalFile(
 			$filename,
-			[],
-			[],
-			$codeSniffer
+			$codeSniffer->ruleset,
+			$codeSniffer->config
 		);
-		$codeSnifferFile->start();
+
+		$codeSnifferFile->process();
 
 		return $codeSnifferFile;
 	}

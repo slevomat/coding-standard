@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Helpers;
 class DocCommentHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
-	/** @var \PHP_CodeSniffer_File */
+	/** @var \PHP_CodeSniffer\Files\File */
 	private $testedCodeSnifferFile;
 
 	public function testClassHasDocComment()
@@ -96,7 +96,7 @@ class DocCommentHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertFalse(DocCommentHelper::hasDocCommentDescription($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withoutDocComment')));
 	}
 
-	private function getTestedCodeSnifferFile(): \PHP_CodeSniffer_File
+	private function getTestedCodeSnifferFile(): \PHP_CodeSniffer\Files\File
 	{
 		if ($this->testedCodeSnifferFile === null) {
 			$this->testedCodeSnifferFile = $this->getCodeSnifferFile(

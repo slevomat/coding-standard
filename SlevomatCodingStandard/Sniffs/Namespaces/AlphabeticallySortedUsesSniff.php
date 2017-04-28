@@ -6,7 +6,7 @@ use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
-class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
+class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_INCORRECT_ORDER = 'IncorrectlyOrderedUses';
@@ -29,10 +29,10 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $openTagPointer)
 	{
 		$this->lastUse = null;
 		$useStatements = UseStatementHelper::getUseStatements(
@@ -63,11 +63,11 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
 	 */
 	private function fixAlphabeticalOrder(
-		\PHP_CodeSniffer_File $phpcsFile,
+		\PHP_CodeSniffer\Files\File $phpcsFile,
 		array $useStatements
 	)
 	{

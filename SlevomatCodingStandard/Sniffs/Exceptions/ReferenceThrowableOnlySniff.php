@@ -8,7 +8,7 @@ use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
-class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer_Sniff
+class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_REFERENCED_GENERAL_EXCEPTION = 'ReferencedGeneralException';
@@ -25,10 +25,10 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $openTagPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $openTagPointer)
 	{
 		$tokens = $phpcsFile->getTokens();
 		$message = sprintf('Referencing general \%s; use \%s instead.', \Exception::class, \Throwable::class);
@@ -74,12 +74,12 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
 	 * @param int $catchPointer
 	 * @return bool
 	 */
-	private function searchForThrowableInNextCatches(\PHP_CodeSniffer_File $phpcsFile, array $useStatements, int $catchPointer): bool
+	private function searchForThrowableInNextCatches(\PHP_CodeSniffer\Files\File $phpcsFile, array $useStatements, int $catchPointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 		$nextCatchPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$catchPointer]['scope_closer'] + 1);

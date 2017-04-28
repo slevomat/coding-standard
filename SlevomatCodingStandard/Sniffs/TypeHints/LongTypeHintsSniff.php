@@ -6,7 +6,7 @@ use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 
-class LongTypeHintsSniff implements \PHP_CodeSniffer_Sniff
+class LongTypeHintsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_USED_LONG_TYPE_HINT = 'UsedLongTypeHint';
@@ -24,10 +24,10 @@ class LongTypeHintsSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $pointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $pointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $pointer)
 	{
 		$tokens = $phpcsFile->getTokens();
 

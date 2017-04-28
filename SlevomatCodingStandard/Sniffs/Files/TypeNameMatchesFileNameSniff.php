@@ -7,7 +7,7 @@ use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 
-class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
+class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	const CODE_NO_MATCH_BETWEEN_TYPE_NAME_AND_FILE_NAME = 'NoMatchBetweenTypeNameAndFileName';
@@ -99,10 +99,10 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $typePointer
 	 */
-	public function process(\PHP_CodeSniffer_File $phpcsFile, $typePointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $typePointer)
 	{
 		$tokens = $phpcsFile->getTokens();
 		$namePointer = $phpcsFile->findNext(T_STRING, $typePointer + 1);
