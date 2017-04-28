@@ -20,6 +20,9 @@ class FooClass
 	{
 		/** @var self $boo */
 		$boo = $this->get();
+
+		/** @var $coo self */
+		$coo = $this->get();
 	}
 
 	/**

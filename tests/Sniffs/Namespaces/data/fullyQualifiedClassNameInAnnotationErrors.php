@@ -58,7 +58,8 @@ class FooClass
 	 */
 	public function resultSet()
 	{
-
+		/** @var $coo FooClass */
+		$coo = $this->get();
 	}
 
 }

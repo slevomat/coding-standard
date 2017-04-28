@@ -40,7 +40,14 @@ class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer_Sniff
 			return;
 		}
 
-		$typeHints = explode('|', preg_split('~\\s+~', trim($tokens[$annotationContentPointer]['content']))[0]);
+		$annotationContent = trim($tokens[$annotationContentPointer]['content']);
+		if ($annotationTagName === '@var' && preg_match('~^\$\\S+\\s+(.+)~', $annotationContent, $matches)) {
+			$typeHintsDefinition = $matches[1];
+		} else {
+			$typeHintsDefinition = preg_split('~\\s+~', $annotationContent)[0];
+		}
+
+		$typeHints = explode('|', $typeHintsDefinition);
 		foreach ($typeHints as $typeHint) {
 			$typeHint = preg_replace('~(\[\])+$~', '', $typeHint);
 			$lowercasedTypeHint = strtolower($typeHint);

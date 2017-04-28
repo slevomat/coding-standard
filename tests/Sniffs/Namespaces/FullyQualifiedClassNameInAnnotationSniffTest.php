@@ -14,7 +14,7 @@ class FullyQualifiedClassNameInAnnotationSniffTest extends \SlevomatCodingStanda
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fullyQualifiedClassNameInAnnotationErrors.php');
 
-		$this->assertSame(11, $report->getErrorCount());
+		$this->assertSame(12, $report->getErrorCount());
 
 		$this->assertSniffError($report, 13, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME);
 		$this->assertSniffError($report, 17, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME);
@@ -27,6 +27,7 @@ class FullyQualifiedClassNameInAnnotationSniffTest extends \SlevomatCodingStanda
 		$this->assertSniffError($report, 49, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME);
 		$this->assertSniffError($report, 57, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \FooNamespace\FooClass in @return should be referenced via a fully qualified name');
 		$this->assertSniffError($report, 57, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \Iterator in @return should be referenced via a fully qualified name');
+		$this->assertSniffError($report, 61, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME);
 	}
 
 }
