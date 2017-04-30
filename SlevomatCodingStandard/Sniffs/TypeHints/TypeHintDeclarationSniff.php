@@ -781,12 +781,14 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 				continue;
 			}
 
-			$parameterAnnotationParts = preg_split('~\\s+~', $parameterAnnotation->getContent(), 2);
-			$parameterTypeHintDefinition = $parameterAnnotationParts[0];
-			if (isset($parameterAnnotationParts[1]) && preg_match('~^(?:\.{3}\\s*)?(\$\\S+)~', $parameterAnnotationParts[1], $matches)) {
-				$parametersTypeHintsDefinitions[$matches[1]] = $parameterTypeHintDefinition;
+			if (!preg_match('~^([^$]\\S*)(?:\\s+(?:\.{3}\\s*)?(\$\\S+))?~', $parameterAnnotation->getContent(), $matches)) {
+				continue;
+			}
+
+			if (isset($matches[2])) {
+				$parametersTypeHintsDefinitions[$matches[2]] = $matches[1];
 			} elseif (isset($parametersNames[$parameterAnnotationNo])) {
-				$parametersTypeHintsDefinitions[$parametersNames[$parameterAnnotationNo]] = $parameterTypeHintDefinition;
+				$parametersTypeHintsDefinitions[$parametersNames[$parameterAnnotationNo]] = $matches[1];
 			}
 		}
 

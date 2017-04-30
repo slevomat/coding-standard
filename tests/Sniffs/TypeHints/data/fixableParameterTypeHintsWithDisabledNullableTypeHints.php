@@ -64,6 +64,14 @@ function optionalWithoutTypeHint($a = null)
 
 }
 
+/**
+ * @param $a string
+ */
+function invalidAnnotation($a)
+{
+
+}
+
 class Foo
 {
 
@@ -123,6 +131,14 @@ class Foo
 	 * @param string|null $a
 	 */
 	public function optionalWithoutTypeHint($a = null)
+	{
+
+	}
+
+	/**
+	 * @param $a string
+	 */
+	private function invalidAnnotation($a)
 	{
 
 	}

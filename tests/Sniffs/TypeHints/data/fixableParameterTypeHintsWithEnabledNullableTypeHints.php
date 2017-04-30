@@ -174,6 +174,14 @@ function traversableDateTimeImmutable($a)
 
 }
 
+/**
+ * @param $a string
+ */
+function invalidAnnotation($a)
+{
+
+}
+
 abstract class Foo
 {
 
@@ -352,6 +360,14 @@ abstract class Foo
 	 * @param \DateTimeImmutable[] $a
 	 */
 	protected function traversableDateTimeImmutable($a)
+	{
+
+	}
+
+	/**
+	 * @param $a string
+	 */
+	private function invalidAnnotation($a)
 	{
 
 	}
