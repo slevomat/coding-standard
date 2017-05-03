@@ -96,36 +96,18 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 		if (!$a->hasSameType($b)) {
 			return $a->compareByType($b);
 		}
-		$aName = $a->getFullyQualifiedTypeName();
-		$bName = $b->getFullyQualifiedTypeName();
 
-		$i = 0;
-		for (; $i < min(strlen($aName), strlen($bName)); $i++) {
-			if ($this->isSpecialCharacter($aName[$i]) && !$this->isSpecialCharacter($bName[$i])) {
-				return -1;
-			} elseif (!$this->isSpecialCharacter($aName[$i]) && $this->isSpecialCharacter($bName[$i])) {
-				return 1;
-			}
+		$aNameParts = explode(NamespaceHelper::NAMESPACE_SEPARATOR, $a->getFullyQualifiedTypeName());
+		$bNameParts = explode(NamespaceHelper::NAMESPACE_SEPARATOR, $b->getFullyQualifiedTypeName());
 
-			if (is_numeric($aName[$i]) && is_numeric($bName[$i])) {
-				break;
-			}
-
-			$cmp = strcasecmp($aName[$i], $bName[$i]);
-			if (
-				$cmp !== 0
-				|| ($aName[$i] !== $bName[$i] && strtolower($aName[$i]) === strtolower($bName[$i]))
-			) {
-				return $cmp;
+		for ($i = 0; $i < min(count($aNameParts), count($bNameParts)); $i++) {
+			$comparison = strcasecmp($aNameParts[$i], $bNameParts[$i]);
+			if ($comparison !== 0) {
+				return $comparison;
 			}
 		}
 
-		return strnatcasecmp(substr($aName, $i), substr($bName, $i));
-	}
-
-	private function isSpecialCharacter(string $character): bool
-	{
-		return in_array($character, ['\\', '_'], true);
+		return count($aNameParts) <=> count($bNameParts);
 	}
 
 }
