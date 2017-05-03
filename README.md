@@ -347,6 +347,10 @@ Sniff provides the following settings:
 
 * `forbiddenAnnotations`: allows to configure which annotations are forbidden to be used
 
+#### SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration 🔧
+
+Reports invalid format of inline phpDocs with `@var`.
+
 ## Installation
 
 The recommended way to install Slevomat Coding Standard is [through Composer](http://getcomposer.org).
