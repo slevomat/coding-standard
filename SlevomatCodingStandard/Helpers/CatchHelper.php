@@ -13,36 +13,29 @@ class CatchHelper
 	 */
 	public static function findCatchedTypesInCatch(\PHP_CodeSniffer_File $phpcsFile, array $useStatements, array $catchToken): array
 	{
-		$catchedVariablePointer = $phpcsFile->findNext(T_VARIABLE, $catchToken['parenthesis_opener'] + 1, $catchToken['parenthesis_closer']);
-
-		$startPointer = TokenHelper::findNextEffective($phpcsFile, $catchToken['parenthesis_opener'] + 1, $catchedVariablePointer);
+		$nameEndPointer = $catchToken['parenthesis_opener'];
 		$tokens = $phpcsFile->getTokens();
 		$catchedTypes = [];
-		while (true) {
-			$nextPointer = $phpcsFile->findNext(
-				array_merge([T_BITWISE_OR], TokenHelper::$nameTokenCodes),
-				$startPointer,
-				$catchedVariablePointer
-			);
-			if ($nextPointer === false) {
+		do {
+			$nameStartPointer = $phpcsFile->findNext(array_merge([T_BITWISE_OR], TokenHelper::$nameTokenCodes), $nameEndPointer + 1, $catchToken['parenthesis_closer']);
+			if ($nameStartPointer === false) {
 				break;
 			}
-			$nextToken = $tokens[$nextPointer];
-			if ($nextToken['code'] === T_BITWISE_OR) {
-				$startPointer = TokenHelper::findNextEffective($phpcsFile, $nextPointer + 1, $catchedVariablePointer);
-				continue;
+
+			if ($tokens[$nameStartPointer]['code'] === T_BITWISE_OR) {
+				$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $nameStartPointer + 1, $catchToken['parenthesis_closer']);
 			}
 
-			$endPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $nextPointer) - 1;
+			$pointerAfterNameEndPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $nameStartPointer + 1);
+			$nameEndPointer = $pointerAfterNameEndPointer === null ? $nameStartPointer : $pointerAfterNameEndPointer - 1;
+
 			$catchedTypes[] = NamespaceHelper::resolveName(
 				$phpcsFile,
-				TokenHelper::getContent($phpcsFile, $startPointer, $endPointer),
+				TokenHelper::getContent($phpcsFile, $nameStartPointer, $nameEndPointer),
 				$useStatements,
 				$catchToken['parenthesis_opener']
 			);
-
-			$startPointer = $endPointer + 1;
-		}
+		} while (true);
 
 		return $catchedTypes;
 	}
