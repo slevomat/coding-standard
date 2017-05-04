@@ -537,7 +537,6 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		);
 
 		$this->assertSame(1, $report->getErrorCount());
-		$this->assertSame('unknownSniff', $report->getErrors()[1][1][0]['source']);
 		$this->assertContains('Value for keyword token not found, constant "T_FOO" is not defined', $report->getErrors()[1][1][0]['message']);
 	}
 
