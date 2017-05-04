@@ -30,6 +30,10 @@ class PropertyHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 				'$hoo',
 				false,
 			],
+			[
+				'$weirdDefinition',
+				true,
+			],
 		];
 	}
 

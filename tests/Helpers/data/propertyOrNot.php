@@ -15,4 +15,6 @@ class Foo
 		$hoo = $boo;
 	}
 
+	private$weirdDefinition;
+
 }

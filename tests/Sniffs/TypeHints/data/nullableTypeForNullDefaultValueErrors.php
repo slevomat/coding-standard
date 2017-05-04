@@ -59,4 +59,9 @@ class FooBar
 
 	}
 
+	public function weirdDefinition(float&$ref=null)
+	{
+
+	}
+
 }

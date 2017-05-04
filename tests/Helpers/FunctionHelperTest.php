@@ -71,6 +71,10 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 				'someParametersWithNullableTypeHints',
 				['$string', '$int', '$bool', '$float', '$callable', '$array', '$object'],
 			],
+			[
+				'parametersWithWeirdDefinition',
+				['$string', '$int', '$bool', '$float', '$callable', '$array', '$object'],
+			],
 		];
 	}
 
@@ -147,6 +151,23 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 					'$array',
 				],
 			],
+			[
+				'parametersWithWeirdDefinition',
+				[
+					'$string' => new ParameterTypeHint('string', false, false),
+					'$int' => null,
+					'$bool' => new ParameterTypeHint('bool', false, true),
+					'$float' => null,
+					'$callable' => new ParameterTypeHint('callable', false, false),
+					'$array' => null,
+					'$object' => new ParameterTypeHint('\FooNamespace\FooClass', false, false),
+				],
+				[
+					'$int',
+					'$float',
+					'$array',
+				],
+			],
 		];
 	}
 
@@ -170,6 +191,18 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			],
 			[
 				'someParametersWithNullableTypeHints',
+				[
+					'$string' => new ParameterTypeHint('string', true, false),
+					'$int' => new ParameterTypeHint('int', false, false),
+					'$bool' => new ParameterTypeHint('bool', true, true),
+					'$float' => new ParameterTypeHint('float', false, false),
+					'$callable' => new ParameterTypeHint('callable', true, false),
+					'$array' => new ParameterTypeHint('array', false, true),
+					'$object' => new ParameterTypeHint('\FooNamespace\FooClass', true, false),
+				],
+			],
+			[
+				'parametersWithWeirdDefinition',
 				[
 					'$string' => new ParameterTypeHint('string', true, false),
 					'$int' => new ParameterTypeHint('int', false, false),

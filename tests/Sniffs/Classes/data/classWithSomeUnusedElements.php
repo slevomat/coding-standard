@@ -98,4 +98,13 @@ class ClassWithSomeUnusedProperties extends \Consistence\Object
 		return [];
 	}
 
+	private$unusedPropertyWithWeirdDefinition;
+
+	private$unusedWriteOnlyPropertyWithWeirdDefinition;
+
+	public function unusedWriteOnlyPropertyWithWeirdDefinitionMethod()
+	{
+		$this->unusedWriteOnlyPropertyWithWeirdDefinition = null;
+	}
+
 }

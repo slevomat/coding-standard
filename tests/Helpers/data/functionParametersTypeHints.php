@@ -17,4 +17,6 @@ abstract class FooClass
 
 	abstract public function someParametersWithoutTypeHints(string $string, $int, bool $bool = true, $float, callable $callable, $array = [], \FooNamespace\FooClass $object);
 
+	abstract public function parametersWithWeirdDefinition(string$string,$int,bool$bool=true,$float,callable$callable,$array=[],\FooNamespace\FooClass$object);
+
 }

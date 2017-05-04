@@ -18,7 +18,7 @@ class NullableTypeForNullDefaultValueSniffTest extends \SlevomatCodingStandard\S
 			'enabled' => true,
 		]);
 
-		$this->assertSame(11, $report->getErrorCount());
+		$this->assertSame(12, $report->getErrorCount());
 
 		$code = NullableTypeForNullDefaultValueSniff::CODE_NULLABILITY_SYMBOL_REQUIRED;
 		$this->assertSniffError($report, 3, $code);
@@ -32,6 +32,7 @@ class NullableTypeForNullDefaultValueSniffTest extends \SlevomatCodingStandard\S
 		$this->assertSniffError($report, 47, $code);
 		$this->assertSniffError($report, 52, $code);
 		$this->assertSniffError($report, 57, $code);
+		$this->assertSniffError($report, 62, $code);
 	}
 
 	public function testFixable()

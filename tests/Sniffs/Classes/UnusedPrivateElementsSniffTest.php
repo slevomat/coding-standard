@@ -71,6 +71,19 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 			UnusedPrivateElementsSniff::CODE_UNUSED_METHOD,
 			'Class ClassWithSomeUnusedProperties contains unused private method unusedMethodReturningReference().'
 		);
+
+		$this->assertSniffError(
+			$resultFile,
+			101,
+			UnusedPrivateElementsSniff::CODE_UNUSED_PROPERTY,
+			'Class ClassWithSomeUnusedProperties contains unused property $unusedPropertyWithWeirdDefinition.'
+		);
+		$this->assertSniffError(
+			$resultFile,
+			103,
+			UnusedPrivateElementsSniff::CODE_WRITE_ONLY_PROPERTY,
+			'Class ClassWithSomeUnusedProperties contains write-only property $unusedWriteOnlyPropertyWithWeirdDefinition.'
+		);
 	}
 
 	public function testOnlyPublicElements()
