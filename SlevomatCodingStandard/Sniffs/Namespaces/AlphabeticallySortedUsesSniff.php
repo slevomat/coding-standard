@@ -11,6 +11,9 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 
 	const CODE_INCORRECT_ORDER = 'IncorrectlyOrderedUses';
 
+	/** @var bool */
+	public $caseSensitive = false;
+
 	/** @var \SlevomatCodingStandard\Helpers\UseStatement|null */
 	private $lastUse;
 
@@ -101,13 +104,22 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 		$bNameParts = explode(NamespaceHelper::NAMESPACE_SEPARATOR, $b->getFullyQualifiedTypeName());
 
 		for ($i = 0; $i < min(count($aNameParts), count($bNameParts)); $i++) {
-			$comparison = strcasecmp($aNameParts[$i], $bNameParts[$i]);
+			$comparison = $this->compare($aNameParts[$i], $bNameParts[$i]);
 			if ($comparison !== 0) {
 				return $comparison;
 			}
 		}
 
 		return count($aNameParts) <=> count($bNameParts);
+	}
+
+	private function compare(string $a, string $b): int
+	{
+		if ($this->caseSensitive) {
+			return strcmp($a, $b);
+		}
+
+		return strcasecmp($a, $b);
 	}
 
 }

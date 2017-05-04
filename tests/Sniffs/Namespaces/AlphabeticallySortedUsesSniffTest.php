@@ -39,6 +39,15 @@ class AlphabeticallySortedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\T
 		);
 	}
 
+	public function testCorrectOrderOfSimilarNamespacesCaseSensitive()
+	{
+		$this->assertNoSniffErrorInFile(
+			$this->checkFile(__DIR__ . '/data/correctOrderSimilarNamespacesCaseSensitive.php', [
+				'caseSensitive' => true,
+			])
+		);
+	}
+
 	public function testIncorrectOrderOfSimilarNamespaces()
 	{
 		$this->assertSniffError(
