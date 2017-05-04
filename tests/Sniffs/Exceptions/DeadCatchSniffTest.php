@@ -47,4 +47,14 @@ class DeadCatchSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertSniffError($report, 41, DeadCatchSniff::CODE_CATCH_AFTER_THROWABLE_CATCH);
 	}
 
+	public function testDeadCatchWeirdDefinition()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/deadCatchesWeirdDefinition.php');
+
+		$this->assertSame(2, $report->getErrorCount());
+
+		$this->assertSniffError($report, 13, DeadCatchSniff::CODE_CATCH_AFTER_THROWABLE_CATCH);
+		$this->assertSniffError($report, 21, DeadCatchSniff::CODE_CATCH_AFTER_THROWABLE_CATCH);
+	}
+
 }
