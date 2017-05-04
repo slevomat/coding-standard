@@ -99,8 +99,8 @@ class FunctionHelper
 				do {
 					$previousToken = TokenHelper::findPreviousExcluding($codeSnifferFile, array_merge(TokenHelper::$ineffectiveTokenCodes, [T_BITWISE_AND, T_ELLIPSIS]), $previousToken - 1, $tokens[$functionPointer]['parenthesis_opener'] + 1);
 					if ($previousToken !== null) {
-						$isTypeHint = $tokens[$previousToken]['code'] !== T_COMMA && $tokens[$previousToken]['code'] !== T_NULLABLE;
-						if ($tokens[$previousToken]['code'] === T_NULLABLE) {
+						$isTypeHint = $tokens[$previousToken]['code'] !== T_COMMA && $tokens[$previousToken]['content'] !== '?';
+						if ($tokens[$previousToken]['content'] === '?') {
 							$isNullable = true;
 						}
 					} else {
