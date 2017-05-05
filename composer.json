@@ -2,8 +2,6 @@
 	"name": "slevomat/coding-standard",
 	"description": "Slevomat Coding Standard for PHP_CodeSniffer extends Consistence Coding Standard by providing sniffs with additional checks.",
 	"license": "MIT",
-	"minimum-stability": "dev",
-	"prefer-stable": true,
 	"config": {
 		"bin-dir": "bin"
 	},
