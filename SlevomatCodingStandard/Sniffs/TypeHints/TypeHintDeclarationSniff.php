@@ -20,6 +20,8 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	const NAME = 'SlevomatCodingStandard.TypeHints.TypeHintDeclaration';
 
 	const CODE_MISSING_PARAMETER_TYPE_HINT = 'MissingParameterTypeHint';
+	
+	const CODE_MISSING_PARAMETER_TYPE_HINT_AND_DOC = 'MissingParameterTypeHintAndDoc';
 
 	const CODE_MISSING_PROPERTY_TYPE_HINT = 'MissingPropertyTypeHint';
 
@@ -132,7 +134,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			}
 		}
 
-		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_PARAMETER_TYPE_HINT))) {
+		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_PARAMETER_TYPE_HINT_AND_DOC))) {
 			return;
 		}
 
@@ -146,7 +148,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 						$parameterName
 					),
 					$functionPointer,
-					self::CODE_MISSING_PARAMETER_TYPE_HINT
+					self::CODE_MISSING_PARAMETER_TYPE_HINT_AND_DOC
 				);
 
 				continue;
