@@ -100,4 +100,16 @@ abstract class FooClass
 	{
 	}
 
+	/**
+	 * @param null|string $string
+	 * @param int $int
+	 * @param bool|null $bool
+	 * @param float $float
+	 * @param callable|null $callable
+	 * @param mixed[] $array
+	 * @param \FooNamespace\FooClass|null $object
+	 * @return mixed
+	 */
+	abstract public function parametersWithWeirdDefinition(?string$string,int$int,?bool$bool=true,float$float,?callable$callable,array$array=[],?\FooNamespace\FooClass$object);
+
 }
