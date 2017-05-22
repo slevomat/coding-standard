@@ -1,6 +1,7 @@
 <?php
 
 use AnyNamespace\Anything;
+use AnyNamespace\Traversable;
 
 abstract class FooClass
 {
@@ -320,5 +321,18 @@ abstract class FooClass
 	private function nullableMultidimensionalArrayParameter($a)
 	{
 	}
+
+	private function returnUsedTraversable(): Traversable
+	{
+
+	}
+
+	public function usedTraversableParameter(Traversable $a)
+	{
+
+	}
+
+	/** @var Traversable[] */
+	private $usedTraversable = [];
 
 }
