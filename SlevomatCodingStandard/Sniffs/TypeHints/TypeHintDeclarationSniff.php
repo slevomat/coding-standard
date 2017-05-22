@@ -728,8 +728,8 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	private function definitionContainsItemsSpecificationForTraversable(string $typeHintDefinition): bool
 	{
 		if (preg_match_all('~(?<=^|\|)(.+?)\[\](?=\||$)~', $typeHintDefinition, $matches)) {
-			foreach ($matches[1] as $returnTypeHintPart) {
-				if (!$this->isTraversableTypeHint($returnTypeHintPart)) {
+			foreach ($matches[1] as $typeHint) {
+				if (!$this->isTraversableTypeHint($typeHint)) {
 					return true;
 				}
 			}
