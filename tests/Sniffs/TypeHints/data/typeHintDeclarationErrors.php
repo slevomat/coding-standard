@@ -2,6 +2,8 @@
 
 use AnyNamespace\Anything;
 use AnyNamespace\Traversable;
+use Doctrine;
+use Doctrine\Common\Collections as DoctrineCollections;
 
 abstract class FooClass
 {
@@ -334,5 +336,47 @@ abstract class FooClass
 
 	/** @var Traversable[] */
 	private $usedTraversable = [];
+
+	/**
+	 * @var Doctrine\Common\Collections\ArrayCollection
+	 */
+	protected $partialUseTraversable;
+
+	/**
+	 * @param \Doctrine\Common\Collections\ArrayCollection $a
+	 */
+	private function partialUseTraversableParameter(Doctrine\Common\Collections\ArrayCollection $a)
+	{
+
+	}
+
+	/**
+	 * @return \Doctrine\Common\Collections\ArrayCollection
+	 */
+	public function returnpartialUseTraversable(): Doctrine\Common\Collections\ArrayCollection
+	{
+		return new Doctrine\Common\Collections\ArrayCollection();
+	}
+
+	/**
+	 * @var DoctrineCollections\ArrayCollection
+	 */
+	protected $partialUseWithAliasTraversable;
+
+	/**
+	 * @param DoctrineCollections\ArrayCollection $a
+	 */
+	private function partialUseWithAliasTraversableParameter(DoctrineCollections\ArrayCollection $a)
+	{
+
+	}
+
+	/**
+	 * @return DoctrineCollections\ArrayCollection
+	 */
+	public function returnpartialUseWithAliasTraversable(): DoctrineCollections\ArrayCollection
+	{
+		return new DoctrineCollections\ArrayCollection();
+	}
 
 }

@@ -61,25 +61,10 @@ class TypeHintHelper
 	{
 		if (self::isSimpleTypeHint($typeHint)) {
 			return self::convertLongSimpleTypeHintToShort($typeHint);
-		} elseif (NamespaceHelper::isFullyQualifiedName($typeHint)) {
-			return $typeHint;
 		}
-
-		$canonicalQualifiedTypeHint = $typeHint;
 
 		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $phpcsFile->findPrevious(T_OPEN_TAG, $pointer));
-		$normalizedTypeHint = UseStatement::normalizedNameAsReferencedInFile($typeHint);
-		if (isset($useStatements[$normalizedTypeHint])) {
-			$useStatement = $useStatements[$normalizedTypeHint];
-			$canonicalQualifiedTypeHint = $useStatement->getFullyQualifiedTypeName();
-		} else {
-			$fileNamespace = NamespaceHelper::findCurrentNamespaceName($phpcsFile, $pointer);
-			if ($fileNamespace !== null) {
-				$canonicalQualifiedTypeHint = sprintf('%s%s%s', $fileNamespace, NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint);
-			}
-		}
-
-		return sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $canonicalQualifiedTypeHint);
+		return NamespaceHelper::resolveName($phpcsFile, $typeHint, $useStatements, $pointer);
 	}
 
 }

@@ -2,6 +2,8 @@
 
 namespace FooNamespace;
 
+use Doctrine;
+use Doctrine\Common\Collections as DoctrineCollections;
 use UsedNamespace\UsedClass;
 
 abstract class FooClass
@@ -569,6 +571,48 @@ abstract class FooClass
 	public function returnsMixedContainingTraversable()
 	{
 		return [];
+	}
+
+	/**
+	 * @var Doctrine\Common\Collections\ArrayCollection|mixed[]
+	 */
+	protected $partialUseTraversable;
+
+	/**
+	 * @param \Doctrine\Common\Collections\ArrayCollection|mixed[] $a
+	 */
+	private function partialUseTraversableParameter(Doctrine\Common\Collections\ArrayCollection $a)
+	{
+
+	}
+
+	/**
+	 * @return \Doctrine\Common\Collections\ArrayCollection|mixed[]
+	 */
+	public function returnpartialUseTraversable(): Doctrine\Common\Collections\ArrayCollection
+	{
+		return new Doctrine\Common\Collections\ArrayCollection();
+	}
+
+	/**
+	 * @var DoctrineCollections\ArrayCollection|mixed[]
+	 */
+	protected $partialUseWithAliasTraversable;
+
+	/**
+	 * @param DoctrineCollections\ArrayCollection|mixed[] $a
+	 */
+	private function partialUseWithAliasTraversableParameter(DoctrineCollections\ArrayCollection $a)
+	{
+
+	}
+
+	/**
+	 * @return DoctrineCollections\ArrayCollection|mixed[]
+	 */
+	public function returnpartialUseWithAliasTraversable(): DoctrineCollections\ArrayCollection
+	{
+		return new DoctrineCollections\ArrayCollection();
 	}
 
 }

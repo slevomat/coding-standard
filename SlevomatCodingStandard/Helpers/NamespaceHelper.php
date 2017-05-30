@@ -92,18 +92,28 @@ class NamespaceHelper
 		int $currentPointer
 	): string
 	{
-		if (!self::isFullyQualifiedName($nameAsReferencedInFile)) {
-			$normalizedName = UseStatement::normalizedNameAsReferencedInFile(self::normalizeToCanonicalName($nameAsReferencedInFile));
-
-			if (isset($useStatements[$normalizedName])) {
-				return sprintf('%s%s', self::NAMESPACE_SEPARATOR, $useStatements[$normalizedName]->getFullyQualifiedTypeName());
-			}
-
-			$namespaceName = self::findCurrentNamespaceName($phpcsFile, $currentPointer);
-			return sprintf('%s%s%s', $namespaceName ?? '', self::NAMESPACE_SEPARATOR, $nameAsReferencedInFile);
+		if (self::isFullyQualifiedName($nameAsReferencedInFile)) {
+			return $nameAsReferencedInFile;
 		}
 
-		return $nameAsReferencedInFile;
+		$normalizedName = UseStatement::normalizedNameAsReferencedInFile(self::normalizeToCanonicalName($nameAsReferencedInFile));
+
+		if (isset($useStatements[$normalizedName])) {
+			return sprintf('%s%s', self::NAMESPACE_SEPARATOR, $useStatements[$normalizedName]->getFullyQualifiedTypeName());
+		}
+
+		$nameParts = self::getNameParts($nameAsReferencedInFile);
+		$normalizedNameFirstPart = UseStatement::normalizedNameAsReferencedInFile($nameParts[0]);
+		if (count($nameParts) > 1 && isset($useStatements[$normalizedNameFirstPart])) {
+			return sprintf('%s%s%s%s', self::NAMESPACE_SEPARATOR, $useStatements[$normalizedNameFirstPart]->getFullyQualifiedTypeName(), self::NAMESPACE_SEPARATOR, implode(self::NAMESPACE_SEPARATOR, array_slice($nameParts, 1)));
+		}
+
+		$name = sprintf('%s%s', self::NAMESPACE_SEPARATOR, $nameAsReferencedInFile);
+		$namespaceName = self::findCurrentNamespaceName($phpcsFile, $currentPointer);
+		if ($namespaceName !== null) {
+			$name = sprintf('%s%s%s', self::NAMESPACE_SEPARATOR, $namespaceName, $name);
+		}
+		return $name;
 	}
 
 }
