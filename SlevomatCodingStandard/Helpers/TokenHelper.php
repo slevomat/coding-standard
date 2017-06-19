@@ -50,11 +50,9 @@ class TokenHelper
 	 */
 	public static function findNext(\PHP_CodeSniffer\Files\File $phpcsFile, $types, int $startPointer, int $endPointer = null)
 	{
+		/** @var int|false $token */
 		$token = $phpcsFile->findNext($types, $startPointer, $endPointer, false);
-		if ($token === false) {
-			return null;
-		}
-		return $token;
+		return $token === false ? null : $token;
 	}
 
 	/**
@@ -67,11 +65,9 @@ class TokenHelper
 	 */
 	public static function findNextContent(\PHP_CodeSniffer\Files\File $phpcsFile, $types, string $content, int $startPointer, int $endPointer = null)
 	{
+		/** @var int|false $token */
 		$token = $phpcsFile->findNext($types, $startPointer, $endPointer, false, $content);
-		if ($token === false) {
-			return null;
-		}
-		return $token;
+		return $token === false ? null : $token;
 	}
 
 	/**
@@ -94,11 +90,9 @@ class TokenHelper
 	 */
 	public static function findNextExcluding(\PHP_CodeSniffer\Files\File $phpcsFile, $types, int $startPointer, int $endPointer = null)
 	{
+		/** @var int|false $token */
 		$token = $phpcsFile->findNext($types, $startPointer, $endPointer, true);
-		if ($token === false) {
-			return null;
-		}
-		return $token;
+		return $token === false ? null : $token;
 	}
 
 	/**
@@ -110,11 +104,9 @@ class TokenHelper
 	 */
 	public static function findNextLocal(\PHP_CodeSniffer\Files\File $phpcsFile, $types, int $startPointer, int $endPointer = null)
 	{
+		/** @var int|false $token */
 		$token = $phpcsFile->findNext($types, $startPointer, $endPointer, false, null, true);
-		if ($token === false) {
-			return null;
-		}
-		return $token;
+		return $token === false ? null : $token;
 	}
 
 	/**
@@ -126,11 +118,9 @@ class TokenHelper
 	 */
 	public static function findNextLocalExcluding(\PHP_CodeSniffer\Files\File $phpcsFile, $types, int $startPointer, int $endPointer = null)
 	{
+		/** @var int|false $token */
 		$token = $phpcsFile->findNext($types, $startPointer, $endPointer, true, null, true);
-		if ($token === false) {
-			return null;
-		}
-		return $token;
+		return $token === false ? null : $token;
 	}
 
 	/**
@@ -153,11 +143,9 @@ class TokenHelper
 	 */
 	public static function findPrevious(\PHP_CodeSniffer\Files\File $phpcsFile, $types, int $startPointer, int $endPointer = null)
 	{
+		/** @var int|false $token */
 		$token = $phpcsFile->findPrevious($types, $startPointer, $endPointer, false);
-		if ($token === false) {
-			return null;
-		}
-		return $token;
+		return $token === false ? null : $token;
 	}
 
 	/**
@@ -180,11 +168,9 @@ class TokenHelper
 	 */
 	public static function findPreviousExcluding(\PHP_CodeSniffer\Files\File $phpcsFile, $types, int $startPointer, int $endPointer = null)
 	{
+		/** @var int|false $token */
 		$token = $phpcsFile->findPrevious($types, $startPointer, $endPointer, true);
-		if ($token === false) {
-			return null;
-		}
-		return $token;
+		return $token === false ? null : $token;
 	}
 
 	/**

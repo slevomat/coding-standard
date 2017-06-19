@@ -1,6 +1,8 @@
 parameters:
 	autoload_files:
 		- %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/autoload.php
+		- %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/src/Util/Tokens.php
 	excludes_analyse:
 		- */tests/*/data/*
-	enableUnionTypes: false
+	ignoreErrors:
+		- '~Parameter #2 \$array of method PHPUnit\\Framework\\Assert::assertArrayHasKey\(\)~'
