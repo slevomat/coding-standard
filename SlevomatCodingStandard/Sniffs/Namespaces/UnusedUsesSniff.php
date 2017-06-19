@@ -18,7 +18,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	public $searchAnnotations = false;
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

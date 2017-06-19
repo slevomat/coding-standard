@@ -9,7 +9,7 @@ class DisallowEqualOperatorsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	const CODE_DISALLOWED_NOT_EQUAL_OPERATOR = 'DisallowedNotEqualOperator';
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

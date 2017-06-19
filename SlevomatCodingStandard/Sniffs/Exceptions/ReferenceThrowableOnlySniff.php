@@ -14,7 +14,7 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	const CODE_REFERENCED_GENERAL_EXCEPTION = 'ReferencedGeneralException';
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

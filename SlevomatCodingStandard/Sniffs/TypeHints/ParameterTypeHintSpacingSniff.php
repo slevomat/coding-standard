@@ -14,7 +14,7 @@ class ParameterTypeHintSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	const CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL = 'WhitespaceAfterNullabilitySymbol';
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

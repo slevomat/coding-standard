@@ -21,7 +21,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	public $spacesCountAroundEqualsSign = 1;
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

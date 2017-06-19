@@ -26,7 +26,7 @@ class ReturnTypeHintSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	public $spacesCountBeforeColon = 0;
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

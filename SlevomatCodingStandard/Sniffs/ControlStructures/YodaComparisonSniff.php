@@ -27,7 +27,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	private $stopTokenCodes;
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

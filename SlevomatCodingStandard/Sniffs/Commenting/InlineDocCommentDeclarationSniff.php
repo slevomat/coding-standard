@@ -12,7 +12,7 @@ class InlineDocCommentDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	const CODE_INVALID_FORMAT = 'InvalidFormat';
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

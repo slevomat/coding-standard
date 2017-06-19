@@ -17,7 +17,7 @@ class NullableTypeForNullDefaultValueSniff implements \PHP_CodeSniffer\Sniffs\Sn
 	public $enabled = PHP_VERSION_ID >= 70100;
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

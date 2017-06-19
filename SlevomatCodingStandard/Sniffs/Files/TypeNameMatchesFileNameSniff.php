@@ -38,7 +38,7 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	private $namespaceExtractor;
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{
