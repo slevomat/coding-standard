@@ -20,6 +20,7 @@ use Zetta\Rasmus;
 use My\PartialClass;
 use My\PartialFunction;
 use My\PartialConstant;
+use PartialNamespace;
 
 class TestClass implements FirstInterface, SecondInterface
 {
@@ -39,6 +40,7 @@ class TestClass implements FirstInterface, SecondInterface
 		new PartialClass\UsedClass();
 		PartialFunction\usedFunction();
 		PartialConstant\USED_CONSTANT;
+		new PartialNamespace\UsedClass();
 
 		return new NewObject();
 	}

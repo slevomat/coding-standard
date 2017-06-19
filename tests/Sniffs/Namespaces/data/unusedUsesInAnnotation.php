@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Foo\Bar;
 use X;
 use XX;
+use XXX;
 
 /**
  * @ORM\Entity()
@@ -31,6 +32,7 @@ class Boo
 	 */
 	public function foo()
 	{
+		/** @var XXX\UsedClass() $usedClass */
 	}
 
 }
