@@ -43,8 +43,8 @@ class NamespaceHelper
 	 */
 	public static function findCurrentNamespaceName(\PHP_CodeSniffer_File $phpcsFile, int $anyPointer)
 	{
-		$namespacePointer = $phpcsFile->findPrevious(T_NAMESPACE, $anyPointer);
-		if ($namespacePointer === false) {
+		$namespacePointer = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $anyPointer);
+		if ($namespacePointer === null) {
 			return null;
 		}
 

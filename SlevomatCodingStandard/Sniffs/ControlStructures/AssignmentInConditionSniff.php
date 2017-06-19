@@ -2,6 +2,8 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
+use SlevomatCodingStandard\Helpers\TokenHelper;
+
 class AssignmentInConditionSniff implements \PHP_CodeSniffer_Sniff
 {
 
@@ -29,7 +31,7 @@ class AssignmentInConditionSniff implements \PHP_CodeSniffer_Sniff
 		$tokens = $phpcsFile->getTokens();
 		$token = $tokens[$conditionStartPointer];
 		if ($token['code'] === T_DO) {
-			$whilePointer = $phpcsFile->findNext(T_WHILE, $token['scope_closer'] + 1);
+			$whilePointer = TokenHelper::findNext($phpcsFile, T_WHILE, $token['scope_closer'] + 1);
 			$whileToken = $tokens[$whilePointer];
 			$parenthesisOpener = $whileToken['parenthesis_opener'];
 			$parenthesisCloser = $whileToken['parenthesis_closer'];
@@ -49,8 +51,8 @@ class AssignmentInConditionSniff implements \PHP_CodeSniffer_Sniff
 		string $conditionType
 	)
 	{
-		$equalsTokenPointer = $phpcsFile->findNext(T_EQUAL, $parenthesisOpener + 1, $parenthesisCloser);
-		if ($equalsTokenPointer !== false) {
+		$equalsTokenPointer = TokenHelper::findNext($phpcsFile, T_EQUAL, $parenthesisOpener + 1, $parenthesisCloser);
+		if ($equalsTokenPointer !== null) {
 			$phpcsFile->addError(
 				sprintf('Assignment in %s condition is not allowed.', $conditionType),
 				$equalsTokenPointer,

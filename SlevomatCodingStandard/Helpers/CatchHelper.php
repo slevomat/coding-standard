@@ -17,8 +17,8 @@ class CatchHelper
 		$tokens = $phpcsFile->getTokens();
 		$catchedTypes = [];
 		do {
-			$nameStartPointer = $phpcsFile->findNext(array_merge([T_BITWISE_OR], TokenHelper::$nameTokenCodes), $nameEndPointer + 1, $catchToken['parenthesis_closer']);
-			if ($nameStartPointer === false) {
+			$nameStartPointer = TokenHelper::findNext($phpcsFile, array_merge([T_BITWISE_OR], TokenHelper::$nameTokenCodes), $nameEndPointer + 1, $catchToken['parenthesis_closer']);
+			if ($nameStartPointer === null) {
 				break;
 			}
 

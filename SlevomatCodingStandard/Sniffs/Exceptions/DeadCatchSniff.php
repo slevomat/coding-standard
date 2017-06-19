@@ -32,7 +32,7 @@ class DeadCatchSniff implements \PHP_CodeSniffer_Sniff
 		$catchToken = $tokens[$catchPointer];
 		$catchedTypes = CatchHelper::findCatchedTypesInCatch(
 			$phpcsFile,
-			UseStatementHelper::getUseStatements($phpcsFile, $phpcsFile->findNext(T_OPEN_TAG, 0)),
+			UseStatementHelper::getUseStatements($phpcsFile, TokenHelper::findNext($phpcsFile, T_OPEN_TAG, 0)),
 			$catchToken
 		);
 

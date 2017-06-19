@@ -6,6 +6,7 @@ use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
+use SlevomatCodingStandard\Helpers\TokenHelper;
 
 class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 {
@@ -105,10 +106,10 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 	public function process(\PHP_CodeSniffer_File $phpcsFile, $typePointer)
 	{
 		$tokens = $phpcsFile->getTokens();
-		$namePointer = $phpcsFile->findNext(T_STRING, $typePointer + 1);
+		$namePointer = TokenHelper::findNext($phpcsFile, T_STRING, $typePointer + 1);
 
-		$namespacePointer = $phpcsFile->findPrevious(T_NAMESPACE, $typePointer - 1);
-		if ($namespacePointer === false) {
+		$namespacePointer = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $typePointer - 1);
+		if ($namespacePointer === null) {
 			// Skip types without a namespace
 			return;
 		}

@@ -106,7 +106,7 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/referencedName.php'
 		);
-		$backslashTokenPointer = $codeSnifferFile->findNext(T_NS_SEPARATOR, 0);
+		$backslashTokenPointer = TokenHelper::findNext($codeSnifferFile, T_NS_SEPARATOR, 0);
 		$endTokenPointer = ReferencedNameHelper::getReferencedNameEndPointer($codeSnifferFile, $backslashTokenPointer);
 		$this->assertTokenPointer(T_STRING, 3, $codeSnifferFile, $endTokenPointer);
 	}

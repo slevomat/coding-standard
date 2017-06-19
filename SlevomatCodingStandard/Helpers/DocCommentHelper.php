@@ -18,9 +18,9 @@ class DocCommentHelper
 		}
 
 		$tokens = $codeSnifferFile->getTokens();
-		$found = $codeSnifferFile->findNext([T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STAR], $docCommentOpenToken + 1, $tokens[$docCommentOpenToken]['comment_closer'] - 1, true);
+		$found = TokenHelper::findNextExcluding($codeSnifferFile, [T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STAR], $docCommentOpenToken + 1, $tokens[$docCommentOpenToken]['comment_closer'] - 1);
 
-		return $found !== false && $tokens[$found]['code'] === T_DOC_COMMENT_STRING;
+		return $found !== null && $tokens[$found]['code'] === T_DOC_COMMENT_STRING;
 	}
 
 	/**

@@ -18,7 +18,7 @@ class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/emptyPhpFile.php'
 		);
-		$openTagPointer = $codeSnifferFile->findNext(T_OPEN_TAG, 0);
+		$openTagPointer = TokenHelper::findNext($codeSnifferFile, T_OPEN_TAG, 0);
 		$this->assertTokenPointer(T_OPEN_TAG, 1, $codeSnifferFile, $openTagPointer);
 		$this->assertNull(TokenHelper::findNextEffective($codeSnifferFile, $openTagPointer + 1));
 	}
@@ -72,7 +72,7 @@ class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/sampleOne.php'
 		);
-		$variableTokenPointer = $codeSnifferFile->findNext(T_VARIABLE, 0);
+		$variableTokenPointer = TokenHelper::findNext($codeSnifferFile, T_VARIABLE, 0);
 		$this->assertTokenPointer(T_VARIABLE, 3, $codeSnifferFile, $variableTokenPointer);
 		$this->assertNull(TokenHelper::findNextExcluding($codeSnifferFile, [
 			T_OPEN_TAG,
@@ -85,7 +85,7 @@ class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/sampleOne.php'
 		);
-		$variableTokenPointer = $codeSnifferFile->findNext(T_VARIABLE, 0);
+		$variableTokenPointer = TokenHelper::findNext($codeSnifferFile, T_VARIABLE, 0);
 		$this->assertTokenPointer(T_VARIABLE, 3, $codeSnifferFile, $variableTokenPointer);
 		$this->assertTokenPointer(T_VARIABLE, 3, $codeSnifferFile, TokenHelper::findNextAnyToken($codeSnifferFile, $variableTokenPointer));
 	}
@@ -95,7 +95,7 @@ class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/sampleOne.php'
 		);
-		$barTokenPointer = $codeSnifferFile->findNext(T_STRING, 1);
+		$barTokenPointer = TokenHelper::findNext($codeSnifferFile, T_STRING, 1);
 		$assignmentTokenPointer = TokenHelper::findPreviousEffective($codeSnifferFile, $barTokenPointer - 1);
 		$this->assertTokenPointer(T_EQUAL, 3, $codeSnifferFile, $assignmentTokenPointer);
 	}
@@ -105,7 +105,7 @@ class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/effectiveCodeWithComment.php'
 		);
-		$this->assertTokenPointer(T_OPEN_TAG, 1, $codeSnifferFile, TokenHelper::findPreviousEffective($codeSnifferFile, $codeSnifferFile->findNext(T_CLASS, 0) - 1));
+		$this->assertTokenPointer(T_OPEN_TAG, 1, $codeSnifferFile, TokenHelper::findPreviousEffective($codeSnifferFile, TokenHelper::findNext($codeSnifferFile, T_CLASS, 0) - 1));
 	}
 
 	public function testFindPreviousEffectiveWithDocComment()
@@ -113,7 +113,7 @@ class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/effectiveCodeWithDocComment.php'
 		);
-		$this->assertTokenPointer(T_OPEN_TAG, 1, $codeSnifferFile, TokenHelper::findPreviousEffective($codeSnifferFile, $codeSnifferFile->findNext(T_CLASS, 0) - 1));
+		$this->assertTokenPointer(T_OPEN_TAG, 1, $codeSnifferFile, TokenHelper::findPreviousEffective($codeSnifferFile, TokenHelper::findNext($codeSnifferFile, T_CLASS, 0) - 1));
 	}
 
 	public function testFindNothingPreviousExcluding()
@@ -152,7 +152,7 @@ class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		);
 
 		$lastTokenPointer = TokenHelper::getLastTokenPointer($codeSnifferFile);
-		$stringTokenPointer = $codeSnifferFile->findNext(T_STRING, 0);
+		$stringTokenPointer = TokenHelper::findNext($codeSnifferFile, T_STRING, 0);
 		$this->assertTokenPointer(T_STRING, 3, $codeSnifferFile, $stringTokenPointer);
 		$this->assertTokenPointer(T_STRING, 3, $codeSnifferFile, TokenHelper::findPreviousExcluding($codeSnifferFile, [
 			T_WHITESPACE,
@@ -169,7 +169,7 @@ class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		);
 
 		$lastTokenPointer = TokenHelper::getLastTokenPointer($codeSnifferFile);
-		$openParenthesisTokenPointer = $codeSnifferFile->findNext(T_OPEN_PARENTHESIS, 0);
+		$openParenthesisTokenPointer = TokenHelper::findNext($codeSnifferFile, T_OPEN_PARENTHESIS, 0);
 		$this->assertTokenPointer(T_OPEN_PARENTHESIS, 3, $codeSnifferFile, $openParenthesisTokenPointer);
 		$this->assertNull(TokenHelper::findPreviousExcluding($codeSnifferFile, [
 			T_WHITESPACE,
@@ -184,7 +184,7 @@ class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/sampleTwo.php'
 		);
-		$variableTokenPointer = $codeSnifferFile->findNext(T_VARIABLE, 0);
+		$variableTokenPointer = TokenHelper::findNext($codeSnifferFile, T_VARIABLE, 0);
 		$this->assertTokenPointer(T_VARIABLE, 3, $codeSnifferFile, $variableTokenPointer);
 		$this->assertTokenPointer(T_STRING, 4, $codeSnifferFile, TokenHelper::findFirstTokenOnNextLine($codeSnifferFile, $variableTokenPointer));
 	}
@@ -195,7 +195,7 @@ class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			__DIR__ . '/data/forLoop.php'
 		);
 		$tokens = $codeSnifferFile->getTokens();
-		$forTokenPointer = $codeSnifferFile->findNext(T_FOR, 0);
+		$forTokenPointer = TokenHelper::findNext($codeSnifferFile, T_FOR, 0);
 		$nextLineTokenPointer = TokenHelper::findFirstTokenOnNextLine($codeSnifferFile, $forTokenPointer);
 		$this->assertTokenPointer(T_WHITESPACE, 4, $codeSnifferFile, $nextLineTokenPointer);
 		$this->assertSame("\t", $tokens[$nextLineTokenPointer]['content']);
@@ -225,9 +225,9 @@ class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/sampleTwo.php'
 		);
-		$variableTokenPointer = $codeSnifferFile->findNext(T_VARIABLE, 0);
+		$variableTokenPointer = TokenHelper::findNext($codeSnifferFile, T_VARIABLE, 0);
 		$this->assertTokenPointer(T_VARIABLE, 3, $codeSnifferFile, $variableTokenPointer);
-		$openParenthesisTokenPointer = $codeSnifferFile->findNext(T_OPEN_PARENTHESIS, 0);
+		$openParenthesisTokenPointer = TokenHelper::findNext($codeSnifferFile, T_OPEN_PARENTHESIS, 0);
 		$this->assertTokenPointer(T_OPEN_PARENTHESIS, 4, $codeSnifferFile, $openParenthesisTokenPointer);
 		$content = TokenHelper::getContent($codeSnifferFile, $variableTokenPointer, $openParenthesisTokenPointer);
 		$this->assertSame(sprintf('$i++;%sfoo(', $codeSnifferFile->eolChar), $content);
@@ -238,9 +238,9 @@ class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/sampleOne.php'
 		);
-		$semicolonTokenPointer = $codeSnifferFile->findNext(T_SEMICOLON, 0);
+		$semicolonTokenPointer = TokenHelper::findNext($codeSnifferFile, T_SEMICOLON, 0);
 		$this->assertTokenPointer(T_SEMICOLON, 3, $codeSnifferFile, $semicolonTokenPointer);
-		$lastWhitespaceTokenPointer = $codeSnifferFile->findNext(T_WHITESPACE, $semicolonTokenPointer + 1);
+		$lastWhitespaceTokenPointer = TokenHelper::findNext($codeSnifferFile, T_WHITESPACE, $semicolonTokenPointer + 1);
 		$this->assertTokenPointer(T_WHITESPACE, 3, $codeSnifferFile, $lastWhitespaceTokenPointer);
 		$this->assertSame($lastWhitespaceTokenPointer, TokenHelper::getLastTokenPointer($codeSnifferFile));
 	}

@@ -46,7 +46,7 @@ class PropertyHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	{
 		$codeSnifferFile = $this->getTestedCodeSnifferFile();
 
-		$variablePointer = $codeSnifferFile->findNext(T_VARIABLE, 0, null, false, $variableName);
+		$variablePointer = TokenHelper::findNextContent($codeSnifferFile, T_VARIABLE, $variableName, 0);
 		$this->assertSame($isProperty, PropertyHelper::isProperty($codeSnifferFile, $variablePointer));
 	}
 

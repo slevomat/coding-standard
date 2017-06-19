@@ -16,8 +16,8 @@ class UseStatementHelper
 
 	public static function isTraitUse(\PHP_CodeSniffer_File $phpcsFile, int $usePointer): bool
 	{
-		$typePointer = $phpcsFile->findPrevious(array_merge(TokenHelper::$typeKeywordTokenCodes, [T_ANON_CLASS]), $usePointer);
-		if ($typePointer !== false) {
+		$typePointer = TokenHelper::findPrevious($phpcsFile, array_merge(TokenHelper::$typeKeywordTokenCodes, [T_ANON_CLASS]), $usePointer);
+		if ($typePointer !== null) {
 			$tokens = $phpcsFile->getTokens();
 			$typeToken = $tokens[$typePointer];
 			$openerPointer = $typeToken['scope_opener'];
@@ -31,11 +31,11 @@ class UseStatementHelper
 
 	public static function getNameAsReferencedInClassFromUse(\PHP_CodeSniffer_File $phpcsFile, int $usePointer): string
 	{
-		$endPointer = $phpcsFile->findNext([T_SEMICOLON, T_COMMA], $usePointer + 1);
-		$asPointer = $phpcsFile->findNext(T_AS, $usePointer + 1, $endPointer);
-		if ($asPointer !== false) {
+		$endPointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_COMMA], $usePointer + 1);
+		$asPointer = TokenHelper::findNext($phpcsFile, T_AS, $usePointer + 1, $endPointer);
+		if ($asPointer !== null) {
 			$tokens = $phpcsFile->getTokens();
-			return $tokens[$phpcsFile->findNext(T_STRING, $asPointer + 1)]['content'];
+			return $tokens[TokenHelper::findNext($phpcsFile, T_STRING, $asPointer + 1)]['content'];
 		}
 		$name = self::getFullyQualifiedTypeNameFromUse($phpcsFile, $usePointer);
 
@@ -46,7 +46,7 @@ class UseStatementHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$nameEndPointer = $phpcsFile->findNext([T_SEMICOLON, T_AS, T_COMMA], $usePointer + 1) - 1;
+		$nameEndPointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_AS, T_COMMA], $usePointer + 1) - 1;
 		if (in_array($tokens[$nameEndPointer]['code'], TokenHelper::$ineffectiveTokenCodes, true)) {
 			$nameEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $nameEndPointer);
 		}
@@ -103,8 +103,8 @@ class UseStatementHelper
 		$pointers = [];
 		while (true) {
 			$typesToFind = array_merge([T_USE], TokenHelper::$typeKeywordTokenCodes);
-			$pointer = $phpcsFile->findNext($typesToFind, $pointer);
-			if ($pointer === false) {
+			$pointer = TokenHelper::findNext($phpcsFile, $typesToFind, $pointer);
+			if ($pointer === null) {
 				break;
 			}
 

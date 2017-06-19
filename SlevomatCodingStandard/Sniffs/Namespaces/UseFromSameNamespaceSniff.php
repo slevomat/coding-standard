@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
+use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
 class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
@@ -62,7 +63,7 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
 			), $usePointer, self::CODE_USE_FROM_SAME_NAMESPACE);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$endPointer = $phpcsFile->findNext(T_SEMICOLON, $usePointer) + 1;
+				$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $usePointer) + 1;
 				for ($i = $usePointer; $i <= $endPointer; $i++) {
 					$phpcsFile->fixer->replaceToken($i, '');
 				}
@@ -78,11 +79,7 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
 	 */
 	private function findAsPointer(\PHP_CodeSniffer_File $phpcsFile, int $startPointer)
 	{
-		$asPointer = $phpcsFile->findNext(T_AS, $startPointer, null, false, null, true);
-		if ($asPointer === false) {
-			return null;
-		}
-		return $asPointer;
+		return TokenHelper::findNextLocal($phpcsFile, T_AS, $startPointer);
 	}
 
 }

@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Sniffs\Types;
 
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
+use SlevomatCodingStandard\Helpers\TokenHelper;
 
 class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer_Sniff
 {
@@ -54,7 +55,7 @@ class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer_Sniff
 		$typeToken = $tokens[$stackPointer];
 		$openerPointer = $typeToken['scope_opener'];
 		$openerToken = $tokens[$openerPointer];
-		$nextPointerAfterOpeningBrace = $phpcsFile->findNext(T_WHITESPACE, $openerPointer + 1, null, true);
+		$nextPointerAfterOpeningBrace = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $openerPointer + 1);
 		$nextTokenAfterOpeningBrace = $tokens[$nextPointerAfterOpeningBrace];
 		$linesCountAfterOpeningBrace = SniffSettingsHelper::normalizeInteger($this->linesCountAfterOpeningBrace);
 		$lines = $nextTokenAfterOpeningBrace['line'] - $openerToken['line'] - 1;
@@ -111,7 +112,7 @@ class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer_Sniff
 		$typeToken = $tokens[$stackPointer];
 		$closerPointer = $typeToken['scope_closer'];
 		$closerToken = $tokens[$closerPointer];
-		$previousPointerBeforeClosingBrace = $phpcsFile->findPrevious(T_WHITESPACE, $closerPointer - 1, null, true);
+		$previousPointerBeforeClosingBrace = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $closerPointer - 1);
 		$previousTokenBeforeClosingBrace = $tokens[$previousPointerBeforeClosingBrace];
 		$linesCountBeforeClosingBrace = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeClosingBrace);
 		$lines = $closerToken['line'] - $previousTokenBeforeClosingBrace['line'] - 1;
