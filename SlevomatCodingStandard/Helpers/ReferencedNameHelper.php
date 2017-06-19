@@ -61,8 +61,8 @@ class ReferencedNameHelper
 		$types = [];
 
 		while (true) {
-			$nameStartPointer = $phpcsFile->findNext($searchTypes, $beginSearchAtPointer);
-			if ($nameStartPointer === false) {
+			$nameStartPointer = TokenHelper::findNext($phpcsFile, $searchTypes, $beginSearchAtPointer);
+			if ($nameStartPointer === null) {
 				break;
 			}
 
@@ -169,8 +169,8 @@ class ReferencedNameHelper
 		];
 
 		if ($previousToken['code'] === T_USE) {
-			$classPointer = $phpcsFile->findPrevious([T_CLASS, T_TRAIT], $startPointer - 1);
-			if ($classPointer !== false) {
+			$classPointer = TokenHelper::findPrevious($phpcsFile, [T_CLASS, T_TRAIT], $startPointer - 1);
+			if ($classPointer !== null) {
 				$classToken = $tokens[$classPointer];
 				return $startPointer > $classToken['scope_opener'] && $startPointer < $classToken['scope_closer'];
 			}

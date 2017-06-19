@@ -37,7 +37,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 */
 	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $openTagPointer)
 	{
-		if ($phpcsFile->findPrevious(T_OPEN_TAG, $openTagPointer - 1) !== false) {
+		if (TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $openTagPointer - 1) !== null) {
 			return;
 		}
 
@@ -80,7 +80,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return;
 		}
 
-		$numberPointer = $phpcsFile->findNext(T_LNUMBER, $strictTypesPointer + 1);
+		$numberPointer = TokenHelper::findNext($phpcsFile, T_LNUMBER, $strictTypesPointer + 1);
 		if ($tokens[$numberPointer]['content'] !== '1') {
 			$fix = $phpcsFile->addFixableError(
 				sprintf(

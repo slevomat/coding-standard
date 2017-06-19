@@ -44,13 +44,13 @@ class ForbiddenAnnotationsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$fix = $phpcsFile->addFixableError(sprintf('Use of annotation %s is forbidden.', $annotationName), $annotationPointer, self::CODE_ANNOTATION_FORBIDDEN);
 		if ($fix) {
-			$docCommentOpenPointer = $phpcsFile->findPrevious(T_DOC_COMMENT_OPEN_TAG, $annotationPointer - 1);
+			$docCommentOpenPointer = TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_OPEN_TAG, $annotationPointer - 1);
 			$docCommentClosePointer = $tokens[$docCommentOpenPointer]['comment_closer'];
 
-			$annotationStartPointer = $phpcsFile->findPrevious(T_DOC_COMMENT_STAR, $annotationPointer - 1);
-			$nextPointer = $phpcsFile->findNext([T_DOC_COMMENT_TAG, T_DOC_COMMENT_CLOSE_TAG], $annotationPointer + 1);
+			$annotationStartPointer = TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_STAR, $annotationPointer - 1);
+			$nextPointer = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_TAG, T_DOC_COMMENT_CLOSE_TAG], $annotationPointer + 1);
 			if ($tokens[$nextPointer]['code'] === T_DOC_COMMENT_TAG) {
-				$nextPointer = $phpcsFile->findPrevious(T_DOC_COMMENT_STAR, $nextPointer - 1);
+				$nextPointer = TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_STAR, $nextPointer - 1);
 			}
 			$annotationEndPointer = $nextPointer - 1;
 

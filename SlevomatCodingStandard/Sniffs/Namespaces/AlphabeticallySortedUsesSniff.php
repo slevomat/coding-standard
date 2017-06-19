@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
+use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
@@ -73,7 +74,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	{
 		$firstUseStatement = reset($useStatements);
 		$lastUseStatement = end($useStatements);
-		$lastSemicolonPointer = $phpcsFile->findNext(T_SEMICOLON, $lastUseStatement->getPointer());
+		$lastSemicolonPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $lastUseStatement->getPointer());
 		$phpcsFile->fixer->beginChangeset();
 		for ($i = $firstUseStatement->getPointer(); $i <= $lastSemicolonPointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');

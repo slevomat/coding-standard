@@ -8,7 +8,7 @@ class FunctionHelper
 	public static function getName(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $functionPointer): string
 	{
 		$tokens = $codeSnifferFile->getTokens();
-		return $tokens[$codeSnifferFile->findNext(T_STRING, $functionPointer + 1, $tokens[$functionPointer]['parenthesis_opener'])]['content'];
+		return $tokens[TokenHelper::findNext($codeSnifferFile, T_STRING, $functionPointer + 1, $tokens[$functionPointer]['parenthesis_opener'])]['content'];
 	}
 
 	public static function getFullyQualifiedName(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $functionPointer): string
@@ -164,29 +164,29 @@ class FunctionHelper
 		$isAbstract = self::isAbstract($codeSnifferFile, $functionPointer);
 
 		$colonToken = $isAbstract
-			? $codeSnifferFile->findNext(T_COLON, $tokens[$functionPointer]['parenthesis_closer'] + 1, null, false, null, true)
-			: $codeSnifferFile->findNext(T_COLON, $tokens[$functionPointer]['parenthesis_closer'] + 1, $tokens[$functionPointer]['scope_opener'] - 1);
+			? TokenHelper::findNextLocal($codeSnifferFile, T_COLON, $tokens[$functionPointer]['parenthesis_closer'] + 1)
+			: TokenHelper::findNext($codeSnifferFile, T_COLON, $tokens[$functionPointer]['parenthesis_closer'] + 1, $tokens[$functionPointer]['scope_opener'] - 1);
 
-		if ($colonToken === false) {
+		if ($colonToken === null) {
 			return null;
 		}
 
 		$abstractExcludeTokens = array_merge(TokenHelper::$ineffectiveTokenCodes, [T_SEMICOLON]);
 
 		$nullableToken = $isAbstract
-			? $codeSnifferFile->findNext($abstractExcludeTokens, $colonToken + 1, null, true, null, true)
-			: $codeSnifferFile->findNext(TokenHelper::$ineffectiveTokenCodes, $colonToken + 1, $tokens[$functionPointer]['scope_opener'] - 1, true);
+			? TokenHelper::findNextLocalExcluding($codeSnifferFile, $abstractExcludeTokens, $colonToken + 1)
+			: TokenHelper::findNextExcluding($codeSnifferFile, TokenHelper::$ineffectiveTokenCodes, $colonToken + 1, $tokens[$functionPointer]['scope_opener'] - 1);
 
-		$nullable = $nullableToken !== false && $tokens[$nullableToken]['code'] === T_NULLABLE;
+		$nullable = $nullableToken !== null && $tokens[$nullableToken]['code'] === T_NULLABLE;
 
 		$typeHint = '';
 		$nextToken = $nullable ? $nullableToken : $colonToken;
 		do {
 			$nextToken = $isAbstract
-				? $codeSnifferFile->findNext($abstractExcludeTokens, $nextToken + 1, null, true, null, true)
-				: $codeSnifferFile->findNext(TokenHelper::$ineffectiveTokenCodes, $nextToken + 1, $tokens[$functionPointer]['scope_opener'] - 1, true);
+				? TokenHelper::findNextLocalExcluding($codeSnifferFile, $abstractExcludeTokens, $nextToken + 1)
+				: TokenHelper::findNextExcluding($codeSnifferFile, TokenHelper::$ineffectiveTokenCodes, $nextToken + 1, $tokens[$functionPointer]['scope_opener'] - 1);
 
-			$isTypeHint = $nextToken !== false;
+			$isTypeHint = $nextToken !== null;
 			if ($isTypeHint) {
 				$typeHint .= $tokens[$nextToken]['content'];
 			}

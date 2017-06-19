@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
+use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
 class MultipleUsesPerLineSniff implements \PHP_CodeSniffer\Sniffs\Sniff
@@ -34,10 +35,10 @@ class MultipleUsesPerLineSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return $usePointer + 1;
 		}
 
-		$endPointer = $phpcsFile->findNext(T_SEMICOLON, $usePointer + 1);
-		$commaPointer = $phpcsFile->findNext(T_COMMA, $usePointer + 1, $endPointer);
+		$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $usePointer + 1);
+		$commaPointer = TokenHelper::findNext($phpcsFile, T_COMMA, $usePointer + 1, $endPointer);
 
-		if ($commaPointer !== false) {
+		if ($commaPointer !== null) {
 			$phpcsFile->addError(
 				'Multiple used types per use statement are forbidden.',
 				$commaPointer,

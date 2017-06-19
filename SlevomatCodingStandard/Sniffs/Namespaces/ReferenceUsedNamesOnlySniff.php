@@ -196,11 +196,11 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						if ($fix) {
 							$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 							if (count($useStatements) === 0) {
-								$namespacePointer = $phpcsFile->findNext(T_NAMESPACE, $openTagPointer);
-								$useStatementPlacePointer = $phpcsFile->findNext([T_SEMICOLON, T_OPEN_CURLY_BRACKET], $namespacePointer + 1);
+								$namespacePointer = TokenHelper::findNext($phpcsFile, T_NAMESPACE, $openTagPointer);
+								$useStatementPlacePointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_OPEN_CURLY_BRACKET], $namespacePointer + 1);
 							} else {
 								$lastUseStatement = array_values($useStatements)[count($useStatements) - 1];
-								$useStatementPlacePointer = $phpcsFile->findNext(T_SEMICOLON, $lastUseStatement->getPointer() + 1);
+								$useStatementPlacePointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $lastUseStatement->getPointer() + 1);
 							}
 
 							$phpcsFile->fixer->beginChangeset();

@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
+use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
@@ -65,8 +66,8 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$tokens = $phpcsFile->getTokens();
 			$searchAnnotationsPointer = $openTagPointer + 1;
 			while (true) {
-				$docCommentPointer = $phpcsFile->findNext([T_DOC_COMMENT_TAG, T_DOC_COMMENT_STRING], $searchAnnotationsPointer);
-				if ($docCommentPointer === false) {
+				$docCommentPointer = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_TAG, T_DOC_COMMENT_STRING], $searchAnnotationsPointer);
+				if ($docCommentPointer === null) {
 					break;
 				}
 
@@ -95,7 +96,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			), $value->getPointer(), self::CODE_UNUSED_USE);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$endPointer = $phpcsFile->findNext(T_SEMICOLON, $value->getPointer()) + 1;
+				$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $value->getPointer()) + 1;
 				for ($i = $value->getPointer(); $i <= $endPointer; $i++) {
 					$phpcsFile->fixer->replaceToken($i, '');
 				}

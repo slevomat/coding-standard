@@ -243,7 +243,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				$parameterTypeHint = TypeHintHelper::isSimpleTypeHint($possibleParameterTypeHint) ? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleParameterTypeHint) : $possibleParameterTypeHint;
 
 				$tokens = $phpcsFile->getTokens();
-				$parameterPointer = $phpcsFile->findNext(T_VARIABLE, $tokens[$functionPointer]['parenthesis_opener'], $tokens[$functionPointer]['parenthesis_closer'], false, $parameterName);
+				$parameterPointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $parameterName, $tokens[$functionPointer]['parenthesis_opener'], $tokens[$functionPointer]['parenthesis_closer']);
 
 				$beforeParameterPointer = $parameterPointer;
 				do {
@@ -544,8 +544,8 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 							continue;
 						}
 
-						$changeStart = $phpcsFile->findPrevious([T_DOC_COMMENT_STAR], $i - 1, $docCommentOpenPointer);
-						$changeEnd = $phpcsFile->findNext([T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR], $i - 1, $docCommentClosePointer + 1) - 1;
+						$changeStart = TokenHelper::findPrevious($phpcsFile, [T_DOC_COMMENT_STAR], $i - 1, $docCommentOpenPointer);
+						$changeEnd = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR], $i - 1, $docCommentClosePointer + 1) - 1;
 						$phpcsFile->fixer->beginChangeset();
 						for ($j = $changeStart; $j <= $changeEnd; $j++) {
 							$phpcsFile->fixer->replaceToken($j, '');
@@ -583,9 +583,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 								continue;
 							}
 
-							$parameterInformationPointer = $phpcsFile->findNext([T_DOC_COMMENT_WHITESPACE], $i + 1, $docCommentClosePointer + 1, true);
+							$parameterInformationPointer = TokenHelper::findNextExcluding($phpcsFile, [T_DOC_COMMENT_WHITESPACE], $i + 1, $docCommentClosePointer + 1);
 
-							if ($parameterInformationPointer === false || $tokens[$parameterInformationPointer]['code'] !== T_DOC_COMMENT_STRING) {
+							if ($parameterInformationPointer === null || $tokens[$parameterInformationPointer]['code'] !== T_DOC_COMMENT_STRING) {
 								continue;
 							}
 
@@ -597,8 +597,8 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 								continue;
 							}
 
-							$changeStart = $phpcsFile->findPrevious([T_DOC_COMMENT_STAR], $i - 1);
-							$changeEnd = $phpcsFile->findNext([T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR], $i - 1) - 1;
+							$changeStart = TokenHelper::findPrevious($phpcsFile, [T_DOC_COMMENT_STAR], $i - 1);
+							$changeEnd = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR], $i - 1) - 1;
 							$phpcsFile->fixer->beginChangeset();
 							for ($j = $changeStart; $j <= $changeEnd; $j++) {
 								$phpcsFile->fixer->replaceToken($j, '');

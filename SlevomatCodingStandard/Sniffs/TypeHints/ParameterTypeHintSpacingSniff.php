@@ -44,18 +44,18 @@ class ParameterTypeHintSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$parameterPointer = $i;
 			$parameterName = $tokens[$parameterPointer]['content'];
 
-			$parameterStartPointer = $phpcsFile->findPrevious(T_COMMA, $parameterPointer - 1, $parametersStartPointer);
-			if ($parameterStartPointer === false) {
+			$parameterStartPointer = TokenHelper::findPrevious($phpcsFile, T_COMMA, $parameterPointer - 1, $parametersStartPointer);
+			if ($parameterStartPointer === null) {
 				$parameterStartPointer = $parametersStartPointer;
 			}
 
-			$parameterEndPointer = $phpcsFile->findNext(T_COMMA, $parameterPointer + 1, $parametersEndPointer + 1);
-			if ($parameterEndPointer === false) {
+			$parameterEndPointer = TokenHelper::findNext($phpcsFile, T_COMMA, $parameterPointer + 1, $parametersEndPointer + 1);
+			if ($parameterEndPointer === null) {
 				$parameterEndPointer = $parametersEndPointer;
 			}
 
-			$typeHintEndPointer = $phpcsFile->findPrevious(TokenHelper::$typeHintTokenCodes, $parameterPointer - 1, $parameterStartPointer);
-			if ($typeHintEndPointer === false) {
+			$typeHintEndPointer = TokenHelper::findPrevious($phpcsFile, TokenHelper::$typeHintTokenCodes, $parameterPointer - 1, $parameterStartPointer);
+			if ($typeHintEndPointer === null) {
 				continue;
 			}
 
@@ -64,7 +64,7 @@ class ParameterTypeHintSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				T_BITWISE_AND => sprintf('reference sign of parameter %s', $parameterName),
 				T_ELLIPSIS => sprintf('varadic parameter %s', $parameterName),
 			];
-			$nextTokenPointer = $phpcsFile->findNext(array_keys($nextTokenNames), $typeHintEndPointer + 1, $parameterEndPointer + 1);
+			$nextTokenPointer = TokenHelper::findNext($phpcsFile, array_keys($nextTokenNames), $typeHintEndPointer + 1, $parameterEndPointer + 1);
 
 			if ($tokens[$typeHintEndPointer + 1]['code'] !== T_WHITESPACE) {
 				$fix = $phpcsFile->addFixableError(sprintf('There must be exactly one space between parameter type hint and %s.', $nextTokenNames[$tokens[$nextTokenPointer]['code']]), $typeHintEndPointer, self::CODE_NO_SPACE_BETWEEN_TYPE_HINT_AND_PARAMETER);

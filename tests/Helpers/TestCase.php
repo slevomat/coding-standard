@@ -35,8 +35,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
 			if ($tokens[$i]['code'] === T_STRING && $tokens[$i]['content'] === $name) {
-				$classPointer = $codeSnifferFile->findPrevious([T_CLASS, T_INTERFACE, T_TRAIT], $i - 1);
-				if ($classPointer !== false) {
+				$classPointer = TokenHelper::findPrevious($codeSnifferFile, [T_CLASS, T_INTERFACE, T_TRAIT], $i - 1);
+				if ($classPointer !== null) {
 					return $classPointer;
 				}
 			}
@@ -54,8 +54,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
 			if ($tokens[$i]['code'] === T_STRING && $tokens[$i]['content'] === $name) {
-				$constantPointer = $codeSnifferFile->findPrevious(T_CONST, $i - 1);
-				if ($constantPointer !== false) {
+				$constantPointer = TokenHelper::findPrevious($codeSnifferFile, T_CONST, $i - 1);
+				if ($constantPointer !== null) {
 					return $constantPointer;
 				}
 			}
@@ -73,8 +73,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
 			if ($tokens[$i]['code'] === T_VARIABLE && $tokens[$i]['content'] === sprintf('$%s', $name)) {
-				$propertyPointer = $codeSnifferFile->findPrevious([T_PUBLIC, T_PROTECTED, T_PRIVATE, T_STATIC], $i - 1);
-				if ($propertyPointer !== false) {
+				$propertyPointer = TokenHelper::findPrevious($codeSnifferFile, [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_STATIC], $i - 1);
+				if ($propertyPointer !== null) {
 					return $i;
 				}
 			}
@@ -92,8 +92,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
 			if ($tokens[$i]['code'] === T_STRING && $tokens[$i]['content'] === $name) {
-				$functionPointer = $codeSnifferFile->findPrevious(T_FUNCTION, $i - 1);
-				if ($functionPointer !== false) {
+				$functionPointer = TokenHelper::findPrevious($codeSnifferFile, T_FUNCTION, $i - 1);
+				if ($functionPointer !== null) {
 					return $functionPointer;
 				}
 			}

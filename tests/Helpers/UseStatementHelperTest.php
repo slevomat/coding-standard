@@ -10,7 +10,7 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/anonymousFunction.php'
 		);
-		$usePointer = $codeSnifferFile->findNext(T_USE, 0);
+		$usePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
 		$this->assertTrue(UseStatementHelper::isAnonymousFunctionUse($codeSnifferFile, $usePointer));
 	}
 
@@ -19,7 +19,7 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/useStatements.php'
 		);
-		$usePointer = $codeSnifferFile->findNext(T_USE, 0);
+		$usePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
 		$this->assertFalse(UseStatementHelper::isAnonymousFunctionUse($codeSnifferFile, $usePointer));
 	}
 
@@ -28,7 +28,7 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/classWithTrait.php'
 		);
-		$usePointer = $codeSnifferFile->findNext(T_USE, 0);
+		$usePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
 		$this->assertTrue(UseStatementHelper::isTraitUse($codeSnifferFile, $usePointer));
 	}
 
@@ -37,7 +37,7 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/anonymousClassWithTrait.php'
 		);
-		$usePointer = $codeSnifferFile->findNext(T_USE, 0);
+		$usePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
 		$this->assertTrue(UseStatementHelper::isTraitUse($codeSnifferFile, $usePointer));
 	}
 
@@ -46,7 +46,7 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/useStatements.php'
 		);
-		$usePointer = $codeSnifferFile->findNext(T_USE, 0);
+		$usePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
 		$this->assertFalse(UseStatementHelper::isTraitUse($codeSnifferFile, $usePointer));
 	}
 
@@ -55,13 +55,13 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/useStatements.php'
 		);
-		$bazUsePointer = $codeSnifferFile->findNext(T_USE, 0);
+		$bazUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
 		$this->assertSame('Baz', UseStatementHelper::getNameAsReferencedInClassFromUse($codeSnifferFile, $bazUsePointer));
 
-		$fooUsePointer = $codeSnifferFile->findNext(T_USE, $bazUsePointer + 1);
+		$fooUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $bazUsePointer + 1);
 		$this->assertSame('Foo', UseStatementHelper::getNameAsReferencedInClassFromUse($codeSnifferFile, $fooUsePointer));
 
-		$loremIpsumUsePointer = $codeSnifferFile->findNext(T_USE, $fooUsePointer + 1);
+		$loremIpsumUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $fooUsePointer + 1);
 		$this->assertSame('LoremIpsum', UseStatementHelper::getNameAsReferencedInClassFromUse($codeSnifferFile, $loremIpsumUsePointer));
 	}
 
@@ -70,19 +70,19 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/useStatements.php'
 		);
-		$bazUsePointer = $codeSnifferFile->findNext(T_USE, 0);
+		$bazUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
 		$this->assertSame('Bar\Baz', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $bazUsePointer));
 
-		$fooUsePointer = $codeSnifferFile->findNext(T_USE, $bazUsePointer + 1);
+		$fooUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $bazUsePointer + 1);
 		$this->assertSame('Foo', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $fooUsePointer));
 
-		$loremIpsumUsePointer = $codeSnifferFile->findNext(T_USE, $fooUsePointer + 1);
+		$loremIpsumUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $fooUsePointer + 1);
 		$this->assertSame('Lorem\Ipsum', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $loremIpsumUsePointer));
 
-		$rasmusFooConstantUsePointer = $codeSnifferFile->findNext(T_USE, $loremIpsumUsePointer + 1);
+		$rasmusFooConstantUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $loremIpsumUsePointer + 1);
 		$this->assertSame('Rasmus\FOO_CONSTANT', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $rasmusFooConstantUsePointer));
 
-		$lerdorfIsBarPointer = $codeSnifferFile->findNext(T_USE, $rasmusFooConstantUsePointer + 1);
+		$lerdorfIsBarPointer = TokenHelper::findNext($codeSnifferFile, T_USE, $rasmusFooConstantUsePointer + 1);
 		$this->assertSame('Lerdorf\isBar', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $lerdorfIsBarPointer));
 	}
 
