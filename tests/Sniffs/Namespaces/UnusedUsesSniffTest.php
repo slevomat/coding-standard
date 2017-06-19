@@ -93,6 +93,7 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertNoSniffError($this->getFileReport(), 20);
 		$this->assertNoSniffError($this->getFileReport(), 21);
 		$this->assertNoSniffError($this->getFileReport(), 22);
+		$this->assertNoSniffError($this->getFileReport(), 23);
 	}
 
 	public function testUsedUseInAnnotationWithDisabledSearchAnnotations()
@@ -101,7 +102,7 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 			'searchAnnotations' => false,
 		]);
 
-		$this->assertSame(5, $report->getErrorCount());
+		$this->assertSame(6, $report->getErrorCount());
 
 		$this->assertSniffError(
 			$report,
@@ -126,6 +127,12 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 			9,
 			UnusedUsesSniff::CODE_UNUSED_USE,
 			'Type XX is not used in this file.'
+		);
+		$this->assertSniffError(
+			$report,
+			10,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'Type XXX is not used in this file.'
 		);
 	}
 
