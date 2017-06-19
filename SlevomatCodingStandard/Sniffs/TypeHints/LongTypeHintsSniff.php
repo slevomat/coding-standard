@@ -12,7 +12,7 @@ class LongTypeHintsSniff implements \PHP_CodeSniffer_Sniff
 	const CODE_USED_LONG_TYPE_HINT = 'UsedLongTypeHint';
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

@@ -27,7 +27,7 @@ class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer_Sniff
 	private $normalizedIgnoredNames;
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

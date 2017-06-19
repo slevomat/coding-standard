@@ -27,7 +27,7 @@ class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer_Sniff
 	public $linesCountBeforeClosingBrace = 1;
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

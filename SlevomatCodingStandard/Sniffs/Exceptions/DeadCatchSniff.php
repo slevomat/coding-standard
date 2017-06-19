@@ -12,7 +12,7 @@ class DeadCatchSniff implements \PHP_CodeSniffer_Sniff
 	const CODE_CATCH_AFTER_THROWABLE_CATCH = 'CatchAfterThrowableCatch';
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

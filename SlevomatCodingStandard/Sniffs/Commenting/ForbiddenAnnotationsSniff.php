@@ -17,7 +17,7 @@ class ForbiddenAnnotationsSniff implements \PHP_CodeSniffer_Sniff
 	private $normalizedForbiddenAnnotations;
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

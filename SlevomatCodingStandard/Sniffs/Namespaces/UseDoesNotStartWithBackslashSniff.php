@@ -11,7 +11,7 @@ class UseDoesNotStartWithBackslashSniff implements \PHP_CodeSniffer_Sniff
 	const CODE_STARTS_WITH_BACKSLASH = 'UseStartsWithBackslash';
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

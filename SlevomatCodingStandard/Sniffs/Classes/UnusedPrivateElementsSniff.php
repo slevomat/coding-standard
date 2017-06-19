@@ -36,7 +36,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 	private $normalizedAlwaysUsedPropertiesSuffixes;
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

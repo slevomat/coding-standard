@@ -21,7 +21,7 @@ class UseOnlyWhitelistedNamespacesSniff implements \PHP_CodeSniffer_Sniff
 	private $normalizedNamespacesRequiredToUse;
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

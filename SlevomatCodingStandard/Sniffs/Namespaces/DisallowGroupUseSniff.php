@@ -8,7 +8,7 @@ class DisallowGroupUseSniff implements \PHP_CodeSniffer_Sniff
 	const CODE_DISALLOWED_GROUP_USE = 'DisallowedGroupUse';
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

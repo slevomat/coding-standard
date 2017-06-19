@@ -43,7 +43,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param int|int[] $types
+	 * @param mixed|mixed[] $types
 	 * @param int $startPointer
 	 * @param int|null $endPointer
 	 * @return int|null
@@ -59,7 +59,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param int|int[] $types
+	 * @param mixed|mixed[] $types
 	 * @param string $content
 	 * @param int $startPointer
 	 * @param int|null $endPointer
@@ -87,7 +87,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param int|int[] $types
+	 * @param mixed|mixed[] $types
 	 * @param int $startPointer search starts at this token, inclusive
 	 * @param int|null $endPointer search ends at this token, exclusive
 	 * @return int|null
@@ -103,7 +103,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param int|int[] $types
+	 * @param mixed|mixed[] $types
 	 * @param int $startPointer
 	 * @param int|null $endPointer
 	 * @return int|null
@@ -119,7 +119,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param int|int[] $types
+	 * @param mixed|mixed[] $types
 	 * @param int $startPointer
 	 * @param int|null $endPointer
 	 * @return int|null
@@ -146,7 +146,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param int[]|int $types
+	 * @param mixed|mixed[] $types
 	 * @param int $startPointer search starts at this token, inclusive
 	 * @param int|null $endPointer search ends at this token, exclusive
 	 * @return int|null
@@ -173,7 +173,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
-	 * @param int[]|int $types
+	 * @param mixed|mixed[] $types
 	 * @param int $startPointer search starts at this token, inclusive
 	 * @param int|null $endPointer search ends at this token, exclusive
 	 * @return int|null

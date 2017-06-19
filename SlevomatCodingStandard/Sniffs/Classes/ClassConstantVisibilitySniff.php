@@ -18,7 +18,7 @@ class ClassConstantVisibilitySniff implements \PHP_CodeSniffer_Sniff
 	public $enabled = PHP_VERSION_ID >= 70100;
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

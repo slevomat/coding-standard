@@ -10,7 +10,7 @@ class AssignmentInConditionSniff implements \PHP_CodeSniffer_Sniff
 	const CODE_ASSIGNMENT_IN_CONDITION = 'AssignmentInCondition';
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

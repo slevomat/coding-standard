@@ -10,7 +10,7 @@ class TrailingArrayCommaSniff implements \PHP_CodeSniffer_Sniff
 	const CODE_MISSING_TRAILING_COMMA = 'MissingTrailingComma';
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

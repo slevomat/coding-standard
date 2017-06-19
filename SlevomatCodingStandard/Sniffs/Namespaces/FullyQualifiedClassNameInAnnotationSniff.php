@@ -11,7 +11,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer_Sniff
 	const CODE_NON_FULLY_QUALIFIED_CLASS_NAME = 'NonFullyQualifiedClassName';
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

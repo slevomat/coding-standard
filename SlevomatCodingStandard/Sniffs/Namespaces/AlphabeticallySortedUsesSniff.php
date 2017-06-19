@@ -19,7 +19,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 	private $lastUse;
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

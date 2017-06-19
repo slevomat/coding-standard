@@ -13,7 +13,7 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer_Sniff
 	const CODE_USE_FROM_SAME_NAMESPACE = 'UseFromSameNamespace';
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

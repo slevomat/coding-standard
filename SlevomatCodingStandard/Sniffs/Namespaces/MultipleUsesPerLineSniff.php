@@ -11,7 +11,7 @@ class MultipleUsesPerLineSniff implements \PHP_CodeSniffer_Sniff
 	const CODE_MULTIPLE_USES_PER_LINE = 'MultipleUsesPerLine';
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{

@@ -77,7 +77,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
-	 * @return int[]
+	 * @return mixed[]
 	 */
 	public function register(): array
 	{
