@@ -74,7 +74,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					$nameAsReferencedInFile = $useStatement->getNameAsReferencedInFile();
 					if (
 						preg_match('~^@' . preg_quote($nameAsReferencedInFile, '~') . '(?=[^a-z\\d]|$)~i', $tokens[$docCommentPointer]['content'])
-						|| preg_match('~(?<=^|[^a-z\\d\\\\])' . preg_quote($nameAsReferencedInFile, '~') . '(?=[^a-z\\d\\\\]|$)~i', $tokens[$docCommentPointer]['content'])
+						|| preg_match('~(?<=^|[^a-z\\d\\\\])' . preg_quote($nameAsReferencedInFile, '~') . '(?=\\\\|[^a-z\\d]|$)~i', $tokens[$docCommentPointer]['content'])
 					) {
 						unset($unusedNames[$i]);
 					}
