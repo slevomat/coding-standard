@@ -16,9 +16,6 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	/** @var string[] path(string) => namespace */
 	public $rootNamespaces = [];
 
-	/** @var string[] index(integer) => extension */
-	public $extensions = ['php'];
-
 	/** @var string[] path(string) => namespace */
 	private $normalizedRootNamespaces;
 
@@ -33,6 +30,12 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 	/** @var string[] */
 	private $normalizedIgnoredNamespaces;
+
+	/** @var string[] */
+	public $extensions = ['php'];
+
+	/** @var string[]|null */
+	private $normalizedExtensions;
 
 	/** @var \SlevomatCodingStandard\Sniffs\Files\FilepathNamespaceExtractor */
 	private $namespaceExtractor;
@@ -85,13 +88,25 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		return $this->normalizedIgnoredNamespaces;
 	}
 
+	/**
+	 * @return string[]
+	 */
+	private function getExtensions(): array
+	{
+		if ($this->normalizedExtensions === null) {
+			$this->normalizedExtensions = SniffSettingsHelper::normalizeArray($this->extensions);
+		}
+
+		return $this->normalizedExtensions;
+	}
+
 	private function getNamespaceExtractor(): FilepathNamespaceExtractor
 	{
 		if ($this->namespaceExtractor === null) {
 			$this->namespaceExtractor = new FilepathNamespaceExtractor(
 				$this->getRootNamespaces(),
 				$this->getSkipDirs(),
-				$this->extensions
+				$this->getExtensions()
 			);
 		}
 
