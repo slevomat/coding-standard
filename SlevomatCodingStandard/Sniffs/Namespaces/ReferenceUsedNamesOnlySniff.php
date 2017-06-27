@@ -23,7 +23,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	/** @var string[] */
 	public $fullyQualifiedKeywords = [];
 
-	/** @var string[] */
+	/** @var string[]|null */
 	private $normalizedFullyQualifiedKeywords;
 
 	/** @var bool */
@@ -41,7 +41,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	/** @var string[] */
 	public $ignoredNames = [];
 
-	/** @var string[] */
+	/** @var string[]|null */
 	private $normalizedIgnoredNames;
 
 	/** @var bool */

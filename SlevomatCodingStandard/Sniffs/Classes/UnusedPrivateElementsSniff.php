@@ -26,13 +26,13 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 	/** @var string[] */
 	public $alwaysUsedPropertiesAnnotations = [];
 
-	/** @var string[] */
+	/** @var string[]|null */
 	private $normalizedAlwaysUsedPropertiesAnnotations;
 
 	/** @var string[] */
 	public $alwaysUsedPropertiesSuffixes = [];
 
-	/** @var string[] */
+	/** @var string[]|null */
 	private $normalizedAlwaysUsedPropertiesSuffixes;
 
 	/**

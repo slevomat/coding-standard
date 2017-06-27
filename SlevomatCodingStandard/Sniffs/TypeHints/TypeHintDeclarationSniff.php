@@ -52,10 +52,10 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	/** @var string[] */
 	public $usefulAnnotations = [];
 
-	/** @var int[] [string => int] */
+	/** @var int[]|null [string => int] */
 	private $normalizedTraversableTypeHints;
 
-	/** @var string[] */
+	/** @var string[]|null */
 	private $normalizedUsefulAnnotations;
 
 	/**
