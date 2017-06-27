@@ -16,19 +16,19 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	/** @var string[] path(string) => namespace */
 	public $rootNamespaces = [];
 
-	/** @var string[] path(string) => namespace */
+	/** @var string[]|null path(string) => namespace */
 	private $normalizedRootNamespaces;
 
 	/** @var string[] */
 	public $skipDirs = [];
 
-	/** @var string[] */
+	/** @var string[]|null */
 	private $normalizedSkipDirs;
 
 	/** @var string[] */
 	public $ignoredNamespaces = [];
 
-	/** @var string[] */
+	/** @var string[]|null */
 	private $normalizedIgnoredNamespaces;
 
 	/** @var string[] */

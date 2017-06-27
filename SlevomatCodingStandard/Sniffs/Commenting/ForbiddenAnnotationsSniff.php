@@ -13,7 +13,7 @@ class ForbiddenAnnotationsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	/** @var string[] */
 	public $forbiddenAnnotations = [];
 
-	/** @var int[] [string => int] */
+	/** @var int[]|null [string => int] */
 	private $normalizedForbiddenAnnotations;
 
 	/**

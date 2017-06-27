@@ -18,7 +18,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer\Sniff
 	 */
 	public $keywordsToCheck = [];
 
-	/** @var string[] */
+	/** @var string[]|null */
 	private $normalizedKeywordsToCheck;
 
 	/**

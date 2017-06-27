@@ -17,13 +17,13 @@ class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	/** @var string[] */
 	public $specialExceptionNames = [];
 
-	/** @var string[] */
+	/** @var string[]|null */
 	private $normalizedSpecialExceptionNames;
 
 	/** @var string[] */
 	public $ignoredNames = [];
 
-	/** @var string[] */
+	/** @var string[]|null */
 	private $normalizedIgnoredNames;
 
 	/**
