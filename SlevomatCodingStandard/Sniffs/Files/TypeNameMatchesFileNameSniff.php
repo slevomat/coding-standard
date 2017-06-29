@@ -59,6 +59,19 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 	{
 		if ($this->normalizedRootNamespaces === null) {
 			$this->normalizedRootNamespaces = SniffSettingsHelper::normalizeAssociativeArray($this->rootNamespaces);
+			uksort($this->normalizedRootNamespaces, function (string $a, string $b): int {
+				$aParts = explode('/', str_replace('\\', '/', $a));
+				$bParts = explode('/', str_replace('\\', '/', $b));
+
+				for ($i = 0; $i < min(count($aParts), count($bParts)); $i++) {
+					$comparison = strcasecmp($bParts[$i], $aParts[$i]);
+					if ($comparison !== 0) {
+						return $comparison;
+					}
+				}
+
+				return count($bParts) <=> count($aParts);
+			});
 		}
 
 		return $this->normalizedRootNamespaces;

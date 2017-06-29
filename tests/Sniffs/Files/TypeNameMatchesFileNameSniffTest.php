@@ -49,4 +49,26 @@ class TypeNameMatchesFileNameSniffTest extends \SlevomatCodingStandard\Sniffs\Te
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/noNamespace.php'));
 	}
 
+	public function testRootNamespacesNormalization()
+	{
+		$sniffProperties1 = [
+			'rootNamespaces' => [
+				'tests/Sniffs/Files/data/rootNamespace2/Xxx' => 'RootNamespace2',
+				'tests/Sniffs/Files/data/rootNamespace2' => 'RootNamespace2',
+			],
+		];
+		$sniffProperties2 = [
+			'rootNamespaces' => [
+				'tests/Sniffs/Files/data/rootNamespace2' => 'RootNamespace2',
+				'tests/Sniffs/Files/data/rootNamespace2/Xxx' => 'RootNamespace2',
+			],
+		];
+
+		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/rootNamespace2/Foo.php', $sniffProperties1));
+		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/rootNamespace2/Xxx/Boo.php', $sniffProperties1));
+
+		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/rootNamespace2/Foo.php', $sniffProperties2));
+		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/rootNamespace2/Xxx/Boo.php', $sniffProperties2));
+	}
+
 }
