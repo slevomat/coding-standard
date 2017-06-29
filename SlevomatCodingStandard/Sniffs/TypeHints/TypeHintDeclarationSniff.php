@@ -481,10 +481,23 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$containsUsefulInformation = DocCommentHelper::hasDocCommentDescription($phpcsFile, $functionPointer);
 
-		foreach (FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer) as $parameterAnnotation) {
-			if ($parameterAnnotation->getContent() !== null && preg_match('~^\\S+\\s+(?:(?:\.{3}\\s*)?\$\\S+\\s+)?[^$]~', $parameterAnnotation->getContent())) {
+		$parametersNames = FunctionHelper::getParametersNames($phpcsFile, $functionPointer);
+		$parametersContainDescription = [];
+		foreach (FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer) as $parameterAnnotationNo => $parameterAnnotation) {
+			if ($parameterAnnotation->getContent() === null) {
+				continue;
+			}
+
+			if (!preg_match('~^\\S+\\s+(?:(?:\.{3}\\s*)?(\$\\S+)\\s+)?[^$]~', $parameterAnnotation->getContent(), $matches)) {
+				continue;
+			}
+
+			if (isset($matches[2])) {
+				$parametersContainDescription[$matches[2]] = true;
 				$containsUsefulInformation = true;
-				break;
+			} elseif (isset($parametersNames[$parameterAnnotationNo])) {
+				$parametersContainDescription[$parametersNames[$parameterAnnotationNo]] = true;
+				$containsUsefulInformation = true;
 			}
 		}
 
@@ -494,7 +507,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$parameterTypeHints = FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer);
 		$parametersAnnotationTypeHints = $this->getFunctionParameterTypeHintsDefinitions($phpcsFile, $functionPointer);
-		$uselessParameterNames = $this->getUselessParameterNames($phpcsFile, $functionPointer, $parameterTypeHints, $parametersAnnotationTypeHints);
+		$uselessParameterNames = $this->getUselessParameterNames($phpcsFile, $functionPointer, $parameterTypeHints, $parametersAnnotationTypeHints, $parametersContainDescription);
 
 		foreach (AnnotationHelper::getAnnotations($phpcsFile, $functionPointer) as list($annotation)) {
 			if ($annotation->getName() === SuppressHelper::ANNOTATION) {
@@ -867,9 +880,10 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param int $functionPointer
 	 * @param \SlevomatCodingStandard\Helpers\ParameterTypeHint[]|null[] $functionTypeHints
 	 * @param string[]|null[] $parametersTypeHintsDefinitions
+	 * @param bool[] $parametersContainDescription
 	 * @return string[] names of parameters with useless annotation hint
 	 */
-	private function getUselessParameterNames(\PHP_CodeSniffer\Files\File $phpcsFile, int $functionPointer, array $functionTypeHints, array $parametersTypeHintsDefinitions): array
+	private function getUselessParameterNames(\PHP_CodeSniffer\Files\File $phpcsFile, int $functionPointer, array $functionTypeHints, array $parametersTypeHintsDefinitions, array $parametersContainDescription): array
 	{
 		$uselessParameterNames = [];
 
@@ -879,6 +893,10 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			}
 
 			if (!array_key_exists($parameterName, $parametersTypeHintsDefinitions)) {
+				continue;
+			}
+
+			if (array_key_exists($parameterName, $parametersContainDescription)) {
 				continue;
 			}
 
