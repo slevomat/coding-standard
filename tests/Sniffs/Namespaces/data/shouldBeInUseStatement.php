@@ -12,7 +12,7 @@ class Bar
 		new \Foo\SomeError();
 		new \Some\CommonException();
 		new \Exception();
-		new \Nette\Object();
+		new \Nette\ObjectPrototype();
 	}
 
 }

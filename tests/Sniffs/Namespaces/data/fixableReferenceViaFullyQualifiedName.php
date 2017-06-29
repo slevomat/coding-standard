@@ -4,7 +4,7 @@ namespace Foo\Test\Bla;
 
 use Doctrine\ORM\Mapping\Column as DoctrineColumn;
 
-class Bar extends \Object implements \Iterator
+class Bar extends \ObjectPrototype implements \Iterator
 {
 
 	public function bar()
@@ -14,12 +14,12 @@ class Bar extends \Object implements \Iterator
 		new \Foo\SomeError();
 		new \Some\CommonException();
 		new \Exception();
-		new \Nette\Object();
+		new \Nette\ObjectPrototype();
 	}
 
-	public function foo(\Doctrine\ORM\Mapping\Column $doctrineColumn): \Nette\Object
+	public function foo(\Doctrine\ORM\Mapping\Column $doctrineColumn): \Nette\ObjectPrototype
 	{
-		return new \Nette\Object();
+		return new \Nette\ObjectPrototype();
 	}
 
 }

@@ -7,7 +7,7 @@ use Lorem\IpsumFoo;
 use Lorem\Ipsum\Consecteur as LoremConsecteur;
 use Lorem\Ipsum\Dolor;
 use Lorem\Ipsum\Dolor\Sit;
-use Some\Object;
+use Some\ObjectPrototype;
 
 $f = function () use ($a, $b) {
 

@@ -16,7 +16,7 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 			$this->getFileReport(),
 			5,
 			UnusedUsesSniff::CODE_UNUSED_USE,
-			'First\Object'
+			'First\ObjectPrototype'
 		);
 		$this->assertSniffError(
 			$this->getFileReport(),
@@ -38,7 +38,7 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 			$this->getFileReport(),
 			8,
 			UnusedUsesSniff::CODE_UNUSED_USE,
-			'My\Object (as MyObject)'
+			'My\ObjectPrototype (as MyObject)'
 		);
 	}
 

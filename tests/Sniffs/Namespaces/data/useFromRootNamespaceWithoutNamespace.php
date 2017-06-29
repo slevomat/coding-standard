@@ -1,4 +1,4 @@
 <?php
 
 use Foo;
-use Second\Object;
+use Second\ObjectPrototype;

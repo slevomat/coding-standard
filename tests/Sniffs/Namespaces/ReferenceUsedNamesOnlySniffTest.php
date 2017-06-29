@@ -125,7 +125,7 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 			$report,
 			15,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Nette\Object'
+			'\Nette\ObjectPrototype'
 		);
 	}
 
@@ -308,7 +308,7 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 			$report,
 			7,
 			ReferenceUsedNamesOnlySniff::CODE_PARTIAL_USE,
-			'SomeFramework\Object'
+			'SomeFramework\ObjectPrototype'
 		);
 		$this->assertNoSniffError($report, 6);
 	}

@@ -1,6 +1,6 @@
 <?php
 
-use \Some\Object;
+use \Some\ObjectPrototype;
 
 class Foo {
 

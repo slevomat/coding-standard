@@ -1,5 +1,5 @@
 <?php
 
 use \FirstClass;
-use \Third\NS\Object;
+use \Third\NS\ObjectPrototype;
 use Second\FooObject;

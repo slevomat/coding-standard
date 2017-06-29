@@ -1,6 +1,6 @@
 <?php
 
-class ClassWithSomeUnusedProperties extends \Consistence\Object
+class ClassWithSomeUnusedProperties extends \Consistence\ObjectPrototype
 {
 
 	public $publicProperty;
