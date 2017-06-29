@@ -1,14 +1,14 @@
 <?php
 
 namespace Foo\Test\Bla;
-use Nette\Object;
+use Nette\ObjectPrototype;
 
-class Bar extends \Object implements \Iterator
+class Bar extends \ObjectPrototype implements \Iterator
 {
 
 	public function bar()
 	{
-		new Object();
+		new ObjectPrototype();
 	}
 
 }

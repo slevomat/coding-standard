@@ -2,12 +2,12 @@
 
 namespace Foo\Test\Bla;
 
-class Bar extends \Object implements \Iterator
+class Bar extends \ObjectPrototype implements \Iterator
 {
 
 	public function bar()
 	{
-		new \Nette\Object();
+		new \Nette\ObjectPrototype();
 	}
 
 }

@@ -4,7 +4,7 @@ namespace Foo;
 
 use Framework;
 use Framework\Subnamespace;
-use NewNamespace\Object as NewObject;
+use NewNamespace\ObjectPrototype as NewObject;
 use R\S;
 use T;
 use function LoremIpsum\UsedFunction;

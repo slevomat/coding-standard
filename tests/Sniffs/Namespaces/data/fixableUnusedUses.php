@@ -2,11 +2,11 @@
 
 namespace Foo;
 
-use First\Object;
+use First\ObjectPrototype;
 use Framework;
 use Framework\Subnamespace;
-use My\Object as MyObject;
-use NewNamespace\Object as NewObject;
+use My\ObjectPrototype as MyObject;
+use NewNamespace\ObjectPrototype as NewObject;
 use R\S;
 use T;
 use Test_Invalid;

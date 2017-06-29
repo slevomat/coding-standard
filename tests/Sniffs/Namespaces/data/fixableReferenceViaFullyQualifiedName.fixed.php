@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping\Column as DoctrineColumn;
 use Iterator;
 use Some\ConstantClass;
 use Foo\SomeError;
-use Nette\Object;
+use Nette\ObjectPrototype;
 
-class Bar extends \Object implements Iterator
+class Bar extends \ObjectPrototype implements Iterator
 {
 
 	public function bar()
@@ -18,12 +18,12 @@ class Bar extends \Object implements Iterator
 		new SomeError();
 		new \Some\CommonException();
 		new \Exception();
-		new Object();
+		new ObjectPrototype();
 	}
 
-	public function foo(DoctrineColumn $doctrineColumn): Object
+	public function foo(DoctrineColumn $doctrineColumn): ObjectPrototype
 	{
-		return new Object();
+		return new ObjectPrototype();
 	}
 
 }
