@@ -2,24 +2,24 @@ language: php
 matrix:
   include:
     - php: 7.0
-      env: dependencies=lowest
+      env: DEPENDENCIES=lowest
     - php: 7.0
-      env: dependencies=highest
+      env: DEPENDENCIES=highest
     - php: 7.1
-      env: dependencies=lowest
+      env: DEPENDENCIES=lowest
     - php: 7.1
-      env: dependencies=highest
+      env: DEPENDENCIES=highest
     - php: master
-      env: dependencies=lowest
+      env: DEPENDENCIES=lowest
     - php: master
-      env: dependencies=highest
+      env: DEPENDENCIES=highest
 cache:
   directories:
     - $HOME/.composer/cache
 before_script:
   - composer self-update
-  - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest --prefer-dist --no-interaction --no-progress; fi;
-  - if [ "$dependencies" = "highest" ]; then composer update --prefer-dist --no-interaction --no-progress; fi;
+  - if [ "${DEPENDENCIES}" = "lowest" ]; then composer update --prefer-lowest --prefer-dist --no-interaction --no-progress; fi;
+  - if [ "${DEPENDENCIES}" = "highest" ]; then composer update --prefer-dist --no-interaction --no-progress; fi;
 script:
   - bin/phing
 after_script:
