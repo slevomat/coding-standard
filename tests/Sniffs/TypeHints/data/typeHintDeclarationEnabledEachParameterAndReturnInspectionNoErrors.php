@@ -39,4 +39,11 @@ abstract class FooClass
 	{
 	}
 
+	/**
+	 * @param string $param1 Description
+	 */
+	public function withDescription(string $param1, int $param2): void
+	{
+	}
+
 }
