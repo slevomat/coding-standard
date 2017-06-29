@@ -9,6 +9,13 @@
 		phpstan
 	"/>
 
+	<target name="check-without-phpstan" depends="
+		composer,
+		lint,
+		cs,
+		tests
+	"/>
+
 	<target name="composer">
 		<exec
 			executable="composer"
