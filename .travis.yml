@@ -12,7 +12,7 @@ matrix:
     - php: master
       env: DEPENDENCIES=lowest PHPSTAN=no
     - php: master
-      env: DEPENDENCIES=highest PHPSTAN=no
+      env: DEPENDENCIES=highest PHPSTAN=yes
 cache:
   directories:
     - $HOME/.composer/cache
