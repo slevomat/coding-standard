@@ -615,4 +615,12 @@ abstract class FooClass
 		return new DoctrineCollections\ArrayCollection();
 	}
 
+	/**
+	 * @inheritdoc
+	 */
+	public function inheritdoc($a)
+	{
+		return true;
+	}
+
 }

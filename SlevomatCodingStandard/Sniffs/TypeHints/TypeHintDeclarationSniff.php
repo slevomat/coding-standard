@@ -93,6 +93,10 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			return;
 		}
 
+		if ($this->hasInheritdocAnnotation($phpcsFile, $functionPointer)) {
+			return;
+		}
+
 		$parametersTypeHintsDefinitions = $this->getFunctionParameterTypeHintsDefinitions($phpcsFile, $functionPointer);
 
 		if (!SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_TRAVERSABLE_PARAMETER_TYPE_HINT_SPECIFICATION))) {
@@ -272,6 +276,10 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	private function checkReturnTypeHints(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer)
 	{
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::NAME)) {
+			return;
+		}
+
+		if ($this->hasInheritdocAnnotation($phpcsFile, $functionPointer)) {
 			return;
 		}
 
@@ -472,6 +480,10 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		$parameterSniffSuppressed = SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_USELESS_PARAMETER_ANNOTATION));
 
 		if ($docCommentSniffSuppressed && $returnSniffSuppressed && $parameterSniffSuppressed) {
+			return;
+		}
+
+		if ($this->hasInheritdocAnnotation($phpcsFile, $functionPointer)) {
 			return;
 		}
 
@@ -921,6 +933,11 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 		}
 
 		return $uselessParameterNames;
+	}
+
+	private function hasInheritdocAnnotation(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer): bool
+	{
+		return count(AnnotationHelper::getAnnotationsByName($phpcsFile, $functionPointer, '@inheritdoc')) !== 0;
 	}
 
 }
