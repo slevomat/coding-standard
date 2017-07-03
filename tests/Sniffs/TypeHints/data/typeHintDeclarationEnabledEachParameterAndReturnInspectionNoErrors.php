@@ -46,4 +46,12 @@ abstract class FooClass
 	{
 	}
 
+	/**
+	 * @param string|null $param2 Has description
+	 * @param string|null $param3 Has description
+	 */
+	public function moreParametersWithDescription(string $param1 = '', string $param2 = null, string $param3 = null): void
+	{
+	}
+
 }

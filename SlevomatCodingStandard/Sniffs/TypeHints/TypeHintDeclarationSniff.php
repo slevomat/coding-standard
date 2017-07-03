@@ -504,8 +504,8 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 				continue;
 			}
 
-			if (isset($matches[2])) {
-				$parametersContainDescription[$matches[2]] = true;
+			if (isset($matches[1])) {
+				$parametersContainDescription[$matches[1]] = true;
 				$containsUsefulInformation = true;
 			} elseif (isset($parametersNames[$parameterAnnotationNo])) {
 				$parametersContainDescription[$parametersNames[$parameterAnnotationNo]] = true;
