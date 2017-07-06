@@ -60,10 +60,10 @@
 
 	<target name="cs-fix">
 		<exec
-				executable="bin/phpcbf"
-				logoutput="true"
-				passthru="true"
-				checkreturn="true"
+			executable="bin/phpcbf"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
 		>
 			<arg value="--standard=ruleset.xml"/>
 			<arg value="--extensions=php"/>
