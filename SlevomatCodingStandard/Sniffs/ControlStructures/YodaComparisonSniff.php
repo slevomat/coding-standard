@@ -101,8 +101,8 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 		$tokens = $phpcsFile->getTokens();
 		$leftSideTokens = $this->getLeftSideTokens($tokens, $comparisonTokenPointer);
 		$rightSideTokens = $this->getRightSideTokens($tokens, $comparisonTokenPointer);
-		$leftDynamism = $this->getDynamismForTokens($leftSideTokens);
-		$rightDynamism = $this->getDynamismForTokens($rightSideTokens);
+		$leftDynamism = $this->getDynamismForTokens($tokens, $leftSideTokens);
+		$rightDynamism = $this->getDynamismForTokens($tokens, $rightSideTokens);
 
 		if ($leftDynamism === null || $rightDynamism === null) {
 			return;
@@ -151,6 +151,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 	private function getLeftSideTokens(array $tokens, int $comparisonTokenPointer): array
 	{
 		$parenthesisDepth = 0;
+		$shortArrayDepth = 0;
 		$examinedTokenPointer = $comparisonTokenPointer;
 		$sideTokens = [];
 		$stopTokenCodes = $this->getStopTokenCodes();
@@ -159,6 +160,16 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 			$examinedToken = $tokens[$examinedTokenPointer];
 			if ($parenthesisDepth === 0 && isset($stopTokenCodes[$examinedToken['code']])) {
 				break;
+			}
+
+			if ($examinedToken['code'] === T_CLOSE_SHORT_ARRAY) {
+				$shortArrayDepth++;
+			} elseif ($examinedToken['code'] === T_OPEN_SHORT_ARRAY) {
+				if ($shortArrayDepth === 0) {
+					break;
+				}
+
+				$shortArrayDepth--;
 			}
 
 			if ($examinedToken['code'] === T_CLOSE_PARENTHESIS) {
@@ -185,6 +196,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 	private function getRightSideTokens(array $tokens, int $comparisonTokenPointer): array
 	{
 		$parenthesisDepth = 0;
+		$shortArrayDepth = 0;
 		$examinedTokenPointer = $comparisonTokenPointer;
 		$sideTokens = [];
 		$stopTokenCodes = $this->getStopTokenCodes();
@@ -193,6 +205,16 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 			$examinedToken = $tokens[$examinedTokenPointer];
 			if ($parenthesisDepth === 0 && isset($stopTokenCodes[$examinedToken['code']])) {
 				break;
+			}
+
+			if ($examinedToken['code'] === T_OPEN_SHORT_ARRAY) {
+				$shortArrayDepth++;
+			} elseif ($examinedToken['code'] === T_CLOSE_SHORT_ARRAY) {
+				if ($shortArrayDepth === 0) {
+					break;
+				}
+
+				$shortArrayDepth--;
 			}
 
 			if ($examinedToken['code'] === T_OPEN_PARENTHESIS) {
@@ -212,10 +234,11 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 	}
 
 	/**
+	 * @param mixed[] $tokens
 	 * @param mixed[] $sideTokens
 	 * @return int|null
 	 */
-	private function getDynamismForTokens(array $sideTokens)
+	private function getDynamismForTokens(array $tokens, array $sideTokens)
 	{
 		$sideTokens = array_values(array_filter($sideTokens, function (array $token): bool {
 			return !in_array($token['code'], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT, T_NS_SEPARATOR, T_PLUS, T_MINUS, T_INT_CAST, T_DOUBLE_CAST, T_STRING_CAST, T_ARRAY_CAST, T_OBJECT_CAST, T_BOOL_CAST, T_UNSET_CAST], true);
@@ -223,13 +246,20 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 
 		$sideTokensCount = count($sideTokens);
 
+		$dynamism = $this->getTokenDynamism();
+
 		if ($sideTokensCount > 0) {
 			if ($sideTokens[0]['code'] === T_VARIABLE) {
 				// expression starts with a variable - wins over everything else
 				return self::DYNAMISM_VARIABLE;
 			} elseif ($sideTokens[$sideTokensCount - 1]['code'] === T_CLOSE_PARENTHESIS) {
-				// function or method call
-				return self::DYNAMISM_FUNCTION_CALL;
+				if (isset($sideTokens[$sideTokensCount - 1]['parenthesis_owner']) && $tokens[$sideTokens[$sideTokensCount - 1]['parenthesis_owner']]['code'] === T_ARRAY) {
+					// array()
+					return $dynamism[T_ARRAY];
+				} else {
+					// function or method call
+					return self::DYNAMISM_FUNCTION_CALL;
+				}
 			} elseif ($sideTokensCount === 1 && $sideTokens[0]['code'] === T_STRING) {
 				// constant
 				return self::DYNAMISM_CONSTANT;
@@ -246,7 +276,6 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 			}
 		}
 
-		$dynamism = $this->getTokenDynamism();
 		if (isset($sideTokens[0]) && isset($dynamism[$sideTokens[0]['code']])) {
 			return $dynamism[$sideTokens[0]['code']];
 		}
