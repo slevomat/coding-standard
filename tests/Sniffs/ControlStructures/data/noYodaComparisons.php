@@ -9,6 +9,9 @@ $foo === [];
 $foo === $this->foo();
 $this->foo() === $foo;
 [123] === [123];
+array(123) === array(123);
+[123] === array(123);
+array(123) === [123];
 BAR === 123;
 Foo::BAR === 123;
 Foo::BAR === 123.0;
@@ -25,6 +28,14 @@ foo() + 2 === Foo::BAR;
 
 if (
 	$foo($bar) === [Foo::BAR, Foo::BAZ] && (
+		$bar === true ||
+		$bar === null
+	)
+) {
+}
+
+if (
+	$foo($bar) === array(Foo::BAR, Foo::BAZ) && (
 		$bar === true ||
 		$bar === null
 	)
@@ -51,3 +62,8 @@ switch (true) {
 	default:
 		$timezone = 'UTC';
 }
+
+[$username === self::ADMIN_EMAIL ? self::ROLE_ADMIN : self::ROLE_CUSTOMER];
+array($username === self::ADMIN_EMAIL ? self::ROLE_ADMIN : self::ROLE_CUSTOMER);
+[$array === []];
+[$array === array()];
