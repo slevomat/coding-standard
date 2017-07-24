@@ -114,7 +114,6 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 				if (count($leftSideTokens) > 0 & count($rightSideTokens) > 0) {
 					$phpcsFile->fixer->beginChangeset();
 					$this->write($phpcsFile, $leftSideTokens, $rightSideTokens);
-					$phpcsFile->fixer->addContent(key($leftSideTokens), ' ');
 					$this->write($phpcsFile, $rightSideTokens, $leftSideTokens);
 					$phpcsFile->fixer->endChangeset();
 				}
@@ -138,9 +137,9 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 
-		$phpcsFile->fixer->addContent($firstLeftPointer, trim(implode('', array_map(function (array $token): string {
+		$phpcsFile->fixer->addContent($firstLeftPointer, implode('', array_map(function (array $token): string {
 			return $token['content'];
-		}, $rightSideTokens))));
+		}, $rightSideTokens)));
 	}
 
 	/**
@@ -297,7 +296,7 @@ class YodaComparisonSniff implements \PHP_CodeSniffer_Sniff
 			}
 		}
 
-		foreach (array_reverse($tokens) as $pointer => $token) {
+		foreach (array_reverse($tokens, true) as $pointer => $token) {
 			if ($token['code'] === T_WHITESPACE) {
 				unset($tokens[$pointer]);
 			} else {
