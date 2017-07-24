@@ -11,27 +11,12 @@ class YodaComparisonSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertNoSniffErrorInFile($resultFile);
 	}
 
-	/**
-	 * @return int[][]
-	 */
-	public function dataIncorrectFile(): array
-	{
-		$lineNumbers = [];
-		foreach (range(3, 33) as $lineNumber) {
-			$lineNumbers[$lineNumber] = [$lineNumber];
-		}
-
-		return $lineNumbers;
-	}
-
-	/**
-	 * @dataProvider dataIncorrectFile
-	 * @param int $lineNumber
-	 */
-	public function testIncorrectFile(int $lineNumber)
+	public function testIncorrectFile()
 	{
 		$resultFile = $this->checkFile(__DIR__ . '/data/allYodaComparisons.php');
-		$this->assertSniffError($resultFile, $lineNumber, YodaComparisonSniff::CODE_YODA_COMPARISON);
+		foreach (range(3, 33) as $lineNumber) {
+			$this->assertSniffError($resultFile, $lineNumber, YodaComparisonSniff::CODE_YODA_COMPARISON);
+		}
 	}
 
 	public function testFixable()
