@@ -61,3 +61,19 @@ abstract class Foo
 	}
 
 }
+
+function () {
+
+};
+
+function () {
+	return;
+};
+
+function () {
+
+};
+
+function () use (& $foo) {
+
+};

@@ -27,3 +27,27 @@ abstract class VoidClass
 	}
 
 }
+
+function () {
+
+};
+
+function () {
+	return;
+};
+
+function () {
+	function (): bool {
+		return true;
+	};
+	new class {
+		public function foo(): bool
+		{
+			return true;
+		}
+	};
+};
+
+function (): bool {
+
+};
