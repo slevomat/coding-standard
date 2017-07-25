@@ -53,3 +53,19 @@ abstract class Foo
 	public abstract function voidAnnotation();
 
 }
+
+function () {
+
+};
+
+function () {
+	return;
+};
+
+function (): bool {
+
+};
+
+function () use (& $foo): \Foo\Bar {
+
+};
