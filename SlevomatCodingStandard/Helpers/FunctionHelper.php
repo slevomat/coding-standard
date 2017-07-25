@@ -127,10 +127,12 @@ class FunctionHelper
 
 		$isInSameLevel = function (int $pointer) use ($functionPointer, $tokens): bool {
 			foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
+				if ($conditionPointer === $functionPointer) {
+					break;
+				}
+
 				if ($conditionTokenCode === T_CLOSURE || $conditionTokenCode === T_ANON_CLASS) {
 					return false;
-				} elseif ($conditionPointer === $functionPointer) {
-					break;
 				}
 			}
 			return true;

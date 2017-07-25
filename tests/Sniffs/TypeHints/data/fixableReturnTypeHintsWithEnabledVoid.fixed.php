@@ -53,3 +53,19 @@ abstract class Foo
 	public abstract function voidAnnotation(): void;
 
 }
+
+function (): void {
+
+};
+
+function (): void {
+	return;
+};
+
+function (): void {
+
+};
+
+function () use (& $foo): void {
+
+};

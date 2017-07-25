@@ -35,6 +35,8 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	const CODE_USELESS_RETURN_ANNOTATION = 'UselessReturnAnnotation';
 
+	const CODE_INCORRECT_RETURN_TYPE_HINT = 'IncorrectReturnTypeHint';
+
 	const CODE_USELESS_DOC_COMMENT = 'UselessDocComment';
 
 	/** @var bool */
@@ -71,6 +73,8 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			$this->checkParametersTypeHints($phpcsFile, $pointer);
 			$this->checkReturnTypeHints($phpcsFile, $pointer);
 			$this->checkUselessDocComment($phpcsFile, $pointer);
+		} elseif ($token['code'] === T_CLOSURE) {
+			$this->checkClosure($phpcsFile, $pointer);
 		} elseif ($token['code'] === T_VARIABLE && PropertyHelper::isProperty($phpcsFile, $pointer)) {
 			$this->checkPropertyTypeHint($phpcsFile, $pointer);
 		}
@@ -83,6 +87,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 	{
 		return [
 			T_FUNCTION,
+			T_CLOSURE,
 			T_VARIABLE,
 		];
 	}
@@ -470,6 +475,51 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			$returnTypeHint = TypeHintHelper::isSimpleTypeHint($possibleReturnTypeHint) ? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleReturnTypeHint) : $possibleReturnTypeHint;
 			$phpcsFile->fixer->addContent($phpcsFile->getTokens()[$functionPointer]['parenthesis_closer'], sprintf(': %s%s', ($nullableReturnTypeHint ? '?' : ''), $returnTypeHint));
 			$phpcsFile->fixer->endChangeset();
+		}
+	}
+
+	private function checkClosure(\PHP_CodeSniffer_File $phpcsFile, int $closurePointer)
+	{
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $closurePointer);
+		$returnsValue = FunctionHelper::returnsValue($phpcsFile, $closurePointer);
+
+		if (!$returnsValue && $returnTypeHint !== null && $returnTypeHint->getTypeHint() !== 'void') {
+			$fix = $phpcsFile->addFixableError(
+				'Closure has incorrect return type hint.',
+				$closurePointer,
+				self::CODE_INCORRECT_RETURN_TYPE_HINT
+			);
+
+			if ($fix) {
+				$tokens = $phpcsFile->getTokens();
+				$closeParenthesisPosition = TokenHelper::findPrevious($phpcsFile, [T_CLOSE_PARENTHESIS], $tokens[$closurePointer]['scope_opener'] - 1, $closurePointer);
+
+				$phpcsFile->fixer->beginChangeset();
+				for ($i = $closeParenthesisPosition + 1; $i < $tokens[$closurePointer]['scope_opener']; $i++) {
+					$phpcsFile->fixer->replaceToken($i, '');
+				}
+				$phpcsFile->fixer->replaceToken($closeParenthesisPosition, $this->enableVoidTypeHint ? '): void ' : ') ');
+				$phpcsFile->fixer->endChangeset();
+			}
+
+			return;
+		}
+
+		if ($this->enableVoidTypeHint && !$returnsValue && $returnTypeHint === null) {
+			$fix = $phpcsFile->addFixableError(
+				'Closure does not have void return type hint.',
+				$closurePointer,
+				self::CODE_MISSING_RETURN_TYPE_HINT
+			);
+
+			if ($fix) {
+				$tokens = $phpcsFile->getTokens();
+				$position = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$closurePointer]['scope_opener'] - 1, $closurePointer);
+
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->addContent($position, ': void');
+				$phpcsFile->fixer->endChangeset();
+			}
 		}
 	}
 
