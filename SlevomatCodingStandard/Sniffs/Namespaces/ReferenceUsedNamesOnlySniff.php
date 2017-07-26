@@ -48,11 +48,11 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	public $allowPartialUses = true;
 
 	/**
-	 * If null, all namespaces are required to be used
+	 * If empty, all namespaces are required to be used
 	 *
-	 * @var string[]|null
+	 * @var string[]
 	 */
-	public $namespacesRequiredToUse;
+	public $namespacesRequiredToUse = [];
 
 	/** @var string[]|null */
 	private $normalizedNamespacesRequiredToUse;
@@ -99,7 +99,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 	 */
 	private function getNamespacesRequiredToUse(): array
 	{
-		if ($this->namespacesRequiredToUse !== null && $this->normalizedNamespacesRequiredToUse === null) {
+		if ($this->normalizedNamespacesRequiredToUse === null) {
 			$this->normalizedNamespacesRequiredToUse = SniffSettingsHelper::normalizeArray($this->namespacesRequiredToUse);
 		}
 
@@ -243,7 +243,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 
 	private function isClassRequiredToBeUsed(string $name): bool
 	{
-		if ($this->namespacesRequiredToUse === null) {
+		if (count($this->namespacesRequiredToUse) === 0) {
 			return true;
 		}
 

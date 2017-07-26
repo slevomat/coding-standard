@@ -38,15 +38,15 @@ class SniffSettingsHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		], SniffSettingsHelper::normalizeAssociativeArray([
 			'    ' => '   ',
 			'app/ui' => 'Slevomat\UI',
-			'  ' => '  ',
+			'   ' => '  ',
 			'app' => 'Slevomat',
 			'  ' => '  ',
 			'build/SlevomatSniffs/Sniffs' => 'SlevomatSniffs\Sniffs',
-			'  ' => '  ',
+			'      ' => '  ',
 			'tests/ui' => 'Slevomat\UI',
-			'  ' => '  ',
+			' ' => '  ',
 			'tests' => 'Slevomat',
-			'  ' => '  ',
+			'' => '  ',
 		]));
 	}
 
