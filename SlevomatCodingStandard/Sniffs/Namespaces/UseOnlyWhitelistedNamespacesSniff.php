@@ -35,7 +35,7 @@ class UseOnlyWhitelistedNamespacesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 */
 	private function getNamespacesRequiredToUse(): array
 	{
-		if ($this->namespacesRequiredToUse !== null && $this->normalizedNamespacesRequiredToUse === null) {
+		if ($this->normalizedNamespacesRequiredToUse === null) {
 			$this->normalizedNamespacesRequiredToUse = SniffSettingsHelper::normalizeArray($this->namespacesRequiredToUse);
 		}
 
