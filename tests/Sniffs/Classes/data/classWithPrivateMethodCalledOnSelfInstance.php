@@ -15,4 +15,9 @@ class ClassWithPrivateMethodCalledOnSelfInstance
 	{
 	}
 
+	public static function foo()
+	{
+		return new self();
+	}
+
 }

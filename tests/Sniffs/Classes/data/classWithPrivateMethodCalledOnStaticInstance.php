@@ -5,7 +5,7 @@ class ClassWithPrivateMethodCalledOnSelfInstance
 
 	public static function create()
 	{
-		$self = new self();
+		$self = new static();
 		$self->setUp();
 
 		return $self;
@@ -13,6 +13,11 @@ class ClassWithPrivateMethodCalledOnSelfInstance
 
 	private function setUp()
 	{
+	}
+
+	public static function foo()
+	{
+		return new static();
 	}
 
 }

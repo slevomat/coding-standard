@@ -157,11 +157,15 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				$newTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokenPointer - 1);
 				if ($tokens[$newTokenPointer]['code'] === T_NEW) {
 					$variableTokenPointer = TokenHelper::findPreviousLocal($phpcsFile, T_VARIABLE, $newTokenPointer - 1);
-					$scopeMethodPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $variableTokenPointer - 1);
-					for ($i = $tokens[$scopeMethodPointer]['scope_opener']; $i < $tokens[$scopeMethodPointer]['scope_closer']; $i++) {
-						if ($tokens[$i]['content'] === $tokens[$variableTokenPointer]['content']) {
-							$findUsagesStartTokenPointer = $checkVariable($i);
+					if ($variableTokenPointer !== null) {
+						$scopeMethodPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $variableTokenPointer - 1);
+						for ($i = $tokens[$scopeMethodPointer]['scope_opener']; $i < $tokens[$scopeMethodPointer]['scope_closer']; $i++) {
+							if ($tokens[$i]['content'] === $tokens[$variableTokenPointer]['content']) {
+								$findUsagesStartTokenPointer = $checkVariable($i);
+							}
 						}
+					} else {
+						$findUsagesStartTokenPointer = $tokenPointer + 1;
 					}
 				} else {
 					$doubleColonTokenPointer = TokenHelper::findNextEffective($phpcsFile, $tokenPointer + 1);
