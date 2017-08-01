@@ -175,6 +175,20 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param mixed|mixed[] $types
+	 * @param int $startPointer
+	 * @param int|null $endPointer
+	 * @return int|null
+	 */
+	public static function findPreviousLocal(\PHP_CodeSniffer_File $phpcsFile, $types, int $startPointer, int $endPointer = null)
+	{
+		/** @var int|false $token */
+		$token = $phpcsFile->findPrevious($types, $startPointer, $endPointer, false, null, true);
+		return $token === false ? null : $token;
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer_File $phpcsFile
 	 * @param int $pointer search starts at this token, inclusive
 	 * @return int|null
 	 */
