@@ -132,8 +132,8 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return $propertyNameTokenPointer + 1;
 		};
 
-		while (($propertyAccessTokenPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_SELF, T_STATIC, T_DOUBLE_QUOTED_STRING], $findUsagesStartTokenPointer, $classToken['scope_closer'])) !== null) {
-			$propertyAccessToken = $tokens[$propertyAccessTokenPointer];
+		while (($tokenPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_SELF, T_STATIC, T_DOUBLE_QUOTED_STRING], $findUsagesStartTokenPointer, $classToken['scope_closer'])) !== null) {
+			$propertyAccessToken = $tokens[$tokenPointer];
 			if ($propertyAccessToken['code'] === T_DOUBLE_QUOTED_STRING) {
 				if (preg_match_all('~(?<!\\\\)\$this->(.+?\b)(?!\()~', $propertyAccessToken['content'], $matches, PREG_PATTERN_ORDER)) {
 					foreach ($matches[1] as $propertyInString) {
@@ -150,11 +150,11 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					}
 				}
 
-				$findUsagesStartTokenPointer = $propertyAccessTokenPointer + 1;
+				$findUsagesStartTokenPointer = $tokenPointer + 1;
 			} elseif ($propertyAccessToken['content'] === '$this') {
-				$findUsagesStartTokenPointer = $checkVariable($propertyAccessTokenPointer);
+				$findUsagesStartTokenPointer = $checkVariable($tokenPointer);
 			} elseif (in_array($propertyAccessToken['code'], [T_SELF, T_STATIC], true)) {
-				$newTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $propertyAccessTokenPointer - 1);
+				$newTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokenPointer - 1);
 				if ($tokens[$newTokenPointer]['code'] === T_NEW) {
 					$variableTokenPointer = TokenHelper::findPreviousLocal($phpcsFile, T_VARIABLE, $newTokenPointer - 1);
 					$scopeMethodPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $variableTokenPointer - 1);
@@ -164,7 +164,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						}
 					}
 				} else {
-					$doubleColonTokenPointer = TokenHelper::findNextEffective($phpcsFile, $propertyAccessTokenPointer + 1);
+					$doubleColonTokenPointer = TokenHelper::findNextEffective($phpcsFile, $tokenPointer + 1);
 					$doubleColonToken = $tokens[$doubleColonTokenPointer];
 					if ($doubleColonToken['code'] !== T_DOUBLE_COLON) {
 						// self or static not followed by ::
@@ -201,7 +201,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					$findUsagesStartTokenPointer = $methodCallTokenPointer + 1;
 				}
 			} else {
-				$findUsagesStartTokenPointer = $propertyAccessTokenPointer + 1;
+				$findUsagesStartTokenPointer = $tokenPointer + 1;
 			}
 
 			if (count($reportedProperties) + count($reportedMethods) + count($reportedConstants) === 0) {
