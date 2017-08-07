@@ -8,6 +8,8 @@ class ClassWithPrivateMethodCalledOnSelfInstance
 		$self = new self();
 		$self->setUp();
 
+		self::bar();
+
 		return $self;
 	}
 
@@ -18,6 +20,10 @@ class ClassWithPrivateMethodCalledOnSelfInstance
 	public static function foo()
 	{
 		return new self();
+	}
+
+	private static function bar()
+	{
 	}
 
 }
