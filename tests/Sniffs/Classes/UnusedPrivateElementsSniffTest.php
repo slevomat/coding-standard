@@ -101,15 +101,15 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/classWithSpecialSelf.php'));
 	}
 
-	public function testClassWithPrivateMethodCalledOnSelfInstance()
+	public function testClassWithPrivateElementsUsedOnSelfInstance()
 	{
-		$report = $this->checkFile(__DIR__ . '/data/classWithPrivateMethodCalledOnSelfInstance.php');
+		$report = $this->checkFile(__DIR__ . '/data/classWithPrivateElementsUsedOnSelfInstance.php');
 		$this->assertNoSniffErrorInFile($report);
 	}
 
-	public function testClassWithPrivateMethodCalledOnStaticInstance()
+	public function testClassWithPrivateElementsUsedOnStaticInstance()
 	{
-		$report = $this->checkFile(__DIR__ . '/data/classWithPrivateMethodCalledOnStaticInstance.php');
+		$report = $this->checkFile(__DIR__ . '/data/classWithPrivateElementsUsedOnStaticInstance.php');
 		$this->assertNoSniffErrorInFile($report);
 	}
 
