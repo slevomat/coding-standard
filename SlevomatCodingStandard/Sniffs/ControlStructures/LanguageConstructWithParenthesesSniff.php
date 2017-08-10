@@ -37,16 +37,23 @@ class LanguageConstructWithParenthesesSniff implements \PHP_CodeSniffer\Sniffs\S
 	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $languageConstructPointer)
 	{
 		$tokens = $phpcsFile->getTokens();
+		$openParenthesisPointer = TokenHelper::findNextEffective($phpcsFile, $languageConstructPointer + 1);
+		if ($tokens[$openParenthesisPointer]['code'] !== T_OPEN_PARENTHESIS) {
+			return;
+		}
 
-		$nextTokenPointer = TokenHelper::findNextEffective($phpcsFile, $languageConstructPointer + 1);
-		if ($tokens[$nextTokenPointer]['code'] === T_OPEN_PARENTHESIS) {
-			$fix = $phpcsFile->addFixableError(sprintf('Usage of language construct "%s" with parentheses is disallowed.', $tokens[$languageConstructPointer]['content']), $languageConstructPointer, self::CODE_USED_WITH_PARENTHESES);
-			if ($fix) {
-				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->replaceToken($nextTokenPointer, $tokens[$nextTokenPointer - 1]['code'] === T_WHITESPACE ? '' : ' ');
-				$phpcsFile->fixer->replaceToken($tokens[$nextTokenPointer]['parenthesis_closer'], '');
-				$phpcsFile->fixer->endChangeset();
-			}
+		$closeParenthesisPointer = $tokens[$openParenthesisPointer]['parenthesis_closer'];
+		$afterCloseParenthesisPointer = TokenHelper::findNextEffective($phpcsFile, $closeParenthesisPointer + 1);
+		if ($tokens[$afterCloseParenthesisPointer]['code'] !== T_SEMICOLON) {
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError(sprintf('Usage of language construct "%s" with parentheses is disallowed.', $tokens[$languageConstructPointer]['content']), $languageConstructPointer, self::CODE_USED_WITH_PARENTHESES);
+		if ($fix) {
+			$phpcsFile->fixer->beginChangeset();
+			$phpcsFile->fixer->replaceToken($openParenthesisPointer, $tokens[$openParenthesisPointer - 1]['code'] === T_WHITESPACE ? '' : ' ');
+			$phpcsFile->fixer->replaceToken($tokens[$openParenthesisPointer]['parenthesis_closer'], '');
+			$phpcsFile->fixer->endChangeset();
 		}
 	}
 

@@ -32,3 +32,18 @@ try {
 } catch (\Throwable $e) {
 
 }
+
+function returnCalculationOnStart(): bool
+{
+	return (10 + 5) === 15;
+}
+
+function returnCalculationOnEnd(): bool
+{
+	return 15 === (10 + 5);
+}
+
+function returnConditions(): bool
+{
+	return (null === true) || (null === false);
+}
