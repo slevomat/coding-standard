@@ -2,17 +2,17 @@ language: php
 matrix:
   include:
     - php: 7.0
-      env: DEPENDENCIES=lowest PHPSTAN=yes
+      env: DEPENDENCIES=lowest
     - php: 7.0
-      env: DEPENDENCIES=highest PHPSTAN=yes
+      env: DEPENDENCIES=highest
     - php: 7.1
-      env: DEPENDENCIES=lowest PHPSTAN=yes
+      env: DEPENDENCIES=lowest
     - php: 7.1
-      env: DEPENDENCIES=highest PHPSTAN=yes
+      env: DEPENDENCIES=highest
     - php: master
-      env: DEPENDENCIES=lowest PHPSTAN=no
+      env: DEPENDENCIES=lowest
     - php: master
-      env: DEPENDENCIES=highest PHPSTAN=yes
+      env: DEPENDENCIES=highest
 cache:
   directories:
     - $HOME/.composer/cache
@@ -21,8 +21,7 @@ before_script:
   - if [ "${DEPENDENCIES}" = "lowest" ]; then composer update --prefer-lowest --prefer-dist --no-interaction --no-progress; fi;
   - if [ "${DEPENDENCIES}" = "highest" ]; then composer update --prefer-dist --no-interaction --no-progress; fi;
 script:
-  - if [ "${PHPSTAN}" = "yes" ]; then bin/phing; fi;
-  - if [ "${PHPSTAN}" = "no" ]; then bin/phing check-without-phpstan; fi;
+  - bin/phing
 after_script:
   - if [ "${TRAVIS_ALLOW_FAILURE}" = false ]; then
         wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.0/coveralls.phar
