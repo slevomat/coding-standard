@@ -94,7 +94,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$writeOnlyProperties = [];
 		$findUsagesStartTokenPointer = $classToken['scope_opener'] + 1;
 
-		$checkVariable = function ($tokenPointer) use ($phpcsFile, $tokens, &$reportedMethods, &$reportedProperties, &$writeOnlyProperties) {
+		$checkObjectOperatorUsage = function ($tokenPointer) use ($phpcsFile, $tokens, &$reportedMethods, &$reportedProperties, &$writeOnlyProperties) {
 			$objectOperatorTokenPointer = TokenHelper::findNextEffective($phpcsFile, $tokenPointer + 1);
 			$objectOperatorToken = $tokens[$objectOperatorTokenPointer];
 			if ($objectOperatorToken['code'] !== T_OBJECT_OPERATOR) {
@@ -132,17 +132,52 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return $propertyNameTokenPointer + 1;
 		};
 
+		$checkDoubleColonUsage = function (int $tokenPointer) use ($phpcsFile, $tokens, &$reportedMethods, &$reportedConstants): int {
+			$doubleColonTokenPointer = TokenHelper::findNextEffective($phpcsFile, $tokenPointer + 1);
+			$doubleColonToken = $tokens[$doubleColonTokenPointer];
+			if ($doubleColonToken['code'] !== T_DOUBLE_COLON) {
+				// self or static not followed by ::
+				return $doubleColonTokenPointer + 1;
+			}
+
+			$methodNameTokenPointer = TokenHelper::findNextEffective($phpcsFile, $doubleColonTokenPointer + 1);
+			$methodNameToken = $tokens[$methodNameTokenPointer];
+			if ($methodNameToken['code'] !== T_STRING) {
+				// self:: or static:: not followed by a string - possible static property access
+				return $methodNameTokenPointer + 1;
+			}
+
+			$methodCallTokenPointer = TokenHelper::findNextEffective($phpcsFile, $methodNameTokenPointer + 1);
+			$methodCallToken = $tokens[$methodCallTokenPointer];
+			if ($methodCallToken['code'] !== T_OPEN_PARENTHESIS) {
+				$name = $methodNameToken['content'];
+				if (isset($reportedConstants[$name])) {
+					unset($reportedConstants[$name]);
+				}
+
+				// self::string or static::string not followed by ( - possible constant access
+				return $methodCallTokenPointer + 1;
+			}
+
+			$name = $methodNameToken['content'];
+			if (isset($reportedMethods[$name])) {
+				unset($reportedMethods[$name]);
+			}
+
+			return $methodCallTokenPointer + 1;
+		};
+
 		while (($tokenPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_SELF, T_STATIC, T_DOUBLE_QUOTED_STRING], $findUsagesStartTokenPointer, $classToken['scope_closer'])) !== null) {
-			$propertyAccessToken = $tokens[$tokenPointer];
-			if ($propertyAccessToken['code'] === T_DOUBLE_QUOTED_STRING) {
-				if (preg_match_all('~(?<!\\\\)\$this->(.+?\b)(?!\()~', $propertyAccessToken['content'], $matches, PREG_PATTERN_ORDER)) {
+			$token = $tokens[$tokenPointer];
+			if ($token['code'] === T_DOUBLE_QUOTED_STRING) {
+				if (preg_match_all('~(?<!\\\\)\$this->(.+?\b)(?!\()~', $token['content'], $matches, PREG_PATTERN_ORDER)) {
 					foreach ($matches[1] as $propertyInString) {
 						if (isset($reportedProperties[$propertyInString])) {
 							unset($reportedProperties[$propertyInString]);
 						}
 					}
 				}
-				if (preg_match_all('~(?<=\{)\$this->(.+?\b)(?=\()~', $propertyAccessToken['content'], $matches, PREG_PATTERN_ORDER)) {
+				if (preg_match_all('~(?<=\{)\$this->(.+?\b)(?=\()~', $token['content'], $matches, PREG_PATTERN_ORDER)) {
 					foreach ($matches[1] as $methodInString) {
 						if (isset($reportedMethods[$methodInString])) {
 							unset($reportedMethods[$methodInString]);
@@ -151,9 +186,9 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				}
 
 				$findUsagesStartTokenPointer = $tokenPointer + 1;
-			} elseif ($propertyAccessToken['content'] === '$this') {
-				$findUsagesStartTokenPointer = $checkVariable($tokenPointer);
-			} elseif (in_array($propertyAccessToken['code'], [T_SELF, T_STATIC], true)) {
+			} elseif ($token['content'] === '$this') {
+				$findUsagesStartTokenPointer = $checkObjectOperatorUsage($tokenPointer);
+			} elseif (in_array($token['code'], [T_SELF, T_STATIC], true)) {
 				$newTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokenPointer - 1);
 				if ($tokens[$newTokenPointer]['code'] === T_NEW) {
 					$variableTokenPointer = TokenHelper::findPreviousLocal($phpcsFile, T_VARIABLE, $newTokenPointer - 1);
@@ -161,48 +196,19 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						$scopeMethodPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $variableTokenPointer - 1);
 						for ($i = $tokens[$scopeMethodPointer]['scope_opener']; $i < $tokens[$scopeMethodPointer]['scope_closer']; $i++) {
 							if ($tokens[$i]['content'] === $tokens[$variableTokenPointer]['content']) {
-								$findUsagesStartTokenPointer = $checkVariable($i);
+								$afterActualTokenPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
+								if ($tokens[$afterActualTokenPointer]['code'] === T_OBJECT_OPERATOR) {
+									$findUsagesStartTokenPointer = $checkObjectOperatorUsage($i);
+								} elseif ($tokens[$afterActualTokenPointer]['code'] === T_DOUBLE_COLON) {
+									$findUsagesStartTokenPointer = $checkDoubleColonUsage($i);
+								}
 							}
 						}
 					} else {
 						$findUsagesStartTokenPointer = $tokenPointer + 1;
 					}
 				} else {
-					$doubleColonTokenPointer = TokenHelper::findNextEffective($phpcsFile, $tokenPointer + 1);
-					$doubleColonToken = $tokens[$doubleColonTokenPointer];
-					if ($doubleColonToken['code'] !== T_DOUBLE_COLON) {
-						// self or static not followed by ::
-						$findUsagesStartTokenPointer = $doubleColonTokenPointer + 1;
-						continue;
-					}
-
-					$methodNameTokenPointer = TokenHelper::findNextEffective($phpcsFile, $doubleColonTokenPointer + 1);
-					$methodNameToken = $tokens[$methodNameTokenPointer];
-					if ($methodNameToken['code'] !== T_STRING) {
-						// self:: or static:: not followed by a string - possible static property access
-						$findUsagesStartTokenPointer = $methodNameTokenPointer + 1;
-						continue;
-					}
-
-					$methodCallTokenPointer = TokenHelper::findNextEffective($phpcsFile, $methodNameTokenPointer + 1);
-					$methodCallToken = $tokens[$methodCallTokenPointer];
-					if ($methodCallToken['code'] !== T_OPEN_PARENTHESIS) {
-						$name = $methodNameToken['content'];
-						if (isset($reportedConstants[$name])) {
-							unset($reportedConstants[$name]);
-						}
-
-						// self::string or static::string not followed by ( - possible constant access
-						$findUsagesStartTokenPointer = $methodCallTokenPointer + 1;
-						continue;
-					}
-
-					$name = $methodNameToken['content'];
-					if (isset($reportedMethods[$name])) {
-						unset($reportedMethods[$name]);
-					}
-
-					$findUsagesStartTokenPointer = $methodCallTokenPointer + 1;
+					$findUsagesStartTokenPointer = $checkDoubleColonUsage($tokenPointer);
 				}
 			} else {
 				$findUsagesStartTokenPointer = $tokenPointer + 1;
