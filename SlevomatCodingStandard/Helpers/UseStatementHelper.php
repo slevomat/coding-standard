@@ -23,7 +23,7 @@ class UseStatementHelper
 			$openerPointer = $typeToken['scope_opener'];
 			$closerPointer = $typeToken['scope_closer'];
 
-			return ($usePointer > $openerPointer && $usePointer < $closerPointer);
+			return $usePointer > $openerPointer && $usePointer < $closerPointer;
 		}
 
 		return false;

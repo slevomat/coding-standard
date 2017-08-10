@@ -132,6 +132,10 @@ Commas after last element in an array make adding a new element easier and resul
 
 This sniff enforces trailing commas in multi-line arrays and requires short array syntax `[]`.
 
+#### SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses 🔧
+
+`LanguageConstructWithParenthesesSniff` checks and fixes language construct used with parentheses.
+
 #### SlevomatCodingStandard.ControlStructures.YodaComparison 🔧
 
 [Yoda conditions](https://en.wikipedia.org/wiki/Yoda_conditions) decrease code comprehensibility and readability by switching operands around comparison operators forcing the reader to read the code in an unnatural way.
