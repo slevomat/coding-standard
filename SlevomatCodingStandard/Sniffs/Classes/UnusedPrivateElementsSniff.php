@@ -198,15 +198,14 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 							if ($tokens[$i]['content'] === $tokens[$variableTokenPointer]['content']) {
 								$afterActualTokenPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
 								if ($tokens[$afterActualTokenPointer]['code'] === T_OBJECT_OPERATOR) {
-									$findUsagesStartTokenPointer = $checkObjectOperatorUsage($i);
+									$checkObjectOperatorUsage($i);
 								} elseif ($tokens[$afterActualTokenPointer]['code'] === T_DOUBLE_COLON) {
-									$findUsagesStartTokenPointer = $checkDoubleColonUsage($i);
+									$checkDoubleColonUsage($i);
 								}
 							}
 						}
-					} else {
-						$findUsagesStartTokenPointer = $tokenPointer + 1;
 					}
+					$findUsagesStartTokenPointer = $tokenPointer + 1;
 				} else {
 					$findUsagesStartTokenPointer = $checkDoubleColonUsage($tokenPointer);
 				}
