@@ -47,3 +47,8 @@ function returnConditions(): bool
 {
 	return (null === true) || (null === false);
 }
+
+die(0);
+die('Error');
+exit(0);
+exit('Error');

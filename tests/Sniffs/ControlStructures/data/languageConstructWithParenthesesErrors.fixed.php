@@ -32,3 +32,6 @@ try {
 } catch (\Throwable $e) {
 
 }
+
+die;
+exit;

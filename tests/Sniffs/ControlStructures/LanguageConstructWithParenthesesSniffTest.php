@@ -14,7 +14,7 @@ class LanguageConstructWithParenthesesSniffTest extends \SlevomatCodingStandard\
 	{
 		$report = $this->checkFile(__DIR__ . '/data/languageConstructWithParenthesesErrors.php', [], [LanguageConstructWithParenthesesSniff::CODE_USED_WITH_PARENTHESES]);
 
-		$this->assertSame(11, $report->getErrorCount());
+		$this->assertSame(13, $report->getErrorCount());
 
 		$this->assertSniffError($report, 5, LanguageConstructWithParenthesesSniff::CODE_USED_WITH_PARENTHESES, 'Usage of language construct "continue" with parentheses is disallowed.');
 		$this->assertSniffError($report, 8, LanguageConstructWithParenthesesSniff::CODE_USED_WITH_PARENTHESES, 'Usage of language construct "break" with parentheses is disallowed.');
@@ -27,6 +27,8 @@ class LanguageConstructWithParenthesesSniffTest extends \SlevomatCodingStandard\
 		$this->assertSniffError($report, 22, LanguageConstructWithParenthesesSniff::CODE_USED_WITH_PARENTHESES, 'Usage of language construct "return" with parentheses is disallowed.');
 		$this->assertSniffError($report, 27, LanguageConstructWithParenthesesSniff::CODE_USED_WITH_PARENTHESES, 'Usage of language construct "yield" with parentheses is disallowed.');
 		$this->assertSniffError($report, 31, LanguageConstructWithParenthesesSniff::CODE_USED_WITH_PARENTHESES, 'Usage of language construct "throw" with parentheses is disallowed.');
+		$this->assertSniffError($report, 36, LanguageConstructWithParenthesesSniff::CODE_USED_WITH_PARENTHESES, 'Usage of language construct "die" with parentheses is disallowed.');
+		$this->assertSniffError($report, 37, LanguageConstructWithParenthesesSniff::CODE_USED_WITH_PARENTHESES, 'Usage of language construct "exit" with parentheses is disallowed.');
 
 		$this->assertAllFixedInFile($report);
 	}
