@@ -14,7 +14,7 @@ class YodaComparisonSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 	public function testIncorrectFile()
 	{
 		$resultFile = $this->checkFile(__DIR__ . '/data/allYodaComparisons.php');
-		foreach (range(3, 33) as $lineNumber) {
+		foreach (range(3, 36) as $lineNumber) {
 			$this->assertSniffError($resultFile, $lineNumber, YodaComparisonSniff::CODE_YODA_COMPARISON);
 		}
 	}
