@@ -10,6 +10,21 @@ class DocCommentHelper
 		return self::findDocCommentOpenToken($codeSnifferFile, $pointer) !== null;
 	}
 
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
+	 * @param int $pointer
+	 * @return string|null
+	 */
+	public static function getDocComment(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $pointer)
+	{
+		$docCommentOpenToken = self::findDocCommentOpenToken($codeSnifferFile, $pointer);
+		if ($docCommentOpenToken === null) {
+			return null;
+		}
+
+		return trim(TokenHelper::getContent($codeSnifferFile, $docCommentOpenToken + 1, $codeSnifferFile->getTokens()[$docCommentOpenToken]['comment_closer'] - 1));
+	}
+
 	public static function hasDocCommentDescription(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $pointer): bool
 	{
 		$docCommentOpenToken = self::findDocCommentOpenToken($codeSnifferFile, $pointer);
