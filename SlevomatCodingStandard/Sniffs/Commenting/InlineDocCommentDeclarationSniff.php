@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Sniffs\Commenting;
 
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
-use SlevomatCodingStandard\Helpers\TokenHelper;
 
 class InlineDocCommentDeclarationSniff implements \PHP_CodeSniffer_Sniff
 {
@@ -39,7 +38,7 @@ class InlineDocCommentDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
-		$docCommentContent = trim(TokenHelper::getContent($phpcsFile, $docCommentOpenPointer + 1, $tokens[$docCommentOpenPointer]['comment_closer'] - 1));
+		$docCommentContent = DocCommentHelper::getDocComment($phpcsFile, $variablePointer);
 
 		if (strpos($docCommentContent, '@var') !== 0) {
 			return;
