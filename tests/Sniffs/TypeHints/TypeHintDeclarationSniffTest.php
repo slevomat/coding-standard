@@ -140,12 +140,16 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 			'enableVoidTypeHint' => true,
 		]);
 
-		$this->assertSame(4, $report->getErrorCount());
+		$this->assertSame(8, $report->getErrorCount());
 
 		$this->assertSniffError($report, 3, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		$this->assertSniffError($report, 14, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		$this->assertSniffError($report, 16, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		$this->assertSniffError($report, 24, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
+		$this->assertSniffError($report, 31, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		$this->assertSniffError($report, 35, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		$this->assertSniffError($report, 39, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		$this->assertSniffError($report, 51, TypeHintDeclarationSniff::CODE_INCORRECT_RETURN_TYPE_HINT);
 	}
 
 	public function testEnabledNullableTypeHintsNoErrors()
@@ -259,7 +263,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintsWithEnabledVoid.php', [
 			'enableNullableTypeHints' => false,
 			'enableVoidTypeHint' => true,
-		], [TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT]);
+		], [TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT, TypeHintDeclarationSniff::CODE_INCORRECT_RETURN_TYPE_HINT]);
 
 		$this->assertAllFixedInFile($report);
 	}
@@ -269,7 +273,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintsWithDisabledVoid.php', [
 			'enableNullableTypeHints' => false,
 			'enableVoidTypeHint' => false,
-		], [TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT]);
+		], [TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT, TypeHintDeclarationSniff::CODE_INCORRECT_RETURN_TYPE_HINT]);
 
 		$this->assertAllFixedInFile($report);
 	}
