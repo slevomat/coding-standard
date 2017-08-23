@@ -67,3 +67,7 @@ switch (true) {
 array($username === self::ADMIN_EMAIL ? self::ROLE_ADMIN : self::ROLE_CUSTOMER);
 [$array === []];
 [$array === array()];
+
+$param === A::TYPE_A and $param === A::TYPE_B;
+$param === A::TYPE_A or $param === A::TYPE_B;
+$param === A::TYPE_A xor $param === A::TYPE_B;
