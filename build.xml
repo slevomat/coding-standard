@@ -54,7 +54,7 @@
 			passthru="true"
 			checkreturn="true"
 		>
-			<arg value="--standard=ruleset.xml"/>
+			<arg value="--standard=build/ruleset.xml"/>
 			<arg value="--ignore=*/data/*"/>
 			<arg path="SlevomatCodingStandard"/>
 			<arg path="tests"/>
