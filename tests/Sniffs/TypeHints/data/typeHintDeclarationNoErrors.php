@@ -616,9 +616,17 @@ abstract class FooClass
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function inheritdoc($a)
+	{
+		return true;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function inheritdocAnnotation($a)
 	{
 		return true;
 	}
