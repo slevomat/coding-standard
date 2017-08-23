@@ -937,7 +937,12 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 
 	private function hasInheritdocAnnotation(\PHP_CodeSniffer_File $phpcsFile, int $functionPointer): bool
 	{
-		return count(AnnotationHelper::getAnnotationsByName($phpcsFile, $functionPointer, '@inheritdoc')) !== 0;
+		$docComment = DocCommentHelper::getDocComment($phpcsFile, $functionPointer);
+		if ($docComment === null) {
+			return false;
+		}
+
+		return strpos($docComment, '@inheritdoc') !== false;
 	}
 
 }
