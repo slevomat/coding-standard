@@ -309,7 +309,11 @@ new Foo\Bar();
 
 `allowFullyQualifiedNameForCollidingClasses` - allow fully qualified name for a class with a colliding use statement
 
-`allowFullyQualifiedGlobalClasses` - allows using fully qualified names from global space (i.e. \DateTimeImmutable)
+`allowFullyQualifiedGlobalClasses` - allows using fully qualified classes from global space (i.e. `\DateTimeImmutable`)
+
+`allowFullyQualifiedGlobalFunctions` - allows using fully qualified functions from global space (i.e. `\phpversion()`)
+
+`allowFullyQualifiedGlobalConstants` - allows using fully qualified constants from global space (i.e. `\PHP_VERSION`)
 
 #### SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces
 
