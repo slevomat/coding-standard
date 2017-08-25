@@ -540,17 +540,44 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		);
 	}
 
-	public function testAllowingFullyQualifiedGlobalTypes()
+	public function testAllowingFullyQualifiedGlobalClasses()
 	{
 		$report = $this->checkFile(
 			__DIR__ . '/data/fullyQualifiedGlobalClassesInNamespace.php',
 			[
 				'allowFullyQualifiedGlobalClasses' => true,
+				'allowFullyQualifiedGlobalFunctions' => false,
+				'allowFullyQualifiedGlobalConstants' => false,
 			]
 		);
 		$this->assertNoSniffErrorInFile($report);
 	}
 
+	public function testAllowingFullyQualifiedGlobalFunctions()
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/fullyQualifiedGlobalFunctionsInNamespace.php',
+			[
+				'allowFullyQualifiedGlobalClasses' => false,
+				'allowFullyQualifiedGlobalFunctions' => true,
+				'allowFullyQualifiedGlobalConstants' => false,
+			]
+		);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
+	public function testAllowingFullyQualifiedGlobalConstants()
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/fullyQualifiedGlobalConstantsInNamespace.php',
+			[
+				'allowFullyQualifiedGlobalClasses' => false,
+				'allowFullyQualifiedGlobalFunctions' => false,
+				'allowFullyQualifiedGlobalConstants' => true,
+			]
+		);
+		$this->assertNoSniffErrorInFile($report);
+	}
 
 	public function testFixableReferenceViaFullyQualifiedName()
 	{

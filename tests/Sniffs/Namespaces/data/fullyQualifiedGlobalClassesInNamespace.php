@@ -14,4 +14,8 @@ class Bar implements \Iterator
 
 new \DateTimeImmutable();
 
-echo \DateTime::ISO8601;
+echo \DateTime::RFC3339;
+
+phpversion();
+
+echo PHP_VERSION;
