@@ -32,15 +32,26 @@ class UseStatement
 	)
 	{
 		$this->nameAsReferencedInFile = $nameAsReferencedInFile;
-		$this->normalizedNameAsReferencedInFile = self::normalizedNameAsReferencedInFile($nameAsReferencedInFile);
+		$this->normalizedNameAsReferencedInFile = self::normalizedNameAsReferencedInFile($type, $nameAsReferencedInFile);
 		$this->fullyQualifiedTypeName = $fullyQualifiedClassName;
 		$this->usePointer = $usePointer;
 		$this->type = $type;
 	}
 
-	public static function normalizedNameAsReferencedInFile(string $name): string
+	public static function normalizedNameAsReferencedInFile(string $type, string $name): string
 	{
-		return strtolower($name);
+		if ($type !== self::TYPE_CONSTANT) {
+			return strtolower($name);
+		}
+
+		$nameParts = explode(NamespaceHelper::NAMESPACE_SEPARATOR, $name);
+		if (count($nameParts) === 1) {
+			return $name;
+		}
+
+		return sprintf('%s%s%s', implode(NamespaceHelper::NAMESPACE_SEPARATOR, array_map(function (string $namePart): string {
+			return strtolower($namePart);
+		}, array_slice($nameParts, 0, -1))), NamespaceHelper::NAMESPACE_SEPARATOR, $nameParts[count($nameParts) - 1]);
 	}
 
 	public function getNameAsReferencedInFile(): string

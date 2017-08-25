@@ -98,7 +98,7 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertUseStatement('Foo', 'Foo', $useStatements['foo'], false, false);
 		$this->assertUseStatement('Lorem\Ipsum', 'LoremIpsum', $useStatements['loremipsum'], false, false);
 		$this->assertUseStatement('Zero', 'Zero', $useStatements['zero'], false, false);
-		$this->assertUseStatement('Rasmus\FOO_CONSTANT', 'FOO_CONSTANT', $useStatements['foo_constant'], false, true);
+		$this->assertUseStatement('Rasmus\FOO_CONSTANT', 'FOO_CONSTANT', $useStatements['FOO_CONSTANT'], false, true);
 		$this->assertUseStatement('Lerdorf\isBar', 'isBar', $useStatements['isbar'], true, false);
 	}
 

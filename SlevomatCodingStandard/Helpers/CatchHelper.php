@@ -29,7 +29,7 @@ class CatchHelper
 			$pointerAfterNameEndPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $nameStartPointer + 1);
 			$nameEndPointer = $pointerAfterNameEndPointer === null ? $nameStartPointer : $pointerAfterNameEndPointer - 1;
 
-			$catchedTypes[] = NamespaceHelper::resolveName(
+			$catchedTypes[] = NamespaceHelper::resolveClassName(
 				$phpcsFile,
 				TokenHelper::getContent($phpcsFile, $nameStartPointer, $nameEndPointer),
 				$useStatements,

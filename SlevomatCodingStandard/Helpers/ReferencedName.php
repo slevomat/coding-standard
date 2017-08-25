@@ -39,6 +39,11 @@ class ReferencedName
 		return $this->startPointer;
 	}
 
+	public function getType(): string
+	{
+		return $this->type;
+	}
+
 	public function getEndPointer(): int
 	{
 		return $this->endPointer;

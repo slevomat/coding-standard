@@ -85,9 +85,28 @@ class NamespaceHelper
 	 * @param int $currentPointer
 	 * @return string
 	 */
+	public static function resolveClassName(
+		\PHP_CodeSniffer_File $phpcsFile,
+		string $nameAsReferencedInFile,
+		array $useStatements,
+		int $currentPointer
+	): string
+	{
+		return self::resolveName($phpcsFile, $nameAsReferencedInFile, ReferencedName::TYPE_DEFAULT, $useStatements, $currentPointer);
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer_File $phpcsFile
+	 * @param string $nameAsReferencedInFile
+	 * @param string $type
+	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
+	 * @param int $currentPointer
+	 * @return string
+	 */
 	public static function resolveName(
 		\PHP_CodeSniffer_File $phpcsFile,
 		string $nameAsReferencedInFile,
+		string $type,
 		array $useStatements,
 		int $currentPointer
 	): string
@@ -96,14 +115,14 @@ class NamespaceHelper
 			return $nameAsReferencedInFile;
 		}
 
-		$normalizedName = UseStatement::normalizedNameAsReferencedInFile(self::normalizeToCanonicalName($nameAsReferencedInFile));
+		$normalizedName = UseStatement::normalizedNameAsReferencedInFile($type, self::normalizeToCanonicalName($nameAsReferencedInFile));
 
 		if (isset($useStatements[$normalizedName])) {
 			return sprintf('%s%s', self::NAMESPACE_SEPARATOR, $useStatements[$normalizedName]->getFullyQualifiedTypeName());
 		}
 
 		$nameParts = self::getNameParts($nameAsReferencedInFile);
-		$normalizedNameFirstPart = UseStatement::normalizedNameAsReferencedInFile($nameParts[0]);
+		$normalizedNameFirstPart = UseStatement::normalizedNameAsReferencedInFile($type, $nameParts[0]);
 		if (count($nameParts) > 1 && isset($useStatements[$normalizedNameFirstPart])) {
 			return sprintf('%s%s%s%s', self::NAMESPACE_SEPARATOR, $useStatements[$normalizedNameFirstPart]->getFullyQualifiedTypeName(), self::NAMESPACE_SEPARATOR, implode(self::NAMESPACE_SEPARATOR, array_slice($nameParts, 1)));
 		}
