@@ -281,6 +281,10 @@ Sniff provides the following settings:
 * Exceptions with different names can be configured in `specialExceptionNames` property.
 * If your codebase uses classes that look like exceptions (because they have `Exception` or `Error` suffixes) but aren't, you can add them to `ignoredNames` property and the sniff won't enforce them to be fully qualified. Classes with `Error` suffix has to be added to ignored only if they are in the root namespace (like `LibXMLError`).
 
+#### SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions
+
+All references to global functions must be referenced via a fully qualified name.
+
 #### SlevomatCodingStandard.Namespaces.MultipleUsesPerLine
 
 Prohibits multiple uses separated by commas:
