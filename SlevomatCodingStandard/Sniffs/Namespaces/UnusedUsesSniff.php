@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
+use SlevomatCodingStandard\Helpers\ReferencedName;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
@@ -43,7 +44,9 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$nameParts = NamespaceHelper::getNameParts($name);
 			$nameAsReferencedInFile = $nameParts[0];
 			$nameReferencedWithoutSubNamespace = count($nameParts) === 1;
-			$normalizedNameAsReferencedInFile = UseStatement::normalizedNameAsReferencedInFile($nameAsReferencedInFile);
+			$normalizedNameAsReferencedInFile = $nameReferencedWithoutSubNamespace
+				? UseStatement::normalizedNameAsReferencedInFile($referencedName->getType(), $nameAsReferencedInFile)
+				: UseStatement::normalizedNameAsReferencedInFile(ReferencedName::TYPE_DEFAULT, $nameAsReferencedInFile);
 			if (
 				!NamespaceHelper::isFullyQualifiedName($name)
 				&& isset($unusedNames[$normalizedNameAsReferencedInFile])

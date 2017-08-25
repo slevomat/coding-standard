@@ -35,7 +35,7 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
 		foreach ($referencedNames as $referencedName) {
-			$resolvedName = NamespaceHelper::resolveName(
+			$resolvedName = NamespaceHelper::resolveClassName(
 				$phpcsFile,
 				$referencedName->getNameAsReferencedInFile(),
 				$useStatements,

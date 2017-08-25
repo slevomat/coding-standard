@@ -31,7 +31,7 @@ class TypeHintHelper
 		}
 
 		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $pointer));
-		return NamespaceHelper::resolveName($phpcsFile, $typeHint, $useStatements, $pointer);
+		return NamespaceHelper::resolveClassName($phpcsFile, $typeHint, $useStatements, $pointer);
 	}
 
 	/**
