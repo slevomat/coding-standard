@@ -588,6 +588,18 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		$this->assertAllFixedInFile($report);
 	}
 
+	public function testNotFixableReferenceViaFullyQualifiedName()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/notFixableReferenceViaFullyQualifiedName.php', [], [ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME]);
+		$this->assertAllFixedInFile($report);
+	}
+
+	public function testPartlyFixableReferenceViaFullyQualifiedName()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/partlyFixableReferenceViaFullyQualifiedName.php', [], [ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME]);
+		$this->assertAllFixedInFile($report);
+	}
+
 	public function testFixableReferenceViaFullyQualifiedNameNoUseStatements()
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableReferenceViaFullyQualifiedNameNoUseStatements.php', [

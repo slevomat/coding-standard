@@ -139,17 +139,19 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
+		$definedClassesIndex = array_flip(array_map(function (string $className): string {
+			return strtolower($className);
+		}, ClassHelper::getAllNames($phpcsFile)));
 
 		if ($this->allowFullyQualifiedNameForCollidingClasses) {
 			$referencesIndex = array_flip(
 				array_map(
 					function (ReferencedName $referencedName): string {
-						return $referencedName->getNameAsReferencedInFile();
+						return strtolower($referencedName->getNameAsReferencedInFile());
 					},
 					$referencedNames
 				)
 			);
-			$definedClassesIndex = array_flip(ClassHelper::getAllNames($phpcsFile));
 		}
 
 		foreach ($referencedNames as $referencedName) {
@@ -158,7 +160,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 			$canonicalName = NamespaceHelper::normalizeToCanonicalName($name);
 
 			if ($this->allowFullyQualifiedNameForCollidingClasses) {
-				$unqualifiedClassName = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name);
+				$unqualifiedClassName = strtolower(NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name));
 				if (isset($referencesIndex[$unqualifiedClassName]) || array_key_exists($unqualifiedClassName, $definedClassesIndex ?? [])) {
 					continue;
 				}
@@ -210,12 +212,29 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 							continue;
 						}
 
-						$fix = $phpcsFile->addFixableError(sprintf(
-							'Type %s should not be referenced via a fully qualified name, but via a use statement.',
-							$name
-						), $nameStartPointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+						$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
+						$nameToReference = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name);
+						$canonicalNameToReference = strtolower($nameToReference);
+
+						$canBeFixed = true;
+						foreach ($useStatements as $useStatement) {
+							if ($useStatement->getFullyQualifiedTypeName() !== $canonicalName
+								&& ($useStatement->getCanonicalNameAsReferencedInFile() === $canonicalNameToReference || array_key_exists($canonicalNameToReference, $definedClassesIndex))
+							) {
+								$canBeFixed = false;
+								break;
+							}
+						}
+
+						$errorMessage = sprintf('Type %s should not be referenced via a fully qualified name, but via a use statement.', $name);
+						if ($canBeFixed) {
+							$fix = $phpcsFile->addFixableError($errorMessage, $nameStartPointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+						} else {
+							$phpcsFile->addError($errorMessage, $nameStartPointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+							$fix = false;
+						}
+
 						if ($fix) {
-							$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 							if (count($useStatements) === 0) {
 								$namespacePointer = TokenHelper::findNext($phpcsFile, T_NAMESPACE, $openTagPointer);
 								$useStatementPlacePointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_OPEN_CURLY_BRACKET], $namespacePointer + 1);
@@ -230,7 +249,6 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer_Sniff
 								$phpcsFile->fixer->replaceToken($i, '');
 							}
 
-							$nameToReference = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name);
 							$alreadyUsed = false;
 							foreach ($useStatements as $useStatement) {
 								if ($useStatement->getFullyQualifiedTypeName() === $canonicalName) {
