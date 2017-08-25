@@ -48,6 +48,14 @@ class FooClass extends \ExtendedClass implements \ImplementedInterface, \SecondI
 
 		new Integer();
 		new Boolean();
+
+		function (Bobobo ...$bobobo) : array {
+			return $bobobo;
+		};
+
+		function (Dododo &$dododo) : array {
+			return $dododo;
+		};
 	}
 
 }
