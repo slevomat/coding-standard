@@ -34,6 +34,8 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			['BAR_CONSTANT', false, true],
 			['Integer', false, false],
 			['Boolean', false, false],
+			['Bobobo', false, false],
+			['Dododo', false, false],
 			['\ExtendedInterface', false, false],
 			['\SecondExtendedInterface', false, false],
 			['\ThirdExtendedInterface', false, false],
