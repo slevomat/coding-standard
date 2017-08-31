@@ -69,7 +69,8 @@ class ForbiddenAnnotationsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			}
 
 			if (!$docCommentUseful) {
-				for ($i = $docCommentOpenPointer; $i < TokenHelper::findNextEffective($phpcsFile, $docCommentClosePointer + 1); $i++) {
+				$nextPointerAfterDocComment = TokenHelper::findNextEffective($phpcsFile, $docCommentClosePointer + 1);
+				for ($i = $docCommentOpenPointer; $i < $nextPointerAfterDocComment; $i++) {
 					$phpcsFile->fixer->replaceToken($i, '');
 				}
 			}
