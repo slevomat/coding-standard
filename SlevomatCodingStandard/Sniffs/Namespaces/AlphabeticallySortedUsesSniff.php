@@ -104,7 +104,8 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer_Sniff
 		$aNameParts = explode(NamespaceHelper::NAMESPACE_SEPARATOR, $a->getFullyQualifiedTypeName());
 		$bNameParts = explode(NamespaceHelper::NAMESPACE_SEPARATOR, $b->getFullyQualifiedTypeName());
 
-		for ($i = 0; $i < min(count($aNameParts), count($bNameParts)); $i++) {
+		$minPartsCount = min(count($aNameParts), count($bNameParts));
+		for ($i = 0; $i < $minPartsCount; $i++) {
 			$comparison = $this->compare($aNameParts[$i], $bNameParts[$i]);
 			if ($comparison !== 0) {
 				return $comparison;

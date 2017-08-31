@@ -63,7 +63,8 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer_Sniff
 				$aParts = explode('/', str_replace('\\', '/', $a));
 				$bParts = explode('/', str_replace('\\', '/', $b));
 
-				for ($i = 0; $i < min(count($aParts), count($bParts)); $i++) {
+				$minPartsCount = min(count($aParts), count($bParts));
+				for ($i = 0; $i < $minPartsCount; $i++) {
 					$comparison = strcasecmp($bParts[$i], $aParts[$i]);
 					if ($comparison !== 0) {
 						return $comparison;
