@@ -631,4 +631,19 @@ abstract class FooClass
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public function camelizedInheritdoc($a)
+	{
+		return true;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function camelizedInheritdocAnnotation($a)
+	{
+		return true;
+	}
 }

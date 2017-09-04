@@ -942,7 +942,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer_Sniff
 			return false;
 		}
 
-		return strpos($docComment, '@inheritdoc') !== false;
+		return stripos($docComment, '@inheritdoc') !== false;
 	}
 
 }
