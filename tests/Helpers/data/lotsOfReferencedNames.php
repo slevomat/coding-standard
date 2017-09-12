@@ -25,6 +25,11 @@ class FooClass extends \ExtendedClass implements \ImplementedInterface, \SecondI
 
 	private $boo = 1, $hoo = SomeClass::CLASS_CONSTANT, $doo = TYPE_ONE;
 
+	const ARRAY = [
+		ArrayKey1::CONSTANT => true,
+		ArrayKey2::CONSTANT => true,
+	];
+
 	/**
 	 * @param TypeHintedName $foo
 	 * @param AnotherTypeHintedName[] $bar
