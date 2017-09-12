@@ -20,6 +20,8 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			['SomeDifferentTrait', false, false],
 			['\FullyQualified\SometTotallyDifferentTrait', false, false],
 			['SomeTrait', false, false],
+			['SomeClass', false, false],
+			['TYPE_ONE', false, true],
 			['TypeHintedName', false, false],
 			['ClassInstance', false, false],
 			['StaticClass', false, false],
