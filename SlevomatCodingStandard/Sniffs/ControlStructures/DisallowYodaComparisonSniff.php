@@ -9,10 +9,10 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
  *  > (Foo::BAR, BAR)
  *  > (true, false, null, 1, 1.0, arrays, 'foo')
  */
-class YodaComparisonSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class DisallowYodaComparisonSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
-	const CODE_YODA_COMPARISON = 'YodaComparison';
+	const CODE_DISALLOWED_YODA_COMPARISON = 'DisallowedYodaComparison';
 
 	const DYNAMISM_VARIABLE = 999;
 
@@ -112,14 +112,12 @@ class YodaComparisonSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 
 		if ($leftDynamism < $rightDynamism) {
-			$fix = $phpcsFile->addFixableError('Yoda comparisons are prohibited.', $comparisonTokenPointer, self::CODE_YODA_COMPARISON);
-			if ($fix) {
-				if (count($leftSideTokens) > 0 & count($rightSideTokens) > 0) {
-					$phpcsFile->fixer->beginChangeset();
-					$this->write($phpcsFile, $leftSideTokens, $rightSideTokens);
-					$this->write($phpcsFile, $rightSideTokens, $leftSideTokens);
-					$phpcsFile->fixer->endChangeset();
-				}
+			$fix = $phpcsFile->addFixableError('Yoda comparisons are disallowed.', $comparisonTokenPointer, self::CODE_DISALLOWED_YODA_COMPARISON);
+			if ($fix && count($leftSideTokens) > 0 & count($rightSideTokens) > 0) {
+				$phpcsFile->fixer->beginChangeset();
+				$this->write($phpcsFile, $leftSideTokens, $rightSideTokens);
+				$this->write($phpcsFile, $rightSideTokens, $leftSideTokens);
+				$phpcsFile->fixer->endChangeset();
 			}
 		}
 	}

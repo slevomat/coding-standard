@@ -73,7 +73,7 @@ if ($file = findFile($path)) {
 
 Assignment in `while` loop condition is specifically allowed because it's commonly used.
 
-This is a great addition to already existing `SlevomatCodingStandard.ControlStructures.YodaComparison` because it prevents the danger of assigning something by mistake instead of using comparison operator like `===`.
+This is a great addition to already existing `SlevomatCodingStandard.ControlStructures.DisallowYodaComparison` because it prevents the danger of assigning something by mistake instead of using comparison operator like `===`.
 
 #### SlevomatCodingStandard.ControlStructures.DisallowEqualOperators 🔧
 
@@ -136,11 +136,11 @@ This sniff enforces trailing commas in multi-line arrays and requires short arra
 
 `LanguageConstructWithParenthesesSniff` checks and fixes language construct used with parentheses.
 
-#### SlevomatCodingStandard.ControlStructures.YodaComparison 🔧
+#### SlevomatCodingStandard.ControlStructures.DisallowYodaComparison 🔧
 
 [Yoda conditions](https://en.wikipedia.org/wiki/Yoda_conditions) decrease code comprehensibility and readability by switching operands around comparison operators forcing the reader to read the code in an unnatural way.
 
-`YodaComparisonSniff` looks for and fixes such comparisons not only in `if` statements but in the whole code.
+`DisallowYodaComparisonSniff` looks for and fixes such comparisons not only in `if` statements but in the whole code.
 
 #### SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses 🔧
 
@@ -439,7 +439,7 @@ When running `phpcs` [on the command line](https://github.com/squizlabs/PHP_Code
 
 ```
 vendor/bin/phpcs --standard=ruleset.xml \
---sniffs=SlevomatCodingStandard.ControlStructures.YodaComparison,SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses \
+--sniffs=SlevomatCodingStandard.ControlStructures.DisallowYodaComparison,SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses \
 --extensions=php --encoding=utf-8 --tab-width=4 -sp src tests
 ```
 
