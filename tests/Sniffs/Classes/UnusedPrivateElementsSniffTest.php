@@ -113,6 +113,12 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertNoSniffErrorInFile($report);
 	}
 
+	public function testClassWithChainedPrivateMethods()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/classWithChainedPrivateMethods.php');
+		$this->assertNoSniffErrorInFile($report);
+	}
+
 	public function testClassWithConstants()
 	{
 		$resultFile = $this->checkFile(__DIR__ . '/data/classWithConstants.php');

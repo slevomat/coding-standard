@@ -177,6 +177,26 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 				if ($tokens[$variableTokenPointer]['code'] === T_VARIABLE && $tokens[$variableTokenPointer]['content'] === '$this') {
 					$findUsagesStartTokenPointer = $checkObjectOperatorUsage($tokenPointer);
 				} else {
+					$possibleThisTokenPointer = $tokenPointer - 1;
+					do {
+						$possibleThisTokenPointer = TokenHelper::findPreviousLocal($phpcsFile, T_VARIABLE, $possibleThisTokenPointer - 1);
+					} while ($possibleThisTokenPointer !== null && $tokens[$possibleThisTokenPointer]['content'] !== '$this');
+
+					if ($possibleThisTokenPointer !== null) {
+						$possibleMethodNamePointer = TokenHelper::findNextEffective($phpcsFile, $tokenPointer + 1);
+						if ($tokens[$possibleMethodNamePointer]['code'] === T_STRING) {
+							$possibleMethodCallPointer = TokenHelper::findNextEffective($phpcsFile, $possibleMethodNamePointer + 1);
+							if ($tokens[$possibleMethodCallPointer]['code'] === T_OPEN_PARENTHESIS) {
+								$methodName = $tokens[$possibleMethodNamePointer]['content'];
+								if (isset($reportedMethods[$methodName])) {
+									unset($reportedMethods[$methodName]);
+									$findUsagesStartTokenPointer = $possibleMethodCallPointer + 1;
+									continue;
+								}
+							}
+						}
+					}
+
 					$findUsagesStartTokenPointer = $tokenPointer + 1;
 				}
 			} elseif ($token['code'] === T_DOUBLE_COLON) {
