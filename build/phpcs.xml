@@ -11,7 +11,7 @@
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalConstants"/>
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions"/>
 	</rule>
-	<rule ref="./ruleset-consistence.xml">
+	<rule ref="./phpcs-consistence.xml">
 		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedIF"/><!-- Allow empty if statements - usually with a comment -->
 		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedELSEIF"/><!-- Allow empty elseif statements - usually with a comment -->
 	</rule>
