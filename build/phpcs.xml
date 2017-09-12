@@ -7,6 +7,7 @@
 
 	<rule ref="SlevomatCodingStandard/ruleset.xml">
 		<exclude name="SlevomatCodingStandard.Classes.ClassConstantVisibility"/><!-- PHP >= 7.1 only -->
+		<exclude name="SlevomatCodingStandard.ControlStructures.RequireYodaComparison"/>
 		<exclude name="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue"/><!-- PHP >= 7.1 only -->
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalConstants"/>
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions"/>
