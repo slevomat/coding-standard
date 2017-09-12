@@ -94,20 +94,13 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 		$writeOnlyProperties = [];
 		$findUsagesStartTokenPointer = $classToken['scope_opener'] + 1;
 
-		$checkObjectOperatorUsage = function ($tokenPointer) use ($phpcsFile, $tokens, &$reportedMethods, &$reportedProperties, &$writeOnlyProperties) {
-			$objectOperatorTokenPointer = TokenHelper::findNextEffective($phpcsFile, $tokenPointer + 1);
-			$objectOperatorToken = $tokens[$objectOperatorTokenPointer];
-			if ($objectOperatorToken['code'] !== T_OBJECT_OPERATOR) {
-				// $variable not followed by ->
-				return $tokenPointer + 1;
-			}
-
+		$checkObjectOperatorUsage = function (int $objectOperatorTokenPointer) use ($phpcsFile, $tokens, &$reportedMethods, &$reportedProperties, &$writeOnlyProperties) {
 			$propertyNameTokenPointer = TokenHelper::findNextEffective($phpcsFile, $objectOperatorTokenPointer + 1);
 			$propertyNameToken = $tokens[$propertyNameTokenPointer];
 			$name = $propertyNameToken['content'];
 			if ($propertyNameToken['code'] !== T_STRING) {
 				// $variable-> but not accessing a specific property (e. g. $variable->$foo or $variable->{$foo})
-				return $tokenPointer + 1;
+				return $objectOperatorTokenPointer + 1;
 			}
 			$methodCallTokenPointer = TokenHelper::findNextEffective($phpcsFile, $propertyNameTokenPointer + 1);
 			$methodCallToken = $tokens[$methodCallTokenPointer];
@@ -132,14 +125,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			return $propertyNameTokenPointer + 1;
 		};
 
-		$checkDoubleColonUsage = function (int $tokenPointer) use ($phpcsFile, $tokens, &$reportedMethods, &$reportedConstants): int {
-			$doubleColonTokenPointer = TokenHelper::findNextEffective($phpcsFile, $tokenPointer + 1);
-			$doubleColonToken = $tokens[$doubleColonTokenPointer];
-			if ($doubleColonToken['code'] !== T_DOUBLE_COLON) {
-				// self or static not followed by ::
-				return $doubleColonTokenPointer + 1;
-			}
-
+		$checkDoubleColonUsage = function (int $doubleColonTokenPointer) use ($phpcsFile, $tokens, &$reportedMethods, &$reportedConstants): int {
 			$methodNameTokenPointer = TokenHelper::findNextEffective($phpcsFile, $doubleColonTokenPointer + 1);
 			$methodNameToken = $tokens[$methodNameTokenPointer];
 			if ($methodNameToken['code'] !== T_STRING) {
@@ -167,7 +153,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 			return $methodCallTokenPointer + 1;
 		};
 
-		while (($tokenPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_SELF, T_STATIC, T_DOUBLE_QUOTED_STRING], $findUsagesStartTokenPointer, $classToken['scope_closer'])) !== null) {
+		while (($tokenPointer = TokenHelper::findNext($phpcsFile, [T_NEW, T_DOUBLE_QUOTED_STRING, T_DOUBLE_COLON, T_OBJECT_OPERATOR], $findUsagesStartTokenPointer, $classToken['scope_closer'])) !== null) {
 			$token = $tokens[$tokenPointer];
 			if ($token['code'] === T_DOUBLE_QUOTED_STRING) {
 				if (preg_match_all('~(?<!\\\\)\$this->(.+?\b)(?!\()~', $token['content'], $matches, PREG_PATTERN_ORDER)) {
@@ -186,30 +172,36 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer_Sniff
 				}
 
 				$findUsagesStartTokenPointer = $tokenPointer + 1;
-			} elseif ($token['content'] === '$this') {
-				$findUsagesStartTokenPointer = $checkObjectOperatorUsage($tokenPointer);
-			} elseif (in_array($token['code'], [T_SELF, T_STATIC], true)) {
-				$newTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokenPointer - 1);
-				if ($tokens[$newTokenPointer]['code'] === T_NEW) {
-					$variableTokenPointer = TokenHelper::findPreviousLocal($phpcsFile, T_VARIABLE, $newTokenPointer - 1);
-					if ($variableTokenPointer !== null) {
-						$scopeMethodPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $variableTokenPointer - 1);
-						for ($i = $tokens[$scopeMethodPointer]['scope_opener']; $i < $tokens[$scopeMethodPointer]['scope_closer']; $i++) {
-							if ($tokens[$i]['content'] === $tokens[$variableTokenPointer]['content']) {
-								$afterActualTokenPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
-								if ($tokens[$afterActualTokenPointer]['code'] === T_OBJECT_OPERATOR) {
-									$checkObjectOperatorUsage($i);
-								} elseif ($tokens[$afterActualTokenPointer]['code'] === T_DOUBLE_COLON) {
-									$checkDoubleColonUsage($i);
-								}
+			} elseif ($token['code'] === T_OBJECT_OPERATOR) {
+				$variableTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokenPointer - 1);
+				if ($tokens[$variableTokenPointer]['code'] === T_VARIABLE && $tokens[$variableTokenPointer]['content'] === '$this') {
+					$findUsagesStartTokenPointer = $checkObjectOperatorUsage($tokenPointer);
+				} else {
+					$findUsagesStartTokenPointer = $tokenPointer + 1;
+				}
+			} elseif ($token['code'] === T_DOUBLE_COLON) {
+				$previousTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokenPointer - 1);
+				if (in_array($tokens[$previousTokenPointer]['code'], [T_SELF, T_STATIC], true)) {
+					$findUsagesStartTokenPointer = $checkDoubleColonUsage($tokenPointer);
+				} else {
+					$findUsagesStartTokenPointer = $tokenPointer + 1;
+				}
+			} elseif ($token['code'] === T_NEW) {
+				$variableTokenPointer = TokenHelper::findPreviousLocal($phpcsFile, T_VARIABLE, $tokenPointer - 1);
+				$nextTokenPointer = TokenHelper::findNextEffective($phpcsFile, $tokenPointer + 1);
+				if ($variableTokenPointer !== null && in_array($tokens[$nextTokenPointer]['code'], [T_SELF, T_STATIC], true)) {
+					$scopeMethodPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $variableTokenPointer - 1);
+					for ($i = $tokens[$scopeMethodPointer]['scope_opener']; $i < $tokens[$scopeMethodPointer]['scope_closer']; $i++) {
+						if ($tokens[$i]['content'] === $tokens[$variableTokenPointer]['content']) {
+							$afterActualTokenPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
+							if ($tokens[$afterActualTokenPointer]['code'] === T_OBJECT_OPERATOR) {
+								$checkObjectOperatorUsage($afterActualTokenPointer);
+							} elseif ($tokens[$afterActualTokenPointer]['code'] === T_DOUBLE_COLON) {
+								$checkDoubleColonUsage($afterActualTokenPointer);
 							}
 						}
 					}
-					$findUsagesStartTokenPointer = $tokenPointer + 1;
-				} else {
-					$findUsagesStartTokenPointer = $checkDoubleColonUsage($tokenPointer);
 				}
-			} else {
 				$findUsagesStartTokenPointer = $tokenPointer + 1;
 			}
 
