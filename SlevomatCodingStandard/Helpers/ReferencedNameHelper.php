@@ -200,7 +200,7 @@ class ReferencedNameHelper
 		$endPointer = self::getReferencedNameEndPointer($phpcsFile, $startPointer);
 		$referencedName = TokenHelper::getContent($phpcsFile, $startPointer, $endPointer);
 
-		return !TypeHintHelper::isSimpleTypeHint($referencedName) || in_array($referencedName, ['integer', 'boolean'], true);
+		return !TypeHintHelper::isSimpleTypeHint($referencedName);
 	}
 
 }
