@@ -23,6 +23,8 @@ class FooClass extends \ExtendedClass implements \ImplementedInterface, \SecondI
 	/** @var Rasmus|Lerdorf[]|null|string|self|\Foo\BarBaz */
 	private $barz;
 
+	private $boo = 1, $hoo = SomeClass::CLASS_CONSTANT, $doo = TYPE_ONE;
+
 	/**
 	 * @param TypeHintedName $foo
 	 * @param AnotherTypeHintedName[] $bar
@@ -70,3 +72,5 @@ trait FooTrait
 	use SomeTrait;
 
 }
+
+const TYPE_ONE = 1, TYPE_TWO = 2, TYPE_THREE = 3;

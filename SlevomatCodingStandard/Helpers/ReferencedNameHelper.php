@@ -183,6 +183,8 @@ class ReferencedNameHelper
 			return false;
 		} elseif ($previousToken['code'] === T_OPEN_PARENTHESIS && isset($previousToken['parenthesis_owner']) && $tokens[$previousToken['parenthesis_owner']]['code'] === T_DECLARE) {
 			return false;
+		} elseif ($previousToken['code'] === T_COMMA && TokenHelper::findPreviousLocal($phpcsFile, [T_CONST], $previousPointer - 1) !== null) {
+			return false;
 		}
 
 		$isProbablyReferencedName = !in_array(
