@@ -8,7 +8,7 @@ use SlevomatCodingStandard\Helpers\UseStatementHelper;
 class UseDoesNotStartWithBackslashSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
-	const CODE_STARTS_WITH_BACKSLASH = 'UseStartsWithBackslash';
+	public const CODE_STARTS_WITH_BACKSLASH = 'UseStartsWithBackslash';
 
 	/**
 	 * @return mixed[]
@@ -25,7 +25,7 @@ class UseDoesNotStartWithBackslashSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $usePointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $usePointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $usePointer): void
 	{
 		if (
 			UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer)

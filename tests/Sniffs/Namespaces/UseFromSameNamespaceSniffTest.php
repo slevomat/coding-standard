@@ -10,7 +10,7 @@ class UseFromSameNamespaceSniffTest extends \SlevomatCodingStandard\Sniffs\TestC
 		return $this->checkFile(__DIR__ . '/data/useFromSameNamespace.php');
 	}
 
-	public function testUnrelatedNamespaces()
+	public function testUnrelatedNamespaces(): void
 	{
 		$report = $this->getFileReport();
 		$this->assertNoSniffError($report, 5);
@@ -18,17 +18,17 @@ class UseFromSameNamespaceSniffTest extends \SlevomatCodingStandard\Sniffs\TestC
 		$this->assertNoSniffError($report, 10);
 	}
 
-	public function testUseWithAsPart()
+	public function testUseWithAsPart(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 7);
 	}
 
-	public function testUseFromSubnamespace()
+	public function testUseFromSubnamespace(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 9);
 	}
 
-	public function testUseFromSameNamespace()
+	public function testUseFromSameNamespace(): void
 	{
 		$this->assertSniffError(
 			$this->getFileReport(),
@@ -38,12 +38,12 @@ class UseFromSameNamespaceSniffTest extends \SlevomatCodingStandard\Sniffs\TestC
 		);
 	}
 
-	public function testSkipClosure()
+	public function testSkipClosure(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 12);
 	}
 
-	public function testCheckNearestPreviousNamespaceWithMultipleNamespacesInFile()
+	public function testCheckNearestPreviousNamespaceWithMultipleNamespacesInFile(): void
 	{
 		$report = $this->getFileReport();
 		$this->assertSniffError(
@@ -55,7 +55,7 @@ class UseFromSameNamespaceSniffTest extends \SlevomatCodingStandard\Sniffs\TestC
 		$this->assertNoSniffError($report, 19);
 	}
 
-	public function testFixableUseFromSameNamespace()
+	public function testFixableUseFromSameNamespace(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableUseFromSameNamespace.php', [], [UseFromSameNamespaceSniff::CODE_USE_FROM_SAME_NAMESPACE]);
 		$this->assertAllFixedInFile($report);

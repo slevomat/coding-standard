@@ -10,7 +10,7 @@ use SlevomatCodingStandard\Helpers\UseStatementHelper;
 class UseFromSameNamespaceSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
-	const CODE_USE_FROM_SAME_NAMESPACE = 'UseFromSameNamespace';
+	public const CODE_USE_FROM_SAME_NAMESPACE = 'UseFromSameNamespace';
 
 	/**
 	 * @return mixed[]
@@ -27,7 +27,7 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $usePointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $usePointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $usePointer): void
 	{
 		if (
 			UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer)
@@ -72,12 +72,7 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param int $startPointer
-	 * @return int|null
-	 */
-	private function findAsPointer(\PHP_CodeSniffer\Files\File $phpcsFile, int $startPointer)
+	private function findAsPointer(\PHP_CodeSniffer\Files\File $phpcsFile, int $startPointer): ?int
 	{
 		return TokenHelper::findNextLocal($phpcsFile, T_AS, $startPointer);
 	}

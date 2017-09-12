@@ -8,17 +8,17 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
-	const CODE_NO_EMPTY_LINE_AFTER_OPENING_BRACE = 'NoEmptyLineAfterOpeningBrace';
+	public const CODE_NO_EMPTY_LINE_AFTER_OPENING_BRACE = 'NoEmptyLineAfterOpeningBrace';
 
-	const CODE_MULTIPLE_EMPTY_LINES_AFTER_OPENING_BRACE = 'MultipleEmptyLinesAfterOpeningBrace';
+	public const CODE_MULTIPLE_EMPTY_LINES_AFTER_OPENING_BRACE = 'MultipleEmptyLinesAfterOpeningBrace';
 
-	const CODE_INCORRECT_EMPTY_LINES_AFTER_OPENING_BRACE = 'IncorrectEmptyLinesAfterOpeningBrace';
+	public const CODE_INCORRECT_EMPTY_LINES_AFTER_OPENING_BRACE = 'IncorrectEmptyLinesAfterOpeningBrace';
 
-	const CODE_NO_EMPTY_LINE_BEFORE_CLOSING_BRACE = 'NoEmptyLineBeforeClosingBrace';
+	public const CODE_NO_EMPTY_LINE_BEFORE_CLOSING_BRACE = 'NoEmptyLineBeforeClosingBrace';
 
-	const CODE_MULTIPLE_EMPTY_LINES_BEFORE_CLOSING_BRACE = 'MultipleEmptyLinesBeforeClosingBrace';
+	public const CODE_MULTIPLE_EMPTY_LINES_BEFORE_CLOSING_BRACE = 'MultipleEmptyLinesBeforeClosingBrace';
 
-	const CODE_INCORRECT_EMPTY_LINES_BEFORE_CLOSING_BRACE = 'IncorrectEmptyLinesBeforeClosingBrace';
+	public const CODE_INCORRECT_EMPTY_LINES_BEFORE_CLOSING_BRACE = 'IncorrectEmptyLinesBeforeClosingBrace';
 
 	/** @var int */
 	public $linesCountAfterOpeningBrace = 1;
@@ -43,13 +43,13 @@ class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $stackPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $stackPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $stackPointer): void
 	{
 		$this->processOpeningBrace($phpcsFile, $stackPointer);
 		$this->processClosingBrace($phpcsFile, $stackPointer);
 	}
 
-	private function processOpeningBrace(\PHP_CodeSniffer\Files\File $phpcsFile, int $stackPointer)
+	private function processOpeningBrace(\PHP_CodeSniffer\Files\File $phpcsFile, int $stackPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 		$typeToken = $tokens[$stackPointer];
@@ -106,7 +106,7 @@ class EmptyLinesAroundTypeBracesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 	}
 
-	private function processClosingBrace(\PHP_CodeSniffer\Files\File $phpcsFile, int $stackPointer)
+	private function processClosingBrace(\PHP_CodeSniffer\Files\File $phpcsFile, int $stackPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 		$typeToken = $tokens[$stackPointer];

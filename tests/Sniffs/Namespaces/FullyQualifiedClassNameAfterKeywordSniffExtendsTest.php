@@ -18,7 +18,7 @@ class FullyQualifiedClassNameAfterKeywordSniffExtendsTest extends \SlevomatCodin
 		);
 	}
 
-	public function testNonFullyQualifiedExtends()
+	public function testNonFullyQualifiedExtends(): void
 	{
 		$this->assertSniffError(
 			$this->getFileReport(),
@@ -28,7 +28,7 @@ class FullyQualifiedClassNameAfterKeywordSniffExtendsTest extends \SlevomatCodin
 		);
 	}
 
-	public function testFullyQualifiedExtends()
+	public function testFullyQualifiedExtends(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 3);
 	}

@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 class ClassConstantVisibilitySniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function testErrors()
+	public function testErrors(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/classWithConstants.php', [
 			'enabled' => true,
@@ -25,7 +25,7 @@ class ClassConstantVisibilitySniffTest extends \SlevomatCodingStandard\Sniffs\Te
 		);
 	}
 
-	public function testNoClassConstants()
+	public function testNoClassConstants(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/noClassConstants.php', [
 			'enabled' => true,
@@ -33,7 +33,7 @@ class ClassConstantVisibilitySniffTest extends \SlevomatCodingStandard\Sniffs\Te
 		$this->assertNoSniffErrorInFile($report);
 	}
 
-	public function testNoClassConstantsWithNamespace()
+	public function testNoClassConstantsWithNamespace(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/noClassConstantsWithNamespace.php', [
 			'enabled' => true,
@@ -41,7 +41,7 @@ class ClassConstantVisibilitySniffTest extends \SlevomatCodingStandard\Sniffs\Te
 		$this->assertNoSniffErrorInFile($report);
 	}
 
-	public function testDisabledSniff()
+	public function testDisabledSniff(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/classWithConstants.php', [
 			'enabled' => false,

@@ -10,7 +10,7 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		return $this->checkFile(__DIR__ . '/data/unusedUses.php');
 	}
 
-	public function testUnusedUse()
+	public function testUnusedUse(): void
 	{
 		$this->assertSniffError(
 			$this->getFileReport(),
@@ -32,7 +32,7 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		);
 	}
 
-	public function testUnusedUseWithAsPart()
+	public function testUnusedUseWithAsPart(): void
 	{
 		$this->assertSniffError(
 			$this->getFileReport(),
@@ -42,53 +42,53 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		);
 	}
 
-	public function testUsedPartialNamespaceUse()
+	public function testUsedPartialNamespaceUse(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 6);
 	}
 
-	public function testUsedPartialSubnamespaceUse()
+	public function testUsedPartialSubnamespaceUse(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 7);
 	}
 
-	public function testUsedUseWithAsPart()
+	public function testUsedUseWithAsPart(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 9);
 	}
 
-	public function testUsedUseInTypeHint()
+	public function testUsedUseInTypeHint(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 10);
 	}
 
-	public function testUsedUseWithStaticMethodCall()
+	public function testUsedUseWithStaticMethodCall(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 11);
 	}
 
-	public function testUsedFunction()
+	public function testUsedFunction(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 13);
 	}
 
-	public function testUsedConstant()
+	public function testUsedConstant(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 15);
 	}
 
-	public function testUsedClassesInImplements()
+	public function testUsedClassesInImplements(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 17);
 		$this->assertNoSniffError($this->getFileReport(), 18);
 	}
 
-	public function testReturnTypeHint()
+	public function testReturnTypeHint(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 19);
 	}
 
-	public function testPartialUses()
+	public function testPartialUses(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 20);
 		$this->assertNoSniffError($this->getFileReport(), 21);
@@ -96,7 +96,7 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertNoSniffError($this->getFileReport(), 23);
 	}
 
-	public function testUsedUseInAnnotationWithDisabledSearchAnnotations()
+	public function testUsedUseInAnnotationWithDisabledSearchAnnotations(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/unusedUsesInAnnotation.php', [
 			'searchAnnotations' => false,
@@ -136,7 +136,7 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		);
 	}
 
-	public function testUsedUseInAnnotationWithEnabledSearchAnnotations()
+	public function testUsedUseInAnnotationWithEnabledSearchAnnotations(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/unusedUsesInAnnotation.php', [
 			'searchAnnotations' => true,
@@ -152,13 +152,13 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		);
 	}
 
-	public function testFindCaseInsensitiveUse()
+	public function testFindCaseInsensitiveUse(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/caseInsensitiveUse.php');
 		$this->assertNoSniffError($report, 3);
 	}
 
-	public function testReportCaseInsensitiveUse()
+	public function testReportCaseInsensitiveUse(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/caseInsensitiveUse.php');
 		$this->assertSniffError(
@@ -169,13 +169,13 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		);
 	}
 
-	public function testUsedTrait()
+	public function testUsedTrait(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/usedTrait.php');
 		$this->assertNoSniffError($report, 5);
 	}
 
-	public function testTypeWithUnderscoresInAnnotation()
+	public function testTypeWithUnderscoresInAnnotation(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/unusedUsesAnnotationUnderscores.php', [
 			'searchAnnotations' => true,
@@ -183,19 +183,19 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		$this->assertNoSniffError($report, 5);
 	}
 
-	public function testMatchingCaseOfUseAndClassConstant()
+	public function testMatchingCaseOfUseAndClassConstant(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/matchingCaseOfUseAndClassConstant.php');
 		$this->assertNoSniffErrorInFile($report);
 	}
 
-	public function testMatchingCaseOfUseAndPhpFunction()
+	public function testMatchingCaseOfUseAndPhpFunction(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/matchingCaseOfUseAndPhpFunction.php');
 		$this->assertNoSniffErrorInFile($report);
 	}
 
-	public function testFixableUnusedUses()
+	public function testFixableUnusedUses(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableUnusedUses.php', [], [UnusedUsesSniff::CODE_UNUSED_USE]);
 		$this->assertAllFixedInFile($report);

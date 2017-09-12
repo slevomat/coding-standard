@@ -10,7 +10,7 @@ class MultipleUsesPerLineSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		return $this->checkFile(__DIR__ . '/data/multipleUsesPerLine.php');
 	}
 
-	public function testMultipleUsesPerLine()
+	public function testMultipleUsesPerLine(): void
 	{
 		$this->assertSniffError(
 			$this->getFileReport(),
@@ -19,7 +19,7 @@ class MultipleUsesPerLineSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		);
 	}
 
-	public function testIgnoreCommasInClosureUse()
+	public function testIgnoreCommasInClosureUse(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 7);
 	}

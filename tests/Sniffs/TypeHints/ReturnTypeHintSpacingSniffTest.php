@@ -5,12 +5,12 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function testCorrectSpacing()
+	public function testCorrectSpacing(): void
 	{
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/returnTypeHintsCorrect.php'));
 	}
 
-	public function testIncorrectSpacing()
+	public function testIncorrectSpacing(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/returnTypeHintsIncorrect.php');
 		$this->assertSniffError(
@@ -155,7 +155,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		);
 	}
 
-	public function testIncorrectSpacingInInterface()
+	public function testIncorrectSpacingInInterface(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/returnTypeHintsIncorrect.php');
 		$this->assertSniffError(
@@ -250,12 +250,12 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		);
 	}
 
-	public function testCorrectSpacingWithNullable()
+	public function testCorrectSpacingWithNullable(): void
 	{
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/returnNullableTypeHintsCorrect.php'));
 	}
 
-	public function testIncorrectSpacingWithNullable()
+	public function testIncorrectSpacingWithNullable(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/returnNullableTypeHintsIncorrect.php');
 
@@ -318,7 +318,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError($report, 130, ReturnTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL);
 	}
 
-	public function testReturnTypeHintsArrayIncorrect()
+	public function testReturnTypeHintsArrayIncorrect(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/returnTypeHintsArrayIncorrect.php');
 
@@ -327,7 +327,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError($report, 6, ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON);
 	}
 
-	public function testCorrectSpacingWithSpaceBeforeColon()
+	public function testCorrectSpacingWithSpaceBeforeColon(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/returnTypeHintsCorrectSpaceBeforeColon.php', [
 			'spacesCountBeforeColon' => 1,
@@ -335,7 +335,7 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertNoSniffErrorInFile($report);
 	}
 
-	public function testIncorrectSpacingWithSpaceBeforeColon()
+	public function testIncorrectSpacingWithSpaceBeforeColon(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/returnTypeHintsIncorrectSpaceBeforeColon.php', [
 			'spacesCountBeforeColon' => 1,
@@ -371,43 +371,43 @@ class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertSniffError($report, 90, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
 	}
 
-	public function testFixableReturnTypeHintNoSpaceBetweenColonAndType()
+	public function testFixableReturnTypeHintNoSpaceBetweenColonAndType(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintNoSpaceBetweenColonAndType.php', [], [ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT]);
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableReturnTypeHintMultipleSpacesBetweenColonAndType()
+	public function testFixableReturnTypeHintMultipleSpacesBetweenColonAndType(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintMultipleSpacesBetweenColonAndType.php', [], [ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT]);
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableReturnTypeHintNoSpaceBetweenColonAndNullabilitySymbol()
+	public function testFixableReturnTypeHintNoSpaceBetweenColonAndNullabilitySymbol(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintNoSpaceBetweenColonAndNullabilitySymbol.php', [], [ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_NULLABILITY_SYMBOL]);
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableReturnTypeHintMultipleSpacesBetweenColonAndNullabilitySymbol()
+	public function testFixableReturnTypeHintMultipleSpacesBetweenColonAndNullabilitySymbol(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintMultipleSpacesBetweenColonAndNullabilitySymbol.php', [], [ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_NULLABILITY_SYMBOL]);
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableReturnTypeHintWhitespaceAfterNullabilitySymbol()
+	public function testFixableReturnTypeHintWhitespaceAfterNullabilitySymbol(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintWhitespaceAfterNullabilitySymbol.php', [], [ReturnTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL]);
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableReturnTypeHintWhitespaceBeforeColon()
+	public function testFixableReturnTypeHintWhitespaceBeforeColon(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintWhitespaceBeforeColon.php', [], [ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON]);
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableReturnTypeHintWhitespaceBeforeColonWithSpace()
+	public function testFixableReturnTypeHintWhitespaceBeforeColonWithSpace(): void
 	{
 		$report = $this->checkFile(
 			__DIR__ . '/data/fixableReturnTypeHintWhitespaceBeforeColonWithSpace.php',

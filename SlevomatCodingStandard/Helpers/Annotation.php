@@ -16,8 +16,8 @@ class Annotation
 
 	public function __construct(
 		string $name,
-		string $parameters = null,
-		string $content = null
+		?string $parameters,
+		?string $content
 	)
 	{
 		$this->name = $name;
@@ -30,18 +30,12 @@ class Annotation
 		return $this->name;
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getParameters()
+	public function getParameters(): ?string
 	{
 		return $this->parameters;
 	}
 
-	/**
-	 * @return string|null
-	 */
-	public function getContent()
+	public function getContent(): ?string
 	{
 		return $this->content;
 	}

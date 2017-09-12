@@ -1,10 +1,6 @@
 language: php
 matrix:
   include:
-    - php: 7.0
-      env: DEPENDENCIES=lowest
-    - php: 7.0
-      env: DEPENDENCIES=highest
     - php: 7.1
       env: DEPENDENCIES=lowest
     - php: 7.1

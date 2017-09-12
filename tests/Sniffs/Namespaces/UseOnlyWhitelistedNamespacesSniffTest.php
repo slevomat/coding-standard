@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 class UseOnlyWhitelistedNamespacesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function testUseOnlyWhitelistedNamespaces()
+	public function testUseOnlyWhitelistedNamespaces(): void
 	{
 		$report = $this->checkFile(
 			__DIR__ . '/data/whitelistedNamespacesInUses.php',
@@ -35,7 +35,7 @@ class UseOnlyWhitelistedNamespacesSniffTest extends \SlevomatCodingStandard\Snif
 		);
 	}
 
-	public function testIgnoreUseFromAnonymousFunction()
+	public function testIgnoreUseFromAnonymousFunction(): void
 	{
 		$report = $this->checkFile(
 			__DIR__ . '/data/whitelistedNamespacesInUses.php'
@@ -43,7 +43,7 @@ class UseOnlyWhitelistedNamespacesSniffTest extends \SlevomatCodingStandard\Snif
 		$this->assertNoSniffError($report, 12);
 	}
 
-	public function testIgnoreTraitUses()
+	public function testIgnoreTraitUses(): void
 	{
 		$report = $this->checkFile(
 			__DIR__ . '/data/whitelistedNamespacesInUses.php'
@@ -53,7 +53,7 @@ class UseOnlyWhitelistedNamespacesSniffTest extends \SlevomatCodingStandard\Snif
 		$this->assertNoSniffError($report, 21);
 	}
 
-	public function testAllowUseFromRootNamespace()
+	public function testAllowUseFromRootNamespace(): void
 	{
 		$report = $this->checkFile(
 			__DIR__ . '/data/whitelistedNamespacesInUses.php',

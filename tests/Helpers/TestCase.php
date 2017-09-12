@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Helpers;
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
 
-	const UNKNOWN_PHP_TOKEN = 'UNKNOWN';
+	private const UNKNOWN_PHP_TOKEN = 'UNKNOWN';
 
 	/**
 	 * @param int|string $code
@@ -13,7 +13,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
 	 * @param int|null $tokenPointer
 	 */
-	protected function assertTokenPointer($code, int $line, \PHP_CodeSniffer\Files\File $codeSnifferFile, int $tokenPointer = null)
+	protected function assertTokenPointer($code, int $line, \PHP_CodeSniffer\Files\File $codeSnifferFile, ?int $tokenPointer = null): void
 	{
 		$token = $this->getTokenFromPointer($codeSnifferFile, $tokenPointer);
 		$expectedTokenName = $this->findTokenName($code);
@@ -25,12 +25,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$this->assertSame($line, $token['line']);
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
-	 * @param string $name
-	 * @return int|null
-	 */
-	protected function findClassPointerByName(\PHP_CodeSniffer\Files\File $codeSnifferFile, string $name)
+	protected function findClassPointerByName(\PHP_CodeSniffer\Files\File $codeSnifferFile, string $name): ?int
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
@@ -44,12 +39,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		return null;
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
-	 * @param string $name
-	 * @return int|null
-	 */
-	protected function findConstantPointerByName(\PHP_CodeSniffer\Files\File $codeSnifferFile, string $name)
+	protected function findConstantPointerByName(\PHP_CodeSniffer\Files\File $codeSnifferFile, string $name): ?int
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
@@ -63,12 +53,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		return null;
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
-	 * @param string $name
-	 * @return int|null
-	 */
-	protected function findPropertyPointerByName(\PHP_CodeSniffer\Files\File $codeSnifferFile, string $name)
+	protected function findPropertyPointerByName(\PHP_CodeSniffer\Files\File $codeSnifferFile, string $name): ?int
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
@@ -82,12 +67,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		return null;
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
-	 * @param string $name
-	 * @return int|null
-	 */
-	protected function findFunctionPointerByName(\PHP_CodeSniffer\Files\File $codeSnifferFile, string $name)
+	protected function findFunctionPointerByName(\PHP_CodeSniffer\Files\File $codeSnifferFile, string $name): ?int
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
@@ -105,7 +85,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 * @param int|string $code
 	 * @return string|null
 	 */
-	private function findTokenName($code)
+	private function findTokenName($code): ?string
 	{
 		if (is_int($code)) {
 			$tokenName = token_name($code);
@@ -132,7 +112,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 */
 	private function getTokenFromPointer(
 		\PHP_CodeSniffer\Files\File $codeSnifferFile,
-		int $tokenPointer = null
+		?int $tokenPointer = null
 	): array
 	{
 		if ($tokenPointer === null) {

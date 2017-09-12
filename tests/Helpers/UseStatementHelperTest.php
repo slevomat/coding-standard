@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Helpers;
 class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
-	public function testIsAnonymousFunctionUse()
+	public function testIsAnonymousFunctionUse(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/anonymousFunction.php'
@@ -14,7 +14,7 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertTrue(UseStatementHelper::isAnonymousFunctionUse($codeSnifferFile, $usePointer));
 	}
 
-	public function testIsNotAnonymousFunctionUse()
+	public function testIsNotAnonymousFunctionUse(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/useStatements.php'
@@ -23,7 +23,7 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertFalse(UseStatementHelper::isAnonymousFunctionUse($codeSnifferFile, $usePointer));
 	}
 
-	public function testIsTraitUse()
+	public function testIsTraitUse(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/classWithTrait.php'
@@ -32,7 +32,7 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertTrue(UseStatementHelper::isTraitUse($codeSnifferFile, $usePointer));
 	}
 
-	public function testIsTraitUseInAnonymousClass()
+	public function testIsTraitUseInAnonymousClass(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/anonymousClassWithTrait.php'
@@ -41,7 +41,7 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertTrue(UseStatementHelper::isTraitUse($codeSnifferFile, $usePointer));
 	}
 
-	public function testIsNotTraitUse()
+	public function testIsNotTraitUse(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/useStatements.php'
@@ -50,7 +50,7 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertFalse(UseStatementHelper::isTraitUse($codeSnifferFile, $usePointer));
 	}
 
-	public function testGetNameAsReferencedInClassFromUse()
+	public function testGetNameAsReferencedInClassFromUse(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/useStatements.php'
@@ -65,7 +65,7 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertSame('LoremIpsum', UseStatementHelper::getNameAsReferencedInClassFromUse($codeSnifferFile, $loremIpsumUsePointer));
 	}
 
-	public function testGetFullyQualifiedTypeNameFromUse()
+	public function testGetFullyQualifiedTypeNameFromUse(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/useStatements.php'
@@ -86,7 +86,7 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertSame('Lerdorf\isBar', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $lerdorfIsBarPointer));
 	}
 
-	public function testGetUseStatements()
+	public function testGetUseStatements(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/useStatements.php'
@@ -102,7 +102,7 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertUseStatement('Lerdorf\isBar', 'isBar', $useStatements['isbar'], true, false);
 	}
 
-	private function assertUseStatement(string $fullyQualifiedTypeName, string $referencedName, UseStatement $useStatement, bool $isFunction, bool $isConstant)
+	private function assertUseStatement(string $fullyQualifiedTypeName, string $referencedName, UseStatement $useStatement, bool $isFunction, bool $isConstant): void
 	{
 		$this->assertSame($fullyQualifiedTypeName, $useStatement->getFullyQualifiedTypeName());
 		$this->assertSame($referencedName, $useStatement->getNameAsReferencedInFile());

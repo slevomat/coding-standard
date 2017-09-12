@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function testErrors()
+	public function testErrors(): void
 	{
 		$resultFile = $this->checkFile(__DIR__ . '/data/classWithSomeUnusedElements.php', [
 			'alwaysUsedPropertiesAnnotations' => [
@@ -88,40 +88,40 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		$this->assertNoSniffError($resultFile, 110);
 	}
 
-	public function testOnlyPublicElements()
+	public function testOnlyPublicElements(): void
 	{
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/classWithOnlyPublicElements.php'));
 	}
 
-	public function testClassWithSpecialThis()
+	public function testClassWithSpecialThis(): void
 	{
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/classWithSpecialThis.php'));
 	}
 
-	public function testClassWithSpecialSelf()
+	public function testClassWithSpecialSelf(): void
 	{
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/classWithSpecialSelf.php'));
 	}
 
-	public function testClassWithPrivateElementsUsedOnSelfInstance()
+	public function testClassWithPrivateElementsUsedOnSelfInstance(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/classWithPrivateElementsUsedOnSelfInstance.php');
 		$this->assertNoSniffErrorInFile($report);
 	}
 
-	public function testClassWithPrivateElementsUsedOnStaticInstance()
+	public function testClassWithPrivateElementsUsedOnStaticInstance(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/classWithPrivateElementsUsedOnStaticInstance.php');
 		$this->assertNoSniffErrorInFile($report);
 	}
 
-	public function testClassWithChainedPrivateMethods()
+	public function testClassWithChainedPrivateMethods(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/classWithChainedPrivateMethods.php');
 		$this->assertNoSniffErrorInFile($report);
 	}
 
-	public function testClassWithConstants()
+	public function testClassWithConstants(): void
 	{
 		$resultFile = $this->checkFile(__DIR__ . '/data/classWithConstants.php');
 
@@ -141,7 +141,7 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		);
 	}
 
-	public function testClassWithPropertyUsedInString()
+	public function testClassWithPropertyUsedInString(): void
 	{
 		$resultFile = $this->checkFile(__DIR__ . '/data/classWithPropertyUsedInString.php');
 
@@ -155,7 +155,7 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		);
 	}
 
-	public function testClassWithMethodUsedInString()
+	public function testClassWithMethodUsedInString(): void
 	{
 		$resultFile = $this->checkFile(__DIR__ . '/data/classWithMethodUsedInString.php');
 

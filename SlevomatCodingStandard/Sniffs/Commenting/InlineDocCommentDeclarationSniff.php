@@ -8,7 +8,7 @@ use SlevomatCodingStandard\Helpers\PropertyHelper;
 class InlineDocCommentDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
-	const CODE_INVALID_FORMAT = 'InvalidFormat';
+	public const CODE_INVALID_FORMAT = 'InvalidFormat';
 
 	/**
 	 * @return mixed[]
@@ -25,7 +25,7 @@ class InlineDocCommentDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $variablePointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $variablePointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $variablePointer): void
 	{
 		if (PropertyHelper::isProperty($phpcsFile, $variablePointer)) {
 			return;

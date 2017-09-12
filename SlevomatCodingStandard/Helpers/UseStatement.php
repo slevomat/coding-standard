@@ -5,9 +5,9 @@ namespace SlevomatCodingStandard\Helpers;
 class UseStatement
 {
 
-	const TYPE_DEFAULT = ReferencedName::TYPE_DEFAULT;
-	const TYPE_FUNCTION = ReferencedName::TYPE_FUNCTION;
-	const TYPE_CONSTANT = ReferencedName::TYPE_CONSTANT;
+	public const TYPE_DEFAULT = ReferencedName::TYPE_DEFAULT;
+	public const TYPE_FUNCTION = ReferencedName::TYPE_FUNCTION;
+	public const TYPE_CONSTANT = ReferencedName::TYPE_CONSTANT;
 
 	/** @var string */
 	private $nameAsReferencedInFile;
@@ -97,7 +97,7 @@ class UseStatement
 			self::TYPE_FUNCTION => 3,
 		];
 
-		return $order[$this->type] - $order[$that->type];
+		return $order[$this->type] <=> $order[$that->type];
 	}
 
 }

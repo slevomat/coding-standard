@@ -5,37 +5,37 @@ namespace SlevomatCodingStandard\Helpers;
 class SuppressHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
-	const CHECK_NAME = 'Sniff.Sniff.Sniff.check';
+	private const CHECK_NAME = 'Sniff.Sniff.Sniff.check';
 
 	/** @var \PHP_CodeSniffer\Files\File */
 	private $testedCodeSnifferFile;
 
-	public function testClassIsSuppressed()
+	public function testClassIsSuppressed(): void
 	{
 		$this->assertTrue(SuppressHelper::isSniffSuppressed($this->getTestedCodeSnifferFile(), $this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'IsSuppressed'), self::CHECK_NAME));
 	}
 
-	public function testClassIsNotSuppressed()
+	public function testClassIsNotSuppressed(): void
 	{
 		$this->assertFalse(SuppressHelper::isSniffSuppressed($this->getTestedCodeSnifferFile(), $this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'IsNotSuppressed'), self::CHECK_NAME));
 	}
 
-	public function testConstantIsSuppressed()
+	public function testConstantIsSuppressed(): void
 	{
 		$this->assertTrue(SuppressHelper::isSniffSuppressed($this->getTestedCodeSnifferFile(), $this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'IS_SUPPRESSED'), self::CHECK_NAME));
 	}
 
-	public function testConstantIsNotSuppressed()
+	public function testConstantIsNotSuppressed(): void
 	{
 		$this->assertFalse(SuppressHelper::isSniffSuppressed($this->getTestedCodeSnifferFile(), $this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'IS_NOT_SUPPRESSED'), self::CHECK_NAME));
 	}
 
-	public function testPropertyIsSuppressed()
+	public function testPropertyIsSuppressed(): void
 	{
 		$this->assertTrue(SuppressHelper::isSniffSuppressed($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'isSuppressed'), self::CHECK_NAME));
 	}
 
-	public function testPropertyIsNotSuppressed()
+	public function testPropertyIsNotSuppressed(): void
 	{
 		$this->assertFalse(SuppressHelper::isSniffSuppressed($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'isNotSuppressed'), self::CHECK_NAME));
 	}
@@ -56,7 +56,7 @@ class SuppressHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 * @dataProvider dataFunctionIsSuppressed
 	 * @param string $name
 	 */
-	public function testFunctionIsSuppressed(string $name)
+	public function testFunctionIsSuppressed(string $name): void
 	{
 		$this->assertTrue(SuppressHelper::isSniffSuppressed($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), $name), self::CHECK_NAME));
 	}
@@ -77,7 +77,7 @@ class SuppressHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 * @dataProvider dataFunctionIsNotSuppressed
 	 * @param string $name
 	 */
-	public function testFunctionIsNotSuppressed(string $name)
+	public function testFunctionIsNotSuppressed(string $name): void
 	{
 		$this->assertFalse(SuppressHelper::isSniffSuppressed($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), $name), self::CHECK_NAME));
 	}

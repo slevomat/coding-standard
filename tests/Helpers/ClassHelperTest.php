@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Helpers;
 class ClassHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
-	public function testNameWithNamespace()
+	public function testNameWithNamespace(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithNamespace.php');
 		$this->assertSame('\FooNamespace\FooClass', ClassHelper::getFullyQualifiedName($codeSnifferFile, $this->findClassPointerByName($codeSnifferFile, 'FooClass')));
@@ -16,7 +16,7 @@ class ClassHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertSame('FooTrait', ClassHelper::getName($codeSnifferFile, $this->findClassPointerByName($codeSnifferFile, 'FooTrait')));
 	}
 
-	public function testNameWithoutNamespace()
+	public function testNameWithoutNamespace(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithoutNamespace.php');
 		$this->assertSame('\FooClass', ClassHelper::getFullyQualifiedName($codeSnifferFile, $this->findClassPointerByName($codeSnifferFile, 'FooClass')));
@@ -27,19 +27,19 @@ class ClassHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertSame('FooTrait', ClassHelper::getName($codeSnifferFile, $this->findClassPointerByName($codeSnifferFile, 'FooTrait')));
 	}
 
-	public function testGetAllNamesWithNamespace()
+	public function testGetAllNamesWithNamespace(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithNamespace.php');
 		$this->assertSame(['FooClass', 'FooInterface', 'FooTrait'], ClassHelper::getAllNames($codeSnifferFile));
 	}
 
-	public function testGetAllNamesWithoutNamespace()
+	public function testGetAllNamesWithoutNamespace(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithoutNamespace.php');
 		$this->assertSame(['FooClass', 'FooInterface', 'FooTrait'], ClassHelper::getAllNames($codeSnifferFile));
 	}
 
-	public function testGetAllNamesWithNoClass()
+	public function testGetAllNamesWithNoClass(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/namespacedFile.php');
 		$this->assertSame([], ClassHelper::getAllNames($codeSnifferFile));

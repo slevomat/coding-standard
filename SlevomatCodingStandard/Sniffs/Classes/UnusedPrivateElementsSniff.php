@@ -13,15 +13,15 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
-	const NAME = 'SlevomatCodingStandard.Classes.UnusedPrivateElements';
+	private const NAME = 'SlevomatCodingStandard.Classes.UnusedPrivateElements';
 
-	const CODE_UNUSED_PROPERTY = 'UnusedProperty';
+	public const CODE_UNUSED_PROPERTY = 'UnusedProperty';
 
-	const CODE_WRITE_ONLY_PROPERTY = 'WriteOnlyProperty';
+	public const CODE_WRITE_ONLY_PROPERTY = 'WriteOnlyProperty';
 
-	const CODE_UNUSED_METHOD = 'UnusedMethod';
+	public const CODE_UNUSED_METHOD = 'UnusedMethod';
 
-	const CODE_UNUSED_CONSTANT = 'UnusedConstant';
+	public const CODE_UNUSED_CONSTANT = 'UnusedConstant';
 
 	/** @var string[] */
 	public $alwaysUsedPropertiesAnnotations = [];
@@ -79,7 +79,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $classPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $classPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $classPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 		$classToken = $tokens[$classPointer];
@@ -399,7 +399,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param int $methodTokenPointer
 	 * @return int|null
 	 */
-	private function findVisibilityModifier(\PHP_CodeSniffer\Files\File $phpcsFile, array $tokens, int $methodTokenPointer)
+	private function findVisibilityModifier(\PHP_CodeSniffer\Files\File $phpcsFile, array $tokens, int $methodTokenPointer): ?int
 	{
 		$visibilityModifiedTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $methodTokenPointer - 1);
 		$visibilityModifiedToken = $tokens[$visibilityModifiedTokenPointer];

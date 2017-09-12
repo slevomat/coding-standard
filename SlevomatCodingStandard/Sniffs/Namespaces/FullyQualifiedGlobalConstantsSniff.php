@@ -9,7 +9,7 @@ use SlevomatCodingStandard\Helpers\UseStatementHelper;
 class FullyQualifiedGlobalConstantsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
-	const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified';
+	public const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified';
 
 	/**
 	 * @return mixed[]
@@ -26,7 +26,7 @@ class FullyQualifiedGlobalConstantsSniff implements \PHP_CodeSniffer\Sniffs\Snif
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $openTagPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $openTagPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

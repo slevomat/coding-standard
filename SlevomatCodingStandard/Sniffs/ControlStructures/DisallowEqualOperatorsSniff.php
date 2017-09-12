@@ -5,8 +5,8 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 class DisallowEqualOperatorsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
-	const CODE_DISALLOWED_EQUAL_OPERATOR = 'DisallowedEqualOperator';
-	const CODE_DISALLOWED_NOT_EQUAL_OPERATOR = 'DisallowedNotEqualOperator';
+	public const CODE_DISALLOWED_EQUAL_OPERATOR = 'DisallowedEqualOperator';
+	public const CODE_DISALLOWED_NOT_EQUAL_OPERATOR = 'DisallowedNotEqualOperator';
 
 	/**
 	 * @return mixed[]
@@ -24,7 +24,7 @@ class DisallowEqualOperatorsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $operatorPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $operatorPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $operatorPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

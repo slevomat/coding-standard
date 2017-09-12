@@ -14,7 +14,7 @@ use SlevomatCodingStandard\Helpers\YodaHelper;
 class RequireYodaComparisonSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
-	const CODE_REQUIRED_YODA_COMPARISON = 'RequiredYodaComparison';
+	public const CODE_REQUIRED_YODA_COMPARISON = 'RequiredYodaComparison';
 
 	/**
 	 * @return mixed[]
@@ -34,7 +34,7 @@ class RequireYodaComparisonSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $comparisonTokenPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $comparisonTokenPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $comparisonTokenPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 		$leftSideTokens = YodaHelper::getLeftSideTokens($tokens, $comparisonTokenPointer);

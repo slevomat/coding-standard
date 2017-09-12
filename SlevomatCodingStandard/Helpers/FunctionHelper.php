@@ -74,7 +74,7 @@ class FunctionHelper
 	 */
 	public static function getParametersWithoutTypeHint(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $functionPointer): array
 	{
-		return array_keys(array_filter(self::getParametersTypeHints($codeSnifferFile, $functionPointer), function (ParameterTypeHint $parameterTypeHint = null): bool {
+		return array_keys(array_filter(self::getParametersTypeHints($codeSnifferFile, $functionPointer), function (?ParameterTypeHint $parameterTypeHint = null): bool {
 			return $parameterTypeHint === null;
 		}));
 	}
@@ -154,12 +154,7 @@ class FunctionHelper
 		return false;
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
-	 * @param int $functionPointer
-	 * @return \SlevomatCodingStandard\Helpers\ReturnTypeHint|null
-	 */
-	public static function findReturnTypeHint(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $functionPointer)
+	public static function findReturnTypeHint(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $functionPointer): ?ReturnTypeHint
 	{
 		$tokens = $codeSnifferFile->getTokens();
 
@@ -212,12 +207,7 @@ class FunctionHelper
 		return AnnotationHelper::getAnnotationsByName($codeSnifferFile, $functionPointer, '@param');
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
-	 * @param int $functionPointer
-	 * @return \SlevomatCodingStandard\Helpers\Annotation|null
-	 */
-	public static function findReturnAnnotation(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $functionPointer)
+	public static function findReturnAnnotation(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $functionPointer): ?Annotation
 	{
 		$returnAnnotations = AnnotationHelper::getAnnotationsByName($codeSnifferFile, $functionPointer, '@return');
 

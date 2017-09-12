@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 class AlphabeticallySortedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function testIncorrectOrder()
+	public function testIncorrectOrder(): void
 	{
 		$this->assertSniffError(
 			$this->checkFile(__DIR__ . '/data/incorrectOrder.php'),
@@ -15,7 +15,7 @@ class AlphabeticallySortedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\T
 		);
 	}
 
-	public function testIncorrectOrderIntertwinedWithClasses()
+	public function testIncorrectOrderIntertwinedWithClasses(): void
 	{
 		$this->assertSniffError(
 			$this->checkFile(__DIR__ . '/data/incorrectOrderIntertwinedWithClasses.php'),
@@ -25,21 +25,21 @@ class AlphabeticallySortedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\T
 		);
 	}
 
-	public function testCorrectOrderIgnoresUsesAfterClassesTraitsAndInterfaces()
+	public function testCorrectOrderIgnoresUsesAfterClassesTraitsAndInterfaces(): void
 	{
 		$this->assertNoSniffErrorInFile(
 			$this->checkFile(__DIR__ . '/data/correctOrder.php')
 		);
 	}
 
-	public function testCorrectOrderOfSimilarNamespaces()
+	public function testCorrectOrderOfSimilarNamespaces(): void
 	{
 		$this->assertNoSniffErrorInFile(
 			$this->checkFile(__DIR__ . '/data/correctOrderSimilarNamespaces.php')
 		);
 	}
 
-	public function testCorrectOrderOfSimilarNamespacesCaseSensitive()
+	public function testCorrectOrderOfSimilarNamespacesCaseSensitive(): void
 	{
 		$this->assertNoSniffErrorInFile(
 			$this->checkFile(__DIR__ . '/data/correctOrderSimilarNamespacesCaseSensitive.php', [
@@ -48,7 +48,7 @@ class AlphabeticallySortedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\T
 		);
 	}
 
-	public function testIncorrectOrderOfSimilarNamespaces()
+	public function testIncorrectOrderOfSimilarNamespaces(): void
 	{
 		$this->assertSniffError(
 			$this->checkFile(__DIR__ . '/data/incorrectOrderSimilarNamespaces.php'),
@@ -58,12 +58,12 @@ class AlphabeticallySortedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\T
 		);
 	}
 
-	public function testPatrikOrder()
+	public function testPatrikOrder(): void
 	{
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/alphabeticalPatrik.php'));
 	}
 
-	public function testFixableUnusedUses()
+	public function testFixableUnusedUses(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableAlphabeticalSortedUses.php', [], [AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER]);
 		$this->assertAllFixedInFile($report);

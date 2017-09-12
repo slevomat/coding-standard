@@ -11,7 +11,7 @@ namespace SlevomatCodingStandard\Helpers;
 class NamespaceHelper
 {
 
-	const NAMESPACE_SEPARATOR = '\\';
+	public const NAMESPACE_SEPARATOR = '\\';
 
 	public static function isFullyQualifiedName(string $typeName): bool
 	{
@@ -36,12 +36,7 @@ class NamespaceHelper
 		return explode(self::NAMESPACE_SEPARATOR, $name);
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param int $anyPointer any pointer type where the search begins from (backwards)
-	 * @return string|null
-	 */
-	public static function findCurrentNamespaceName(\PHP_CodeSniffer\Files\File $phpcsFile, int $anyPointer)
+	public static function findCurrentNamespaceName(\PHP_CodeSniffer\Files\File $phpcsFile, int $anyPointer): ?string
 	{
 		$namespacePointer = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $anyPointer);
 		if ($namespacePointer === null) {

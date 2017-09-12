@@ -5,13 +5,13 @@ namespace SlevomatCodingStandard\Sniffs\Commenting;
 class InlineDocCommentDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function testNoInvalidInlineDocCommentDeclarations()
+	public function testNoInvalidInlineDocCommentDeclarations(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/noInvalidInlineDocCommentDeclarations.php');
 		$this->assertNoSniffErrorInFile($report);
 	}
 
-	public function testInvalidInlineDocCommentDeclarations()
+	public function testInvalidInlineDocCommentDeclarations(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/invalidInlineDocCommentDeclarations.php');
 
@@ -37,7 +37,7 @@ class InlineDocCommentDeclarationSniffTest extends \SlevomatCodingStandard\Sniff
 		);
 	}
 
-	public function testFixableInvalidInlineDocCommentDeclarations()
+	public function testFixableInvalidInlineDocCommentDeclarations(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/invalidInlineDocCommentDeclarations.php', [], [InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT]);
 		$this->assertAllFixedInFile($report);

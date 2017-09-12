@@ -9,7 +9,7 @@
 		"bin-dir": "bin"
 	},
 	"require": {
-		"php": "^7.0",
+		"php": "^7.1",
 		"squizlabs/php_codesniffer": "^3.0.1"
 	},
 	"require-dev": {

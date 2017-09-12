@@ -10,7 +10,7 @@ class UseDoesNotStartWithBackslashSniffTest extends \SlevomatCodingStandard\Snif
 		return $this->checkFile(__DIR__ . '/data/useBackslash.php');
 	}
 
-	public function testUseStartsWithBackslash()
+	public function testUseStartsWithBackslash(): void
 	{
 		$this->assertSniffError(
 			$this->getFileReport(),
@@ -19,12 +19,12 @@ class UseDoesNotStartWithBackslashSniffTest extends \SlevomatCodingStandard\Snif
 		);
 	}
 
-	public function testDoNotCheckUsedTraitsInClasses()
+	public function testDoNotCheckUsedTraitsInClasses(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 7);
 	}
 
-	public function testDoNotCheckUsedTraitsInTraits()
+	public function testDoNotCheckUsedTraitsInTraits(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 13);
 	}

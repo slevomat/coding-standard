@@ -10,7 +10,7 @@ class UseFromSameNamespaceSniffRootNamespaceTest extends \SlevomatCodingStandard
 		return UseFromSameNamespaceSniff::class;
 	}
 
-	public function testUseFromRootNamespaceInFileWithoutNamespace()
+	public function testUseFromRootNamespaceInFileWithoutNamespace(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/useFromRootNamespaceWithoutNamespace.php');
 		$this->assertSniffError(

@@ -18,7 +18,7 @@ class FullyQualifiedClassNameAfterKeywordSniffImplementsTest extends \SlevomatCo
 		);
 	}
 
-	public function testNonFullyQualifiedImplements()
+	public function testNonFullyQualifiedImplements(): void
 	{
 		$this->assertSniffError(
 			$this->getFileReport(),
@@ -28,17 +28,17 @@ class FullyQualifiedClassNameAfterKeywordSniffImplementsTest extends \SlevomatCo
 		);
 	}
 
-	public function testFullyQualifiedImplements()
+	public function testFullyQualifiedImplements(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 3);
 	}
 
-	public function testMultipleFullyQualifiedImplements()
+	public function testMultipleFullyQualifiedImplements(): void
 	{
 		$this->assertNoSniffError($this->getFileReport(), 13);
 	}
 
-	public function testMultipleImplementsWithFirstWrong()
+	public function testMultipleImplementsWithFirstWrong(): void
 	{
 		$this->assertSniffError(
 			$this->getFileReport(),
@@ -48,7 +48,7 @@ class FullyQualifiedClassNameAfterKeywordSniffImplementsTest extends \SlevomatCo
 		);
 	}
 
-	public function testMultipleImplementsWithSecondAndThirdWrong()
+	public function testMultipleImplementsWithSecondAndThirdWrong(): void
 	{
 		$report = $this->getFileReport();
 		$this->assertSniffError(

@@ -5,12 +5,12 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 class DisallowEqualOperatorsSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function testNoErrors()
+	public function testNoErrors(): void
 	{
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/disallowEqualOperatorsNoErrors.php'));
 	}
 
-	public function testErrors()
+	public function testErrors(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/disallowEqualOperatorsErrors.php');
 

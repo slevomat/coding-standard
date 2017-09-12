@@ -102,7 +102,7 @@ class FilepathNamespaceExtractorTest extends \SlevomatCodingStandard\Sniffs\Test
 	 * @param string|null $expectedNamespace
 	 * @param string[] $extensions
 	 */
-	public function testGetTypeNameFromProjectPath(string $path, string $expectedNamespace = null, array $extensions)
+	public function testGetTypeNameFromProjectPath(string $path, ?string $expectedNamespace = null, array $extensions): void
 	{
 		$extractor = new FilepathNamespaceExtractor(
 			[

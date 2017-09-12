@@ -10,7 +10,7 @@ use SlevomatCodingStandard\Helpers\UseStatementHelper;
 class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
-	const CODE_INCORRECT_ORDER = 'IncorrectlyOrderedUses';
+	public const CODE_INCORRECT_ORDER = 'IncorrectlyOrderedUses';
 
 	/** @var bool */
 	public $caseSensitive = false;
@@ -33,7 +33,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $openTagPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $openTagPointer): void
 	{
 		$this->lastUse = null;
 		$useStatements = UseStatementHelper::getUseStatements(
@@ -70,7 +70,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	private function fixAlphabeticalOrder(
 		\PHP_CodeSniffer\Files\File $phpcsFile,
 		array $useStatements
-	)
+	): void
 	{
 		$firstUseStatement = reset($useStatements);
 		$lastUseStatement = end($useStatements);

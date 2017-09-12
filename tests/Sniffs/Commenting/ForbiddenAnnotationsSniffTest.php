@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Commenting;
 class ForbiddenAnnotationsSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function testNoForbiddenAnnotations()
+	public function testNoForbiddenAnnotations(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/noForbiddenAnnotations.php', [
 			'forbiddenAnnotations' => ['@see', '@throws'],
@@ -13,7 +13,7 @@ class ForbiddenAnnotationsSniffTest extends \SlevomatCodingStandard\Sniffs\TestC
 		$this->assertNoSniffErrorInFile($report);
 	}
 
-	public function testForbiddenAnnotations()
+	public function testForbiddenAnnotations(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/forbiddenAnnotations.php', [
 			'forbiddenAnnotations' => ['@see', '@throws', '@Route'],
@@ -30,7 +30,7 @@ class ForbiddenAnnotationsSniffTest extends \SlevomatCodingStandard\Sniffs\TestC
 		$this->assertSniffError($report, 45, ForbiddenAnnotationsSniff::CODE_ANNOTATION_FORBIDDEN);
 	}
 
-	public function testFixableForbiddenAnnotations()
+	public function testFixableForbiddenAnnotations(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/forbiddenAnnotations.php', [
 			'forbiddenAnnotations' => ['@see', '@throws', '@Route'],

@@ -9,7 +9,7 @@ use SlevomatCodingStandard\Helpers\UseStatementHelper;
 class UseOnlyWhitelistedNamespacesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
-	const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified';
+	public const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified';
 
 	/** @var bool */
 	public $allowUseFromRootNamespace = false;
@@ -47,7 +47,7 @@ class UseOnlyWhitelistedNamespacesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $usePointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $usePointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $usePointer): void
 	{
 		if (
 			UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer)

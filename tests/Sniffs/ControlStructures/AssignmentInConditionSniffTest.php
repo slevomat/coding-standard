@@ -5,13 +5,13 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 class AssignmentInConditionSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function testCorrectFile()
+	public function testCorrectFile(): void
 	{
 		$resultFile = $this->checkFile(__DIR__ . '/data/noAssignmentsInConditions.php');
 		$this->assertNoSniffErrorInFile($resultFile);
 	}
 
-	public function testIncorrectFile()
+	public function testIncorrectFile(): void
 	{
 		$resultFile = $this->checkFile(__DIR__ . '/data/allAssignmentsInConditions.php');
 		foreach (range(3, 6) as $lineNumber) {

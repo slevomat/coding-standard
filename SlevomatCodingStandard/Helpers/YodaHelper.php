@@ -5,18 +5,18 @@ namespace SlevomatCodingStandard\Helpers;
 class YodaHelper
 {
 
-	const DYNAMISM_VARIABLE = 999;
+	private const DYNAMISM_VARIABLE = 999;
 
-	const DYNAMISM_CONSTANT = 1;
+	private const DYNAMISM_CONSTANT = 1;
 
-	const DYNAMISM_FUNCTION_CALL = self::DYNAMISM_VARIABLE;
+	private const DYNAMISM_FUNCTION_CALL = self::DYNAMISM_VARIABLE;
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param mixed[] $leftSideTokens
 	 * @param mixed[] $rightSideTokens
 	 */
-	public static function fix(\PHP_CodeSniffer\Files\File $phpcsFile, array $leftSideTokens, array $rightSideTokens)
+	public static function fix(\PHP_CodeSniffer\Files\File $phpcsFile, array $leftSideTokens, array $rightSideTokens): void
 	{
 		$phpcsFile->fixer->beginChangeset();
 		self::replace($phpcsFile, $leftSideTokens, $rightSideTokens);
@@ -29,7 +29,7 @@ class YodaHelper
 	 * @param mixed[] $leftSideTokens
 	 * @param mixed[] $rightSideTokens
 	 */
-	private static function replace(\PHP_CodeSniffer\Files\File $phpcsFile, array $leftSideTokens, array $rightSideTokens)
+	private static function replace(\PHP_CodeSniffer\Files\File $phpcsFile, array $leftSideTokens, array $rightSideTokens): void
 	{
 		current($leftSideTokens);
 		$firstLeftPointer = key($leftSideTokens);
@@ -140,7 +140,7 @@ class YodaHelper
 	 * @param mixed[] $sideTokens
 	 * @return int|null
 	 */
-	public static function getDynamismForTokens(array $tokens, array $sideTokens)
+	public static function getDynamismForTokens(array $tokens, array $sideTokens): ?int
 	{
 		$sideTokens = array_values(array_filter($sideTokens, function (array $token): bool {
 			return !in_array($token['code'], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT, T_NS_SEPARATOR, T_PLUS, T_MINUS, T_INT_CAST, T_DOUBLE_CAST, T_STRING_CAST, T_ARRAY_CAST, T_OBJECT_CAST, T_BOOL_CAST, T_UNSET_CAST], true);

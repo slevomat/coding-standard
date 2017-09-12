@@ -41,13 +41,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		return $file;
 	}
 
-	protected function assertNoSniffErrorInFile(\PHP_CodeSniffer\Files\File $file)
+	protected function assertNoSniffErrorInFile(\PHP_CodeSniffer\Files\File $file): void
 	{
 		$errors = $file->getErrors();
 		$this->assertEmpty($errors, sprintf('No errors expected, but %d errors found.', count($errors)));
 	}
 
-	protected function assertSniffError(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $line, string $code, string $message = null)
+	protected function assertSniffError(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $line, string $code, ?string $message = null): void
 	{
 		$errors = $codeSnifferFile->getErrors();
 		$this->assertTrue(isset($errors[$line]), sprintf('Expected error on line %s, but none found.', $line));
@@ -70,7 +70,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		);
 	}
 
-	protected function assertNoSniffError(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $line)
+	protected function assertNoSniffError(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $line): void
 	{
 		$errors = $codeSnifferFile->getErrors();
 		$this->assertFalse(
@@ -85,7 +85,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		);
 	}
 
-	protected function assertAllFixedInFile(\PHP_CodeSniffer\Files\File $codeSnifferFile)
+	protected function assertAllFixedInFile(\PHP_CodeSniffer\Files\File $codeSnifferFile): void
 	{
 		$codeSnifferFile->fixer->fixFile();
 
@@ -98,7 +98,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 * @param string|null $message
 	 * @return bool
 	 */
-	private function hasError(array $errorsOnLine, string $sniffCode, string $message = null): bool
+	private function hasError(array $errorsOnLine, string $sniffCode, ?string $message = null): bool
 	{
 		foreach ($errorsOnLine as $errorsOnPosition) {
 			foreach ($errorsOnPosition as $error) {

@@ -6,9 +6,7 @@
 	<arg value="p"/>
 
 	<rule ref="SlevomatCodingStandard">
-		<exclude name="SlevomatCodingStandard.Classes.ClassConstantVisibility"/><!-- PHP >= 7.1 only -->
 		<exclude name="SlevomatCodingStandard.ControlStructures.RequireYodaComparison"/>
-		<exclude name="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue"/><!-- PHP >= 7.1 only -->
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalConstants"/>
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions"/>
 	</rule>
@@ -61,8 +59,6 @@
 	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
 		<properties>
-			<property name="enableNullableTypeHints" value="false"/>
-			<property name="enableVoidTypeHint" value="false"/>
 			<property name="usefulAnnotations" type="array" value="
 				@dataProvider
 			"/>

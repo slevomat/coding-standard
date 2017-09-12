@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 class FullyQualifiedClassNameAfterKeywordSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function testThrowExceptionForUndefinedConstant()
+	public function testThrowExceptionForUndefinedConstant(): void
 	{
 		try {
 			$this->checkFile(
@@ -19,13 +19,13 @@ class FullyQualifiedClassNameAfterKeywordSniffTest extends \SlevomatCodingStanda
 		}
 	}
 
-	public function testCheckNothingWhenNoKeywordsAreConfigured()
+	public function testCheckNothingWhenNoKeywordsAreConfigured(): void
 	{
 		$fileReport = $this->checkFile(__DIR__ . '/data/fullyQualifiedExtends.php');
 		$this->assertEmpty($fileReport->getErrors());
 	}
 
-	public function testFixableFullyQualified()
+	public function testFixableFullyQualified(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableFullyQualifiedClassNameAfterKeyword.php', [
 			'keywordsToCheck' => [

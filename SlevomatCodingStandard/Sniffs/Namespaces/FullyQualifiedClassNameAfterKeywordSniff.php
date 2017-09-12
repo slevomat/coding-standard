@@ -11,7 +11,7 @@ use SlevomatCodingStandard\Helpers\UseStatementHelper;
 class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
-	const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified%s';
+	public const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified%s';
 
 	/**
 	 * Token types as a strings (e.g. "T_IMPLEMENTS")
@@ -56,7 +56,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $keywordPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $keywordPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $keywordPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

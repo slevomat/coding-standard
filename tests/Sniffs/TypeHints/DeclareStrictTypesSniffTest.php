@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function testMultipleOpenTagsInFile()
+	public function testMultipleOpenTagsInFile(): void
 	{
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/declareStrictTypesMultipleOpenTags.php'));
 	}
@@ -40,7 +40,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 	 * @param string $file
 	 * @param int $line
 	 */
-	public function testDeclareStrictTypesMissing(string $file, int $line)
+	public function testDeclareStrictTypesMissing(string $file, int $line): void
 	{
 		$report = $this->checkFile($file);
 		$this->assertSniffError(
@@ -72,7 +72,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 	 * @dataProvider dataDeclareStrictTypesIncorrectFormat
 	 * @param string $file
 	 */
-	public function testDeclareStrictTypesIncorrectFormat(string $file)
+	public function testDeclareStrictTypesIncorrectFormat(string $file): void
 	{
 		$report = $this->checkFile($file);
 		$this->assertSniffError(
@@ -82,7 +82,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		);
 	}
 
-	public function testDeclareStrictTypesIncorrectFormatNoSpaces()
+	public function testDeclareStrictTypesIncorrectFormatNoSpaces(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/declareStrictTypesIncorrectFormatNoSpaces.php', [
 			'spacesCountAroundEqualsSign' => 0,
@@ -94,7 +94,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		);
 	}
 
-	public function testDeclareStrictTwoNewlines()
+	public function testDeclareStrictTwoNewlines(): void
 	{
 		$file = __DIR__ . '/data/declareStrictTypesTwoNewlines.php';
 		$this->assertNoSniffErrorInFile($this->checkFile($file, [
@@ -102,7 +102,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		]));
 	}
 
-	public function testDeclareStrictTwoNewlinesError()
+	public function testDeclareStrictTwoNewlinesError(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/declareStrictTypesTwoNewlinesError.php');
 		$this->assertSniffError(
@@ -113,7 +113,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		);
 	}
 
-	public function testDeclareStrictOneSpaceError()
+	public function testDeclareStrictOneSpaceError(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/declareStrictTypesOneSpaceError.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => '2',
@@ -126,17 +126,17 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		);
 	}
 
-	public function testDeclareStrictOneSpace()
+	public function testDeclareStrictOneSpace(): void
 	{
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/declareStrictTypesOneSpace.php'));
 	}
 
-	public function testDeclareStrictWithTicks()
+	public function testDeclareStrictWithTicks(): void
 	{
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/declareStrictTypesWithTicks.php'));
 	}
 
-	public function testFixableNoNewLines()
+	public function testFixableNoNewLines(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesNoNewLines.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 0,
@@ -144,7 +144,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableMissingNoNewLines()
+	public function testFixableMissingNoNewLines(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingNoNewLines.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 0,
@@ -152,7 +152,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableOneNewLine()
+	public function testFixableOneNewLine(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesOneNewLine.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 1,
@@ -160,7 +160,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableMissingOneNewLine()
+	public function testFixableMissingOneNewLine(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingOneNewLine.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 1,
@@ -168,7 +168,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableMoreNewLines()
+	public function testFixableMoreNewLines(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMoreNewLines.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 4,
@@ -176,7 +176,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableMissingMoreNewLines()
+	public function testFixableMissingMoreNewLines(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingMoreNewLines.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 4,
@@ -184,13 +184,13 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableMissingIncorrectFormatOneSpace()
+	public function testFixableMissingIncorrectFormatOneSpace(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatOneSpace.php', [], [DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT]);
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableMissingIncorrectFormatNoSpaces()
+	public function testFixableMissingIncorrectFormatNoSpaces(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatNoSpaces.php', [
 			'spacesCountAroundEqualsSign' => 0,
@@ -198,7 +198,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableMissingIncorrectFormatMoreSpaces()
+	public function testFixableMissingIncorrectFormatMoreSpaces(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatMoreSpaces.php', [
 			'spacesCountAroundEqualsSign' => 4,
@@ -206,13 +206,13 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableMissingWithTicks()
+	public function testFixableMissingWithTicks(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingWithTicks.php', [], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING]);
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableDisabled()
+	public function testFixableDisabled(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesDisabled.php', [], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING]);
 		$this->assertAllFixedInFile($report);

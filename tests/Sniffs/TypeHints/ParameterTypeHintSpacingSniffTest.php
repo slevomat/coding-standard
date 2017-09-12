@@ -5,12 +5,12 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 class ParameterTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function testNoErrors()
+	public function testNoErrors(): void
 	{
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/parameterTypeHintSpacingNoErrors.php'));
 	}
 
-	public function testErrors()
+	public function testErrors(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/parameterTypeHintSpacingErrors.php');
 
@@ -24,19 +24,19 @@ class ParameterTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\T
 		$this->assertSniffError($report, 3, ParameterTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PARAMETER, 'There must be exactly one space between parameter type hint and varadic parameter $c.');
 	}
 
-	public function testFixableParameterTypeHintSpacingNoSpaceBetweenTypeHintAndParameter()
+	public function testFixableParameterTypeHintSpacingNoSpaceBetweenTypeHintAndParameter(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableParameterTypeHintSpacingNoSpaceBetweenTypeHintAndParameter.php', [], [ParameterTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_TYPE_HINT_AND_PARAMETER]);
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableParameterTypeHintSpacingMultipleSpacesBetweenTypeHintAndParameter()
+	public function testFixableParameterTypeHintSpacingMultipleSpacesBetweenTypeHintAndParameter(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableParameterTypeHintSpacingMultipleSpacesBetweenTypeHintAndParameter.php', [], [ParameterTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PARAMETER]);
 		$this->assertAllFixedInFile($report);
 	}
 
-	public function testFixableParameterTypeHintSpacingWhitespaceAfterNullabilitySymbol()
+	public function testFixableParameterTypeHintSpacingWhitespaceAfterNullabilitySymbol(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableParameterTypeHintSpacingWhitespaceAfterNullabilitySymbol.php', [], [ParameterTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL]);
 		$this->assertAllFixedInFile($report);

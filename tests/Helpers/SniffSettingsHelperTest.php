@@ -5,14 +5,14 @@ namespace SlevomatCodingStandard\Helpers;
 class SniffSettingsHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
-	public function testNormalizeInteger()
+	public function testNormalizeInteger(): void
 	{
 		$this->assertSame(2, SniffSettingsHelper::normalizeInteger(2));
 		$this->assertSame(2, SniffSettingsHelper::normalizeInteger('2'));
 		$this->assertSame(2, SniffSettingsHelper::normalizeInteger('  2  '));
 	}
 
-	public function testNormalizeArray()
+	public function testNormalizeArray(): void
 	{
 		$this->assertSame([
 			'Foo\Bar\BarException',
@@ -27,7 +27,7 @@ class SniffSettingsHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		]));
 	}
 
-	public function testNormalizeAssociativeArray()
+	public function testNormalizeAssociativeArray(): void
 	{
 		$this->assertSame([
 			'app/ui' => 'Slevomat\UI',
@@ -50,7 +50,7 @@ class SniffSettingsHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		]));
 	}
 
-	public function testNormalizeAssociativeArrayWithIntegerKeys()
+	public function testNormalizeAssociativeArrayWithIntegerKeys(): void
 	{
 		$this->assertSame([
 			'app/ui' => 'Slevomat\UI',

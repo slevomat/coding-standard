@@ -9,7 +9,7 @@ use SlevomatCodingStandard\Helpers\UseStatementHelper;
 class DeadCatchSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
-	const CODE_CATCH_AFTER_THROWABLE_CATCH = 'CatchAfterThrowableCatch';
+	public const CODE_CATCH_AFTER_THROWABLE_CATCH = 'CatchAfterThrowableCatch';
 
 	/**
 	 * @return mixed[]
@@ -26,7 +26,7 @@ class DeadCatchSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $catchPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $catchPointer)
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $catchPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 		$catchToken = $tokens[$catchPointer];

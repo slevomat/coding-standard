@@ -5,12 +5,12 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 class LongTypeHintsSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	public function testNoErrors()
+	public function testNoErrors(): void
 	{
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/longTypeHintsNoErrors.php'));
 	}
 
-	public function testErrors()
+	public function testErrors(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/longTypeHintsErrors.php');
 
