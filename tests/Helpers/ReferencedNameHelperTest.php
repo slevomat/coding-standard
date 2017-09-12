@@ -22,6 +22,8 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			['SomeTrait', false, false],
 			['SomeClass', false, false],
 			['TYPE_ONE', false, true],
+			['ArrayKey1', false, false],
+			['ArrayKey2', false, false],
 			['TypeHintedName', false, false],
 			['ClassInstance', false, false],
 			['StaticClass', false, false],

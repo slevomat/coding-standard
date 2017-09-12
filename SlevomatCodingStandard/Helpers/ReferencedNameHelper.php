@@ -161,6 +161,11 @@ class ReferencedNameHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
+		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer + 1);
+		if ($tokens[$nextPointer]['code'] === T_DOUBLE_COLON) {
+			return true;
+		}
+
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $startPointer - 1);
 		$previousToken = $tokens[$previousPointer];
 
