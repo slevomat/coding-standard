@@ -769,7 +769,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 	private function isValidTypeHint(string $typeHint): bool
 	{
-		return TypeHintHelper::isSimpleTypeHint($typeHint) || !in_array($typeHint, TypeHintHelper::getSimpleUnofficialTypeHints(), true);
+		return TypeHintHelper::isSimpleTypeHint($typeHint) || !TypeHintHelper::isSimpleUnofficialTypeHints($typeHint);
 	}
 
 	private function definitionContainsNullTypeHint(string $typeHintDefinition): bool

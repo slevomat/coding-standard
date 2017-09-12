@@ -39,19 +39,29 @@ class TypeHintHelper
 	 */
 	public static function getSimpleTypeHints(): array
 	{
-		return [
-			'int',
-			'integer',
-			'float',
-			'string',
-			'bool',
-			'boolean',
-			'callable',
-			'self',
-			'array',
-			'iterable',
-			'void',
-		];
+		static $simpleTypeHints;
+
+		if ($simpleTypeHints === null) {
+			$simpleTypeHints = [
+				'int',
+				'integer',
+				'float',
+				'string',
+				'bool',
+				'boolean',
+				'callable',
+				'self',
+				'array',
+				'iterable',
+				'void',
+			];
+
+			if (PHP_VERSION_ID >= 70200) {
+				$simpleTypeHints[] = 'object';
+			}
+		}
+
+		return $simpleTypeHints;
 	}
 
 	/**
@@ -65,21 +75,27 @@ class TypeHintHelper
 		];
 	}
 
-	/**
-	 * @return string[]
-	 */
-	public static function getSimpleUnofficialTypeHints(): array
+	public static function isSimpleUnofficialTypeHints(string $typeHint): bool
 	{
-		return [
-			'null',
-			'mixed',
-			'true',
-			'false',
-			'resource',
-			'object',
-			'static',
-			'$this',
-		];
+		static $simpleUnofficialTypeHints;
+
+		if ($simpleUnofficialTypeHints === null) {
+			$simpleUnofficialTypeHints = [
+				'null',
+				'mixed',
+				'true',
+				'false',
+				'resource',
+				'static',
+				'$this',
+			];
+
+			if (PHP_VERSION_ID < 70200) {
+				$simpleUnofficialTypeHints[] = 'object';
+			}
+		}
+
+		return in_array($typeHint, $simpleUnofficialTypeHints, true);
 	}
 
 }

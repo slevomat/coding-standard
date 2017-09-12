@@ -26,7 +26,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			['\Traversable', false],
 			['resource', false],
 			['mixed[]', false],
-			['object', false],
+			['object', PHP_VERSION_ID >= 70200],
 			['null', false],
 		];
 	}
@@ -63,6 +63,38 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	public function testIsSimpleIterableTypeHint(string $typeHint, bool $isSimple)
 	{
 		$this->assertSame($isSimple, TypeHintHelper::isSimpleIterableTypeHint($typeHint));
+	}
+
+	/**
+	 * @return mixed[][]
+	 */
+	public function dataIsSimpleUnofficialTypeHint(): array
+	{
+		return [
+			['null', true],
+			['mixed', true],
+			['true', true],
+			['false', true],
+			['resource', true],
+			['static', true],
+			['$this', true],
+
+			['\Traversable', false],
+			['int', false],
+			['bool', false],
+			['object', PHP_VERSION_ID < 70200],
+			['string', false],
+		];
+	}
+
+	/**
+	 * @dataProvider dataIsSimpleUnofficialTypeHint
+	 * @param string $typeHint
+	 * @param bool $isSimple
+	 */
+	public function testIsSimpleUnofficialTypeHint(string $typeHint, bool $isSimple)
+	{
+		$this->assertSame($isSimple, TypeHintHelper::isSimpleUnofficialTypeHints($typeHint));
 	}
 
 	/**
