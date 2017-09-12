@@ -383,7 +383,7 @@ The recommended way to install Slevomat Coding Standard is [through Composer](ht
 ```JSON
 {
 	"require-dev": {
-		"slevomat/coding-standard": "^3.0"
+		"slevomat/coding-standard": "~3.0"
 	}
 }
 ```
@@ -397,7 +397,7 @@ If you want to use the whole coding standard, besides requiring `slevomat/coding
 ```JSON
 {
 	"require-dev": {
-		"consistence/coding-standard": "^2.0"
+		"consistence/coding-standard": "~2.0"
 	}
 }
 ```
@@ -417,7 +417,7 @@ To check your code base for violations, run `PHP-Parallel-Lint` and `PHP_CodeSni
 
 ```
 vendor/bin/parallel-lint src tests
-vendor/bin/phpcs --standard=ruleset.xml --extensions=php --encoding=utf-8 --tab-width=4 -sp src tests
+vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests
 ```
 
 ## Using individual sniffs
@@ -466,7 +466,7 @@ Mention Slevomat Conding Standard in your project's `ruleset.xml` and list all t
 Then run the remaining sniffs in the usual way:
 
 ```
-vendor/bin/phpcs --standard=ruleset.xml --extensions=php --encoding=utf-8 --tab-width=4 -sp src tests
+vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests
 ```
 
 ## Fixing errors automatically
@@ -474,7 +474,7 @@ vendor/bin/phpcs --standard=ruleset.xml --extensions=php --encoding=utf-8 --tab-
 Sniffs in this standard marked by the 🔧 symbol support [automatic fixing of coding standard violations](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Fixing-Errors-Automatically). To fix your code automatically, run phpcbf insteand of phpcs:
 
 ```
-vendor/bin/phpcbf --standard=ruleset.xml --extensions=php --encoding=utf-8 --tab-width=4 -sp src tests
+vendor/bin/phpcbf --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests
 ```
 
 Always remember to back up your code before performing automatic fixes and check the results with your own eyes as the automatic fixer can sometimes produce unwanted results.
