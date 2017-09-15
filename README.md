@@ -55,7 +55,7 @@ Sniff provides the following settings:
 
 #### SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly 🔧
 
-In PHP 7.0, a [`Throwable` interface was added](https://wiki.php.net/rfc/throwable-interface) that allows catching and handling errors in more cases than `Exception` previously allowed. So if the catch statement contained `Exception` on PHP 5.x, it means it should probably be rewritten to reference `Throwable` on PHP 7.x. This sniff enforces that.
+In PHP 7.0, a [`Throwable` interface was added](https://wiki.php.net/rfc/throwable-interface) that allows catching and handling errors in more cases than `Exception` previously allowed. So, if the catch statement contained `Exception` on PHP 5.x, it means it should probably be rewritten to reference `Throwable` on PHP 7.x. This sniff enforces that.
 
 #### SlevomatCodingStandard.TypeHints.DeclareStrictTypes 🔧
 
@@ -117,7 +117,7 @@ use Foo\Bar;
 
 #### SlevomatCodingStandard.Exceptions.DeadCatch
 
-This sniffs finds unreachable catch blocks:
+This sniff finds unreachable catch blocks:
 
 ```php
 try {
@@ -147,7 +147,7 @@ This sniff enforces trailing commas in multi-line arrays and requires short arra
 
 `DisallowYodaComparisonSniff` looks for and fixes such comparisons not only in `if` statements but in the whole code.
 
-However if you prefer Yoda conditions, you can use `RequireYodaComparisonSniff`.
+However, if you prefer Yoda conditions, you can use `RequireYodaComparisonSniff`.
 
 #### SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses 🔧
 
@@ -204,7 +204,7 @@ Sniff provides the following settings:
 
 #### SlevomatCodingStandard.Classes.ClassConstantVisibility
 
-In PHP 7.1 it's possible to declare [visibility of class constants](https://wiki.php.net/rfc/class_const_visibility). In a similar vein to optional declaration of visibility for properties and methods which is actually required in sane coding standards, this sniff also requires to declare visibility for all class constants.
+In PHP 7.1 it's possible to declare [visibility of class constants](https://wiki.php.net/rfc/class_const_visibility). In a similar vein to optional declaration of visibility for properties and methods which is actually required in sane coding standards, this sniff also requires declaring visibility for all class constants.
 
 ```php
 const FOO = 1; // visibility missing!
@@ -243,13 +243,13 @@ function foo(
 
 #### SlevomatCodingStandard.Namespaces.DisallowGroupUse
 
-[Group use declarations](https://wiki.php.net/rfc/group_use_declarations) are ugly, make diffs ugly and this sniffs prohibits them.
+[Group use declarations](https://wiki.php.net/rfc/group_use_declarations) are ugly, make diffs ugly and this sniff prohibits them.
 
 #### SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword
 
 Enforces fully qualified type references after configurable set of language keywords.
 
-For example with the following setting, extended or implemented type must always be referenced with a fully qualified name:
+For example, with the following setting, extended or implemented type must always be referenced with a fully qualified name:
 
 ```xml
 <rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword">
@@ -393,7 +393,7 @@ The recommended way to install Slevomat Coding Standard is [through Composer](ht
 }
 ```
 
-It's also recommended to install [jakub-onderka/php-parallel-lint](https://github.com/JakubOnderka/PHP-Parallel-Lint) which checks source code for syntax errors. Sniffs count on the processed code to be syntatically valid (no parse errors), otherwise they can behave unexpectedly. It is advised to run `PHP-Parallel-Lint` in your build tool before running `PHP_CodeSniffer` and exiting the build process early if `PHP-Parallel-Lint` fails.
+It's also recommended to install [jakub-onderka/php-parallel-lint](https://github.com/JakubOnderka/PHP-Parallel-Lint) which checks source code for syntax errors. Sniffs count on the processed code to be syntactically valid (no parse errors), otherwise they can behave unexpectedly. It is advised to run `PHP-Parallel-Lint` in your build tool before running `PHP_CodeSniffer` and exiting the build process early if `PHP-Parallel-Lint` fails.
 
 ## How to run the sniffs
 
@@ -401,7 +401,7 @@ You can choose one of two ways to run only selected sniffs from the standard on 
 
 ### Choose which sniffs to run
 
-Mention Slevomat Conding Standard in your project's `ruleset.xml`:
+Mention Slevomat Coding Standard in your project's `ruleset.xml`:
 
 ```xml
 <?xml version="1.0"?>
@@ -469,7 +469,7 @@ vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src t
 
 ## Fixing errors automatically
 
-Sniffs in this standard marked by the 🔧 symbol support [automatic fixing of coding standard violations](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Fixing-Errors-Automatically). To fix your code automatically, run phpcbf insteand of phpcs:
+Sniffs in this standard marked by the 🔧 symbol support [automatic fixing of coding standard violations](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Fixing-Errors-Automatically). To fix your code automatically, run phpcbf instead of phpcs:
 
 ```
 vendor/bin/phpcbf --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests
