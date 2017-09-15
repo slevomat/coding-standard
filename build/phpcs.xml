@@ -5,7 +5,7 @@
 	<arg value="s"/>
 	<arg value="p"/>
 
-	<rule ref="SlevomatCodingStandard/ruleset.xml">
+	<rule ref="SlevomatCodingStandard">
 		<exclude name="SlevomatCodingStandard.Classes.ClassConstantVisibility"/><!-- PHP >= 7.1 only -->
 		<exclude name="SlevomatCodingStandard.ControlStructures.RequireYodaComparison"/>
 		<exclude name="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue"/><!-- PHP >= 7.1 only -->
