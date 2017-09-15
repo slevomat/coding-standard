@@ -7,7 +7,11 @@
 [![Code coverage](https://img.shields.io/coveralls/slevomat/coding-standard/master.svg?style=flat-square)](https://coveralls.io/github/slevomat/coding-standard?branch=master)
 ![PHPStan](https://img.shields.io/badge/style-level%206-brightgreen.svg?style=flat-square&label=phpstan)
 
-Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) complements [Consistence Coding Standard](https://github.com/consistence/coding-standard) by providing sniffs with additional checks.
+Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) provides sniffs that fall into three categories:
+
+* Functional - improving the safety and behaviour of code
+* Cleaning - detecting dead code
+* Formatting - rules for consistent code looks
 
 ## Table of contents
 
@@ -16,11 +20,12 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_
   - [Cleaning - detecting dead code](#cleaning---detecting-dead-code)
   - [Formatting - rules for consistent code looks](#formatting---rules-for-consistent-code-looks)
 2. [Installation](#installation)
-3. [Using the standard as a whole](#using-the-standard-as-a-whole)
-4. [Using individual sniffs](#using-individual-sniffs)
-5. [Fixing errors automatically](#fixing-errors-automatically)
-6. [Suppressing sniffs locally](#suppressing-sniffs-locally)
-7. [Contributing](#contributing)
+3. [How to run the sniffs](#how-to-run-the-sniffs)
+  - [Choose which sniffs to run](#choose-which-sniffs-to-run)
+  - [Using all sniffs from the standard](#using-all-sniffs-from-the-standard)
+4. [Fixing errors automatically](#fixing-errors-automatically)
+5. [Suppressing sniffs locally](#suppressing-sniffs-locally)
+6. [Contributing](#contributing)
 
 ## Sniffs included in this standard
 
@@ -383,14 +388,56 @@ The recommended way to install Slevomat Coding Standard is [through Composer](ht
 ```JSON
 {
 	"require-dev": {
-		"slevomat/coding-standard": "~3.0"
+		"slevomat/coding-standard": "~4.0"
 	}
 }
 ```
 
 It's also recommended to install [jakub-onderka/php-parallel-lint](https://github.com/JakubOnderka/PHP-Parallel-Lint) which checks source code for syntax errors. Sniffs count on the processed code to be syntatically valid (no parse errors), otherwise they can behave unexpectedly. It is advised to run `PHP-Parallel-Lint` in your build tool before running `PHP_CodeSniffer` and exiting the build process early if `PHP-Parallel-Lint` fails.
 
-## Using the standard as a whole
+## How to run the sniffs
+
+You can choose one of two ways to run only selected sniffs from the standard on your codebase:
+
+### Choose which sniffs to run
+
+Mention Slevomat Conding Standard in your project's `ruleset.xml`:
+
+```xml
+<?xml version="1.0"?>
+<ruleset name="AcmeProject">
+	<config name="installed_paths" value="../../slevomat/coding-standard"/><!-- relative path from PHPCS source location -->
+</ruleset>
+```
+
+When running `phpcs` [on the command line](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage), use the `--sniffs` option to list all the sniffs you want to use separated by a comma:
+
+```
+vendor/bin/phpcs --standard=ruleset.xml \
+--sniffs=SlevomatCodingStandard.ControlStructures.DisallowYodaComparison,SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses \
+--extensions=php --encoding=utf-8 --tab-width=4 -sp src tests
+```
+
+Or write your own ruleset.xml by referencing the selected sniffs. This is a sample ruleset.xml:
+
+```xml
+<?xml version="1.0"?>
+<ruleset name="AcmeProject">
+	<config name="installed_paths" value="../../slevomat/coding-standard"/><!-- relative path from PHPCS source location -->
+	<rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
+	<!-- ...other sniffs to include... -->
+</ruleset>
+```
+
+Then run the `phpcs` executable the usual way:
+
+```
+vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests
+```
+
+### Using all sniffs from the standard
+
+⚠️ This is no longer a recommended way to use Slevomat Coding Standard, because your build can break when moving between minor versions of the standard (which can happen if you use `^` or `~` version constraint in `composer.json`). We regularly add new sniffs even in minor versions meaning your code won't most likely comply with new minor versions of the package.
 
 If you want to use the whole coding standard, besides requiring `slevomat/coding-standard` in composer.json, require also Consistence Coding Standard:
 
@@ -417,55 +464,6 @@ To check your code base for violations, run `PHP-Parallel-Lint` and `PHP_CodeSni
 
 ```
 vendor/bin/parallel-lint src tests
-vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests
-```
-
-## Using individual sniffs
-
-If you don't want to follow the whole standard, but find a handful of included sniffs useful, you can use them selectively.
-
-You can choose one of two ways to run only selected sniffs from the standard on your codebase:
-
-### List all sniffs to run
-
-Mention Slevomat Conding Standard in your project's `ruleset.xml`:
-
-```xml
-<?xml version="1.0"?>
-<ruleset name="AcmeProject">
-	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml" />
-</ruleset>
-```
-
-When running `phpcs` [on the command line](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage), use the `--sniffs` option to list all the sniffs you want to use separated by a comma:
-
-```
-vendor/bin/phpcs --standard=ruleset.xml \
---sniffs=SlevomatCodingStandard.ControlStructures.DisallowYodaComparison,SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses \
---extensions=php --encoding=utf-8 --tab-width=4 -sp src tests
-```
-
-### Use all sniffs except for the unwanted ones
-
-Mention Slevomat Conding Standard in your project's `ruleset.xml` and list all the excluded sniffs:
-
-```xml
-<?xml version="1.0"?>
-<ruleset name="AcmeProject">
-	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
-		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword"/>
-		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedExceptions"/>
-		<exclude name="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly"/>
-		<exclude name="SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces"/>
-		<exclude name="SlevomatCodingStandard.Types.EmptyLinesAroundTypeBraces"/>
-		<exclude name="SlevomatCodingStandard.Files.TypeNameMatchesFileName"/>
-	</rule>
-</ruleset>
-```
-
-Then run the remaining sniffs in the usual way:
-
-```
 vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests
 ```
 
