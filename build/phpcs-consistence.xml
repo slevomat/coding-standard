@@ -17,7 +17,6 @@
 	<rule ref="Generic.NamingConventions.ConstructorName"/>
 	<rule ref="Generic.PHP.CharacterBeforePHPOpeningTag"/>
 	<rule ref="Generic.PHP.DeprecatedFunctions"/>
-	<rule ref="Generic.PHP.DisallowAlternativePHPTags"/>
 	<rule ref="Generic.PHP.ForbiddenFunctions"/>
 	<rule ref="Generic.Strings.UnnecessaryStringConcat">
 		<properties>
