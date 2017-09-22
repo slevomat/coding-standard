@@ -43,23 +43,38 @@ class AnnotationHelper
 				// Fix for wrong PHPCS parsing
 				$annotationCode = $tokens[$i]['content'];
 				for ($j = $i + 1; $j < $tokens[$docCommentOpenToken]['comment_closer']; $j++) {
-					if (!in_array($tokens[$j]['code'], [T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STRING], true)) {
+					if (!in_array($tokens[$j]['code'], [T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STRING, T_DOC_COMMENT_STAR], true)) {
 						break;
 					}
+
+					if ($tokens[$j]['code'] === T_DOC_COMMENT_STAR) {
+						continue;
+					}
+
+					if ($tokens[$j]['code'] === T_DOC_COMMENT_WHITESPACE) {
+						if (array_key_exists($j - 1, $tokens) && $tokens[$j - 1]['code'] === T_DOC_COMMENT_STAR) {
+							continue;
+						}
+						if (array_key_exists($j + 1, $tokens) && $tokens[$j + 1]['code'] === T_DOC_COMMENT_STAR) {
+							continue;
+						}
+					}
+
 					$annotationCode .= $tokens[$j]['content'];
 				}
 
 				$annotationName = $tokens[$i]['content'];
 				$annotationParameters = null;
 				$annotationContent = null;
-				if (preg_match('~^(@[a-zA-Z\\\\]+)(?:\(([^)]*)\))?(?:\\s+(.+))?$~s', $annotationCode, $matches)) {
+				if (preg_match('~^(@[a-zA-Z\\\\]+)(?:\(([^)]*)\))?(?:\\s+(.+))?($)~s', $annotationCode, $matches)) {
 					$annotationName = $matches[1];
-					$annotationParameters = $matches[2] ?: null;
-					if (isset($matches[3])) {
-						$annotationContent = trim($matches[3]);
-						if ($annotationContent === '') {
-							$annotationContent = null;
-						}
+					$annotationParameters = trim($matches[2]);
+					if ($annotationParameters === '') {
+						$annotationParameters = null;
+					}
+					$annotationContent = trim($matches[3]);
+					if ($annotationContent === '') {
+						$annotationContent = null;
 					}
 				}
 

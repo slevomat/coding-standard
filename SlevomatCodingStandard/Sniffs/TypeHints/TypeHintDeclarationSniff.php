@@ -46,6 +46,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	public $enableVoidTypeHint = PHP_VERSION_ID >= 70100;
 
 	/** @var bool */
+	public $enableObjectTypeHint = PHP_VERSION_ID >= 70200;
+
+	/** @var bool */
 	public $enableEachParameterAndReturnInspection = false;
 
 	/** @var string[] */

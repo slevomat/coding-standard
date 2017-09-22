@@ -60,6 +60,14 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertNull($annotations[0]->getContent());
 	}
 
+	public function testFunctionWithMultilineParametrizedAnnotation()
+	{
+		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withMultilineParametrizedAnnotation'), '@Route');
+		$this->assertCount(1, $annotations);
+		$this->assertSame("\"/configs/{config}/domains/{domain}/locales/{locale}/messages\", name=\"jms_translation_update_message\",\ndefaults = {\"id\" = null}, options = {\"i18n\" = false}, methods={\"PUT\"}", $annotations[0]->getParameters());
+		$this->assertNull($annotations[0]->getContent());
+	}
+
 	public function testFunctionWithParametrizedAnnotationWithoutParameters()
 	{
 		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withParametrizedAnnotationWithoutParameters'), '@Assert\Callback');

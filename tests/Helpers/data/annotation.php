@@ -46,4 +46,9 @@ interface WithoutAnnotation
 	 */
 	public function withoutAnnotation();
 
+	/**
+	 * @Route("/configs/{config}/domains/{domain}/locales/{locale}/messages", name="jms_translation_update_message",
+	 *     defaults = {"id" = null}, options = {"i18n" = false}, methods={"PUT"})
+	 */
+	public function withMultilineParametrizedAnnotation();
 }
