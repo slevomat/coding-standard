@@ -53,7 +53,7 @@ Sniff provides the following settings:
 * `usefulAnnotations`: prevents reporting and removing useless phpDocs if they contain an additional configured annotation like `@dataProvider`.
 * `enableEachParameterAndReturnInspection`: enables inspection and fixing of `@param` and `@return` annotations separately. Useful when you only want to document parameters or return values that could not be expressed natively (i.e. member types of `array` or `Traversable`).
 
-This sniff can cause an error if you're overriding or implementing a parent method which does not have typehints. In such cases add `@phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration` annotation to the method to have this sniff skip it.
+This sniff can cause an error if you're overriding or implementing a parent method which does not have typehints. In such cases add `@phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint` annotation to the method to have this sniff skip it.
 
 #### SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly 🔧
 
