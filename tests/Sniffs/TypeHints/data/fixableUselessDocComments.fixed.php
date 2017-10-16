@@ -7,6 +7,11 @@ function useless(string $a): void
 
 }
 
+function uselessAligned(string $a, int $b): void
+{
+
+}
+
 /**
  * @param string[] $a
  * @return string[]
