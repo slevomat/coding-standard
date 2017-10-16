@@ -52,6 +52,16 @@ function usefulWithReturnDescription(): string
 	return '';
 }
 
+/**
+ * @param string $a
+ * @param int    $b
+ * @return void
+ */
+function uselessAlignedParameters(string $a, int $b): void
+{
+
+}
+
 abstract class FooClass
 {
 

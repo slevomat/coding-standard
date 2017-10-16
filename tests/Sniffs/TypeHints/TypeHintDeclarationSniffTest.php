@@ -37,7 +37,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 			],
 		]);
 
-		$this->assertSame(62, $report->getErrorCount());
+		$this->assertSame(63, $report->getErrorCount());
 
 		$this->assertSniffError($report, 11, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 		$this->assertSniffError($report, 18, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
@@ -69,6 +69,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$this->assertSniffError($report, 241, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
 		$this->assertSniffError($report, 248, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
 		$this->assertSniffError($report, 255, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
+		$this->assertSniffError($report, 386, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
 
 		$this->assertSniffError($report, 107, TypeHintDeclarationSniff::CODE_MISSING_PROPERTY_TYPE_HINT);
 		$this->assertSniffError($report, 109, TypeHintDeclarationSniff::CODE_MISSING_PROPERTY_TYPE_HINT);

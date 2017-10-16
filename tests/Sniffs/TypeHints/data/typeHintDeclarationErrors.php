@@ -379,4 +379,13 @@ abstract class FooClass
 		return new DoctrineCollections\ArrayCollection();
 	}
 
+	/**
+	 * @param string $a
+	 * @param int    $b
+	 */
+	public function uselessAlignedParameters(string $a, int $b)
+	{
+
+	}
+
 }
