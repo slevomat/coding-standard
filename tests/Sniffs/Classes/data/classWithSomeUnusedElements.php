@@ -107,4 +107,14 @@ class ClassWithSomeUnusedProperties extends \Consistence\ObjectPrototype
 		$this->unusedWriteOnlyPropertyWithWeirdDefinition = null;
 	}
 
+	private function usedPrivateMethodWithIncorrectCase()
+	{
+
+	}
+
+	public function methodCalledUsedPrivateMethodWithIncorrectCase()
+	{
+		$this->usedprivatemethodwithincorrectcase();
+	}
+
 }
