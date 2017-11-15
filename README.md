@@ -406,7 +406,7 @@ Mention Slevomat Coding Standard in your project's `ruleset.xml`:
 ```xml
 <?xml version="1.0"?>
 <ruleset name="AcmeProject">
-	<config name="installed_paths" value="../../slevomat/coding-standard"/><!-- relative path from PHPCS source location -->
+	<config name="installed_paths" value="vendor/slevomat/coding-standard/SlevomatCodingStandard"/>
 </ruleset>
 ```
 
