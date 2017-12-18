@@ -2,9 +2,11 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
+use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
 class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
@@ -63,7 +65,16 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer\Sniff
 			return;
 		}
 
-		$possibleCommaPointer = $this->checkReferencedName($phpcsFile, $keywordPointer, $nameStartPointer);
+		$useStatements = UseStatementHelper::getUseStatements(
+			$phpcsFile,
+			TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $nameStartPointer)
+		);
+		$possibleCommaPointer = $this->checkReferencedName(
+			$phpcsFile,
+			$useStatements,
+			$keywordPointer,
+			$nameStartPointer
+		);
 
 		if (in_array($tokens[$keywordPointer]['code'], [T_IMPLEMENTS, T_USE], true)) {
 			while (true) {
@@ -72,7 +83,12 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer\Sniff
 					$possibleCommaToken = $tokens[$possibleCommaPointer];
 					if ($possibleCommaToken['code'] === T_COMMA) {
 						$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $possibleCommaPointer + 1);
-						$possibleCommaPointer = $this->checkReferencedName($phpcsFile, $keywordPointer, $nameStartPointer);
+						$possibleCommaPointer = $this->checkReferencedName(
+							$phpcsFile,
+							$useStatements,
+							$keywordPointer,
+							$nameStartPointer
+						);
 						continue;
 					}
 				}
@@ -82,7 +98,19 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer\Sniff
 		}
 	}
 
-	private function checkReferencedName(\PHP_CodeSniffer\Files\File $phpcsFile, int $keywordPointer, int $nameStartPointer): int
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements canonicalName(string) => useStatement(\SlevomatCodingStandard\Helpers\UseStatement)
+	 * @param int $keywordPointer
+	 * @param int $nameStartPointer
+	 * @return int
+	 */
+	private function checkReferencedName(
+		\PHP_CodeSniffer\Files\File $phpcsFile,
+		array $useStatements,
+		int $keywordPointer,
+		int $nameStartPointer
+	): int
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -104,11 +132,29 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer\Sniff
 		if ($nameStartToken['code'] !== T_NS_SEPARATOR) {
 			$name = TokenHelper::getContent($phpcsFile, $nameStartPointer, $endPointer);
 			$keyword = $tokens[$keywordPointer]['content'];
-			$phpcsFile->addError(sprintf(
+
+			$fix = $phpcsFile->addFixableError(sprintf(
 				'Type %s in %s statement should be referenced via a fully qualified name.',
 				$name,
 				$keyword
 			), $keywordPointer, self::getErrorCode($keyword));
+			if ($fix) {
+				$phpcsFile->fixer->beginChangeset();
+
+				$fullyQualifiedName = NamespaceHelper::resolveClassName(
+					$phpcsFile,
+					$name,
+					$useStatements,
+					$nameStartPointer
+				);
+
+				for ($i = $nameStartPointer; $i <= $endPointer; $i++) {
+					$phpcsFile->fixer->replaceToken($i, '');
+				}
+				$phpcsFile->fixer->addContent($nameStartPointer, $fullyQualifiedName);
+
+				$phpcsFile->fixer->endChangeset();
+			}
 		}
 
 		return $endPointer;

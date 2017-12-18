@@ -25,4 +25,15 @@ class FullyQualifiedClassNameAfterKeywordSniffTest extends \SlevomatCodingStanda
 		$this->assertEmpty($fileReport->getErrors());
 	}
 
+	public function testFixableFullyQualified()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableFullyQualifiedClassNameAfterKeyword.php', [
+			'keywordsToCheck' => [
+				'T_EXTENDS',
+				'T_IMPLEMENTS',
+			],
+		]);
+		$this->assertAllFixedInFile($report);
+	}
+
 }
