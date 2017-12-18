@@ -64,11 +64,25 @@ class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer\Sniff
 			if ($fullyQualifiedTypeHint === $typeHint) {
 				continue;
 			}
-			$phpcsFile->addError(sprintf(
+			$fix = $phpcsFile->addFixableError(sprintf(
 				'Class name %s in %s should be referenced via a fully qualified name.',
 				$fullyQualifiedTypeHint,
 				$annotationTagName
 			), $annotationTagPointer, self::CODE_NON_FULLY_QUALIFIED_CLASS_NAME);
+			if ($fix) {
+				$phpcsFile->fixer->beginChangeset();
+
+				$fixedAnnoationContent = preg_replace_callback(
+					'~(^|\s|\|)(' . strtr($typeHint, ['\\' => '\\\\']) . ')(\s|\||\[|$)~',
+					function (array $matches) use ($fullyQualifiedTypeHint): string {
+						return $matches[1] . $fullyQualifiedTypeHint . $matches[3];
+					},
+					$tokens[$annotationContentPointer]['content']
+				);
+				$phpcsFile->fixer->replaceToken($annotationContentPointer, $fixedAnnoationContent);
+
+				$phpcsFile->fixer->endChangeset();
+			}
 		}
 	}
 
