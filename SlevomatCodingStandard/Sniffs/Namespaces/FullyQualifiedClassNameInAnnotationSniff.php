@@ -2,8 +2,8 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\TypeHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 
 class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
@@ -55,7 +55,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer\Sniff
 			if (
 				TypeHintHelper::isSimpleTypeHint($lowercasedTypeHint)
 				|| TypeHintHelper::isSimpleUnofficialTypeHints($lowercasedTypeHint)
-				|| StringHelper::startsWith($typeHint, '$')
+				|| !TypeHelper::isTypeName($typeHint)
 			) {
 				continue;
 			}
