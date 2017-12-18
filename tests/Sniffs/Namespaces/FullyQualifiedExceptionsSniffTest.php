@@ -108,4 +108,10 @@ class FullyQualifiedExceptionsSniffTest extends \SlevomatCodingStandard\Sniffs\T
 		$this->assertNoSniffErrorInFile($report);
 	}
 
+	public function testFixableFullyQualified()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableFullyQualifiedExceptions.php');
+		$this->assertAllFixedInFile($report);
+	}
+
 }
