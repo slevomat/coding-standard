@@ -23,6 +23,9 @@ class FooClass
 
 		/** @var $coo self */
 		$coo = $this->get();
+
+		/** @var $missingTypeDefinition */
+		$missingTypeDefinition = [];
 	}
 
 	/**
