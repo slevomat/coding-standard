@@ -30,4 +30,10 @@ class FullyQualifiedClassNameInAnnotationSniffTest extends \SlevomatCodingStanda
 		$this->assertSniffError($report, 61, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME);
 	}
 
+	public function testFixableFullyQualified()
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableFullyQualifiedClassNameInAnnotation.php');
+		$this->assertAllFixedInFile($report);
+	}
+
 }
