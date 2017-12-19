@@ -8,6 +8,10 @@ environment:
       php_version: 7.1
     - dependencies: highest
       php_version: 7.1
+    - dependencies: lowest
+      php_version: 7.2
+    - dependencies: highest
+      php_version: 7.2
 
   project_directory: c:\projects\slevomat-coding-standard
   composer_directory: c:\tools\composer
