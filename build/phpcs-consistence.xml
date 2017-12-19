@@ -3,9 +3,9 @@
 
 	<!-- copy of https://github.com/consistence/coding-standard/blob/master/Consistence/ruleset.xml for local checking usage -->
 
-	<rule ref="Generic.Arrays.ArrayIndent">
-		<exclude name="Generic.Arrays.ArrayIndent.CloseBraceNotNewLine"/><!-- multiline items causes evaluation as multiline array https://github.com/squizlabs/PHP_CodeSniffer/issues/1791 -->
-	</rule>
+	<!--<rule ref="Generic.Arrays.ArrayIndent">-->
+		<!--<exclude name="Generic.Arrays.ArrayIndent.CloseBraceNotNewLine"/>&lt;!&ndash; multiline items causes evaluation as multiline array https://github.com/squizlabs/PHP_CodeSniffer/issues/1791 &ndash;&gt;-->
+	<!--</rule>-->
 	<rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
 	<rule ref="Generic.Classes.DuplicateClassName"/>
 	<rule ref="Generic.CodeAnalysis.EmptyStatement">
