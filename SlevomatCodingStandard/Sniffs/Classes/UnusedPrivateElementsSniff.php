@@ -84,8 +84,15 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$tokens = $phpcsFile->getTokens();
 		$classToken = $tokens[$classPointer];
 		$reportedProperties = $this->getProperties($phpcsFile, $tokens, $classToken);
-		$reportedMethods = $this->getMethods($phpcsFile, $tokens, $classToken);
 		$reportedConstants = $this->getConstants($phpcsFile, $tokens, $classToken);
+
+		$reportedMethods = [];
+		$originalMethods = [];
+		foreach ($this->getMethods($phpcsFile, $tokens, $classToken) as $methodName => $methodPointer) {
+			$normalizedMethodName = $this->getNormalizedMethodName($methodName);
+			$reportedMethods[$normalizedMethodName] = $methodPointer;
+			$originalMethods[$normalizedMethodName] = $methodName;
+		}
 
 		if (count($reportedProperties) + count($reportedMethods) + count($reportedConstants) === 0) {
 			return;
@@ -106,7 +113,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$methodCallToken = $tokens[$methodCallTokenPointer];
 			if ($methodCallToken['code'] === T_OPEN_PARENTHESIS) {
 				// calling a method on $variable
-				unset($reportedMethods[$name]);
+				unset($reportedMethods[$this->getNormalizedMethodName($name)]);
 				return $methodCallTokenPointer + 1;
 			}
 
@@ -145,7 +152,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				return $methodCallTokenPointer + 1;
 			}
 
-			$name = $methodNameToken['content'];
+			$name = $this->getNormalizedMethodName($methodNameToken['content']);
 			if (isset($reportedMethods[$name])) {
 				unset($reportedMethods[$name]);
 			}
@@ -165,8 +172,9 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				}
 				if (preg_match_all('~(?<=\{)\$this->(.+?\b)(?=\()~', $token['content'], $matches, PREG_PATTERN_ORDER)) {
 					foreach ($matches[1] as $methodInString) {
-						if (isset($reportedMethods[$methodInString])) {
-							unset($reportedMethods[$methodInString]);
+						$normalizedMethodInString = $this->getNormalizedMethodName($methodInString);
+						if (isset($reportedMethods[$normalizedMethodInString])) {
+							unset($reportedMethods[$normalizedMethodInString]);
 						}
 					}
 				}
@@ -187,7 +195,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						if ($tokens[$possibleMethodNamePointer]['code'] === T_STRING) {
 							$possibleMethodCallPointer = TokenHelper::findNextEffective($phpcsFile, $possibleMethodNamePointer + 1);
 							if ($tokens[$possibleMethodCallPointer]['code'] === T_OPEN_PARENTHESIS) {
-								$methodName = $tokens[$possibleMethodNamePointer]['content'];
+								$methodName = $this->getNormalizedMethodName($tokens[$possibleMethodNamePointer]['content']);
 								if (isset($reportedMethods[$methodName])) {
 									unset($reportedMethods[$methodName]);
 									$findUsagesStartTokenPointer = $possibleMethodCallPointer + 1;
@@ -257,7 +265,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				$phpcsFile->addError(sprintf(
 					'Class %s contains unused private method %s().',
 					$className,
-					$name
+					$originalMethods[$name]
 				), $methodTokenPointer, self::CODE_UNUSED_METHOD);
 			}
 		}
@@ -351,6 +359,11 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 
 		return $reportedMethods;
+	}
+
+	private function getNormalizedMethodName(string $methodName): string
+	{
+		return strtolower($methodName);
 	}
 
 	/**

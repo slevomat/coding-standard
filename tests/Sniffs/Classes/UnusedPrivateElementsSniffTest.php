@@ -84,6 +84,8 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 			UnusedPrivateElementsSniff::CODE_WRITE_ONLY_PROPERTY,
 			'Class ClassWithSomeUnusedProperties contains write-only property $unusedWriteOnlyPropertyWithWeirdDefinition.'
 		);
+
+		$this->assertNoSniffError($resultFile, 110);
 	}
 
 	public function testOnlyPublicElements()
