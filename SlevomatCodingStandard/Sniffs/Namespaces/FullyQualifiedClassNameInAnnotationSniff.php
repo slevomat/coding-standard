@@ -73,9 +73,9 @@ class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer\Sniff
 				$phpcsFile->fixer->beginChangeset();
 
 				$fixedAnnoationContent = preg_replace_callback(
-					'~(^|\s|\|)(' . strtr($typeHint, ['\\' => '\\\\']) . ')(\s|\||\[|$)~',
+					'~(^|\s|\|)' . preg_quote($typeHint, '~') . '(\s|\||\[|$)~',
 					function (array $matches) use ($fullyQualifiedTypeHint): string {
-						return $matches[1] . $fullyQualifiedTypeHint . $matches[3];
+						return $matches[1] . $fullyQualifiedTypeHint . $matches[2];
 					},
 					$tokens[$annotationContentPointer]['content']
 				);
