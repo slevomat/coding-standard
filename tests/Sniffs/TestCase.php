@@ -23,7 +23,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 			$codeSniffer->ruleset->ruleset[$this->getSniffName()]['properties'] = $sniffProperties;
 		}
 
-		$codeSniffer->ruleset->sniffs = [$this->getSniffClassName() => $this->getSniffClassName()];
+		$sniffClassName = $this->getSniffClassName();
+
+		$codeSniffer->ruleset->sniffs = [$sniffClassName => new $sniffClassName()];
 
 		if (count($codesToCheck) > 0) {
 			foreach ($this->getSniffClassReflection()->getConstants() as $constantName => $constantValue) {

@@ -5,5 +5,4 @@ parameters:
 	excludes_analyse:
 		- */tests/*/data/*
 	ignoreErrors:
-		- '~Parameter #2 \$array of method PHPUnit\\Framework\\Assert::assertArrayHasKey\(\)~'
 		- '~Parameter #3 \$message of method PHPUnit\\Framework\\Assert::assertSame\(\) expects string~'

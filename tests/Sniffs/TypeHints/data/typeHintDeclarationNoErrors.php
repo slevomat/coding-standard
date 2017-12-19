@@ -260,7 +260,7 @@ abstract class FooClass
 	}
 
 	/**
-	 * @return FooClass|\PHPUnit_Framework_MockObject_MockObject
+	 * @return FooClass|\PHPUnit\Framework\MockObject\MockObject
 	 */
 	public function withMock(): FooClass
 	{
