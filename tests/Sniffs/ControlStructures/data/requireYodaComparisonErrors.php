@@ -34,3 +34,4 @@ array($username === self::ADMIN_EMAIL ? self::ROLE_ADMIN : self::ROLE_CUSTOMER);
 $param === A::TYPE_A and $param === A::TYPE_B;
 A::TYPE_A === $param or $param === A::TYPE_B;
 $param === A::TYPE_A xor A::TYPE_B === $param;
+$x = $username === [$a, $b, $c];

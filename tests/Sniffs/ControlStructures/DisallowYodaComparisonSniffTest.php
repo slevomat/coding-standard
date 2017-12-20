@@ -14,7 +14,7 @@ class DisallowYodaComparisonSniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 	public function testErrors(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/disallowYodaComparisonErrors.php');
-		foreach (range(3, 36) as $lineNumber) {
+		foreach (range(3, 37) as $lineNumber) {
 			$this->assertSniffError($report, $lineNumber, DisallowYodaComparisonSniff::CODE_DISALLOWED_YODA_COMPARISON);
 		}
 	}

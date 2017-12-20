@@ -60,7 +60,7 @@ class YodaHelper
 		while (true) {
 			$examinedTokenPointer--;
 			$examinedToken = $tokens[$examinedTokenPointer];
-			if ($parenthesisDepth === 0 && isset($stopTokenCodes[$examinedToken['code']])) {
+			if ($parenthesisDepth === 0 && $shortArrayDepth === 0 && isset($stopTokenCodes[$examinedToken['code']])) {
 				break;
 			}
 
@@ -105,7 +105,7 @@ class YodaHelper
 		while (true) {
 			$examinedTokenPointer++;
 			$examinedToken = $tokens[$examinedTokenPointer];
-			if ($parenthesisDepth === 0 && isset($stopTokenCodes[$examinedToken['code']])) {
+			if ($parenthesisDepth === 0 && $shortArrayDepth === 0 && isset($stopTokenCodes[$examinedToken['code']])) {
 				break;
 			}
 

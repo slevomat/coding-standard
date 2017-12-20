@@ -14,7 +14,7 @@ class RequireYodaComparisonSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 	public function testErrors(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/requireYodaComparisonErrors.php');
-		foreach (range(3, 36) as $lineNumber) {
+		foreach (range(3, 37) as $lineNumber) {
 			$this->assertSniffError($report, $lineNumber, RequireYodaComparisonSniff::CODE_REQUIRED_YODA_COMPARISON);
 		}
 	}

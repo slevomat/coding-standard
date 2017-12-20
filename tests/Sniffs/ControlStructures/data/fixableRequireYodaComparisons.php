@@ -61,6 +61,8 @@ $x = array($username === [] ? true : false);
 $x = [$username === array() ? true : false];
 $x = [$username === [] ? true : false];
 
+$x = $username === [$a, $b, $c];
+
 $param === A::TYPE_A and $param === A::TYPE_B;
 A::TYPE_A === $param or $param === A::TYPE_B;
 $param === A::TYPE_A xor A::TYPE_B === $param;
