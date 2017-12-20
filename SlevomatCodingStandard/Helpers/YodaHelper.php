@@ -26,23 +26,23 @@ class YodaHelper
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed[] $leftSideTokens
-	 * @param mixed[] $rightSideTokens
+	 * @param mixed[] $oldTokens
+	 * @param mixed[] $newTokens
 	 */
-	private static function replace(\PHP_CodeSniffer\Files\File $phpcsFile, array $leftSideTokens, array $rightSideTokens): void
+	private static function replace(\PHP_CodeSniffer\Files\File $phpcsFile, array $oldTokens, array $newTokens): void
 	{
-		current($leftSideTokens);
-		$firstLeftPointer = key($leftSideTokens);
-		end($leftSideTokens);
-		$lastLeftPointer = key($leftSideTokens);
+		current($oldTokens);
+		$firstOldPointer = key($oldTokens);
+		end($oldTokens);
+		$lastOldPointer = key($oldTokens);
 
-		for ($i = $firstLeftPointer; $i <= $lastLeftPointer; $i++) {
+		for ($i = $firstOldPointer; $i <= $lastOldPointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 
-		$phpcsFile->fixer->addContent($firstLeftPointer, implode('', array_map(function (array $token): string {
+		$phpcsFile->fixer->addContent($firstOldPointer, implode('', array_map(function (array $token): string {
 			return $token['content'];
-		}, $rightSideTokens)));
+		}, $newTokens)));
 	}
 
 	/**
