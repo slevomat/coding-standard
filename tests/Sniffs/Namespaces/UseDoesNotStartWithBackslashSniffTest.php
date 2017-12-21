@@ -5,28 +5,21 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 class UseDoesNotStartWithBackslashSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	private function getFileReport(): \PHP_CodeSniffer\Files\File
+	public function testNoErrors(): void
 	{
-		return $this->checkFile(__DIR__ . '/data/useBackslash.php');
+		$report = $this->checkFile(__DIR__ . '/data/useDoesNotStartWithBackslashNoErrors.php');
+		$this->assertNoSniffErrorInFile($report);
 	}
 
-	public function testUseStartsWithBackslash(): void
+	public function testErrors(): void
 	{
-		$this->assertSniffError(
-			$this->getFileReport(),
-			3,
-			UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH
-		);
-	}
+		$report = $this->checkFile(__DIR__ . '/data/useDoesNotStartWithBackslashErrors.php');
 
-	public function testDoNotCheckUsedTraitsInClasses(): void
-	{
-		$this->assertNoSniffError($this->getFileReport(), 7);
-	}
+		$this->assertSame(3, $report->getErrorCount());
 
-	public function testDoNotCheckUsedTraitsInTraits(): void
-	{
-		$this->assertNoSniffError($this->getFileReport(), 13);
+		$this->assertSniffError($report, 3, UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH);
+		$this->assertSniffError($report, 4, UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH);
+		$this->assertSniffError($report, 5, UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH);
 	}
 
 }
