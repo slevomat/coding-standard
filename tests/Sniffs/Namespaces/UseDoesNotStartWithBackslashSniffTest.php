@@ -22,4 +22,10 @@ class UseDoesNotStartWithBackslashSniffTest extends \SlevomatCodingStandard\Snif
 		$this->assertSniffError($report, 5, UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH);
 	}
 
+	public function testFixable(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fixableUseDoesNotStartWithBackslash.php', [], [UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH]);
+		$this->assertAllFixedInFile($report);
+	}
+
 }
