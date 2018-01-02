@@ -301,6 +301,8 @@ All references to global constants must be referenced via a fully qualified name
 Sniff provides the following settings:
 
 * `exclude`: list of global constants that are allowed not to be referenced via FQN.
+* `allowImported`: whether to allow `use const`
+* `allowFullyQualified`: whether to allow in-place fully qualified references (i.e. `\Foo\BAR`)
 
 #### SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions 🔧
 
@@ -309,6 +311,8 @@ All references to global functions must be referenced via a fully qualified name
 Sniff provides the following settings:
 
 * `exclude`: list of global functions that are allowed not to be referenced via FQN.
+* `allowImported`: whether to allow `use function`
+* `allowFullyQualified`: whether to allow in-place fully qualified references (i.e. `\Foo\bar()`)
 
 #### SlevomatCodingStandard.Namespaces.MultipleUsesPerLine
 

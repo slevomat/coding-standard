@@ -36,4 +36,37 @@ class FullyQualifiedGlobalConstantsSniffTest extends \SlevomatCodingStandard\Sni
 		$this->assertAllFixedInFile($report);
 	}
 
+	public function testNoErrorsFullyQualifiedDisabled(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsAllowFullyQualifiedDisabledNoErrors.php', ['allowFullyQualified' => false]);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
+	public function testErrorsFullyQualifiedDisabled(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsAllowFullyQualifiedDisabledErrors.php', ['allowFullyQualified' => false]);
+
+		$this->assertSame(2, $report->getErrorCount());
+
+		$this->assertSniffError($report, 10, FullyQualifiedGlobalConstantsSniff::CODE_FULLY_QUALIFIED_NOT_ALLOWED, 'Constant \FOO should not be referenced using the backslash.');
+		$this->assertSniffError($report, 11, FullyQualifiedGlobalConstantsSniff::CODE_FULLY_QUALIFIED_NOT_ALLOWED, 'Constant \BAR\BAZ should not be referenced using the backslash.');
+	}
+
+	public function testNoErrorsImportedDisabled(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsAllowImportedDisabledNoErrors.php', ['allowImported' => false]);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
+	public function testErrorsImportedDisabled(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsAllowImportedDisabledErrors.php', ['allowImported' => false]);
+
+		$this->assertSame(3, $report->getErrorCount());
+
+		$this->assertSniffError($report, 15, FullyQualifiedGlobalConstantsSniff::CODE_IMPORTED_NOT_ALLOWED, 'Constant AA should not be referenced using the use statement.');
+		$this->assertSniffError($report, 16, FullyQualifiedGlobalConstantsSniff::CODE_IMPORTED_NOT_ALLOWED, 'Constant B should not be referenced using the use statement.');
+		$this->assertSniffError($report, 17, FullyQualifiedGlobalConstantsSniff::CODE_IMPORTED_NOT_ALLOWED, 'Constant BAR should not be referenced using the use statement.');
+	}
+
 }

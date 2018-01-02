@@ -13,9 +13,19 @@ class FullyQualifiedGlobalFunctionsSniff
 		return 'Function %s() should be referenced via a fully qualified name.';
 	}
 
+	protected function getFullyQualifiedNotAllowedMessage(): string
+	{
+		return 'Function %s() should not be referenced using the backslash.';
+	}
+
+	protected function getImportedNotAllowedMessage(): string
+	{
+		return 'Function %s() should not be referenced using the use statement.';
+	}
+
 	protected function isCaseSensitive(): bool
 	{
-		return true;
+		return false;
 	}
 
 	protected function isValidType(ReferencedName $name): bool

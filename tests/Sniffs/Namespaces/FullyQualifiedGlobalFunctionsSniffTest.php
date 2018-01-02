@@ -36,4 +36,38 @@ class FullyQualifiedGlobalFunctionsSniffTest extends \SlevomatCodingStandard\Sni
 		$this->assertAllFixedInFile($report);
 	}
 
+	public function testNoErrorsFullyQualifiedDisabled(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsAllowFullyQualifiedDisabledNoErrors.php', ['allowFullyQualified' => false]);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
+	public function testErrorsFullyQualifiedDisabled(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsAllowFullyQualifiedDisabledErrors.php', ['allowFullyQualified' => false]);
+
+		$this->assertSame(2, $report->getErrorCount());
+
+		$this->assertSniffError($report, 10, FullyQualifiedGlobalFunctionsSniff::CODE_FULLY_QUALIFIED_NOT_ALLOWED, 'Function \foo() should not be referenced using the backslash.');
+		$this->assertSniffError($report, 11, FullyQualifiedGlobalFunctionsSniff::CODE_FULLY_QUALIFIED_NOT_ALLOWED, 'Function \bar() should not be referenced using the backslash.');
+	}
+
+	public function testNoErrorsImportedDisabled(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsAllowImportedDisabledNoErrors.php', ['allowImported' => false]);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
+	public function testErrorsImportedDisabled(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsAllowImportedDisabledErrors.php', ['allowImported' => false]);
+
+		$this->assertSame(4, $report->getErrorCount());
+
+		$this->assertSniffError($report, 15, FullyQualifiedGlobalFunctionsSniff::CODE_IMPORTED_NOT_ALLOWED, 'Function aa() should not be referenced using the use statement.');
+		$this->assertSniffError($report, 16, FullyQualifiedGlobalFunctionsSniff::CODE_IMPORTED_NOT_ALLOWED, 'Function b() should not be referenced using the use statement.');
+		$this->assertSniffError($report, 17, FullyQualifiedGlobalFunctionsSniff::CODE_IMPORTED_NOT_ALLOWED, 'Function BAZ() should not be referenced using the use statement.');
+		$this->assertSniffError($report, 18, FullyQualifiedGlobalFunctionsSniff::CODE_IMPORTED_NOT_ALLOWED, 'Function baz() should not be referenced using the use statement.');
+	}
+
 }
