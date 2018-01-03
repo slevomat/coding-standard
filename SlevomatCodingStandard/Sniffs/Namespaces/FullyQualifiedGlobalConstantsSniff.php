@@ -13,6 +13,16 @@ class FullyQualifiedGlobalConstantsSniff
 		return 'Constant %s should be referenced via a fully qualified name.';
 	}
 
+	protected function getFullyQualifiedNotAllowedMessage(): string
+	{
+		return 'Constant %s should not be referenced using the backslash.';
+	}
+
+	protected function getImportedNotAllowedMessage(): string
+	{
+		return 'Constant %s should not be referenced using the use statement.';
+	}
+
 	protected function isCaseSensitive(): bool
 	{
 		return true;

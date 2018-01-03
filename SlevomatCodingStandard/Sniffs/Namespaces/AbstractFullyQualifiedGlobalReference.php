@@ -13,11 +13,21 @@ abstract class AbstractFullyQualifiedGlobalReference
 
 	public const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified';
 
+	public const CODE_FULLY_QUALIFIED_NOT_ALLOWED = 'FullyQualifiedNotAllowed';
+
+	public const CODE_IMPORTED_NOT_ALLOWED = 'ImportedNotAllowed';
+
 	/** @var string[] */
 	public $exclude = [];
 
 	/** @var string[]|null */
 	private $normalizedExclude;
+
+	/** @var bool */
+	public $allowFullyQualified = true;
+
+	/** @var bool */
+	public $allowImported = true;
 
 	/**
 	 * @return mixed[]
@@ -36,7 +46,7 @@ abstract class AbstractFullyQualifiedGlobalReference
 	 */
 	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $openTagPointer): void
 	{
-		$tokens = $phpcsFile->getTokens();
+		assert($this->allowFullyQualified || $this->allowImported, 'At least one check must be enabled.');
 
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
 		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
@@ -52,6 +62,9 @@ abstract class AbstractFullyQualifiedGlobalReference
 			}
 
 			if (NamespaceHelper::isFullyQualifiedName($name)) {
+				if (!$this->allowFullyQualified) {
+					$phpcsFile->addError(sprintf($this->getFullyQualifiedNotAllowedMessage(), $name), $referenceNamePointer, self::CODE_FULLY_QUALIFIED_NOT_ALLOWED);
+				}
 				continue;
 			}
 
@@ -59,15 +72,19 @@ abstract class AbstractFullyQualifiedGlobalReference
 				continue;
 			}
 
-			if (array_key_exists($canonicalName, $useStatements)) {
-				continue;
-			}
-
 			if (array_key_exists($canonicalName, $exclude)) {
 				continue;
 			}
 
-			$fix = $phpcsFile->addFixableError(sprintf($this->getNotFullyQualifiedMessage(), $tokens[$referenceNamePointer]['content']), $referenceNamePointer, self::CODE_NON_FULLY_QUALIFIED);
+			if (array_key_exists($canonicalName, $useStatements)) {
+				if (!$this->allowImported) {
+					$phpcsFile->addError(sprintf($this->getImportedNotAllowedMessage(), $name), $referenceNamePointer, self::CODE_IMPORTED_NOT_ALLOWED);
+				}
+
+				continue;
+			}
+
+			$fix = $phpcsFile->addFixableError(sprintf($this->getNotFullyQualifiedMessage(), $name), $referenceNamePointer, self::CODE_NON_FULLY_QUALIFIED);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
 				$phpcsFile->fixer->addContentBefore($referenceNamePointer, NamespaceHelper::NAMESPACE_SEPARATOR);
@@ -96,6 +113,10 @@ abstract class AbstractFullyQualifiedGlobalReference
 	}
 
 	abstract protected function getNotFullyQualifiedMessage(): string;
+
+	abstract protected function getFullyQualifiedNotAllowedMessage(): string;
+
+	abstract protected function getImportedNotAllowedMessage(): string;
 
 	abstract protected function isCaseSensitive(): bool;
 
