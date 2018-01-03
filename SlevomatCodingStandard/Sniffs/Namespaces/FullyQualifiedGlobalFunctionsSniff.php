@@ -15,7 +15,7 @@ class FullyQualifiedGlobalFunctionsSniff
 
 	protected function isCaseSensitive(): bool
 	{
-		return true;
+		return false;
 	}
 
 	protected function isValidType(ReferencedName $name): bool

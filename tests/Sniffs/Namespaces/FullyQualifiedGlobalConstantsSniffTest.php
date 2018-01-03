@@ -18,7 +18,7 @@ class FullyQualifiedGlobalConstantsSniffTest extends \SlevomatCodingStandard\Sni
 		$this->assertSame(2, $report->getErrorCount());
 
 		$this->assertSniffError($report, 17, FullyQualifiedGlobalConstantsSniff::CODE_NON_FULLY_QUALIFIED, 'Constant PHP_VERSION should be referenced via a fully qualified name.');
-		$this->assertSniffError($report, 28, FullyQualifiedGlobalConstantsSniff::CODE_NON_FULLY_QUALIFIED, 'Constant PHP_OS should be referenced via a fully qualified name.');
+		$this->assertSniffError($report, 31, FullyQualifiedGlobalConstantsSniff::CODE_NON_FULLY_QUALIFIED, 'Constant PHP_OS should be referenced via a fully qualified name.');
 
 		$this->assertAllFixedInFile($report);
 	}

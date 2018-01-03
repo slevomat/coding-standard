@@ -23,8 +23,11 @@ namespace Foo
 
 }
 
-namespace {
+namespace
+{
 
-	max(10, 100);
+	use function MAX;
+
+	MaX(10, 100);
 
 }

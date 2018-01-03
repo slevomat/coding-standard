@@ -23,7 +23,10 @@ namespace Foo
 
 }
 
-namespace {
+namespace
+{
+
+	use const PHP_OS;
 
 	\PHP_OS;
 

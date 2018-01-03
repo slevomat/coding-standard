@@ -25,6 +25,6 @@ namespace Foo
 
 namespace {
 
-	\max(10, 100);
+	\MAX(10, 100);
 
 }

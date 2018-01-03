@@ -44,8 +44,7 @@ abstract class AbstractFullyQualifiedGlobalReference
 
 		foreach ($referencedNames as $referencedName) {
 			$name = $referencedName->getNameAsReferencedInFile();
-			$canonicalName = $this->isCaseSensitive() ? $name : strtolower($name);
-			$referenceNamePointer = $referencedName->getStartPointer();
+			$namePointer = $referencedName->getStartPointer();
 
 			if (!$this->isValidType($referencedName)) {
 				continue;
@@ -59,18 +58,23 @@ abstract class AbstractFullyQualifiedGlobalReference
 				continue;
 			}
 
+			$canonicalName = $this->isCaseSensitive() ? $name : strtolower($name);
+
 			if (array_key_exists($canonicalName, $useStatements)) {
-				continue;
+				$fullyQualifiedName = NamespaceHelper::resolveName($phpcsFile, $name, $referencedName->getType(), $useStatements, $namePointer);
+				if (NamespaceHelper::hasNamespace($fullyQualifiedName)) {
+					continue;
+				}
 			}
 
 			if (array_key_exists($canonicalName, $exclude)) {
 				continue;
 			}
 
-			$fix = $phpcsFile->addFixableError(sprintf($this->getNotFullyQualifiedMessage(), $tokens[$referenceNamePointer]['content']), $referenceNamePointer, self::CODE_NON_FULLY_QUALIFIED);
+			$fix = $phpcsFile->addFixableError(sprintf($this->getNotFullyQualifiedMessage(), $tokens[$namePointer]['content']), $namePointer, self::CODE_NON_FULLY_QUALIFIED);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContentBefore($referenceNamePointer, NamespaceHelper::NAMESPACE_SEPARATOR);
+				$phpcsFile->fixer->addContentBefore($namePointer, NamespaceHelper::NAMESPACE_SEPARATOR);
 				$phpcsFile->fixer->endChangeset();
 			}
 		}

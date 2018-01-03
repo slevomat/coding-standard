@@ -14,7 +14,7 @@ namespace Foo
 	{
 		public function __construct()
 		{
-			min(10, 100);
+			mIn(10, 100);
 			\FullyQualified\hehe();
 			Qualified\haha();
 			hihi();

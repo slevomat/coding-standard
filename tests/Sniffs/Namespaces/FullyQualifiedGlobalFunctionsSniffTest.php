@@ -18,7 +18,7 @@ class FullyQualifiedGlobalFunctionsSniffTest extends \SlevomatCodingStandard\Sni
 		$this->assertSame(2, $report->getErrorCount());
 
 		$this->assertSniffError($report, 17, FullyQualifiedGlobalFunctionsSniff::CODE_NON_FULLY_QUALIFIED, 'Function min() should be referenced via a fully qualified name.');
-		$this->assertSniffError($report, 28, FullyQualifiedGlobalFunctionsSniff::CODE_NON_FULLY_QUALIFIED, 'Function max() should be referenced via a fully qualified name.');
+		$this->assertSniffError($report, 31, FullyQualifiedGlobalFunctionsSniff::CODE_NON_FULLY_QUALIFIED, 'Function MaX() should be referenced via a fully qualified name.');
 
 		$this->assertAllFixedInFile($report);
 	}
