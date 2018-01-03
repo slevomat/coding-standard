@@ -420,7 +420,9 @@ Mention Slevomat Coding Standard in your project's `ruleset.xml`:
 ```xml
 <?xml version="1.0"?>
 <ruleset name="AcmeProject">
-	<config name="installed_paths" value="../../slevomat/coding-standard"/><!-- relative path from PHPCS source location -->
+	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml"><!-- relative path to your ruleset.xml -->
+		<!-- sniffs to exclude -->
+	</rule>
 </ruleset>
 ```
 
@@ -439,7 +441,7 @@ Or write your own ruleset.xml by referencing the selected sniffs. This is a samp
 <ruleset name="AcmeProject">
 	<config name="installed_paths" value="../../slevomat/coding-standard"/><!-- relative path from PHPCS source location -->
 	<rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
-	<!-- ...other sniffs to include... -->
+	<!-- other sniffs to include -->
 </ruleset>
 ```
 
