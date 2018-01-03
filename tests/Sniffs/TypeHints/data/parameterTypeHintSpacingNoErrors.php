@@ -1,4 +1,4 @@
-<?php // lint >= 7.1
+<?php
 
 $a = function (?bool $a, ?string &$b, ?int ...$c)
 {
