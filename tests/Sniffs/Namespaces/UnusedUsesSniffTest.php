@@ -32,6 +32,12 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		);
 	}
 
+	public function testUnusedUseNoNamespaceNoErrors(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/unusedUsesNoNamespaceNoErrors.php');
+		$this->assertNoSniffErrorInFile($report);
+	}
+
 	public function testUnusedUseWithAsPart(): void
 	{
 		$this->assertSniffError(
