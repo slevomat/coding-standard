@@ -4,12 +4,19 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
 class FullyQualifiedGlobalFunctionsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	public const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified';
+
+	/** @var string[] */
+	public $exclude = [];
+
+	/** @var string[]|null */
+	private $normalizedExclude;
 
 	/**
 	 * @return mixed[]
@@ -32,6 +39,7 @@ class FullyQualifiedGlobalFunctionsSniff implements \PHP_CodeSniffer\Sniffs\Snif
 
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
 		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
+		$exclude = array_flip($this->getNormalizedExclude());
 
 		foreach ($referencedNames as $referencedName) {
 			$name = $referencedName->getNameAsReferencedInFile();
@@ -54,6 +62,10 @@ class FullyQualifiedGlobalFunctionsSniff implements \PHP_CodeSniffer\Sniffs\Snif
 				continue;
 			}
 
+			if (array_key_exists($canonicalName, $exclude)) {
+				continue;
+			}
+
 			$fix = $phpcsFile->addFixableError(sprintf('Function %s() should be referenced via a fully qualified name.', $tokens[$referenceNamePointer]['content']), $referenceNamePointer, self::CODE_NON_FULLY_QUALIFIED);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
@@ -61,6 +73,21 @@ class FullyQualifiedGlobalFunctionsSniff implements \PHP_CodeSniffer\Sniffs\Snif
 				$phpcsFile->fixer->endChangeset();
 			}
 		}
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getNormalizedExclude(): array
+	{
+		if ($this->normalizedExclude === null) {
+			$exclude = array_map(function (string $name): string {
+				return strtolower($name);
+			}, SniffSettingsHelper::normalizeArray($this->exclude));
+
+			$this->normalizedExclude = $exclude;
+		}
+		return $this->normalizedExclude;
 	}
 
 }

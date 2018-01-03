@@ -23,4 +23,17 @@ class FullyQualifiedGlobalFunctionsSniffTest extends \SlevomatCodingStandard\Sni
 		$this->assertAllFixedInFile($report);
 	}
 
+	public function testExcludeErrors(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsExcludeErrors.php', [
+			'exclude' => ['min'],
+		]);
+
+		$this->assertSame(1, $report->getErrorCount());
+
+		$this->assertSniffError($report, 28, FullyQualifiedGlobalFunctionsSniff::CODE_NON_FULLY_QUALIFIED, 'Function max() should be referenced via a fully qualified name.');
+
+		$this->assertAllFixedInFile($report);
+	}
+
 }

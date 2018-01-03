@@ -299,6 +299,10 @@ All references to global constants must be referenced via a fully qualified name
 
 All references to global functions must be referenced via a fully qualified name.
 
+Sniff provides the following settings:
+
+* `exclude` - list of global functions that are allowed not to be referenced via FQN
+
 #### SlevomatCodingStandard.Namespaces.MultipleUsesPerLine
 
 Prohibits multiple uses separated by commas:
