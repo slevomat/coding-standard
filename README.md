@@ -247,7 +247,7 @@ function foo(
 
 [Group use declarations](https://wiki.php.net/rfc/group_use_declarations) are ugly, make diffs ugly and this sniff prohibits them.
 
-#### SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword
+#### SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword 🔧
 
 Enforces fully qualified type references after configurable set of language keywords.
 
@@ -261,7 +261,7 @@ For example, with the following setting, extended or implemented type must alway
 </rule>
 ```
 
-#### SlevomatCodingStandard.Namespaces.FullyQualifiedExceptions
+#### SlevomatCodingStandard.Namespaces.FullyQualifiedExceptions 🔧
 
 This sniff reduces confusion in the following code snippet:
 
@@ -290,11 +290,11 @@ Sniff provides the following settings:
 * Exceptions with different names can be configured in `specialExceptionNames` property.
 * If your codebase uses classes that look like exceptions (because they have `Exception` or `Error` suffixes) but aren't, you can add them to `ignoredNames` property and the sniff won't enforce them to be fully qualified. Classes with `Error` suffix has to be added to ignored only if they are in the root namespace (like `LibXMLError`).
 
-#### SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalConstants
+#### SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalConstants 🔧
 
 All references to global constants must be referenced via a fully qualified name.
 
-#### SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions
+#### SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions 🔧
 
 All references to global functions must be referenced via a fully qualified name.
 
@@ -345,7 +345,7 @@ Sniff provides the following settings:
 use DateTimeImmutable;
 ```
 
-#### SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash
+#### SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash 🔧
 
 Disallows leading backslash in use statement:
 
@@ -362,7 +362,7 @@ Sniff provides the following settings:
 * `linesCountAfterOpeningBrace`: allows to configure the number of lines after opening brace
 * `linesCountBeforeClosingBrace`: allows to configure the number of lines before closing brace
 
-#### SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation
+#### SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation 🔧
 
 Enforces fully qualified names of classes and interfaces in phpDocs - in `@var`, `@param`, `@return`, `@throws`. This results in unambiguous phpDocs.
 
