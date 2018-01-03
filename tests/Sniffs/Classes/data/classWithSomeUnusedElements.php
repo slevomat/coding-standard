@@ -117,4 +117,7 @@ class ClassWithSomeUnusedProperties extends \Consistence\ObjectPrototype
 		$this->usedprivatemethodwithincorrectcase();
 	}
 
+	private static $unusedStaticProperty1;
+	static private $unusedStaticProperty2;
+
 }

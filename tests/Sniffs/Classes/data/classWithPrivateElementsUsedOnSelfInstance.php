@@ -7,7 +7,8 @@ class ClassWithPrivateElementsUsedOnSelfInstance
 
 	private $property = 'property';
 
-	private static $staticProperty = 'staticProperty';
+	private static $staticProperty1 = 'staticProperty1';
+	static private $staticProperty2 = 'staticProperty2';
 
 	public static function create()
 	{
@@ -17,7 +18,8 @@ class ClassWithPrivateElementsUsedOnSelfInstance
 
 		$self::staticSetUp();
 		$self::CONSTANT;
-		$self::$staticProperty;
+		$self::$staticProperty1;
+		$self::$staticProperty2;
 
 		return $self;
 	}

@@ -101,63 +101,72 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$writeOnlyProperties = [];
 		$findUsagesStartTokenPointer = $classToken['scope_opener'] + 1;
 
-		$checkObjectOperatorUsage = function (int $objectOperatorTokenPointer) use ($phpcsFile, $tokens, &$reportedMethods, &$reportedProperties, &$writeOnlyProperties) {
-			$propertyNameTokenPointer = TokenHelper::findNextEffective($phpcsFile, $objectOperatorTokenPointer + 1);
-			$propertyNameToken = $tokens[$propertyNameTokenPointer];
-			$name = $propertyNameToken['content'];
-			if ($propertyNameToken['code'] !== T_STRING) {
+		$checkPropertyUsage = function (int $propertyNameTokenPointer) use ($phpcsFile, $tokens, &$reportedProperties, &$writeOnlyProperties): void {
+			$propertyName = $this->getNormalizedPropertyName($tokens[$propertyNameTokenPointer]['content']);
+
+			$possibleAssignTokenPointer = TokenHelper::findNextEffective($phpcsFile, $propertyNameTokenPointer + 1);
+			$possibleAssingToken = $tokens[$possibleAssignTokenPointer];
+			if ($possibleAssingToken['code'] === T_EQUAL) {
+				$writeOnlyProperties[$propertyName] = $propertyNameTokenPointer;
+				return;
+			}
+
+			if (isset($reportedProperties[$propertyName])) {
+				unset($reportedProperties[$propertyName]);
+			}
+		};
+
+		$checkObjectOperatorUsage = function (int $objectOperatorTokenPointer) use ($phpcsFile, $tokens, $checkPropertyUsage, &$reportedMethods): int {
+			$nextTokenPointer = TokenHelper::findNextEffective($phpcsFile, $objectOperatorTokenPointer + 1);
+			$nextToken = $tokens[$nextTokenPointer];
+			if ($nextToken['code'] !== T_STRING) {
 				// $variable-> but not accessing a specific property (e. g. $variable->$foo or $variable->{$foo})
 				return $objectOperatorTokenPointer + 1;
 			}
-			$methodCallTokenPointer = TokenHelper::findNextEffective($phpcsFile, $propertyNameTokenPointer + 1);
+			$methodCallTokenPointer = TokenHelper::findNextEffective($phpcsFile, $nextTokenPointer + 1);
 			$methodCallToken = $tokens[$methodCallTokenPointer];
 			if ($methodCallToken['code'] === T_OPEN_PARENTHESIS) {
 				// calling a method on $variable
-				unset($reportedMethods[$this->getNormalizedMethodName($name)]);
+				unset($reportedMethods[$this->getNormalizedMethodName($nextToken['content'])]);
 				return $methodCallTokenPointer + 1;
 			}
 
-			$assignTokenPointer = TokenHelper::findNextEffective($phpcsFile, $propertyNameTokenPointer + 1);
-			$assignToken = $tokens[$assignTokenPointer];
-			if ($assignToken['code'] === T_EQUAL) {
-				// assigning value to a property - note possible write-only property
-				$writeOnlyProperties[$name] = $propertyNameTokenPointer;
-				return $assignTokenPointer + 1;
-			}
+			$checkPropertyUsage($nextTokenPointer);
 
-			if (isset($reportedProperties[$name])) {
-				unset($reportedProperties[$name]);
-			}
-
-			return $propertyNameTokenPointer + 1;
+			return $nextTokenPointer + 1;
 		};
 
-		$checkDoubleColonUsage = function (int $doubleColonTokenPointer) use ($phpcsFile, $tokens, &$reportedMethods, &$reportedConstants): int {
-			$methodNameTokenPointer = TokenHelper::findNextEffective($phpcsFile, $doubleColonTokenPointer + 1);
-			$methodNameToken = $tokens[$methodNameTokenPointer];
-			if ($methodNameToken['code'] !== T_STRING) {
+		$checkDoubleColonUsage = function (int $doubleColonTokenPointer) use ($phpcsFile, $tokens, $checkPropertyUsage, &$reportedMethods, &$reportedConstants): int {
+			$nextTokenPointer = TokenHelper::findNextEffective($phpcsFile, $doubleColonTokenPointer + 1);
+			$nextToken = $tokens[$nextTokenPointer];
+			if ($nextToken['code'] !== T_STRING) {
 				// self:: or static:: not followed by a string - possible static property access
-				return $methodNameTokenPointer + 1;
+
+				if ($nextToken['code'] === T_VARIABLE) {
+					$checkPropertyUsage($nextTokenPointer);
+				}
+				return $nextTokenPointer + 1;
 			}
 
-			$methodCallTokenPointer = TokenHelper::findNextEffective($phpcsFile, $methodNameTokenPointer + 1);
-			$methodCallToken = $tokens[$methodCallTokenPointer];
-			if ($methodCallToken['code'] !== T_OPEN_PARENTHESIS) {
-				$name = $methodNameToken['content'];
+			$tokenPointerAfterNextToken = TokenHelper::findNextEffective($phpcsFile, $nextTokenPointer + 1);
+			$tokenAfterNextToken = $tokens[$tokenPointerAfterNextToken];
+			if ($tokenAfterNextToken['code'] !== T_OPEN_PARENTHESIS) {
+				// self::string or static::string not followed by ( - possible constant access
+
+				$name = $nextToken['content'];
 				if (isset($reportedConstants[$name])) {
 					unset($reportedConstants[$name]);
 				}
 
-				// self::string or static::string not followed by ( - possible constant access
-				return $methodCallTokenPointer + 1;
+				return $tokenPointerAfterNextToken + 1;
 			}
 
-			$name = $this->getNormalizedMethodName($methodNameToken['content']);
+			$name = $this->getNormalizedMethodName($nextToken['content']);
 			if (isset($reportedMethods[$name])) {
 				unset($reportedMethods[$name]);
 			}
 
-			return $methodCallTokenPointer + 1;
+			return $tokenPointerAfterNextToken + 1;
 		};
 
 		while (($tokenPointer = TokenHelper::findNext($phpcsFile, [T_NEW, T_DOUBLE_QUOTED_STRING, T_DOUBLE_COLON, T_OBJECT_OPERATOR], $findUsagesStartTokenPointer, $classToken['scope_closer'])) !== null) {
@@ -292,15 +301,14 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$reportedProperties = [];
 		$findPropertiesStartTokenPointer = $classToken['scope_opener'] + 1;
 		while (($propertyTokenPointer = TokenHelper::findNext($phpcsFile, T_VARIABLE, $findPropertiesStartTokenPointer, $classToken['scope_closer'])) !== null) {
-			$visibilityModifiedTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $propertyTokenPointer - 1);
-			$visibilityModifiedToken = $tokens[$visibilityModifiedTokenPointer];
-			if ($visibilityModifiedToken['code'] !== T_PRIVATE) {
+			$visibilityModifierTokenPointer = $this->findVisibilityModifierTokenPointer($phpcsFile, $tokens, $propertyTokenPointer);
+			if ($visibilityModifierTokenPointer === null || $tokens[$visibilityModifierTokenPointer]['code'] !== T_PRIVATE) {
 				$findPropertiesStartTokenPointer = $propertyTokenPointer + 1;
 				continue;
 			}
 
 			$findPropertiesStartTokenPointer = $propertyTokenPointer + 1;
-			$phpDocTags = $this->getPhpDocTags($phpcsFile, $visibilityModifiedTokenPointer);
+			$phpDocTags = $this->getPhpDocTags($phpcsFile, $visibilityModifierTokenPointer);
 			foreach ($phpDocTags as $tag) {
 				preg_match('#([@a-zA-Z\\\]+)#', $tag, $matches);
 				if (in_array($matches[1], $this->getAlwaysUsedPropertiesAnnotations(), true)) {
@@ -344,8 +352,8 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$reportedMethods = [];
 		$findMethodsStartTokenPointer = $classToken['scope_opener'] + 1;
 		while (($methodTokenPointer = TokenHelper::findNext($phpcsFile, T_FUNCTION, $findMethodsStartTokenPointer, $classToken['scope_closer'])) !== null) {
-			$visibilityModifier = $this->findVisibilityModifier($phpcsFile, $tokens, $methodTokenPointer);
-			if ($visibilityModifier === null || $visibilityModifier !== T_PRIVATE) {
+			$visibilityModifierTokenPointer = $this->findVisibilityModifierTokenPointer($phpcsFile, $tokens, $methodTokenPointer);
+			if ($visibilityModifierTokenPointer === null || $tokens[$visibilityModifierTokenPointer]['code'] !== T_PRIVATE) {
 				$findMethodsStartTokenPointer = $methodTokenPointer + 1;
 				continue;
 			}
@@ -366,6 +374,11 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		return strtolower($methodName);
 	}
 
+	private function getNormalizedPropertyName(string $propertyName): string
+	{
+		return preg_replace('~^\$~', '', $propertyName);
+	}
+
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param mixed[] $tokens
@@ -377,8 +390,8 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$reportedConstants = [];
 		$findConstantsStartTokenPointer = $classToken['scope_opener'] + 1;
 		while (($constantTokenPointer = TokenHelper::findNext($phpcsFile, T_CONST, $findConstantsStartTokenPointer, $classToken['scope_closer'])) !== null) {
-			$visibilityModifier = $this->findVisibilityModifier($phpcsFile, $tokens, $constantTokenPointer);
-			if ($visibilityModifier === null || $visibilityModifier !== T_PRIVATE) {
+			$visibilityModifierTokenPointer = $this->findVisibilityModifierTokenPointer($phpcsFile, $tokens, $constantTokenPointer);
+			if ($visibilityModifierTokenPointer === null || $tokens[$visibilityModifierTokenPointer]['code'] !== T_PRIVATE) {
 				$findConstantsStartTokenPointer = $constantTokenPointer + 1;
 				continue;
 			}
@@ -399,14 +412,14 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param int $methodTokenPointer
 	 * @return int|null
 	 */
-	private function findVisibilityModifier(\PHP_CodeSniffer\Files\File $phpcsFile, array $tokens, int $methodTokenPointer): ?int
+	private function findVisibilityModifierTokenPointer(\PHP_CodeSniffer\Files\File $phpcsFile, array $tokens, int $methodTokenPointer): ?int
 	{
 		$visibilityModifiedTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $methodTokenPointer - 1);
 		$visibilityModifiedToken = $tokens[$visibilityModifiedTokenPointer];
 		if (in_array($visibilityModifiedToken['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE], true)) {
-			return $visibilityModifiedToken['code'];
+			return $visibilityModifiedTokenPointer;
 		} elseif (in_array($visibilityModifiedToken['code'], [T_ABSTRACT, T_STATIC], true)) {
-			return $this->findVisibilityModifier($phpcsFile, $tokens, $visibilityModifiedTokenPointer);
+			return $this->findVisibilityModifierTokenPointer($phpcsFile, $tokens, $visibilityModifiedTokenPointer);
 		}
 
 		return null;
