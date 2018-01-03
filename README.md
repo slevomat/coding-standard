@@ -38,17 +38,16 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_
 #### SlevomatCodingStandard.TypeHints.TypeHintDeclaration 🔧🚧
 
 * Checks for missing property types in phpDoc `@var`.
-* Checks for missing typehints in case they can be declared natively. If the phpDoc contains something that can be written as a native PHP 7.0 or 7.1 typehint, this sniff reports that.
+* Checks for missing typehints in case they can be declared natively. If the phpDoc contains something that can be written as a native PHP 7.0, 7.1 or 7.2 typehint, this sniff reports that.
 * Checks for missing `@return` and/or native return typehint in case the method body contains `return` with a value.
 * Checks for useless doc comments. If the native method declaration contains everything and the phpDoc does not add anything useful, it's reported as useless and can optionally be automatically removed with `phpcbf`.
 * Some phpDocs might still be useful even if they do not add any typehint information. They can contain textual descriptions of code elements and also some meaningful annotations like `@expectException` or `@dataProvider`.
 * Forces to specify what's in traversable types like `array`, `iterable` and `\Traversable`.
-* Distinguishes what's possible in PHP 7.0 (scalar typehints) and PHP 7.1 (nullable types and void return typehint).
 
 Sniff provides the following settings:
 
-* `enableNullableTypeHints`: enforces to transform `Foo|null` in phpDoc into `?Foo` in native typehint. It's on by default if you're on PHP 7.1.
-* `enableVoidTypeHint`: enforces to transform `@return void` into native `void` return typehint. It's on by default if you're on PHP 7.1.
+* `enableNullableTypeHints`: enforces to transform `Foo|null` in phpDoc into `?Foo` in native typehint.
+* `enableVoidTypeHint`: enforces to transform `@return void` into native `void` return typehint.
 * `traversableTypeHints`: enforces which typehints must have specified contained type. E. g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
 * `usefulAnnotations`: prevents reporting and removing useless phpDocs if they contain an additional configured annotation like `@dataProvider`.
 * `enableEachParameterAndReturnInspection`: enables inspection and fixing of `@param` and `@return` annotations separately. Useful when you only want to document parameters or return values that could not be expressed natively (i.e. member types of `array` or `Traversable`).
@@ -167,7 +166,7 @@ use LogStandard;
 
 Sniff provides the following settings:
 
-* `caseSensitive` - compare namespaces case sensitively, which makes this order correct:
+* `caseSensitive`: compare namespaces case sensitively, which makes this order correct:
 
 ```php
 use LogAware;
@@ -202,16 +201,16 @@ Sniff provides the following settings:
 
 * `rootNamespaces` property expects configuration similar to PSR-4 - project directories mapped to certain namespaces.
 * `skipDirs` are not taken into consideration when comparing a path to a namespace. For example, with the above settings, file at path `app/services/Product/Product.php` is expected to contain `Slevomat\Product\Product`, not `Slevomat\services\Product\Product`.
-* `extensions` - allow different file extensions. Default is `php`.
-* `ignoredNamespaces` - sniff is not performed on these namespaces
+* `extensions`: allow different file extensions. Default is `php`.
+* `ignoredNamespaces`: sniff is not performed on these namespaces.
 
 #### SlevomatCodingStandard.Classes.ClassConstantVisibility 🔧
 
-In PHP 7.1 it's possible to declare [visibility of class constants](https://wiki.php.net/rfc/class_const_visibility). In a similar vein to optional declaration of visibility for properties and methods which is actually required in sane coding standards, this sniff also requires declaring visibility for all class constants.
+In PHP 7.1+ it's possible to declare [visibility of class constants](https://wiki.php.net/rfc/class_const_visibility). In a similar vein to optional declaration of visibility for properties and methods which is actually required in sane coding standards, this sniff also requires declaring visibility for all class constants.
 
 Sniff provides the following settings:
 
-* `fixable`: the sniff is not fixable by default because we think it's better to decide about each constant one by one however you can enable fixability with this option
+* `fixable`: the sniff is not fixable by default because we think it's better to decide about each constant one by one however you can enable fixability with this option.
 
 ```php
 const FOO = 1; // visibility missing!
@@ -228,7 +227,7 @@ function foo(): ?int
 
 Sniff provides the following settings:
 
-* `spacesCountBeforeColon` - the number of spaces expected between closing brace and colon
+* `spacesCountBeforeColon`: the number of spaces expected between closing brace and colon.
 
 #### SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue 🔧
 
@@ -301,7 +300,7 @@ All references to global constants must be referenced via a fully qualified name
 
 Sniff provides the following settings:
 
-* `exclude` - list of global constants that are allowed not to be referenced via FQN
+* `exclude`: list of global constants that are allowed not to be referenced via FQN.
 
 #### SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions 🔧
 
@@ -309,7 +308,7 @@ All references to global functions must be referenced via a fully qualified name
 
 Sniff provides the following settings:
 
-* `exclude` - list of global functions that are allowed not to be referenced via FQN
+* `exclude`: list of global functions that are allowed not to be referenced via FQN.
 
 #### SlevomatCodingStandard.Namespaces.MultipleUsesPerLine
 
@@ -351,8 +350,8 @@ Disallows uses of other than configured namespaces.
 
 Sniff provides the following settings:
 
-* `namespacesRequiredToUse` - namespaces in this array are the only ones allowed to be used. E. g. root project namespace.
-* `allowUseFromRootNamespace` - also allow using top-level namespace:
+* `namespacesRequiredToUse`: namespaces in this array are the only ones allowed to be used. E. g. root project namespace.
+* `allowUseFromRootNamespace`: also allow using top-level namespace:
 
 ```php
 use DateTimeImmutable;
@@ -372,8 +371,8 @@ Enforces one configurable number of lines after opening class/interface/trait br
 
 Sniff provides the following settings:
 
-* `linesCountAfterOpeningBrace`: allows to configure the number of lines after opening brace
-* `linesCountBeforeClosingBrace`: allows to configure the number of lines before closing brace
+* `linesCountAfterOpeningBrace`: allows to configure the number of lines after opening brace.
+* `linesCountBeforeClosingBrace`: allows to configure the number of lines before closing brace.
 
 #### SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation 🔧
 
@@ -383,14 +382,14 @@ Enforces fully qualified names of classes and interfaces in phpDocs - in `@var`,
 
 Reports forbidden annotations. No annotations are forbidden by default, the configuration is completely up to the user. It's recommended to forbid obsolete and inappropriate annotations like:
 
-* `@author`, `@created`, `@version` - we have version control systems
-* `@package` - we have namespaces
-* `@copyright`, `@license` - it's not necessary to repeat licensing information in each file
-* `@throws` - it's not possible to enforce this annotation and the information can become outdated
+* `@author`, `@created`, `@version`: we have version control systems.
+* `@package`: we have namespaces.
+* `@copyright`, `@license`: it's not necessary to repeat licensing information in each file.
+* `@throws`: it's not possible to enforce this annotation and the information can become outdated.
 
 Sniff provides the following settings:
 
-* `forbiddenAnnotations`: allows to configure which annotations are forbidden to be used
+* `forbiddenAnnotations`: allows to configure which annotations are forbidden to be used.
 
 #### SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration 🔧
 
