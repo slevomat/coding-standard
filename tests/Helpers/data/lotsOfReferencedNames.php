@@ -74,7 +74,9 @@ interface FooInterface extends \ExtendedInterface, \SecondExtendedInterface, \Th
 trait FooTrait
 {
 
-	use SomeTrait;
+	use SomeTrait {
+		__construct as initTrait;
+	}
 
 }
 

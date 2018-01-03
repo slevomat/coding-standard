@@ -16,6 +16,7 @@ namespace SlevomatCodingStandard\Helpers;
  * - namespace name
  * - type name in a use statement
  * - class name in a class definition
+ * - method name alias imported from trait
  */
 class ReferencedNameHelper
 {
@@ -164,6 +165,11 @@ class ReferencedNameHelper
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer + 1);
 		if ($tokens[$nextPointer]['code'] === T_DOUBLE_COLON) {
 			return true;
+		}
+
+		if (count($tokens[$startPointer]['conditions']) > 0 && array_values(array_reverse($tokens[$startPointer]['conditions']))[0] === T_USE) {
+			// Method imported from trait
+			return false;
 		}
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $startPointer - 1);

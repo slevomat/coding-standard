@@ -10,8 +10,19 @@ namespace Foo
 
 	}
 
+	trait Baz
+	{
+		public function __construct()
+		{
+		}
+	}
+
 	class Boo implements Doo
 	{
+		use Baz {
+			__construct as initTrait;
+		}
+
 		public function __construct()
 		{
 			\PHP_VERSION;
