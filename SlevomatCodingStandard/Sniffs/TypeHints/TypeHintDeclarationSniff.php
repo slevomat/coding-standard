@@ -39,11 +39,17 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 	public const CODE_USELESS_DOC_COMMENT = 'UselessDocComment';
 
-	/** @var bool */
-	public $enableNullableTypeHints = PHP_VERSION_ID >= 70100;
+	/**
+	 * @deprecated
+	 * @var bool
+	 */
+	public $enableNullableTypeHints = true;
 
-	/** @var bool */
-	public $enableVoidTypeHint = PHP_VERSION_ID >= 70100;
+	/**
+	 * @deprecated
+	 * @var bool
+	 */
+	public $enableVoidTypeHint = true;
 
 	/** @var bool */
 	public $enableEachParameterAndReturnInspection = false;
