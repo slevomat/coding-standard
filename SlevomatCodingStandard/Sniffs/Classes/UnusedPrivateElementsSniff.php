@@ -5,10 +5,12 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
+use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
 class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
@@ -83,6 +85,10 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 		$classToken = $tokens[$classPointer];
+		$className = ClassHelper::getFullyQualifiedName($phpcsFile, $classPointer);
+
+		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $classPointer - 1));
+
 		$reportedProperties = $this->getProperties($phpcsFile, $tokens, $classToken);
 		$reportedConstants = $this->getConstants($phpcsFile, $tokens, $classToken);
 
@@ -100,6 +106,21 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$writeOnlyProperties = [];
 		$findUsagesStartTokenPointer = $classToken['scope_opener'] + 1;
+
+		$isCurrentClass = function (int $referencedNamePointer) use ($phpcsFile, $tokens, $useStatements, $className): bool {
+			if (in_array($tokens[$referencedNamePointer]['code'], [T_SELF, T_STATIC], true)) {
+				return true;
+			}
+
+			if ($tokens[$referencedNamePointer]['code'] === T_STRING) {
+				$referencedClassName = NamespaceHelper::resolveClassName($phpcsFile, $tokens[$referencedNamePointer]['content'], $useStatements, $referencedNamePointer);
+				if ($className === $referencedClassName) {
+					return true;
+				}
+			}
+
+			return false;
+		};
 
 		$checkPropertyUsage = function (int $propertyNameTokenPointer) use ($phpcsFile, $tokens, &$reportedProperties, &$writeOnlyProperties): void {
 			$propertyName = $this->getNormalizedPropertyName($tokens[$propertyNameTokenPointer]['content']);
@@ -218,7 +239,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				}
 			} elseif ($token['code'] === T_DOUBLE_COLON) {
 				$previousTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokenPointer - 1);
-				if (in_array($tokens[$previousTokenPointer]['code'], [T_SELF, T_STATIC], true)) {
+				if ($isCurrentClass($previousTokenPointer)) {
 					$findUsagesStartTokenPointer = $checkDoubleColonUsage($tokenPointer);
 				} else {
 					$findUsagesStartTokenPointer = $tokenPointer + 1;
@@ -226,7 +247,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			} elseif ($token['code'] === T_NEW) {
 				$variableTokenPointer = TokenHelper::findPreviousLocal($phpcsFile, T_VARIABLE, $tokenPointer - 1);
 				$nextTokenPointer = TokenHelper::findNextEffective($phpcsFile, $tokenPointer + 1);
-				if ($variableTokenPointer !== null && in_array($tokens[$nextTokenPointer]['code'], [T_SELF, T_STATIC], true)) {
+				if ($variableTokenPointer !== null && $isCurrentClass($nextTokenPointer)) {
 					$scopeMethodPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $variableTokenPointer - 1);
 					for ($i = $tokens[$scopeMethodPointer]['scope_opener']; $i < $tokens[$scopeMethodPointer]['scope_closer']; $i++) {
 						if ($tokens[$i]['content'] === $tokens[$variableTokenPointer]['content']) {
