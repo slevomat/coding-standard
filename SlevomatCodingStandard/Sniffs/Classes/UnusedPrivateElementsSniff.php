@@ -105,8 +105,8 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$propertyName = $this->getNormalizedPropertyName($tokens[$propertyNameTokenPointer]['content']);
 
 			$possibleAssignTokenPointer = TokenHelper::findNextEffective($phpcsFile, $propertyNameTokenPointer + 1);
-			$possibleAssingToken = $tokens[$possibleAssignTokenPointer];
-			if ($possibleAssingToken['code'] === T_EQUAL) {
+			$possibleAssignToken = $tokens[$possibleAssignTokenPointer];
+			if (in_array($possibleAssignToken['code'], \PHP_CodeSniffer\Util\Tokens::$assignmentTokens, true)) {
 				$writeOnlyProperties[$propertyName] = $propertyNameTokenPointer;
 				return;
 			}

@@ -182,4 +182,15 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		);
 	}
 
+	public function testClassWithWriteOnlyProperties(): void
+	{
+		$resultFile = $this->checkFile(__DIR__ . '/data/classWithWriteOnlyProperties.php');
+
+		$this->assertSame(13, $resultFile->getErrorCount());
+
+		foreach (range(6, 18) as $line) {
+			$this->assertSniffError($resultFile, $line, UnusedPrivateElementsSniff::CODE_WRITE_ONLY_PROPERTY);
+		}
+	}
+
 }
