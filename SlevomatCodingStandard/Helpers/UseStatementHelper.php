@@ -5,6 +5,9 @@ namespace SlevomatCodingStandard\Helpers;
 class UseStatementHelper
 {
 
+	/** @var \SlevomatCodingStandard\Helpers\UseStatement[][] Cached data for method getUseStatements() */
+	private static $allUseStatements = [];
+
 	public static function isAnonymousFunctionUse(\PHP_CodeSniffer\Files\File $phpcsFile, int $usePointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
@@ -64,29 +67,43 @@ class UseStatementHelper
 	 */
 	public static function getUseStatements(\PHP_CodeSniffer\Files\File $phpcsFile, int $openTagPointer): array
 	{
-		$names = [];
-		$tokens = $phpcsFile->getTokens();
-		foreach (self::getUseStatementPointers($phpcsFile, $openTagPointer) as $usePointer) {
-			$nextTokenFromUsePointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
-			$type = UseStatement::TYPE_DEFAULT;
-			if ($tokens[$nextTokenFromUsePointer]['code'] === T_STRING) {
-				if ($tokens[$nextTokenFromUsePointer]['content'] === 'const') {
-					$type = UseStatement::TYPE_CONSTANT;
-				} elseif ($tokens[$nextTokenFromUsePointer]['content'] === 'function') {
-					$type = UseStatement::TYPE_FUNCTION;
-				}
+		$cacheKey = sprintf('%s-%s', $phpcsFile->getFilename(), $openTagPointer);
+
+		$fixerLoops = $phpcsFile->fixer !== null ? $phpcsFile->fixer->loops : null;
+		if ($fixerLoops !== null) {
+			$cacheKey .= '-loop' . $fixerLoops;
+			if ($fixerLoops > 0) {
+				unset(self::$allUseStatements[$cacheKey . '-loop' . ($fixerLoops - 1)]);
 			}
-			$name = self::getNameAsReferencedInClassFromUse($phpcsFile, $usePointer);
-			$useStatement = new UseStatement(
-				$name,
-				self::getFullyQualifiedTypeNameFromUse($phpcsFile, $usePointer),
-				$usePointer,
-				$type
-			);
-			$names[$useStatement->getCanonicalNameAsReferencedInFile()] = $useStatement;
 		}
 
-		return $names;
+		if (!array_key_exists($cacheKey, self::$allUseStatements)) {
+			$useStatements = [];
+			$tokens = $phpcsFile->getTokens();
+			foreach (self::getUseStatementPointers($phpcsFile, $openTagPointer) as $usePointer) {
+				$nextTokenFromUsePointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
+				$type = UseStatement::TYPE_DEFAULT;
+				if ($tokens[$nextTokenFromUsePointer]['code'] === T_STRING) {
+					if ($tokens[$nextTokenFromUsePointer]['content'] === 'const') {
+						$type = UseStatement::TYPE_CONSTANT;
+					} elseif ($tokens[$nextTokenFromUsePointer]['content'] === 'function') {
+						$type = UseStatement::TYPE_FUNCTION;
+					}
+				}
+				$name = self::getNameAsReferencedInClassFromUse($phpcsFile, $usePointer);
+				$useStatement = new UseStatement(
+					$name,
+					self::getFullyQualifiedTypeNameFromUse($phpcsFile, $usePointer),
+					$usePointer,
+					$type
+				);
+				$useStatements[$useStatement->getCanonicalNameAsReferencedInFile()] = $useStatement;
+			}
+
+			self::$allUseStatements[$cacheKey] = $useStatements;
+		}
+
+		return self::$allUseStatements[$cacheKey];
 	}
 
 	/**
