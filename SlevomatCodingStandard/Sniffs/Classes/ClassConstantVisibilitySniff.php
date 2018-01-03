@@ -17,6 +17,11 @@ class ClassConstantVisibilitySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	public $enabled = true;
 
 	/**
+	 * @var bool
+	 */
+	public $fixable = false;
+
+	/**
 	 * @return mixed[]
 	 */
 	public function register(): array
@@ -50,19 +55,21 @@ class ClassConstantVisibilitySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$visibilityPointer = TokenHelper::findPreviousEffective($phpcsFile, $constantPointer - 1);
 		if (!in_array($tokens[$visibilityPointer]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE], true)) {
-			$fix = $phpcsFile->addFixableError(
-				sprintf(
-					'Constant %s::%s visibility missing.',
-					ClassHelper::getFullyQualifiedName($phpcsFile, $classPointer),
-					$tokens[TokenHelper::findNextEffective($phpcsFile, $constantPointer + 1)]['content']
-				),
-				$constantPointer,
-				self::CODE_MISSING_CONSTANT_VISIBILITY
+			$message = sprintf(
+				'Constant %s::%s visibility missing.',
+				ClassHelper::getFullyQualifiedName($phpcsFile, $classPointer),
+				$tokens[TokenHelper::findNextEffective($phpcsFile, $constantPointer + 1)]['content']
 			);
-			if ($fix) {
-				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContentBefore($constantPointer, 'public ');
-				$phpcsFile->fixer->endChangeset();
+
+			if ($this->fixable) {
+				$fix = $phpcsFile->addFixableError($message, $constantPointer, self::CODE_MISSING_CONSTANT_VISIBILITY);
+				if ($fix) {
+					$phpcsFile->fixer->beginChangeset();
+					$phpcsFile->fixer->addContentBefore($constantPointer, 'public ');
+					$phpcsFile->fixer->endChangeset();
+				}
+			} else {
+				$phpcsFile->addError($message, $constantPointer, self::CODE_MISSING_CONSTANT_VISIBILITY);
 			}
 		}
 	}
