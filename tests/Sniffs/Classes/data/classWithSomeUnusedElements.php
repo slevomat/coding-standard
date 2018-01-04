@@ -120,4 +120,11 @@ class ClassWithSomeUnusedProperties extends \Consistence\ObjectPrototype
 	private static $unusedStaticProperty1;
 	static private $unusedStaticProperty2;
 
+	private $propertyUsedAsArrayKey;
+
+	public function propertyUsedAsArrayKey()
+	{
+		return [$this->propertyUsedAsArrayKey => true];
+	}
+
 }

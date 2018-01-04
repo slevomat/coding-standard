@@ -99,6 +99,8 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 			UnusedPrivateElementsSniff::CODE_UNUSED_PROPERTY,
 			'Class ClassWithSomeUnusedProperties contains unused property $unusedStaticProperty2.'
 		);
+
+		$this->assertNoSniffError($resultFile, 123);
 	}
 
 	public function testOnlyPublicElements(): void
