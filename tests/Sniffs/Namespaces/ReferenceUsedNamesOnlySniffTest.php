@@ -65,7 +65,7 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param string[] $ignoredNames
 	 */
-	public function testReferencingConstantViaFullyQualifiedName(array $ignoredNames): void
+	public function testReferencingClassConstantViaFullyQualifiedName(array $ignoredNames): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/shouldBeInUseStatement.php', [
 			'ignoredNames' => $ignoredNames,
@@ -75,6 +75,28 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 			11,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
 			'\Some\ConstantClass'
+		);
+	}
+
+	public function testReferencingConstantViaFullyQualifiedName(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/shouldBeInUseStatement.php');
+		$this->assertSniffError(
+			$report,
+			16,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'\Boo\FOO'
+		);
+	}
+
+	public function testReferencingFunctionViaFullyQualifiedName(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/shouldBeInUseStatement.php');
+		$this->assertSniffError(
+			$report,
+			17,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'\Boo\foo'
 		);
 	}
 

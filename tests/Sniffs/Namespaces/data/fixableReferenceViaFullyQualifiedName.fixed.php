@@ -7,6 +7,8 @@ use Iterator;
 use Some\ConstantClass;
 use Foo\SomeError;
 use Nette\ObjectPrototype;
+use function Boo\foo;
+use const Boo\FOO;
 
 class Bar extends \ObjectPrototype implements Iterator
 {
@@ -19,6 +21,8 @@ class Bar extends \ObjectPrototype implements Iterator
 		new \Some\CommonException();
 		new \Exception();
 		new ObjectPrototype();
+		foo();
+		FOO;
 	}
 
 	public function foo(DoctrineColumn $doctrineColumn): ObjectPrototype

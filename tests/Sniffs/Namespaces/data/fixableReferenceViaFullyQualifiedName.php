@@ -15,6 +15,8 @@ class Bar extends \ObjectPrototype implements \Iterator
 		new \Some\CommonException();
 		new \Exception();
 		new \Nette\ObjectPrototype();
+		\Boo\foo();
+		\Boo\FOO;
 	}
 
 	public function foo(\Doctrine\ORM\Mapping\Column $doctrineColumn): \Nette\ObjectPrototype

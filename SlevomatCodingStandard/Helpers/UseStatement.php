@@ -85,6 +85,11 @@ class UseStatement
 		return $this->usePointer;
 	}
 
+	public function getType(): string
+	{
+		return $this->type;
+	}
+
 	public function isConstant(): bool
 	{
 		return $this->type === self::TYPE_CONSTANT;
@@ -100,13 +105,13 @@ class UseStatement
 		return $this->type === $that->type;
 	}
 
-	public function getTypeName(): ?string
+	public static function getTypeName(string $type): ?string
 	{
-		if ($this->isConstant()) {
+		if ($type === self::TYPE_CONSTANT) {
 			return 'const';
 		}
 
-		if ($this->isFunction()) {
+		if ($type === self::TYPE_FUNCTION) {
 			return 'function';
 		}
 

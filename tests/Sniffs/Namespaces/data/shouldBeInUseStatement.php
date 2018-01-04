@@ -13,6 +13,8 @@ class Bar
 		new \Some\CommonException();
 		new \Exception();
 		new \Nette\ObjectPrototype();
+		\Boo\FOO;
+		\Boo\foo();
 	}
 
 }

@@ -9,6 +9,7 @@ use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
 class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
@@ -218,7 +219,9 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 						$canBeFixed = true;
 						foreach ($useStatements as $useStatement) {
-							if ($useStatement->getFullyQualifiedTypeName() !== $canonicalName
+							if (
+								$useStatement->getType() === $referencedName->getType()
+								&& $useStatement->getFullyQualifiedTypeName() !== $canonicalName
 								&& ($useStatement->getCanonicalNameAsReferencedInFile() === $canonicalNameToReference || array_key_exists($canonicalNameToReference, $definedClassesIndex))
 							) {
 								$canBeFixed = false;
@@ -251,7 +254,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 							$alreadyUsed = false;
 							foreach ($useStatements as $useStatement) {
-								if ($useStatement->getFullyQualifiedTypeName() === $canonicalName) {
+								if ($useStatement->getType() === $referencedName->getType() && $useStatement->getFullyQualifiedTypeName() === $canonicalName) {
 									$nameToReference = $useStatement->getNameAsReferencedInFile();
 									$alreadyUsed = true;
 									break;
@@ -261,8 +264,11 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 							$phpcsFile->fixer->addContent($referencedName->getStartPointer(), $nameToReference);
 
 							if (!$alreadyUsed) {
+								$useTypeName = UseStatement::getTypeName($referencedName->getType());
+								$useTypeFormatted = $useTypeName !== null ? sprintf('%s ', $useTypeName) : '';
+
 								$phpcsFile->fixer->addNewline($useStatementPlacePointer);
-								$phpcsFile->fixer->addContent($useStatementPlacePointer, sprintf('use %s;', $canonicalName));
+								$phpcsFile->fixer->addContent($useStatementPlacePointer, sprintf('use %s%s;', $useTypeFormatted, $canonicalName));
 							}
 
 							$phpcsFile->fixer->endChangeset();
