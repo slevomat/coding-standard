@@ -3,6 +3,8 @@
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use SlevomatCodingStandard\Helpers\ClassHelper;
+use SlevomatCodingStandard\Helpers\ConstantHelper;
+use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedName;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
@@ -18,6 +20,8 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	public const CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME = 'ReferenceViaFullyQualifiedName';
 
 	public const CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE = 'ReferenceViaFullyQualifiedNameWithoutNamespace';
+
+	public const CODE_REFERENCE_VIA_FALLBACK_GLOBAL_NAME = 'ReferenceViaFallbackGlobalName';
 
 	public const CODE_PARTIAL_USE = 'PartialUse';
 
@@ -37,7 +41,13 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	public $allowFullyQualifiedGlobalFunctions = false;
 
 	/** @var bool */
+	public $allowFallbackGlobalFunctions = true;
+
+	/** @var bool */
 	public $allowFullyQualifiedGlobalConstants = false;
+
+	/** @var bool */
+	public $allowFallbackGlobalConstants = true;
 
 	/** @var string[] */
 	public $specialExceptionNames = [];
@@ -66,6 +76,12 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 	/** @var bool */
 	public $allowFullyQualifiedNameForCollidingClasses = false;
+
+	/** @var bool */
+	public $allowFullyQualifiedNameForCollidingFunctions = false;
+
+	/** @var bool */
+	public $allowFullyQualifiedNameForCollidingConstants = false;
 
 	/**
 	 * @return mixed[]
@@ -140,17 +156,51 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
+		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
+
 		$definedClassesIndex = array_flip(array_map(function (string $className): string {
 			return strtolower($className);
 		}, ClassHelper::getAllNames($phpcsFile)));
+		$definedFunctionsIndex = array_flip(array_map(function (string $functionName): string {
+			return strtolower($functionName);
+		}, FunctionHelper::getAllFunctionNames($phpcsFile)));
+		$definedConstantsIndex = array_flip(ConstantHelper::getAllNames($phpcsFile));
 
 		if ($this->allowFullyQualifiedNameForCollidingClasses) {
-			$referencesIndex = array_flip(
+			$classReferencesIndex = array_flip(
 				array_map(
 					function (ReferencedName $referencedName): string {
 						return strtolower($referencedName->getNameAsReferencedInFile());
 					},
-					$referencedNames
+					array_filter($referencedNames, function (ReferencedName $referencedName): bool {
+						return $referencedName->isClass();
+					})
+				)
+			);
+		}
+
+		if ($this->allowFullyQualifiedNameForCollidingFunctions) {
+			$functionReferencesIndex = array_flip(
+				array_map(
+					function (ReferencedName $referencedName): string {
+						return strtolower($referencedName->getNameAsReferencedInFile());
+					},
+					array_filter($referencedNames, function (ReferencedName $referencedName): bool {
+						return $referencedName->isFunction();
+					})
+				)
+			);
+		}
+
+		if ($this->allowFullyQualifiedNameForCollidingConstants) {
+			$constantReferencesIndex = array_flip(
+				array_map(
+					function (ReferencedName $referencedName): string {
+						return $referencedName->getNameAsReferencedInFile();
+					},
+					array_filter($referencedNames, function (ReferencedName $referencedName): bool {
+						return $referencedName->isConstant();
+					})
 				)
 			);
 		}
@@ -159,16 +209,33 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$name = $referencedName->getNameAsReferencedInFile();
 			$nameStartPointer = $referencedName->getStartPointer();
 			$canonicalName = NamespaceHelper::normalizeToCanonicalName($name);
+			$unqualifiedName = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name);
 
-			if ($this->allowFullyQualifiedNameForCollidingClasses) {
-				$unqualifiedClassName = strtolower(NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name));
-				if (isset($referencesIndex[$unqualifiedClassName]) || array_key_exists($unqualifiedClassName, $definedClassesIndex ?? [])) {
+			$isFullyQualified = NamespaceHelper::isFullyQualifiedName($name);
+			$isGlobalFallback = !$isFullyQualified
+				&& !NamespaceHelper::hasNamespace($name)
+				&& !array_key_exists(UseStatement::getUniqueId($referencedName->getType(), $name), $useStatements);
+			$isGlobalFunctionFallback = $referencedName->isFunction() && $isGlobalFallback;
+			$isGlobalConstantFallback = $referencedName->isConstant() && $isGlobalFallback;
+
+			if ($referencedName->isClass() && $this->allowFullyQualifiedNameForCollidingClasses) {
+				$lowerCasedUnqualifiedClassName = strtolower($unqualifiedName);
+				if (isset($classReferencesIndex[$lowerCasedUnqualifiedClassName]) || array_key_exists($lowerCasedUnqualifiedClassName, $definedClassesIndex)) {
+					continue;
+				}
+			} elseif ($referencedName->isFunction() && $this->allowFullyQualifiedNameForCollidingFunctions) {
+				$lowerCasedUnqualifiedFunctionName = strtolower($unqualifiedName);
+				if (isset($functionReferencesIndex[$lowerCasedUnqualifiedFunctionName]) || array_key_exists($lowerCasedUnqualifiedFunctionName, $definedFunctionsIndex)) {
+					continue;
+				}
+			} elseif ($referencedName->isConstant() && $this->allowFullyQualifiedNameForCollidingConstants) {
+				if (isset($constantReferencesIndex[$unqualifiedName]) || array_key_exists($unqualifiedName, $definedConstantsIndex)) {
 					continue;
 				}
 			}
 
-			if (NamespaceHelper::isFullyQualifiedName($name)) {
-				if (!$this->isClassRequiredToBeUsed($name)) {
+			if ($isFullyQualified || $isGlobalFunctionFallback || $isGlobalConstantFallback) {
+				if ($isFullyQualified && !$this->isRequiredToBeUsed($name)) {
 					continue;
 				}
 
@@ -185,12 +252,15 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				$previousKeywordPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(TokenHelper::$nameTokenCodes, [T_WHITESPACE, T_COMMA]), $nameStartPointer - 1);
 				if (!in_array($tokens[$previousKeywordPointer]['code'], $this->getFullyQualifiedKeywords(), true)) {
 					if (
-						!NamespaceHelper::hasNamespace($name)
+						$isFullyQualified
+						&& !NamespaceHelper::hasNamespace($name)
 						&& NamespaceHelper::findCurrentNamespaceName($phpcsFile, $nameStartPointer) === null
 					) {
+						$label = sprintf($referencedName->isConstant() ? 'Constant %s' : ($referencedName->isFunction() ? 'Function %s()' : 'Class %s'), $name);
+
 						$fix = $phpcsFile->addFixableError(sprintf(
-							'Type %s should not be referenced via a fully qualified name, but via an unqualified name without the leading \\, because the file does not have a namespace and the type cannot be put in a use statement.',
-							$name
+							'%s should not be referenced via a fully qualified name, but via an unqualified name without the leading \\, because the file does not have a namespace and the type cannot be put in a use statement.',
+							$label
 						), $nameStartPointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE);
 						if ($fix) {
 							$phpcsFile->fixer->beginChangeset();
@@ -201,9 +271,9 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						$shouldBeUsed = NamespaceHelper::hasNamespace($name);
 						if (!$shouldBeUsed) {
 							if ($referencedName->isFunction()) {
-								$shouldBeUsed = !$this->allowFullyQualifiedGlobalFunctions;
+								$shouldBeUsed = $isFullyQualified ? !$this->allowFullyQualifiedGlobalFunctions : !$this->allowFallbackGlobalFunctions;
 							} elseif ($referencedName->isConstant()) {
-								$shouldBeUsed = !$this->allowFullyQualifiedGlobalConstants;
+								$shouldBeUsed = $isFullyQualified ? !$this->allowFullyQualifiedGlobalConstants : !$this->allowFallbackGlobalConstants;
 							} else {
 								$shouldBeUsed = !$this->allowFullyQualifiedGlobalClasses;
 							}
@@ -213,27 +283,41 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 							continue;
 						}
 
-						$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 						$nameToReference = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name);
-						$canonicalNameToReference = strtolower($nameToReference);
+						$canonicalNameToReference = $referencedName->isConstant() ? $nameToReference : strtolower($nameToReference);
 
 						$canBeFixed = true;
 						foreach ($useStatements as $useStatement) {
+							if ($useStatement->getType() !== $referencedName->getType()) {
+								continue;
+							}
+
+							if ($useStatement->getFullyQualifiedTypeName() === $canonicalName) {
+								continue;
+							}
+
 							if (
-								$useStatement->getType() === $referencedName->getType()
-								&& $useStatement->getFullyQualifiedTypeName() !== $canonicalName
-								&& ($useStatement->getCanonicalNameAsReferencedInFile() === $canonicalNameToReference || array_key_exists($canonicalNameToReference, $definedClassesIndex))
+								$useStatement->getCanonicalNameAsReferencedInFile() === $canonicalNameToReference
+								|| ($referencedName->isClass() && array_key_exists($canonicalNameToReference, $definedClassesIndex))
+								|| ($referencedName->isFunction() && array_key_exists($canonicalNameToReference, $definedFunctionsIndex))
+								|| ($referencedName->isConstant() && array_key_exists($canonicalNameToReference, $definedConstantsIndex))
 							) {
 								$canBeFixed = false;
 								break;
 							}
 						}
 
-						$errorMessage = sprintf('Type %s should not be referenced via a fully qualified name, but via a use statement.', $name);
+						$label = sprintf($referencedName->isConstant() ? 'Constant %s' : ($referencedName->isFunction() ? 'Function %s()' : 'Class %s'), $name);
+						$errorCode = $isGlobalConstantFallback || $isGlobalFunctionFallback
+							? self::CODE_REFERENCE_VIA_FALLBACK_GLOBAL_NAME
+							: self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME;
+						$errorMessage = $isGlobalConstantFallback || $isGlobalFunctionFallback
+							? sprintf('%s should not be referenced via a fallback global name, but via a use statement.', $label)
+							: sprintf('%s should not be referenced via a fully qualified name, but via a use statement.', $label);
 						if ($canBeFixed) {
-							$fix = $phpcsFile->addFixableError($errorMessage, $nameStartPointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+							$fix = $phpcsFile->addFixableError($errorMessage, $nameStartPointer, $errorCode);
 						} else {
-							$phpcsFile->addError($errorMessage, $nameStartPointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+							$phpcsFile->addError($errorMessage, $nameStartPointer, $errorCode);
 							$fix = false;
 						}
 
@@ -286,7 +370,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 	}
 
-	private function isClassRequiredToBeUsed(string $name): bool
+	private function isRequiredToBeUsed(string $name): bool
 	{
 		if (count($this->namespacesRequiredToUse) === 0) {
 			return true;

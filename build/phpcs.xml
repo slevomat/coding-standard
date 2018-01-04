@@ -49,6 +49,8 @@
 			<property name="namespacesRequiredToUse" type="array" value="SlevomatCodingStandard"/>
 			<property name="fullyQualifiedKeywords" type="array" value="T_EXTENDS,T_IMPLEMENTS"/>
 			<property name="allowFullyQualifiedExceptions" value="true"/>
+			<property name="allowFullyQualifiedGlobalFunctions" value="true"/>
+			<property name="allowFullyQualifiedGlobalConstants" value="true"/>
 			<property name="allowPartialUses" value="false"/>
 		</properties>
 	</rule>

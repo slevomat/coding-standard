@@ -49,6 +49,11 @@ class ReferencedName
 		return $this->endPointer;
 	}
 
+	public function isClass(): bool
+	{
+		return $this->type === self::TYPE_DEFAULT;
+	}
+
 	public function isConstant(): bool
 	{
 		return $this->type === self::TYPE_CONSTANT;

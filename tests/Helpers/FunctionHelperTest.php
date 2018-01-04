@@ -367,4 +367,10 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertNull(FunctionHelper::findReturnAnnotation($codeSnifferFile, $functionPointer));
 	}
 
+	public function testGetAllFunctionNames(): void
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionNames.php');
+		$this->assertSame(['foo', 'boo'], FunctionHelper::getAllFunctionNames($codeSnifferFile));
+	}
+
 }

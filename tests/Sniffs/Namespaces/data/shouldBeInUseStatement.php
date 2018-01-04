@@ -15,6 +15,8 @@ class Bar
 		new \Nette\ObjectPrototype();
 		\Boo\FOO;
 		\Boo\foo();
+		min(1, 2);
+		PHP_VERSION;
 	}
 
 }

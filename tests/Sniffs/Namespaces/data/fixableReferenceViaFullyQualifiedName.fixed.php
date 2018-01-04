@@ -9,6 +9,8 @@ use Foo\SomeError;
 use Nette\ObjectPrototype;
 use function Boo\foo;
 use const Boo\FOO;
+use function min;
+use const PHP_VERSION;
 
 class Bar extends \ObjectPrototype implements Iterator
 {
@@ -23,6 +25,8 @@ class Bar extends \ObjectPrototype implements Iterator
 		new ObjectPrototype();
 		foo();
 		FOO;
+		min(1, 2);
+		PHP_VERSION;
 	}
 
 	public function foo(DoctrineColumn $doctrineColumn): ObjectPrototype

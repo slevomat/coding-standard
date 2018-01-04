@@ -218,4 +218,36 @@ class FunctionHelper
 		return $returnAnnotations[0];
 	}
 
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
+	 * @return string[]
+	 */
+	public static function getAllFunctionNames(\PHP_CodeSniffer\Files\File $codeSnifferFile): array
+	{
+		$previousFunctionPointer = 0;
+
+		return array_map(
+			function (int $functionPointer) use ($codeSnifferFile): string {
+				return self::getName($codeSnifferFile, $functionPointer);
+			},
+			array_filter(
+				iterator_to_array(self::getAllFunctionOrMethodPointers($codeSnifferFile, $previousFunctionPointer)),
+				function (int $functionOrMethodPointer) use ($codeSnifferFile): bool {
+					return !self::isMethod($codeSnifferFile, $functionOrMethodPointer);
+				}
+			)
+		);
+	}
+
+	private static function getAllFunctionOrMethodPointers(\PHP_CodeSniffer\Files\File $codeSnifferFile, int &$previousFunctionPointer): \Generator
+	{
+		do {
+			$nextFunctionPointer = TokenHelper::findNext($codeSnifferFile, T_FUNCTION, $previousFunctionPointer + 1);
+			if ($nextFunctionPointer !== null) {
+				$previousFunctionPointer = $nextFunctionPointer;
+				yield $nextFunctionPointer;
+			}
+		} while ($nextFunctionPointer !== null);
+	}
+
 }

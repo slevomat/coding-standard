@@ -4,6 +4,7 @@ namespace Foo;
 
 use DateTime;
 use DateTimeImmutable;
+use function phpversion;
 
 new DateTimeImmutable();
 

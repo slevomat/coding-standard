@@ -2,6 +2,9 @@
 
 namespace Foo;
 
+use function phpversion;
+use const PHP_VERSION;
+
 class Bar implements \Iterator
 {
 

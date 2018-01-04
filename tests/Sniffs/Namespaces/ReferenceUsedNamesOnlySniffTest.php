@@ -100,6 +100,32 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		);
 	}
 
+	public function testReferencingGlobalFunctionViaFallback(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/shouldBeInUseStatement.php', [
+			'allowFallbackGlobalFunctions' => false,
+		]);
+		$this->assertSniffError(
+			$report,
+			18,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FALLBACK_GLOBAL_NAME,
+			'min'
+		);
+	}
+
+	public function testReferencingGlobalConstantViaFallback(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/shouldBeInUseStatement.php', [
+			'allowFallbackGlobalConstants' => false,
+		]);
+		$this->assertSniffError(
+			$report,
+			19,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FALLBACK_GLOBAL_NAME,
+			'PHP_VERSION'
+		);
+	}
+
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param string[] $ignoredNames
@@ -601,12 +627,14 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		$this->assertNoSniffErrorInFile($report);
 	}
 
-	public function testFixableReferenceViaFullyQualifiedName(): void
+	public function testFixableReferenceViaFullyQualifiedOrGlobalFallbackName(): void
 	{
 		$report = $this->checkFile(__DIR__ . '/data/fixableReferenceViaFullyQualifiedName.php', [
 			'fullyQualifiedKeywords' => ['T_EXTENDS'],
 			'allowFullyQualifiedExceptions' => true,
-		], [ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME]);
+			'allowFallbackGlobalFunctions' => false,
+			'allowFallbackGlobalConstants' => false,
+		], [ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FALLBACK_GLOBAL_NAME]);
 		$this->assertAllFixedInFile($report);
 	}
 
@@ -705,6 +733,46 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		);
 		$this->assertSame(1, $report->getErrorCount());
 		$this->assertSniffError($report, 5, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+	}
+
+	public function testCollidingFullyQualifiedFunctionNameAllowed(): void
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/collidingFullyQualifiedFunctionNames.php',
+			['allowFullyQualifiedNameForCollidingFunctions' => true]
+		);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
+	public function testCollidingFullyQualifiedFunctionNameDisallowed(): void
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/collidingFullyQualifiedFunctionNames.php',
+			['allowFullyQualifiedNameForCollidingFunctions' => false]
+		);
+
+		$this->assertSame(1, $report->getErrorCount());
+		$this->assertSniffError($report, 15, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+	}
+
+	public function testCollidingFullyQualifiedConstantNameAllowed(): void
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/collidingFullyQualifiedConstantNames.php',
+			['allowFullyQualifiedNameForCollidingConstants' => true]
+		);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
+	public function testCollidingFullyQualifiedConstantNameDisallowed(): void
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/collidingFullyQualifiedConstantNames.php',
+			['allowFullyQualifiedNameForCollidingConstants' => false]
+		);
+
+		$this->assertSame(1, $report->getErrorCount());
+		$this->assertSniffError($report, 12, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
 	}
 
 }

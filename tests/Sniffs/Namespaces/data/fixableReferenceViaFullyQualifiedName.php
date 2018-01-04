@@ -17,6 +17,8 @@ class Bar extends \ObjectPrototype implements \Iterator
 		new \Nette\ObjectPrototype();
 		\Boo\foo();
 		\Boo\FOO;
+		min(1, 2);
+		PHP_VERSION;
 	}
 
 	public function foo(\Doctrine\ORM\Mapping\Column $doctrineColumn): \Nette\ObjectPrototype

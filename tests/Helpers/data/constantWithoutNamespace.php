@@ -1,0 +1,3 @@
+<?php
+
+const FOO = 'boo';
