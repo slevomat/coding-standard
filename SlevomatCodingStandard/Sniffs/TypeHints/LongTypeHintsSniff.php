@@ -3,8 +3,10 @@
 namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
+use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
+use SlevomatCodingStandard\Helpers\TokenHelper;
 
 class LongTypeHintsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
@@ -63,12 +65,32 @@ class LongTypeHintsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					}
 
 					if ($suggestType !== null) {
-						$phpcsFile->addError(sprintf(
+						$fix = $phpcsFile->addFixableError(sprintf(
 							'Expected "%s" but found "%s" in %s annotation.',
 							$suggestType,
 							$type,
 							$annotationName
 						), $pointer, self::CODE_USED_LONG_TYPE_HINT);
+
+						if ($fix) {
+							$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $pointer);
+							$docCommentClosePointer = $tokens[$docCommentOpenPointer]['comment_closer'];
+
+							$phpcsFile->fixer->beginChangeset();
+							for ($i = $docCommentOpenPointer; $i <= $docCommentClosePointer; $i++) {
+								$phpcsFile->fixer->replaceToken($i, '');
+							}
+
+							$docComment = TokenHelper::getContent($phpcsFile, $docCommentOpenPointer, $docCommentClosePointer);
+
+							$fixedDocComment = preg_replace_callback('~((?:@(?:var|param|return)\\s+)|\|)' . preg_quote($type, '~') . '(\\s|\||\[)~', function (array $matches) use ($suggestType): string {
+								return $matches[1] . $suggestType . $matches[2];
+							}, $docComment);
+
+							$phpcsFile->fixer->addContent($docCommentOpenPointer, $fixedDocComment);
+
+							$phpcsFile->fixer->endChangeset();
+						}
 					}
 				}
 			}

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @param integer $a
- * @return boolean
+ * @param int $a
+ * @return bool
  */
 function doSomething($a)
 {
@@ -12,7 +12,7 @@ function doSomething($a)
 class Foo
 {
 
-	/** @var integer|null */
+	/** @var int|null */
 	private $integer = 0;
 
 	/**
@@ -21,21 +21,21 @@ class Foo
 	 * Long
 	 * Destription
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	private $boolean = true;
 
 	/**
 	 * Array
-	 * @var integer[]|boolean[]|null
+	 * @var int[]|bool[]|null
 	 */
 	public $array;
 
 	/**
-	 * @param boolean|null $a
-	 * @param null|boolean
-	 * @param integer|bool $c
-	 * @return integer|null
+	 * @param bool|null $a
+	 * @param null|bool
+	 * @param int|bool $c
+	 * @return int|null
 	 */
 	public function doSomething($a, $b, $c)
 	{
