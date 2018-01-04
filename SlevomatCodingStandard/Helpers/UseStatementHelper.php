@@ -97,7 +97,7 @@ class UseStatementHelper
 					$usePointer,
 					$type
 				);
-				$useStatements[$useStatement->getCanonicalNameAsReferencedInFile()] = $useStatement;
+				$useStatements[UseStatement::getUniqueId($type, $name)] = $useStatement;
 			}
 
 			self::$allUseStatements[$cacheKey] = $useStatements;

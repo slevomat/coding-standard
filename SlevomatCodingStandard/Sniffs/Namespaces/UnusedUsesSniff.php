@@ -44,24 +44,24 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$nameParts = NamespaceHelper::getNameParts($name);
 			$nameAsReferencedInFile = $nameParts[0];
 			$nameReferencedWithoutSubNamespace = count($nameParts) === 1;
-			$normalizedNameAsReferencedInFile = $nameReferencedWithoutSubNamespace
-				? UseStatement::normalizedNameAsReferencedInFile($referencedName->getType(), $nameAsReferencedInFile)
-				: UseStatement::normalizedNameAsReferencedInFile(ReferencedName::TYPE_DEFAULT, $nameAsReferencedInFile);
+			$uniqueId = $nameReferencedWithoutSubNamespace
+				? UseStatement::getUniqueId($referencedName->getType(), $nameAsReferencedInFile)
+				: UseStatement::getUniqueId(ReferencedName::TYPE_DEFAULT, $nameAsReferencedInFile);
 			if (
 				!NamespaceHelper::isFullyQualifiedName($name)
-				&& isset($unusedNames[$normalizedNameAsReferencedInFile])
+				&& isset($unusedNames[$uniqueId])
 			) {
-				if ($nameReferencedWithoutSubNamespace && !$referencedName->hasSameUseStatementType($unusedNames[$normalizedNameAsReferencedInFile])) {
+				if ($nameReferencedWithoutSubNamespace && !$referencedName->hasSameUseStatementType($unusedNames[$uniqueId])) {
 					continue;
 				}
-				if ($unusedNames[$normalizedNameAsReferencedInFile]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
+				if ($unusedNames[$uniqueId]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
 					$phpcsFile->addError(sprintf(
 						'Case of reference name %s and use statement %s do not match.',
 						$nameAsReferencedInFile,
-						$unusedNames[$normalizedNameAsReferencedInFile]->getNameAsReferencedInFile()
+						$unusedNames[$uniqueId]->getNameAsReferencedInFile()
 					), $pointer, self::CODE_MISMATCHING_CASE);
 				}
-				unset($unusedNames[$normalizedNameAsReferencedInFile]);
+				unset($unusedNames[$uniqueId]);
 			}
 		}
 

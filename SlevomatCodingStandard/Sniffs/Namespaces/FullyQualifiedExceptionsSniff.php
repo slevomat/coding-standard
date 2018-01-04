@@ -72,9 +72,9 @@ class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		foreach ($referencedNames as $referencedName) {
 			$pointer = $referencedName->getStartPointer();
 			$name = $referencedName->getNameAsReferencedInFile();
-			$normalizedName = UseStatement::normalizedNameAsReferencedInFile($referencedName->getType(), $name);
-			if (isset($useStatements[$normalizedName]) && $referencedName->hasSameUseStatementType($useStatements[$normalizedName])) {
-				$useStatement = $useStatements[$normalizedName];
+			$uniqueId = UseStatement::getUniqueId($referencedName->getType(), $name);
+			if (isset($useStatements[$uniqueId]) && $referencedName->hasSameUseStatementType($useStatements[$uniqueId])) {
+				$useStatement = $useStatements[$uniqueId];
 				if (
 					in_array($useStatement->getFullyQualifiedTypeName(), $this->getIgnoredNames(), true)
 					|| (

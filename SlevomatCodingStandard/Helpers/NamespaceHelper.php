@@ -110,16 +110,16 @@ class NamespaceHelper
 			return $nameAsReferencedInFile;
 		}
 
-		$normalizedName = UseStatement::normalizedNameAsReferencedInFile($type, self::normalizeToCanonicalName($nameAsReferencedInFile));
+		$uniqueId = UseStatement::getUniqueId($type, self::normalizeToCanonicalName($nameAsReferencedInFile));
 
-		if (isset($useStatements[$normalizedName])) {
-			return sprintf('%s%s', self::NAMESPACE_SEPARATOR, $useStatements[$normalizedName]->getFullyQualifiedTypeName());
+		if (isset($useStatements[$uniqueId])) {
+			return sprintf('%s%s', self::NAMESPACE_SEPARATOR, $useStatements[$uniqueId]->getFullyQualifiedTypeName());
 		}
 
 		$nameParts = self::getNameParts($nameAsReferencedInFile);
-		$normalizedNameFirstPart = UseStatement::normalizedNameAsReferencedInFile($type, $nameParts[0]);
-		if (count($nameParts) > 1 && isset($useStatements[$normalizedNameFirstPart])) {
-			return sprintf('%s%s%s%s', self::NAMESPACE_SEPARATOR, $useStatements[$normalizedNameFirstPart]->getFullyQualifiedTypeName(), self::NAMESPACE_SEPARATOR, implode(self::NAMESPACE_SEPARATOR, array_slice($nameParts, 1)));
+		$firstPartUniqueId = UseStatement::getUniqueId($type, $nameParts[0]);
+		if (count($nameParts) > 1 && isset($useStatements[$firstPartUniqueId])) {
+			return sprintf('%s%s%s%s', self::NAMESPACE_SEPARATOR, $useStatements[$firstPartUniqueId]->getFullyQualifiedTypeName(), self::NAMESPACE_SEPARATOR, implode(self::NAMESPACE_SEPARATOR, array_slice($nameParts, 1)));
 		}
 
 		$name = sprintf('%s%s', self::NAMESPACE_SEPARATOR, $nameAsReferencedInFile);

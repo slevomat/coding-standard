@@ -3,8 +3,10 @@
 use Bar\Baz;
 use Foo;
 use Lorem\Ipsum as LoremIpsum;
-use const Rasmus\FOO_CONSTANT;
+use const Lerdorf\IS_BAR;
+use const Rasmus\FOO;
 use function Lerdorf\isBar;
+use function Rasmus\foo;
 
 class FooBar
 {

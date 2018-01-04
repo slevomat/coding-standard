@@ -6,6 +6,7 @@ use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedName;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
+use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
 abstract class AbstractFullyQualifiedGlobalReference
@@ -60,7 +61,7 @@ abstract class AbstractFullyQualifiedGlobalReference
 
 			$canonicalName = $this->isCaseSensitive() ? $name : strtolower($name);
 
-			if (array_key_exists($canonicalName, $useStatements)) {
+			if (array_key_exists(UseStatement::getUniqueId($referencedName->getType(), $canonicalName), $useStatements)) {
 				$fullyQualifiedName = NamespaceHelper::resolveName($phpcsFile, $name, $referencedName->getType(), $useStatements, $namePointer);
 				if (NamespaceHelper::hasNamespace($fullyQualifiedName)) {
 					continue;

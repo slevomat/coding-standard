@@ -79,11 +79,17 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$loremIpsumUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $fooUsePointer + 1);
 		$this->assertSame('Lorem\Ipsum', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $loremIpsumUsePointer));
 
-		$rasmusFooConstantUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $loremIpsumUsePointer + 1);
-		$this->assertSame('Rasmus\FOO_CONSTANT', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $rasmusFooConstantUsePointer));
+		$lerdorfIsBarConstantUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $loremIpsumUsePointer + 1);
+		$this->assertSame('Lerdorf\IS_BAR', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $lerdorfIsBarConstantUsePointer));
 
-		$lerdorfIsBarPointer = TokenHelper::findNext($codeSnifferFile, T_USE, $rasmusFooConstantUsePointer + 1);
-		$this->assertSame('Lerdorf\isBar', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $lerdorfIsBarPointer));
+		$rasmusFooConstantUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $lerdorfIsBarConstantUsePointer + 1);
+		$this->assertSame('Rasmus\FOO', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $rasmusFooConstantUsePointer));
+
+		$lerdorfIsBarFunctionUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $rasmusFooConstantUsePointer + 1);
+		$this->assertSame('Lerdorf\isBar', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $lerdorfIsBarFunctionUsePointer));
+
+		$rasmusFooFunctionUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $lerdorfIsBarFunctionUsePointer + 1);
+		$this->assertSame('Rasmus\foo', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $rasmusFooFunctionUsePointer));
 	}
 
 	public function testGetUseStatements(): void
@@ -92,14 +98,16 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			__DIR__ . '/data/useStatements.php'
 		);
 		$useStatements = UseStatementHelper::getUseStatements($codeSnifferFile, 0);
-		$this->assertCount(6, $useStatements);
-		$this->assertSame(2, $useStatements['baz']->getPointer());
-		$this->assertUseStatement('Bar\Baz', 'Baz', $useStatements['baz'], false, false);
-		$this->assertUseStatement('Foo', 'Foo', $useStatements['foo'], false, false);
-		$this->assertUseStatement('Lorem\Ipsum', 'LoremIpsum', $useStatements['loremipsum'], false, false);
-		$this->assertUseStatement('Zero', 'Zero', $useStatements['zero'], false, false);
-		$this->assertUseStatement('Rasmus\FOO_CONSTANT', 'FOO_CONSTANT', $useStatements['FOO_CONSTANT'], false, true);
-		$this->assertUseStatement('Lerdorf\isBar', 'isBar', $useStatements['isbar'], true, false);
+		$this->assertCount(8, $useStatements);
+		$this->assertSame(2, $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Baz')]->getPointer());
+		$this->assertUseStatement('Bar\Baz', 'Baz', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Baz')], false, false);
+		$this->assertUseStatement('Foo', 'Foo', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Foo')], false, false);
+		$this->assertUseStatement('Lorem\Ipsum', 'LoremIpsum', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'LoremIpsum')], false, false);
+		$this->assertUseStatement('Zero', 'Zero', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Zero')], false, false);
+		$this->assertUseStatement('Rasmus\FOO', 'FOO', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CONSTANT, 'FOO')], false, true);
+		$this->assertUseStatement('Rasmus\foo', 'foo', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_FUNCTION, 'foo')], true, false);
+		$this->assertUseStatement('Lerdorf\IS_BAR', 'IS_BAR', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CONSTANT, 'IS_BAR')], false, true);
+		$this->assertUseStatement('Lerdorf\isBar', 'isBar', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_FUNCTION, 'isBar')], true, false);
 	}
 
 	private function assertUseStatement(string $fullyQualifiedTypeName, string $referencedName, UseStatement $useStatement, bool $isFunction, bool $isConstant): void
