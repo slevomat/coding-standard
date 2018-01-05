@@ -26,7 +26,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			['\Traversable', false],
 			['resource', false],
 			['mixed[]', false],
-			['object', PHP_VERSION_ID >= 70200],
+			['object', false],
 			['null', false],
 		];
 	}
@@ -82,7 +82,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			['\Traversable', false],
 			['int', false],
 			['bool', false],
-			['object', PHP_VERSION_ID < 70200],
+			['object', true],
 			['string', false],
 		];
 	}

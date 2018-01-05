@@ -211,7 +211,7 @@ class ReferencedNameHelper
 		$endPointer = self::getReferencedNameEndPointer($phpcsFile, $startPointer);
 		$referencedName = TokenHelper::getContent($phpcsFile, $startPointer, $endPointer);
 
-		return !TypeHintHelper::isSimpleTypeHint($referencedName);
+		return !TypeHintHelper::isSimpleTypeHint($referencedName) && $referencedName !== 'object';
 	}
 
 }

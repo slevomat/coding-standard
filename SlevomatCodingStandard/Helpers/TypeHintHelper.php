@@ -55,10 +55,6 @@ class TypeHintHelper
 				'iterable',
 				'void',
 			];
-
-			if (PHP_VERSION_ID >= 70200) {
-				$simpleTypeHints[] = 'object';
-			}
 		}
 
 		return $simpleTypeHints;
@@ -85,14 +81,11 @@ class TypeHintHelper
 				'mixed',
 				'true',
 				'false',
+				'object',
 				'resource',
 				'static',
 				'$this',
 			];
-
-			if (PHP_VERSION_ID < 70200) {
-				$simpleUnofficialTypeHints[] = 'object';
-			}
 		}
 
 		return in_array($typeHint, $simpleUnofficialTypeHints, true);

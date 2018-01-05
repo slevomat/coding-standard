@@ -52,6 +52,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	public $enableVoidTypeHint = true;
 
 	/** @var bool */
+	public $enableObjectTypeHint = PHP_VERSION_ID >= 70200;
+
+	/** @var bool */
 	public $enableEachParameterAndReturnInspection = false;
 
 	/** @var string[] */
@@ -775,7 +778,15 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 	private function isValidTypeHint(string $typeHint): bool
 	{
-		return TypeHintHelper::isSimpleTypeHint($typeHint) || !TypeHintHelper::isSimpleUnofficialTypeHints($typeHint);
+		if (TypeHintHelper::isSimpleTypeHint($typeHint)) {
+			return true;
+		}
+
+		if ($typeHint === 'object') {
+			return $this->enableObjectTypeHint;
+		}
+
+		return !TypeHintHelper::isSimpleUnofficialTypeHints($typeHint);
 	}
 
 	private function definitionContainsNullTypeHint(string $typeHintDefinition): bool
@@ -889,8 +900,15 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 	private function typeHintEqualsAnnotation(\PHP_CodeSniffer\Files\File $phpcsFile, int $functionPointer, string $typeHint, string $typeHintInAnnotation): bool
 	{
-		return TypeHintHelper::isSimpleTypeHint($typeHint)
-			|| TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint) === TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHintInAnnotation);
+		if (TypeHintHelper::isSimpleTypeHint($typeHint)) {
+			return true;
+		}
+
+		if ($typeHint === 'object') {
+			return $this->enableObjectTypeHint;
+		}
+
+		return TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint) === TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHintInAnnotation);
 	}
 
 	private function isReturnAnnotationUseless(\PHP_CodeSniffer\Files\File $phpcsFile, int $functionPointer, ?ReturnTypeHint $returnTypeHint = null, ?Annotation $returnAnnotation = null): bool

@@ -10,6 +10,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/typeHintDeclarationNoErrors.php', [
 			'enableNullableTypeHints' => false,
 			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => false,
 			'traversableTypeHints' => [
 				\Traversable::class,
 				'\QueryResultSet',
@@ -30,6 +31,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$report = $this->checkFile(__DIR__ . '/data/typeHintDeclarationErrors.php', [
 			'enableNullableTypeHints' => false,
 			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => false,
 			'traversableTypeHints' => [
 				\Traversable::class,
 				'AnyNamespace\Traversable',
@@ -116,6 +118,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$report = $this->checkFile(__DIR__ . '/data/voidAndIterableTypeHintDeclaration.php', [
 			'enableNullableTypeHints' => false,
 			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => false,
 			'traversableTypeHints' => [
 				\Traversable::class,
 			],
@@ -139,6 +142,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$report = $this->checkFile(__DIR__ . '/data/enabledVoidTypeHintErrors.php', [
 			'enableNullableTypeHints' => false,
 			'enableVoidTypeHint' => true,
+			'enableObjectTypeHint' => false,
 		]);
 
 		$this->assertSame(8, $report->getErrorCount());
@@ -158,6 +162,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/typeHintDeclarationEnabledNullableTypeHintsNoErrors.php', [
 			'enableNullableTypeHints' => true,
 			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => false,
 		]));
 	}
 
@@ -166,6 +171,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$report = $this->checkFile(__DIR__ . '/data/typeHintDeclarationEnabledNullableTypeHintsErrors.php', [
 			'enableNullableTypeHints' => true,
 			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => false,
 		]);
 
 		$this->assertSame(14, $report->getErrorCount());
@@ -191,6 +197,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/typeHintDeclarationDisabledNullableTypeHintsNoErrors.php', [
 			'enableNullableTypeHints' => false,
 			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => false,
 		]));
 	}
 
@@ -199,6 +206,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$report = $this->checkFile(__DIR__ . '/data/typeHintDeclarationDisabledNullableTypeHintsErrors.php', [
 			'enableNullableTypeHints' => false,
 			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => false,
 		]);
 
 		$this->assertSame(3, $report->getErrorCount());
@@ -213,6 +221,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/typeHintDeclarationEnabledEachParameterAndReturnInspectionNoErrors.php', [
 			'enableNullableTypeHints' => false,
 			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => false,
 			'enableEachParameterAndReturnInspection' => true,
 		]));
 	}
@@ -222,6 +231,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$report = $this->checkFile(__DIR__ . '/data/typeHintDeclarationEnabledEachParameterAndReturnInspectionErrors.php', [
 			'enableNullableTypeHints' => false,
 			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => false,
 			'usefulAnnotations' => ['@useful'],
 			'enableEachParameterAndReturnInspection' => true,
 		]);
@@ -250,6 +260,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHints.php', [
 			'enableNullableTypeHints' => true,
 			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => false,
 			'traversableTypeHints' => [
 				\ArrayIterator::class,
 				\Traversable::class,
@@ -264,6 +275,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintsWithEnabledVoid.php', [
 			'enableNullableTypeHints' => false,
 			'enableVoidTypeHint' => true,
+			'enableObjectTypeHint' => false,
 		], [TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT, TypeHintDeclarationSniff::CODE_INCORRECT_RETURN_TYPE_HINT]);
 
 		$this->assertAllFixedInFile($report);
@@ -274,6 +286,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$report = $this->checkFile(__DIR__ . '/data/fixableReturnTypeHintsWithDisabledVoid.php', [
 			'enableNullableTypeHints' => false,
 			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => false,
 		], [TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT, TypeHintDeclarationSniff::CODE_INCORRECT_RETURN_TYPE_HINT]);
 
 		$this->assertAllFixedInFile($report);
@@ -284,6 +297,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$report = $this->checkFile(__DIR__ . '/data/fixableParameterTypeHintsWithEnabledNullableTypeHints.php', [
 			'enableNullableTypeHints' => true,
 			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => false,
 			'traversableTypeHints' => [
 				\ArrayIterator::class,
 				\Traversable::class,
@@ -298,6 +312,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$report = $this->checkFile(__DIR__ . '/data/fixableParameterTypeHintsWithDisabledNullableTypeHints.php', [
 			'enableNullableTypeHints' => false,
 			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => false,
 		], [TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT]);
 
 		$this->assertAllFixedInFile($report);
@@ -308,6 +323,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$report = $this->checkFile(__DIR__ . '/data/fixableUselessDocComments.php', [
 			'enableNullableTypeHints' => true,
 			'enableVoidTypeHint' => true,
+			'enableObjectTypeHint' => false,
 		], [TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT]);
 
 		$this->assertAllFixedInFile($report);
@@ -318,11 +334,46 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		$report = $this->checkFile(__DIR__ . '/data/fixableEnableEachParameterAndReturnInspection.php', [
 			'enableNullableTypeHints' => false,
 			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => false,
 			'enableEachParameterAndReturnInspection' => true,
 			'usefulAnnotations' => ['@useful'],
 		], [TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT, TypeHintDeclarationSniff::CODE_USELESS_PARAMETER_ANNOTATION, TypeHintDeclarationSniff::CODE_USELESS_RETURN_ANNOTATION]);
 
 		$this->assertAllFixedInFile($report);
+	}
+
+	public function testEnabledObjectTypeHintNoErrors(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/typeHintDeclarationEnabledObjectTypeHintNoErrors.php', [
+			'enableNullableTypeHints' => true,
+			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => true,
+		]);
+		$this->assertNoSniffErrorInFile($report);
+	}
+
+	public function testEnabledObjectTypeHintErrors(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/typeHintDeclarationEnabledObjectTypeHintErrors.php', [
+			'enableNullableTypeHints' => true,
+			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => true,
+		]);
+
+		$this->assertSame(2, $report->getErrorCount());
+
+		$this->assertSniffError($report, 11, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		$this->assertSniffError($report, 16, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+	}
+
+	public function testDisabledObjectTypeHintNoErrors(): void
+	{
+		$report = $this->checkFile(__DIR__ . '/data/typeHintDeclarationDisabledObjectTypeHintNoErrors.php', [
+			'enableNullableTypeHints' => true,
+			'enableVoidTypeHint' => false,
+			'enableObjectTypeHint' => false,
+		]);
+		$this->assertNoSniffErrorInFile($report);
 	}
 
 }
