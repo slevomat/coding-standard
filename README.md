@@ -323,11 +323,9 @@ use Foo, Bar;
 
 Enforces to use all referenced names with configurable omissions:
 
-`fullyQualifiedKeywords` - allows fully qualified names after certain keywords. Useful in tandem with FullyQualifiedClassNameAfterKeyword sniff.
-
-`allowFullyQualifiedExceptions`, `specialExceptionNames` & `ignoredNames` - allows fully qualified exceptions. Useful in tandem with FullyQualifiedExceptions sniff.
-
-`allowPartialUses` - allows using and referencing whole namespaces:
+* `fullyQualifiedKeywords`: allows fully qualified names after certain keywords. Useful in tandem with FullyQualifiedClassNameAfterKeyword sniff.
+* `allowFullyQualifiedExceptions`, `specialExceptionNames` & `ignoredNames`: allows fully qualified exceptions. Useful in tandem with FullyQualifiedExceptions sniff.
+* `allowPartialUses`: allows using and referencing whole namespaces:
 
 ```php
 use Foo;
@@ -335,15 +333,11 @@ use Foo;
 new Foo\Bar();
 ```
 
-`namespacesRequiredToUse` - if not set, all namespaces are required to be used. When set, only mentioned namespaces are required to be used. Useful in tandem with UseOnlyWhitelistedNamespaces sniff.
-
-`allowFullyQualifiedNameForCollidingClasses` - allow fully qualified name for a class with a colliding use statement
-
-`allowFullyQualifiedGlobalClasses` - allows using fully qualified classes from global space (i.e. `\DateTimeImmutable`)
-
-`allowFullyQualifiedGlobalFunctions` - allows using fully qualified functions from global space (i.e. `\phpversion()`)
-
-`allowFullyQualifiedGlobalConstants` - allows using fully qualified constants from global space (i.e. `\PHP_VERSION`)
+* `namespacesRequiredToUse`: if not set, all namespaces are required to be used. When set, only mentioned namespaces are required to be used. Useful in tandem with UseOnlyWhitelistedNamespaces sniff.
+* `allowFullyQualifiedNameForCollidingClasses`: allow fully qualified name for a class with a colliding use statement.
+* `allowFullyQualifiedGlobalClasses`: allows using fully qualified classes from global space (i.e. `\DateTimeImmutable`).
+* `allowFullyQualifiedGlobalFunctions`: allows using fully qualified functions from global space (i.e. `\phpversion()`).
+* `allowFullyQualifiedGlobalConstants`: allows using fully qualified constants from global space (i.e. `\PHP_VERSION`).
 
 #### SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces
 
