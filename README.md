@@ -46,8 +46,8 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_
 
 Sniff provides the following settings:
 
-* `enableNullableTypeHints`: enforces to transform `Foo|null` in phpDoc into `?Foo` in native typehint.
-* `enableVoidTypeHint`: enforces to transform `@return void` into native `void` return typehint.
+* **DEPRECATED** `enableNullableTypeHints`: enforces to transform `Foo|null` in phpDoc into `?Foo` in native typehint.
+* **DEPRECATED** `enableVoidTypeHint`: enforces to transform `@return void` into native `void` return typehint.
 * `traversableTypeHints`: enforces which typehints must have specified contained type. E. g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
 * `usefulAnnotations`: prevents reporting and removing useless phpDocs if they contain an additional configured annotation like `@dataProvider`.
 * `enableEachParameterAndReturnInspection`: enables inspection and fixing of `@param` and `@return` annotations separately. Useful when you only want to document parameters or return values that could not be expressed natively (i.e. member types of `array` or `Traversable`).
