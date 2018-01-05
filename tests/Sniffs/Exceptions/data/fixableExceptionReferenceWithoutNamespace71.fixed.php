@@ -14,7 +14,7 @@ class Foo
 
 		try {
 
-		} catch (FooException | Throwable $e) {
+		} catch (FooException | \Throwable $e) {
 
 		}
 	}

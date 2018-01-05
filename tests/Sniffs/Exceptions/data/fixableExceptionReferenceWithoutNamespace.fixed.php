@@ -14,7 +14,7 @@ class Foo
 
 		try {
 
-		} catch (Throwable $e) {
+		} catch (\Throwable $e) {
 
 		}
 	}
