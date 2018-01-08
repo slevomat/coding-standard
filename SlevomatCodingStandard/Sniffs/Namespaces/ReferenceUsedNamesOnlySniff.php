@@ -218,19 +218,21 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$isGlobalFunctionFallback = $referencedName->isFunction() && $isGlobalFallback;
 			$isGlobalConstantFallback = $referencedName->isConstant() && $isGlobalFallback;
 
-			if ($referencedName->isClass() && $this->allowFullyQualifiedNameForCollidingClasses) {
-				$lowerCasedUnqualifiedClassName = strtolower($unqualifiedName);
-				if (isset($classReferencesIndex[$lowerCasedUnqualifiedClassName]) || array_key_exists($lowerCasedUnqualifiedClassName, $definedClassesIndex)) {
-					continue;
-				}
-			} elseif ($referencedName->isFunction() && $this->allowFullyQualifiedNameForCollidingFunctions) {
-				$lowerCasedUnqualifiedFunctionName = strtolower($unqualifiedName);
-				if (isset($functionReferencesIndex[$lowerCasedUnqualifiedFunctionName]) || array_key_exists($lowerCasedUnqualifiedFunctionName, $definedFunctionsIndex)) {
-					continue;
-				}
-			} elseif ($referencedName->isConstant() && $this->allowFullyQualifiedNameForCollidingConstants) {
-				if (isset($constantReferencesIndex[$unqualifiedName]) || array_key_exists($unqualifiedName, $definedConstantsIndex)) {
-					continue;
+			if ($isFullyQualified) {
+				if ($referencedName->isClass() && $this->allowFullyQualifiedNameForCollidingClasses) {
+					$lowerCasedUnqualifiedClassName = strtolower($unqualifiedName);
+					if (isset($classReferencesIndex[$lowerCasedUnqualifiedClassName]) || array_key_exists($lowerCasedUnqualifiedClassName, $definedClassesIndex)) {
+						continue;
+					}
+				} elseif ($referencedName->isFunction() && $this->allowFullyQualifiedNameForCollidingFunctions) {
+					$lowerCasedUnqualifiedFunctionName = strtolower($unqualifiedName);
+					if (isset($functionReferencesIndex[$lowerCasedUnqualifiedFunctionName]) || array_key_exists($lowerCasedUnqualifiedFunctionName, $definedFunctionsIndex)) {
+						continue;
+					}
+				} elseif ($referencedName->isConstant() && $this->allowFullyQualifiedNameForCollidingConstants) {
+					if (isset($constantReferencesIndex[$unqualifiedName]) || array_key_exists($unqualifiedName, $definedConstantsIndex)) {
+						continue;
+					}
 				}
 			}
 

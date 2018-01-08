@@ -775,4 +775,19 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		$this->assertSniffError($report, 12, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
 	}
 
+	public function testReferencingGlobalFunctionViaFallbackErrorsWithMoreComplexSettings(): void
+	{
+		$report = $this->checkFile(
+			__DIR__ . '/data/referencingGlobalFunctionViaFallbackErrorsWithMoreComplexSettings.php',
+			[
+				'allowFallbackGlobalFunctions' => false,
+				'allowFullyQualifiedNameForCollidingFunctions' => true,
+				'allowFullyQualifiedGlobalFunctions' => true,
+			]
+		);
+
+		$this->assertSame(1, $report->getErrorCount());
+		$this->assertSniffError($report, 17, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FALLBACK_GLOBAL_NAME);
+	}
+
 }
