@@ -131,7 +131,7 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	public function testConstantIsNotReferencedName(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/class-constant.php'
+			__DIR__ . '/data/classConstant.php'
 		);
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
 		$this->assertCount(0, $names);
