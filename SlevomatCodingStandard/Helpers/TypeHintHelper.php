@@ -30,7 +30,9 @@ class TypeHintHelper
 			return self::convertLongSimpleTypeHintToShort($typeHint);
 		}
 
-		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $pointer));
+		/** @var int $openTagPointer */
+		$openTagPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $pointer);
+		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 		return NamespaceHelper::resolveClassName($phpcsFile, $typeHint, $useStatements, $pointer);
 	}
 

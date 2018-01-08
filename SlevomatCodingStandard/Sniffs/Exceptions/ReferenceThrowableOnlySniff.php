@@ -52,6 +52,7 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				$previousPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::$nameTokenCodes, [T_BITWISE_OR]), $previousPointer - 1);
 			}
 			if ($tokens[$previousPointer]['code'] === T_OPEN_PARENTHESIS) {
+				/** @var int $catchPointer */
 				$catchPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
 				if ($tokens[$catchPointer]['code'] === T_CATCH) {
 					if ($this->searchForThrowableInNextCatches($phpcsFile, $useStatements, $catchPointer)) {

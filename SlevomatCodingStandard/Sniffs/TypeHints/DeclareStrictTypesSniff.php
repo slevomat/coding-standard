@@ -85,6 +85,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return;
 		}
 
+		/** @var int $numberPointer */
 		$numberPointer = TokenHelper::findNext($phpcsFile, T_LNUMBER, $strictTypesPointer + 1);
 		if ($tokens[$numberPointer]['content'] !== '1') {
 			$fix = $phpcsFile->addFixableError(
@@ -179,6 +180,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			}
 		}
 
+		/** @var int $declareSemicolonPointer */
 		$declareSemicolonPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$declarePointer]['parenthesis_closer'] + 1);
 
 		$whitespaceAfter = '';

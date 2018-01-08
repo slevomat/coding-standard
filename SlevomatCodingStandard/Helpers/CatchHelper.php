@@ -23,6 +23,7 @@ class CatchHelper
 			}
 
 			if ($tokens[$nameStartPointer]['code'] === T_BITWISE_OR) {
+				/** @var int $nameStartPointer */
 				$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $nameStartPointer + 1, $catchToken['parenthesis_closer']);
 			}
 

@@ -135,6 +135,8 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $typePointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
+
+		/** @var int $namePointer */
 		$namePointer = TokenHelper::findNext($phpcsFile, T_STRING, $typePointer + 1);
 
 		$namespacePointer = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $typePointer - 1);

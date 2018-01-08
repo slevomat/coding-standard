@@ -36,11 +36,13 @@ class UseDoesNotStartWithBackslashSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
+		/** @var int $nextTokenPointer */
 		$nextTokenPointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
 
 		if ($tokens[$nextTokenPointer]['code'] === T_STRING
 			&& ($tokens[$nextTokenPointer]['content'] === 'function' || $tokens[$nextTokenPointer]['content'] === 'const')
 		) {
+			/** @var int $nextTokenPointer */
 			$nextTokenPointer = TokenHelper::findNextEffective($phpcsFile, $nextTokenPointer + 1);
 		}
 

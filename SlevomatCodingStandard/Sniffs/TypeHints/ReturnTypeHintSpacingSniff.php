@@ -44,7 +44,9 @@ class ReturnTypeHintSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
+		/** @var int $typeHintPointer */
 		$typeHintPointer = TokenHelper::findPreviousExcluding($phpcsFile, [T_NS_SEPARATOR, T_STRING], $typeHintPointer - 1) + 1;
+		/** @var int $colonPointer */
 		$colonPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge([T_NULLABLE], TokenHelper::$ineffectiveTokenCodes), $typeHintPointer - 1);
 
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $colonPointer + 1);

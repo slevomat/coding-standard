@@ -43,6 +43,7 @@ class NamespaceHelper
 			return null;
 		}
 
+		/** @var int $namespaceNameStartPointer */
 		$namespaceNameStartPointer = TokenHelper::findNextEffective($phpcsFile, $namespacePointer + 1);
 		$namespaceNameEndPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $namespaceNameStartPointer + 1) - 1;
 

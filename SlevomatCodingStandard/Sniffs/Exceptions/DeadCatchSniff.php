@@ -29,10 +29,13 @@ class DeadCatchSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $catchPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
+
+		/** @var int $openTagPointer */
+		$openTagPointer = TokenHelper::findNext($phpcsFile, T_OPEN_TAG, 0);
 		$catchToken = $tokens[$catchPointer];
 		$catchedTypes = CatchHelper::findCatchedTypesInCatch(
 			$phpcsFile,
-			UseStatementHelper::getUseStatements($phpcsFile, TokenHelper::findNext($phpcsFile, T_OPEN_TAG, 0)),
+			UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer),
 			$catchToken
 		);
 

@@ -261,6 +261,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				$parameterTypeHint = TypeHintHelper::isSimpleTypeHint($possibleParameterTypeHint) ? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleParameterTypeHint) : $possibleParameterTypeHint;
 
 				$tokens = $phpcsFile->getTokens();
+				/** @var int $parameterPointer */
 				$parameterPointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $parameterName, $tokens[$functionPointer]['parenthesis_opener'], $tokens[$functionPointer]['parenthesis_closer']);
 
 				$beforeParameterPointer = $parameterPointer;
@@ -299,8 +300,14 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
-		$hasReturnAnnotation = $returnAnnotation !== null && $returnAnnotation->getContent() !== null;
-		$returnTypeHintDefinition = $hasReturnAnnotation ? preg_split('~\\s+~', $returnAnnotation->getContent())[0] : '';
+
+		if ($returnAnnotation !== null && $returnAnnotation->getContent() !== null) {
+			$hasReturnAnnotation = true;
+			$returnTypeHintDefinition = preg_split('~\\s+~', $returnAnnotation->getContent())[0];
+		} else {
+			$hasReturnAnnotation = false;
+			$returnTypeHintDefinition = '';
+		}
 
 		$traversableTypeHint = false;
 		if ($returnTypeHint !== null && $this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()))) {
@@ -501,6 +508,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 			if ($fix) {
 				$tokens = $phpcsFile->getTokens();
+				/** @var int $closeParenthesisPosition */
 				$closeParenthesisPosition = TokenHelper::findPrevious($phpcsFile, [T_CLOSE_PARENTHESIS], $tokens[$closurePointer]['scope_opener'] - 1, $closurePointer);
 
 				$phpcsFile->fixer->beginChangeset();
@@ -523,6 +531,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 			if ($fix) {
 				$tokens = $phpcsFile->getTokens();
+				/** @var int $position */
 				$position = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$closurePointer]['scope_opener'] - 1, $closurePointer);
 
 				$phpcsFile->fixer->beginChangeset();
@@ -628,7 +637,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 							continue;
 						}
 
+						/** @var int $changeStart */
 						$changeStart = TokenHelper::findPrevious($phpcsFile, [T_DOC_COMMENT_STAR], $i - 1, $docCommentOpenPointer);
+						/** @var int $changeEnd */
 						$changeEnd = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR], $i - 1, $docCommentClosePointer + 1) - 1;
 						$phpcsFile->fixer->beginChangeset();
 						for ($j = $changeStart; $j <= $changeEnd; $j++) {
@@ -681,7 +692,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 								continue;
 							}
 
+							/** @var int $changeStart */
 							$changeStart = TokenHelper::findPrevious($phpcsFile, [T_DOC_COMMENT_STAR], $i - 1);
+							/** @var int $changeEnd */
 							$changeEnd = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR], $i - 1) - 1;
 							$phpcsFile->fixer->beginChangeset();
 							for ($j = $changeStart; $j <= $changeEnd; $j++) {
@@ -712,10 +725,12 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			self::CODE_USELESS_DOC_COMMENT
 		);
 		if ($fix) {
+			/** @var int $docCommentOpenPointer */
 			$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $functionPointer);
 			$docCommentClosePointer = $phpcsFile->getTokens()[$docCommentOpenPointer]['comment_closer'];
 
 			$changeStart = $docCommentOpenPointer;
+			/** @var int $changeEnd */
 			$changeEnd = TokenHelper::findNextEffective($phpcsFile, $docCommentClosePointer + 1) - 1;
 
 			$phpcsFile->fixer->beginChangeset();
@@ -990,6 +1005,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				continue;
 			}
 
+			/** @var string $parameterTypeHintDefinition */
 			$parameterTypeHintDefinition = $parametersTypeHintsDefinitions[$parameterName];
 			if ($this->definitionContainsStaticOrThisTypeHint($parameterTypeHintDefinition)) {
 				continue;

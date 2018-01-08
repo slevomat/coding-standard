@@ -60,14 +60,17 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer\Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
+		/** @var int $nameStartPointer */
 		$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $keywordPointer + 1);
 		if (!in_array($tokens[$nameStartPointer]['code'], TokenHelper::$nameTokenCodes, true)) {
 			return;
 		}
 
+		/** @var int $openTagPointer */
+		$openTagPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $nameStartPointer);
 		$useStatements = UseStatementHelper::getUseStatements(
 			$phpcsFile,
-			TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $nameStartPointer)
+			$openTagPointer
 		);
 		$possibleCommaPointer = $this->checkReferencedName(
 			$phpcsFile,
@@ -82,6 +85,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer\Sniff
 				if ($possibleCommaPointer !== null) {
 					$possibleCommaToken = $tokens[$possibleCommaPointer];
 					if ($possibleCommaToken['code'] === T_COMMA) {
+						/** @var int $nameStartPointer */
 						$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $possibleCommaPointer + 1);
 						$possibleCommaPointer = $this->checkReferencedName(
 							$phpcsFile,

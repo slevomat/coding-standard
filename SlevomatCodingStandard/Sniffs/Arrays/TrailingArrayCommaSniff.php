@@ -35,6 +35,7 @@ class TrailingArrayCommaSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return;
 		}
 
+		/** @var int $previousToCloseParenthesisPointer */
 		$previousToCloseParenthesisPointer = TokenHelper::findPreviousEffective($phpcsFile, $closeParenthesisPointer - 1);
 		$previousToCloseParenthesisToken = $tokens[$previousToCloseParenthesisPointer];
 		if (

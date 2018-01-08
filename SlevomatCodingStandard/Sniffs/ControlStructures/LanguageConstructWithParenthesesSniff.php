@@ -38,6 +38,7 @@ class LanguageConstructWithParenthesesSniff implements \PHP_CodeSniffer\Sniffs\S
 	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $languageConstructPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
+		/** @var int $openParenthesisPointer */
 		$openParenthesisPointer = TokenHelper::findNextEffective($phpcsFile, $languageConstructPointer + 1);
 		if ($tokens[$openParenthesisPointer]['code'] !== T_OPEN_PARENTHESIS) {
 			return;

@@ -73,6 +73,7 @@ class LongTypeHintsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						), $pointer, self::CODE_USED_LONG_TYPE_HINT);
 
 						if ($fix) {
+							/** @var int $docCommentOpenPointer */
 							$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $pointer);
 							$docCommentClosePointer = $tokens[$docCommentOpenPointer]['comment_closer'];
 

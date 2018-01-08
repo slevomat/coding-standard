@@ -87,6 +87,19 @@
 			<arg value="-c"/>
 			<arg path="build/phpstan.neon"/>
 			<arg path="SlevomatCodingStandard"/>
+		</exec>
+
+		<exec
+			executable="bin/phpstan"
+			logoutput="true"
+			passthru="true"
+			checkreturn="true"
+		>
+			<arg value="analyse"/>
+			<arg value="-l"/>
+			<arg value="6"/>
+			<arg value="-c"/>
+			<arg path="build/phpstan.neon"/>
 			<arg path="tests"/>
 		</exec>
 	</target>
