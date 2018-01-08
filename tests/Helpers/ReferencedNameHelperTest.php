@@ -137,4 +137,13 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertCount(0, $names);
 	}
 
+	public function testMethodReturningReferenceIsNotReferencedName(): void
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/methodReturnsReference.php'
+		);
+		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
+		$this->assertCount(0, $names);
+	}
+
 }

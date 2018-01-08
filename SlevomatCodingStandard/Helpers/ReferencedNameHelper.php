@@ -196,6 +196,8 @@ class ReferencedNameHelper
 			return false;
 		} elseif ($previousToken['code'] === T_COMMA && TokenHelper::findPreviousLocal($phpcsFile, [T_CONST], $previousPointer - 1) !== null) {
 			return false;
+		} elseif ($previousToken['code'] === T_BITWISE_AND && TokenHelper::findPreviousLocal($phpcsFile, [T_FUNCTION], $previousPointer - 1) !== null) {
+			return false;
 		}
 
 		$isProbablyReferencedName = !in_array(
