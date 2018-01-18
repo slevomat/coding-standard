@@ -646,4 +646,12 @@ abstract class FooClass
 	{
 		return true;
 	}
+
+	/**
+	 * @param bool $foo describes something about $anything
+	 */
+	public function parameterHasDescriptionContainingVariable(bool $foo, int $bar) : void
+	{
+	}
+
 }

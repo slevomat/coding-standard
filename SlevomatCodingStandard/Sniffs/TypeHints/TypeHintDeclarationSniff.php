@@ -568,7 +568,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				continue;
 			}
 
-			if (!preg_match('~^\\S+\\s+(?:(?:\.{3}\\s*)?(\$\\S+)\\s+)?[^$]+$~', $parameterAnnotation->getContent(), $matches)) {
+			if (!preg_match('~^\\S+\\s++(?:(?:\.{3}\\s*)?(\$\\S+)\\s+)?[^$]~', $parameterAnnotation->getContent(), $matches)) {
 				continue;
 			}
 
