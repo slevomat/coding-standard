@@ -128,6 +128,16 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 
 		$whitespaceBefore = substr($tokens[$openTagPointer]['content'], strlen('<?php'));
+		$whitespeceBeforePointer = $openTagPointer + 1;
+		do {
+			if (!array_key_exists($whitespeceBeforePointer, $tokens) || $tokens[$whitespeceBeforePointer]['code'] !== T_WHITESPACE) {
+				break;
+			}
+
+			$whitespaceBefore .= $tokens[$whitespeceBeforePointer]['content'];
+			$whitespeceBeforePointer++;
+		} while (true);
+
 		$requiredNewlinesCountBetweenOpenTagAndDeclare = SniffSettingsHelper::normalizeInteger($this->newlinesCountBetweenOpenTagAndDeclare);
 		if ($requiredNewlinesCountBetweenOpenTagAndDeclare === 0) {
 			if ($whitespaceBefore !== ' ') {
@@ -146,15 +156,6 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				}
 			}
 		} else {
-			$whitespeceBeforePointer = $openTagPointer + 1;
-			do {
-				if (!array_key_exists($whitespeceBeforePointer, $tokens) || $tokens[$whitespeceBeforePointer]['code'] !== T_WHITESPACE) {
-					break;
-				}
-
-				$whitespaceBefore .= $tokens[$whitespeceBeforePointer]['content'];
-				$whitespeceBeforePointer++;
-			} while (true);
 			$newlinesCountBefore = substr_count($whitespaceBefore, $phpcsFile->eolChar);
 			if ($newlinesCountBefore !== $requiredNewlinesCountBetweenOpenTagAndDeclare) {
 				$fix = $phpcsFile->addFixableError(
