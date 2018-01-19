@@ -83,7 +83,7 @@
 		>
 			<arg value="analyse"/>
 			<arg value="-l"/>
-			<arg value="6"/>
+			<arg value="7"/>
 			<arg value="-c"/>
 			<arg path="build/phpstan.neon"/>
 			<arg path="SlevomatCodingStandard"/>
