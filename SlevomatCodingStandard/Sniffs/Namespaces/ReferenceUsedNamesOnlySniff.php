@@ -226,11 +226,11 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					}
 				} elseif ($referencedName->isFunction() && $this->allowFullyQualifiedNameForCollidingFunctions) {
 					$lowerCasedUnqualifiedFunctionName = strtolower($unqualifiedName);
-					if (isset($functionReferencesIndex[$lowerCasedUnqualifiedFunctionName]) || array_key_exists($lowerCasedUnqualifiedFunctionName, $definedFunctionsIndex)) {
+					if (array_key_exists($lowerCasedUnqualifiedFunctionName, $definedFunctionsIndex)) {
 						continue;
 					}
 				} elseif ($referencedName->isConstant() && $this->allowFullyQualifiedNameForCollidingConstants) {
-					if (isset($constantReferencesIndex[$unqualifiedName]) || array_key_exists($unqualifiedName, $definedConstantsIndex)) {
+					if (array_key_exists($unqualifiedName, $definedConstantsIndex)) {
 						continue;
 					}
 				}
