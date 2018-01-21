@@ -915,14 +915,6 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 	private function typeHintEqualsAnnotation(\PHP_CodeSniffer\Files\File $phpcsFile, int $functionPointer, string $typeHint, string $typeHintInAnnotation): bool
 	{
-		if (TypeHintHelper::isSimpleTypeHint($typeHint)) {
-			return true;
-		}
-
-		if ($typeHint === 'object') {
-			return $this->enableObjectTypeHint;
-		}
-
 		return TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint) === TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHintInAnnotation);
 	}
 

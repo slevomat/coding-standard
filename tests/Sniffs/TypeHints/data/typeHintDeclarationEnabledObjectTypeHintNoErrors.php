@@ -45,4 +45,36 @@ abstract class FooClass
 		return [];
 	}
 
+	/**
+	 * @param \DateTimeImmutable $object
+	 */
+	public function parameterObjectTypeVariance(object $object)
+	{
+
+	}
+
+	/**
+	 * @param \DateTimeImmutable|null $object
+	 */
+	public function parameterNullableObjectTypeVariance(?object $object)
+	{
+
+	}
+
+	/**
+	 * @return \DateTimeImmutable
+	 */
+	public function returnsObjectTypeVariance(): object
+	{
+
+	}
+
+	/**
+	 * @return \DateTimeImmutable|null
+	 */
+	public function returnsNullableObjectTypeVariance(): ?object
+	{
+
+	}
+
 }
