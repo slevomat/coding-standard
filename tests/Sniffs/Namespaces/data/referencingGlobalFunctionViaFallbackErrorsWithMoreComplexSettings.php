@@ -2,7 +2,7 @@
 
 namespace FooNamespace;
 
-function php_version()
+function phpversion()
 {
 	return '6.0.0';
 }
@@ -12,7 +12,7 @@ class Foo
 
 	public function boo()
 	{
-		\php_version();
+		\phpversion();
 		\max(1, 3);
 		min(1, 3);
 	}
