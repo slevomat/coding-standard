@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types = 1, ticks = 1, encoding = 'UTF-8');
 
 class Foo
 {

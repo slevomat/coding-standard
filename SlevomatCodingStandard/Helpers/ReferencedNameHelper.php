@@ -194,7 +194,7 @@ class ReferencedNameHelper
 			return false;
 		} elseif ($previousToken['code'] === T_OPEN_PARENTHESIS && isset($previousToken['parenthesis_owner']) && $tokens[$previousToken['parenthesis_owner']]['code'] === T_DECLARE) {
 			return false;
-		} elseif ($previousToken['code'] === T_COMMA && TokenHelper::findPreviousLocal($phpcsFile, [T_CONST], $previousPointer - 1) !== null) {
+		} elseif ($previousToken['code'] === T_COMMA && TokenHelper::findPreviousLocal($phpcsFile, [T_CONST, T_DECLARE], $previousPointer - 1) !== null) {
 			return false;
 		} elseif ($previousToken['code'] === T_BITWISE_AND && TokenHelper::findPreviousLocal($phpcsFile, [T_FUNCTION], $previousPointer - 1) !== null) {
 			return false;
