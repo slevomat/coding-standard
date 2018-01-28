@@ -37,6 +37,11 @@ interface WithoutAnnotation
 	public function withParametrizedAnnotation();
 
 	/**
+	 * @Security("is_granted('ROLE_ADMIN')")
+	 */
+	public function withParametrizedAnnotationContainingParenthesis();
+
+	/**
 	 * @Assert\Callback()
 	 */
 	public function withParametrizedAnnotationWithoutParameters();

@@ -70,6 +70,14 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertNull($annotations[0]->getContent());
 	}
 
+	public function testFunctionWithParametrizedAnnotationContainingParenthesis(): void
+	{
+		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withParametrizedAnnotationContainingParenthesis'), '@Security');
+		$this->assertCount(1, $annotations);
+		$this->assertSame('"is_granted(\'ROLE_ADMIN\')"', $annotations[0]->getParameters());
+		$this->assertNull($annotations[0]->getContent());
+	}
+
 	public function testFunctionWithMultilineParametrizedAnnotation(): void
 	{
 		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withMultilineParametrizedAnnotation'), '@Route');

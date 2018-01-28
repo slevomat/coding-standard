@@ -654,4 +654,12 @@ abstract class FooClass
 	{
 	}
 
+	/**
+	 * @Security("is_granted('ROLE_ADMIN')")
+	 */
+	public function usefullSymfonySecurityAnnotation()
+	{
+
+	}
+
 }

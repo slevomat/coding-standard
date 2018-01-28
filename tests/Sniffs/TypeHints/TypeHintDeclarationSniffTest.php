@@ -22,6 +22,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 				'@see',
 				'@Assert\Callback',
 				'@Something\\',
+				'@Security',
 			],
 		]));
 	}
