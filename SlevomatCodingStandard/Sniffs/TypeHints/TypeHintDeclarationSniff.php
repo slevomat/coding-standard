@@ -118,7 +118,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				$traversableTypeHint = false;
 				if ($parameterTypeHint !== null && $this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()))) {
 					$traversableTypeHint = true;
-				} elseif (array_key_exists($parameterName, $parametersTypeHintsDefinitions) && $this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $parametersTypeHintsDefinitions[$parameterName])) {
+				} elseif (array_key_exists($parameterName, $parametersTypeHintsDefinitions) && $this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $parametersTypeHintsDefinitions[$parameterName]['definition'])) {
 					$traversableTypeHint = true;
 				}
 
@@ -133,11 +133,11 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						$functionPointer,
 						self::CODE_MISSING_TRAVERSABLE_PARAMETER_TYPE_HINT_SPECIFICATION
 					);
-				} elseif (($traversableTypeHint && !$this->definitionContainsTraversableTypeHintSpeficication($parametersTypeHintsDefinitions[$parameterName]))
+				} elseif (($traversableTypeHint && !$this->definitionContainsTraversableTypeHintSpeficication($parametersTypeHintsDefinitions[$parameterName]['definition']))
 					|| (
 						array_key_exists($parameterName, $parametersTypeHintsDefinitions)
-						&& $this->definitionContainsTraversableTypeHintSpeficication($parametersTypeHintsDefinitions[$parameterName])
-						&& !$this->definitionContainsItemsSpecificationForTraversable($phpcsFile, $functionPointer, $parametersTypeHintsDefinitions[$parameterName])
+						&& $this->definitionContainsTraversableTypeHintSpeficication($parametersTypeHintsDefinitions[$parameterName]['definition'])
+						&& !$this->definitionContainsItemsSpecificationForTraversable($phpcsFile, $functionPointer, $parametersTypeHintsDefinitions[$parameterName]['definition'])
 					)
 				) {
 					$phpcsFile->addError(
@@ -147,7 +147,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 							FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
 							$parameterName
 						),
-						$functionPointer,
+						$parametersTypeHintsDefinitions[$parameterName]['pointer'],
 						self::CODE_MISSING_TRAVERSABLE_PARAMETER_TYPE_HINT_SPECIFICATION
 					);
 				}
@@ -174,7 +174,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				continue;
 			}
 
-			$parameterTypeHintDefinition = $parametersTypeHintsDefinitions[$parameterName];
+			$parameterTypeHintDefinition = $parametersTypeHintsDefinitions[$parameterName]['definition'];
 
 			if (strtolower($parameterTypeHintDefinition) === 'null') {
 				continue;
@@ -333,13 +333,16 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					&& !$this->definitionContainsItemsSpecificationForTraversable($phpcsFile, $functionPointer, $returnTypeHintDefinition)
 				)
 			) {
+				/** @var \SlevomatCodingStandard\Helpers\Annotation $returnAnnotation */
+				$returnAnnotation = $returnAnnotation;
+
 				$phpcsFile->addError(
 					sprintf(
 						'@return annotation of %s %s() does not specify type hint for items of its traversable return value.',
 						lcfirst($this->getFunctionTypeLabel($phpcsFile, $functionPointer)),
 						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
 					),
-					$functionPointer,
+					$returnAnnotation->getPointer(),
 					self::CODE_MISSING_TRAVERSABLE_RETURN_TYPE_HINT_SPECIFICATION
 				);
 			}
@@ -587,7 +590,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$parameterTypeHints = FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer);
 		$parametersAnnotationTypeHints = $this->getFunctionParameterTypeHintsDefinitions($phpcsFile, $functionPointer);
-		$uselessParameterNames = $this->getUselessParameterNames($phpcsFile, $functionPointer, $parameterTypeHints, $parametersAnnotationTypeHints, $parametersContainDescription);
+		$uselessParameterAnnotations = $this->getUselessParameterAnnotations($phpcsFile, $functionPointer, $parameterTypeHints, $parametersAnnotationTypeHints, $parametersContainDescription);
 
 		foreach (AnnotationHelper::getAnnotations($phpcsFile, $functionPointer) as list($annotation)) {
 			if ($annotation->getName() === SuppressHelper::ANNOTATION) {
@@ -610,7 +613,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$isWholeDocCommentUseless = !$containsUsefulInformation
 			&& ($returnAnnotation === null || $isReturnAnnotationUseless)
-			&& count($uselessParameterNames) === count($parametersAnnotationTypeHints);
+			&& count($uselessParameterAnnotations) === count($parametersAnnotationTypeHints);
 
 		if ($this->enableEachParameterAndReturnInspection && (!$isWholeDocCommentUseless || $docCommentSniffSuppressed)) {
 			if ($returnAnnotation !== null && $isReturnAnnotationUseless && !$returnSniffSuppressed) {
@@ -620,7 +623,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
 						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
 					),
-					$functionPointer,
+					$returnAnnotation->getPointer(),
 					self::CODE_USELESS_RETURN_ANNOTATION
 				);
 				if ($fix) {
@@ -653,15 +656,19 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			}
 
 			if (!$parameterSniffSuppressed) {
-				foreach ($uselessParameterNames as $uselessParameterName) {
+				$parameterNamesWithUselessAnnotation = array_map(function (array $uselessParameterAnnotation): string {
+					return $uselessParameterAnnotation['parameterName'];
+				}, $uselessParameterAnnotations);
+
+				foreach ($uselessParameterAnnotations as $uselessParameterAnnotation) {
 					$fix = $phpcsFile->addFixableError(
 						sprintf(
 							'%s %s() has useless @param annotation for parameter %s.',
 							$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
 							FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-							$uselessParameterName
+							$uselessParameterAnnotation['parameterName']
 						),
-						$functionPointer,
+						$uselessParameterAnnotation['pointer'],
 						self::CODE_USELESS_PARAMETER_ANNOTATION
 					);
 					if ($fix) {
@@ -688,7 +695,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 								continue;
 							}
 
-							if (!in_array($match[1], $uselessParameterNames, true)) {
+							if (!in_array($match[1], $parameterNamesWithUselessAnnotation, true)) {
 								continue;
 							}
 
@@ -779,7 +786,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						'@var annotation of property %s does not specify type hint for its items.',
 						PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer)
 					),
-					$propertyPointer,
+					$varAnnotations[0]->getPointer(),
 					self::CODE_MISSING_TRAVERSABLE_PROPERTY_TYPE_HINT_SPECIFICATION
 				);
 			}
@@ -888,7 +895,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $functionPointer
-	 * @return string[] [string => string]
+	 * @return mixed[][] [string => [int, string]]
 	 */
 	private function getFunctionParameterTypeHintsDefinitions(\PHP_CodeSniffer\Files\File $phpcsFile, int $functionPointer): array
 	{
@@ -904,9 +911,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			}
 
 			if (isset($matches[2])) {
-				$parametersTypeHintsDefinitions[$matches[2]] = $matches[1];
+				$parametersTypeHintsDefinitions[$matches[2]] = ['pointer' => $parameterAnnotation->getPointer(), 'definition' => $matches[1]];
 			} elseif (isset($parametersNames[$parameterAnnotationNo])) {
-				$parametersTypeHintsDefinitions[$parametersNames[$parameterAnnotationNo]] = $matches[1];
+				$parametersTypeHintsDefinitions[$parametersNames[$parameterAnnotationNo]] = ['pointer' => $parameterAnnotation->getPointer(), 'definition' => $matches[1]];
 			}
 		}
 
@@ -972,11 +979,11 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $functionPointer
 	 * @param \SlevomatCodingStandard\Helpers\ParameterTypeHint[]|null[] $functionTypeHints
-	 * @param string[]|null[] $parametersTypeHintsDefinitions
+	 * @param mixed[][] $parametersTypeHintsDefinitions
 	 * @param bool[] $parametersContainDescription
-	 * @return string[] names of parameters with useless annotation hint
+	 * @return mixed[][]
 	 */
-	private function getUselessParameterNames(\PHP_CodeSniffer\Files\File $phpcsFile, int $functionPointer, array $functionTypeHints, array $parametersTypeHintsDefinitions, array $parametersContainDescription): array
+	private function getUselessParameterAnnotations(\PHP_CodeSniffer\Files\File $phpcsFile, int $functionPointer, array $functionTypeHints, array $parametersTypeHintsDefinitions, array $parametersContainDescription): array
 	{
 		$uselessParameterNames = [];
 
@@ -998,7 +1005,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			}
 
 			/** @var string $parameterTypeHintDefinition */
-			$parameterTypeHintDefinition = $parametersTypeHintsDefinitions[$parameterName];
+			$parameterTypeHintDefinition = $parametersTypeHintsDefinitions[$parameterName]['definition'];
 			if ($this->definitionContainsStaticOrThisTypeHint($parameterTypeHintDefinition)) {
 				continue;
 			} elseif ($this->isTypeHintDefinitionCompoundOfNull($parameterTypeHintDefinition)) {
@@ -1011,7 +1018,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				continue;
 			}
 
-			$uselessParameterNames[] = $parameterName;
+			$uselessParameterNames[] = ['pointer' => $parametersTypeHintsDefinitions[$parameterName]['pointer'], 'parameterName' => $parameterName];
 		}
 
 		return $uselessParameterNames;
