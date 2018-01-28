@@ -8,6 +8,9 @@ class Annotation
 	/** @var string */
 	private $name;
 
+	/** @var int */
+	private $pointer;
+
 	/** @var string|null */
 	private $parameters;
 
@@ -16,11 +19,13 @@ class Annotation
 
 	public function __construct(
 		string $name,
+		int $pointer,
 		?string $parameters,
 		?string $content
 	)
 	{
 		$this->name = $name;
+		$this->pointer = $pointer;
 		$this->parameters = $parameters;
 		$this->content = $content;
 	}
@@ -28,6 +33,11 @@ class Annotation
 	public function getName(): string
 	{
 		return $this->name;
+	}
+
+	public function getPointer(): int
+	{
+		return $this->pointer;
 	}
 
 	public function getParameters(): ?string

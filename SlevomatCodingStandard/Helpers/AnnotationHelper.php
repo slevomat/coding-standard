@@ -78,7 +78,7 @@ class AnnotationHelper
 					}
 				}
 
-				$annotations[$annotationName][] = new Annotation($annotationName, $annotationParameters, $annotationContent);
+				$annotations[$annotationName][] = new Annotation($annotationName, $i, $annotationParameters, $annotationContent);
 			}
 		}
 
