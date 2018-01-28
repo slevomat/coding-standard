@@ -70,7 +70,7 @@ class LongTypeHintsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 							$suggestType,
 							$type,
 							$annotationName
-						), $pointer, self::CODE_USED_LONG_TYPE_HINT);
+						), $annotation->getPointer(), self::CODE_USED_LONG_TYPE_HINT);
 
 						if ($fix) {
 							/** @var int $docCommentOpenPointer */

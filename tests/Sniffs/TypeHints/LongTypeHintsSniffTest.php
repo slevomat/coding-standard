@@ -16,16 +16,16 @@ class LongTypeHintsSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 
 		$this->assertSame(10, $report->getErrorCount());
 
-		$this->assertSniffError($report, 7, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "int" but found "integer" in @param annotation.');
-		$this->assertSniffError($report, 7, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "bool" but found "boolean" in @return annotation.');
-		$this->assertSniffError($report, 16, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "int" but found "integer" in @var annotation.');
-		$this->assertSniffError($report, 26, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "bool" but found "boolean" in @var annotation.');
-		$this->assertSniffError($report, 32, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "bool" but found "boolean" in @var annotation.');
-		$this->assertSniffError($report, 32, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "int" but found "integer" in @var annotation.');
-		$this->assertSniffError($report, 40, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "bool" but found "boolean" in @param annotation.');
-		$this->assertSniffError($report, 40, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "bool" but found "boolean" in @param annotation.');
-		$this->assertSniffError($report, 40, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "int" but found "integer" in @param annotation.');
-		$this->assertSniffError($report, 40, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "int" but found "integer" in @return annotation.');
+		$this->assertSniffError($report, 4, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "int" but found "integer" in @param annotation.');
+		$this->assertSniffError($report, 5, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "bool" but found "boolean" in @return annotation.');
+		$this->assertSniffError($report, 15, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "int" but found "integer" in @var annotation.');
+		$this->assertSniffError($report, 24, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "bool" but found "boolean" in @var annotation.');
+		$this->assertSniffError($report, 30, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "bool" but found "boolean" in @var annotation.');
+		$this->assertSniffError($report, 30, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "int" but found "integer" in @var annotation.');
+		$this->assertSniffError($report, 35, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "bool" but found "boolean" in @param annotation.');
+		$this->assertSniffError($report, 36, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "bool" but found "boolean" in @param annotation.');
+		$this->assertSniffError($report, 37, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "int" but found "integer" in @param annotation.');
+		$this->assertSniffError($report, 38, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "int" but found "integer" in @return annotation.');
 
 		$this->assertAllFixedInFile($report);
 	}
