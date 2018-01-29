@@ -108,7 +108,7 @@ Sniff provides the following settings:
 
 * `searchAnnotations` (defaults to `false`): enables searching for mentions in annotations, which is especially useful for projects using [Doctrine Annotations](https://github.com/doctrine/annotations)
 
-#### SlevomatCodingStandard.Namespaces.UseFromSameNamespace
+#### SlevomatCodingStandard.Namespaces.UseFromSameNamespace 🔧
 
 Prohibits uses from the same namespace:
 
@@ -368,7 +368,7 @@ Disallows leading backslash in use statement:
 use \Foo\Bar;
 ```
 
-#### SlevomatCodingStandard.Types.EmptyLinesAroundTypeBraces
+#### SlevomatCodingStandard.Types.EmptyLinesAroundTypeBraces 🔧
 
 Enforces one configurable number of lines after opening class/interface/trait brace and one empty line before the closing brace.
 
