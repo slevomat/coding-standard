@@ -144,6 +144,10 @@ This sniff enforces trailing commas in multi-line arrays and requires short arra
 
 `LanguageConstructWithParenthesesSniff` checks and fixes language construct used with parentheses.
 
+#### SlevomatCodingStandard.ControlStructures.RequireNewWithParenthesesSniff 🔧
+
+`RequireNewWithParenthesesSniff` checks and fixes "new" used without parentheses.
+
 #### SlevomatCodingStandard.ControlStructures.DisallowYodaComparison/RequireYodaComparison 🔧
 
 [Yoda conditions](https://en.wikipedia.org/wiki/Yoda_conditions) decrease code comprehensibility and readability by switching operands around comparison operators forcing the reader to read the code in an unnatural way.
