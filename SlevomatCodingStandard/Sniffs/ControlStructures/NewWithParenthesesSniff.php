@@ -4,7 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use SlevomatCodingStandard\Helpers\TokenHelper;
 
-class RequireNewWithParenthesesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class NewWithParenthesesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	public const CODE_MISSING_PARENTHESES = 'MissingParentheses';
