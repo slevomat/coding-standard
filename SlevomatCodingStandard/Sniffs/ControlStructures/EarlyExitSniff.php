@@ -34,6 +34,13 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return;
 		}
 
+		$previousConditionCloseParenthesisPointer = TokenHelper::findPreviousEffective($phpcsFile, $elsePointer - 1);
+		$previousConditionPointer = $tokens[$previousConditionCloseParenthesisPointer]['scope_condition'];
+
+		if ($tokens[$previousConditionPointer]['code'] === T_ELSEIF) {
+			return;
+		}
+
 		$phpcsFile->addError(
 			'Use early exit instead of else.',
 			$elsePointer,

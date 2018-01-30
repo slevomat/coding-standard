@@ -71,3 +71,13 @@ function () {
 		$variable = 'b';
 	}
 };
+
+function () {
+	if (true) {
+		// Something
+	} elseif (false) {
+		// Something else
+	} else {
+		throw new Exception();
+	}
+};
