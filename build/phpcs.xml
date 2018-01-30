@@ -31,9 +31,6 @@
 			"/>
 		</properties>
 	</rule>
-	<rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit">
-		<exclude-pattern>SlevomatCodingStandard/Sniffs/TypeHints/TypeHintDeclarationSniff.php</exclude-pattern>
-	</rule>
 	<rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly">
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Exceptions/ReferenceThrowableOnlySniff.php</exclude-pattern>
 	</rule>
