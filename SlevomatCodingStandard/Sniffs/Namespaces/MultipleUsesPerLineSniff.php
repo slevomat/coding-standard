@@ -24,15 +24,14 @@ class MultipleUsesPerLineSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $usePointer
-	 * @return int|null
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $usePointer): ?int
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $usePointer): void
 	{
 		if (
 			UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer)
 			|| UseStatementHelper::isTraitUse($phpcsFile, $usePointer)
 		) {
-			return $usePointer + 1;
+			return;
 		}
 
 		$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $usePointer + 1);
@@ -45,8 +44,6 @@ class MultipleUsesPerLineSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				self::CODE_MULTIPLE_USES_PER_LINE
 			);
 		}
-
-		return null;
 	}
 
 }

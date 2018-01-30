@@ -15,9 +15,9 @@ class RequireNewWithParenthesesSniffTest extends \SlevomatCodingStandard\Sniffs\
 	{
 		$report = $this->checkFile(__DIR__ . '/data/requireNewWithParenthesesErrors.php', [], [RequireNewWithParenthesesSniff::CODE_MISSING_PARENTHESES]);
 
-		$this->assertSame(17, $report->getErrorCount());
+		$this->assertSame(19, $report->getErrorCount());
 
-		foreach ([3, 9, 17, 22, 25, 29, 35, 37, 40, 43, 45, 47, 48, 50, 52] as $line) {
+		foreach ([3, 9, 17, 22, 25, 29, 35, 37, 40, 43, 45, 47, 48, 50, 52, 57] as $line) {
 			$this->assertSniffError($report, $line, RequireNewWithParenthesesSniff::CODE_MISSING_PARENTHESES);
 		}
 

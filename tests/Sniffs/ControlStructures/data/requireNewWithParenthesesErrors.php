@@ -52,3 +52,7 @@ $aa[(string) new stdClass] = true;
 if (new stdClass) {
 
 }
+
+$aaa = [
+	(string) new stdClass => new stdClass
+];

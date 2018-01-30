@@ -48,6 +48,7 @@ class RequireNewWithParenthesesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					T_CLOSE_SHORT_ARRAY,
 					T_CLOSE_SQUARE_BRACKET,
 					T_CLOSE_PARENTHESIS,
+					T_DOUBLE_ARROW,
 				],
 				$shouldBeOpenParenthesisPointer
 			);
