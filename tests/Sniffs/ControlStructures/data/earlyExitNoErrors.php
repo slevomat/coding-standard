@@ -63,3 +63,11 @@ function () {
 
 	// Something
 };
+
+function () {
+	if (true) {
+		$variable = 'a';
+	} else {
+		$variable = 'b';
+	}
+};
