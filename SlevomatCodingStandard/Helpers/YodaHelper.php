@@ -158,10 +158,10 @@ class YodaHelper
 				if (isset($sideTokens[$sideTokensCount - 1]['parenthesis_owner']) && $tokens[$sideTokens[$sideTokensCount - 1]['parenthesis_owner']]['code'] === T_ARRAY) {
 					// array()
 					return $dynamism[T_ARRAY];
-				} else {
-					// function or method call
-					return self::DYNAMISM_FUNCTION_CALL;
 				}
+
+				// function or method call
+				return self::DYNAMISM_FUNCTION_CALL;
 			} elseif ($sideTokensCount === 1 && $sideTokens[0]['code'] === T_STRING) {
 				// constant
 				return self::DYNAMISM_CONSTANT;
@@ -192,19 +192,19 @@ class YodaHelper
 	public static function trimWhitespaceTokens(array $tokens): array
 	{
 		foreach ($tokens as $pointer => $token) {
-			if ($token['code'] === T_WHITESPACE) {
-				unset($tokens[$pointer]);
-			} else {
+			if ($token['code'] !== T_WHITESPACE) {
 				break;
 			}
+
+			unset($tokens[$pointer]);
 		}
 
 		foreach (array_reverse($tokens, true) as $pointer => $token) {
-			if ($token['code'] === T_WHITESPACE) {
-				unset($tokens[$pointer]);
-			} else {
+			if ($token['code'] !== T_WHITESPACE) {
 				break;
 			}
+
+			unset($tokens[$pointer]);
 		}
 
 		return $tokens;

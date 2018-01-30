@@ -27,9 +27,9 @@ class FunctionHelper
 			}
 
 			return $namespace !== null ? sprintf('%s%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $namespace, $name) : $name;
-		} else {
-			return $namespace !== null ? sprintf('%s%s%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $namespace, NamespaceHelper::NAMESPACE_SEPARATOR, $name) : $name;
 		}
+
+		return $namespace !== null ? sprintf('%s%s%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $namespace, NamespaceHelper::NAMESPACE_SEPARATOR, $name) : $name;
 	}
 
 	public static function isAbstract(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $functionPointer): bool
