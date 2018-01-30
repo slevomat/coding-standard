@@ -91,6 +91,10 @@ Disallows using loose `==` and `!=` comparison operators. Use `===` and `!==` in
 
 Require usage of null coalesce operator when possible.
 
+#### SlevomatCodingStandard.ControlStructures.EarlyExitSniff
+
+Require usage of early exit instead of using `else`.
+
 ### Cleaning - detecting dead code
 
 #### SlevomatCodingStandard.Classes.UnusedPrivateElements 🚧
