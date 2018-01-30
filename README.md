@@ -87,6 +87,10 @@ This is a great addition to already existing `SlevomatCodingStandard.ControlStru
 
 Disallows using loose `==` and `!=` comparison operators. Use `===` and `!==` instead, they are much more secure and predictable.
 
+#### SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator 🔧
+
+Require usage of null coalesce operator when possible.
+
 ### Cleaning - detecting dead code
 
 #### SlevomatCodingStandard.Classes.UnusedPrivateElements 🚧
