@@ -7,15 +7,15 @@ class AssignmentInConditionSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 
 	public function testCorrectFile(): void
 	{
-		$resultFile = $this->checkFile(__DIR__ . '/data/noAssignmentsInConditions.php');
-		$this->assertNoSniffErrorInFile($resultFile);
+		$resultFile = self::checkFile(__DIR__ . '/data/noAssignmentsInConditions.php');
+		self::assertNoSniffErrorInFile($resultFile);
 	}
 
 	public function testIncorrectFile(): void
 	{
-		$resultFile = $this->checkFile(__DIR__ . '/data/allAssignmentsInConditions.php');
+		$resultFile = self::checkFile(__DIR__ . '/data/allAssignmentsInConditions.php');
 		foreach (range(3, 6) as $lineNumber) {
-			$this->assertSniffError($resultFile, $lineNumber, AssignmentInConditionSniff::CODE_ASSIGNMENT_IN_CONDITION);
+			self::assertSniffError($resultFile, $lineNumber, AssignmentInConditionSniff::CODE_ASSIGNMENT_IN_CONDITION);
 		}
 	}
 

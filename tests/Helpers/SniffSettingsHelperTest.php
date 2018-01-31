@@ -7,14 +7,14 @@ class SniffSettingsHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 	public function testNormalizeInteger(): void
 	{
-		$this->assertSame(2, SniffSettingsHelper::normalizeInteger(2));
-		$this->assertSame(2, SniffSettingsHelper::normalizeInteger('2'));
-		$this->assertSame(2, SniffSettingsHelper::normalizeInteger('  2  '));
+		self::assertSame(2, SniffSettingsHelper::normalizeInteger(2));
+		self::assertSame(2, SniffSettingsHelper::normalizeInteger('2'));
+		self::assertSame(2, SniffSettingsHelper::normalizeInteger('  2  '));
 	}
 
 	public function testNormalizeArray(): void
 	{
-		$this->assertSame([
+		self::assertSame([
 			'Foo\Bar\BarException',
 			'Foo\Bar\BazException',
 		], SniffSettingsHelper::normalizeArray([
@@ -29,7 +29,7 @@ class SniffSettingsHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 	public function testNormalizeAssociativeArray(): void
 	{
-		$this->assertSame([
+		self::assertSame([
 			'app/ui' => 'Slevomat\UI',
 			'app' => 'Slevomat',
 			'build/SlevomatSniffs/Sniffs' => 'SlevomatSniffs\Sniffs',
@@ -52,7 +52,7 @@ class SniffSettingsHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 	public function testNormalizeAssociativeArrayWithIntegerKeys(): void
 	{
-		$this->assertSame([
+		self::assertSame([
 			'app/ui' => 'Slevomat\UI',
 			'app' => 'Slevomat',
 		], SniffSettingsHelper::normalizeAssociativeArray([
@@ -70,7 +70,7 @@ class SniffSettingsHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 */
 	public function testIsValidRegularExpression(string $expression, bool $valid): void
 	{
-		$this->assertSame($valid, SniffSettingsHelper::isValidRegularExpression($expression));
+		self::assertSame($valid, SniffSettingsHelper::isValidRegularExpression($expression));
 	}
 
 	/**

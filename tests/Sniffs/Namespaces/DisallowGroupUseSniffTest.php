@@ -7,15 +7,15 @@ class DisallowGroupUseSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 
 	public function testNoErrors(): void
 	{
-		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/disallowGroupUseNoErrors.php'));
+		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/disallowGroupUseNoErrors.php'));
 	}
 
 	public function testErrors(): void
 	{
-		$codeSnifferFile = $this->checkFile(__DIR__ . '/data/disallowGroupUseErrors.php');
+		$codeSnifferFile = self::checkFile(__DIR__ . '/data/disallowGroupUseErrors.php');
 
-		$this->assertSniffError($codeSnifferFile, 5, DisallowGroupUseSniff::CODE_DISALLOWED_GROUP_USE);
-		$this->assertSniffError($codeSnifferFile, 9, DisallowGroupUseSniff::CODE_DISALLOWED_GROUP_USE);
+		self::assertSniffError($codeSnifferFile, 5, DisallowGroupUseSniff::CODE_DISALLOWED_GROUP_USE);
+		self::assertSniffError($codeSnifferFile, 9, DisallowGroupUseSniff::CODE_DISALLOWED_GROUP_USE);
 	}
 
 }

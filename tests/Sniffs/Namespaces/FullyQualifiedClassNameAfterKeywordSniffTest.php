@@ -8,32 +8,32 @@ class FullyQualifiedClassNameAfterKeywordSniffTest extends \SlevomatCodingStanda
 	public function testThrowExceptionForUndefinedConstant(): void
 	{
 		try {
-			$this->checkFile(
+			self::checkFile(
 				__DIR__ . '/data/fullyQualifiedExtends.php',
 				['keywordsToCheck' => ['T_FOO']]
 			);
 			$this->fail();
 		} catch (\SlevomatCodingStandard\Sniffs\Namespaces\UndefinedKeywordTokenException $e) {
-			$this->assertContains('T_FOO', $e->getMessage());
-			$this->assertSame('T_FOO', $e->getKeyword());
+			self::assertContains('T_FOO', $e->getMessage());
+			self::assertSame('T_FOO', $e->getKeyword());
 		}
 	}
 
 	public function testCheckNothingWhenNoKeywordsAreConfigured(): void
 	{
-		$fileReport = $this->checkFile(__DIR__ . '/data/fullyQualifiedExtends.php');
-		$this->assertEmpty($fileReport->getErrors());
+		$fileReport = self::checkFile(__DIR__ . '/data/fullyQualifiedExtends.php');
+		self::assertEmpty($fileReport->getErrors());
 	}
 
 	public function testFixableFullyQualified(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableFullyQualifiedClassNameAfterKeyword.php', [
+		$report = self::checkFile(__DIR__ . '/data/fixableFullyQualifiedClassNameAfterKeyword.php', [
 			'keywordsToCheck' => [
 				'T_EXTENDS',
 				'T_IMPLEMENTS',
 			],
 		]);
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 }

@@ -7,21 +7,21 @@ class RequireNullCoalesceOperatorSniffTest extends \SlevomatCodingStandard\Sniff
 
 	public function testNoErrors(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/requireNullCoalesceOperatorNoErrors.php');
-		$this->assertNoSniffErrorInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/requireNullCoalesceOperatorNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/requireNullCoalesceOperatorErrors.php', [], [RequireNullCoalesceOperatorSniff::CODE_NULL_COALESCE_OPERATOR_NOT_USED]);
+		$report = self::checkFile(__DIR__ . '/data/requireNullCoalesceOperatorErrors.php', [], [RequireNullCoalesceOperatorSniff::CODE_NULL_COALESCE_OPERATOR_NOT_USED]);
 
-		$this->assertSame(3, $report->getErrorCount());
+		self::assertSame(3, $report->getErrorCount());
 
 		foreach ([3, 5, 7] as $line) {
-			$this->assertSniffError($report, $line, RequireNullCoalesceOperatorSniff::CODE_NULL_COALESCE_OPERATOR_NOT_USED);
+			self::assertSniffError($report, $line, RequireNullCoalesceOperatorSniff::CODE_NULL_COALESCE_OPERATOR_NOT_USED);
 		}
 
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 }

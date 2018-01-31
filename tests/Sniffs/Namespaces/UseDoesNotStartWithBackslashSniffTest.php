@@ -7,25 +7,25 @@ class UseDoesNotStartWithBackslashSniffTest extends \SlevomatCodingStandard\Snif
 
 	public function testNoErrors(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/useDoesNotStartWithBackslashNoErrors.php');
-		$this->assertNoSniffErrorInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/useDoesNotStartWithBackslashNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/useDoesNotStartWithBackslashErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/useDoesNotStartWithBackslashErrors.php');
 
-		$this->assertSame(3, $report->getErrorCount());
+		self::assertSame(3, $report->getErrorCount());
 
-		$this->assertSniffError($report, 3, UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH);
-		$this->assertSniffError($report, 4, UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH);
-		$this->assertSniffError($report, 5, UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH);
+		self::assertSniffError($report, 3, UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH);
+		self::assertSniffError($report, 4, UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH);
+		self::assertSniffError($report, 5, UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH);
 	}
 
 	public function testFixable(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableUseDoesNotStartWithBackslash.php', [], [UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH]);
-		$this->assertAllFixedInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/fixableUseDoesNotStartWithBackslash.php', [], [UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH]);
+		self::assertAllFixedInFile($report);
 	}
 
 }

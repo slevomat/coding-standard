@@ -5,14 +5,14 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 class FullyQualifiedClassNameAfterKeywordSniffImplementsTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	protected function getSniffClassName(): string
+	protected static function getSniffClassName(): string
 	{
 		return FullyQualifiedClassNameAfterKeywordSniff::class;
 	}
 
 	private function getFileReport(): \PHP_CodeSniffer\Files\File
 	{
-		return $this->checkFile(
+		return self::checkFile(
 			__DIR__ . '/data/fullyQualifiedImplements.php',
 			['keywordsToCheck' => ['T_IMPLEMENTS']]
 		);
@@ -20,7 +20,7 @@ class FullyQualifiedClassNameAfterKeywordSniffImplementsTest extends \SlevomatCo
 
 	public function testNonFullyQualifiedImplements(): void
 	{
-		$this->assertSniffError(
+		self::assertSniffError(
 			$this->getFileReport(),
 			8,
 			FullyQualifiedClassNameAfterKeywordSniff::getErrorCode('implements'),
@@ -30,17 +30,17 @@ class FullyQualifiedClassNameAfterKeywordSniffImplementsTest extends \SlevomatCo
 
 	public function testFullyQualifiedImplements(): void
 	{
-		$this->assertNoSniffError($this->getFileReport(), 3);
+		self::assertNoSniffError($this->getFileReport(), 3);
 	}
 
 	public function testMultipleFullyQualifiedImplements(): void
 	{
-		$this->assertNoSniffError($this->getFileReport(), 13);
+		self::assertNoSniffError($this->getFileReport(), 13);
 	}
 
 	public function testMultipleImplementsWithFirstWrong(): void
 	{
-		$this->assertSniffError(
+		self::assertSniffError(
 			$this->getFileReport(),
 			18,
 			FullyQualifiedClassNameAfterKeywordSniff::getErrorCode('implements'),
@@ -51,13 +51,13 @@ class FullyQualifiedClassNameAfterKeywordSniffImplementsTest extends \SlevomatCo
 	public function testMultipleImplementsWithSecondAndThirdWrong(): void
 	{
 		$report = $this->getFileReport();
-		$this->assertSniffError(
+		self::assertSniffError(
 			$report,
 			23,
 			FullyQualifiedClassNameAfterKeywordSniff::getErrorCode('implements'),
 			'Amet in implements'
 		);
-		$this->assertSniffError(
+		self::assertSniffError(
 			$report,
 			23,
 			FullyQualifiedClassNameAfterKeywordSniff::getErrorCode('implements'),

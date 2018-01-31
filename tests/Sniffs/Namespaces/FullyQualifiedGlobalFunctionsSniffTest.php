@@ -7,33 +7,33 @@ class FullyQualifiedGlobalFunctionsSniffTest extends \SlevomatCodingStandard\Sni
 
 	public function testNoErrors(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsNoErrors.php');
-		$this->assertNoSniffErrorInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsErrors.php');
 
-		$this->assertSame(2, $report->getErrorCount());
+		self::assertSame(2, $report->getErrorCount());
 
-		$this->assertSniffError($report, 17, FullyQualifiedGlobalFunctionsSniff::CODE_NON_FULLY_QUALIFIED, 'Function min() should be referenced via a fully qualified name.');
-		$this->assertSniffError($report, 31, FullyQualifiedGlobalFunctionsSniff::CODE_NON_FULLY_QUALIFIED, 'Function MaX() should be referenced via a fully qualified name.');
+		self::assertSniffError($report, 17, FullyQualifiedGlobalFunctionsSniff::CODE_NON_FULLY_QUALIFIED, 'Function min() should be referenced via a fully qualified name.');
+		self::assertSniffError($report, 31, FullyQualifiedGlobalFunctionsSniff::CODE_NON_FULLY_QUALIFIED, 'Function MaX() should be referenced via a fully qualified name.');
 
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testExcludeErrors(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsExcludeErrors.php', [
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsExcludeErrors.php', [
 			'exclude' => ['min'],
 		]);
 
-		$this->assertSame(1, $report->getErrorCount());
+		self::assertSame(1, $report->getErrorCount());
 
-		$this->assertSniffError($report, 28, FullyQualifiedGlobalFunctionsSniff::CODE_NON_FULLY_QUALIFIED, 'Function max() should be referenced via a fully qualified name.');
+		self::assertSniffError($report, 28, FullyQualifiedGlobalFunctionsSniff::CODE_NON_FULLY_QUALIFIED, 'Function max() should be referenced via a fully qualified name.');
 
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 }

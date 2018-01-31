@@ -47,13 +47,13 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
-		$this->assertCount(count($foundTypes), $names);
+		self::assertCount(count($foundTypes), $names);
 		foreach ($names as $i => $referencedName) {
 			[$type, $isFunction, $isConstant] = $foundTypes[$i];
 
-			$this->assertSame($type, $referencedName->getNameAsReferencedInFile());
-			$this->assertSame($isFunction, $referencedName->isFunction(), $type);
-			$this->assertSame($isConstant, $referencedName->isConstant(), $type);
+			self::assertSame($type, $referencedName->getNameAsReferencedInFile());
+			self::assertSame($isFunction, $referencedName->isFunction(), $type);
+			self::assertSame($isConstant, $referencedName->isConstant(), $type);
 		}
 	}
 
@@ -69,13 +69,13 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
-		$this->assertCount(count($foundTypes), $names);
+		self::assertCount(count($foundTypes), $names);
 		foreach ($names as $i => $referencedName) {
 			[$type, $isFunction, $isConstant] = $foundTypes[$i];
 
-			$this->assertSame($type, $referencedName->getNameAsReferencedInFile());
-			$this->assertSame($isFunction, $referencedName->isFunction(), $type);
-			$this->assertSame($isConstant, $referencedName->isConstant(), $type);
+			self::assertSame($type, $referencedName->getNameAsReferencedInFile());
+			self::assertSame($isFunction, $referencedName->isFunction(), $type);
+			self::assertSame($isConstant, $referencedName->isConstant(), $type);
 		}
 	}
 
@@ -84,7 +84,7 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/fileWithoutReferencedName.php'
 		);
-		$this->assertCount(0, ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0));
+		self::assertCount(0, ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0));
 	}
 
 	public function testMultipleExceptionsCatch(): void
@@ -103,13 +103,13 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
-		$this->assertCount(count($foundTypes), $names);
+		self::assertCount(count($foundTypes), $names);
 		foreach ($names as $i => $referencedName) {
 			[$type, $isFunction, $isConstant] = $foundTypes[$i];
 
-			$this->assertSame($type, $referencedName->getNameAsReferencedInFile());
-			$this->assertSame($isFunction, $referencedName->isFunction(), $type);
-			$this->assertSame($isConstant, $referencedName->isConstant(), $type);
+			self::assertSame($type, $referencedName->getNameAsReferencedInFile());
+			self::assertSame($isFunction, $referencedName->isFunction(), $type);
+			self::assertSame($isConstant, $referencedName->isConstant(), $type);
 		}
 	}
 
@@ -120,7 +120,7 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		);
 		$backslashTokenPointer = TokenHelper::findNext($codeSnifferFile, T_NS_SEPARATOR, 0);
 		$endTokenPointer = ReferencedNameHelper::getReferencedNameEndPointer($codeSnifferFile, $backslashTokenPointer);
-		$this->assertTokenPointer(T_STRING, 3, $codeSnifferFile, $endTokenPointer);
+		self::assertTokenPointer(T_STRING, 3, $codeSnifferFile, $endTokenPointer);
 	}
 
 	public function testReturnTypeHint(): void
@@ -129,9 +129,9 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			__DIR__ . '/data/return-typehint.php'
 		);
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
-		$this->assertCount(2, $names);
-		$this->assertSame('Bar', $names[0]->getNameAsReferencedInFile());
-		$this->assertSame('\OtherNamespace\Lorem', $names[1]->getNameAsReferencedInFile());
+		self::assertCount(2, $names);
+		self::assertSame('Bar', $names[0]->getNameAsReferencedInFile());
+		self::assertSame('\OtherNamespace\Lorem', $names[1]->getNameAsReferencedInFile());
 	}
 
 	public function testConstantIsNotReferencedName(): void
@@ -140,7 +140,7 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			__DIR__ . '/data/classConstant.php'
 		);
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
-		$this->assertCount(0, $names);
+		self::assertCount(0, $names);
 	}
 
 	public function testMethodReturningReferenceIsNotReferencedName(): void
@@ -149,7 +149,7 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			__DIR__ . '/data/methodReturnsReference.php'
 		);
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
-		$this->assertCount(0, $names);
+		self::assertCount(0, $names);
 	}
 
 }

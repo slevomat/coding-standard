@@ -7,7 +7,7 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 
 	public function testErrors(): void
 	{
-		$resultFile = $this->checkFile(__DIR__ . '/data/classWithSomeUnusedElements.php', [
+		$resultFile = self::checkFile(__DIR__ . '/data/classWithSomeUnusedElements.php', [
 			'alwaysUsedPropertiesAnnotations' => [
 				'@get',
 				'@set',
@@ -18,143 +18,143 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 				'Timestamp',
 			],
 		]);
-		$this->assertNoSniffError($resultFile, 6);
-		$this->assertNoSniffError($resultFile, 8);
-		$this->assertNoSniffError($resultFile, 10);
-		$this->assertNoSniffError($resultFile, 15);
-		$this->assertNoSniffError($resultFile, 20);
-		$this->assertNoSniffError($resultFile, 22);
-		$this->assertNoSniffError($resultFile, 24);
-		$this->assertSniffError(
+		self::assertNoSniffError($resultFile, 6);
+		self::assertNoSniffError($resultFile, 8);
+		self::assertNoSniffError($resultFile, 10);
+		self::assertNoSniffError($resultFile, 15);
+		self::assertNoSniffError($resultFile, 20);
+		self::assertNoSniffError($resultFile, 22);
+		self::assertNoSniffError($resultFile, 24);
+		self::assertSniffError(
 			$resultFile,
 			26,
 			UnusedPrivateElementsSniff::CODE_UNUSED_PROPERTY,
 			'Class ClassWithSomeUnusedProperties contains unused property $unusedProperty.'
 		);
-		$this->assertSniffError(
+		self::assertSniffError(
 			$resultFile,
 			28,
 			UnusedPrivateElementsSniff::CODE_UNUSED_PROPERTY,
 			'Class ClassWithSomeUnusedProperties contains unused property $unusedPropertyWhichNameIsAlsoAFunction.'
 		);
-		$this->assertSniffError(
+		self::assertSniffError(
 			$resultFile,
 			30,
 			UnusedPrivateElementsSniff::CODE_WRITE_ONLY_PROPERTY,
 			'Class ClassWithSomeUnusedProperties contains write-only property $writeOnlyProperty.'
 		);
-		$this->assertNoSniffError($resultFile, 33);
-		$this->assertSniffError(
+		self::assertNoSniffError($resultFile, 33);
+		self::assertSniffError(
 			$resultFile,
 			48,
 			UnusedPrivateElementsSniff::CODE_UNUSED_METHOD,
 			'Class ClassWithSomeUnusedProperties contains unused private method unusedPrivateMethod().'
 		);
-		$this->assertNoSniffError($resultFile, 51);
-		$this->assertNoSniffError($resultFile, 58);
-		$this->assertNoSniffError($resultFile, 63);
-		$this->assertSniffError(
+		self::assertNoSniffError($resultFile, 51);
+		self::assertNoSniffError($resultFile, 58);
+		self::assertNoSniffError($resultFile, 63);
+		self::assertSniffError(
 			$resultFile,
 			68,
 			UnusedPrivateElementsSniff::CODE_UNUSED_METHOD,
 			'Class ClassWithSomeUnusedProperties contains unused private method unusedStaticPrivateMethod().'
 		);
-		$this->assertNoSniffError($resultFile, 73);
+		self::assertNoSniffError($resultFile, 73);
 
-		$this->assertNoSniffError($resultFile, 81);
-		$this->assertNoSniffError($resultFile, 86);
-		$this->assertNoSniffError($resultFile, 91);
+		self::assertNoSniffError($resultFile, 81);
+		self::assertNoSniffError($resultFile, 86);
+		self::assertNoSniffError($resultFile, 91);
 
-		$this->assertSniffError(
+		self::assertSniffError(
 			$resultFile,
 			96,
 			UnusedPrivateElementsSniff::CODE_UNUSED_METHOD,
 			'Class ClassWithSomeUnusedProperties contains unused private method unusedMethodReturningReference().'
 		);
 
-		$this->assertSniffError(
+		self::assertSniffError(
 			$resultFile,
 			101,
 			UnusedPrivateElementsSniff::CODE_UNUSED_PROPERTY,
 			'Class ClassWithSomeUnusedProperties contains unused property $unusedPropertyWithWeirdDefinition.'
 		);
-		$this->assertSniffError(
+		self::assertSniffError(
 			$resultFile,
 			103,
 			UnusedPrivateElementsSniff::CODE_WRITE_ONLY_PROPERTY,
 			'Class ClassWithSomeUnusedProperties contains write-only property $unusedWriteOnlyPropertyWithWeirdDefinition.'
 		);
 
-		$this->assertNoSniffError($resultFile, 110);
+		self::assertNoSniffError($resultFile, 110);
 
-		$this->assertSniffError(
+		self::assertSniffError(
 			$resultFile,
 			120,
 			UnusedPrivateElementsSniff::CODE_UNUSED_PROPERTY,
 			'Class ClassWithSomeUnusedProperties contains unused property $unusedStaticProperty1.'
 		);
-		$this->assertSniffError(
+		self::assertSniffError(
 			$resultFile,
 			121,
 			UnusedPrivateElementsSniff::CODE_UNUSED_PROPERTY,
 			'Class ClassWithSomeUnusedProperties contains unused property $unusedStaticProperty2.'
 		);
 
-		$this->assertNoSniffError($resultFile, 123);
+		self::assertNoSniffError($resultFile, 123);
 	}
 
 	public function testOnlyPublicElements(): void
 	{
-		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/classWithOnlyPublicElements.php'));
+		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/classWithOnlyPublicElements.php'));
 	}
 
 	public function testClassWithSpecialThis(): void
 	{
-		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/classWithSpecialThis.php'));
+		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/classWithSpecialThis.php'));
 	}
 
 	public function testClassWithSpecialSelf(): void
 	{
-		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/classWithSpecialSelf.php'));
+		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/classWithSpecialSelf.php'));
 	}
 
 	public function testClassWithPrivateElementsUsedOnSelfInstance(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/classWithPrivateElementsUsedOnSelfInstance.php');
-		$this->assertNoSniffErrorInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/classWithPrivateElementsUsedOnSelfInstance.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testClassWithPrivateElementsUsedOnStaticInstance(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/classWithPrivateElementsUsedOnStaticInstance.php');
-		$this->assertNoSniffErrorInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/classWithPrivateElementsUsedOnStaticInstance.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testClassWithPrivateElementsUsedOnSameClass(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/classWithPrivateElementsUsedOnSameClass.php');
-		$this->assertNoSniffErrorInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/classWithPrivateElementsUsedOnSameClass.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testClassWithChainedPrivateMethods(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/classWithChainedPrivateMethods.php');
-		$this->assertNoSniffErrorInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/classWithChainedPrivateMethods.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testClassWithConstants(): void
 	{
-		$resultFile = $this->checkFile(__DIR__ . '/data/classWithConstants.php');
+		$resultFile = self::checkFile(__DIR__ . '/data/classWithConstants.php');
 
-		$this->assertSame(1, $resultFile->getErrorCount());
+		self::assertSame(1, $resultFile->getErrorCount());
 
-		$this->assertNoSniffError($resultFile, 6);
-		$this->assertNoSniffError($resultFile, 7);
-		$this->assertNoSniffError($resultFile, 9);
-		$this->assertNoSniffError($resultFile, 11);
-		$this->assertNoSniffError($resultFile, 12);
+		self::assertNoSniffError($resultFile, 6);
+		self::assertNoSniffError($resultFile, 7);
+		self::assertNoSniffError($resultFile, 9);
+		self::assertNoSniffError($resultFile, 11);
+		self::assertNoSniffError($resultFile, 12);
 
-		$this->assertSniffError(
+		self::assertSniffError(
 			$resultFile,
 			10,
 			UnusedPrivateElementsSniff::CODE_UNUSED_CONSTANT,
@@ -164,11 +164,11 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 
 	public function testClassWithPropertyUsedInString(): void
 	{
-		$resultFile = $this->checkFile(__DIR__ . '/data/classWithPropertyUsedInString.php');
+		$resultFile = self::checkFile(__DIR__ . '/data/classWithPropertyUsedInString.php');
 
-		$this->assertSame(1, $resultFile->getErrorCount());
+		self::assertSame(1, $resultFile->getErrorCount());
 
-		$this->assertSniffError(
+		self::assertSniffError(
 			$resultFile,
 			8,
 			UnusedPrivateElementsSniff::CODE_WRITE_ONLY_PROPERTY,
@@ -178,11 +178,11 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 
 	public function testClassWithMethodUsedInString(): void
 	{
-		$resultFile = $this->checkFile(__DIR__ . '/data/classWithMethodUsedInString.php');
+		$resultFile = self::checkFile(__DIR__ . '/data/classWithMethodUsedInString.php');
 
-		$this->assertSame(1, $resultFile->getErrorCount());
+		self::assertSame(1, $resultFile->getErrorCount());
 
-		$this->assertSniffError(
+		self::assertSniffError(
 			$resultFile,
 			10,
 			UnusedPrivateElementsSniff::CODE_UNUSED_METHOD,
@@ -192,12 +192,12 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 
 	public function testClassWithWriteOnlyProperties(): void
 	{
-		$resultFile = $this->checkFile(__DIR__ . '/data/classWithWriteOnlyProperties.php');
+		$resultFile = self::checkFile(__DIR__ . '/data/classWithWriteOnlyProperties.php');
 
-		$this->assertSame(13, $resultFile->getErrorCount());
+		self::assertSame(13, $resultFile->getErrorCount());
 
 		foreach (range(6, 18) as $line) {
-			$this->assertSniffError($resultFile, $line, UnusedPrivateElementsSniff::CODE_WRITE_ONLY_PROPERTY);
+			self::assertSniffError($resultFile, $line, UnusedPrivateElementsSniff::CODE_WRITE_ONLY_PROPERTY);
 		}
 	}
 

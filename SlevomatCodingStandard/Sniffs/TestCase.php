@@ -11,7 +11,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 * @param string[] $codesToCheck
 	 * @return \PHP_CodeSniffer\Files\File
 	 */
-	protected function checkFile(string $filePath, array $sniffProperties = [], array $codesToCheck = []): \PHP_CodeSniffer\Files\File
+	protected static function checkFile(string $filePath, array $sniffProperties = [], array $codesToCheck = []): \PHP_CodeSniffer\Files\File
 	{
 		$codeSniffer = new \PHP_CodeSniffer\Runner();
 		$codeSniffer->config = new \PHP_CodeSniffer\Config([
@@ -20,20 +20,20 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$codeSniffer->init();
 
 		if (count($sniffProperties) > 0) {
-			$codeSniffer->ruleset->ruleset[$this->getSniffName()]['properties'] = $sniffProperties;
+			$codeSniffer->ruleset->ruleset[static::getSniffName()]['properties'] = $sniffProperties;
 		}
 
-		$sniffClassName = $this->getSniffClassName();
+		$sniffClassName = static::getSniffClassName();
 
 		$codeSniffer->ruleset->sniffs = [$sniffClassName => new $sniffClassName()];
 
 		if (count($codesToCheck) > 0) {
-			foreach ($this->getSniffClassReflection()->getConstants() as $constantName => $constantValue) {
+			foreach (static::getSniffClassReflection()->getConstants() as $constantName => $constantValue) {
 				if (!(strpos($constantName, 'CODE_') === 0 && !in_array($constantValue, $codesToCheck, true))) {
 					continue;
 				}
 
-				$codeSniffer->ruleset->ruleset[sprintf('%s.%s', $this->getSniffName(), $constantValue)]['severity'] = 0;
+				$codeSniffer->ruleset->ruleset[sprintf('%s.%s', static::getSniffName(), $constantValue)]['severity'] = 0;
 			}
 		}
 
@@ -45,21 +45,21 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		return $file;
 	}
 
-	protected function assertNoSniffErrorInFile(\PHP_CodeSniffer\Files\File $file): void
+	protected static function assertNoSniffErrorInFile(\PHP_CodeSniffer\Files\File $file): void
 	{
 		$errors = $file->getErrors();
-		$this->assertEmpty($errors, sprintf('No errors expected, but %d errors found.', count($errors)));
+		self::assertEmpty($errors, sprintf('No errors expected, but %d errors found.', count($errors)));
 	}
 
-	protected function assertSniffError(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $line, string $code, ?string $message = null): void
+	protected static function assertSniffError(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $line, string $code, ?string $message = null): void
 	{
 		$errors = $codeSnifferFile->getErrors();
-		$this->assertTrue(isset($errors[$line]), sprintf('Expected error on line %s, but none found.', $line));
+		self::assertTrue(isset($errors[$line]), sprintf('Expected error on line %s, but none found.', $line));
 
-		$sniffCode = sprintf('%s.%s', $this->getSniffName(), $code);
+		$sniffCode = sprintf('%s.%s', static::getSniffName(), $code);
 
-		$this->assertTrue(
-			$this->hasError($errors[$line], $sniffCode, $message),
+		self::assertTrue(
+			self::hasError($errors[$line], $sniffCode, $message),
 			sprintf(
 				'Expected error %s%s, but none found on line %d.%sErrors found on line %d:%s%s%s',
 				$sniffCode,
@@ -68,7 +68,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 				PHP_EOL . PHP_EOL,
 				$line,
 				PHP_EOL,
-				$this->getFormattedErrors($errors[$line]),
+				self::getFormattedErrors($errors[$line]),
 				PHP_EOL
 			)
 		);
@@ -77,13 +77,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	protected function assertNoSniffError(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $line): void
 	{
 		$errors = $codeSnifferFile->getErrors();
-		$this->assertFalse(
+		self::assertFalse(
 			isset($errors[$line]),
 			sprintf(
 				'Expected no error on line %s, but found:%s%s%s',
 				$line,
 				PHP_EOL . PHP_EOL,
-				isset($errors[$line]) ? $this->getFormattedErrors($errors[$line]) : '',
+				isset($errors[$line]) ? self::getFormattedErrors($errors[$line]) : '',
 				PHP_EOL
 			)
 		);
@@ -93,7 +93,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		$codeSnifferFile->fixer->fixFile();
 
-		$this->assertStringEqualsFile(preg_replace('~(\\.php)$~', '.fixed\\1', $codeSnifferFile->getFilename()), $codeSnifferFile->fixer->getContents());
+		self::assertStringEqualsFile(preg_replace('~(\\.php)$~', '.fixed\\1', $codeSnifferFile->getFilename()), $codeSnifferFile->fixer->getContents());
 	}
 
 	/**
@@ -102,7 +102,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 * @param string|null $message
 	 * @return bool
 	 */
-	private function hasError(array $errorsOnLine, string $sniffCode, ?string $message = null): bool
+	private static function hasError(array $errorsOnLine, string $sniffCode, ?string $message = null): bool
 	{
 		foreach ($errorsOnLine as $errorsOnPosition) {
 			foreach ($errorsOnPosition as $error) {
@@ -123,7 +123,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	/**
 	 * @param mixed[][][] $errors
 	 */
-	private function getFormattedErrors(array $errors): string
+	private static function getFormattedErrors(array $errors): string
 	{
 		return implode(PHP_EOL, array_map(function (array $errors): string {
 			return implode(PHP_EOL, array_map(function (array $error): string {
@@ -132,7 +132,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		}, $errors));
 	}
 
-	protected function getSniffName(): string
+	protected static function getSniffName(): string
 	{
 		return preg_replace(
 			[
@@ -145,24 +145,22 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 				'',
 				'',
 			],
-			$this->getSniffClassName()
+			static::getSniffClassName()
 		);
 	}
 
-	protected function getSniffClassName(): string
+	protected static function getSniffClassName(): string
 	{
-		return substr(get_class($this), 0, -strlen('Test'));
+		return substr(static::class, 0, -strlen('Test'));
 	}
 
-	protected function getSniffClassReflection(): \ReflectionClass
+	protected static function getSniffClassReflection(): \ReflectionClass
 	{
-		static $reflection;
+		static $reflections;
 
-		if ($reflection === null) {
-			$reflection = new \ReflectionClass($this->getSniffClassName());
-		}
+		$className = static::getSniffClassName();
 
-		return $reflection;
+		return $reflections[$className] ?? $reflections[$className] = new \ReflectionClass($className);
 	}
 
 }

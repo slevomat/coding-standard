@@ -7,17 +7,17 @@ class ClassConstantVisibilitySniffTest extends \SlevomatCodingStandard\Sniffs\Te
 
 	public function testErrors(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/classWithConstants.php', [
+		$report = self::checkFile(__DIR__ . '/data/classWithConstants.php', [
 			'enabled' => true,
 		]);
 
-		$this->assertSame(1, $report->getErrorCount());
+		self::assertSame(1, $report->getErrorCount());
 
-		$this->assertNoSniffError($report, 7);
-		$this->assertNoSniffError($report, 9);
-		$this->assertNoSniffError($report, 10);
+		self::assertNoSniffError($report, 7);
+		self::assertNoSniffError($report, 9);
+		self::assertNoSniffError($report, 10);
 
-		$this->assertSniffError(
+		self::assertSniffError(
 			$report,
 			6,
 			ClassConstantVisibilitySniff::CODE_MISSING_CONSTANT_VISIBILITY,
@@ -27,46 +27,46 @@ class ClassConstantVisibilitySniffTest extends \SlevomatCodingStandard\Sniffs\Te
 
 	public function testNoClassConstants(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/noClassConstants.php', [
+		$report = self::checkFile(__DIR__ . '/data/noClassConstants.php', [
 			'enabled' => true,
 		]);
-		$this->assertNoSniffErrorInFile($report);
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testNoClassConstantsWithNamespace(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/noClassConstantsWithNamespace.php', [
+		$report = self::checkFile(__DIR__ . '/data/noClassConstantsWithNamespace.php', [
 			'enabled' => true,
 		]);
-		$this->assertNoSniffErrorInFile($report);
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testDisabledSniff(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/classWithConstants.php', [
+		$report = self::checkFile(__DIR__ . '/data/classWithConstants.php', [
 			'enabled' => false,
 		]);
-		$this->assertNoSniffErrorInFile($report);
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testFixableEnabled(): void
 	{
-		$report = $this->checkFile(
+		$report = self::checkFile(
 			__DIR__ . '/data/fixableMissingClassConstantVisibility.php',
 			['fixable' => true],
 			[ClassConstantVisibilitySniff::CODE_MISSING_CONSTANT_VISIBILITY]
 		);
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableDisabled(): void
 	{
-		$report = $this->checkFile(
+		$report = self::checkFile(
 			__DIR__ . '/data/fixableMissingClassConstantVisibilityFixableDisabled.php',
 			['fixable' => false],
 			[ClassConstantVisibilitySniff::CODE_MISSING_CONSTANT_VISIBILITY]
 		);
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 }

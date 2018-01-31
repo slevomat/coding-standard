@@ -7,29 +7,29 @@ class InlineDocCommentDeclarationSniffTest extends \SlevomatCodingStandard\Sniff
 
 	public function testNoInvalidInlineDocCommentDeclarations(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/noInvalidInlineDocCommentDeclarations.php');
-		$this->assertNoSniffErrorInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/noInvalidInlineDocCommentDeclarations.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testInvalidInlineDocCommentDeclarations(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/invalidInlineDocCommentDeclarations.php');
+		$report = self::checkFile(__DIR__ . '/data/invalidInlineDocCommentDeclarations.php');
 
-		$this->assertSame(3, $report->getErrorCount());
+		self::assertSame(3, $report->getErrorCount());
 
-		$this->assertSniffError(
+		self::assertSniffError(
 			$report,
 			12,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
 			'Invalid inline doc comment format "@var $a string[]" for variable $a, expected "@var string[] $a".'
 		);
-		$this->assertSniffError(
+		self::assertSniffError(
 			$report,
 			18,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
 			'Invalid inline doc comment format "@var $c" for variable $c, expected "@var type $c".'
 		);
-		$this->assertSniffError(
+		self::assertSniffError(
 			$report,
 			21,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
@@ -39,8 +39,8 @@ class InlineDocCommentDeclarationSniffTest extends \SlevomatCodingStandard\Sniff
 
 	public function testFixableInvalidInlineDocCommentDeclarations(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/invalidInlineDocCommentDeclarations.php', [], [InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT]);
-		$this->assertAllFixedInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/invalidInlineDocCommentDeclarations.php', [], [InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT]);
+		self::assertAllFixedInFile($report);
 	}
 
 }

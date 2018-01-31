@@ -7,7 +7,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 
 	public function testMultipleOpenTagsInFile(): void
 	{
-		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/declareStrictTypesMultipleOpenTags.php'));
+		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/declareStrictTypesMultipleOpenTags.php'));
 	}
 
 	/**
@@ -42,8 +42,8 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 	 */
 	public function testDeclareStrictTypesMissing(string $file, int $line): void
 	{
-		$report = $this->checkFile($file);
-		$this->assertSniffError(
+		$report = self::checkFile($file);
+		self::assertSniffError(
 			$report,
 			$line,
 			DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING
@@ -74,8 +74,8 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 	 */
 	public function testDeclareStrictTypesIncorrectFormat(string $file): void
 	{
-		$report = $this->checkFile($file);
-		$this->assertSniffError(
+		$report = self::checkFile($file);
+		self::assertSniffError(
 			$report,
 			1,
 			DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT
@@ -84,16 +84,16 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 
 	public function testEmptyFile(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/declareStrictTypesEmptyFile.php', []);
-		$this->assertNoSniffErrorInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/declareStrictTypesEmptyFile.php', []);
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testDeclareStrictTypesIncorrectFormatNoSpaces(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/declareStrictTypesIncorrectFormatNoSpaces.php', [
+		$report = self::checkFile(__DIR__ . '/data/declareStrictTypesIncorrectFormatNoSpaces.php', [
 			'spacesCountAroundEqualsSign' => 0,
 		]);
-		$this->assertSniffError(
+		self::assertSniffError(
 			$report,
 			1,
 			DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT
@@ -103,15 +103,15 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 	public function testDeclareStrictTwoNewlinesBefore(): void
 	{
 		$file = __DIR__ . '/data/declareStrictTypesTwoNewlinesBefore.php';
-		$this->assertNoSniffErrorInFile($this->checkFile($file, [
+		self::assertNoSniffErrorInFile(self::checkFile($file, [
 			'newlinesCountBetweenOpenTagAndDeclare' => ' 2  ',
 		]));
 	}
 
 	public function testDeclareStrictTwoNewlinesBeforeError(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/declareStrictTypesTwoNewlinesBeforeError.php');
-		$this->assertSniffError(
+		$report = self::checkFile(__DIR__ . '/data/declareStrictTypesTwoNewlinesBeforeError.php');
+		self::assertSniffError(
 			$report,
 			3,
 			DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE,
@@ -122,15 +122,15 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 	public function testDeclareStrictTwoNewlinesAfter(): void
 	{
 		$file = __DIR__ . '/data/declareStrictTypesTwoNewlinesAfter.php';
-		$this->assertNoSniffErrorInFile($this->checkFile($file, [
+		self::assertNoSniffErrorInFile(self::checkFile($file, [
 			'newlinesCountAfterDeclare' => ' 2  ',
 		], [DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_AFTER_DECLARE]));
 	}
 
 	public function testDeclareStrictTwoNewlinesAfterError(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/declareStrictTypesTwoNewlinesAfterError.php');
-		$this->assertSniffError(
+		$report = self::checkFile(__DIR__ . '/data/declareStrictTypesTwoNewlinesAfterError.php');
+		self::assertSniffError(
 			$report,
 			3,
 			DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_AFTER_DECLARE,
@@ -140,10 +140,10 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 
 	public function testDeclareStrictOneSpaceError(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/declareStrictTypesOneSpaceError.php', [
+		$report = self::checkFile(__DIR__ . '/data/declareStrictTypesOneSpaceError.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => '2',
 		]);
-		$this->assertSniffError(
+		self::assertSniffError(
 			$report,
 			1,
 			DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE,
@@ -153,118 +153,118 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 
 	public function testDeclareStrictOneSpace(): void
 	{
-		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/declareStrictTypesOneSpace.php'));
+		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/declareStrictTypesOneSpace.php'));
 	}
 
 	public function testDeclareStrictWithTicks(): void
 	{
-		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/declareStrictTypesWithTicks.php'));
+		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/declareStrictTypesWithTicks.php'));
 	}
 
 	public function testFixableNoNewLinesBefore(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesNoNewLinesBefore.php', [
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesNoNewLinesBefore.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 0,
 		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE]);
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableMissingNoNewLines(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingNoNewLines.php', [
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingNoNewLines.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 0,
 		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE]);
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableOneNewLineBefore(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesOneNewLineBefore.php', [
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesOneNewLineBefore.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 1,
 		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE]);
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableMissingOneNewLine(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingOneNewLine.php', [
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingOneNewLine.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 1,
 		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE]);
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableMoreNewLinesBefore(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMoreNewLinesBefore.php', [
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMoreNewLinesBefore.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 4,
 		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE]);
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableMissingMoreNewLines(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingMoreNewLines.php', [
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingMoreNewLines.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 4,
 		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE]);
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableMissingIncorrectFormatOneSpace(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatOneSpace.php', [], [DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT]);
-		$this->assertAllFixedInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatOneSpace.php', [], [DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT]);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableMissingIncorrectFormatNoSpaces(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatNoSpaces.php', [
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatNoSpaces.php', [
 			'spacesCountAroundEqualsSign' => 0,
 		], [DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT]);
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableMissingIncorrectFormatMoreSpaces(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatMoreSpaces.php', [
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatMoreSpaces.php', [
 			'spacesCountAroundEqualsSign' => 4,
 		], [DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT]);
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableMissingWithTicks(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingWithTicks.php', [], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING]);
-		$this->assertAllFixedInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingWithTicks.php', [], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING]);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableDisabled(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesDisabled.php', [], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING]);
-		$this->assertAllFixedInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesDisabled.php', [], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING]);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableOneNewLineAfter(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesOneNewLineAfter.php', [
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesOneNewLineAfter.php', [
 			'newlinesCountAfterDeclare' => 2,
 		], [DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_AFTER_DECLARE]);
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableNoNewLinesAfter(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesNoNewLinesAfter.php', [
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesNoNewLinesAfter.php', [
 			'newlinesCountAfterDeclare' => 0,
 		], [DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_AFTER_DECLARE]);
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableMoreNewLinesAfter(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMoreNewLinesAfter.php', [
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMoreNewLinesAfter.php', [
 			'newlinesCountAfterDeclare' => 4,
 		], [DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_AFTER_DECLARE]);
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 }

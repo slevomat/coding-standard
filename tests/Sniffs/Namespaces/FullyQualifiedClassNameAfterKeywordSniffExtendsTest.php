@@ -5,14 +5,14 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 class FullyQualifiedClassNameAfterKeywordSniffExtendsTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	protected function getSniffClassName(): string
+	protected static function getSniffClassName(): string
 	{
 		return FullyQualifiedClassNameAfterKeywordSniff::class;
 	}
 
 	private function getFileReport(): \PHP_CodeSniffer\Files\File
 	{
-		return $this->checkFile(
+		return self::checkFile(
 			__DIR__ . '/data/fullyQualifiedExtends.php',
 			['keywordsToCheck' => ['T_EXTENDS']]
 		);
@@ -20,7 +20,7 @@ class FullyQualifiedClassNameAfterKeywordSniffExtendsTest extends \SlevomatCodin
 
 	public function testNonFullyQualifiedExtends(): void
 	{
-		$this->assertSniffError(
+		self::assertSniffError(
 			$this->getFileReport(),
 			8,
 			FullyQualifiedClassNameAfterKeywordSniff::getErrorCode('extends'),
@@ -30,7 +30,7 @@ class FullyQualifiedClassNameAfterKeywordSniffExtendsTest extends \SlevomatCodin
 
 	public function testFullyQualifiedExtends(): void
 	{
-		$this->assertNoSniffError($this->getFileReport(), 3);
+		self::assertNoSniffError($this->getFileReport(), 3);
 	}
 
 }

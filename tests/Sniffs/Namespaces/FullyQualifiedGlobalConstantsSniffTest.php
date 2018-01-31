@@ -7,33 +7,33 @@ class FullyQualifiedGlobalConstantsSniffTest extends \SlevomatCodingStandard\Sni
 
 	public function testNoErrors(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsNoErrors.php');
-		$this->assertNoSniffErrorInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsErrors.php');
 
-		$this->assertSame(2, $report->getErrorCount());
+		self::assertSame(2, $report->getErrorCount());
 
-		$this->assertSniffError($report, 17, FullyQualifiedGlobalConstantsSniff::CODE_NON_FULLY_QUALIFIED, 'Constant PHP_VERSION should be referenced via a fully qualified name.');
-		$this->assertSniffError($report, 31, FullyQualifiedGlobalConstantsSniff::CODE_NON_FULLY_QUALIFIED, 'Constant PHP_OS should be referenced via a fully qualified name.');
+		self::assertSniffError($report, 17, FullyQualifiedGlobalConstantsSniff::CODE_NON_FULLY_QUALIFIED, 'Constant PHP_VERSION should be referenced via a fully qualified name.');
+		self::assertSniffError($report, 31, FullyQualifiedGlobalConstantsSniff::CODE_NON_FULLY_QUALIFIED, 'Constant PHP_OS should be referenced via a fully qualified name.');
 
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testExcludeErrors(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsExcludeErrors.php', [
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsExcludeErrors.php', [
 			'exclude' => ['PHP_VERSION'],
 		]);
 
-		$this->assertSame(1, $report->getErrorCount());
+		self::assertSame(1, $report->getErrorCount());
 
-		$this->assertSniffError($report, 28, FullyQualifiedGlobalConstantsSniff::CODE_NON_FULLY_QUALIFIED, 'Constant PHP_OS should be referenced via a fully qualified name.');
+		self::assertSniffError($report, 28, FullyQualifiedGlobalConstantsSniff::CODE_NON_FULLY_QUALIFIED, 'Constant PHP_OS should be referenced via a fully qualified name.');
 
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 }

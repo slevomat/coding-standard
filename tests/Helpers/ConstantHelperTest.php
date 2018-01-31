@@ -10,8 +10,8 @@ class ConstantHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/constantWithNamespace.php');
 
 		$constantPointer = $this->findConstantPointerByName($codeSnifferFile, 'FOO');
-		$this->assertSame('\FooNamespace\FOO', ConstantHelper::getFullyQualifiedName($codeSnifferFile, $constantPointer));
-		$this->assertSame('FOO', ConstantHelper::getName($codeSnifferFile, $constantPointer));
+		self::assertSame('\FooNamespace\FOO', ConstantHelper::getFullyQualifiedName($codeSnifferFile, $constantPointer));
+		self::assertSame('FOO', ConstantHelper::getName($codeSnifferFile, $constantPointer));
 	}
 
 	public function testNameWithoutNamespace(): void
@@ -19,14 +19,14 @@ class ConstantHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/constantWithoutNamespace.php');
 
 		$constantPointer = $this->findConstantPointerByName($codeSnifferFile, 'FOO');
-		$this->assertSame('FOO', ConstantHelper::getFullyQualifiedName($codeSnifferFile, $constantPointer));
-		$this->assertSame('FOO', ConstantHelper::getName($codeSnifferFile, $constantPointer));
+		self::assertSame('FOO', ConstantHelper::getFullyQualifiedName($codeSnifferFile, $constantPointer));
+		self::assertSame('FOO', ConstantHelper::getName($codeSnifferFile, $constantPointer));
 	}
 
 	public function testGetAllNames(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/constantNames.php');
-		$this->assertSame(['FOO', 'BOO'], ConstantHelper::getAllNames($codeSnifferFile));
+		self::assertSame(['FOO', 'BOO'], ConstantHelper::getAllNames($codeSnifferFile));
 	}
 
 }

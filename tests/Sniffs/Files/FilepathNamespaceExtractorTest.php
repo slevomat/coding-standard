@@ -114,7 +114,7 @@ class FilepathNamespaceExtractorTest extends \SlevomatCodingStandard\Sniffs\Test
 			$extensions
 		);
 		$path = str_replace('/', DIRECTORY_SEPARATOR, $path);
-		$this->assertSame($expectedNamespace, $extractor->getTypeNameFromProjectPath($path));
+		self::assertSame($expectedNamespace, $extractor->getTypeNameFromProjectPath($path));
 	}
 
 }

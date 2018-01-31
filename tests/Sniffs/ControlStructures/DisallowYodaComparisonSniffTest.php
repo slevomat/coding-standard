@@ -7,22 +7,22 @@ class DisallowYodaComparisonSniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 
 	public function testNoErrors(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/disallowYodaComparisonNoErrors.php');
-		$this->assertNoSniffErrorInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/disallowYodaComparisonNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/disallowYodaComparisonErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/disallowYodaComparisonErrors.php');
 		foreach (range(3, 37) as $lineNumber) {
-			$this->assertSniffError($report, $lineNumber, DisallowYodaComparisonSniff::CODE_DISALLOWED_YODA_COMPARISON);
+			self::assertSniffError($report, $lineNumber, DisallowYodaComparisonSniff::CODE_DISALLOWED_YODA_COMPARISON);
 		}
 	}
 
 	public function testFixable(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableDisallowYodaComparisons.php', [], [DisallowYodaComparisonSniff::CODE_DISALLOWED_YODA_COMPARISON]);
-		$this->assertAllFixedInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/fixableDisallowYodaComparisons.php', [], [DisallowYodaComparisonSniff::CODE_DISALLOWED_YODA_COMPARISON]);
+		self::assertAllFixedInFile($report);
 	}
 
 }

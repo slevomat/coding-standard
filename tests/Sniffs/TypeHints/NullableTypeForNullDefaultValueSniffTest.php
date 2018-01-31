@@ -7,14 +7,14 @@ class NullableTypeForNullDefaultValueSniffTest extends \SlevomatCodingStandard\S
 
 	public function testNoErrors(): void
 	{
-		$this->assertNoSniffErrorInFile($this->checkFile(__DIR__ . '/data/nullableTypeForNullDefaultValueNoErrors.php', [
+		$this->assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/nullableTypeForNullDefaultValueNoErrors.php', [
 			'enabled' => true,
 		]));
 	}
 
 	public function testErrors(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/nullableTypeForNullDefaultValueErrors.php', [
+		$report = self::checkFile(__DIR__ . '/data/nullableTypeForNullDefaultValueErrors.php', [
 			'enabled' => true,
 		]);
 
@@ -38,7 +38,7 @@ class NullableTypeForNullDefaultValueSniffTest extends \SlevomatCodingStandard\S
 	public function testFixable(): void
 	{
 		$codes = [NullableTypeForNullDefaultValueSniff::CODE_NULLABILITY_SYMBOL_REQUIRED];
-		$report = $this->checkFile(__DIR__ . '/data/fixableNullableTypeForNullDefaultValue.php', [
+		$report = self::checkFile(__DIR__ . '/data/fixableNullableTypeForNullDefaultValue.php', [
 			'enabled' => true,
 		], $codes);
 		$this->assertAllFixedInFile($report);
@@ -46,7 +46,7 @@ class NullableTypeForNullDefaultValueSniffTest extends \SlevomatCodingStandard\S
 
 	public function testDisabledSniff(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/nullableTypeForNullDefaultValueErrors.php', [
+		$report = self::checkFile(__DIR__ . '/data/nullableTypeForNullDefaultValueErrors.php', [
 			'enabled' => false,
 		]);
 		$this->assertNoSniffErrorInFile($report);

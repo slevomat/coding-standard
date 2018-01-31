@@ -5,14 +5,14 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 class FullyQualifiedExceptionsSniffWithSpecialNamesTest extends \SlevomatCodingStandard\Sniffs\TestCase
 {
 
-	protected function getSniffClassName(): string
+	protected static function getSniffClassName(): string
 	{
 		return FullyQualifiedExceptionsSniff::class;
 	}
 
 	private function getFileReport(): \PHP_CodeSniffer\Files\File
 	{
-		return $this->checkFile(
+		return self::checkFile(
 			__DIR__ . '/data/fullyQualifiedSpecialExceptionNames.php',
 			['specialExceptionNames' => [
 				'Foo\SomeError',
@@ -23,7 +23,7 @@ class FullyQualifiedExceptionsSniffWithSpecialNamesTest extends \SlevomatCodingS
 
 	public function testThrowingUsedException(): void
 	{
-		$this->assertSniffError(
+		self::assertSniffError(
 			$this->getFileReport(),
 			12,
 			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
@@ -33,7 +33,7 @@ class FullyQualifiedExceptionsSniffWithSpecialNamesTest extends \SlevomatCodingS
 
 	public function testCatchingPartiallyUsedException(): void
 	{
-		$this->assertSniffError(
+		self::assertSniffError(
 			$this->getFileReport(),
 			13,
 			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
@@ -43,7 +43,7 @@ class FullyQualifiedExceptionsSniffWithSpecialNamesTest extends \SlevomatCodingS
 
 	public function testThrowingExceptionFromSameNamespace(): void
 	{
-		$this->assertSniffError(
+		self::assertSniffError(
 			$this->getFileReport(),
 			18,
 			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
@@ -53,13 +53,13 @@ class FullyQualifiedExceptionsSniffWithSpecialNamesTest extends \SlevomatCodingS
 
 	public function testCatchingFullyQualifiedException(): void
 	{
-		$this->assertNoSniffError($this->getFileReport(), 15);
+		self::assertNoSniffError($this->getFileReport(), 15);
 	}
 
 
 	public function testCatchingFullyQualifiedExceptionFromSameNamespace(): void
 	{
-		$this->assertNoSniffError($this->getFileReport(), 17);
+		self::assertNoSniffError($this->getFileReport(), 17);
 	}
 
 }

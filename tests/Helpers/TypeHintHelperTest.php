@@ -38,7 +38,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 */
 	public function testIsSimpleTypeHint(string $typeHint, bool $isSimple): void
 	{
-		$this->assertSame($isSimple, TypeHintHelper::isSimpleTypeHint($typeHint));
+		self::assertSame($isSimple, TypeHintHelper::isSimpleTypeHint($typeHint));
 	}
 
 	/**
@@ -62,7 +62,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 */
 	public function testIsSimpleIterableTypeHint(string $typeHint, bool $isSimple): void
 	{
-		$this->assertSame($isSimple, TypeHintHelper::isSimpleIterableTypeHint($typeHint));
+		self::assertSame($isSimple, TypeHintHelper::isSimpleIterableTypeHint($typeHint));
 	}
 
 	/**
@@ -94,7 +94,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 */
 	public function testIsSimpleUnofficialTypeHint(string $typeHint, bool $isSimple): void
 	{
-		$this->assertSame($isSimple, TypeHintHelper::isSimpleUnofficialTypeHints($typeHint));
+		self::assertSame($isSimple, TypeHintHelper::isSimpleUnofficialTypeHints($typeHint));
 	}
 
 	/**
@@ -120,7 +120,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 */
 	public function testConvertLongSimpleTypeHintToShort(string $long, string $short): void
 	{
-		$this->assertSame($short, TypeHintHelper::convertLongSimpleTypeHintToShort($long));
+		self::assertSame($short, TypeHintHelper::convertLongSimpleTypeHintToShort($long));
 	}
 
 	public function testFunctionReturnAnnotationWithNamespace(): void
@@ -129,7 +129,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionWithReturnAnnotation');
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($codeSnifferFile, $functionPointer);
-		$this->assertSame('void', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $returnAnnotation->getContent()));
+		self::assertSame('void', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $returnAnnotation->getContent()));
 	}
 
 	public function testFunctionReturnTypeHintWithNamespace(): void
@@ -138,7 +138,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionWithReturnTypeHint');
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer);
-		$this->assertSame('\FooNamespace\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $returnTypeHint->getTypeHint()));
+		self::assertSame('\FooNamespace\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $returnTypeHint->getTypeHint()));
 	}
 
 	public function testFunctionParameterAnnotationWithNamespace(): void
@@ -148,7 +148,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionWithParameterAnnotation');
 		$parameterAnnotation = FunctionHelper::getParametersAnnotations($codeSnifferFile, $functionPointer)[0];
 		$parameterTypeHint = preg_split('~\\s+~', $parameterAnnotation->getContent())[0];
-		$this->assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $parameterTypeHint));
+		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $parameterTypeHint));
 	}
 
 	public function testFunctionParameterTypeHintWithNamespace(): void
@@ -157,7 +157,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionWithParameterTypeHint');
 		$parameterTypeHint = FunctionHelper::getParametersTypeHints($codeSnifferFile, $functionPointer)['$parameter'];
-		$this->assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $parameterTypeHint->getTypeHint()));
+		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $parameterTypeHint->getTypeHint()));
 	}
 
 	public function testMethodReturnAnnotationWithNamespace(): void
@@ -166,7 +166,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooMethodWithReturnAnnotation');
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($codeSnifferFile, $methodPointer);
-		$this->assertSame('\FooNamespace\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $returnAnnotation->getContent()));
+		self::assertSame('\FooNamespace\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $returnAnnotation->getContent()));
 	}
 
 	public function testMethodReturnTypeHintWithNamespace(): void
@@ -175,7 +175,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooMethodWithReturnTypeHint');
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $methodPointer);
-		$this->assertSame('bool', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $returnTypeHint->getTypeHint()));
+		self::assertSame('bool', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $returnTypeHint->getTypeHint()));
 	}
 
 	public function testMethodParameterAnnotationWithNamespace(): void
@@ -185,7 +185,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooMethodWithParameterAnnotation');
 		$parameterAnnotation = FunctionHelper::getParametersAnnotations($codeSnifferFile, $methodPointer)[0];
 		$parameterTypeHint = preg_split('~\\s+~', $parameterAnnotation->getContent())[0];
-		$this->assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $parameterTypeHint));
+		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $parameterTypeHint));
 	}
 
 	public function testMethodParameterTypeHintWithNamespace(): void
@@ -194,7 +194,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooMethodWithParameterTypeHint');
 		$parameterTypeHint = FunctionHelper::getParametersTypeHints($codeSnifferFile, $methodPointer)['$parameter'];
-		$this->assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $parameterTypeHint->getTypeHint()));
+		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $parameterTypeHint->getTypeHint()));
 	}
 
 	public function testFunctionReturnAnnotationWithoutNamespace(): void
@@ -203,7 +203,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionWithReturnAnnotation');
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($codeSnifferFile, $functionPointer);
-		$this->assertSame('void', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $returnAnnotation->getContent()));
+		self::assertSame('void', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $returnAnnotation->getContent()));
 	}
 
 	public function testFunctionReturnTypeHintWithoutNamespace(): void
@@ -212,7 +212,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionWithReturnTypeHint');
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer);
-		$this->assertSame('\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $returnTypeHint->getTypeHint()));
+		self::assertSame('\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $returnTypeHint->getTypeHint()));
 	}
 
 	public function testFunctionParameterAnnotationWithoutNamespace(): void
@@ -222,7 +222,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionWithParameterAnnotation');
 		$parameterAnnotation = FunctionHelper::getParametersAnnotations($codeSnifferFile, $functionPointer)[0];
 		$parameterTypeHint = preg_split('~\\s+~', $parameterAnnotation->getContent())[0];
-		$this->assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $parameterTypeHint));
+		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $parameterTypeHint));
 	}
 
 	public function testFunctionParameterTypeHintWithoutNamespace(): void
@@ -231,7 +231,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionWithParameterTypeHint');
 		$parameterTypeHint = FunctionHelper::getParametersTypeHints($codeSnifferFile, $functionPointer)['$parameter'];
-		$this->assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $parameterTypeHint->getTypeHint()));
+		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $parameterTypeHint->getTypeHint()));
 	}
 
 	public function testMethodReturnAnnotationWithoutNamespace(): void
@@ -240,7 +240,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooMethodWithReturnAnnotation');
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($codeSnifferFile, $methodPointer);
-		$this->assertSame('\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $returnAnnotation->getContent()));
+		self::assertSame('\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $returnAnnotation->getContent()));
 	}
 
 	public function testMethodReturnTypeHintWithoutNamespace(): void
@@ -249,7 +249,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooMethodWithReturnTypeHint');
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $methodPointer);
-		$this->assertSame('bool', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $returnTypeHint->getTypeHint()));
+		self::assertSame('bool', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $returnTypeHint->getTypeHint()));
 	}
 
 	public function testMethodParameterAnnotationWithoutNamespace(): void
@@ -259,7 +259,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooMethodWithParameterAnnotation');
 		$parameterAnnotation = FunctionHelper::getParametersAnnotations($codeSnifferFile, $methodPointer)[0];
 		$parameterTypeHint = preg_split('~\\s+~', $parameterAnnotation->getContent())[0];
-		$this->assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $parameterTypeHint));
+		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $parameterTypeHint));
 	}
 
 	public function testMethodParameterTypeHintWithoutNamespace(): void
@@ -268,7 +268,7 @@ class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 
 		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooMethodWithParameterTypeHint');
 		$parameterTypeHint = FunctionHelper::getParametersTypeHints($codeSnifferFile, $methodPointer)['$parameter'];
-		$this->assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $parameterTypeHint->getTypeHint()));
+		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $parameterTypeHint->getTypeHint()));
 	}
 
 }

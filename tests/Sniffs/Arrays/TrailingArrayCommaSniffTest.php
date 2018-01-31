@@ -7,18 +7,18 @@ class TrailingArrayCommaSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 
 	public function testCheckFile(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/trailingCommas.php');
+		$report = self::checkFile(__DIR__ . '/data/trailingCommas.php');
 
-		$this->assertSame(2, $report->getErrorCount());
+		self::assertSame(2, $report->getErrorCount());
 
-		$this->assertSniffError($report, 18, TrailingArrayCommaSniff::CODE_MISSING_TRAILING_COMMA);
-		$this->assertSniffError($report, 26, TrailingArrayCommaSniff::CODE_MISSING_TRAILING_COMMA);
+		self::assertSniffError($report, 18, TrailingArrayCommaSniff::CODE_MISSING_TRAILING_COMMA);
+		self::assertSniffError($report, 26, TrailingArrayCommaSniff::CODE_MISSING_TRAILING_COMMA);
 	}
 
 	public function testFixable(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableTrailingCommas.php', [], [TrailingArrayCommaSniff::CODE_MISSING_TRAILING_COMMA]);
-		$this->assertAllFixedInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/fixableTrailingCommas.php', [], [TrailingArrayCommaSniff::CODE_MISSING_TRAILING_COMMA]);
+		self::assertAllFixedInFile($report);
 	}
 
 }

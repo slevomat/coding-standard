@@ -7,30 +7,30 @@ class UseFromSameNamespaceSniffTest extends \SlevomatCodingStandard\Sniffs\TestC
 
 	private function getFileReport(): \PHP_CodeSniffer\Files\File
 	{
-		return $this->checkFile(__DIR__ . '/data/useFromSameNamespace.php');
+		return self::checkFile(__DIR__ . '/data/useFromSameNamespace.php');
 	}
 
 	public function testUnrelatedNamespaces(): void
 	{
 		$report = $this->getFileReport();
-		$this->assertNoSniffError($report, 5);
-		$this->assertNoSniffError($report, 6);
-		$this->assertNoSniffError($report, 10);
+		self::assertNoSniffError($report, 5);
+		self::assertNoSniffError($report, 6);
+		self::assertNoSniffError($report, 10);
 	}
 
 	public function testUseWithAsPart(): void
 	{
-		$this->assertNoSniffError($this->getFileReport(), 7);
+		self::assertNoSniffError($this->getFileReport(), 7);
 	}
 
 	public function testUseFromSubnamespace(): void
 	{
-		$this->assertNoSniffError($this->getFileReport(), 9);
+		self::assertNoSniffError($this->getFileReport(), 9);
 	}
 
 	public function testUseFromSameNamespace(): void
 	{
-		$this->assertSniffError(
+		self::assertSniffError(
 			$this->getFileReport(),
 			8,
 			UseFromSameNamespaceSniff::CODE_USE_FROM_SAME_NAMESPACE,
@@ -40,25 +40,25 @@ class UseFromSameNamespaceSniffTest extends \SlevomatCodingStandard\Sniffs\TestC
 
 	public function testSkipClosure(): void
 	{
-		$this->assertNoSniffError($this->getFileReport(), 12);
+		self::assertNoSniffError($this->getFileReport(), 12);
 	}
 
 	public function testCheckNearestPreviousNamespaceWithMultipleNamespacesInFile(): void
 	{
 		$report = $this->getFileReport();
-		$this->assertSniffError(
+		self::assertSniffError(
 			$report,
 			18,
 			UseFromSameNamespaceSniff::CODE_USE_FROM_SAME_NAMESPACE,
 			'Bar\Baz\Test'
 		);
-		$this->assertNoSniffError($report, 19);
+		self::assertNoSniffError($report, 19);
 	}
 
 	public function testFixableUseFromSameNamespace(): void
 	{
-		$report = $this->checkFile(__DIR__ . '/data/fixableUseFromSameNamespace.php', [], [UseFromSameNamespaceSniff::CODE_USE_FROM_SAME_NAMESPACE]);
-		$this->assertAllFixedInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/fixableUseFromSameNamespace.php', [], [UseFromSameNamespaceSniff::CODE_USE_FROM_SAME_NAMESPACE]);
+		self::assertAllFixedInFile($report);
 	}
 
 }

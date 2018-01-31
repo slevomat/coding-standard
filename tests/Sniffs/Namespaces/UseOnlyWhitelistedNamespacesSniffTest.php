@@ -7,27 +7,27 @@ class UseOnlyWhitelistedNamespacesSniffTest extends \SlevomatCodingStandard\Snif
 
 	public function testUseOnlyWhitelistedNamespaces(): void
 	{
-		$report = $this->checkFile(
+		$report = self::checkFile(
 			__DIR__ . '/data/whitelistedNamespacesInUses.php',
 			['namespacesRequiredToUse' => [
 				'Foo',
 			]]
 		);
 
-		$this->assertSniffError(
+		self::assertSniffError(
 			$report,
 			5,
 			UseOnlyWhitelistedNamespacesSniff::CODE_NON_FULLY_QUALIFIED,
 			'Dolor'
 		);
-		$this->assertNoSniffError($report, 6);
-		$this->assertSniffError(
+		self::assertNoSniffError($report, 6);
+		self::assertSniffError(
 			$report,
 			7,
 			UseOnlyWhitelistedNamespacesSniff::CODE_NON_FULLY_QUALIFIED,
 			'Fooo\Baz'
 		);
-		$this->assertSniffError(
+		self::assertSniffError(
 			$report,
 			8,
 			UseOnlyWhitelistedNamespacesSniff::CODE_NON_FULLY_QUALIFIED,
@@ -37,25 +37,25 @@ class UseOnlyWhitelistedNamespacesSniffTest extends \SlevomatCodingStandard\Snif
 
 	public function testIgnoreUseFromAnonymousFunction(): void
 	{
-		$report = $this->checkFile(
+		$report = self::checkFile(
 			__DIR__ . '/data/whitelistedNamespacesInUses.php'
 		);
-		$this->assertNoSniffError($report, 12);
+		self::assertNoSniffError($report, 12);
 	}
 
 	public function testIgnoreTraitUses(): void
 	{
-		$report = $this->checkFile(
+		$report = self::checkFile(
 			__DIR__ . '/data/whitelistedNamespacesInUses.php'
 		);
-		$this->assertNoSniffError($report, 19);
-		$this->assertNoSniffError($report, 20);
-		$this->assertNoSniffError($report, 21);
+		self::assertNoSniffError($report, 19);
+		self::assertNoSniffError($report, 20);
+		self::assertNoSniffError($report, 21);
 	}
 
 	public function testAllowUseFromRootNamespace(): void
 	{
-		$report = $this->checkFile(
+		$report = self::checkFile(
 			__DIR__ . '/data/whitelistedNamespacesInUses.php',
 			[
 				'namespacesRequiredToUse' => [
@@ -65,15 +65,15 @@ class UseOnlyWhitelistedNamespacesSniffTest extends \SlevomatCodingStandard\Snif
 			]
 		);
 
-		$this->assertNoSniffError($report, 5);
-		$this->assertNoSniffError($report, 6);
-		$this->assertSniffError(
+		self::assertNoSniffError($report, 5);
+		self::assertNoSniffError($report, 6);
+		self::assertSniffError(
 			$report,
 			7,
 			UseOnlyWhitelistedNamespacesSniff::CODE_NON_FULLY_QUALIFIED,
 			'Fooo\Baz'
 		);
-		$this->assertSniffError(
+		self::assertSniffError(
 			$report,
 			8,
 			UseOnlyWhitelistedNamespacesSniff::CODE_NON_FULLY_QUALIFIED,

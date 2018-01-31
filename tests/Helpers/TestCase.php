@@ -17,12 +17,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		$token = $this->getTokenFromPointer($codeSnifferFile, $tokenPointer);
 		$expectedTokenName = $this->findTokenName($code);
-		$this->assertSame(
+		self::assertSame(
 			$code,
 			$token['code'],
 			$expectedTokenName !== null ? sprintf('Expected %s, actual token is %s', $expectedTokenName, $token['type']) : ''
 		);
-		$this->assertSame($line, $token['line']);
+		self::assertSame($line, $token['line']);
 	}
 
 	protected function findClassPointerByName(\PHP_CodeSniffer\Files\File $codeSnifferFile, string $name): ?int

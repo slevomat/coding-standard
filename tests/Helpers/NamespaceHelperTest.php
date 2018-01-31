@@ -24,7 +24,7 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 */
 	public function testIsFullyQualifiedName(string $typeName): void
 	{
-		$this->assertTrue(NamespaceHelper::isFullyQualifiedName($typeName));
+		self::assertTrue(NamespaceHelper::isFullyQualifiedName($typeName));
 	}
 
 	/**
@@ -46,7 +46,7 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 */
 	public function testIsNotFullyQualifiedName(string $typeName): void
 	{
-		$this->assertFalse(NamespaceHelper::isFullyQualifiedName($typeName));
+		self::assertFalse(NamespaceHelper::isFullyQualifiedName($typeName));
 	}
 
 	/**
@@ -68,7 +68,7 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 */
 	public function testHasNamespace(string $typeName): void
 	{
-		$this->assertTrue(NamespaceHelper::hasNamespace($typeName));
+		self::assertTrue(NamespaceHelper::hasNamespace($typeName));
 	}
 
 	/**
@@ -90,7 +90,7 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 */
 	public function testDoesNotHaveNamespace(string $typeName): void
 	{
-		$this->assertFalse(NamespaceHelper::hasNamespace($typeName));
+		self::assertFalse(NamespaceHelper::hasNamespace($typeName));
 	}
 
 	/**
@@ -125,7 +125,7 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 */
 	public function testGetNameParts(string $namespace, array $parts): void
 	{
-		$this->assertSame($parts, NamespaceHelper::getNameParts($namespace));
+		self::assertSame($parts, NamespaceHelper::getNameParts($namespace));
 	}
 
 	public function testFindCurrentNamespaceName(): void
@@ -137,7 +137,7 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			$codeSnifferFile,
 			TokenHelper::getLastTokenPointer($codeSnifferFile)
 		);
-		$this->assertSame('Foo\Bar', $namespace);
+		self::assertSame('Foo\Bar', $namespace);
 	}
 
 	public function testFindCurrentNamespaceNameInFileWithoutNamespace(): void
@@ -145,7 +145,7 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$codeSnifferFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/fileWithoutNamespace.php'
 		);
-		$this->assertNull(
+		self::assertNull(
 			NamespaceHelper::findCurrentNamespaceName(
 				$codeSnifferFile,
 				TokenHelper::getLastTokenPointer($codeSnifferFile)
@@ -162,7 +162,7 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			$codeSnifferFile,
 			TokenHelper::getLastTokenPointer($codeSnifferFile)
 		);
-		$this->assertSame('Lorem\Ipsum', $namespace);
+		self::assertSame('Lorem\Ipsum', $namespace);
 	}
 
 	/**
@@ -197,7 +197,7 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 */
 	public function testGetUnqualifiedNameFromFullyQualifiedName(string $unqualifiedName, string $fullyQualifiedName): void
 	{
-		$this->assertSame($unqualifiedName, NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($fullyQualifiedName));
+		self::assertSame($unqualifiedName, NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($fullyQualifiedName));
 	}
 
 	/**
@@ -218,7 +218,7 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 */
 	public function testIsQualifiedName(string $name): void
 	{
-		$this->assertTrue(NamespaceHelper::isQualifiedName($name));
+		self::assertTrue(NamespaceHelper::isQualifiedName($name));
 	}
 
 	/**
@@ -237,7 +237,7 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 */
 	public function testIsNotQualifiedName(string $name): void
 	{
-		$this->assertFalse(NamespaceHelper::isQualifiedName($name));
+		self::assertFalse(NamespaceHelper::isQualifiedName($name));
 	}
 
 	/**
@@ -272,7 +272,7 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 */
 	public function testNormalizeToCanonicalName(string $normalizedName, string $originalName): void
 	{
-		$this->assertSame($normalizedName, NamespaceHelper::normalizeToCanonicalName($originalName));
+		self::assertSame($normalizedName, NamespaceHelper::normalizeToCanonicalName($originalName));
 	}
 
 	/**
@@ -307,7 +307,7 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 */
 	public function testTypeIsInNamespace(string $typeName, string $namespace): void
 	{
-		$this->assertTrue(NamespaceHelper::isTypeInNamespace($typeName, $namespace));
+		self::assertTrue(NamespaceHelper::isTypeInNamespace($typeName, $namespace));
 	}
 
 	/**
@@ -350,7 +350,7 @@ class NamespaceHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	 */
 	public function testTypeIsNotInNamespace(string $typeName, string $namespace): void
 	{
-		$this->assertFalse(NamespaceHelper::isTypeInNamespace($typeName, $namespace));
+		self::assertFalse(NamespaceHelper::isTypeInNamespace($typeName, $namespace));
 	}
 
 }
