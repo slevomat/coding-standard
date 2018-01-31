@@ -1,111 +1,111 @@
 <?php
 
 function () {
-	if (true) {
-		// Something
-	} else {
+	if (!true) {
 		return false;
 	}
+
+	// Something
 };
 
 // Identical condition
 function () {
-	if ($bool === true) {
-		// Something
-	} else {
+	if ($bool !== true) {
 		return;
 	}
+
+	// Something
 };
 
 // Not identical condition
 foreach ($items as $item) {
-	if ($item !== null) {
-		// Something
-	} else {
+	if ($item === null) {
 		continue;
 	}
+
+	// Something
 }
 
 // Equal condition
 while (true) {
-	if ($string == '') {
-		// Something
-	} else {
+	if ($string != '') {
 		break;
 	}
+
+	// Something
 }
 
 // Not equal condition
 do {
-	if ($string != '') {
-		// Something
-	} else {
+	if ($string == '') {
 		throw new Exception();
 	}
+
+	// Something
 } while (true);
 
 function greateThanOrEqualCondition() {
-	if ($number >= 0) {
-		// Something
-	} else {
+	if ($number < 0) {
 		yield [];
 	}
+
+	// Something
 };
 
 function greateThanCondition() {
-	if ($number > 0) {
-		// Something
-	} else {
+	if ($number <= 0) {
 		exit;
 	}
+
+	// Something
 };
 
 function lessThanOrEqualCondition() {
-	if ($number <= 0) {
-		// Something
-	} else {
+	if ($number > 0) {
 		die;
 	}
+
+	// Something
 };
 
 function lessThanCondition() {
-	if ($number < 0) {
-		// Something
-	} else {
+	if ($number >= 0) {
 		return;
 	}
+
+	// Something
 };
 
 function simpleCondition($password) {
-	if ($password->isValid()) {
-		// Something
-	} else {
+	if (!$password->isValid()) {
 		return false;
 	}
+
+	// Something
 };
 
 function negativeCondition($token) {
-	if (!$token->isExpired()) {
-		// Something
-	} else {
+	if ($token->isExpired()) {
 		return false;
 	}
+
+	// Something
 };
 
 function instanceOfCondition($e) {
-	if ($e instanceof Exception) {
-		logError($e);
-	} else {
+	if (!($e instanceof Exception)) {
 		return;
 	}
+
+	logError($e);
 };
 
 function noSemicolonInIfScope() {
-	if (true) {
-		if (false) {
-			// Something
-		}
-	} else {
+	if (!true) {
 		return;
+	}
+
+	if (false) {
+		// Something
 	}
 }

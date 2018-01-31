@@ -64,7 +64,7 @@ function () {
 	// Something
 };
 
-function () {
+function noExitCode() {
 	if (true) {
 		$variable = 'a';
 	} else {
@@ -72,7 +72,7 @@ function () {
 	}
 };
 
-function () {
+function ifWithElseIf() {
 	if (true) {
 		// Something
 	} elseif (false) {
@@ -82,10 +82,30 @@ function () {
 	}
 };
 
-function () {
+function ifHasExitCodeToo() {
 	if (true) {
 		return true;
 	} else {
 		return false;
 	}
 };
+
+function exitCodeIsNotOnFirstLineOfScope() {
+	if (true) {
+		doSomething();
+		return true;
+	} else {
+		doSomethingElse();
+		return false;
+	}
+}
+
+function noSemicolonInElseScope() {
+	if (true) {
+		doSomething();
+	} else {
+		if (true) {
+
+		}
+	}
+}

@@ -15,11 +15,13 @@ class EarlyExitSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 	{
 		$report = $this->checkFile(__DIR__ . '/data/earlyExitErrors.php', [], [EarlyExitSniff::CODE_EARLY_EXIT_NOT_USED]);
 
-		$this->assertSame(8, $report->getErrorCount());
+		$this->assertSame(13, $report->getErrorCount());
 
-		foreach ([6, 14, 22, 30, 38, 46, 54, 62] as $line) {
+		foreach ([6, 15, 24, 33, 42, 50, 58, 66, 74, 82, 90, 98, 108] as $line) {
 			$this->assertSniffError($report, $line, EarlyExitSniff::CODE_EARLY_EXIT_NOT_USED);
 		}
+
+		$this->assertAllFixedInFile($report);
 	}
 
 }
