@@ -70,7 +70,7 @@ function noExitCode() {
 	} else {
 		$variable = 'b';
 	}
-};
+}
 
 function ifWithElseIf() {
 	if (true) {
@@ -80,7 +80,7 @@ function ifWithElseIf() {
 	} else {
 		throw new Exception();
 	}
-};
+}
 
 function ifHasExitCodeToo() {
 	if (true) {
@@ -88,7 +88,7 @@ function ifHasExitCodeToo() {
 	} else {
 		return false;
 	}
-};
+}
 
 function exitCodeIsNotOnFirstLineOfScope() {
 	if (true) {
@@ -108,4 +108,46 @@ function noSemicolonInElseScope() {
 
 		}
 	}
+}
+
+function () {
+	if (true) {
+		doSometimesSomething();
+	}
+
+	doSomething();
+};
+
+while (true) {
+	$result = doSomething();
+	if ($result) {
+		doMore();
+	}
+
+	doSomethingAgain();
+}
+
+do {
+	$result = doSomething();
+	if ($result) {
+		doMore();
+	}
+
+	doSomethingAgain();
+} while (true);
+
+foreach ($items as $item) {
+	if ($item !== null) {
+		doSomething();
+	}
+
+	doSomethingAgain();
+}
+
+for ($i = 0; $i < 100; $i++) {
+	if ($i % 2 === 0) {
+		doSomething();
+	}
+
+	doSomethingAgain();
 }

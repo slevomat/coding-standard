@@ -50,7 +50,7 @@ function greateThanOrEqualCondition() {
 	} else {
 		yield [];
 	}
-};
+}
 
 function greateThanCondition() {
 	if ($number > 0) {
@@ -58,7 +58,7 @@ function greateThanCondition() {
 	} else {
 		exit;
 	}
-};
+}
 
 function lessThanOrEqualCondition() {
 	if ($number <= 0) {
@@ -66,7 +66,7 @@ function lessThanOrEqualCondition() {
 	} else {
 		die;
 	}
-};
+}
 
 function lessThanCondition() {
 	if ($number < 0) {
@@ -74,7 +74,7 @@ function lessThanCondition() {
 	} else {
 		return;
 	}
-};
+}
 
 function simpleCondition($password) {
 	if ($password->isValid()) {
@@ -82,7 +82,7 @@ function simpleCondition($password) {
 	} else {
 		return false;
 	}
-};
+}
 
 function negativeCondition($token) {
 	if (!$token->isExpired()) {
@@ -90,7 +90,7 @@ function negativeCondition($token) {
 	} else {
 		return false;
 	}
-};
+}
 
 function instanceOfCondition($e) {
 	if ($e instanceof Exception) {
@@ -98,7 +98,7 @@ function instanceOfCondition($e) {
 	} else {
 		return;
 	}
-};
+}
 
 function noSemicolonInIfScope() {
 	if (true) {
@@ -107,5 +107,38 @@ function noSemicolonInIfScope() {
 		}
 	} else {
 		return;
+	}
+}
+
+function ifAtTheEndOfFunction() {
+	$result = doSomething();
+	if ($result) {
+		doMore();
+	}
+}
+
+while (true) {
+	$result = doSomething();
+	if ($result) {
+		doMore();
+	}
+}
+
+do {
+	$result = doSomething();
+	if ($result) {
+		doMore();
+	}
+} while (true);
+
+foreach ($items as $item) {
+	if ($item !== null) {
+		doSomething();
+	}
+}
+
+for ($i = 0; $i < 100; $i++) {
+	if ($i % 2 === 0) {
+		doSomething();
 	}
 }
