@@ -62,9 +62,11 @@ class UseOnlyWhitelistedNamespacesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 
 		foreach ($this->getNamespacesRequiredToUse() as $namespace) {
-			if (NamespaceHelper::isTypeInNamespace($className, $namespace)) {
-				return;
+			if (!NamespaceHelper::isTypeInNamespace($className, $namespace)) {
+				continue;
 			}
+
+			return;
 		}
 
 		$phpcsFile->addError(sprintf(

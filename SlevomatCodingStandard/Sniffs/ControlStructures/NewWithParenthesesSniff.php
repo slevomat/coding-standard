@@ -71,14 +71,16 @@ class NewWithParenthesesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 
 		$fix = $phpcsFile->addFixableError('Usage of "new" without parentheses is disallowed.', $newPointer, self::CODE_MISSING_PARENTHESES);
-		if ($fix) {
-			/** @var int $classNameEndPointer */
-			$classNameEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $shouldBeOpenParenthesisPointer - 1);
-
-			$phpcsFile->fixer->beginChangeset();
-			$phpcsFile->fixer->addContent($classNameEndPointer, '()');
-			$phpcsFile->fixer->endChangeset();
+		if (!$fix) {
+			return;
 		}
+
+		/** @var int $classNameEndPointer */
+		$classNameEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $shouldBeOpenParenthesisPointer - 1);
+
+		$phpcsFile->fixer->beginChangeset();
+		$phpcsFile->fixer->addContent($classNameEndPointer, '()');
+		$phpcsFile->fixer->endChangeset();
 	}
 
 }

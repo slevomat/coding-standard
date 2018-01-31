@@ -29,12 +29,16 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
-			if ($tokens[$i]['code'] === T_STRING && $tokens[$i]['content'] === $name) {
-				$classPointer = TokenHelper::findPrevious($codeSnifferFile, [T_CLASS, T_INTERFACE, T_TRAIT], $i - 1);
-				if ($classPointer !== null) {
-					return $classPointer;
-				}
+			if (!($tokens[$i]['code'] === T_STRING && $tokens[$i]['content'] === $name)) {
+				continue;
 			}
+
+			$classPointer = TokenHelper::findPrevious($codeSnifferFile, [T_CLASS, T_INTERFACE, T_TRAIT], $i - 1);
+			if ($classPointer === null) {
+				continue;
+			}
+
+			return $classPointer;
 		}
 		return null;
 	}
@@ -43,12 +47,16 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
-			if ($tokens[$i]['code'] === T_STRING && $tokens[$i]['content'] === $name) {
-				$constantPointer = TokenHelper::findPrevious($codeSnifferFile, T_CONST, $i - 1);
-				if ($constantPointer !== null) {
-					return $constantPointer;
-				}
+			if (!($tokens[$i]['code'] === T_STRING && $tokens[$i]['content'] === $name)) {
+				continue;
 			}
+
+			$constantPointer = TokenHelper::findPrevious($codeSnifferFile, T_CONST, $i - 1);
+			if ($constantPointer === null) {
+				continue;
+			}
+
+			return $constantPointer;
 		}
 		return null;
 	}
@@ -57,12 +65,16 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
-			if ($tokens[$i]['code'] === T_VARIABLE && $tokens[$i]['content'] === sprintf('$%s', $name)) {
-				$propertyPointer = TokenHelper::findPrevious($codeSnifferFile, [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_STATIC], $i - 1);
-				if ($propertyPointer !== null) {
-					return $i;
-				}
+			if (!($tokens[$i]['code'] === T_VARIABLE && $tokens[$i]['content'] === sprintf('$%s', $name))) {
+				continue;
 			}
+
+			$propertyPointer = TokenHelper::findPrevious($codeSnifferFile, [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_STATIC], $i - 1);
+			if ($propertyPointer === null) {
+				continue;
+			}
+
+			return $i;
 		}
 		return null;
 	}
@@ -71,12 +83,16 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
-			if ($tokens[$i]['code'] === T_STRING && $tokens[$i]['content'] === $name) {
-				$functionPointer = TokenHelper::findPrevious($codeSnifferFile, T_FUNCTION, $i - 1);
-				if ($functionPointer !== null) {
-					return $functionPointer;
-				}
+			if (!($tokens[$i]['code'] === T_STRING && $tokens[$i]['content'] === $name)) {
+				continue;
 			}
+
+			$functionPointer = TokenHelper::findPrevious($codeSnifferFile, T_FUNCTION, $i - 1);
+			if ($functionPointer === null) {
+				continue;
+			}
+
+			return $functionPointer;
 		}
 		return null;
 	}
@@ -97,9 +113,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		// \PHP_CodeSniffer defines more token constants
 		$constants = get_defined_constants(true);
 		foreach ($constants['user'] as $name => $value) {
-			if ($value === $code) {
-				return $name;
+			if ($value !== $code) {
+				continue;
 			}
+
+			return $name;
 		}
 
 		return null;

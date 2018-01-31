@@ -38,11 +38,13 @@ class ClassHelper
 	{
 		do {
 			$nextClassPointer = TokenHelper::findNext($codeSnifferFile, TokenHelper::$typeKeywordTokenCodes, $previousClassPointer + 1);
-			if ($nextClassPointer !== null) {
-				$previousClassPointer = $nextClassPointer;
-				yield $nextClassPointer;
+			if ($nextClassPointer === null) {
+				break;
 			}
-		} while ($nextClassPointer !== null);
+
+			$previousClassPointer = $nextClassPointer;
+			yield $nextClassPointer;
+		} while (true);
 	}
 
 }

@@ -255,37 +255,39 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				$functionPointer,
 				self::CODE_MISSING_PARAMETER_TYPE_HINT
 			);
-			if ($fix) {
-				$phpcsFile->fixer->beginChangeset();
+			if (!$fix) {
+				continue;
+			}
 
-				$parameterTypeHint = TypeHintHelper::isSimpleTypeHint($possibleParameterTypeHint) ? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleParameterTypeHint) : $possibleParameterTypeHint;
+			$phpcsFile->fixer->beginChangeset();
 
-				$tokens = $phpcsFile->getTokens();
-				/** @var int $parameterPointer */
-				$parameterPointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $parameterName, $tokens[$functionPointer]['parenthesis_opener'], $tokens[$functionPointer]['parenthesis_closer']);
+			$parameterTypeHint = TypeHintHelper::isSimpleTypeHint($possibleParameterTypeHint) ? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleParameterTypeHint) : $possibleParameterTypeHint;
 
-				$beforeParameterPointer = $parameterPointer;
-				do {
-					$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $beforeParameterPointer - 1, $tokens[$functionPointer]['parenthesis_opener'] + 1);
-					if ($previousPointer === null || !in_array($tokens[$previousPointer]['code'], [T_BITWISE_AND, T_ELLIPSIS], true)) {
-						break;
-					}
+			$tokens = $phpcsFile->getTokens();
+			/** @var int $parameterPointer */
+			$parameterPointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $parameterName, $tokens[$functionPointer]['parenthesis_opener'], $tokens[$functionPointer]['parenthesis_closer']);
 
-					/** @var int $beforeParameterPointer */
-					$beforeParameterPointer = $previousPointer;
-				} while (true);
-
-				if ($this->enableNullableTypeHints) {
-					$phpcsFile->fixer->addContentBefore($beforeParameterPointer, sprintf('%s%s ', ($nullableParameterTypeHint ? '?' : ''), $parameterTypeHint));
-				} else {
-					$phpcsFile->fixer->addContentBefore($beforeParameterPointer, sprintf('%s ', $parameterTypeHint));
-					if ($nullableParameterTypeHint && $tokens[TokenHelper::findNextEffective($phpcsFile, $parameterPointer + 1)]['code'] !== T_EQUAL) {
-						$phpcsFile->fixer->addContent($parameterPointer, ' = null');
-					}
+			$beforeParameterPointer = $parameterPointer;
+			do {
+				$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $beforeParameterPointer - 1, $tokens[$functionPointer]['parenthesis_opener'] + 1);
+				if ($previousPointer === null || !in_array($tokens[$previousPointer]['code'], [T_BITWISE_AND, T_ELLIPSIS], true)) {
+					break;
 				}
 
-				$phpcsFile->fixer->endChangeset();
+				/** @var int $beforeParameterPointer */
+				$beforeParameterPointer = $previousPointer;
+			} while (true);
+
+			if ($this->enableNullableTypeHints) {
+				$phpcsFile->fixer->addContentBefore($beforeParameterPointer, sprintf('%s%s ', ($nullableParameterTypeHint ? '?' : ''), $parameterTypeHint));
+			} else {
+				$phpcsFile->fixer->addContentBefore($beforeParameterPointer, sprintf('%s ', $parameterTypeHint));
+				if ($nullableParameterTypeHint && $tokens[TokenHelper::findNextEffective($phpcsFile, $parameterPointer + 1)]['code'] !== T_EQUAL) {
+					$phpcsFile->fixer->addContent($parameterPointer, ' = null');
+				}
 			}
+
+			$phpcsFile->fixer->endChangeset();
 		}
 	}
 
@@ -490,12 +492,14 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$functionPointer,
 			self::CODE_MISSING_RETURN_TYPE_HINT
 		);
-		if ($fix) {
-			$phpcsFile->fixer->beginChangeset();
-			$returnTypeHint = TypeHintHelper::isSimpleTypeHint($possibleReturnTypeHint) ? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleReturnTypeHint) : $possibleReturnTypeHint;
-			$phpcsFile->fixer->addContent($phpcsFile->getTokens()[$functionPointer]['parenthesis_closer'], sprintf(': %s%s', ($nullableReturnTypeHint ? '?' : ''), $returnTypeHint));
-			$phpcsFile->fixer->endChangeset();
+		if (!$fix) {
+			return;
 		}
+
+		$phpcsFile->fixer->beginChangeset();
+		$returnTypeHint = TypeHintHelper::isSimpleTypeHint($possibleReturnTypeHint) ? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleReturnTypeHint) : $possibleReturnTypeHint;
+		$phpcsFile->fixer->addContent($phpcsFile->getTokens()[$functionPointer]['parenthesis_closer'], sprintf(': %s%s', ($nullableReturnTypeHint ? '?' : ''), $returnTypeHint));
+		$phpcsFile->fixer->endChangeset();
 	}
 
 	private function checkClosure(\PHP_CodeSniffer\Files\File $phpcsFile, int $closurePointer): void
@@ -526,23 +530,27 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return;
 		}
 
-		if ($this->enableVoidTypeHint && !$returnsValue && $returnTypeHint === null) {
-			$fix = $phpcsFile->addFixableError(
-				'Closure does not have void return type hint.',
-				$closurePointer,
-				self::CODE_MISSING_RETURN_TYPE_HINT
-			);
-
-			if ($fix) {
-				$tokens = $phpcsFile->getTokens();
-				/** @var int $position */
-				$position = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$closurePointer]['scope_opener'] - 1, $closurePointer);
-
-				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContent($position, ': void');
-				$phpcsFile->fixer->endChangeset();
-			}
+		if (!($this->enableVoidTypeHint && !$returnsValue && $returnTypeHint === null)) {
+			return;
 		}
+
+		$fix = $phpcsFile->addFixableError(
+			'Closure does not have void return type hint.',
+			$closurePointer,
+			self::CODE_MISSING_RETURN_TYPE_HINT
+		);
+
+		if (!$fix) {
+			return;
+		}
+
+		$tokens = $phpcsFile->getTokens();
+		/** @var int $position */
+		$position = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$closurePointer]['scope_opener'] - 1, $closurePointer);
+
+		$phpcsFile->fixer->beginChangeset();
+		$phpcsFile->fixer->addContent($position, ': void');
+		$phpcsFile->fixer->endChangeset();
 	}
 
 	private function checkUselessDocComment(\PHP_CodeSniffer\Files\File $phpcsFile, int $functionPointer): void
@@ -605,10 +613,12 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					break;
 				}
 
-				if (substr($usefulAnnotation, -1) === '\\' && strpos($annotation->getName(), $usefulAnnotation) === 0) {
-					$containsUsefulInformation = true;
-					break;
+				if (!(substr($usefulAnnotation, -1) === '\\' && strpos($annotation->getName(), $usefulAnnotation) === 0)) {
+					continue;
 				}
+
+				$containsUsefulInformation = true;
+				break;
 			}
 		}
 
@@ -672,46 +682,48 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						$uselessParameterAnnotation['pointer'],
 						self::CODE_USELESS_PARAMETER_ANNOTATION
 					);
-					if ($fix) {
-						$tokens = $phpcsFile->getTokens();
-						$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $functionPointer);
-						$docCommentClosePointer = $tokens[$docCommentOpenPointer]['comment_closer'];
+					if (!$fix) {
+						continue;
+					}
 
-						for ($i = $docCommentOpenPointer + 1; $i < $docCommentClosePointer; $i++) {
-							if ($tokens[$i]['code'] !== T_DOC_COMMENT_TAG) {
-								continue;
-							}
+					$tokens = $phpcsFile->getTokens();
+					$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $functionPointer);
+					$docCommentClosePointer = $tokens[$docCommentOpenPointer]['comment_closer'];
 
-							if ($tokens[$i]['content'] !== '@param') {
-								continue;
-							}
-
-							$parameterInformationPointer = TokenHelper::findNextExcluding($phpcsFile, [T_DOC_COMMENT_WHITESPACE], $i + 1, $docCommentClosePointer + 1);
-
-							if ($parameterInformationPointer === null || $tokens[$parameterInformationPointer]['code'] !== T_DOC_COMMENT_STRING) {
-								continue;
-							}
-
-							if (!preg_match('~\S+\s+(\$\S+)~', $tokens[$parameterInformationPointer]['content'], $match)) {
-								continue;
-							}
-
-							if (!in_array($match[1], $parameterNamesWithUselessAnnotation, true)) {
-								continue;
-							}
-
-							/** @var int $changeStart */
-							$changeStart = TokenHelper::findPrevious($phpcsFile, [T_DOC_COMMENT_STAR], $i - 1);
-							/** @var int $changeEnd */
-							$changeEnd = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR], $i - 1) - 1;
-							$phpcsFile->fixer->beginChangeset();
-							for ($j = $changeStart; $j <= $changeEnd; $j++) {
-								$phpcsFile->fixer->replaceToken($j, '');
-							}
-							$phpcsFile->fixer->endChangeset();
-
-							break;
+					for ($i = $docCommentOpenPointer + 1; $i < $docCommentClosePointer; $i++) {
+						if ($tokens[$i]['code'] !== T_DOC_COMMENT_TAG) {
+							continue;
 						}
+
+						if ($tokens[$i]['content'] !== '@param') {
+							continue;
+						}
+
+						$parameterInformationPointer = TokenHelper::findNextExcluding($phpcsFile, [T_DOC_COMMENT_WHITESPACE], $i + 1, $docCommentClosePointer + 1);
+
+						if ($parameterInformationPointer === null || $tokens[$parameterInformationPointer]['code'] !== T_DOC_COMMENT_STRING) {
+							continue;
+						}
+
+						if (!preg_match('~\S+\s+(\$\S+)~', $tokens[$parameterInformationPointer]['content'], $match)) {
+							continue;
+						}
+
+						if (!in_array($match[1], $parameterNamesWithUselessAnnotation, true)) {
+							continue;
+						}
+
+						/** @var int $changeStart */
+						$changeStart = TokenHelper::findPrevious($phpcsFile, [T_DOC_COMMENT_STAR], $i - 1);
+						/** @var int $changeEnd */
+						$changeEnd = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR], $i - 1) - 1;
+						$phpcsFile->fixer->beginChangeset();
+						for ($j = $changeStart; $j <= $changeEnd; $j++) {
+							$phpcsFile->fixer->replaceToken($j, '');
+						}
+						$phpcsFile->fixer->endChangeset();
+
+						break;
 					}
 				}
 			}
@@ -732,21 +744,23 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$functionPointer,
 			self::CODE_USELESS_DOC_COMMENT
 		);
-		if ($fix) {
-			/** @var int $docCommentOpenPointer */
-			$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $functionPointer);
-			$docCommentClosePointer = $phpcsFile->getTokens()[$docCommentOpenPointer]['comment_closer'];
-
-			$changeStart = $docCommentOpenPointer;
-			/** @var int $changeEnd */
-			$changeEnd = TokenHelper::findNextEffective($phpcsFile, $docCommentClosePointer + 1) - 1;
-
-			$phpcsFile->fixer->beginChangeset();
-			for ($i = $changeStart; $i <= $changeEnd; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
-			$phpcsFile->fixer->endChangeset();
+		if (!$fix) {
+			return;
 		}
+
+		/** @var int $docCommentOpenPointer */
+		$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $functionPointer);
+		$docCommentClosePointer = $phpcsFile->getTokens()[$docCommentOpenPointer]['comment_closer'];
+
+		$changeStart = $docCommentOpenPointer;
+		/** @var int $changeEnd */
+		$changeEnd = TokenHelper::findNextEffective($phpcsFile, $docCommentClosePointer + 1) - 1;
+
+		$phpcsFile->fixer->beginChangeset();
+		for ($i = $changeStart; $i <= $changeEnd; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+		$phpcsFile->fixer->endChangeset();
 	}
 
 	private function checkPropertyTypeHint(\PHP_CodeSniffer\Files\File $phpcsFile, int $propertyPointer): void
@@ -855,9 +869,11 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	{
 		if (preg_match_all('~(?<=^|\|)(.+?)\[\](?=\||$)~', $typeHintDefinition, $matches)) {
 			foreach ($matches[1] as $typeHint) {
-				if (!$this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeHint))) {
-					return true;
+				if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeHint))) {
+					continue;
 				}
+
+				return true;
 			}
 		}
 

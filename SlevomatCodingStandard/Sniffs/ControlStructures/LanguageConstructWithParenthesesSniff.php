@@ -56,15 +56,17 @@ class LanguageConstructWithParenthesesSniff implements \PHP_CodeSniffer\Sniffs\S
 		}
 
 		$fix = $phpcsFile->addFixableError(sprintf('Usage of language construct "%s" with parentheses is disallowed.', $tokens[$languageConstructPointer]['content']), $languageConstructPointer, self::CODE_USED_WITH_PARENTHESES);
-		if ($fix) {
-			$phpcsFile->fixer->beginChangeset();
-			$phpcsFile->fixer->replaceToken($openParenthesisPointer, '');
-			if ($tokens[$openParenthesisPointer - 1]['code'] !== T_WHITESPACE && $containsContentBetweenParentheses) {
-				$phpcsFile->fixer->addContent($openParenthesisPointer, ' ');
-			}
-			$phpcsFile->fixer->replaceToken($closeParenthesisPointer, '');
-			$phpcsFile->fixer->endChangeset();
+		if (!$fix) {
+			return;
 		}
+
+		$phpcsFile->fixer->beginChangeset();
+		$phpcsFile->fixer->replaceToken($openParenthesisPointer, '');
+		if ($tokens[$openParenthesisPointer - 1]['code'] !== T_WHITESPACE && $containsContentBetweenParentheses) {
+			$phpcsFile->fixer->addContent($openParenthesisPointer, ' ');
+		}
+		$phpcsFile->fixer->replaceToken($closeParenthesisPointer, '');
+		$phpcsFile->fixer->endChangeset();
 	}
 
 }

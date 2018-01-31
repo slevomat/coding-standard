@@ -47,22 +47,24 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$uniqueId = $nameReferencedWithoutSubNamespace
 				? UseStatement::getUniqueId($referencedName->getType(), $nameAsReferencedInFile)
 				: UseStatement::getUniqueId(ReferencedName::TYPE_DEFAULT, $nameAsReferencedInFile);
-			if (
+			if (!(
 				!NamespaceHelper::isFullyQualifiedName($name)
 				&& isset($unusedNames[$uniqueId])
-			) {
-				if ($nameReferencedWithoutSubNamespace && !$referencedName->hasSameUseStatementType($unusedNames[$uniqueId])) {
-					continue;
-				}
-				if ($unusedNames[$uniqueId]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
-					$phpcsFile->addError(sprintf(
-						'Case of reference name %s and use statement %s do not match.',
-						$nameAsReferencedInFile,
-						$unusedNames[$uniqueId]->getNameAsReferencedInFile()
-					), $pointer, self::CODE_MISMATCHING_CASE);
-				}
-				unset($unusedNames[$uniqueId]);
+			)) {
+				continue;
 			}
+
+			if ($nameReferencedWithoutSubNamespace && !$referencedName->hasSameUseStatementType($unusedNames[$uniqueId])) {
+				continue;
+			}
+			if ($unusedNames[$uniqueId]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
+				$phpcsFile->addError(sprintf(
+					'Case of reference name %s and use statement %s do not match.',
+					$nameAsReferencedInFile,
+					$unusedNames[$uniqueId]->getNameAsReferencedInFile()
+				), $pointer, self::CODE_MISMATCHING_CASE);
+			}
+			unset($unusedNames[$uniqueId]);
 		}
 
 		if ($this->searchAnnotations) {
@@ -76,12 +78,14 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 				foreach ($unusedNames as $i => $useStatement) {
 					$nameAsReferencedInFile = $useStatement->getNameAsReferencedInFile();
-					if (
+					if (!(
 						preg_match('~^@' . preg_quote($nameAsReferencedInFile, '~') . '(?=[^a-z\\d]|$)~i', $tokens[$docCommentPointer]['content'])
 						|| preg_match('~(?<=^|[^a-z\\d\\\\])' . preg_quote($nameAsReferencedInFile, '~') . '(?=\\\\|[^a-z\\d]|$)~i', $tokens[$docCommentPointer]['content'])
-					) {
-						unset($unusedNames[$i]);
+					)) {
+						continue;
 					}
+
+					unset($unusedNames[$i]);
 				}
 
 				$searchAnnotationsPointer = $docCommentPointer + 1;
@@ -97,14 +101,16 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				'Type %s is not used in this file.',
 				$fullName
 			), $value->getPointer(), self::CODE_UNUSED_USE);
-			if ($fix) {
-				$phpcsFile->fixer->beginChangeset();
-				$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $value->getPointer()) + 1;
-				for ($i = $value->getPointer(); $i <= $endPointer; $i++) {
-					$phpcsFile->fixer->replaceToken($i, '');
-				}
-				$phpcsFile->fixer->endChangeset();
+			if (!$fix) {
+				continue;
 			}
+
+			$phpcsFile->fixer->beginChangeset();
+			$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $value->getPointer()) + 1;
+			for ($i = $value->getPointer(); $i <= $endPointer; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
+			$phpcsFile->fixer->endChangeset();
 		}
 	}
 

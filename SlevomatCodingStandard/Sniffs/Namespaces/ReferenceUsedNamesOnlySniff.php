@@ -298,15 +298,17 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 								continue;
 							}
 
-							if (
+							if (!(
 								$useStatement->getCanonicalNameAsReferencedInFile() === $canonicalNameToReference
 								|| ($referencedName->isClass() && array_key_exists($canonicalNameToReference, $definedClassesIndex))
 								|| ($referencedName->isFunction() && array_key_exists($canonicalNameToReference, $definedFunctionsIndex))
 								|| ($referencedName->isConstant() && array_key_exists($canonicalNameToReference, $definedConstantsIndex))
-							) {
-								$canBeFixed = false;
-								break;
+							)) {
+								continue;
 							}
+
+							$canBeFixed = false;
+							break;
 						}
 
 						$label = sprintf($referencedName->isConstant() ? 'Constant %s' : ($referencedName->isFunction() ? 'Function %s()' : 'Class %s'), $name);
@@ -342,11 +344,13 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 							$alreadyUsed = false;
 							foreach ($useStatements as $useStatement) {
-								if ($useStatement->getType() === $referencedName->getType() && $useStatement->getFullyQualifiedTypeName() === $canonicalName) {
-									$nameToReference = $useStatement->getNameAsReferencedInFile();
-									$alreadyUsed = true;
-									break;
+								if (!($useStatement->getType() === $referencedName->getType() && $useStatement->getFullyQualifiedTypeName() === $canonicalName)) {
+									continue;
 								}
+
+								$nameToReference = $useStatement->getNameAsReferencedInFile();
+								$alreadyUsed = true;
+								break;
 							}
 
 							$phpcsFile->fixer->addContent($referencedName->getStartPointer(), $nameToReference);
@@ -381,9 +385,11 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 
 		foreach ($this->getNamespacesRequiredToUse() as $namespace) {
-			if (NamespaceHelper::isTypeInNamespace($name, $namespace)) {
-				return true;
+			if (!NamespaceHelper::isTypeInNamespace($name, $namespace)) {
+				continue;
 			}
+
+			return true;
 		}
 
 		return false;

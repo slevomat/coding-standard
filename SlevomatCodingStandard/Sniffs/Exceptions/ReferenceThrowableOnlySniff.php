@@ -66,16 +66,18 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				$referencedName->getStartPointer(),
 				self::CODE_REFERENCED_GENERAL_EXCEPTION
 			);
-			if ($fix) {
-				$phpcsFile->fixer->beginChangeset();
-
-				for ($i = $referencedName->getStartPointer(); $i <= $referencedName->getEndPointer(); $i++) {
-					$phpcsFile->fixer->replaceToken($i, '');
-				}
-
-				$phpcsFile->fixer->addContent($referencedName->getStartPointer(), '\Throwable');
-				$phpcsFile->fixer->endChangeset();
+			if (!$fix) {
+				continue;
 			}
+
+			$phpcsFile->fixer->beginChangeset();
+
+			for ($i = $referencedName->getStartPointer(); $i <= $referencedName->getEndPointer(); $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
+
+			$phpcsFile->fixer->addContent($referencedName->getStartPointer(), '\Throwable');
+			$phpcsFile->fixer->endChangeset();
 		}
 	}
 

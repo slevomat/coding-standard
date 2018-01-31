@@ -46,12 +46,16 @@ class RequireYodaComparisonSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return;
 		}
 
-		if ($leftDynamism > $rightDynamism) {
-			$fix = $phpcsFile->addFixableError('Yoda comparison is required.', $comparisonTokenPointer, self::CODE_REQUIRED_YODA_COMPARISON);
-			if ($fix && count($leftSideTokens) > 0 & count($rightSideTokens) > 0) {
-				YodaHelper::fix($phpcsFile, $leftSideTokens, $rightSideTokens);
-			}
+		if ($leftDynamism <= $rightDynamism) {
+			return;
 		}
+
+		$fix = $phpcsFile->addFixableError('Yoda comparison is required.', $comparisonTokenPointer, self::CODE_REQUIRED_YODA_COMPARISON);
+		if (!($fix && count($leftSideTokens) > 0 & count($rightSideTokens) > 0)) {
+			return;
+		}
+
+		YodaHelper::fix($phpcsFile, $leftSideTokens, $rightSideTokens);
 	}
 
 }

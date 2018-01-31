@@ -91,14 +91,18 @@ class ParameterTypeHintSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				continue;
 			}
 
-			if ($nullabilitySymbolPointer + 1 !== $typeHintStartPointer) {
-				$fix = $phpcsFile->addFixableError(sprintf('There must be no whitespace between parameter type hint nullability symbol and parameter type hint of parameter %s.', $parameterName), $typeHintStartPointer, self::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL);
-				if ($fix) {
-					$phpcsFile->fixer->beginChangeset();
-					$phpcsFile->fixer->replaceToken($nullabilitySymbolPointer + 1, '');
-					$phpcsFile->fixer->endChangeset();
-				}
+			if ($nullabilitySymbolPointer + 1 === $typeHintStartPointer) {
+				continue;
 			}
+
+			$fix = $phpcsFile->addFixableError(sprintf('There must be no whitespace between parameter type hint nullability symbol and parameter type hint of parameter %s.', $parameterName), $typeHintStartPointer, self::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL);
+			if (!$fix) {
+				continue;
+			}
+
+			$phpcsFile->fixer->beginChangeset();
+			$phpcsFile->fixer->replaceToken($nullabilitySymbolPointer + 1, '');
+			$phpcsFile->fixer->endChangeset();
 		}
 	}
 

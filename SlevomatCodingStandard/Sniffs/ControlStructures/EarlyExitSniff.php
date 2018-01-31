@@ -74,33 +74,35 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$elsePointer,
 			self::CODE_EARLY_EXIT_NOT_USED
 		);
-		if ($fix) {
-			$ifCode = $this->getScopeCode($phpcsFile, $ifPointer);
-			$elseCode = $this->getScopeCode($phpcsFile, $elsePointer);
-
-			$negativeIfCondition = $this->getNegativeIfCondition($phpcsFile, $ifPointer);
-
-			$phpcsFile->fixer->beginChangeset();
-
-			for ($i = $ifPointer; $i <= $tokens[$elsePointer]['scope_closer']; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
-
-			$afterIfCode = $this->unindent($ifCode, $phpcsFile->eolChar);
-
-			$phpcsFile->fixer->addContent(
-				$ifPointer,
-				sprintf(
-					'if (%s) {%s}%s%s',
-					$negativeIfCondition,
-					$elseCode,
-					$phpcsFile->eolChar,
-					$afterIfCode
-				)
-			);
-
-			$phpcsFile->fixer->endChangeset();
+		if (!$fix) {
+			return;
 		}
+
+		$ifCode = $this->getScopeCode($phpcsFile, $ifPointer);
+		$elseCode = $this->getScopeCode($phpcsFile, $elsePointer);
+
+		$negativeIfCondition = $this->getNegativeIfCondition($phpcsFile, $ifPointer);
+
+		$phpcsFile->fixer->beginChangeset();
+
+		for ($i = $ifPointer; $i <= $tokens[$elsePointer]['scope_closer']; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+
+		$afterIfCode = $this->unindent($ifCode, $phpcsFile->eolChar);
+
+		$phpcsFile->fixer->addContent(
+			$ifPointer,
+			sprintf(
+				'if (%s) {%s}%s%s',
+				$negativeIfCondition,
+				$elseCode,
+				$phpcsFile->eolChar,
+				$afterIfCode
+			)
+		);
+
+		$phpcsFile->fixer->endChangeset();
 	}
 
 	private function processIf(\PHP_CodeSniffer\Files\File $phpcsFile, int $ifPointer): void
@@ -123,39 +125,41 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$ifPointer,
 			self::CODE_EARLY_EXIT_NOT_USED
 		);
-		if ($fix) {
-			$ifCode = $this->getScopeCode($phpcsFile, $ifPointer);
-			$ifIndentation = $this->getIndentation($phpcsFile, $ifPointer);
-			$earlyExitCode = $this->getEarlyExitCode($tokens[$scopePointer]['code']);
-			$earlyExitCodeIndentation = $ifIndentation . ($ifIndentation[0] === "\t" ? "\t" : '    ');
-
-			$negativeIfCondition = $this->getNegativeIfCondition($phpcsFile, $ifPointer);
-
-			$phpcsFile->fixer->beginChangeset();
-
-			for ($i = $ifPointer; $i <= $tokens[$ifPointer]['scope_closer']; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
-
-			$afterIfCode = $this->unindent($ifCode, $phpcsFile->eolChar);
-
-			$phpcsFile->fixer->addContent(
-				$ifPointer,
-				sprintf(
-					'if (%s) {%s%s%s;%s%s}%s%s',
-					$negativeIfCondition,
-					$phpcsFile->eolChar,
-					$earlyExitCodeIndentation,
-					$earlyExitCode,
-					$phpcsFile->eolChar,
-					$ifIndentation,
-					$phpcsFile->eolChar,
-					$afterIfCode
-				)
-			);
-
-			$phpcsFile->fixer->endChangeset();
+		if (!$fix) {
+			return;
 		}
+
+		$ifCode = $this->getScopeCode($phpcsFile, $ifPointer);
+		$ifIndentation = $this->getIndentation($phpcsFile, $ifPointer);
+		$earlyExitCode = $this->getEarlyExitCode($tokens[$scopePointer]['code']);
+		$earlyExitCodeIndentation = $ifIndentation . ($ifIndentation[0] === "\t" ? "\t" : '    ');
+
+		$negativeIfCondition = $this->getNegativeIfCondition($phpcsFile, $ifPointer);
+
+		$phpcsFile->fixer->beginChangeset();
+
+		for ($i = $ifPointer; $i <= $tokens[$ifPointer]['scope_closer']; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+
+		$afterIfCode = $this->unindent($ifCode, $phpcsFile->eolChar);
+
+		$phpcsFile->fixer->addContent(
+			$ifPointer,
+			sprintf(
+				'if (%s) {%s%s%s;%s%s}%s%s',
+				$negativeIfCondition,
+				$phpcsFile->eolChar,
+				$earlyExitCodeIndentation,
+				$earlyExitCode,
+				$phpcsFile->eolChar,
+				$ifIndentation,
+				$phpcsFile->eolChar,
+				$afterIfCode
+			)
+		);
+
+		$phpcsFile->fixer->endChangeset();
 	}
 
 	private function getIndentation(\PHP_CodeSniffer\Files\File $phpcsFile, int $pointer): string

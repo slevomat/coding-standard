@@ -111,9 +111,11 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$minPartsCount = min(count($aNameParts), count($bNameParts));
 		for ($i = 0; $i < $minPartsCount; $i++) {
 			$comparison = $this->compare($aNameParts[$i], $bNameParts[$i]);
-			if ($comparison !== 0) {
-				return $comparison;
+			if ($comparison === 0) {
+				continue;
 			}
+
+			return $comparison;
 		}
 
 		return count($aNameParts) <=> count($bNameParts);

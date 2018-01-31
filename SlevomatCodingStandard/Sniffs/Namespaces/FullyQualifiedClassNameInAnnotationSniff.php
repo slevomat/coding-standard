@@ -69,20 +69,22 @@ class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer\Sniff
 				$fullyQualifiedTypeHint,
 				$annotationTagName
 			), $annotationTagPointer, self::CODE_NON_FULLY_QUALIFIED_CLASS_NAME);
-			if ($fix) {
-				$phpcsFile->fixer->beginChangeset();
-
-				$fixedAnnoationContent = preg_replace_callback(
-					'~(^|\s|\|)' . preg_quote($typeHint, '~') . '(\s|\||\[|$)~',
-					function (array $matches) use ($fullyQualifiedTypeHint): string {
-						return $matches[1] . $fullyQualifiedTypeHint . $matches[2];
-					},
-					$tokens[$annotationContentPointer]['content']
-				);
-				$phpcsFile->fixer->replaceToken($annotationContentPointer, $fixedAnnoationContent);
-
-				$phpcsFile->fixer->endChangeset();
+			if (!$fix) {
+				continue;
 			}
+
+			$phpcsFile->fixer->beginChangeset();
+
+			$fixedAnnoationContent = preg_replace_callback(
+				'~(^|\s|\|)' . preg_quote($typeHint, '~') . '(\s|\||\[|$)~',
+				function (array $matches) use ($fullyQualifiedTypeHint): string {
+					return $matches[1] . $fullyQualifiedTypeHint . $matches[2];
+				},
+				$tokens[$annotationContentPointer]['content']
+			);
+			$phpcsFile->fixer->replaceToken($annotationContentPointer, $fixedAnnoationContent);
+
+			$phpcsFile->fixer->endChangeset();
 		}
 	}
 

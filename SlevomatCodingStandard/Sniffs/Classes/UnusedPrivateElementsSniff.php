@@ -150,9 +150,11 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				return;
 			}
 
-			if (isset($reportedProperties[$propertyName])) {
-				unset($reportedProperties[$propertyName]);
+			if (!isset($reportedProperties[$propertyName])) {
+				return;
 			}
+
+			unset($reportedProperties[$propertyName]);
 		};
 
 		$checkObjectOperatorUsage = function (int $objectOperatorTokenPointer) use ($phpcsFile, $tokens, $checkPropertyUsage, &$reportedMethods): int {
@@ -213,17 +215,21 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			if ($token['code'] === T_DOUBLE_QUOTED_STRING) {
 				if (preg_match_all('~(?<!\\\\)\$this->(.+?\b)(?!\()~', $token['content'], $matches, PREG_PATTERN_ORDER)) {
 					foreach ($matches[1] as $propertyInString) {
-						if (isset($reportedProperties[$propertyInString])) {
-							unset($reportedProperties[$propertyInString]);
+						if (!isset($reportedProperties[$propertyInString])) {
+							continue;
 						}
+
+						unset($reportedProperties[$propertyInString]);
 					}
 				}
 				if (preg_match_all('~(?<=\{)\$this->(.+?\b)(?=\()~', $token['content'], $matches, PREG_PATTERN_ORDER)) {
 					foreach ($matches[1] as $methodInString) {
 						$normalizedMethodInString = $this->getNormalizedMethodName($methodInString);
-						if (isset($reportedMethods[$normalizedMethodInString])) {
-							unset($reportedMethods[$normalizedMethodInString]);
+						if (!isset($reportedMethods[$normalizedMethodInString])) {
+							continue;
 						}
+
+						unset($reportedMethods[$normalizedMethodInString]);
 					}
 				}
 
@@ -268,22 +274,26 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				if ($variableTokenPointer !== null && $isCurrentClass($nextTokenPointer)) {
 					$scopeMethodPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $variableTokenPointer - 1);
 					for ($i = $tokens[$scopeMethodPointer]['scope_opener']; $i < $tokens[$scopeMethodPointer]['scope_closer']; $i++) {
-						if ($tokens[$i]['content'] === $tokens[$variableTokenPointer]['content']) {
-							$afterActualTokenPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
-							if ($tokens[$afterActualTokenPointer]['code'] === T_OBJECT_OPERATOR) {
-								$checkObjectOperatorUsage($afterActualTokenPointer);
-							} elseif ($tokens[$afterActualTokenPointer]['code'] === T_DOUBLE_COLON) {
-								$checkDoubleColonUsage($afterActualTokenPointer);
-							}
+						if ($tokens[$i]['content'] !== $tokens[$variableTokenPointer]['content']) {
+							continue;
+						}
+
+						$afterActualTokenPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
+						if ($tokens[$afterActualTokenPointer]['code'] === T_OBJECT_OPERATOR) {
+							$checkObjectOperatorUsage($afterActualTokenPointer);
+						} elseif ($tokens[$afterActualTokenPointer]['code'] === T_DOUBLE_COLON) {
+							$checkDoubleColonUsage($afterActualTokenPointer);
 						}
 					}
 				}
 				$findUsagesStartTokenPointer = $tokenPointer + 1;
 			}
 
-			if (count($reportedProperties) + count($reportedMethods) + count($reportedConstants) === 0) {
-				return;
+			if (count($reportedProperties) + count($reportedMethods) + count($reportedConstants) !== 0) {
+				continue;
 			}
+
+			return;
 		}
 
 		$className = ClassHelper::getName($phpcsFile, $classPointer);
@@ -309,23 +319,27 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 
 		foreach ($reportedMethods as $name => $methodTokenPointer) {
-			if (!SuppressHelper::isSniffSuppressed($phpcsFile, $methodTokenPointer, $this->getSniffName(self::CODE_UNUSED_METHOD))) {
-				$phpcsFile->addError(sprintf(
-					'Class %s contains unused private method %s().',
-					$className,
-					$originalMethods[$name]
-				), $methodTokenPointer, self::CODE_UNUSED_METHOD);
+			if (SuppressHelper::isSniffSuppressed($phpcsFile, $methodTokenPointer, $this->getSniffName(self::CODE_UNUSED_METHOD))) {
+				continue;
 			}
+
+			$phpcsFile->addError(sprintf(
+				'Class %s contains unused private method %s().',
+				$className,
+				$originalMethods[$name]
+			), $methodTokenPointer, self::CODE_UNUSED_METHOD);
 		}
 
 		foreach ($reportedConstants as $name => $constantTokenPointer) {
-			if (!SuppressHelper::isSniffSuppressed($phpcsFile, $constantTokenPointer, $this->getSniffName(self::CODE_UNUSED_CONSTANT))) {
-				$phpcsFile->addError(sprintf(
-					'Class %s contains unused private constant %s.',
-					$className,
-					$name
-				), $constantTokenPointer, self::CODE_UNUSED_CONSTANT);
+			if (SuppressHelper::isSniffSuppressed($phpcsFile, $constantTokenPointer, $this->getSniffName(self::CODE_UNUSED_CONSTANT))) {
+				continue;
 			}
+
+			$phpcsFile->addError(sprintf(
+				'Class %s contains unused private constant %s.',
+				$className,
+				$name
+			), $constantTokenPointer, self::CODE_UNUSED_CONSTANT);
 		}
 	}
 
@@ -355,18 +369,22 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$phpDocTags = $this->getPhpDocTags($phpcsFile, $visibilityModifierTokenPointer);
 			foreach ($phpDocTags as $tag) {
 				preg_match('#([@a-zA-Z\\\]+)#', $tag, $matches);
-				if (in_array($matches[1], $this->getAlwaysUsedPropertiesAnnotations(), true)) {
-					continue 2;
+				if (!in_array($matches[1], $this->getAlwaysUsedPropertiesAnnotations(), true)) {
+					continue;
 				}
+
+				continue 2;
 			}
 
 			$propertyToken = $tokens[$propertyTokenPointer];
 			$name = substr($propertyToken['content'], 1);
 
 			foreach ($this->getAlwaysUsedPropertiesSuffixes() as $prefix) {
-				if (StringHelper::endsWith($name, $prefix)) {
-					continue 2;
+				if (!StringHelper::endsWith($name, $prefix)) {
+					continue;
 				}
+
+				continue 2;
 			}
 
 			$reportedProperties[$name] = $propertyTokenPointer;

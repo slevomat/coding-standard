@@ -29,9 +29,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
 		if (count($codesToCheck) > 0) {
 			foreach ($this->getSniffClassReflection()->getConstants() as $constantName => $constantValue) {
-				if (strpos($constantName, 'CODE_') === 0 && !in_array($constantValue, $codesToCheck, true)) {
-					$codeSniffer->ruleset->ruleset[sprintf('%s.%s', $this->getSniffName(), $constantValue)]['severity'] = 0;
+				if (!(strpos($constantName, 'CODE_') === 0 && !in_array($constantValue, $codesToCheck, true))) {
+					continue;
 				}
+
+				$codeSniffer->ruleset->ruleset[sprintf('%s.%s', $this->getSniffName(), $constantValue)]['severity'] = 0;
 			}
 		}
 
@@ -104,12 +106,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		foreach ($errorsOnLine as $errorsOnPosition) {
 			foreach ($errorsOnPosition as $error) {
-				if (
+				if (!(
 					$error['source'] === $sniffCode
 					&& ($message === null || strpos($error['message'], $message) !== false)
-				) {
-					return true;
+				)) {
+					continue;
 				}
+
+				return true;
 			}
 		}
 

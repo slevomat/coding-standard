@@ -64,35 +64,39 @@ class LongTypeHintsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						$suggestType = 'bool';
 					}
 
-					if ($suggestType !== null) {
-						$fix = $phpcsFile->addFixableError(sprintf(
-							'Expected "%s" but found "%s" in %s annotation.',
-							$suggestType,
-							$type,
-							$annotationName
-						), $annotation->getPointer(), self::CODE_USED_LONG_TYPE_HINT);
-
-						if ($fix) {
-							/** @var int $docCommentOpenPointer */
-							$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $pointer);
-							$docCommentClosePointer = $tokens[$docCommentOpenPointer]['comment_closer'];
-
-							$phpcsFile->fixer->beginChangeset();
-							for ($i = $docCommentOpenPointer; $i <= $docCommentClosePointer; $i++) {
-								$phpcsFile->fixer->replaceToken($i, '');
-							}
-
-							$docComment = TokenHelper::getContent($phpcsFile, $docCommentOpenPointer, $docCommentClosePointer);
-
-							$fixedDocComment = preg_replace_callback('~((?:@(?:var|param|return)\\s+)|\|)' . preg_quote($type, '~') . '(\\s|\||\[)~', function (array $matches) use ($suggestType): string {
-								return $matches[1] . $suggestType . $matches[2];
-							}, $docComment);
-
-							$phpcsFile->fixer->addContent($docCommentOpenPointer, $fixedDocComment);
-
-							$phpcsFile->fixer->endChangeset();
-						}
+					if ($suggestType === null) {
+						continue;
 					}
+
+					$fix = $phpcsFile->addFixableError(sprintf(
+						'Expected "%s" but found "%s" in %s annotation.',
+						$suggestType,
+						$type,
+						$annotationName
+					), $annotation->getPointer(), self::CODE_USED_LONG_TYPE_HINT);
+
+					if (!$fix) {
+						continue;
+					}
+
+					/** @var int $docCommentOpenPointer */
+					$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $pointer);
+					$docCommentClosePointer = $tokens[$docCommentOpenPointer]['comment_closer'];
+
+					$phpcsFile->fixer->beginChangeset();
+					for ($i = $docCommentOpenPointer; $i <= $docCommentClosePointer; $i++) {
+						$phpcsFile->fixer->replaceToken($i, '');
+					}
+
+					$docComment = TokenHelper::getContent($phpcsFile, $docCommentOpenPointer, $docCommentClosePointer);
+
+					$fixedDocComment = preg_replace_callback('~((?:@(?:var|param|return)\\s+)|\|)' . preg_quote($type, '~') . '(\\s|\||\[)~', function (array $matches) use ($suggestType): string {
+						return $matches[1] . $suggestType . $matches[2];
+					}, $docComment);
+
+					$phpcsFile->fixer->addContent($docCommentOpenPointer, $fixedDocComment);
+
+					$phpcsFile->fixer->endChangeset();
 				}
 			}
 		}

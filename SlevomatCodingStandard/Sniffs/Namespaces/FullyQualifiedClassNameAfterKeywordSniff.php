@@ -79,26 +79,28 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer\Sniff
 			$nameStartPointer
 		);
 
-		if (in_array($tokens[$keywordPointer]['code'], [T_IMPLEMENTS, T_USE], true)) {
-			while (true) {
-				$possibleCommaPointer = TokenHelper::findNextExcluding($phpcsFile, array_merge(TokenHelper::$nameTokenCodes, [T_WHITESPACE]), $possibleCommaPointer);
-				if ($possibleCommaPointer !== null) {
-					$possibleCommaToken = $tokens[$possibleCommaPointer];
-					if ($possibleCommaToken['code'] === T_COMMA) {
-						/** @var int $nameStartPointer */
-						$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $possibleCommaPointer + 1);
-						$possibleCommaPointer = $this->checkReferencedName(
-							$phpcsFile,
-							$useStatements,
-							$keywordPointer,
-							$nameStartPointer
-						);
-						continue;
-					}
-				}
+		if (!in_array($tokens[$keywordPointer]['code'], [T_IMPLEMENTS, T_USE], true)) {
+			return;
+		}
 
-				break;
+		while (true) {
+			$possibleCommaPointer = TokenHelper::findNextExcluding($phpcsFile, array_merge(TokenHelper::$nameTokenCodes, [T_WHITESPACE]), $possibleCommaPointer);
+			if ($possibleCommaPointer !== null) {
+				$possibleCommaToken = $tokens[$possibleCommaPointer];
+				if ($possibleCommaToken['code'] === T_COMMA) {
+					/** @var int $nameStartPointer */
+					$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $possibleCommaPointer + 1);
+					$possibleCommaPointer = $this->checkReferencedName(
+						$phpcsFile,
+						$useStatements,
+						$keywordPointer,
+						$nameStartPointer
+					);
+					continue;
+				}
 			}
+
+			break;
 		}
 	}
 

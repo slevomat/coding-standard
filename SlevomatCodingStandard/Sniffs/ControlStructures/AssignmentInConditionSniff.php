@@ -52,13 +52,15 @@ class AssignmentInConditionSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	): void
 	{
 		$equalsTokenPointer = TokenHelper::findNext($phpcsFile, T_EQUAL, $parenthesisOpener + 1, $parenthesisCloser);
-		if ($equalsTokenPointer !== null) {
-			$phpcsFile->addError(
-				sprintf('Assignment in %s condition is not allowed.', $conditionType),
-				$equalsTokenPointer,
-				self::CODE_ASSIGNMENT_IN_CONDITION
-			);
+		if ($equalsTokenPointer === null) {
+			return;
 		}
+
+		$phpcsFile->addError(
+			sprintf('Assignment in %s condition is not allowed.', $conditionType),
+			$equalsTokenPointer,
+			self::CODE_ASSIGNMENT_IN_CONDITION
+		);
 	}
 
 }

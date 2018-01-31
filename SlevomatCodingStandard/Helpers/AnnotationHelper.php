@@ -38,48 +38,49 @@ class AnnotationHelper
 
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = $docCommentOpenToken + 1; $i < $tokens[$docCommentOpenToken]['comment_closer']; $i++) {
-			if ($tokens[$i]['code'] === T_DOC_COMMENT_TAG) {
+			if ($tokens[$i]['code'] !== T_DOC_COMMENT_TAG) {
+				continue;
+			}
 
-				// Fix for wrong PHPCS parsing
-				$annotationCode = $tokens[$i]['content'];
-				for ($j = $i + 1; $j < $tokens[$docCommentOpenToken]['comment_closer']; $j++) {
-					if (!in_array($tokens[$j]['code'], [T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STRING, T_DOC_COMMENT_STAR], true)) {
-						break;
-					}
+			// Fix for wrong PHPCS parsing
+			$annotationCode = $tokens[$i]['content'];
+			for ($j = $i + 1; $j < $tokens[$docCommentOpenToken]['comment_closer']; $j++) {
+				if (!in_array($tokens[$j]['code'], [T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STRING, T_DOC_COMMENT_STAR], true)) {
+					break;
+				}
 
-					if ($tokens[$j]['code'] === T_DOC_COMMENT_STAR) {
+				if ($tokens[$j]['code'] === T_DOC_COMMENT_STAR) {
+					continue;
+				}
+
+				if ($tokens[$j]['code'] === T_DOC_COMMENT_WHITESPACE) {
+					if (array_key_exists($j - 1, $tokens) && $tokens[$j - 1]['code'] === T_DOC_COMMENT_STAR) {
 						continue;
 					}
-
-					if ($tokens[$j]['code'] === T_DOC_COMMENT_WHITESPACE) {
-						if (array_key_exists($j - 1, $tokens) && $tokens[$j - 1]['code'] === T_DOC_COMMENT_STAR) {
-							continue;
-						}
-						if (array_key_exists($j + 1, $tokens) && $tokens[$j + 1]['code'] === T_DOC_COMMENT_STAR) {
-							continue;
-						}
-					}
-
-					$annotationCode .= $tokens[$j]['content'];
-				}
-
-				$annotationName = $tokens[$i]['content'];
-				$annotationParameters = null;
-				$annotationContent = null;
-				if (preg_match('~^(@[a-zA-Z\\\\]+)(?:\((.*?)\))?(?:\\s+(.+))?($)~s', $annotationCode, $matches)) {
-					$annotationName = $matches[1];
-					$annotationParameters = trim($matches[2]);
-					if ($annotationParameters === '') {
-						$annotationParameters = null;
-					}
-					$annotationContent = trim($matches[3]);
-					if ($annotationContent === '') {
-						$annotationContent = null;
+					if (array_key_exists($j + 1, $tokens) && $tokens[$j + 1]['code'] === T_DOC_COMMENT_STAR) {
+						continue;
 					}
 				}
 
-				$annotations[$annotationName][] = new Annotation($annotationName, $i, $annotationParameters, $annotationContent);
+				$annotationCode .= $tokens[$j]['content'];
 			}
+
+			$annotationName = $tokens[$i]['content'];
+			$annotationParameters = null;
+			$annotationContent = null;
+			if (preg_match('~^(@[a-zA-Z\\\\]+)(?:\((.*?)\))?(?:\\s+(.+))?($)~s', $annotationCode, $matches)) {
+				$annotationName = $matches[1];
+				$annotationParameters = trim($matches[2]);
+				if ($annotationParameters === '') {
+					$annotationParameters = null;
+				}
+				$annotationContent = trim($matches[3]);
+				if ($annotationContent === '') {
+					$annotationContent = null;
+				}
+			}
+
+			$annotations[$annotationName][] = new Annotation($annotationName, $i, $annotationParameters, $annotationContent);
 		}
 
 		return $annotations;

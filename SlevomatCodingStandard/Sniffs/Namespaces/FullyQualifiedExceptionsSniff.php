@@ -113,23 +113,25 @@ class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				'Exception %s should be referenced via a fully qualified name.',
 				$name
 			), $pointer, self::CODE_NON_FULLY_QUALIFIED_EXCEPTION);
-			if ($fix) {
-				$phpcsFile->fixer->beginChangeset();
-
-				$fullyQualifiedName = NamespaceHelper::resolveClassName(
-					$phpcsFile,
-					$name,
-					$useStatements,
-					$pointer
-				);
-
-				for ($i = $referencedName->getStartPointer(); $i <= $referencedName->getEndPointer(); $i++) {
-					$phpcsFile->fixer->replaceToken($i, '');
-				}
-				$phpcsFile->fixer->addContent($referencedName->getStartPointer(), $fullyQualifiedName);
-
-				$phpcsFile->fixer->endChangeset();
+			if (!$fix) {
+				continue;
 			}
+
+			$phpcsFile->fixer->beginChangeset();
+
+			$fullyQualifiedName = NamespaceHelper::resolveClassName(
+				$phpcsFile,
+				$name,
+				$useStatements,
+				$pointer
+			);
+
+			for ($i = $referencedName->getStartPointer(); $i <= $referencedName->getEndPointer(); $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
+			$phpcsFile->fixer->addContent($referencedName->getStartPointer(), $fullyQualifiedName);
+
+			$phpcsFile->fixer->endChangeset();
 		}
 	}
 

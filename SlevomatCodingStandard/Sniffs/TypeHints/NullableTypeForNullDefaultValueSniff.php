@@ -78,13 +78,15 @@ class NullableTypeForNullDefaultValueSniff implements \PHP_CodeSniffer\Sniffs\Sn
 				self::CODE_NULLABILITY_SYMBOL_REQUIRED
 			);
 
-			if ($fix) {
-				$firstTypehint = TokenHelper::findNextEffective($phpcsFile, $beforeTypeHintPointer === null ? $startPointer : $beforeTypeHintPointer + 1);
-
-				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContent($firstTypehint - 1, '?');
-				$phpcsFile->fixer->endChangeset();
+			if (!$fix) {
+				continue;
 			}
+
+			$firstTypehint = TokenHelper::findNextEffective($phpcsFile, $beforeTypeHintPointer === null ? $startPointer : $beforeTypeHintPointer + 1);
+
+			$phpcsFile->fixer->beginChangeset();
+			$phpcsFile->fixer->addContent($firstTypehint - 1, '?');
+			$phpcsFile->fixer->endChangeset();
 		}
 	}
 

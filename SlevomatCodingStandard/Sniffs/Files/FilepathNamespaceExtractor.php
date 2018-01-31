@@ -46,15 +46,17 @@ class FilepathNamespaceExtractor
 		while (count($pathParts) > 0) {
 			array_shift($pathParts);
 			foreach ($this->rootNamespaces as $directory => $namespace) {
-				if (StringHelper::startsWith(implode('/', $pathParts) . '/', $directory . '/')) {
-					$directoryPartsCount = count(explode('/', $directory));
-					for ($i = 0; $i < $directoryPartsCount; $i++) {
-						array_shift($pathParts);
-					}
-
-					$rootNamespace = $namespace;
-					break 2;
+				if (!StringHelper::startsWith(implode('/', $pathParts) . '/', $directory . '/')) {
+					continue;
 				}
+
+				$directoryPartsCount = count(explode('/', $directory));
+				for ($i = 0; $i < $directoryPartsCount; $i++) {
+					array_shift($pathParts);
+				}
+
+				$rootNamespace = $namespace;
+				break 2;
 			}
 		}
 

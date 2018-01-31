@@ -40,9 +40,11 @@ class FunctionHelper
 	public static function isMethod(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $functionPointer): bool
 	{
 		foreach (array_reverse($codeSnifferFile->getTokens()[$functionPointer]['conditions']) as $conditionTokenCode) {
-			if (in_array($conditionTokenCode, [T_CLASS, T_INTERFACE, T_TRAIT, T_ANON_CLASS], true)) {
-				return true;
+			if (!in_array($conditionTokenCode, [T_CLASS, T_INTERFACE, T_TRAIT, T_ANON_CLASS], true)) {
+				continue;
 			}
+
+			return true;
 		}
 
 		return false;
@@ -59,9 +61,11 @@ class FunctionHelper
 
 		$parametersNames = [];
 		for ($i = $tokens[$functionPointer]['parenthesis_opener'] + 1; $i < $tokens[$functionPointer]['parenthesis_closer']; $i++) {
-			if ($tokens[$i]['code'] === T_VARIABLE) {
-				$parametersNames[] = $tokens[$i]['content'];
+			if ($tokens[$i]['code'] !== T_VARIABLE) {
+				continue;
 			}
+
+			$parametersNames[] = $tokens[$i]['content'];
 		}
 
 		return $parametersNames;
@@ -90,32 +94,36 @@ class FunctionHelper
 
 		$parametersTypeHints = [];
 		for ($i = $tokens[$functionPointer]['parenthesis_opener'] + 1; $i < $tokens[$functionPointer]['parenthesis_closer']; $i++) {
-			if ($tokens[$i]['code'] === T_VARIABLE) {
-				$parameterName = $tokens[$i]['content'];
-				$typeHint = null;
-				$isNullable = false;
-
-				$previousToken = $i;
-				do {
-					$previousToken = TokenHelper::findPreviousExcluding($codeSnifferFile, array_merge(TokenHelper::$ineffectiveTokenCodes, [T_BITWISE_AND, T_ELLIPSIS]), $previousToken - 1, $tokens[$functionPointer]['parenthesis_opener'] + 1);
-					if ($previousToken !== null) {
-						$isTypeHint = $tokens[$previousToken]['code'] !== T_COMMA && $tokens[$previousToken]['code'] !== T_NULLABLE;
-						if ($tokens[$previousToken]['code'] === T_NULLABLE) {
-							$isNullable = true;
-						}
-					} else {
-						$isTypeHint = false;
-					}
-					if ($isTypeHint) {
-						$typeHint = $tokens[$previousToken]['content'] . $typeHint;
-					}
-				} while ($isTypeHint);
-
-				$equalsPointer = TokenHelper::findNextEffective($codeSnifferFile, $i + 1, $tokens[$functionPointer]['parenthesis_closer']);
-				$isOptional = $equalsPointer !== null && $tokens[$equalsPointer]['code'] === T_EQUAL;
-
-				$parametersTypeHints[$parameterName] = $typeHint !== null ? new ParameterTypeHint($typeHint, $isNullable, $isOptional) : null;
+			if ($tokens[$i]['code'] !== T_VARIABLE) {
+				continue;
 			}
+
+			$parameterName = $tokens[$i]['content'];
+			$typeHint = '';
+			$isNullable = false;
+
+			$previousToken = $i;
+			do {
+				$previousToken = TokenHelper::findPreviousExcluding($codeSnifferFile, array_merge(TokenHelper::$ineffectiveTokenCodes, [T_BITWISE_AND, T_ELLIPSIS]), $previousToken - 1, $tokens[$functionPointer]['parenthesis_opener'] + 1);
+				if ($previousToken !== null) {
+					$isTypeHint = $tokens[$previousToken]['code'] !== T_COMMA && $tokens[$previousToken]['code'] !== T_NULLABLE;
+					if ($tokens[$previousToken]['code'] === T_NULLABLE) {
+						$isNullable = true;
+					}
+				} else {
+					$isTypeHint = false;
+				}
+				if (!$isTypeHint) {
+					continue;
+				}
+
+				$typeHint = $tokens[$previousToken]['content'] . $typeHint;
+			} while ($isTypeHint);
+
+			$equalsPointer = TokenHelper::findNextEffective($codeSnifferFile, $i + 1, $tokens[$functionPointer]['parenthesis_closer']);
+			$isOptional = $equalsPointer !== null && $tokens[$equalsPointer]['code'] === T_EQUAL;
+
+			$parametersTypeHints[$parameterName] = $typeHint !== '' ? new ParameterTypeHint($typeHint, $isNullable, $isOptional) : null;
 		}
 
 		return $parametersTypeHints;
@@ -131,24 +139,30 @@ class FunctionHelper
 					break;
 				}
 
-				if ($conditionTokenCode === T_CLOSURE || $conditionTokenCode === T_ANON_CLASS) {
-					return false;
+				if (!($conditionTokenCode === T_CLOSURE || $conditionTokenCode === T_ANON_CLASS)) {
+					continue;
 				}
+
+				return false;
 			}
 			return true;
 		};
 
 		for ($i = $tokens[$functionPointer]['scope_opener'] + 1; $i < $tokens[$functionPointer]['scope_closer']; $i++) {
-			if ($tokens[$i]['code'] === T_YIELD && $isInSameLevel($i)) {
-				return true;
+			if (!($tokens[$i]['code'] === T_YIELD && $isInSameLevel($i))) {
+				continue;
 			}
+
+			return true;
 		}
 
 		for ($i = $tokens[$functionPointer]['scope_opener'] + 1; $i < $tokens[$functionPointer]['scope_closer']; $i++) {
-			if ($tokens[$i]['code'] === T_RETURN && $isInSameLevel($i)) {
-				$nextEffectiveTokenPointer = TokenHelper::findNextEffective($codeSnifferFile, $i + 1);
-				return $tokens[$nextEffectiveTokenPointer]['code'] !== T_SEMICOLON;
+			if (!($tokens[$i]['code'] === T_RETURN && $isInSameLevel($i))) {
+				continue;
 			}
+
+			$nextEffectiveTokenPointer = TokenHelper::findNextEffective($codeSnifferFile, $i + 1);
+			return $tokens[$nextEffectiveTokenPointer]['code'] !== T_SEMICOLON;
 		}
 
 		return false;
@@ -184,9 +198,11 @@ class FunctionHelper
 				: TokenHelper::findNextExcluding($codeSnifferFile, TokenHelper::$ineffectiveTokenCodes, $nextToken + 1, $tokens[$functionPointer]['scope_opener'] - 1);
 
 			$isTypeHint = $nextToken !== null;
-			if ($isTypeHint) {
-				$typeHint .= $tokens[$nextToken]['content'];
+			if (!$isTypeHint) {
+				continue;
 			}
+
+			$typeHint .= $tokens[$nextToken]['content'];
 		} while ($isTypeHint);
 
 		return $typeHint !== '' ? new ReturnTypeHint($typeHint, $nullable) : null;
@@ -243,11 +259,13 @@ class FunctionHelper
 	{
 		do {
 			$nextFunctionPointer = TokenHelper::findNext($codeSnifferFile, T_FUNCTION, $previousFunctionPointer + 1);
-			if ($nextFunctionPointer !== null) {
-				$previousFunctionPointer = $nextFunctionPointer;
-				yield $nextFunctionPointer;
+			if ($nextFunctionPointer === null) {
+				break;
 			}
-		} while ($nextFunctionPointer !== null);
+
+			$previousFunctionPointer = $nextFunctionPointer;
+			yield $nextFunctionPointer;
+		} while (true);
 	}
 
 }

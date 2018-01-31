@@ -73,11 +73,13 @@ abstract class AbstractFullyQualifiedGlobalReference
 			}
 
 			$fix = $phpcsFile->addFixableError(sprintf($this->getNotFullyQualifiedMessage(), $tokens[$namePointer]['content']), $namePointer, self::CODE_NON_FULLY_QUALIFIED);
-			if ($fix) {
-				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContentBefore($namePointer, NamespaceHelper::NAMESPACE_SEPARATOR);
-				$phpcsFile->fixer->endChangeset();
+			if (!$fix) {
+				continue;
 			}
+
+			$phpcsFile->fixer->beginChangeset();
+			$phpcsFile->fixer->addContentBefore($namePointer, NamespaceHelper::NAMESPACE_SEPARATOR);
+			$phpcsFile->fixer->endChangeset();
 		}
 	}
 

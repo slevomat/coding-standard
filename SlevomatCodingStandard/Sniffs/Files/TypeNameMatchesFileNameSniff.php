@@ -66,9 +66,11 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				$minPartsCount = min(count($aParts), count($bParts));
 				for ($i = 0; $i < $minPartsCount; $i++) {
 					$comparison = strcasecmp($bParts[$i], $aParts[$i]);
-					if ($comparison !== 0) {
-						return $comparison;
+					if ($comparison === 0) {
+						continue;
 					}
+
+					return $comparison;
 				}
 
 				return count($bParts) <=> count($aParts);
@@ -148,26 +150,30 @@ class TypeNameMatchesFileNameSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$typeName = NamespaceHelper::normalizeToCanonicalName(ClassHelper::getFullyQualifiedName($phpcsFile, $typePointer));
 
 		foreach ($this->getIgnoredNamespaces() as $ignoredNamespace) {
-			if (StringHelper::startsWith($typeName, $ignoredNamespace . '\\')) {
-				return;
+			if (!StringHelper::startsWith($typeName, $ignoredNamespace . '\\')) {
+				continue;
 			}
+
+			return;
 		}
 
 		$expectedTypeName = $this->getNamespaceExtractor()->getTypeNameFromProjectPath(
 			$phpcsFile->getFilename()
 		);
-		if ($typeName !== $expectedTypeName) {
-			$phpcsFile->addError(
-				sprintf(
-					'%s name %s does not match filepath %s.',
-					ucfirst($tokens[$typePointer]['content']),
-					$typeName,
-					$phpcsFile->getFilename()
-				),
-				$namePointer,
-				self::CODE_NO_MATCH_BETWEEN_TYPE_NAME_AND_FILE_NAME
-			);
+		if ($typeName === $expectedTypeName) {
+			return;
 		}
+
+		$phpcsFile->addError(
+			sprintf(
+				'%s name %s does not match filepath %s.',
+				ucfirst($tokens[$typePointer]['content']),
+				$typeName,
+				$phpcsFile->getFilename()
+			),
+			$namePointer,
+			self::CODE_NO_MATCH_BETWEEN_TYPE_NAME_AND_FILE_NAME
+		);
 	}
 
 }

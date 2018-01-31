@@ -56,20 +56,24 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return;
 		}
 
-		if (!NamespaceHelper::hasNamespace($usedTypeNameRest)) {
-			$fix = $phpcsFile->addFixableError(sprintf(
-				'Use %s is from the same namespace – that is prohibited.',
-				$usedTypeName
-			), $usePointer, self::CODE_USE_FROM_SAME_NAMESPACE);
-			if ($fix) {
-				$phpcsFile->fixer->beginChangeset();
-				$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $usePointer) + 1;
-				for ($i = $usePointer; $i <= $endPointer; $i++) {
-					$phpcsFile->fixer->replaceToken($i, '');
-				}
-				$phpcsFile->fixer->endChangeset();
-			}
+		if (NamespaceHelper::hasNamespace($usedTypeNameRest)) {
+			return;
 		}
+
+		$fix = $phpcsFile->addFixableError(sprintf(
+			'Use %s is from the same namespace – that is prohibited.',
+			$usedTypeName
+		), $usePointer, self::CODE_USE_FROM_SAME_NAMESPACE);
+		if (!$fix) {
+			return;
+		}
+
+		$phpcsFile->fixer->beginChangeset();
+		$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $usePointer) + 1;
+		for ($i = $usePointer; $i <= $endPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+		$phpcsFile->fixer->endChangeset();
 	}
 
 	private function findAsPointer(\PHP_CodeSniffer\Files\File $phpcsFile, int $startPointer): ?int

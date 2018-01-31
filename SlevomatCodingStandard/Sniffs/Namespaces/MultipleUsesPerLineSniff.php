@@ -37,13 +37,15 @@ class MultipleUsesPerLineSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $usePointer + 1);
 		$commaPointer = TokenHelper::findNext($phpcsFile, T_COMMA, $usePointer + 1, $endPointer);
 
-		if ($commaPointer !== null) {
-			$phpcsFile->addError(
-				'Multiple used types per use statement are forbidden.',
-				$commaPointer,
-				self::CODE_MULTIPLE_USES_PER_LINE
-			);
+		if ($commaPointer === null) {
+			return;
 		}
+
+		$phpcsFile->addError(
+			'Multiple used types per use statement are forbidden.',
+			$commaPointer,
+			self::CODE_MULTIPLE_USES_PER_LINE
+		);
 	}
 
 }

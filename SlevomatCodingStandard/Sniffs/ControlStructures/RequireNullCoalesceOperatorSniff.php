@@ -60,17 +60,19 @@ class RequireNullCoalesceOperatorSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$issetPointer,
 			self::CODE_NULL_COALESCE_OPERATOR_NOT_USED
 		);
-		if ($fix) {
-			$phpcsFile->fixer->beginChangeset();
-
-			for ($i = $issetPointer; $i <= $inlineElsePointer; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
-
-			$phpcsFile->fixer->addContent($issetPointer, sprintf('%s ??', $variableContent));
-
-			$phpcsFile->fixer->endChangeset();
+		if (!$fix) {
+			return;
 		}
+
+		$phpcsFile->fixer->beginChangeset();
+
+		for ($i = $issetPointer; $i <= $inlineElsePointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+
+		$phpcsFile->fixer->addContent($issetPointer, sprintf('%s ??', $variableContent));
+
+		$phpcsFile->fixer->endChangeset();
 	}
 
 }

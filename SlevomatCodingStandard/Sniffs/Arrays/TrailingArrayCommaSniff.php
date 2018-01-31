@@ -38,22 +38,26 @@ class TrailingArrayCommaSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		/** @var int $previousToCloseParenthesisPointer */
 		$previousToCloseParenthesisPointer = TokenHelper::findPreviousEffective($phpcsFile, $closeParenthesisPointer - 1);
 		$previousToCloseParenthesisToken = $tokens[$previousToCloseParenthesisPointer];
-		if (
+		if (!(
 			$previousToCloseParenthesisPointer !== $arrayToken['bracket_opener']
 			&& $previousToCloseParenthesisToken['code'] !== T_COMMA
 			&& $closeParenthesisToken['line'] !== $previousToCloseParenthesisToken['line']
-		) {
-			$fix = $phpcsFile->addFixableError(
-				'Multiline arrays must have a trailing comma after the last element.',
-				$previousToCloseParenthesisPointer,
-				self::CODE_MISSING_TRAILING_COMMA
-			);
-			if ($fix) {
-				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContent($previousToCloseParenthesisPointer, ',');
-				$phpcsFile->fixer->endChangeset();
-			}
+		)) {
+			return;
 		}
+
+		$fix = $phpcsFile->addFixableError(
+			'Multiline arrays must have a trailing comma after the last element.',
+			$previousToCloseParenthesisPointer,
+			self::CODE_MISSING_TRAILING_COMMA
+		);
+		if (!$fix) {
+			return;
+		}
+
+		$phpcsFile->fixer->beginChangeset();
+		$phpcsFile->fixer->addContent($previousToCloseParenthesisPointer, ',');
+		$phpcsFile->fixer->endChangeset();
 	}
 
 }
