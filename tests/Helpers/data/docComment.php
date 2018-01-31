@@ -73,3 +73,10 @@ trait WithoutDocComment
 {
 
 }
+
+/**
+ */
+class EmptyDocComment
+{
+
+}

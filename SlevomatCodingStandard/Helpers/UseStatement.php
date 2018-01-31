@@ -51,18 +51,11 @@ class UseStatement
 
 	public static function normalizedNameAsReferencedInFile(string $type, string $name): string
 	{
-		if ($type !== self::TYPE_CONSTANT) {
-			return strtolower($name);
-		}
-
-		$nameParts = explode(NamespaceHelper::NAMESPACE_SEPARATOR, $name);
-		if (count($nameParts) === 1) {
+		if ($type === self::TYPE_CONSTANT) {
 			return $name;
 		}
 
-		return sprintf('%s%s%s', implode(NamespaceHelper::NAMESPACE_SEPARATOR, array_map(function (string $namePart): string {
-			return strtolower($namePart);
-		}, array_slice($nameParts, 0, -1))), NamespaceHelper::NAMESPACE_SEPARATOR, $nameParts[count($nameParts) - 1]);
+		return strtolower($name);
 	}
 
 	public function getNameAsReferencedInFile(): string

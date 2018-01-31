@@ -15,15 +15,17 @@ class EarlyExitSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/earlyExitErrors.php', [], [EarlyExitSniff::CODE_EARLY_EXIT_NOT_USED]);
 
-		self::assertSame(18, $report->getErrorCount());
+		self::assertSame(21, $report->getErrorCount());
 
-		foreach ([6, 15, 24, 33, 42, 50, 58, 66, 74, 82, 90, 98, 108] as $line) {
+		foreach ([6, 15, 24, 33, 42, 50, 58, 66, 74, 82, 90, 98, 108, 149, 157, 165] as $line) {
 			self::assertSniffError($report, $line, EarlyExitSniff::CODE_EARLY_EXIT_NOT_USED, 'Use early exit instead of else.');
 		}
 
 		foreach ([115, 122, 129, 135, 141] as $line) {
 			self::assertSniffError($report, $line, EarlyExitSniff::CODE_EARLY_EXIT_NOT_USED, 'Use early exit to reduce code nesting.');
 		}
+
+		$this->assertAllFixedInFile($report);
 	}
 
 }

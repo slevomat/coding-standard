@@ -25,6 +25,12 @@ class DocCommentHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		self::assertFalse(DocCommentHelper::hasDocComment($this->getTestedCodeSnifferFile(), $this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithoutDocComment')));
 	}
 
+	public function testClassHasEmptyDocComment(): void
+	{
+		self::assertTrue(DocCommentHelper::hasDocComment($this->getTestedCodeSnifferFile(), $this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'EmptyDocComment')));
+		self::assertNull(DocCommentHelper::getDocCommentDescription($this->getTestedCodeSnifferFile(), $this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'EmptyDocComment')));
+	}
+
 	public function testClassHasDocCommentDescription(): void
 	{
 		self::assertTrue(DocCommentHelper::hasDocCommentDescription($this->getTestedCodeSnifferFile(), $this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithDocCommentAndDescription')));

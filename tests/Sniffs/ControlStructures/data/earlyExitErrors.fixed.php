@@ -154,3 +154,27 @@ for ($i = 0; $i < 100; $i++) {
 
 	doSomething();
 }
+
+function logicalAndCondition() {
+	if (!(true && true)) {
+		return;
+	}
+
+	doSomething();
+}
+
+function logicalOrCondition() {
+	if (!(true || true)) {
+		return;
+	}
+
+	doSomething();
+}
+
+function indentedBySpaces() {
+    if (!true) {
+        return;
+    }
+
+    doSomething();
+}

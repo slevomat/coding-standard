@@ -142,3 +142,27 @@ for ($i = 0; $i < 100; $i++) {
 		doSomething();
 	}
 }
+
+function logicalAndCondition() {
+	if (true && true) {
+		doSomething();
+	} else {
+		return;
+	}
+}
+
+function logicalOrCondition() {
+	if (true || true) {
+		doSomething();
+	} else {
+		return;
+	}
+}
+
+function indentedBySpaces() {
+    if (true) {
+        doSomething();
+    } else {
+        return;
+    }
+}
