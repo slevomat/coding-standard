@@ -30,7 +30,9 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$pointerInElse = TokenHelper::findNextEffective($phpcsFile, $tokens[$elsePointer]['scope_opener'] + 1);
 
-		if (!in_array($tokens[$pointerInElse]['code'], [T_RETURN, T_CONTINUE, T_BREAK, T_THROW, T_YIELD, T_EXIT], true)) {
+		$earlyExitTokenCodes = [T_RETURN, T_CONTINUE, T_BREAK, T_THROW, T_YIELD, T_EXIT];
+
+		if (!in_array($tokens[$pointerInElse]['code'], $earlyExitTokenCodes, true)) {
 			return;
 		}
 
@@ -38,6 +40,12 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$previousConditionPointer = $tokens[$previousConditionCloseParenthesisPointer]['scope_condition'];
 
 		if ($tokens[$previousConditionPointer]['code'] === T_ELSEIF) {
+			return;
+		}
+
+		$pointerInIf = TokenHelper::findNextEffective($phpcsFile, $tokens[$previousConditionPointer]['scope_opener'] + 1);
+
+		if (in_array($tokens[$pointerInIf]['code'], $earlyExitTokenCodes, true)) {
 			return;
 		}
 

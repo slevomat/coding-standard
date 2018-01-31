@@ -2,7 +2,7 @@
 
 function () {
 	if (true) {
-		return true;
+		// Something
 	} else {
 		return false;
 	}

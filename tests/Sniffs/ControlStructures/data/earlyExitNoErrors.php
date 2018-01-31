@@ -81,3 +81,11 @@ function () {
 		throw new Exception();
 	}
 };
+
+function () {
+	if (true) {
+		return true;
+	} else {
+		return false;
+	}
+};
