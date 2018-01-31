@@ -178,7 +178,11 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		return TokenHelper::getContent($phpcsFile, $tokens[$scopePointer]['scope_opener'] + 1, $tokens[$scopePointer]['scope_closer'] - 1);
 	}
 
-	private function getEarlyExitCode(int $code): string
+	/**
+	 * @param string|int $code
+	 * @return string
+	 */
+	private function getEarlyExitCode($code): string
 	{
 		if (in_array($code, [T_WHILE, T_DO, T_FOREACH, T_FOR], true)) {
 			return 'continue';
