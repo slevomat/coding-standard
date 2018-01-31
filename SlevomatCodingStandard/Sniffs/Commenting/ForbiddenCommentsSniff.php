@@ -38,7 +38,7 @@ class ForbiddenCommentsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		foreach (SniffSettingsHelper::normalizeArray($this->forbiddenCommentPatterns) as $forbiddenCommentPattern) {
 			if (!SniffSettingsHelper::isValidRegularExpression($forbiddenCommentPattern)) {
-				continue;
+				throw new \Exception(sprintf('%s is not valid PCRE pattern.', $forbiddenCommentPattern));
 			}
 
 			foreach ($comments as $comment) {
