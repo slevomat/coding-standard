@@ -62,4 +62,44 @@ class SniffSettingsHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		]));
 	}
 
+	/**
+	 * @dataProvider validRegularExpressionsProvider
+	 * @dataProvider invalidRegularExpressionsProvider
+	 * @param string $expression
+	 * @param bool $valid
+	 */
+	public function testIsValidRegularExpression(string $expression, bool $valid): void
+	{
+		$this->assertSame($valid, SniffSettingsHelper::isValidRegularExpression($expression));
+	}
+
+	/**
+	 * @return mixed[][]
+	 */
+	public function validRegularExpressionsProvider(): array
+	{
+		return [
+			['~abc~', true],
+			['~abc~Aix', true],
+			['(hello)', true],
+			['{hello}', true],
+			['[hello]', true],
+			['##u', true],
+			['#some(more|coml[ea]?x)pattern#ui', true],
+		];
+	}
+
+	/**
+	 * @return mixed[][]
+	 */
+	public function invalidRegularExpressionsProvider(): array
+	{
+		return [
+			['abc', false],
+			['aregexpa', false],
+			['~abc', false],
+			['\\abc\\', false],
+		];
+	}
+
 }

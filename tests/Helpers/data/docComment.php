@@ -38,8 +38,11 @@ abstract class WithDocCommentAndDescription
 
 	/**
 	 * Function with doc comment and description
+	 * And is multi-line
 	 *
 	 * @see Whatever
+	 *
+	 * And also nothing here
 	 */
 	final public function withDocCommentAndDescription($d)
 	{

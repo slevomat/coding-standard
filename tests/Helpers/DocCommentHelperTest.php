@@ -102,6 +102,30 @@ class DocCommentHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$this->assertFalse(DocCommentHelper::hasDocCommentDescription($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withoutDocComment')));
 	}
 
+	public function testConstantGetDocCommentDescription(): void
+	{
+		$this->assertEquals(
+			['Constant WITH_DOC_COMMENT_AND_DESCRIPTION'],
+			$this->stringifyComments(DocCommentHelper::getDocCommentDescription($this->getTestedCodeSnifferFile(), $this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITH_DOC_COMMENT_AND_DESCRIPTION')))
+		);
+	}
+
+	public function testPropertyGetDocCommentDescription(): void
+	{
+		$this->assertSame(
+			['Property with doc comment and description'],
+			$this->stringifyComments(DocCommentHelper::getDocCommentDescription($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withDocCommentAndDescription')))
+		);
+	}
+
+	public function testFunctionGetDocCommentDescription(): void
+	{
+		$this->assertSame(
+			['Function with doc comment and description', 'And is multi-line'],
+			$this->stringifyComments(DocCommentHelper::getDocCommentDescription($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withDocCommentAndDescription')))
+		);
+	}
+
 	private function getTestedCodeSnifferFile(): \PHP_CodeSniffer\Files\File
 	{
 		if ($this->testedCodeSnifferFile === null) {
@@ -110,6 +134,17 @@ class DocCommentHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			);
 		}
 		return $this->testedCodeSnifferFile;
+	}
+
+	/**
+	 * @param \SlevomatCodingStandard\Helpers\Comment[] $comments
+	 * @return string[]
+	 */
+	private function stringifyComments(array $comments): array
+	{
+		return array_map(function (Comment $comment): string {
+			return $comment->getContent();
+		}, $comments);
 	}
 
 }

@@ -20,24 +20,71 @@ class DocCommentHelper
 		return trim(TokenHelper::getContent($codeSnifferFile, $docCommentOpenToken + 1, $codeSnifferFile->getTokens()[$docCommentOpenToken]['comment_closer'] - 1));
 	}
 
-	public static function hasDocCommentDescription(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $pointer): bool
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
+	 * @param int $pointer
+	 * @return \SlevomatCodingStandard\Helpers\Comment[]|null
+	 */
+	public static function getDocCommentDescription(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $pointer): ?array
 	{
-		$docCommentOpenToken = self::findDocCommentOpenToken($codeSnifferFile, $pointer);
-		if ($docCommentOpenToken === null) {
-			return false;
+		$docCommentOpenPointer = self::findDocCommentOpenToken($codeSnifferFile, $pointer);
+
+		if ($docCommentOpenPointer === null) {
+			return null;
 		}
 
 		$tokens = $codeSnifferFile->getTokens();
-		$found = TokenHelper::findNextExcluding($codeSnifferFile, [T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STAR], $docCommentOpenToken + 1, $tokens[$docCommentOpenToken]['comment_closer'] - 1);
+		$descriptionStartPointer = TokenHelper::findNextExcluding(
+			$codeSnifferFile,
+			[T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STAR],
+			$docCommentOpenPointer + 1,
+			$tokens[$docCommentOpenPointer]['comment_closer']
+		);
 
-		return $found !== null && $tokens[$found]['code'] === T_DOC_COMMENT_STRING;
+		if ($descriptionStartPointer === null) {
+			return null;
+		}
+
+		if ($tokens[$descriptionStartPointer]['code'] !== T_DOC_COMMENT_STRING) {
+			return null;
+		}
+
+		$tokenAfterDescriptionPointer = TokenHelper::findNext(
+			$codeSnifferFile,
+			[T_DOC_COMMENT_TAG, T_DOC_COMMENT_CLOSE_TAG],
+			$descriptionStartPointer + 1,
+			$tokens[$docCommentOpenPointer]['comment_closer'] + 1
+		);
+
+		/** @var \SlevomatCodingStandard\Helpers\Comment[] $comments */
+		$comments = [];
+		for ($i = $descriptionStartPointer; $i < $tokenAfterDescriptionPointer; $i++) {
+			if ($tokens[$i]['code'] !== T_DOC_COMMENT_STRING) {
+				continue;
+			}
+
+			$comments[] = new Comment($i, $tokens[$i]['content']);
+		}
+
+		return count($comments) > 0 ? $comments : null;
+	}
+
+	public static function hasDocCommentDescription(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $pointer): bool
+	{
+		return self::getDocCommentDescription($codeSnifferFile, $pointer) !== null;
 	}
 
 	public static function findDocCommentOpenToken(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $pointer): ?int
 	{
+		$tokens = $codeSnifferFile->getTokens();
+
+		if ($tokens[$pointer]['code'] === T_DOC_COMMENT_OPEN_TAG) {
+			return $pointer;
+		}
+
 		$found = TokenHelper::findPreviousExcluding($codeSnifferFile, [T_WHITESPACE, T_COMMENT, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT], $pointer - 1);
-		if ($found !== null && $codeSnifferFile->getTokens()[$found]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
-			return $codeSnifferFile->getTokens()[$found]['comment_opener'];
+		if ($found !== null && $tokens[$found]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
+			return $tokens[$found]['comment_opener'];
 		}
 
 		return null;
