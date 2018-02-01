@@ -58,6 +58,31 @@ class TokenHelper
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param mixed|mixed[] $types
+	 * @param int $startPointer
+	 * @param int|null $endPointer
+	 * @return int[]
+	 */
+	public static function findNextAll(\PHP_CodeSniffer\Files\File $phpcsFile, $types, int $startPointer, ?int $endPointer = null): array
+	{
+		$pointers = [];
+
+		$actualStartPointer = $startPointer;
+		while (true) {
+			$pointer = self::findNext($phpcsFile, $types, $actualStartPointer, $endPointer);
+			if ($pointer === null) {
+				break;
+			}
+
+			$pointers[] = $pointer;
+			$actualStartPointer = $pointer + 1;
+		}
+
+		return $pointers;
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param mixed|mixed[] $types
 	 * @param string $content
 	 * @param int $startPointer
 	 * @param int|null $endPointer

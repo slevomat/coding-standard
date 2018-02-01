@@ -5,6 +5,23 @@ namespace SlevomatCodingStandard\Helpers;
 class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 {
 
+	public function testFindNextAll(): void
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/useStatements.php'
+		);
+
+		$tokens = $codeSnifferFile->getTokens();
+
+		$pointers = TokenHelper::findNextAll($codeSnifferFile, [T_OPEN_TAG, T_CLASS, T_CLOSURE], 0);
+
+		self::assertCount(3, $pointers);
+
+		self::assertSame(T_OPEN_TAG, $tokens[$pointers[0]]['code']);
+		self::assertSame(T_CLASS, $tokens[$pointers[1]]['code']);
+		self::assertSame(T_CLOSURE, $tokens[$pointers[2]]['code']);
+	}
+
 	public function testFindNextEffective(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
