@@ -10,6 +10,9 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	public const CODE_EARLY_EXIT_NOT_USED = 'EarlyExitNotUsed';
 	public const CODE_USELESS_ELSE = 'UselessElse';
 
+	private const TAB_INDENT = "\t";
+	private const SPACES_INDENT = '    ';
+
 	/**
 	 * @return mixed[]
 	 */
@@ -208,7 +211,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 	private function prepareIndentation(string $identation): string
 	{
-		return $identation . ($identation[0] === "\t" ? "\t" : '    ');
+		return $identation . ($identation[0] === self::TAB_INDENT ? self::TAB_INDENT : self::SPACES_INDENT);
 	}
 
 	private function getScopeCode(\PHP_CodeSniffer\Files\File $phpcsFile, int $scopePointer): string
@@ -282,11 +285,11 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				return $line;
 			}
 
-			if ($line[0] === "\t") {
+			if ($line[0] === self::TAB_INDENT) {
 				return substr($line, 1);
 			}
 
-			if (substr($line, 0, 4) === '    ') {
+			if (substr($line, 0, 4) === self::SPACES_INDENT) {
 				return substr($line, 4);
 			}
 
