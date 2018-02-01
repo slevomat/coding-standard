@@ -85,7 +85,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			}
 
 			$elseCode = $this->getScopeCode($phpcsFile, $elsePointer);
-			$afterIfCode = $this->unindent($elseCode, $phpcsFile->eolChar);
+			$afterIfCode = $this->fixIndentation($elseCode, $phpcsFile->eolChar, $this->prepareIndentation($this->getIndentation($phpcsFile, $ifPointer)));
 
 			$phpcsFile->fixer->addContent(
 				$tokens[$elsePointer]['scope_closer'],
@@ -118,7 +118,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$ifCode = $this->getScopeCode($phpcsFile, $ifPointer);
 			$elseCode = $this->getScopeCode($phpcsFile, $elsePointer);
 			$negativeIfCondition = $this->getNegativeIfCondition($phpcsFile, $ifPointer);
-			$afterIfCode = $this->unindent($ifCode, $phpcsFile->eolChar);
+			$afterIfCode = $this->fixIndentation($ifCode, $phpcsFile->eolChar, $this->getIndentation($phpcsFile, $ifPointer));
 
 			$phpcsFile->fixer->addContent(
 				$ifPointer,
@@ -162,7 +162,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$ifCode = $this->getScopeCode($phpcsFile, $ifPointer);
 		$ifIndentation = $this->getIndentation($phpcsFile, $ifPointer);
 		$earlyExitCode = $this->getEarlyExitCode($tokens[$scopePointer]['code']);
-		$earlyExitCodeIndentation = $ifIndentation . ($ifIndentation[0] === "\t" ? "\t" : '    ');
+		$earlyExitCodeIndentation = $this->prepareIndentation($ifIndentation);
 
 		$negativeIfCondition = $this->getNegativeIfCondition($phpcsFile, $ifPointer);
 
@@ -172,7 +172,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 
-		$afterIfCode = $this->unindent($ifCode, $phpcsFile->eolChar);
+		$afterIfCode = $this->fixIndentation($ifCode, $phpcsFile->eolChar, $ifIndentation);
 
 		$phpcsFile->fixer->addContent(
 			$ifPointer,
@@ -204,6 +204,11 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 
 		return trim($indentation, "\n\r");
+	}
+
+	private function prepareIndentation(string $identation): string
+	{
+		return $identation . ($identation[0] === "\t" ? "\t" : '    ');
 	}
 
 	private function getScopeCode(\PHP_CodeSniffer\Files\File $phpcsFile, int $scopePointer): string
@@ -270,9 +275,9 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		return sprintf('!%s', $ifCondition);
 	}
 
-	private function unindent(string $code, string $eolChar): string
+	private function fixIndentation(string $code, string $eolChar, string $defaultIndentation): string
 	{
-		return implode($eolChar, array_map(function (string $line): string {
+		return implode($eolChar, array_map(function (string $line) use ($defaultIndentation): string {
 			if ($line === '') {
 				return $line;
 			}
@@ -281,7 +286,11 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				return substr($line, 1);
 			}
 
-			return substr($line, 4);
+			if (substr($line, 0, 4) === '    ') {
+				return substr($line, 4);
+			}
+
+			return $defaultIndentation . ltrim($line);
 		}, explode($eolChar, rtrim($code))));
 	}
 

@@ -196,3 +196,11 @@ function exitCodeIsNotOnFirstLineOfScope() {
 	doSomethingElse();
 	return false;
 }
+
+function inlineCommentAfterIf() {
+	if (!true) {
+		return false;
+	}
+	// Comment
+	doSomething();
+}

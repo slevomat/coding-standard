@@ -184,3 +184,11 @@ function exitCodeIsNotOnFirstLineOfScope() {
 		return false;
 	}
 }
+
+function inlineCommentAfterIf() {
+	if (true) { // Comment
+		doSomething();
+	} else {
+		return false;
+	}
+}
