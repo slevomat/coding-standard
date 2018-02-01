@@ -155,16 +155,16 @@ for ($i = 0; $i < 100; $i++) {
 	doSomething();
 }
 
-function logicalAndCondition() {
-	if (!(true && true)) {
+function logicalAndCondition($nullableString, $e) {
+	if (!true || $nullableString === null || $e instanceof Exception) {
 		return;
 	}
 
 	doSomething();
 }
 
-function logicalOrCondition() {
-	if (!(true || true)) {
+function logicalOrCondition($e, $number) {
+	if (!true && !($e instanceof Exception) && $number > 0) {
 		return;
 	}
 
@@ -202,5 +202,21 @@ function inlineCommentAfterIf() {
 		return false;
 	}
 	// Comment
+	doSomething();
+}
+
+function logicalCombinedCondition() {
+	if (!((true && true) || false)) {
+		return;
+	}
+
+	doSomething();
+}
+
+function logicalXorCondition() {
+	if (!(true xor false)) {
+		return;
+	}
+
 	doSomething();
 }

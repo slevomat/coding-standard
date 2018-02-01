@@ -120,7 +120,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 			$ifCode = $this->getScopeCode($phpcsFile, $ifPointer);
 			$elseCode = $this->getScopeCode($phpcsFile, $elsePointer);
-			$negativeIfCondition = $this->getNegativeIfCondition($phpcsFile, $ifPointer);
+			$negativeIfCondition = $this->getNegativeCondition($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'] + 1, $tokens[$ifPointer]['parenthesis_closer'] - 1);
 			$afterIfCode = $this->fixIndentation($ifCode, $phpcsFile->eolChar, $this->getIndentation($phpcsFile, $ifPointer));
 
 			$phpcsFile->fixer->addContent(
@@ -167,7 +167,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$earlyExitCode = $this->getEarlyExitCode($tokens[$scopePointer]['code']);
 		$earlyExitCodeIndentation = $this->prepareIndentation($ifIndentation);
 
-		$negativeIfCondition = $this->getNegativeIfCondition($phpcsFile, $ifPointer);
+		$negativeIfCondition = $this->getNegativeCondition($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'] + 1, $tokens[$ifPointer]['parenthesis_closer'] - 1);
 
 		$phpcsFile->fixer->beginChangeset();
 
@@ -233,49 +233,91 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		return 'return';
 	}
 
-	private function getNegativeIfCondition(\PHP_CodeSniffer\Files\File $phpcsFile, int $ifPointer): string
+	private function getNegativeCondition(\PHP_CodeSniffer\Files\File $phpcsFile, int $startPointer, int $endPointer): string
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$ifCondition = TokenHelper::getContent($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'] + 1, $tokens[$ifPointer]['parenthesis_closer'] - 1);
+		$condition = TokenHelper::getContent($phpcsFile, $startPointer, $endPointer);
 
-		$booleanPointer = TokenHelper::findNext($phpcsFile, \PHP_CodeSniffer\Util\Tokens::$booleanOperators, $tokens[$ifPointer]['parenthesis_opener'] + 1, $tokens[$ifPointer]['parenthesis_closer']);
-		if ($booleanPointer !== null) {
-			return sprintf('!(%s)', $ifCondition);
-		}
+		$booleanPointers = TokenHelper::findNextAll($phpcsFile, \PHP_CodeSniffer\Util\Tokens::$booleanOperators, $startPointer, $endPointer + 1);
+		if (count($booleanPointers) > 0) {
+			$uniqueBooleanOperators = array_unique(array_map(function (int $pointer) use ($tokens) {
+				return $tokens[$pointer]['code'];
+			}, $booleanPointers));
 
-		$booleanNotPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'] + 1);
-		if ($tokens[$booleanNotPointer]['code'] === T_BOOLEAN_NOT) {
-			return ltrim($ifCondition, '!');
-		}
-
-		if (TokenHelper::findNext($phpcsFile, T_INSTANCEOF, $tokens[$ifPointer]['parenthesis_opener'] + 1, $tokens[$ifPointer]['parenthesis_closer']) !== null) {
-			return sprintf('!(%s)', $ifCondition);
-		}
-
-		$comparisonPointer = TokenHelper::findNext($phpcsFile, [T_IS_EQUAL, T_IS_NOT_EQUAL, T_IS_IDENTICAL, T_IS_NOT_IDENTICAL, T_IS_SMALLER_OR_EQUAL, T_IS_GREATER_OR_EQUAL, T_LESS_THAN, T_GREATER_THAN], $tokens[$ifPointer]['parenthesis_opener'] + 1, $tokens[$ifPointer]['parenthesis_closer']);
-		if ($comparisonPointer !== null) {
-			$negativeIfCondition = '';
-
-			for ($i = $tokens[$ifPointer]['parenthesis_opener'] + 1; $i < $tokens[$ifPointer]['parenthesis_closer']; $i++) {
-				$comparisonReplacements = [
-					T_IS_EQUAL => '!=',
-					T_IS_NOT_EQUAL => '==',
-					T_IS_IDENTICAL => '!==',
-					T_IS_NOT_IDENTICAL => '===',
-					T_IS_GREATER_OR_EQUAL => '<',
-					T_IS_SMALLER_OR_EQUAL => '>',
-					T_GREATER_THAN => '<=',
-					T_LESS_THAN => '>=',
-				];
-
-				$negativeIfCondition .= array_key_exists($tokens[$i]['code'], $comparisonReplacements) ? $comparisonReplacements[$tokens[$i]['code']] : $tokens[$i]['content'];
+			if (count($uniqueBooleanOperators) > 1) {
+				return sprintf('!(%s)', $condition);
 			}
 
-			return $negativeIfCondition;
+			if ($uniqueBooleanOperators[0] === T_LOGICAL_XOR) {
+				return sprintf('!(%s)', $condition);
+			}
+
+			$negate = function (int $conditionBoundaryStart, int $conditionBoundaryEnd) use ($phpcsFile): string {
+				$conditionStartPointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $conditionBoundaryStart);
+				$conditionEndPointer = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $conditionBoundaryEnd);
+
+				return sprintf(
+					'%s%s%s',
+					$conditionBoundaryStart !== $conditionStartPointer ? TokenHelper::getContent($phpcsFile, $conditionBoundaryStart, $conditionStartPointer - 1) : '',
+					$this->getNegativeCondition($phpcsFile, $conditionStartPointer, $conditionEndPointer),
+					$conditionBoundaryEnd !== $conditionEndPointer ? TokenHelper::getContent($phpcsFile, $conditionEndPointer + 1, $conditionBoundaryEnd) : ''
+				);
+			};
+
+			$booleanOperatorReplacements = [
+				T_BOOLEAN_AND => '||',
+				T_BOOLEAN_OR => '&&',
+				T_LOGICAL_AND => 'or',
+				T_LOGICAL_OR => 'and',
+			];
+
+			$negativeCondition = $negate($startPointer, $booleanPointers[0] - 1);
+			for ($i = 0; $i < count($booleanPointers); $i++) {
+				$negativeCondition .= $booleanOperatorReplacements[$tokens[$booleanPointers[$i]]['code']];
+				$negativeCondition .= $negate($booleanPointers[$i] + 1, $i + 1 < count($booleanPointers) ? $booleanPointers[$i + 1] - 1 : $endPointer);
+			}
+
+			return $negativeCondition;
 		}
 
-		return sprintf('!%s', $ifCondition);
+		$booleanNotPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer);
+		if ($tokens[$booleanNotPointer]['code'] === T_BOOLEAN_NOT) {
+			$negativeCondition = preg_replace('~^!\\s*~', '', $condition);
+			return preg_replace('~\(\\s*(.+?)\\s*\)\\s*~', '\\1', $negativeCondition);
+		}
+
+		if (TokenHelper::findNext($phpcsFile, T_INSTANCEOF, $startPointer, $endPointer + 1) !== null) {
+			return sprintf('!(%s)', $condition);
+		}
+
+		$comparisonPointer = TokenHelper::findNext(
+			$phpcsFile,
+			[T_IS_EQUAL, T_IS_NOT_EQUAL, T_IS_IDENTICAL, T_IS_NOT_IDENTICAL, T_IS_SMALLER_OR_EQUAL, T_IS_GREATER_OR_EQUAL, T_LESS_THAN, T_GREATER_THAN],
+			$startPointer,
+			$endPointer + 1
+		);
+		if ($comparisonPointer !== null) {
+			$comparisonReplacements = [
+				T_IS_EQUAL => '!=',
+				T_IS_NOT_EQUAL => '==',
+				T_IS_IDENTICAL => '!==',
+				T_IS_NOT_IDENTICAL => '===',
+				T_IS_GREATER_OR_EQUAL => '<',
+				T_IS_SMALLER_OR_EQUAL => '>',
+				T_GREATER_THAN => '<=',
+				T_LESS_THAN => '>=',
+			];
+
+			$negativeCondition = '';
+			for ($i = $startPointer; $i <= $endPointer; $i++) {
+				$negativeCondition .= array_key_exists($tokens[$i]['code'], $comparisonReplacements) ? $comparisonReplacements[$tokens[$i]['code']] : $tokens[$i]['content'];
+			}
+
+			return $negativeCondition;
+		}
+
+		return sprintf('!%s', $condition);
 	}
 
 	private function fixIndentation(string $code, string $eolChar, string $defaultIndentation): string

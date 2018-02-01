@@ -143,16 +143,16 @@ for ($i = 0; $i < 100; $i++) {
 	}
 }
 
-function logicalAndCondition() {
-	if (true && true) {
+function logicalAndCondition($nullableString, $e) {
+	if (true && $nullableString !== null && !($e instanceof Exception)) {
 		doSomething();
 	} else {
 		return;
 	}
 }
 
-function logicalOrCondition() {
-	if (true || true) {
+function logicalOrCondition($e, $number) {
+	if (true || $e instanceof Exception || $number <= 0) {
 		doSomething();
 	} else {
 		return;
@@ -190,5 +190,21 @@ function inlineCommentAfterIf() {
 		doSomething();
 	} else {
 		return false;
+	}
+}
+
+function logicalCombinedCondition() {
+	if ((true && true) || false) {
+		doSomething();
+	} else {
+		return;
+	}
+}
+
+function logicalXorCondition() {
+	if (true xor false) {
+		doSomething();
+	} else {
+		return;
 	}
 }
