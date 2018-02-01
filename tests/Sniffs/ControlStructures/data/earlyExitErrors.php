@@ -166,3 +166,21 @@ function indentedBySpaces() {
         return;
     }
 }
+
+function ifHasExitCodeToo() {
+	if (true) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function exitCodeIsNotOnFirstLineOfScope() {
+	if (true) {
+		doSomething();
+		return true;
+	} else {
+		doSomethingElse();
+		return false;
+	}
+}

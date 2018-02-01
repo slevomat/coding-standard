@@ -8,6 +8,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	public const CODE_EARLY_EXIT_NOT_USED = 'EarlyExitNotUsed';
+	public const CODE_USELESS_ELSE = 'UselessElse';
 
 	/**
 	 * @return mixed[]
@@ -62,47 +63,76 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$ifPointer = $previousConditionPointer;
 
 		$lastSemicolonInIfScopePointer = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$ifPointer]['scope_closer'] - 1);
-		if ($tokens[$lastSemicolonInIfScopePointer]['code'] === T_SEMICOLON) {
-			$earlyExitInIfScopePointer = TokenHelper::findPreviousLocal($phpcsFile, $earlyExitTokenCodes, $lastSemicolonInIfScopePointer - 1, $tokens[$ifPointer]['scope_opener']);
-			if ($earlyExitInIfScopePointer !== null) {
+		$isEarlyExitInIfScope = $tokens[$lastSemicolonInIfScopePointer]['code'] === T_SEMICOLON
+			? TokenHelper::findPreviousLocal($phpcsFile, $earlyExitTokenCodes, $lastSemicolonInIfScopePointer - 1, $tokens[$ifPointer]['scope_opener']) !== null
+			: false;
+
+		if ($isEarlyExitInIfScope) {
+			$fix = $phpcsFile->addFixableError(
+				'Remove useless else to reduce code nesting.',
+				$elsePointer,
+				self::CODE_USELESS_ELSE
+			);
+
+			if (!$fix) {
 				return;
 			}
+
+			$phpcsFile->fixer->beginChangeset();
+
+			for ($i = $tokens[$ifPointer]['scope_closer'] + 1; $i <= $tokens[$elsePointer]['scope_closer']; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
+
+			$elseCode = $this->getScopeCode($phpcsFile, $elsePointer);
+			$afterIfCode = $this->unindent($elseCode, $phpcsFile->eolChar);
+
+			$phpcsFile->fixer->addContent(
+				$tokens[$elsePointer]['scope_closer'],
+				sprintf(
+					'%s%s',
+					$phpcsFile->eolChar,
+					$afterIfCode
+				)
+			);
+
+			$phpcsFile->fixer->endChangeset();
+
+		} else {
+			$fix = $phpcsFile->addFixableError(
+				'Use early exit instead of else.',
+				$elsePointer,
+				self::CODE_EARLY_EXIT_NOT_USED
+			);
+
+			if (!$fix) {
+				return;
+			}
+
+			$phpcsFile->fixer->beginChangeset();
+
+			for ($i = $ifPointer; $i <= $tokens[$elsePointer]['scope_closer']; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
+
+			$ifCode = $this->getScopeCode($phpcsFile, $ifPointer);
+			$elseCode = $this->getScopeCode($phpcsFile, $elsePointer);
+			$negativeIfCondition = $this->getNegativeIfCondition($phpcsFile, $ifPointer);
+			$afterIfCode = $this->unindent($ifCode, $phpcsFile->eolChar);
+
+			$phpcsFile->fixer->addContent(
+				$ifPointer,
+				sprintf(
+					'if (%s) {%s}%s%s',
+					$negativeIfCondition,
+					$elseCode,
+					$phpcsFile->eolChar,
+					$afterIfCode
+				)
+			);
+
+			$phpcsFile->fixer->endChangeset();
 		}
-
-		$fix = $phpcsFile->addFixableError(
-			'Use early exit instead of else.',
-			$elsePointer,
-			self::CODE_EARLY_EXIT_NOT_USED
-		);
-		if (!$fix) {
-			return;
-		}
-
-		$ifCode = $this->getScopeCode($phpcsFile, $ifPointer);
-		$elseCode = $this->getScopeCode($phpcsFile, $elsePointer);
-
-		$negativeIfCondition = $this->getNegativeIfCondition($phpcsFile, $ifPointer);
-
-		$phpcsFile->fixer->beginChangeset();
-
-		for ($i = $ifPointer; $i <= $tokens[$elsePointer]['scope_closer']; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
-
-		$afterIfCode = $this->unindent($ifCode, $phpcsFile->eolChar);
-
-		$phpcsFile->fixer->addContent(
-			$ifPointer,
-			sprintf(
-				'if (%s) {%s}%s%s',
-				$negativeIfCondition,
-				$elseCode,
-				$phpcsFile->eolChar,
-				$afterIfCode
-			)
-		);
-
-		$phpcsFile->fixer->endChangeset();
 	}
 
 	private function processIf(\PHP_CodeSniffer\Files\File $phpcsFile, int $ifPointer): void

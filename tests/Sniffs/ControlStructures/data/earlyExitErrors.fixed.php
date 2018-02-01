@@ -178,3 +178,21 @@ function indentedBySpaces() {
 
     doSomething();
 }
+
+function ifHasExitCodeToo() {
+	if (true) {
+		return true;
+	}
+
+	return false;
+}
+
+function exitCodeIsNotOnFirstLineOfScope() {
+	if (true) {
+		doSomething();
+		return true;
+	}
+
+	doSomethingElse();
+	return false;
+}
