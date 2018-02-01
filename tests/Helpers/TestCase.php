@@ -98,6 +98,33 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
+	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
+	 * @param int $line
+	 * @param int|string $tokenCode
+	 * @return int|null
+	 */
+	protected function findPointerByLineAndType(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $line, $tokenCode): ?int
+	{
+		$tokens = $codeSnifferFile->getTokens();
+		for ($i = 0; $i < count($tokens); $i++) {
+			if ($tokens[$i]['line'] > $line) {
+				return null;
+			}
+
+			if ($tokens[$i]['line'] < $line) {
+				continue;
+			}
+
+			if ($tokens[$i]['code'] !== $tokenCode) {
+				continue;
+			}
+
+			return $i;
+		}
+		return null;
+	}
+
+	/**
 	 * @param int|string $code
 	 * @return string|null
 	 */

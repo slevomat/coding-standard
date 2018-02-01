@@ -63,7 +63,7 @@ class DocCommentHelper
 				continue;
 			}
 
-			$comments[] = new Comment($i, $tokens[$i]['content']);
+			$comments[] = new Comment($i, trim($tokens[$i]['content']));
 		}
 
 		return count($comments) > 0 ? $comments : null;

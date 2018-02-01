@@ -132,6 +132,22 @@ class DocCommentHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		);
 	}
 
+	public function testUnboundGetDocCommentDescription(): void
+	{
+		self::assertSame(
+			['Created by Slevomat.'],
+			$this->stringifyComments(DocCommentHelper::getDocCommentDescription($this->getTestedCodeSnifferFile(), $this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 3, T_DOC_COMMENT_OPEN_TAG)))
+		);
+	}
+
+	public function testUnboundMultiLineGetDocCommentDescription(): void
+	{
+		self::assertSame(
+			['This is', 'multiline.'],
+			$this->stringifyComments(DocCommentHelper::getDocCommentDescription($this->getTestedCodeSnifferFile(), $this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 5, T_DOC_COMMENT_OPEN_TAG)))
+		);
+	}
+
 	private function getTestedCodeSnifferFile(): \PHP_CodeSniffer\Files\File
 	{
 		if ($this->testedCodeSnifferFile === null) {

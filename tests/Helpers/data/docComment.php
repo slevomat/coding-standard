@@ -1,5 +1,12 @@
 <?php
 
+/** Created by Slevomat. */
+
+/**
+ * This is
+ * multiline.
+ */
+
 /**
  * Class WithDocComment
  *
