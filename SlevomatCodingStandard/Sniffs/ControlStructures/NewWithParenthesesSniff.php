@@ -54,11 +54,9 @@ class NewWithParenthesesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			);
 
 			if (
-				!(
-					$shouldBeOpenParenthesisPointer !== null
-					&& $tokens[$shouldBeOpenParenthesisPointer]['code'] === T_CLOSE_SQUARE_BRACKET
-					&& $tokens[$shouldBeOpenParenthesisPointer]['bracket_opener'] > $newPointer
-				)
+				$shouldBeOpenParenthesisPointer === null
+				|| $tokens[$shouldBeOpenParenthesisPointer]['code'] !== T_CLOSE_SQUARE_BRACKET
+				|| $tokens[$shouldBeOpenParenthesisPointer]['bracket_opener'] <= $newPointer
 			) {
 				break;
 			}

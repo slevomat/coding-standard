@@ -139,7 +139,7 @@ class FunctionHelper
 					break;
 				}
 
-				if (!($conditionTokenCode === T_CLOSURE || $conditionTokenCode === T_ANON_CLASS)) {
+				if ($conditionTokenCode !== T_CLOSURE && $conditionTokenCode !== T_ANON_CLASS) {
 					continue;
 				}
 
@@ -149,7 +149,7 @@ class FunctionHelper
 		};
 
 		for ($i = $tokens[$functionPointer]['scope_opener'] + 1; $i < $tokens[$functionPointer]['scope_closer']; $i++) {
-			if (!($tokens[$i]['code'] === T_YIELD && $isInSameLevel($i))) {
+			if ($tokens[$i]['code'] !== T_YIELD || !$isInSameLevel($i)) {
 				continue;
 			}
 
@@ -157,7 +157,7 @@ class FunctionHelper
 		}
 
 		for ($i = $tokens[$functionPointer]['scope_opener'] + 1; $i < $tokens[$functionPointer]['scope_closer']; $i++) {
-			if (!($tokens[$i]['code'] === T_RETURN && $isInSameLevel($i))) {
+			if ($tokens[$i]['code'] !== T_RETURN || !$isInSameLevel($i)) {
 				continue;
 			}
 

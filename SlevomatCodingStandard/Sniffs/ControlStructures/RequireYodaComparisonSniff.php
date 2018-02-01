@@ -51,7 +51,7 @@ class RequireYodaComparisonSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 
 		$fix = $phpcsFile->addFixableError('Yoda comparison is required.', $comparisonTokenPointer, self::CODE_REQUIRED_YODA_COMPARISON);
-		if (!($fix && count($leftSideTokens) > 0 & count($rightSideTokens) > 0)) {
+		if (!$fix || count($leftSideTokens) === 0 || count($rightSideTokens) === 0) {
 			return;
 		}
 

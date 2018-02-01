@@ -51,7 +51,7 @@ class DisallowYodaComparisonSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 
 		$fix = $phpcsFile->addFixableError('Yoda comparisons are disallowed.', $comparisonTokenPointer, self::CODE_DISALLOWED_YODA_COMPARISON);
-		if (!($fix && count($leftSideTokens) > 0 & count($rightSideTokens) > 0)) {
+		if (!$fix || count($leftSideTokens) === 0 || count($rightSideTokens) === 0) {
 			return;
 		}
 

@@ -254,7 +254,9 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			}
 
 			$negate = function (int $conditionBoundaryStart, int $conditionBoundaryEnd) use ($phpcsFile): string {
+				/** @var int $conditionStartPointer */
 				$conditionStartPointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $conditionBoundaryStart);
+				/** @var int $conditionEndPointer */
 				$conditionEndPointer = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $conditionBoundaryEnd);
 
 				return sprintf(

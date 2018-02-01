@@ -530,7 +530,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return;
 		}
 
-		if (!($this->enableVoidTypeHint && !$returnsValue && $returnTypeHint === null)) {
+		if (!$this->enableVoidTypeHint || $returnsValue || $returnTypeHint !== null) {
 			return;
 		}
 
@@ -613,7 +613,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					break;
 				}
 
-				if (!(substr($usefulAnnotation, -1) === '\\' && strpos($annotation->getName(), $usefulAnnotation) === 0)) {
+				if (substr($usefulAnnotation, -1) !== '\\' || strpos($annotation->getName(), $usefulAnnotation) !== 0) {
 					continue;
 				}
 

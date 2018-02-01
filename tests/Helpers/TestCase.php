@@ -29,7 +29,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
-			if (!($tokens[$i]['code'] === T_STRING && $tokens[$i]['content'] === $name)) {
+			if ($tokens[$i]['code'] !== T_STRING || $tokens[$i]['content'] !== $name) {
 				continue;
 			}
 
@@ -47,7 +47,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
-			if (!($tokens[$i]['code'] === T_STRING && $tokens[$i]['content'] === $name)) {
+			if ($tokens[$i]['code'] !== T_STRING || $tokens[$i]['content'] !== $name) {
 				continue;
 			}
 
@@ -65,7 +65,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
-			if (!($tokens[$i]['code'] === T_VARIABLE && $tokens[$i]['content'] === sprintf('$%s', $name))) {
+			if ($tokens[$i]['code'] !== T_VARIABLE || $tokens[$i]['content'] !== sprintf('$%s', $name)) {
 				continue;
 			}
 
@@ -83,7 +83,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
-			if (!($tokens[$i]['code'] === T_STRING && $tokens[$i]['content'] === $name)) {
+			if ($tokens[$i]['code'] !== T_STRING || $tokens[$i]['content'] !== $name) {
 				continue;
 			}
 

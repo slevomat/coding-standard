@@ -65,7 +65,7 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$strictTypesPointer = null;
 		for ($i = $tokens[$declarePointer]['parenthesis_opener'] + 1; $i < $tokens[$declarePointer]['parenthesis_closer']; $i++) {
-			if (!($tokens[$i]['code'] === T_STRING && $tokens[$i]['content'] === 'strict_types')) {
+			if ($tokens[$i]['code'] !== T_STRING || $tokens[$i]['content'] !== 'strict_types') {
 				continue;
 			}
 

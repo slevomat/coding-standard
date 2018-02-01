@@ -29,7 +29,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
 		if (count($codesToCheck) > 0) {
 			foreach (static::getSniffClassReflection()->getConstants() as $constantName => $constantValue) {
-				if (!(strpos($constantName, 'CODE_') === 0 && !in_array($constantValue, $codesToCheck, true))) {
+				if (strpos($constantName, 'CODE_') !== 0 || in_array($constantValue, $codesToCheck, true)) {
 					continue;
 				}
 

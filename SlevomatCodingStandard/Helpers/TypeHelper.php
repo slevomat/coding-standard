@@ -21,7 +21,7 @@ class TypeHelper
 			throw new \Exception('PREG error ' . preg_last_error());
 		}
 
-		return !($result === 0 || $matches === null);
+		return $result !== 0 && $matches !== null;
 	}
 
 }

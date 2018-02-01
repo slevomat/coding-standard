@@ -47,10 +47,10 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$uniqueId = $nameReferencedWithoutSubNamespace
 				? UseStatement::getUniqueId($referencedName->getType(), $nameAsReferencedInFile)
 				: UseStatement::getUniqueId(ReferencedName::TYPE_DEFAULT, $nameAsReferencedInFile);
-			if (!(
-				!NamespaceHelper::isFullyQualifiedName($name)
-				&& isset($unusedNames[$uniqueId])
-			)) {
+			if (
+				NamespaceHelper::isFullyQualifiedName($name)
+				|| !isset($unusedNames[$uniqueId])
+			) {
 				continue;
 			}
 
@@ -78,10 +78,10 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 				foreach ($unusedNames as $i => $useStatement) {
 					$nameAsReferencedInFile = $useStatement->getNameAsReferencedInFile();
-					if (!(
-						preg_match('~^@' . preg_quote($nameAsReferencedInFile, '~') . '(?=[^a-z\\d]|$)~i', $tokens[$docCommentPointer]['content'])
-						|| preg_match('~(?<=^|[^a-z\\d\\\\])' . preg_quote($nameAsReferencedInFile, '~') . '(?=\\\\|[^a-z\\d]|$)~i', $tokens[$docCommentPointer]['content'])
-					)) {
+					if (
+						!preg_match('~^@' . preg_quote($nameAsReferencedInFile, '~') . '(?=[^a-z\\d]|$)~i', $tokens[$docCommentPointer]['content'])
+						&& !preg_match('~(?<=^|[^a-z\\d\\\\])' . preg_quote($nameAsReferencedInFile, '~') . '(?=\\\\|[^a-z\\d]|$)~i', $tokens[$docCommentPointer]['content'])
+					) {
 						continue;
 					}
 

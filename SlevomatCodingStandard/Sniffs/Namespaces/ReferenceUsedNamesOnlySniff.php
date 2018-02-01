@@ -344,7 +344,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 							$alreadyUsed = false;
 							foreach ($useStatements as $useStatement) {
-								if (!($useStatement->getType() === $referencedName->getType() && $useStatement->getFullyQualifiedTypeName() === $canonicalName)) {
+								if ($useStatement->getType() !== $referencedName->getType() || $useStatement->getFullyQualifiedTypeName() !== $canonicalName) {
 									continue;
 								}
 
