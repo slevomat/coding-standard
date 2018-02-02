@@ -25,12 +25,14 @@ class ForbiddenCommentsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $file
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $docCommentOpenPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $file, $docCommentOpenPointer): void
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $docCommentOpenPointer): void
 	{
-		$comments = DocCommentHelper::getDocCommentDescription($file, $docCommentOpenPointer);
+		$tokens = $phpcsFile->getTokens();
+
+		$comments = DocCommentHelper::getDocCommentDescription($phpcsFile, $docCommentOpenPointer);
 
 		if ($comments === null) {
 			return;
@@ -46,11 +48,33 @@ class ForbiddenCommentsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					continue;
 				}
 
-				$file->addError(
+				$fix = $phpcsFile->addFixableError(
 					sprintf('Documentation comment contains forbidden comment "%s".', $comment->getContent()),
 					$comment->getPointer(),
 					self::CODE_COMMENT_FORBIDDEN
 				);
+
+				if (!$fix) {
+					continue;
+				}
+
+				$phpcsFile->fixer->beginChangeset();
+
+				$fixedDocComment = preg_replace($forbiddenCommentPattern, '', $comment->getContent());
+
+				$phpcsFile->fixer->replaceToken($comment->getPointer(), $fixedDocComment);
+
+				for ($i = $comment->getPointer() - 1; $i > $docCommentOpenPointer; $i--) {
+					$contentWithoutSpaces = preg_replace('~ +$~', '', $tokens[$i]['content'], -1, $replacedCount);
+
+					if ($replacedCount === 0) {
+						break;
+					}
+
+					$phpcsFile->fixer->replaceToken($i, $contentWithoutSpaces);
+				}
+
+				$phpcsFile->fixer->endChangeset();
 			}
 		}
 	}
