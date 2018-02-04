@@ -38,6 +38,9 @@ class ClassWithSomeUnusedProperties extends \Consistence\ObjectPrototype
 		$this->writeOnlyProperty = 'foo';
 		$this->unusedPropertyWhichNameIsAlsoAFunction();
 		$this->usedPrivateMethod();
+		$foo = <<<CODE
+{$this->usedPrivateMethodInHereDoc()}
+CODE;
 	}
 
 	private function usedPrivateMethod()
@@ -125,6 +128,11 @@ class ClassWithSomeUnusedProperties extends \Consistence\ObjectPrototype
 	public function propertyUsedAsArrayKey()
 	{
 		return [$this->propertyUsedAsArrayKey => true];
+	}
+
+	private function usedPrivateMethodInHereDoc()
+	{
+
 	}
 
 }

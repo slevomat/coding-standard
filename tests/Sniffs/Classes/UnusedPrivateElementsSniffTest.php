@@ -46,61 +46,63 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		self::assertNoSniffError($resultFile, 33);
 		self::assertSniffError(
 			$resultFile,
-			48,
+			51,
 			UnusedPrivateElementsSniff::CODE_UNUSED_METHOD,
 			'Class ClassWithSomeUnusedProperties contains unused private method unusedPrivateMethod().'
 		);
-		self::assertNoSniffError($resultFile, 51);
-		self::assertNoSniffError($resultFile, 58);
-		self::assertNoSniffError($resultFile, 63);
+		self::assertNoSniffError($resultFile, 54);
+		self::assertNoSniffError($resultFile, 61);
+		self::assertNoSniffError($resultFile, 66);
 		self::assertSniffError(
 			$resultFile,
-			68,
+			71,
 			UnusedPrivateElementsSniff::CODE_UNUSED_METHOD,
 			'Class ClassWithSomeUnusedProperties contains unused private method unusedStaticPrivateMethod().'
 		);
-		self::assertNoSniffError($resultFile, 73);
+		self::assertNoSniffError($resultFile, 76);
 
-		self::assertNoSniffError($resultFile, 81);
-		self::assertNoSniffError($resultFile, 86);
-		self::assertNoSniffError($resultFile, 91);
+		self::assertNoSniffError($resultFile, 84);
+		self::assertNoSniffError($resultFile, 89);
+		self::assertNoSniffError($resultFile, 94);
 
 		self::assertSniffError(
 			$resultFile,
-			96,
+			99,
 			UnusedPrivateElementsSniff::CODE_UNUSED_METHOD,
 			'Class ClassWithSomeUnusedProperties contains unused private method unusedMethodReturningReference().'
 		);
 
 		self::assertSniffError(
 			$resultFile,
-			101,
+			104,
 			UnusedPrivateElementsSniff::CODE_UNUSED_PROPERTY,
 			'Class ClassWithSomeUnusedProperties contains unused property $unusedPropertyWithWeirdDefinition.'
 		);
 		self::assertSniffError(
 			$resultFile,
-			103,
+			106,
 			UnusedPrivateElementsSniff::CODE_WRITE_ONLY_PROPERTY,
 			'Class ClassWithSomeUnusedProperties contains write-only property $unusedWriteOnlyPropertyWithWeirdDefinition.'
 		);
 
-		self::assertNoSniffError($resultFile, 110);
+		self::assertNoSniffError($resultFile, 113);
 
 		self::assertSniffError(
 			$resultFile,
-			120,
+			123,
 			UnusedPrivateElementsSniff::CODE_UNUSED_PROPERTY,
 			'Class ClassWithSomeUnusedProperties contains unused property $unusedStaticProperty1.'
 		);
 		self::assertSniffError(
 			$resultFile,
-			121,
+			124,
 			UnusedPrivateElementsSniff::CODE_UNUSED_PROPERTY,
 			'Class ClassWithSomeUnusedProperties contains unused property $unusedStaticProperty2.'
 		);
 
-		self::assertNoSniffError($resultFile, 123);
+		self::assertNoSniffError($resultFile, 126);
+
+		self::assertNoSniffError($resultFile, 133);
 	}
 
 	public function testOnlyPublicElements(): void
