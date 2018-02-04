@@ -127,4 +127,21 @@ class ClassWithSomeUnusedProperties extends \Consistence\ObjectPrototype
 		return [$this->propertyUsedAsArrayKey => true];
 	}
 
+	private function methodUsedInHeredoc()
+	{
+
+	}
+
+	private $propertyUsedInHeredoc;
+
+	public function methodWithHeredoc()
+	{
+		$code = <<<CODE
+$this->propertyUsedInHeredoc
+code
+{$this->methodUsedInHeredoc()}
+code
+CODE;
+	}
+
 }

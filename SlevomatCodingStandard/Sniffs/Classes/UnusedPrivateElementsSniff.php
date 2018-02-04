@@ -210,9 +210,10 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return $tokenPointerAfterNextToken + 1;
 		};
 
-		while (($tokenPointer = TokenHelper::findNext($phpcsFile, [T_NEW, T_DOUBLE_QUOTED_STRING, T_DOUBLE_COLON, T_OBJECT_OPERATOR], $findUsagesStartTokenPointer, $classToken['scope_closer'])) !== null) {
+		while (($tokenPointer = TokenHelper::findNext($phpcsFile, [T_NEW, T_HEREDOC, T_DOUBLE_QUOTED_STRING, T_DOUBLE_COLON, T_OBJECT_OPERATOR], $findUsagesStartTokenPointer, $classToken['scope_closer'])) !== null) {
 			$token = $tokens[$tokenPointer];
-			if ($token['code'] === T_DOUBLE_QUOTED_STRING) {
+
+			if (in_array($token['code'], [T_HEREDOC, T_DOUBLE_QUOTED_STRING], true)) {
 				if (preg_match_all('~(?<!\\\\)\$this->(.+?\b)(?!\()~', $token['content'], $matches, PREG_PATTERN_ORDER)) {
 					foreach ($matches[1] as $propertyInString) {
 						if (!isset($reportedProperties[$propertyInString])) {
