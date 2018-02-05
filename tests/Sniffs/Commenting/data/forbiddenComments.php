@@ -39,7 +39,13 @@ class Foo
 	 */
 	public function withDescription()
 	{
+	}
 
+	public function inlineComments()
+	{
+		/** @var string $string blahblahblah */
+
+		/** blahblahblah */
 	}
 
 }

@@ -74,6 +74,48 @@ class ForbiddenCommentsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					$phpcsFile->fixer->replaceToken($i, $contentWithoutSpaces);
 				}
 
+				$isEmpty = true;
+				for ($i = $docCommentOpenPointer + 1; $i < $tokens[$docCommentOpenPointer]['comment_closer']; $i++) {
+					/** @var string|mixed[] $token */
+					$token = $phpcsFile->fixer->getTokenContent($i);
+
+					if (is_array($token) && $token['code'] === T_DOC_COMMENT_STAR) {
+						continue;
+					}
+
+					$tokenContent = is_array($token) ? $token['content'] : $token;
+					if (preg_match('~^[\\s\*]*$~', $tokenContent)) {
+						continue;
+					}
+
+					$isEmpty = false;
+					break;
+				}
+
+				if ($isEmpty) {
+					for ($i = $docCommentOpenPointer - 1; $i >= 0; $i--) {
+						$contentWithoutSpaces = preg_replace('~[\t ]+$~', '', $tokens[$i]['content'], -1, $replacedCount);
+
+						if ($replacedCount === 0) {
+							break;
+						}
+
+						$phpcsFile->fixer->replaceToken($i, $contentWithoutSpaces);
+					}
+					for ($i = $docCommentOpenPointer; $i <= $tokens[$docCommentOpenPointer]['comment_closer']; $i++) {
+						$phpcsFile->fixer->replaceToken($i, '');
+					}
+					for ($i = $tokens[$docCommentOpenPointer]['comment_closer'] + 1; $i < count($tokens); $i++) {
+						$contentWithoutSpaces = preg_replace('~^[\r\n]+~', '', $tokens[$i]['content'], -1, $replacedCount);
+
+						if ($replacedCount === 0) {
+							break;
+						}
+
+						$phpcsFile->fixer->replaceToken($i, $contentWithoutSpaces);
+					}
+				}
+
 				$phpcsFile->fixer->endChangeset();
 			}
 		}

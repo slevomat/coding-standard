@@ -1,14 +1,8 @@
 <?php
 
-/**
- *
- */
 class Foo
 {
 
-	/**
-	 *
-	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -39,6 +33,11 @@ class Foo
 	 */
 	public function withDescription()
 	{
+	}
+
+	public function inlineComments()
+	{
+		/** @var string $string blahblahblah */
 
 	}
 

@@ -27,13 +27,14 @@ class ForbiddenCommentsSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/forbiddenComments.php', [
 			'forbiddenCommentPatterns' => ['~Created by PhpStorm\.~', '~(\S+\s+)?Constructor\.~', '~(blah){3}~'],
-		]);
+		], [ForbiddenCommentsSniff::CODE_COMMENT_FORBIDDEN]);
 
-		self::assertSame(3, $report->getErrorCount());
+		self::assertSame(4, $report->getErrorCount());
 
 		self::assertSniffError($report, 4, ForbiddenCommentsSniff::CODE_COMMENT_FORBIDDEN);
 		self::assertSniffError($report, 10, ForbiddenCommentsSniff::CODE_COMMENT_FORBIDDEN);
 		self::assertSniffError($report, 36, ForbiddenCommentsSniff::CODE_COMMENT_FORBIDDEN);
+		self::assertSniffError($report, 48, ForbiddenCommentsSniff::CODE_COMMENT_FORBIDDEN);
 
 		self::assertAllFixedInFile($report);
 	}
