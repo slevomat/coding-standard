@@ -154,7 +154,7 @@ This sniff enforces trailing commas in multi-line arrays and requires short arra
 
 #### SlevomatCodingStandard.ControlStructures.NewWithParenthesesSniff 🔧
 
-`NewWithParenthesesSniff` checks and fixes "new" used without parentheses.
+Require `new` with parentheses.
 
 #### SlevomatCodingStandard.ControlStructures.DisallowYodaComparison/RequireYodaComparison 🔧
 
