@@ -93,7 +93,7 @@ Require usage of null coalesce operator when possible.
 
 #### SlevomatCodingStandard.ControlStructures.EarlyExit 🔧
 
-Require usage of early exit instead of using `else`.
+Require usage of early exit.
 
 ### Cleaning - detecting dead code
 
