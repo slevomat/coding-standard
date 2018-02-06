@@ -130,7 +130,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$nextPointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $tokens[$ifPointer]['scope_closer'] + 1);
-		if ($tokens[$nextPointer]['code'] !== T_CLOSE_CURLY_BRACKET) {
+		if ($nextPointer === null || $tokens[$nextPointer]['code'] !== T_CLOSE_CURLY_BRACKET) {
 			return;
 		}
 

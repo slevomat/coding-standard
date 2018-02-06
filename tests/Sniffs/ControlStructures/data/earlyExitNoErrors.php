@@ -139,3 +139,7 @@ foreach (['foo', 'bar'] as $identity) {
 		break;
 	}
 }
+
+if (!defined('PHPUNIT_COMPOSER_INSTALL')) {
+    define('PHPUNIT_COMPOSER_INSTALL', __DIR__ . '/autoload.php');
+}
