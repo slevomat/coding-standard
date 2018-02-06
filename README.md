@@ -192,6 +192,17 @@ use LogableTrait;
 use LoggerInterface;
 ```
 
+#### SlevomatCodingStandard.Namespaces.UseSpacing 🔧
+
+Enforces configurable number of lines before first `use`, after last `use` and between two different types of `use` (eg. between `use function` and `use const`).
+
+Sniff provides the following settings:
+
+* `linesCountBeforeFirstUse`: allows to configure the number of lines before first `use`.
+* `linesCountBetweenUseTypes`: allows to configure the number of lines between two different types of `use`.
+* `linesCountAfterLastUse`: allows to configure the number of lines after last `use`.
+
+
 #### SlevomatCodingStandard.TypeHints.LongTypeHints 🔧
 
 Enforces using shorthand scalar typehint variants in phpDocs: `int` instead of `integer` and `bool` instead of `boolean`. This is for consistency with native scalar typehints which also allow shorthand variants only.
