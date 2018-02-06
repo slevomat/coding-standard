@@ -277,7 +277,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$booleanNotPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer);
 		if ($tokens[$booleanNotPointer]['code'] === T_BOOLEAN_NOT) {
 			$negativeCondition = preg_replace('~^!\\s*~', '', $condition);
-			return preg_replace('~\(\\s*(.+?)\\s*\)\\s*~', '\\1', $negativeCondition);
+			return preg_replace('~^\(\\s*(.+?)\\s*\)\\s*~', '\\1', $negativeCondition);
 		}
 
 		if (TokenHelper::findNext($phpcsFile, T_INSTANCEOF, $startPointer, $endPointer + 1) !== null) {

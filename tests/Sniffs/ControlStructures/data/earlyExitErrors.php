@@ -208,3 +208,19 @@ function logicalXorCondition() {
 		return;
 	}
 }
+
+function negativeConditionWithFunctionCall() {
+	if (!preg_match($regex, $value)) {
+		$this->context->buildViolation($constraint->message)
+			->setParameter('%string%', $value)
+			->addViolation();
+	}
+}
+
+function negativeConditionWithMethodCall() {
+	foreach (array_reverse($this->getReflectionService()->getParentClasses($name)) as $parentClass) {
+		if (!$this->getDriver()->isTransient($parentClass)) {
+			$parentClasses[] = $parentClass;
+		}
+	}
+}
