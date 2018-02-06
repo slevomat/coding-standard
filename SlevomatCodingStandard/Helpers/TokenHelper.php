@@ -41,6 +41,16 @@ class TokenHelper
 		T_CALLABLE,
 	];
 
+	/** @var mixed[] */
+	public static $earlyExitTokenCodes = [
+		T_RETURN,
+		T_CONTINUE,
+		T_BREAK,
+		T_THROW,
+		T_YIELD,
+		T_EXIT,
+	];
+
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param mixed|mixed[] $types
