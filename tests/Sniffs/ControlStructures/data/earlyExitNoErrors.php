@@ -133,3 +133,12 @@ for ($i = 0; $i < 100; $i++) {
 
 	doSomethingAgain();
 }
+
+function passWhenConditionIsOnTheEndOfMethod()
+{
+	for ($i = 0; $i < 100; $i++) {
+		if ($i % 2 === 0) {
+			doSomething();
+		}
+	}
+}
