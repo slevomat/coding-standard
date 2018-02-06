@@ -133,3 +133,9 @@ for ($i = 0; $i < 100; $i++) {
 
 	doSomethingAgain();
 }
+
+foreach (['foo', 'bar'] as $identity) {
+	if ($identity === 'foo') {
+		break;
+	}
+}

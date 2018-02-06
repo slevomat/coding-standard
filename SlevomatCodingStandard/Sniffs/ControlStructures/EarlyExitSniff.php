@@ -44,15 +44,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$earlyExitTokenCodes = [T_RETURN, T_CONTINUE, T_BREAK, T_THROW, T_YIELD, T_EXIT];
-
-		$lastSemicolonInElseScopePointer = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$elsePointer]['scope_closer'] - 1);
-		if ($tokens[$lastSemicolonInElseScopePointer]['code'] !== T_SEMICOLON) {
-			return;
-		}
-
-		$earlyExitInElseScopePointer = TokenHelper::findPreviousLocal($phpcsFile, $earlyExitTokenCodes, $lastSemicolonInElseScopePointer - 1, $tokens[$elsePointer]['scope_opener']);
-		if ($earlyExitInElseScopePointer === null) {
+		if (!$this->isEarlyExitInScope($phpcsFile, $tokens[$elsePointer]['scope_opener'], $tokens[$elsePointer]['scope_closer'])) {
 			return;
 		}
 
@@ -65,12 +57,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$ifPointer = $previousConditionPointer;
 
-		$lastSemicolonInIfScopePointer = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$ifPointer]['scope_closer'] - 1);
-		$isEarlyExitInIfScope = $tokens[$lastSemicolonInIfScopePointer]['code'] === T_SEMICOLON
-			? TokenHelper::findPreviousLocal($phpcsFile, $earlyExitTokenCodes, $lastSemicolonInIfScopePointer - 1, $tokens[$ifPointer]['scope_opener']) !== null
-			: false;
-
-		if ($isEarlyExitInIfScope) {
+		if ($this->isEarlyExitInScope($phpcsFile, $tokens[$ifPointer]['scope_opener'], $tokens[$ifPointer]['scope_closer'])) {
 			$fix = $phpcsFile->addFixableError(
 				'Remove useless else to reduce code nesting.',
 				$elsePointer,
@@ -150,6 +137,10 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$scopePointer = $tokens[$nextPointer]['scope_condition'];
 
 		if (!in_array($tokens[$scopePointer]['code'], [T_FUNCTION, T_CLOSURE, T_WHILE, T_DO, T_FOREACH, T_FOR], true)) {
+			return;
+		}
+
+		if ($this->isEarlyExitInScope($phpcsFile, $tokens[$ifPointer]['scope_opener'], $tokens[$ifPointer]['scope_closer'])) {
 			return;
 		}
 
@@ -339,6 +330,14 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 			return $defaultIndentation . ltrim($line);
 		}, explode($eolChar, rtrim($code))));
+	}
+
+	private function isEarlyExitInScope(\PHP_CodeSniffer\Files\File $phpcsFile, int $startPointer, int $endPointer): bool
+	{
+		$lastSemicolonInScopePointer = TokenHelper::findPreviousEffective($phpcsFile, $endPointer - 1);
+		return $phpcsFile->getTokens()[$lastSemicolonInScopePointer]['code'] === T_SEMICOLON
+			? TokenHelper::findPreviousLocal($phpcsFile, TokenHelper::$earlyExitTokenCodes, $lastSemicolonInScopePointer - 1, $startPointer) !== null
+			: false;
 	}
 
 }
