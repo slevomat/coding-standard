@@ -179,6 +179,8 @@ use LogStandard;
 
 Sniff provides the following settings:
 
+
+* `psr12Compatible`: sets the required order to `classes`, `functions` and `constants`. Default is PHPStorm compatible: `classes`, `constants` and `functions`.
 * `caseSensitive`: compare namespaces case sensitively, which makes this order correct:
 
 ```php

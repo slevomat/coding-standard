@@ -63,9 +63,17 @@ class AlphabeticallySortedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\T
 		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/alphabeticalPatrik.php'));
 	}
 
-	public function testFixableUnusedUses(): void
+	public function testFixable(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableAlphabeticalSortedUses.php', [], [AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER]);
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testFixablePsr12Compatible(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/fixableAlphabeticalSortedUsesPsr12Compatible.php', [
+			'psr12Compatible' => true,
+		], [AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER]);
 		self::assertAllFixedInFile($report);
 	}
 

@@ -111,15 +111,4 @@ class UseStatement
 		return null;
 	}
 
-	public function compareByType(self $that): int
-	{
-		$order = [
-			self::TYPE_DEFAULT => 1,
-			self::TYPE_CONSTANT => 2,
-			self::TYPE_FUNCTION => 3,
-		];
-
-		return $order[$this->type] <=> $order[$that->type];
-	}
-
 }
