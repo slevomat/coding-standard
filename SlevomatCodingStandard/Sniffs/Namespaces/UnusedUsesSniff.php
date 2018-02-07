@@ -38,6 +38,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$unusedNames = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
 
+		$usedNames = [];
 		foreach ($referencedNames as $referencedName) {
 			$name = $referencedName->getNameAsReferencedInFile();
 			$pointer = $referencedName->getStartPointer();
@@ -64,8 +65,11 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					$unusedNames[$uniqueId]->getNameAsReferencedInFile()
 				), $pointer, self::CODE_MISMATCHING_CASE);
 			}
-			unset($unusedNames[$uniqueId]);
+
+			$usedNames[$uniqueId] = true;
 		}
+
+		$unusedNames = array_diff_key($unusedNames, $usedNames);
 
 		if ($this->searchAnnotations) {
 			$tokens = $phpcsFile->getTokens();
