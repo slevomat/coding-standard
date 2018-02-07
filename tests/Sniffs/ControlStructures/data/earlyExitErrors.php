@@ -224,3 +224,9 @@ function negativeConditionWithMethodCall() {
 		}
 	}
 }
+
+function binaryAndCondition() {
+	if ($invoke & INVOKE_MANAGER) {
+		$this->eventManager->dispatchEvent($eventName, $event);
+	}
+}

@@ -280,7 +280,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return preg_replace('~^\(\\s*(.+?)\\s*\)\\s*~', '\\1', $negativeCondition);
 		}
 
-		if (TokenHelper::findNext($phpcsFile, T_INSTANCEOF, $startPointer, $endPointer + 1) !== null) {
+		if (TokenHelper::findNext($phpcsFile, [T_INSTANCEOF, T_BITWISE_AND], $startPointer, $endPointer + 1) !== null) {
 			return sprintf('!(%s)', $condition);
 		}
 

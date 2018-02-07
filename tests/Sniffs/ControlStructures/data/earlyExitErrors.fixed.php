@@ -240,3 +240,11 @@ function negativeConditionWithMethodCall() {
 		$parentClasses[] = $parentClass;
 	}
 }
+
+function binaryAndCondition() {
+	if (!($invoke & INVOKE_MANAGER)) {
+		return;
+	}
+
+	$this->eventManager->dispatchEvent($eventName, $event);
+}
