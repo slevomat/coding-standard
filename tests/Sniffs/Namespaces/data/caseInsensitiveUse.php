@@ -1,7 +1,11 @@
 <?php
 
 use Foo\Bar;
+use Foo\Boo;
+
+new bar();
 
 new BAR();
 
-new BAR();
+/** @var boo */
+/** @BOO */
