@@ -13,6 +13,13 @@ class FooBar
 
 	use BarTrait;
 
+	function foo() {
+		$test = 'foo';
+		function() use ($test) {
+
+		};
+	}
+
 }
 
 $test = 'foo';

@@ -48,6 +48,11 @@ class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		);
 		$usePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
 		self::assertFalse(UseStatementHelper::isTraitUse($codeSnifferFile, $usePointer));
+
+		$classPointer = TokenHelper::findNext($codeSnifferFile, T_CLASS, 0);
+		$methodPointer = TokenHelper::findNext($codeSnifferFile, T_FUNCTION, $classPointer);
+		$usePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $methodPointer);
+		$this->assertFalse(UseStatementHelper::isTraitUse($codeSnifferFile, $usePointer));
 	}
 
 	public function testGetNameAsReferencedInClassFromUse(): void
