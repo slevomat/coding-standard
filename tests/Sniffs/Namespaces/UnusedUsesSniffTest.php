@@ -167,9 +167,19 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 	public function testReportCaseInsensitiveUse(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/caseInsensitiveUse.php');
+
+		self::assertSame(2, $report->getErrorCount());
+
 		self::assertSniffError(
 			$report,
 			5,
+			UnusedUsesSniff::CODE_MISMATCHING_CASE,
+			'Case of reference name BAR and use statement Bar do not match'
+		);
+
+		self::assertSniffError(
+			$report,
+			7,
 			UnusedUsesSniff::CODE_MISMATCHING_CASE,
 			'Case of reference name BAR and use statement Bar do not match'
 		);
