@@ -130,15 +130,10 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 
 		$whitespaceBefore = substr($tokens[$openTagPointer]['content'], strlen('<?php'));
-		$whitespeceBeforePointer = $openTagPointer + 1;
-		do {
-			if (!array_key_exists($whitespeceBeforePointer, $tokens) || $tokens[$whitespeceBeforePointer]['code'] !== T_WHITESPACE) {
-				break;
-			}
 
-			$whitespaceBefore .= $tokens[$whitespeceBeforePointer]['content'];
-			$whitespeceBeforePointer++;
-		} while (true);
+		if ($openTagPointer + 1 !== $declarePointer) {
+			$whitespaceBefore .= TokenHelper::getContent($phpcsFile, $openTagPointer + 1, $declarePointer - 1);
+		}
 
 		$requiredNewlinesCountBetweenOpenTagAndDeclare = SniffSettingsHelper::normalizeInteger($this->newlinesCountBetweenOpenTagAndDeclare);
 		if ($requiredNewlinesCountBetweenOpenTagAndDeclare === 0) {
@@ -185,44 +180,41 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		/** @var int $declareSemicolonPointer */
 		$declareSemicolonPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$declarePointer]['parenthesis_closer'] + 1);
+		$pointerAfterWhitespaceEnd = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $declareSemicolonPointer + 1);
+		if ($pointerAfterWhitespaceEnd === null) {
+			return;
+		}
 
-		$whitespaceAfter = '';
-		$whitespeceAfterPointer = $declareSemicolonPointer + 1;
-		do {
-			if (!array_key_exists($whitespeceAfterPointer, $tokens) || $tokens[$whitespeceAfterPointer]['code'] !== T_WHITESPACE) {
-				break;
-			}
-
-			$whitespaceAfter .= $tokens[$whitespeceAfterPointer]['content'];
-			$whitespeceAfterPointer++;
-		} while (true);
+		$whitespaceAfter = TokenHelper::getContent($phpcsFile, $declareSemicolonPointer + 1, $pointerAfterWhitespaceEnd - 1);
 
 		$requiredNewlinesCountAfter = SniffSettingsHelper::normalizeInteger($this->newlinesCountAfterDeclare);
 		$newlinesCountAfter = substr_count($whitespaceAfter, $phpcsFile->eolChar);
 
-		if (TokenHelper::findNextEffective($phpcsFile, $declareSemicolonPointer + 1) === null) {
-			// Empty file
-		} elseif ($newlinesCountAfter !== $requiredNewlinesCountAfter) {
-			$fix = $phpcsFile->addFixableError(
-				sprintf(
-					'Expected %d newlines after declare statement, found %d.',
-					$requiredNewlinesCountAfter,
-					$newlinesCountAfter
-				),
-				$declarePointer,
-				self::CODE_INCORRECT_WHITESPACE_AFTER_DECLARE
-			);
-			if ($fix) {
-				$phpcsFile->fixer->beginChangeset();
-				for ($i = $declareSemicolonPointer + 1; $i < $whitespeceAfterPointer; $i++) {
-					$phpcsFile->fixer->replaceToken($i, '');
-				}
-				for ($i = 0; $i < $requiredNewlinesCountAfter; $i++) {
-					$phpcsFile->fixer->addNewline($declareSemicolonPointer);
-				}
-				$phpcsFile->fixer->endChangeset();
-			}
+		if ($newlinesCountAfter === $requiredNewlinesCountAfter) {
+			return;
 		}
+
+		$fix = $phpcsFile->addFixableError(
+			sprintf(
+				'Expected %d newlines after declare statement, found %d.',
+				$requiredNewlinesCountAfter,
+				$newlinesCountAfter
+			),
+			$declarePointer,
+			self::CODE_INCORRECT_WHITESPACE_AFTER_DECLARE
+		);
+		if (!$fix) {
+			return;
+		}
+
+		$phpcsFile->fixer->beginChangeset();
+		for ($i = $declareSemicolonPointer + 1; $i < $pointerAfterWhitespaceEnd; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+		for ($i = 0; $i < $requiredNewlinesCountAfter; $i++) {
+			$phpcsFile->fixer->addNewline($declareSemicolonPointer);
+		}
+		$phpcsFile->fixer->endChangeset();
 	}
 
 }

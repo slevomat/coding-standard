@@ -84,7 +84,7 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 
 	public function testEmptyFile(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/declareStrictTypesEmptyFile.php', []);
+		$report = self::checkFile(__DIR__ . '/data/declareStrictTypesEmptyFile.php');
 		self::assertNoSniffErrorInFile($report);
 	}
 
