@@ -42,6 +42,16 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$file = new \PHP_CodeSniffer\Files\LocalFile($filePath, $codeSniffer->ruleset, $codeSniffer->config);
 		$file->process();
 
+		foreach ($file->getErrors() as $errorsOnLine) {
+			foreach ($errorsOnLine as $errorsOnPosition) {
+				foreach ($errorsOnPosition as $error) {
+					if (strpos($error['source'], 'Internal.') === 0) {
+						throw new \Exception($error['message']);
+					}
+				}
+			}
+		}
+
 		return $file;
 	}
 
