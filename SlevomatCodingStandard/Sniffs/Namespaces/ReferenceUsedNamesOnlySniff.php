@@ -355,7 +355,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 							$phpcsFile->fixer->beginChangeset();
 
 							if ($reference->fromDocComment) {
-								$fixedDocComment = preg_replace_callback('~(^|\|)' . preg_quote($name, '~') . '(\\s|\||\[)~', function (array $matches) use ($nameToReference): string {
+								$fixedDocComment = preg_replace_callback('~(^|\|)' . preg_quote($name, '~') . '(\\s|\||\[|$)~', function (array $matches) use ($nameToReference): string {
 									return $matches[1] . $nameToReference . $matches[2];
 								}, $tokens[$startPointer]['content']);
 

@@ -9,6 +9,11 @@ class Bar
 	private $property;
 
 	/**
+	 * @var \Foo\DateTime
+	 */
+	private $property2;
+
+	/**
 	 * @ORM\Column \Foo\Anything
 	 */
 	public function noErrors()
@@ -29,6 +34,13 @@ class Bar
 		/** @var \Foo\Traversable|array $variable */
 
 		/** @var BlaBla\Foo @variable2 */
+	}
+
+	/**
+	 * @return \Foo\Something
+	 */
+	public function method2()
+	{
 	}
 
 }
