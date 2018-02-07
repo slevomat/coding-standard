@@ -230,6 +230,12 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$condition = TokenHelper::getContent($phpcsFile, $startPointer, $endPointer);
 
+		$booleanNotPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer);
+		if ($tokens[$booleanNotPointer]['code'] === T_BOOLEAN_NOT) {
+			$negativeCondition = preg_replace('~^!\\s*~', '', $condition);
+			return preg_replace('~^\(\\s*(.+?)\\s*\)\\s*$~', '\\1', $negativeCondition);
+		}
+
 		$booleanPointers = TokenHelper::findNextAll($phpcsFile, \PHP_CodeSniffer\Util\Tokens::$booleanOperators, $startPointer, $endPointer + 1);
 		if (count($booleanPointers) > 0) {
 			$uniqueBooleanOperators = array_unique(array_map(function (int $pointer) use ($tokens) {
@@ -272,12 +278,6 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			}
 
 			return $negativeCondition;
-		}
-
-		$booleanNotPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer);
-		if ($tokens[$booleanNotPointer]['code'] === T_BOOLEAN_NOT) {
-			$negativeCondition = preg_replace('~^!\\s*~', '', $condition);
-			return preg_replace('~^\(\\s*(.+?)\\s*\)\\s*~', '\\1', $negativeCondition);
 		}
 
 		if (TokenHelper::findNext($phpcsFile, [T_INSTANCEOF, T_BITWISE_AND], $startPointer, $endPointer + 1) !== null) {

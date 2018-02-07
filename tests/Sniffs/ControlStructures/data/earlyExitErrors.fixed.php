@@ -248,3 +248,19 @@ function binaryAndCondition() {
 
 	$this->eventManager->dispatchEvent($eventName, $event);
 }
+
+function negativeLogicalAndCondition() {
+	if (isset($parameterMappings[$parameterName]) && array_key_exists($parameterName, $parameterMappings)) {
+		return;
+	}
+
+	unset($parameters[$key]);
+}
+
+function negativeLogicalOrCondition() {
+	if (isset($parameterMappings[$parameterName]) || array_key_exists($parameterName, $parameterMappings)) {
+		return;
+	}
+
+	unset($parameters[$key]);
+}
