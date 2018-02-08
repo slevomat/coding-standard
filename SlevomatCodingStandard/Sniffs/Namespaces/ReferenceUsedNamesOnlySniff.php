@@ -172,42 +172,36 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$definedConstantsIndex = array_flip(ConstantHelper::getAllNames($phpcsFile));
 
 		if ($this->allowFullyQualifiedNameForCollidingClasses) {
-			$classReferencesIndex = array_flip(
-				array_map(
-					function (\stdClass $reference): string {
-						return strtolower($reference->name);
-					},
-					array_filter($references, function (\stdClass $reference): bool {
-						return $reference->isClass;
-					})
-				)
-			);
+			$classReferences = array_filter($references, function (\stdClass $reference): bool {
+				return !$reference->fromDocComment && $reference->isClass;
+			});
+
+			$classReferencesIndex = [];
+			foreach ($classReferences as $classReference) {
+				$classReferencesIndex[strtolower($classReference->name)] = NamespaceHelper::resolveName($phpcsFile, $classReference->name, $classReference->type, $useStatements, $classReference->startPointer);
+			}
 		}
 
 		if ($this->allowFullyQualifiedNameForCollidingFunctions) {
-			$functionReferencesIndex = array_flip(
-				array_map(
-					function (\stdClass $reference): string {
-						return strtolower($reference->name);
-					},
-					array_filter($references, function (\stdClass $reference): bool {
-						return $reference->isFunction;
-					})
-				)
-			);
+			$functionReferences = array_filter($references, function (\stdClass $reference): bool {
+				return !$reference->fromDocComment && $reference->isFunction;
+			});
+
+			$functionReferencesIndex = [];
+			foreach ($functionReferences as $functionReference) {
+				$functionReferencesIndex[strtolower($functionReference->name)] = NamespaceHelper::resolveName($phpcsFile, $functionReference->name, $functionReference->type, $useStatements, $functionReference->startPointer);
+			}
 		}
 
 		if ($this->allowFullyQualifiedNameForCollidingConstants) {
-			$constantReferencesIndex = array_flip(
-				array_map(
-					function (\stdClass $reference): string {
-						return $reference->name;
-					},
-					array_filter($references, function (\stdClass $reference): bool {
-						return $reference->isConstant;
-					})
-				)
-			);
+			$constantReferences = array_filter($references, function (\stdClass $reference): bool {
+				return !$reference->fromDocComment && $reference->isConstant;
+			});
+
+			$constantReferencesIndex = [];
+			foreach ($constantReferences as $constantReference) {
+				$constantReferencesIndex[$constantReference->name] = NamespaceHelper::resolveName($phpcsFile, $constantReference->name, $constantReference->type, $useStatements, $constantReference->startPointer);
+			}
 		}
 
 		foreach ($references as $reference) {
@@ -226,7 +220,11 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			if ($isFullyQualified) {
 				if ($reference->isClass && $this->allowFullyQualifiedNameForCollidingClasses) {
 					$lowerCasedUnqualifiedClassName = strtolower($unqualifiedName);
-					if (isset($classReferencesIndex[$lowerCasedUnqualifiedClassName]) || array_key_exists($lowerCasedUnqualifiedClassName, $definedClassesIndex)) {
+					if (array_key_exists($lowerCasedUnqualifiedClassName, $definedClassesIndex)) {
+						continue;
+					}
+
+					if (isset($classReferencesIndex[$lowerCasedUnqualifiedClassName]) && $name !== $classReferencesIndex[$lowerCasedUnqualifiedClassName]) {
 						continue;
 					}
 				} elseif ($reference->isFunction && $this->allowFullyQualifiedNameForCollidingFunctions) {
