@@ -231,9 +231,10 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$condition = TokenHelper::getContent($phpcsFile, $startPointer, $endPointer);
 
 		$booleanNotPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer);
-		if ($tokens[$booleanNotPointer]['code'] === T_BOOLEAN_NOT) {
-			$negativeCondition = preg_replace('~^!\\s*~', '', $condition);
-			return preg_replace('~^\(\\s*(.+?)\\s*\)\\s*$~', '\\1', $negativeCondition);
+		$pointerAfterBooleanNot = TokenHelper::findNextEffective($phpcsFile, $booleanNotPointer + 1);
+
+		if ($tokens[$booleanNotPointer]['code'] === T_BOOLEAN_NOT && $tokens[$pointerAfterBooleanNot]['code'] === T_OPEN_PARENTHESIS) {
+			return TokenHelper::getContent($phpcsFile, $pointerAfterBooleanNot + 1, $tokens[$pointerAfterBooleanNot]['parenthesis_closer'] - 1);
 		}
 
 		$booleanPointers = TokenHelper::findNextAll($phpcsFile, \PHP_CodeSniffer\Util\Tokens::$booleanOperators, $startPointer, $endPointer + 1);
@@ -278,6 +279,10 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			}
 
 			return $negativeCondition;
+		}
+
+		if ($tokens[$booleanNotPointer]['code'] === T_BOOLEAN_NOT) {
+			return preg_replace('~^!\\s*~', '', $condition);
 		}
 
 		if (TokenHelper::findNext($phpcsFile, [T_INSTANCEOF, T_BITWISE_AND], $startPointer, $endPointer + 1) !== null) {
