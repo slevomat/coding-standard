@@ -847,4 +847,17 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testReferencingGlobalTypesInGlobalNamespace(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/referencingGlobalTypesInGlobalNamespace.php',
+			[
+				'allowFallbackGlobalFunctions' => false,
+				'allowFallbackGlobalConstants' => false,
+			]
+		);
+
+		self::assertNoSniffErrorInFile($report);
+	}
+
 }

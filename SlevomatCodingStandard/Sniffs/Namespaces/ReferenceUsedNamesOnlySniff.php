@@ -213,6 +213,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$isFullyQualified = NamespaceHelper::isFullyQualifiedName($name);
 			$isGlobalFallback = !$isFullyQualified
 				&& !NamespaceHelper::hasNamespace($name)
+				&& NamespaceHelper::findCurrentNamespaceName($phpcsFile, $startPointer) !== null
 				&& !array_key_exists(UseStatement::getUniqueId($reference->type, $name), $useStatements);
 			$isGlobalFunctionFallback = $reference->isFunction && $isGlobalFallback;
 			$isGlobalConstantFallback = $reference->isConstant && $isGlobalFallback;
