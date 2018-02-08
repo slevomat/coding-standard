@@ -264,3 +264,33 @@ function negativeLogicalOrCondition() {
 
 	unset($parameters[$key]);
 }
+
+function negativeLogicalConditionOnMoreLines() {
+	if (
+		isset($parameterMappings[$parameterName])
+		&& array_key_exists($parameterName, $parameterMappings)
+	) {
+		return;
+	}
+
+	unset($parameters[$key]);
+}
+
+function twoNegativeConditions() {
+	if (isset($data[$fieldName]) && $valueIsNull) {
+		return;
+	}
+
+	$data[$fieldName] = $value;
+}
+
+function twoNegetiveConditionsOnTwoLines() {
+	if (
+		isset($data[$fieldName])
+		&& $valueIsNull
+	) {
+		return;
+	}
+
+	$data[$fieldName] = $value;
+}
