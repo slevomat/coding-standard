@@ -294,3 +294,20 @@ function twoNegetiveConditionsOnTwoLines() {
 
 	$data[$fieldName] = $value;
 }
+
+function commentInCondition() {
+	if (
+		// Comment
+		!isset($a)
+		/*
+		 Comment
+		 */
+		|| $a !== 'a'
+		// Comment
+		|| $a === 'b'
+	) {
+		return;
+	}
+
+	doSomething();
+}
