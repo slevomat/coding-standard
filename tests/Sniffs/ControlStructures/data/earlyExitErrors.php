@@ -281,3 +281,37 @@ function commentInCondition() {
 		doSomething();
 	}
 }
+
+function veryUglyConditionFromDoctrine() {
+	foreach ($class->getDeclaredPropertiesIterator() as $field => $association) {
+		if ($association->getInversedBy()
+			&& $association instanceof OneToOneAssociationMetadata
+			// @TODO refactor this
+			// we don't want to set any values in un-initialized proxies
+			&& ! (
+				$newValue instanceof GhostObjectInterface
+				&& ! $newValue->isProxyInitialized()
+			)
+		) {
+			$inverseAssociation = $targetClass->getProperty($association->getInversedBy());
+
+			$inverseAssociation->setValue($newValue, $entity);
+		}
+	}
+}
+
+function veryUglyConditionFromDoctrineWithALittleChange() {
+	foreach ($class->getDeclaredPropertiesIterator() as $field => $association) {
+		if (! (
+				$newValue instanceof GhostObjectInterface
+				&& ! $newValue->isProxyInitialized()
+			)
+			&& $association->getInversedBy()
+			&& $association instanceof OneToOneAssociationMetadata
+		) {
+			$inverseAssociation = $targetClass->getProperty($association->getInversedBy());
+
+			$inverseAssociation->setValue($newValue, $entity);
+		}
+	}
+}
