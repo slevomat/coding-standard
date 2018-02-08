@@ -2,7 +2,9 @@
 
 namespace Foo\Test\Bla;
 
-class Bar
+use Foo\Something;
+
+abstract class Bar
 {
 
 	/** @var \DateTimeImmutable|int|\Foo\DateTime */
@@ -42,5 +44,11 @@ class Bar
 	public function method2()
 	{
 	}
+
+	/**
+	 * @param \Foo\Something $something
+	 * @return void
+	 */
+	abstract function abstractMethod(Something $something);
 
 }

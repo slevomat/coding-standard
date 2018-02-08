@@ -825,22 +825,24 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 				'searchAnnotations' => true,
 				'allowPartialUses' => false,
 				'allowFullyQualifiedGlobalClasses' => true,
+				'allowFullyQualifiedNameForCollidingClasses' => true,
 				'allowFullyQualifiedExceptions' => false,
 				'namespacesRequiredToUse' => ['Foo'],
 			]
 		);
 
-		self::assertSame(8, $report->getErrorCount());
+		self::assertSame(9, $report->getErrorCount());
 
-		self::assertSniffError($report, 8, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.');
-		self::assertSniffError($report, 12, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.');
-		self::assertSniffError($report, 27, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\ArrayObject should not be referenced via a fully qualified name, but via a use statement.');
-		self::assertSniffError($report, 29, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\Something should not be referenced via a fully qualified name, but via a use statement.');
-		self::assertSniffError($report, 30, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\Exception should not be referenced via a fully qualified name, but via a use statement.');
-		self::assertSniffError($report, 34, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\Traversable should not be referenced via a fully qualified name, but via a use statement.');
-		self::assertSniffError($report, 40, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\Something should not be referenced via a fully qualified name, but via a use statement.');
+		self::assertSniffError($report, 10, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.');
+		self::assertSniffError($report, 14, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.');
+		self::assertSniffError($report, 29, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\ArrayObject should not be referenced via a fully qualified name, but via a use statement.');
+		self::assertSniffError($report, 31, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\Something should not be referenced via a fully qualified name, but via a use statement.');
+		self::assertSniffError($report, 32, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\Exception should not be referenced via a fully qualified name, but via a use statement.');
+		self::assertSniffError($report, 36, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\Traversable should not be referenced via a fully qualified name, but via a use statement.');
+		self::assertSniffError($report, 42, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\Something should not be referenced via a fully qualified name, but via a use statement.');
+		self::assertSniffError($report, 49, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\Something should not be referenced via a fully qualified name, but via a use statement.');
 
-		self::assertSniffError($report, 36, ReferenceUsedNamesOnlySniff::CODE_PARTIAL_USE);
+		self::assertSniffError($report, 38, ReferenceUsedNamesOnlySniff::CODE_PARTIAL_USE);
 
 		self::assertAllFixedInFile($report);
 	}

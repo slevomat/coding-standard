@@ -1,13 +1,14 @@
 <?php
 
 namespace Foo\Test\Bla;
+
+use Foo\Something;
 use Foo\DateTime;
 use Foo\ArrayObject;
-use Foo\Something;
 use Foo\Exception;
 use Foo\Traversable;
 
-class Bar
+abstract class Bar
 {
 
 	/** @var \DateTimeImmutable|int|DateTime */
@@ -47,5 +48,11 @@ class Bar
 	public function method2()
 	{
 	}
+
+	/**
+	 * @param Something $something
+	 * @return void
+	 */
+	abstract function abstractMethod(Something $something);
 
 }
