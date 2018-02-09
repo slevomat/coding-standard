@@ -22,38 +22,42 @@ abstract class WithAnnotation
 
 }
 
-interface WithoutAnnotation
+abstract class WithoutAnnotation
 {
 
 	/**
 	 * @param string $a
 	 * @param string $b
 	 */
-	public function withAnnotation($b, $c);
+	abstract public function withAnnotation($b, $c);
 
 	/**
 	 * @Route("/", name="homepage")
 	 */
-	public function withParametrizedAnnotation();
+	abstract public function withParametrizedAnnotation();
 
 	/**
 	 * @Security("is_granted('ROLE_ADMIN')")
 	 */
-	public function withParametrizedAnnotationContainingParenthesis();
+	abstract public function withParametrizedAnnotationContainingParenthesis();
 
 	/**
 	 * @Assert\Callback()
 	 */
-	public function withParametrizedAnnotationWithoutParameters();
+	abstract public function withParametrizedAnnotationWithoutParameters();
 
 	/**
 	 * Without annotation
 	 */
-	public function withoutAnnotation();
+	abstract public function withoutAnnotation();
 
 	/**
 	 * @Route("/configs/{config}/domains/{domain}/locales/{locale}/messages", name="jms_translation_update_message",
 	 *     defaults = {"id" = null}, options = {"i18n" = false}, methods={"PUT"})
 	 */
-	public function withMultilineParametrizedAnnotation();
+	abstract public function withMultilineParametrizedAnnotation();
+
+	/** @ORM\OneToMany(targetEntity=Bar::class, mappedBy="boo") */
+	private $inlineDocComment;
+
 }
