@@ -3,6 +3,7 @@
 use Foo\Bar;
 use Foo\Boo;
 use Exception;
+use Uuid;
 
 new bar();
 
@@ -36,3 +37,7 @@ new BAR();
  */
 
 new Exception();
+
+/**
+ * @Serializer\Type("uuid")
+ */
