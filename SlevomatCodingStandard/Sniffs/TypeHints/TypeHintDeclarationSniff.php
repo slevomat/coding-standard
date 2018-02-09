@@ -862,7 +862,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 	private function definitionContainsTraversableTypeHintSpeficication(string $typeHintDefinition): bool
 	{
-		return (bool) preg_match('~\[\](?:\||$)~', $typeHintDefinition);
+		return (bool) preg_match('~\[\](?=\||$)~', $typeHintDefinition);
 	}
 
 	private function definitionContainsItemsSpecificationForTraversable(\PHP_CodeSniffer\Files\File $phpcsFile, int $pointer, string $typeHintDefinition): bool

@@ -90,8 +90,8 @@ class LongTypeHintsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 					$docComment = TokenHelper::getContent($phpcsFile, $docCommentOpenPointer, $docCommentClosePointer);
 
-					$fixedDocComment = preg_replace_callback('~((?:@(?:var|param|return)\\s+)|\|)' . preg_quote($type, '~') . '(\\s|\||\[)~', function (array $matches) use ($suggestType): string {
-						return $matches[1] . $suggestType . $matches[2];
+					$fixedDocComment = preg_replace_callback('~((?:@(?:var|param|return)\\s+)|\|)' . preg_quote($type, '~') . '(?=\\s|\||\[)~', function (array $matches) use ($suggestType): string {
+						return $matches[1] . $suggestType;
 					}, $docComment);
 
 					$phpcsFile->fixer->addContent($docCommentOpenPointer, $fixedDocComment);
