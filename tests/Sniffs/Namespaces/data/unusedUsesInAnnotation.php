@@ -8,6 +8,9 @@ use Foo\Bar;
 use X;
 use XX;
 use XXX;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping\Property;
+use ProxyManager\Proxy\GhostObjectInterface;
 
 /**
  * @ORM\Entity()
@@ -34,5 +37,12 @@ class Boo
 	{
 		/** @var XXX\UsedClass() $usedClass */
 	}
+
+	/**
+	 * @param iterable|Property[] $propertyMappings
+	 * @param array|Collection|object[] $collection The collection.
+	 * @return object|GhostObjectInterface|null The entity reference.
+	 */
+	public function bar($propertyMappings, $collection) {}
 
 }
