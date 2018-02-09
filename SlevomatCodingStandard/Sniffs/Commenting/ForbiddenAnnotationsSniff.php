@@ -53,6 +53,7 @@ class ForbiddenAnnotationsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		/** @var int $annotationStartPointer */
 		$annotationStartPointer = TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_STAR, $annotationPointer - 1);
+
 		/** @var int $nextPointer */
 		$nextPointer = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_TAG, T_DOC_COMMENT_CLOSE_TAG], $annotationPointer + 1);
 		if ($tokens[$nextPointer]['code'] === T_DOC_COMMENT_TAG) {
@@ -60,7 +61,14 @@ class ForbiddenAnnotationsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 		$annotationEndPointer = $nextPointer - 1;
 
+		if ($tokens[$nextPointer]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
+			$pointerBeforeWhitespace = TokenHelper::findPreviousExcluding($phpcsFile, [T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STAR], $annotationStartPointer - 1);
+			/** @var int $annotationStartPointer */
+			$annotationStartPointer = TokenHelper::findNext($phpcsFile, T_DOC_COMMENT_STAR, $pointerBeforeWhitespace + 1);
+		}
+
 		$phpcsFile->fixer->beginChangeset();
+
 		for ($i = $annotationStartPointer; $i <= $annotationEndPointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}

@@ -16,8 +16,8 @@ class Foo
 	}
 
 	/**
-	 * @see multiline()
 	 * @return int
+	 * @see multiline()
 	 * @throws \Exception
 	 */
 	public function get(): int
@@ -44,7 +44,30 @@ class Foo
 	 *
 	 * @see https://www.slevomat.cz
 	 */
-	public function withDescription()
+	public function forbiddenAnnotationAtTheEnd()
+	{
+
+	}
+
+	/**
+	 * @see https://www.slevomat.cz
+	 *
+	 * @return Description
+	 */
+	public function forbiddenAnnotationAtTheBeginning()
+	{
+
+	}
+
+	/**
+	 * Description description description
+	 *  description description
+	 *
+	 * @see https://www.slevomat.cz
+	 *
+	 * @return Description
+	 */
+	public function withEmptyLinesAroundForbiddenAnnotation()
 	{
 
 	}

@@ -19,22 +19,12 @@ class ForbiddenAnnotationsSniffTest extends \SlevomatCodingStandard\Sniffs\TestC
 			'forbiddenAnnotations' => ['@see', '@throws', '@Route'],
 		]);
 
-		self::assertSame(7, $report->getErrorCount());
+		self::assertSame(9, $report->getErrorCount());
 
-		self::assertSniffError($report, 5, ForbiddenAnnotationsSniff::CODE_ANNOTATION_FORBIDDEN);
-		self::assertSniffError($report, 6, ForbiddenAnnotationsSniff::CODE_ANNOTATION_FORBIDDEN);
-		self::assertSniffError($report, 19, ForbiddenAnnotationsSniff::CODE_ANNOTATION_FORBIDDEN);
-		self::assertSniffError($report, 21, ForbiddenAnnotationsSniff::CODE_ANNOTATION_FORBIDDEN);
-		self::assertSniffError($report, 30, ForbiddenAnnotationsSniff::CODE_ANNOTATION_FORBIDDEN);
-		self::assertSniffError($report, 32, ForbiddenAnnotationsSniff::CODE_ANNOTATION_FORBIDDEN);
-		self::assertSniffError($report, 45, ForbiddenAnnotationsSniff::CODE_ANNOTATION_FORBIDDEN);
-	}
+		foreach ([5, 6, 20, 21, 30, 32, 45, 53, 66] as $line) {
+			self::assertSniffError($report, $line, ForbiddenAnnotationsSniff::CODE_ANNOTATION_FORBIDDEN);
+		}
 
-	public function testFixableForbiddenAnnotations(): void
-	{
-		$report = self::checkFile(__DIR__ . '/data/forbiddenAnnotations.php', [
-			'forbiddenAnnotations' => ['@see', '@throws', '@Route'],
-		], [ForbiddenAnnotationsSniff::CODE_ANNOTATION_FORBIDDEN]);
 		self::assertAllFixedInFile($report);
 	}
 

@@ -29,9 +29,27 @@ class Foo
 	/**
 	 * Description description description
 	 *  description description
-	 *
 	 */
-	public function withDescription()
+	public function forbiddenAnnotationAtTheEnd()
+	{
+
+	}
+
+	/**
+	 * @return Description
+	 */
+	public function forbiddenAnnotationAtTheBeginning()
+	{
+
+	}
+
+	/**
+	 * Description description description
+	 *  description description
+	 *
+	 * @return Description
+	 */
+	public function withEmptyLinesAroundForbiddenAnnotation()
 	{
 
 	}
