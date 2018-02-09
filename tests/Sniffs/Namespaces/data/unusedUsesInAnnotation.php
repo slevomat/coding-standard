@@ -14,6 +14,7 @@ use ProxyManager\Proxy\GhostObjectInterface;
 use InvalidArgumentException;
 use LengthException;
 use RuntimeException;
+use Symfony\Component\Validator\Constraints as Assert2;
 
 /**
  * @ORM\Entity()
@@ -57,4 +58,12 @@ class Boo
 	{
 
 	}
+
 }
+
+/**
+ * @Validate(fields={
+ *     "widgetUuid"   = @Assert2\Uuid(),
+ *     "clientAuthKey" = @Assert2\NotBlank()
+ * })
+ */
