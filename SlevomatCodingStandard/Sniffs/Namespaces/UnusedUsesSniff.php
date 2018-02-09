@@ -81,6 +81,11 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 				$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 
+				if (count($annotations) === 0) {
+					$searchAnnotationsPointer = $tokens[$docCommentOpenPointer]['comment_closer'] + 1;
+					continue;
+				}
+
 				foreach ($unusedNames as $useStatement) {
 					$nameAsReferencedInFile = $useStatement->getNameAsReferencedInFile();
 					$uniqueId = UseStatement::getUniqueId($useStatement->getType(), $nameAsReferencedInFile);
@@ -107,7 +112,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 								continue;
 							}
 
-							if (!preg_match('~(?<=^|=|\{)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=::|,|\})~i', $annotation->getParameters(), $matches)) {
+							if (!preg_match('~(?<=^|=|\{)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=::)~i', $annotation->getParameters(), $matches)) {
 								continue;
 							}
 

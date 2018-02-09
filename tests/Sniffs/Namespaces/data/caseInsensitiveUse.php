@@ -12,6 +12,9 @@ new BAR();
 
 /** @var boo */
 /** @BOO */
+/**
+ * @ORM\OneToMany(targetEntity=boo::class, mappedBy="boo")
+ */
 
 /**
  * exception (at the beginning of description)
@@ -43,4 +46,9 @@ new Route();
 
 /**
  * @Route("/uuid/example")
+ */
+
+/**
+ * @Route("/widget/list", name="widget_list")
+ * @Route("/widget/view/{uuid}", name="widget_view")
  */
