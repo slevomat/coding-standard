@@ -11,6 +11,9 @@ use XXX;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\Property;
 use ProxyManager\Proxy\GhostObjectInterface;
+use InvalidArgumentException;
+use LengthException;
+use RuntimeException;
 
 /**
  * @ORM\Entity()
@@ -45,4 +48,13 @@ class Boo
 	 */
 	public function bar($propertyMappings, $collection) {}
 
+	/**
+	 * @expectedException InvalidArgumentException
+	 * @expectedException LengthException
+	 * @expectedException RuntimeException
+	*/
+	public function test()
+	{
+
+	}
 }
