@@ -156,6 +156,14 @@ class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCas
 		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/declareStrictTypesOneSpace.php'));
 	}
 
+	public function testDeclareStrictWithFileCommentAbove(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/declareStrictTypesWithFileCommentAbove.php', [
+			'newlinesCountBetweenOpenTagAndDeclare' => 2,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
 	public function testDeclareStrictWithTicks(): void
 	{
 		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/declareStrictTypesWithTicks.php'));

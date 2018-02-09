@@ -129,10 +129,15 @@ class DeclareStrictTypesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			}
 		}
 
-		$whitespaceBefore = substr($tokens[$openTagPointer]['content'], strlen('<?php'));
+		$pointerBeforeDeclare = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $declarePointer - 1);
 
-		if ($openTagPointer + 1 !== $declarePointer) {
-			$whitespaceBefore .= TokenHelper::getContent($phpcsFile, $openTagPointer + 1, $declarePointer - 1);
+		$whitespaceBefore = '';
+		if ($pointerBeforeDeclare === $openTagPointer) {
+			$whitespaceBefore .= substr($tokens[$openTagPointer]['content'], strlen('<?php'));
+		}
+
+		if ($pointerBeforeDeclare + 1 !== $declarePointer) {
+			$whitespaceBefore .= TokenHelper::getContent($phpcsFile, $pointerBeforeDeclare + 1, $declarePointer - 1);
 		}
 
 		$requiredNewlinesCountBetweenOpenTagAndDeclare = SniffSettingsHelper::normalizeInteger($this->newlinesCountBetweenOpenTagAndDeclare);
