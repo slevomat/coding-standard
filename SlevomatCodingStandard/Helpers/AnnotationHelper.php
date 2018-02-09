@@ -44,6 +44,7 @@ class AnnotationHelper
 
 			// Fix for wrong PHPCS parsing
 			$annotationCode = $tokens[$i]['content'];
+
 			for ($j = $i + 1; $j < $tokens[$docCommentOpenToken]['comment_closer']; $j++) {
 				if (!in_array($tokens[$j]['code'], [T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STRING, T_DOC_COMMENT_STAR], true)) {
 					break;
@@ -68,7 +69,7 @@ class AnnotationHelper
 			$annotationName = $tokens[$i]['content'];
 			$annotationParameters = null;
 			$annotationContent = null;
-			if (preg_match('~^(@[a-zA-Z\\\\]+)(?:\((.*?)\))?(?:\\s+(.+))?($)~s', $annotationCode, $matches)) {
+			if (preg_match('~^(@[a-zA-Z\\\\]+)(?:\((.*?)\))?(?:\\s+(.+))?($)~s', trim($annotationCode), $matches)) {
 				$annotationName = $matches[1];
 				$annotationParameters = trim($matches[2]);
 				if ($annotationParameters === '') {

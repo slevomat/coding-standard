@@ -94,6 +94,14 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		self::assertNull($annotations[0]->getContent());
 	}
 
+	public function testInlineDocCommentWithParametrizedAnnotation(): void
+	{
+		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'inlineDocComment'), '@ORM\OneToMany');
+		self::assertCount(1, $annotations);
+		self::assertSame('targetEntity=Bar::class, mappedBy="boo"', $annotations[0]->getParameters());
+		self::assertNull($annotations[0]->getContent());
+	}
+
 	public function testFunctionWithoutAnnotation(): void
 	{
 		self::assertCount(0, AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withoutAnnotation'), '@param'));
