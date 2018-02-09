@@ -107,7 +107,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 								continue;
 							}
 
-							if (!preg_match('~(?<=^|[^a-z\\d\\\\"\'])(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=[^a-z\\d"\']|$)~i', $annotation->getParameters(), $matches)) {
+							if (!preg_match('~(?<=^|=|\{)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=::|,|\})~i', $annotation->getParameters(), $matches)) {
 								continue;
 							}
 
@@ -124,17 +124,13 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 							), $annotation->getPointer(), self::CODE_MISMATCHING_CASE);
 						}
 
-						if (!in_array($annotationName, ['@var', '@param', '@return', '@throws'], true)) {
-							continue;
-						}
-
 						/** @var \SlevomatCodingStandard\Helpers\Annotation $annotation */
 						foreach ($annotationsByName as $annotation) {
 							if ($annotation->getContent() === null) {
 								continue;
 							}
 
-							if (!preg_match('~^(?:\\s+(?:[a-z\\d\\\\]+(?:\[\])?\|)+)?(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|\\\\|\||\[|$)~i', $annotation->getContent(), $matches)) {
+							if (!preg_match('~(?<=^|\|)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|\\\\|\||\[|$)~i', $annotation->getContent(), $matches)) {
 								continue;
 							}
 

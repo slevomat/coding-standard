@@ -4,6 +4,7 @@ use Foo\Bar;
 use Foo\Boo;
 use Exception;
 use Uuid;
+use Route;
 
 new bar();
 
@@ -32,12 +33,14 @@ new BAR();
  * @return \Exception exception in the param annotation
  */
 
-/**
- * @xxx exception in unsupported annotation
- */
-
 new Exception();
+new Uuid();
+new Route();
 
 /**
  * @Serializer\Type("uuid")
+ */
+
+/**
+ * @Route("/uuid/example")
  */
