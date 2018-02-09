@@ -66,8 +66,7 @@ class ReferencedName
 
 	public function hasSameUseStatementType(UseStatement $useStatement): bool
 	{
-		return $this->isConstant() === $useStatement->isConstant()
-			&& $this->isFunction() === $useStatement->isFunction();
+		return $this->getType() === $useStatement->getType();
 	}
 
 }
