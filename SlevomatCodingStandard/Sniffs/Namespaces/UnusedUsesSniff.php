@@ -56,9 +56,6 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				continue;
 			}
 
-			if ($nameReferencedWithoutSubNamespace && !$referencedName->hasSameUseStatementType($unusedNames[$uniqueId])) {
-				continue;
-			}
 			if ($unusedNames[$uniqueId]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
 				$phpcsFile->addError(sprintf(
 					'Case of reference name "%s" and use statement "%s" do not match.',
