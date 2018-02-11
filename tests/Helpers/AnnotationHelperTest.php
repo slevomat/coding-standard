@@ -107,6 +107,20 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		self::assertCount(0, AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withoutAnnotation'), '@param'));
 	}
 
+	public function testMultilineIndentedAnnotation(): void
+	{
+		$annotations = AnnotationHelper::getAnnotations($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'multilineIndentedAnnotation'));
+
+		self::assertCount(1, $annotations);
+		self::assertArrayHasKey('@X', $annotations);
+
+		$xAnnotations = $annotations['@X'];
+
+		self::assertCount(1, $xAnnotations);
+		self::assertSame('@X', $xAnnotations[0]->getName());
+		self::assertSame('Content', $xAnnotations[0]->getContent());
+	}
+
 	private function getTestedCodeSnifferFile(): \PHP_CodeSniffer\Files\File
 	{
 		if ($this->testedCodeSnifferFile === null) {

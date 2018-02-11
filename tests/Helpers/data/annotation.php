@@ -60,4 +60,16 @@ abstract class WithoutAnnotation
 	/** @ORM\OneToMany(targetEntity=Bar::class, mappedBy="boo") */
 	private $inlineDocComment;
 
+	/**
+	 * @X(
+	 *     a=Y::SOME,
+	 *     b={
+	 *         @Z(
+	 *             code=123
+	 *         )
+	 *     }
+	 * ) Content
+	 */
+	private $multilineIndentedAnnotation;
+
 }
