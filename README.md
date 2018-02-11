@@ -115,6 +115,7 @@ Looks for unused imports from other namespaces.
 Sniff provides the following settings:
 
 * `searchAnnotations` (defaults to `false`): enables searching for mentions in annotations, which is especially useful for projects using [Doctrine Annotations](https://github.com/doctrine/annotations)
+* `ignoredAnnotationNames`: case sensitive list of annotation names that the sniff should ignore (only the name is ignored, annotation content is still searched). Useful for name collisions like `@testCase` annotation and `TestCase` class.
 
 #### SlevomatCodingStandard.Namespaces.UseFromSameNamespace 🔧
 
