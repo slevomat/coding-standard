@@ -108,7 +108,7 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 			'searchAnnotations' => false,
 		]);
 
-		self::assertSame(13, $report->getErrorCount());
+		self::assertSame(17, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Assert is not used in this file.');
 		self::assertSniffError($report, 6, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Doctrine\ORM\Mapping (as ORM) is not used in this file.');
@@ -122,6 +122,10 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		self::assertSniffError($report, 15, UnusedUsesSniff::CODE_UNUSED_USE, 'Type LengthException is not used in this file.');
 		self::assertSniffError($report, 16, UnusedUsesSniff::CODE_UNUSED_USE, 'Type RuntimeException is not used in this file.');
 		self::assertSniffError($report, 17, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Symfony\Component\Validator\Constraints (as Assert2) is not used in this file.');
+		self::assertSniffError($report, 18, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Foo\Boo\A is not used in this file.');
+		self::assertSniffError($report, 19, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Foo\Boo\B is not used in this file.');
+		self::assertSniffError($report, 20, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Foo\Boo\C is not used in this file.');
+		self::assertSniffError($report, 21, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Foo\Boo\D is not used in this file.');
 	}
 
 	public function testUsedUseInAnnotationWithEnabledSearchAnnotations(): void

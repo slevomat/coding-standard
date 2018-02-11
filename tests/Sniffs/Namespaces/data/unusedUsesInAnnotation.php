@@ -15,6 +15,10 @@ use InvalidArgumentException;
 use LengthException;
 use RuntimeException;
 use Symfony\Component\Validator\Constraints as Assert2;
+use Foo\Boo\A;
+use Foo\Boo\B;
+use Foo\Boo\C;
+use Foo\Boo\D;
 
 /**
  * @ORM\Entity()
@@ -66,4 +70,11 @@ class Boo
  *     "widgetUuid"   = @Assert2\Uuid(),
  *     "clientAuthKey" = @Assert2\NotBlank()
  * })
+ */
+
+/**
+ * @CustomAnnotation(A::class)
+ * @CustomAnnotation(prop=B::class)
+ * @CustomAnnotation(@AnotherCustomAnnotation(C::class))
+ * @CustomAnnotation(prop=@AnotherCustomAnnotation(D::class))
  */
