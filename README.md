@@ -427,6 +427,18 @@ Sniff provides the following settings:
 
 * `forbiddenCommentPatterns`: allows to configure which comments are forbidden to be used. This is an array of regular expressions (PCRE) with delimiters.
 
+#### SlevomatCodingStandard.Commenting.DocCommentSpacing 🔧
+
+Enforces configurable number of lines before first content (description or annotation), after last content (description or annotation),
+between description and annotations, between two different annotations types (eg. between `@param` and `@return`).
+
+Sniff provides the following settings:
+
+* `linesCountBeforeFirstContent`: allows to configure the number of lines before first content (description or annotation).
+* `linesCountBetweenDescriptionAndAnnotations`: allows to configure the number of lines between description and annotations.
+* `linesCountBetweenDifferentAnnotationsTypes`: allows to configure the number of lines between two different annotations types.
+* `linesCountAfterLastContent`: allows to configure the number of lines after last content (description or annotation).
+
 #### SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration 🔧
 
 Reports invalid format of inline phpDocs with `@var`.
