@@ -19,6 +19,9 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	/** @var bool */
 	public $searchAnnotations = false;
 
+	/** @var string[] */
+	public $ignoredAnnotationNames = [];
+
 	/**
 	 * @return mixed[]
 	 */
@@ -89,16 +92,18 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 					foreach ($annotations as $annotationName => $annotationsByName) {
 						if (preg_match('~^@(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=[^a-z\\d]|$)~i', $annotationName, $matches)) {
-							$usedNames[$uniqueId] = true;
+							if (!in_array($matches[1], $this->ignoredAnnotationNames, true)) {
+								$usedNames[$uniqueId] = true;
 
-							if ($matches[1] !== $nameAsReferencedInFile) {
-								/** @var \SlevomatCodingStandard\Helpers\Annotation $annotation */
-								foreach ($annotationsByName as $annotation) {
-									$phpcsFile->addError(sprintf(
-										'Case of reference name "%s" and use statement "%s" do not match.',
-										$matches[1],
-										$unusedNames[$uniqueId]->getNameAsReferencedInFile()
-									), $annotation->getPointer(), self::CODE_MISMATCHING_CASE);
+								if ($matches[1] !== $nameAsReferencedInFile) {
+									/** @var \SlevomatCodingStandard\Helpers\Annotation $annotation */
+									foreach ($annotationsByName as $annotation) {
+										$phpcsFile->addError(sprintf(
+											'Case of reference name "%s" and use statement "%s" do not match.',
+											$matches[1],
+											$unusedNames[$uniqueId]->getNameAsReferencedInFile()
+										), $annotation->getPointer(), self::CODE_MISMATCHING_CASE);
+									}
 								}
 							}
 						}

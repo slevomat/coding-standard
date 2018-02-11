@@ -11,7 +11,9 @@ new bar();
 new BAR();
 
 /** @var boo */
-/** @BOO */
+/**
+ * @BOO(foo=bar::class)
+ */
 /**
  * @ORM\OneToMany(targetEntity=boo::class, mappedBy="boo")
  */
