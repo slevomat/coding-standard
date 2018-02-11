@@ -37,16 +37,27 @@ class AnnotationHelper
 		}
 
 		$tokens = $codeSnifferFile->getTokens();
-		for ($i = $docCommentOpenToken + 1; $i < $tokens[$docCommentOpenToken]['comment_closer']; $i++) {
+		$i = $docCommentOpenToken + 1;
+		while ($i < $tokens[$docCommentOpenToken]['comment_closer']) {
+			$annotationPointer = $i;
+
 			if ($tokens[$i]['code'] !== T_DOC_COMMENT_TAG) {
+				$i++;
 				continue;
 			}
 
 			// Fix for wrong PHPCS parsing
+			$parenthesesLevel = substr_count($tokens[$i]['content'], '(') - substr_count($tokens[$i]['content'], ')');
 			$annotationCode = $tokens[$i]['content'];
 
-			for ($j = $i + 1; $j < $tokens[$docCommentOpenToken]['comment_closer']; $j++) {
-				if (!in_array($tokens[$j]['code'], [T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STRING, T_DOC_COMMENT_STAR], true)) {
+			for ($j = $i + 1; $j <= $tokens[$docCommentOpenToken]['comment_closer']; $j++) {
+				if ($tokens[$j]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
+					$i = $j;
+					break;
+				}
+
+				if ($tokens[$j]['code'] === T_DOC_COMMENT_TAG && $parenthesesLevel === 0) {
+					$i = $j;
 					break;
 				}
 
@@ -63,13 +74,14 @@ class AnnotationHelper
 					}
 				}
 
+				$parenthesesLevel += substr_count($tokens[$j]['content'], '(') - substr_count($tokens[$j]['content'], ')');
 				$annotationCode .= $tokens[$j]['content'];
 			}
 
-			$annotationName = $tokens[$i]['content'];
+			$annotationName = $tokens[$annotationPointer]['content'];
 			$annotationParameters = null;
 			$annotationContent = null;
-			if (preg_match('~^(@[a-zA-Z\\\\]+)(?:\((.*?)\))?(?:\\s+(.+))?($)~s', trim($annotationCode), $matches)) {
+			if (preg_match('~^(@[a-zA-Z\\\\]+)(?:\((.*)\))?(?:\\s+(.+))?($)~s', trim($annotationCode), $matches)) {
 				$annotationName = $matches[1];
 				$annotationParameters = trim($matches[2]);
 				if ($annotationParameters === '') {
@@ -81,7 +93,7 @@ class AnnotationHelper
 				}
 			}
 
-			$annotations[$annotationName][] = new Annotation($annotationName, $i, $annotationParameters, $annotationContent);
+			$annotations[$annotationName][] = new Annotation($annotationName, $annotationPointer, $annotationParameters, $annotationContent);
 		}
 
 		return $annotations;
