@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
+use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\ConstantHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
@@ -353,18 +354,18 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 							$phpcsFile->fixer->beginChangeset();
 
-							if ($reference->fromDocComment) {
-								$fixedDocComment = preg_replace_callback('~(^|\|)' . preg_quote($name, '~') . '(\\s|\||\[|$)~', function (array $matches) use ($nameToReference): string {
-									return $matches[1] . $nameToReference . $matches[2];
-								}, $tokens[$startPointer]['content']);
+							for ($i = $startPointer; $i <= $reference->endPointer; $i++) {
+								$phpcsFile->fixer->replaceToken($i, '');
+							}
 
-								$phpcsFile->fixer->replaceToken($startPointer, $fixedDocComment);
+							if ($reference->fromDocComment) {
+								$fixedDocComment = preg_replace_callback('~(\\s|\|)' . preg_quote($name, '~') . '(\\s|\||\[|$)~', function (array $matches) use ($nameToReference): string {
+									return $matches[1] . $nameToReference . $matches[2];
+								}, TokenHelper::getContent($phpcsFile, $startPointer, $reference->endPointer));
+
+								$phpcsFile->fixer->addContent($startPointer, $fixedDocComment);
 
 							} else {
-								for ($i = $startPointer; $i <= $reference->endPointer; $i++) {
-									$phpcsFile->fixer->replaceToken($i, '');
-								}
-
 								$phpcsFile->fixer->addContent($startPointer, $nameToReference);
 							}
 
@@ -438,50 +439,53 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$searchAnnotationsPointer = $openTagPointer + 1;
 		while (true) {
-			$docCommentTagPointer = TokenHelper::findNext($phpcsFile, T_DOC_COMMENT_TAG, $searchAnnotationsPointer);
-			if ($docCommentTagPointer === null) {
+			$docCommentOpenPointer = TokenHelper::findNext($phpcsFile, T_DOC_COMMENT_OPEN_TAG, $searchAnnotationsPointer);
+			if ($docCommentOpenPointer === null) {
 				break;
 			}
 
-			if (!in_array($tokens[$docCommentTagPointer]['content'], ['@var', '@param', '@return', '@throws'], true)) {
-				$searchAnnotationsPointer = $docCommentTagPointer + 1;
-				continue;
-			}
+			$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 
-			$docCommentStringPointer = TokenHelper::findNextExcluding($phpcsFile, T_DOC_COMMENT_WHITESPACE, $docCommentTagPointer + 1);
-			if ($tokens[$docCommentStringPointer]['code'] !== T_DOC_COMMENT_STRING) {
-				$searchAnnotationsPointer = $docCommentStringPointer + 1;
-				continue;
-			}
-
-			$typesAsString = preg_split('~\\s+~', trim($tokens[$docCommentStringPointer]['content']))[0];
-			$types = explode('|', $typesAsString);
-			foreach ($types as $type) {
-				$type = rtrim($type, '[]');
-				$lowercasedType = strtolower($type);
-
-				if (
-					TypeHintHelper::isSimpleTypeHint($lowercasedType)
-					|| TypeHintHelper::isSimpleUnofficialTypeHints($lowercasedType)
-					|| !TypeHelper::isTypeName($type)
-				) {
+			foreach ($annotations as $annotationName => $annotationsByName) {
+				if (!in_array($annotationName, ['@var', '@param', '@return', '@throws'], true)) {
 					continue;
 				}
 
-				$reference = new \stdClass();
-				$reference->fromDocComment = true;
-				$reference->name = $type;
-				$reference->type = ReferencedName::TYPE_DEFAULT;
-				$reference->startPointer = $docCommentStringPointer;
-				$reference->endPointer = $docCommentStringPointer;
-				$reference->isClass = true;
-				$reference->isConstant = false;
-				$reference->isFunction = false;
+				foreach ($annotationsByName as $annotation) {
+					if ($annotation->getContent() === null) {
+						continue;
+					}
 
-				$references[] = $reference;
+					$typesAsString = preg_split('~\\s+~', $annotation->getContent())[0];
+					$types = explode('|', $typesAsString);
+					foreach ($types as $type) {
+						$type = rtrim($type, '[]');
+						$lowercasedType = strtolower($type);
+
+						if (
+							TypeHintHelper::isSimpleTypeHint($lowercasedType)
+							|| TypeHintHelper::isSimpleUnofficialTypeHints($lowercasedType)
+							|| !TypeHelper::isTypeName($type)
+						) {
+							continue;
+						}
+
+						$reference = new \stdClass();
+						$reference->fromDocComment = true;
+						$reference->name = $type;
+						$reference->type = ReferencedName::TYPE_DEFAULT;
+						$reference->startPointer = $annotation->getStartPointer();
+						$reference->endPointer = $annotation->getEndPointer();
+						$reference->isClass = true;
+						$reference->isConstant = false;
+						$reference->isFunction = false;
+
+						$references[] = $reference;
+					}
+				}
 			}
 
-			$searchAnnotationsPointer = $docCommentStringPointer + 1;
+			$searchAnnotationsPointer = $tokens[$docCommentOpenPointer]['comment_closer'] + 1;
 		}
 
 		return $references;
