@@ -5,15 +5,14 @@ use Foo\Boo;
 use Exception;
 use Uuid;
 use Route;
+use Ignore;
 
 new bar();
 
 new BAR();
 
 /** @var boo */
-/**
- * @BOO(foo=bar::class)
- */
+/** @BOO */
 /**
  * @ORM\OneToMany(targetEntity=boo::class, mappedBy="boo")
  */
@@ -53,4 +52,9 @@ new Route();
 /**
  * @Route("/widget/list", name="widget_list")
  * @Route("/widget/view/{uuid}", name="widget_view")
+ */
+
+
+/**
+ * @ignore(foo=uuid::class)
  */
