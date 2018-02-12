@@ -13,7 +13,7 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithAnnotation'), '@see');
 		self::assertCount(1, $annotations);
 		self::assertSame('@see', $annotations[0]->getName());
-		self::assertSame(4, $this->getLineByPointer($annotations[0]->getPointer()));
+		self::assertSame(4, $this->getLineByPointer($annotations[0]->getStartPointer()));
 		self::assertSame('https://www.slevomat.cz', $annotations[0]->getContent());
 	}
 
@@ -27,7 +27,7 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITH_ANNOTATION'), '@var');
 		self::assertCount(1, $annotations);
 		self::assertSame('@var', $annotations[0]->getName());
-		self::assertSame(10, $this->getLineByPointer($annotations[0]->getPointer()));
+		self::assertSame(10, $this->getLineByPointer($annotations[0]->getStartPointer()));
 		self::assertSame('bool', $annotations[0]->getContent());
 	}
 
@@ -41,7 +41,7 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withAnnotation'), '@var');
 		self::assertCount(1, $annotations);
 		self::assertSame('@var', $annotations[0]->getName());
-		self::assertSame(17, $this->getLineByPointer($annotations[0]->getPointer()));
+		self::assertSame(17, $this->getLineByPointer($annotations[0]->getStartPointer()));
 		self::assertSame('int', $annotations[0]->getContent());
 	}
 
@@ -55,10 +55,10 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withAnnotation'), '@param');
 		self::assertCount(2, $annotations);
 		self::assertSame('@param', $annotations[0]->getName());
-		self::assertSame(29, $this->getLineByPointer($annotations[0]->getPointer()));
+		self::assertSame(29, $this->getLineByPointer($annotations[0]->getStartPointer()));
 		self::assertSame('string $a', $annotations[0]->getContent());
 		self::assertSame('@param', $annotations[1]->getName());
-		self::assertSame(30, $this->getLineByPointer($annotations[1]->getPointer()));
+		self::assertSame(30, $this->getLineByPointer($annotations[1]->getStartPointer()));
 		self::assertSame('string $b', $annotations[1]->getContent());
 	}
 
@@ -119,6 +119,8 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		self::assertCount(1, $xAnnotations);
 		self::assertSame('@X', $xAnnotations[0]->getName());
 		self::assertSame('Content', $xAnnotations[0]->getContent());
+		self::assertSame(64, $this->getLineByPointer($xAnnotations[0]->getStartPointer()));
+		self::assertSame(72, $this->getLineByPointer($xAnnotations[0]->getEndPointer()));
 	}
 
 	private function getTestedCodeSnifferFile(): \PHP_CodeSniffer\Files\File

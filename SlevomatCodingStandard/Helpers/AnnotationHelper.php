@@ -39,12 +39,13 @@ class AnnotationHelper
 		$tokens = $codeSnifferFile->getTokens();
 		$i = $docCommentOpenToken + 1;
 		while ($i < $tokens[$docCommentOpenToken]['comment_closer']) {
-			$annotationPointer = $i;
-
 			if ($tokens[$i]['code'] !== T_DOC_COMMENT_TAG) {
 				$i++;
 				continue;
 			}
+
+			$annotationStartPointer = $i;
+			$annotationEndPointer = $i;
 
 			// Fix for wrong PHPCS parsing
 			$parenthesesLevel = substr_count($tokens[$i]['content'], '(') - substr_count($tokens[$i]['content'], ')');
@@ -76,9 +77,10 @@ class AnnotationHelper
 
 				$parenthesesLevel += substr_count($tokens[$j]['content'], '(') - substr_count($tokens[$j]['content'], ')');
 				$annotationCode .= $tokens[$j]['content'];
+				$annotationEndPointer = $j;
 			}
 
-			$annotationName = $tokens[$annotationPointer]['content'];
+			$annotationName = $tokens[$annotationStartPointer]['content'];
 			$annotationParameters = null;
 			$annotationContent = null;
 			if (preg_match('~^(@[a-zA-Z\\\\]+)(?:\((.*)\))?(?:\\s+(.+))?($)~s', trim($annotationCode), $matches)) {
@@ -93,7 +95,7 @@ class AnnotationHelper
 				}
 			}
 
-			$annotations[$annotationName][] = new Annotation($annotationName, $annotationPointer, $annotationParameters, $annotationContent);
+			$annotations[$annotationName][] = new Annotation($annotationName, $annotationStartPointer, $annotationEndPointer, $annotationParameters, $annotationContent);
 		}
 
 		return $annotations;

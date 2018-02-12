@@ -9,7 +9,10 @@ class Annotation
 	private $name;
 
 	/** @var int */
-	private $pointer;
+	private $startPointer;
+
+	/** @var int */
+	private $endPointer;
 
 	/** @var string|null */
 	private $parameters;
@@ -19,13 +22,15 @@ class Annotation
 
 	public function __construct(
 		string $name,
-		int $pointer,
+		int $startPointer,
+		int $endPointer,
 		?string $parameters,
 		?string $content
 	)
 	{
 		$this->name = $name;
-		$this->pointer = $pointer;
+		$this->startPointer = $startPointer;
+		$this->endPointer = $endPointer;
 		$this->parameters = $parameters;
 		$this->content = $content;
 	}
@@ -35,9 +40,14 @@ class Annotation
 		return $this->name;
 	}
 
-	public function getPointer(): int
+	public function getStartPointer(): int
 	{
-		return $this->pointer;
+		return $this->startPointer;
+	}
+
+	public function getEndPointer(): int
+	{
+		return $this->endPointer;
 	}
 
 	public function getParameters(): ?string

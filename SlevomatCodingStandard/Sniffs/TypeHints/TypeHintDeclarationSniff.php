@@ -345,7 +345,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						lcfirst($this->getFunctionTypeLabel($phpcsFile, $functionPointer)),
 						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
 					),
-					$returnAnnotation->getPointer(),
+					$returnAnnotation->getStartPointer(),
 					self::CODE_MISSING_TRAVERSABLE_RETURN_TYPE_HINT_SPECIFICATION
 				);
 			}
@@ -634,7 +634,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
 						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
 					),
-					$returnAnnotation->getPointer(),
+					$returnAnnotation->getStartPointer(),
 					self::CODE_USELESS_RETURN_ANNOTATION
 				);
 				if ($fix) {
@@ -801,7 +801,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						'@var annotation of property %s does not specify type hint for its items.',
 						PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer)
 					),
-					$varAnnotations[0]->getPointer(),
+					$varAnnotations[0]->getStartPointer(),
 					self::CODE_MISSING_TRAVERSABLE_PROPERTY_TYPE_HINT_SPECIFICATION
 				);
 			}
@@ -928,9 +928,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			}
 
 			if (isset($matches[2])) {
-				$parametersTypeHintsDefinitions[$matches[2]] = ['pointer' => $parameterAnnotation->getPointer(), 'definition' => $matches[1]];
+				$parametersTypeHintsDefinitions[$matches[2]] = ['pointer' => $parameterAnnotation->getStartPointer(), 'definition' => $matches[1]];
 			} elseif (isset($parametersNames[$parameterAnnotationNo])) {
-				$parametersTypeHintsDefinitions[$parametersNames[$parameterAnnotationNo]] = ['pointer' => $parameterAnnotation->getPointer(), 'definition' => $matches[1]];
+				$parametersTypeHintsDefinitions[$parametersNames[$parameterAnnotationNo]] = ['pointer' => $parameterAnnotation->getStartPointer(), 'definition' => $matches[1]];
 			}
 		}
 

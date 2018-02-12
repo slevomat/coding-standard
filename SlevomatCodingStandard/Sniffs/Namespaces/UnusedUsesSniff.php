@@ -120,7 +120,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 										'Case of reference name "%s" and use statement "%s" do not match.',
 										$matches[1],
 										$unusedNames[$uniqueId]->getNameAsReferencedInFile()
-									), $annotation->getPointer(), self::CODE_MISMATCHING_CASE);
+									), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 								}
 							}
 						}
@@ -148,7 +148,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 								'Case of reference name "%s" and use statement "%s" do not match.',
 								$matches[1],
 								$unusedNames[$uniqueId]->getNameAsReferencedInFile()
-							), $annotation->getPointer(), self::CODE_MISMATCHING_CASE);
+							), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 						}
 
 						/** @var \SlevomatCodingStandard\Helpers\Annotation $annotation */
@@ -171,7 +171,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 								'Case of reference name "%s" and use statement "%s" do not match.',
 								$matches[1],
 								$unusedNames[$uniqueId]->getNameAsReferencedInFile()
-							), $annotation->getPointer(), self::CODE_MISMATCHING_CASE);
+							), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 						}
 					}
 				}
