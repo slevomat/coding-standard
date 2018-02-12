@@ -208,6 +208,12 @@ Sniff provides the following settings:
 
 Enforces using shorthand scalar typehint variants in phpDocs: `int` instead of `integer` and `bool` instead of `boolean`. This is for consistency with native scalar typehints which also allow shorthand variants only.
 
+
+#### SlevomatCodingStandard.PHP.TypeCast 🔧
+
+Enforces using shorthand cast operators, forbids use of unset and binary cast operators: `(bool)` instead of `(boolean)`, `(int)` instead of `(integer)`, `(float)` instead of `(double)` or `(real)`. `(binary)` and `(unset)` are forbidden.
+
+
 #### SlevomatCodingStandard.Files.TypeNameMatchesFileName
 
 For projects not following the [PSR-0](http://www.php-fig.org/psr/psr-0/) or [PSR-4](http://www.php-fig.org/psr/psr-4/) autoloading standards, this sniff checks whether a namespace and a name of a class/interface/trait follows agreed-on way to organize code into directories and files.
