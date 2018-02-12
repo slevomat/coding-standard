@@ -107,8 +107,8 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					$uniqueId = UseStatement::getUniqueId($useStatement->getType(), $nameAsReferencedInFile);
 
 					foreach ($annotations as $annotationName => $annotationsByName) {
-						if (preg_match('~^@(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=[^a-z\\d]|$)~i', $annotationName, $matches)) {
-							if (!in_array($matches[1], $this->getIgnoredAnnotationNames(), true)) {
+						if (!in_array(substr($annotationName, 1), $this->getIgnoredAnnotationNames(), true)) {
+							if (preg_match('~^@(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=[^a-z\\d]|$)~i', $annotationName, $matches)) {
 								$usedNames[$uniqueId] = true;
 
 								if ($matches[1] !== $nameAsReferencedInFile) {
