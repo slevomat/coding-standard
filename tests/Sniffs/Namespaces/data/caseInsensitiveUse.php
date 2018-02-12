@@ -5,6 +5,7 @@ use Foo\Boo;
 use Exception;
 use Uuid;
 use Route;
+use Ignore;
 
 new bar();
 
@@ -51,4 +52,9 @@ new Route();
 /**
  * @Route("/widget/list", name="widget_list")
  * @Route("/widget/view/{uuid}", name="widget_view")
+ */
+
+
+/**
+ * @ignore(foo=uuid::class)
  */
