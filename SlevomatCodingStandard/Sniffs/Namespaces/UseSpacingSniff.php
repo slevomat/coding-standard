@@ -185,7 +185,7 @@ class UseSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
-					'Expected %d lines between different type of use statement, found %d.',
+					'Expected %d lines between different types of use statement, found %d.',
 					$requiredLinesCountBetweenUseTypes,
 					$actualLinesCountAfterPreviousUse
 				),
