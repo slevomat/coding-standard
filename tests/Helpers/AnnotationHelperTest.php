@@ -120,7 +120,7 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		self::assertSame('@X', $xAnnotations[0]->getName());
 		self::assertSame('Content', $xAnnotations[0]->getContent());
 		self::assertSame(64, $this->getLineByPointer($xAnnotations[0]->getStartPointer()));
-		self::assertSame(72, $this->getLineByPointer($xAnnotations[0]->getEndPointer()));
+		self::assertSame(71, $this->getLineByPointer($xAnnotations[0]->getEndPointer()));
 	}
 
 	private function getTestedCodeSnifferFile(): \PHP_CodeSniffer\Files\File

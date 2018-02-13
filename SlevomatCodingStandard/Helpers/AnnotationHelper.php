@@ -66,7 +66,9 @@ class AnnotationHelper
 					continue;
 				}
 
-				if ($tokens[$j]['code'] === T_DOC_COMMENT_WHITESPACE) {
+				if (in_array($tokens[$j]['code'], [T_DOC_COMMENT_TAG, T_DOC_COMMENT_STRING], true)) {
+					$annotationEndPointer = $j;
+				} elseif ($tokens[$j]['code'] === T_DOC_COMMENT_WHITESPACE) {
 					if (array_key_exists($j - 1, $tokens) && $tokens[$j - 1]['code'] === T_DOC_COMMENT_STAR) {
 						continue;
 					}
@@ -77,7 +79,6 @@ class AnnotationHelper
 
 				$parenthesesLevel += substr_count($tokens[$j]['content'], '(') - substr_count($tokens[$j]['content'], ')');
 				$annotationCode .= $tokens[$j]['content'];
-				$annotationEndPointer = $j;
 			}
 
 			$annotationName = $tokens[$annotationStartPointer]['content'];
