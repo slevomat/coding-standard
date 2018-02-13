@@ -87,3 +87,8 @@ class EmptyDocComment
 {
 
 }
+
+/** @var InlineDocComment */
+$inlineDocComment = new InlineDocComment();
+
+/** Invalid inline doccomment */

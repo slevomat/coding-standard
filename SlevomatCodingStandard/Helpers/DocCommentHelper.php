@@ -90,4 +90,18 @@ class DocCommentHelper
 		return null;
 	}
 
+	public static function isInline(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $docCommentOpenPointer): bool
+	{
+		$tokens = $codeSnifferFile->getTokens();
+
+		$nextPointer = TokenHelper::findNextAnyToken($codeSnifferFile, $tokens[$docCommentOpenPointer]['comment_closer'] + 1);
+
+		if ($nextPointer !== null && in_array($tokens[$nextPointer]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT], true)) {
+			return false;
+		}
+
+		$docCommentContent = self::getDocComment($codeSnifferFile, $docCommentOpenPointer);
+		return strpos($docCommentContent, '@var') === 0;
+	}
+
 }
