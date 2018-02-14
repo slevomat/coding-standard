@@ -152,9 +152,9 @@ class DocCommentHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	{
 		$codeSnifferFile = $this->getTestedCodeSnifferFile();
 
-		// foreach ([3, 10, 18, 32, 46, 71, 94] as $line) {
-		// 	self::assertFalse(DocCommentHelper::isInline($codeSnifferFile, $this->findPointerByLineAndType($codeSnifferFile, $line, T_DOC_COMMENT_OPEN_TAG)));
-		// }
+		foreach ([3, 10, 18, 32, 46, 71, 94] as $line) {
+			self::assertFalse(DocCommentHelper::isInline($codeSnifferFile, $this->findPointerByLineAndType($codeSnifferFile, $line, T_DOC_COMMENT_OPEN_TAG)));
+		}
 
 		foreach ([91] as $line) {
 			self::assertTrue(DocCommentHelper::isInline($codeSnifferFile, $this->findPointerByLineAndType($codeSnifferFile, $line, T_DOC_COMMENT_OPEN_TAG)));

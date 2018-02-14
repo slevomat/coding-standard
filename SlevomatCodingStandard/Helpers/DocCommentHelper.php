@@ -94,7 +94,7 @@ class DocCommentHelper
 	{
 		$tokens = $codeSnifferFile->getTokens();
 
-		$nextPointer = TokenHelper::findNextAnyToken($codeSnifferFile, $tokens[$docCommentOpenPointer]['comment_closer'] + 1);
+		$nextPointer = TokenHelper::findNextExcluding($codeSnifferFile, T_WHITESPACE, $tokens[$docCommentOpenPointer]['comment_closer'] + 1);
 
 		if ($nextPointer !== null && in_array($tokens[$nextPointer]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT], true)) {
 			return false;
