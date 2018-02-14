@@ -9,6 +9,7 @@ class TypeNameMatchesFileNameSniffTest extends \SlevomatCodingStandard\Sniffs\Te
 	{
 		$report = self::checkFile(__DIR__ . '/data/rootNamespace/boo.php', [
 			'rootNamespaces' => ['tests/Sniffs/Files/data/rootNamespace' => 'RootNamespace'],
+			'ignoredNamespaces' => ['IgnoredNamespace'],
 		]);
 
 		self::assertSame(1, $report->getErrorCount());
@@ -16,6 +17,7 @@ class TypeNameMatchesFileNameSniffTest extends \SlevomatCodingStandard\Sniffs\Te
 
 		$report = self::checkFile(__DIR__ . '/data/rootNamespace/coo/Foo.php', [
 			'rootNamespaces' => ['tests/Sniffs/Files/data/rootNamespace' => 'RootNamespace'],
+			'ignoredNamespaces' => ['IgnoredNamespace'],
 		]);
 
 		self::assertSame(1, $report->getErrorCount());
@@ -26,6 +28,7 @@ class TypeNameMatchesFileNameSniffTest extends \SlevomatCodingStandard\Sniffs\Te
 	{
 		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/rootNamespace/Foo.php', [
 			'rootNamespaces' => ['tests/Sniffs/Files/data/rootNamespace' => 'RootNamespace'],
+			'ignoredNamespaces' => ['IgnoredNamespace'],
 		]));
 	}
 
@@ -33,6 +36,7 @@ class TypeNameMatchesFileNameSniffTest extends \SlevomatCodingStandard\Sniffs\Te
 	{
 		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/rootNamespace/skippedDir/Bar.php', [
 			'rootNamespaces' => ['tests/Sniffs/Files/data/rootNamespace' => 'RootNamespace'],
+			'ignoredNamespaces' => ['IgnoredNamespace'],
 			'skipDirs' => ['skippedDir'],
 		]));
 	}
@@ -55,10 +59,12 @@ class TypeNameMatchesFileNameSniffTest extends \SlevomatCodingStandard\Sniffs\Te
 			'rootNamespaces' => [
 				'tests/Sniffs/Files/data/rootNamespace2/Xxx' => 'RootNamespace2',
 				'tests/Sniffs/Files/data/rootNamespace2' => 'RootNamespace2',
+				'tests/Sniffs/Files/data/rootNamespace' => 'RootNamespace',
 			],
 		];
 		$sniffProperties2 = [
 			'rootNamespaces' => [
+				'tests/Sniffs/Files/data/rootNamespace' => 'RootNamespace',
 				'tests/Sniffs/Files/data/rootNamespace2' => 'RootNamespace2',
 				'tests/Sniffs/Files/data/rootNamespace2/Xxx' => 'RootNamespace2',
 			],
