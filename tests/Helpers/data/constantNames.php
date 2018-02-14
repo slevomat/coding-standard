@@ -1,14 +1,17 @@
 <?php
 
-namespace FooNamespace;
-
-const FOO = 'foo';
-
-const BOO = 'boo';
-
-class Foo
+namespace FooNamespace
 {
 
-	const DOO = 'doo';
+	const FOO = 'foo';
+
+	const BOO = 'boo';
+
+	class Foo
+	{
+
+		const DOO = 'doo';
+
+	}
 
 }

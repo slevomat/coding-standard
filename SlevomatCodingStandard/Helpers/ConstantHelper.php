@@ -35,8 +35,8 @@ class ConstantHelper
 				iterator_to_array(self::getAllConstantPointers($codeSnifferFile, $previousConstantPointer)),
 				function (int $constantPointer) use ($codeSnifferFile): bool {
 					foreach (array_reverse($codeSnifferFile->getTokens()[$constantPointer]['conditions']) as $conditionTokenCode) {
-						if (!in_array($conditionTokenCode, [T_CLASS, T_INTERFACE, T_TRAIT, T_ANON_CLASS], true)) {
-							continue;
+						if ($conditionTokenCode === T_NAMESPACE) {
+							return true;
 						}
 
 						return false;

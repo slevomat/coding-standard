@@ -29,4 +29,10 @@ class ConstantHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		self::assertSame(['FOO', 'BOO'], ConstantHelper::getAllNames($codeSnifferFile));
 	}
 
+	public function testGetAllNamesNoNamespace(): void
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/constantWithoutNamespace.php');
+		self::assertSame(['FOO'], ConstantHelper::getAllNames($codeSnifferFile));
+	}
+
 }
