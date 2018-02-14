@@ -8,6 +8,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	public const CODE_EARLY_EXIT_NOT_USED = 'EarlyExitNotUsed';
+	public const CODE_USELESS_ELSEIF = 'UselessElseIf';
 	public const CODE_USELESS_ELSE = 'UselessElse';
 
 	private const TAB_INDENT = "\t";
@@ -20,6 +21,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	{
 		return [
 			T_IF,
+			T_ELSEIF,
 			T_ELSE,
 		];
 	}
@@ -33,10 +35,12 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		if ($tokens[$pointer]['code'] === T_ELSE) {
-			$this->processElse($phpcsFile, $pointer);
-		} else {
+		if ($tokens[$pointer]['code'] === T_IF) {
 			$this->processIf($phpcsFile, $pointer);
+		} elseif ($tokens[$pointer]['code'] === T_ELSEIF) {
+			$this->processElseIf($phpcsFile, $pointer);
+		} else {
+			$this->processElse($phpcsFile, $pointer);
 		}
 	}
 
@@ -44,28 +48,26 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		if (!$this->isEarlyExitInScope($phpcsFile, $tokens[$elsePointer]['scope_opener'], $tokens[$elsePointer]['scope_closer'])) {
-			return;
+		$allConditionsPointers = $this->getAllConditionsPointers($phpcsFile, $elsePointer);
+
+		foreach ($allConditionsPointers as $conditionPointer) {
+			if ($tokens[$conditionPointer]['code'] === T_IF) {
+				continue;
+			}
+
+			if (!$this->isEarlyExitInScope($phpcsFile, $tokens[$conditionPointer]['scope_opener'], $tokens[$conditionPointer]['scope_closer'])) {
+				return;
+			}
 		}
 
-		$previousConditionPointer = $elsePointer;
-		do {
-			$previousConditionCloseParenthesisPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousConditionPointer - 1);
-			$previousConditionPointer = $tokens[$previousConditionCloseParenthesisPointer]['scope_condition'];
+		$previousConditionPointer = $allConditionsPointers[count($allConditionsPointers) - 2];
 
-			if (
-				$tokens[$previousConditionPointer]['code'] === T_ELSEIF
-				&& !$this->isEarlyExitInScope($phpcsFile, $tokens[$previousConditionPointer]['scope_opener'], $tokens[$previousConditionPointer]['scope_closer'])
-			) {
+		if ($this->isEarlyExitInScope($phpcsFile, $tokens[$previousConditionPointer]['scope_opener'], $tokens[$previousConditionPointer]['scope_closer'])) {
+			$pointerAfterElseCondition = TokenHelper::findNextEffective($phpcsFile, $tokens[$elsePointer]['scope_closer'] + 1);
+			if ($pointerAfterElseCondition === null || $tokens[$pointerAfterElseCondition]['code'] !== T_CLOSE_CURLY_BRACKET) {
 				return;
 			}
 
-		} while ($tokens[$previousConditionPointer]['code'] !== T_IF);
-
-		$previousConditionCloseParenthesisPointer = TokenHelper::findPreviousEffective($phpcsFile, $elsePointer - 1);
-		$previousConditionPointer = $tokens[$previousConditionCloseParenthesisPointer]['scope_condition'];
-
-		if ($this->isEarlyExitInScope($phpcsFile, $tokens[$previousConditionPointer]['scope_opener'], $tokens[$previousConditionPointer]['scope_closer'])) {
 			$fix = $phpcsFile->addFixableError(
 				'Remove useless else to reduce code nesting.',
 				$elsePointer,
@@ -134,6 +136,52 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 			$phpcsFile->fixer->endChangeset();
 		}
+	}
+
+	private function processElseIf(\PHP_CodeSniffer\Files\File $phpcsFile, int $elseIfPointer): void
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$allConditionsPointers = $this->getAllConditionsPointers($phpcsFile, $elseIfPointer);
+
+		foreach ($allConditionsPointers as $conditionPointer) {
+			if (!$this->isEarlyExitInScope($phpcsFile, $tokens[$conditionPointer]['scope_opener'], $tokens[$conditionPointer]['scope_closer'])) {
+				return;
+			}
+		}
+
+		$lastConditionPointer = $allConditionsPointers[count($allConditionsPointers) - 1];
+
+		$pointerAfterLastCondition = TokenHelper::findNextEffective($phpcsFile, $tokens[$lastConditionPointer]['scope_closer'] + 1);
+		if ($pointerAfterLastCondition === null || $tokens[$pointerAfterLastCondition]['code'] !== T_CLOSE_CURLY_BRACKET) {
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError(
+			'Remove useless elseif to reduce code nesting.',
+			$elseIfPointer,
+			self::CODE_USELESS_ELSEIF
+		);
+
+		if (!$fix) {
+			return;
+		}
+
+		$phpcsFile->fixer->beginChangeset();
+
+		/** @var int $pointerBeforeElseIfPointer */
+		$pointerBeforeElseIfPointer = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $elseIfPointer - 1);
+
+		for ($i = $pointerBeforeElseIfPointer + 1; $i < $elseIfPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+
+		$phpcsFile->fixer->addNewline($pointerBeforeElseIfPointer);
+		$phpcsFile->fixer->addNewline($pointerBeforeElseIfPointer);
+
+		$phpcsFile->fixer->replaceToken($elseIfPointer, sprintf('%sif', $this->getIndentation($phpcsFile, $allConditionsPointers[0])));
+
+		$phpcsFile->fixer->endChangeset();
 	}
 
 	private function processIf(\PHP_CodeSniffer\Files\File $phpcsFile, int $ifPointer): void
@@ -402,6 +450,40 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		return $phpcsFile->getTokens()[$lastSemicolonInScopePointer]['code'] === T_SEMICOLON
 			? TokenHelper::findPreviousLocal($phpcsFile, TokenHelper::$earlyExitTokenCodes, $lastSemicolonInScopePointer - 1, $startPointer) !== null
 			: false;
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $conditionPointer
+	 * @return int[]
+	 */
+	private function getAllConditionsPointers(\PHP_CodeSniffer\Files\File $phpcsFile, int $conditionPointer): array
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$conditionsPointers = [$conditionPointer];
+
+		if ($tokens[$conditionPointer] !== T_IF) {
+			$currentConditionPointer = $conditionPointer;
+			do {
+				$previousConditionCloseParenthesisPointer = TokenHelper::findPreviousEffective($phpcsFile, $currentConditionPointer - 1);
+				$currentConditionPointer = $tokens[$previousConditionCloseParenthesisPointer]['scope_condition'];
+
+				$conditionsPointers[] = $currentConditionPointer;
+			} while ($tokens[$currentConditionPointer]['code'] !== T_IF);
+		}
+
+		if ($tokens[$conditionPointer] !== T_ELSE) {
+			$currentConditionPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$conditionPointer]['scope_closer'] + 1);
+			while (in_array($tokens[$currentConditionPointer]['code'], [T_ELSEIF, T_ELSE], true)) {
+				$conditionsPointers[] = $currentConditionPointer;
+				$currentConditionPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$currentConditionPointer]['scope_closer'] + 1);
+			}
+		}
+
+		sort($conditionsPointers);
+
+		return $conditionsPointers;
 	}
 
 }

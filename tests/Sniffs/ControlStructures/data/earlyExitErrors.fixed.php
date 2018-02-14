@@ -353,13 +353,53 @@ function veryUglyConditionFromDoctrineWithALittleChange() {
 function allConditionsWithEarlyExit() {
 	if ($dateTime instanceof DateTimeImmutable) {
 		return true;
-	} elseif ($dateTime instanceof DateTime) {
+	}
+
+	if ($dateTime instanceof DateTime) {
 		return true;
-	} elseif (is_numeric($dateTime)) {
+	}
+
+	if (is_numeric($dateTime)) {
 		return true;
-	} elseif (is_string($dateTime)) {
+	}
+
+	if (is_string($dateTime)) {
 		throw new NotImplementedException();
 	}
 
 	throw new NotImplementedException();
+}
+
+function allConditionsWithEarlyExitButWithoutElse($dateTime) {
+	if ($dateTime instanceof DateTimeImmutable) {
+		return true;
+	}
+
+	if ($dateTime instanceof DateTime) {
+		return true;
+	}
+
+	if (is_numeric($dateTime)) {
+		return true;
+	}
+
+	if (is_string($dateTime)) {
+		throw new NotImplementedException();
+	}
+}
+
+function ifElseInElse() {
+	if (!true) {
+		if (true) {
+			return;
+		}
+
+		if (false) {
+			return;
+		}
+
+		return;
+	}
+
+	doSomething();
 }

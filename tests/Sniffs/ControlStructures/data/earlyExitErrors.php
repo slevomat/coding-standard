@@ -329,3 +329,29 @@ function allConditionsWithEarlyExit() {
 		throw new NotImplementedException();
 	}
 }
+
+function allConditionsWithEarlyExitButWithoutElse($dateTime) {
+	if ($dateTime instanceof DateTimeImmutable) {
+		return true;
+	} elseif ($dateTime instanceof DateTime) {
+		return true;
+	} elseif (is_numeric($dateTime)) {
+		return true;
+	} elseif (is_string($dateTime)) {
+		throw new NotImplementedException();
+	}
+}
+
+function ifElseInElse() {
+	if (true) {
+		doSomething();
+	} else {
+		if (true) {
+			return;
+		} elseif (false) {
+			return;
+		} else {
+			return;
+		}
+	}
+}

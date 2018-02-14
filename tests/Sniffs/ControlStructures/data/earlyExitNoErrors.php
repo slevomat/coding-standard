@@ -82,7 +82,7 @@ function ifWithElseIf() {
 	}
 }
 
-function noSemicolonInElseScope() {
+function noEarlyExitScopeAfterIf() {
 	if (true) {
 		doSomething();
 	} else {
@@ -158,7 +158,7 @@ function oneConditionsWithoutEarlyExit($dateTime) {
 	}
 }
 
-function allConditionsWithEarlyExitButWithoutElse($dateTime) {
+function allConditionsWithEarlyExitButCodeAfter($dateTime) {
 	if ($dateTime instanceof DateTimeImmutable) {
 		return true;
 	} elseif ($dateTime instanceof DateTime) {
@@ -167,5 +167,9 @@ function allConditionsWithEarlyExitButWithoutElse($dateTime) {
 		return true;
 	} elseif (is_string($dateTime)) {
 		throw new NotImplementedException();
+	} else {
+		throw new NotImplementedException();
 	}
+
+	doSomething();
 }
