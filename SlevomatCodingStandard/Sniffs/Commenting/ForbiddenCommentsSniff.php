@@ -74,45 +74,30 @@ class ForbiddenCommentsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					$phpcsFile->fixer->replaceToken($i, $contentWithoutSpaces);
 				}
 
-				$isEmpty = true;
+				$docCommentContent = '';
 				for ($i = $docCommentOpenPointer + 1; $i < $tokens[$docCommentOpenPointer]['comment_closer']; $i++) {
 					/** @var string|mixed[] $token */
 					$token = $phpcsFile->fixer->getTokenContent($i);
-
-					if (is_array($token) && $token['code'] === T_DOC_COMMENT_STAR) {
-						continue;
-					}
-
-					$tokenContent = is_array($token) ? $token['content'] : $token;
-					if (preg_match('~^[\\s\*]*$~', $tokenContent)) {
-						continue;
-					}
-
-					$isEmpty = false;
-					break;
+					$docCommentContent .= is_array($token) ? $token['content'] : $token;
 				}
 
-				if ($isEmpty) {
-					for ($i = $docCommentOpenPointer - 1; $i >= 0; $i--) {
-						$contentWithoutSpaces = preg_replace('~[\t ]+$~', '', $tokens[$i]['content'], -1, $replacedCount);
-
-						if ($replacedCount === 0) {
-							break;
-						}
-
-						$phpcsFile->fixer->replaceToken($i, $contentWithoutSpaces);
+				if (preg_match('~^[\\s\*]*$~', $docCommentContent)) {
+					$pointerBeforeDocComment = $docCommentOpenPointer - 1;
+					$contentBeforeWithoutSpaces = preg_replace('~[\t ]+$~', '', $tokens[$pointerBeforeDocComment]['content'], -1, $replacedCount);
+					if ($replacedCount !== 0) {
+						$phpcsFile->fixer->replaceToken($pointerBeforeDocComment, $contentBeforeWithoutSpaces);
 					}
+
 					for ($i = $docCommentOpenPointer; $i <= $tokens[$docCommentOpenPointer]['comment_closer']; $i++) {
 						$phpcsFile->fixer->replaceToken($i, '');
 					}
-					for ($i = $tokens[$docCommentOpenPointer]['comment_closer'] + 1; $i < count($tokens); $i++) {
-						$contentWithoutSpaces = preg_replace('~^[\r\n]+~', '', $tokens[$i]['content'], -1, $replacedCount);
 
-						if ($replacedCount === 0) {
-							break;
+					$pointerAfterDocComment = $tokens[$docCommentOpenPointer]['comment_closer'] + 1;
+					if (array_key_exists($pointerAfterDocComment, $tokens)) {
+						$contentAfterWithoutSpaces = preg_replace('~^[\r\n]+~', '', $tokens[$pointerAfterDocComment]['content'], -1, $replacedCount);
+						if ($replacedCount !== 0) {
+							$phpcsFile->fixer->replaceToken($pointerAfterDocComment, $contentAfterWithoutSpaces);
 						}
-
-						$phpcsFile->fixer->replaceToken($i, $contentWithoutSpaces);
 					}
 				}
 
