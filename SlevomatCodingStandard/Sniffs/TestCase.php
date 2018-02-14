@@ -2,6 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs;
 
+/**
+ * @codeCoverageIgnore
+ */
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
 

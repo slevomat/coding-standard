@@ -2,6 +2,9 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+/**
+ * @codeCoverageIgnore
+ */
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
 
