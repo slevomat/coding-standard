@@ -143,3 +143,29 @@ foreach (['foo', 'bar'] as $identity) {
 if (!defined('PHPUNIT_COMPOSER_INSTALL')) {
     define('PHPUNIT_COMPOSER_INSTALL', __DIR__ . '/autoload.php');
 }
+
+function oneConditionsWithoutEarlyExit($dateTime) {
+	if ($dateTime instanceof DateTimeImmutable) {
+		return true;
+	} elseif ($dateTime instanceof DateTime) {
+		return true;
+	} elseif (is_numeric($dateTime)) {
+		doSomething();
+	} elseif (is_string($dateTime)) {
+		throw new NotImplementedException();
+	} else {
+		throw new NotImplementedException();
+	}
+}
+
+function allConditionsWithEarlyExitButWithoutElse($dateTime) {
+	if ($dateTime instanceof DateTimeImmutable) {
+		return true;
+	} elseif ($dateTime instanceof DateTime) {
+		return true;
+	} elseif (is_numeric($dateTime)) {
+		return true;
+	} elseif (is_string($dateTime)) {
+		throw new NotImplementedException();
+	}
+}

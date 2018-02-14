@@ -48,16 +48,24 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return;
 		}
 
+		$previousConditionPointer = $elsePointer;
+		do {
+			$previousConditionCloseParenthesisPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousConditionPointer - 1);
+			$previousConditionPointer = $tokens[$previousConditionCloseParenthesisPointer]['scope_condition'];
+
+			if (
+				$tokens[$previousConditionPointer]['code'] === T_ELSEIF
+				&& !$this->isEarlyExitInScope($phpcsFile, $tokens[$previousConditionPointer]['scope_opener'], $tokens[$previousConditionPointer]['scope_closer'])
+			) {
+				return;
+			}
+
+		} while ($tokens[$previousConditionPointer]['code'] !== T_IF);
+
 		$previousConditionCloseParenthesisPointer = TokenHelper::findPreviousEffective($phpcsFile, $elsePointer - 1);
 		$previousConditionPointer = $tokens[$previousConditionCloseParenthesisPointer]['scope_condition'];
 
-		if ($tokens[$previousConditionPointer]['code'] === T_ELSEIF) {
-			return;
-		}
-
-		$ifPointer = $previousConditionPointer;
-
-		if ($this->isEarlyExitInScope($phpcsFile, $tokens[$ifPointer]['scope_opener'], $tokens[$ifPointer]['scope_closer'])) {
+		if ($this->isEarlyExitInScope($phpcsFile, $tokens[$previousConditionPointer]['scope_opener'], $tokens[$previousConditionPointer]['scope_closer'])) {
 			$fix = $phpcsFile->addFixableError(
 				'Remove useless else to reduce code nesting.',
 				$elsePointer,
@@ -70,12 +78,12 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 			$phpcsFile->fixer->beginChangeset();
 
-			for ($i = $tokens[$ifPointer]['scope_closer'] + 1; $i <= $tokens[$elsePointer]['scope_closer']; $i++) {
+			for ($i = $tokens[$previousConditionPointer]['scope_closer'] + 1; $i <= $tokens[$elsePointer]['scope_closer']; $i++) {
 				$phpcsFile->fixer->replaceToken($i, '');
 			}
 
 			$elseCode = $this->getScopeCode($phpcsFile, $elsePointer);
-			$afterIfCode = $this->fixIndentation($elseCode, $phpcsFile->eolChar, $this->prepareIndentation($this->getIndentation($phpcsFile, $ifPointer)));
+			$afterIfCode = $this->fixIndentation($elseCode, $phpcsFile->eolChar, $this->prepareIndentation($this->getIndentation($phpcsFile, $previousConditionPointer)));
 
 			$phpcsFile->fixer->addContent(
 				$tokens[$elsePointer]['scope_closer'],
@@ -88,7 +96,10 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 			$phpcsFile->fixer->endChangeset();
 
-		} else {
+		} elseif ($tokens[$previousConditionPointer]['code'] === T_IF) {
+
+			$ifPointer = $previousConditionPointer;
+
 			$fix = $phpcsFile->addFixableError(
 				'Use early exit instead of else.',
 				$elsePointer,

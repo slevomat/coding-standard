@@ -349,3 +349,17 @@ function veryUglyConditionFromDoctrineWithALittleChange() {
 		$inverseAssociation->setValue($newValue, $entity);
 	}
 }
+
+function allConditionsWithEarlyExit() {
+	if ($dateTime instanceof DateTimeImmutable) {
+		return true;
+	} elseif ($dateTime instanceof DateTime) {
+		return true;
+	} elseif (is_numeric($dateTime)) {
+		return true;
+	} elseif (is_string($dateTime)) {
+		throw new NotImplementedException();
+	}
+
+	throw new NotImplementedException();
+}
