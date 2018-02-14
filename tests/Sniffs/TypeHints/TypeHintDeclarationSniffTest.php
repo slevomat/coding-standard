@@ -236,7 +236,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 			'enableEachParameterAndReturnInspection' => true,
 		]);
 
-		self::assertSame(11, $report->getErrorCount());
+		self::assertSame(12, $report->getErrorCount());
 
 		$parameterMessage = function (string $method, string $parameter): string {
 			return sprintf('Method \FooNamespace\FooClass::%s() has useless @param annotation for parameter $%s.', $method, $parameter);
@@ -253,6 +253,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		self::assertSniffError($report, 59, TypeHintDeclarationSniff::CODE_USELESS_RETURN_ANNOTATION);
 		self::assertSniffError($report, 67, TypeHintDeclarationSniff::CODE_USELESS_PARAMETER_ANNOTATION, $parameterMessage('withUsefulAnnotationAndUselessParameter', 'foo'));
 		self::assertSniffError($report, 75, TypeHintDeclarationSniff::CODE_USELESS_RETURN_ANNOTATION);
+		self::assertSniffError($report, 83, TypeHintDeclarationSniff::CODE_USELESS_PARAMETER_ANNOTATION, $parameterMessage('withInvalidParamAnnotation', 'foo'));
 	}
 
 	public function testFixableReturnTypeHints(): void

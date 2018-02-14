@@ -78,4 +78,14 @@ abstract class FooClass
 	{
 	}
 
+	/**
+	 * @param
+	 * @param string $foo
+	 * @return mixed
+	 */
+	public function withInvalidParamAnnotation(string $foo)
+	{
+		return null;
+	}
+
 }
