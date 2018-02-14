@@ -139,7 +139,11 @@ class ClassWithSomeUnusedProperties extends \Consistence\ObjectPrototype
 		$code = <<<CODE
 $this->propertyUsedInHeredoc
 code
+$this->parentPropertyUsedInHeredoc
+code
 {$this->methodUsedInHeredoc()}
+code
+{$this->parentMethodUsedInHeredoc()}
 code
 CODE;
 	}
