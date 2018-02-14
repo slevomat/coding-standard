@@ -439,6 +439,10 @@ Sniff provides the following settings:
 * `linesCountBetweenDifferentAnnotationsTypes`: allows to configure the number of lines between two different annotations types.
 * `linesCountAfterLastContent`: allows to configure the number of lines after last content (description or annotation).
 
+#### SlevomatCodingStandard.Commenting.EmptyCommentSniff 🔧
+
+Reports empty comments.
+
 #### SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration 🔧
 
 Reports invalid format of inline phpDocs with `@var`.
