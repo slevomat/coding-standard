@@ -157,7 +157,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 								continue;
 							}
 
-							if (!preg_match('~(?<=^|\|)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|\\\\|\||\[|$)~i', $annotation->getContent(), $matches)) {
+							if (!preg_match('~(?:^|\||\$\\w+\\s+)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|\\\\|\||\[|$)~i', $annotation->getContent(), $matches)) {
 								continue;
 							}
 
