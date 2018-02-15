@@ -64,9 +64,9 @@ abstract class FooClass
 	}
 
 	/**
+	 * @param
 	 * @param hello
 	 * @useful hello
-	 * @param
 	 */
 	public function withMalformedAndUsefulTags(int $foo)
 	{
