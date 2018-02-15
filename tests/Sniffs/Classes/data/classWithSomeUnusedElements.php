@@ -148,4 +148,9 @@ code
 CODE;
 	}
 
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedConstant
+	 */
+	private const UNUSED_CONSTANT_WITH_SUPPRESS = 0;
+
 }
