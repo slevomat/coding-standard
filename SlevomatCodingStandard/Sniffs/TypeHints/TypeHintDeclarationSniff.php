@@ -218,7 +218,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 							self::CODE_MISSING_PARAMETER_TYPE_HINT
 						);
 						return;
-					} elseif (!$this->isValidTypeHint($possibleParameterTypeHint)) {
+					}
+
+					if (!$this->isValidTypeHint($possibleParameterTypeHint)) {
 						return;
 					}
 				} elseif ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $parameterTypeHintDefinition)) {
@@ -456,7 +458,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						self::CODE_MISSING_RETURN_TYPE_HINT
 					);
 					return;
-				} elseif (!$this->isValidTypeHint($possibleReturnTypeHint)) {
+				}
+
+				if (!$this->isValidTypeHint($possibleReturnTypeHint)) {
 					return;
 				}
 			} elseif ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $returnTypeHintDefinition)) {

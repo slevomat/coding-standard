@@ -154,7 +154,9 @@ class YodaHelper
 			if ($sideTokens[0]['code'] === T_VARIABLE) {
 				// expression starts with a variable - wins over everything else
 				return self::DYNAMISM_VARIABLE;
-			} elseif ($sideTokens[$sideTokensCount - 1]['code'] === T_CLOSE_PARENTHESIS) {
+			}
+
+			if ($sideTokens[$sideTokensCount - 1]['code'] === T_CLOSE_PARENTHESIS) {
 				if (isset($sideTokens[$sideTokensCount - 1]['parenthesis_owner']) && $tokens[$sideTokens[$sideTokensCount - 1]['parenthesis_owner']]['code'] === T_ARRAY) {
 					// array()
 					return $dynamism[T_ARRAY];
@@ -162,7 +164,9 @@ class YodaHelper
 
 				// function or method call
 				return self::DYNAMISM_FUNCTION_CALL;
-			} elseif ($sideTokensCount === 1 && $sideTokens[0]['code'] === T_STRING) {
+			}
+
+			if ($sideTokensCount === 1 && $sideTokens[0]['code'] === T_STRING) {
 				// constant
 				return self::DYNAMISM_CONSTANT;
 			}
@@ -172,7 +176,9 @@ class YodaHelper
 			if ($sideTokens[$sideTokensCount - 1]['code'] === T_VARIABLE) {
 				// static property access
 				return self::DYNAMISM_VARIABLE;
-			} elseif ($sideTokens[$sideTokensCount - 1]['code'] === T_STRING) {
+			}
+
+			if ($sideTokens[$sideTokensCount - 1]['code'] === T_STRING) {
 				// class constant
 				return self::DYNAMISM_CONSTANT;
 			}

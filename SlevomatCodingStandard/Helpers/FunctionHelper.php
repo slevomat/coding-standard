@@ -20,7 +20,9 @@ class FunctionHelper
 			foreach (array_reverse($codeSnifferFile->getTokens()[$functionPointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
 				if ($conditionTokenCode === T_ANON_CLASS) {
 					return sprintf('class@anonymous::%s', $name);
-				} elseif (in_array($conditionTokenCode, [T_CLASS, T_INTERFACE, T_TRAIT], true)) {
+				}
+
+				if (in_array($conditionTokenCode, [T_CLASS, T_INTERFACE, T_TRAIT], true)) {
 					$name = sprintf('%s%s::%s', NamespaceHelper::NAMESPACE_SEPARATOR, ClassHelper::getName($codeSnifferFile, $conditionPointer), $name);
 					break;
 				}
