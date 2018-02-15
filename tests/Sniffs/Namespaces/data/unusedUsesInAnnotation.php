@@ -19,6 +19,7 @@ use Foo\Boo\A;
 use Foo\Boo\B;
 use Foo\Boo\C;
 use Foo\Boo\D;
+use UglyInlineAnnotation;
 
 /**
  * @ORM\Entity()
@@ -78,3 +79,5 @@ class Boo
  * @CustomAnnotation(@AnotherCustomAnnotation(C::class))
  * @CustomAnnotation(prop=@AnotherCustomAnnotation(D::class))
  */
+
+/** @var $variable UglyInlineAnnotation */
