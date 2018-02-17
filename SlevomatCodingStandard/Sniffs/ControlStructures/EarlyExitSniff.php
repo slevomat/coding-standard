@@ -48,6 +48,10 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
+		if (!array_key_exists('scope_opener', $tokens[$elsePointer])) {
+			throw new \Exception(sprintf('Probably invalid "elseif" on line %d.', $tokens[$elsePointer]['line']));
+		}
+
 		$allConditionsPointers = $this->getAllConditionsPointers($phpcsFile, $elsePointer);
 
 		foreach ($allConditionsPointers as $conditionPointer) {
