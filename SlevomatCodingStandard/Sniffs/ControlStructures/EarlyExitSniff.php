@@ -463,7 +463,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$conditionsPointers = [$conditionPointer];
 
-		if ($tokens[$conditionPointer] !== T_IF) {
+		if ($tokens[$conditionPointer]['code'] !== T_IF) {
 			$currentConditionPointer = $conditionPointer;
 			do {
 				$previousConditionCloseParenthesisPointer = TokenHelper::findPreviousEffective($phpcsFile, $currentConditionPointer - 1);
@@ -473,7 +473,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			} while ($tokens[$currentConditionPointer]['code'] !== T_IF);
 		}
 
-		if ($tokens[$conditionPointer] !== T_ELSE) {
+		if ($tokens[$conditionPointer]['code'] !== T_ELSE) {
 			$currentConditionPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$conditionPointer]['scope_closer'] + 1);
 			while (in_array($tokens[$currentConditionPointer]['code'], [T_ELSEIF, T_ELSE], true)) {
 				$conditionsPointers[] = $currentConditionPointer;
