@@ -658,6 +658,22 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testFixableReferenceViaFullyQualifiedNameNoUseStatementsAndNoNamespace(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/fixableReferenceViaFullyQualifiedNameNoUseStatementsAndNoNamespace.php', [
+			'fullyQualifiedKeywords' => ['T_EXTENDS', 'T_IMPLEMENTS'],
+		], [ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME]);
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testFixableReferenceViaFullyQualifiedNameNoUseStatementsAndNoNamespaceAndDeclare(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/fixableReferenceViaFullyQualifiedNameNoUseStatementsAndNoNamespaceAndDeclare.php', [
+			'fullyQualifiedKeywords' => ['T_EXTENDS', 'T_IMPLEMENTS'],
+		], [ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME]);
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testFixableReferenceViaFullyQualifiedNameWithoutNamespace(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableReferenceViaFullyQualifiedNameWithoutNamespace.php', [

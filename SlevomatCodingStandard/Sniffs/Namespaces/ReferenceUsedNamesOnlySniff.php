@@ -331,16 +331,6 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						}
 
 						if ($fix) {
-							if (count($useStatements) === 0) {
-								$namespacePointer = TokenHelper::findNext($phpcsFile, T_NAMESPACE, $openTagPointer);
-								/** @var int $useStatementPlacePointer */
-								$useStatementPlacePointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_OPEN_CURLY_BRACKET], $namespacePointer + 1);
-							} else {
-								$lastUseStatement = array_values($useStatements)[count($useStatements) - 1];
-								/** @var int $useStatementPlacePointer */
-								$useStatementPlacePointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $lastUseStatement->getPointer() + 1);
-							}
-
 							$alreadyUsed = false;
 							foreach ($useStatements as $useStatement) {
 								if ($useStatement->getType() !== $reference->type || $useStatement->getFullyQualifiedTypeName() !== $canonicalName) {
@@ -370,6 +360,8 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 							}
 
 							if (!$alreadyUsed) {
+								$useStatementPlacePointer = $this->getUseStatementPlacePointer($phpcsFile, $openTagPointer, $useStatements);
+
 								$useTypeName = UseStatement::getTypeName($reference->type);
 								$useTypeFormatted = $useTypeName !== null ? sprintf('%s ', $useTypeName) : '';
 
@@ -390,6 +382,38 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				}
 			}
 		}
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $openTagPointer
+	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
+	 * @return int
+	 */
+	private function getUseStatementPlacePointer(\PHP_CodeSniffer\Files\File $phpcsFile, int $openTagPointer, array $useStatements): int
+	{
+		if (count($useStatements) !== 0) {
+			$lastUseStatement = array_values($useStatements)[count($useStatements) - 1];
+			/** @var int $useStatementPlacePointer */
+			$useStatementPlacePointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $lastUseStatement->getPointer() + 1);
+			return $useStatementPlacePointer;
+		}
+
+		$namespacePointer = TokenHelper::findNext($phpcsFile, T_NAMESPACE, $openTagPointer + 1);
+		if ($namespacePointer !== null) {
+			/** @var int $useStatementPlacePointer */
+			$useStatementPlacePointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_OPEN_CURLY_BRACKET], $namespacePointer + 1);
+			return $useStatementPlacePointer;
+		}
+
+		$pointerAfterOpenTagPointer = TokenHelper::findNextEffective($phpcsFile, $openTagPointer + 1);
+		if ($phpcsFile->getTokens()[$pointerAfterOpenTagPointer]['code'] === T_DECLARE) {
+			/** @var int $useStatementPlacePointer */
+			$useStatementPlacePointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $pointerAfterOpenTagPointer + 1);
+			return $useStatementPlacePointer;
+		}
+
+		return $openTagPointer;
 	}
 
 	private function isRequiredToBeUsed(string $name): bool
