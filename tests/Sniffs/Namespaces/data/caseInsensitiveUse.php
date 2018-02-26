@@ -6,6 +6,20 @@ use Exception;
 use Uuid;
 use Route;
 use Ignore;
+use PropertyAnnotation;
+use PropertyAnnotationDescription;
+use PropertyReadAnnotation;
+use PropertyReadAnnotationDescription;
+use PropertyWriteAnnotation;
+use PropertyWriteAnnotationDescription;
+use VarAnnotation;
+use VarAnnotationDescription;
+use ParamAnnotation;
+use ParamAnnotationDescription;
+use ReturnAnnotation;
+use ReturnAnnotationDescription;
+use ThrowsAnnotation;
+use ThrowsAnnotationDescription;
 
 new bar();
 
@@ -58,3 +72,26 @@ new Route();
 /**
  * @ignore(foo=uuid::class)
  */
+
+/**
+ * @property PropertyAnnotation $property propertyAnnotationDescription
+ * @property-read PropertyReadAnnotation $propertyRead propertyReadAnnotationDescription
+ * @property-write PropertyWriteAnnotation $propertyWrite propertyWriteAnnotationDescription
+ */
+class Foo
+{
+
+	/** @var VarAnnotation varAnnotationDescription */
+	private $varAnnotation;
+
+	/**
+	 * @param ParamAnnotation $paramAnnotation paramAnnotationDescription
+	 * @return ReturnAnnotation returnAnnotationDescription
+	 * @throws ThrowsAnnotation throwsAnnotationDescription
+	 */
+	public function method($paramAnnotation)
+	{
+		return null;
+	}
+
+}
