@@ -81,3 +81,16 @@ trait FooTrait
 }
 
 const TYPE_ONE = 1, TYPE_TWO = 2, TYPE_THREE = 3;
+
+final class SomeClass
+{
+
+	/** @var SomeClass2 */
+	private $someClass2;
+
+	public function work() : string
+	{
+		return $this->someClass2::get();
+	}
+
+}

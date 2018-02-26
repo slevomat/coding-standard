@@ -163,8 +163,10 @@ class ReferencedNameHelper
 		$tokens = $phpcsFile->getTokens();
 
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer + 1);
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $startPointer - 1);
+
 		if ($tokens[$nextPointer]['code'] === T_DOUBLE_COLON) {
-			return true;
+			return $tokens[$previousPointer]['code'] !== T_OBJECT_OPERATOR;
 		}
 
 		if (count($tokens[$startPointer]['conditions']) > 0 && array_values(array_reverse($tokens[$startPointer]['conditions']))[0] === T_USE) {
@@ -172,7 +174,6 @@ class ReferencedNameHelper
 			return false;
 		}
 
-		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $startPointer - 1);
 		$previousToken = $tokens[$previousPointer];
 
 		$skipTokenCodes = [
