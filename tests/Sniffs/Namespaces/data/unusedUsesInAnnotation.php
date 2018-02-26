@@ -20,6 +20,13 @@ use Foo\Boo\B;
 use Foo\Boo\C;
 use Foo\Boo\D;
 use UglyInlineAnnotation;
+use PropertyAnnotation;
+use PropertyReadAnnotation;
+use PropertyWriteAnnotation;
+use VarAnnotation;
+use ParamAnnotation;
+use ReturnAnnotation;
+use ThrowsAnnotation;
 
 /**
  * @ORM\Entity()
@@ -81,3 +88,26 @@ class Boo
  */
 
 /** @var $variable UglyInlineAnnotation */
+
+/**
+ * @property PropertyAnnotation $property propertyAnnotation description
+ * @property-read PropertyReadAnnotation $propertyRead propertyReadAnnotation description
+ * @property-write PropertyWriteAnnotation $propertyWrite propertyWriteAnnotation description
+ */
+class Foo
+{
+
+	/** @var VarAnnotation varAnnotation description */
+	private $varAnnotation;
+
+	/**
+	 * @param ParamAnnotation $paramAnnotation paramAnnotation description
+	 * @return ReturnAnnotation returnAnnotation description
+	 * @throws ThrowsAnnotation throwsAnnotation description
+	 */
+	public function method($paramAnnotation)
+	{
+		return null;
+	}
+
+}
