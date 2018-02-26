@@ -39,9 +39,7 @@ class EarlyExitSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 
 	public function testInvalidElseIf(): void
 	{
-		// phpcs:disable SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly.ReferencedGeneralException
-		self::expectException(\Exception::class);
-		// phpcs:enable
+		self::expectException(\Throwable::class);
 		self::expectExceptionMessage('Probably invalid "elseif" on line 6.');
 		self::checkFile(__DIR__ . '/data/earlyExitInvalidElseIf.php');
 	}
