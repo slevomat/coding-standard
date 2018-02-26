@@ -72,4 +72,9 @@ abstract class WithoutAnnotation
 	 */
 	private $multilineIndentedAnnotation;
 
+	/**
+	 * @property-read Test
+	 */
+	private $annotationWithDash;
+
 }

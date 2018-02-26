@@ -123,6 +123,14 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		self::assertSame(71, $this->getLineByPointer($xAnnotations[0]->getEndPointer()));
 	}
 
+	public function testAnnotationWithDash(): void
+	{
+		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'annotationWithDash'), '@property-read');
+		self::assertCount(1, $annotations);
+		self::assertNull($annotations[0]->getParameters());
+		self::assertSame('Test', $annotations[0]->getContent());
+	}
+
 	private function getTestedCodeSnifferFile(): \PHP_CodeSniffer\Files\File
 	{
 		if ($this->testedCodeSnifferFile === null) {
