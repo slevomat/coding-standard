@@ -20,6 +20,8 @@ use ReturnAnnotation;
 use ReturnAnnotationDescription;
 use ThrowsAnnotation;
 use ThrowsAnnotationDescription;
+use MethodAnnotation;
+use MethodAnnotationDescription;
 
 new bar();
 
@@ -77,6 +79,7 @@ new Route();
  * @property PropertyAnnotation $property propertyAnnotationDescription
  * @property-read PropertyReadAnnotation $propertyRead propertyReadAnnotationDescription
  * @property-write PropertyWriteAnnotation $propertyWrite propertyWriteAnnotationDescription
+ * @method MethodAnnotation method(MethodParameter1 $m, MethodParameter2 $m2) methodAnnotationDescription
  */
 class Foo
 {

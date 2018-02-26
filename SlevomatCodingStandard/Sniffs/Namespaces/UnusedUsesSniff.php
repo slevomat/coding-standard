@@ -6,6 +6,7 @@ use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedName;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
@@ -19,6 +20,12 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	/** @var bool */
 	public $searchAnnotations = false;
 
+	/** @var string[] */
+	public $ignoredAnnotationNames = [];
+
+	/** @var string[]|null */
+	private $normalizedIgnoredAnnotationNames;
+
 	/**
 	 * @return mixed[]
 	 */
@@ -27,6 +34,18 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		return [
 			T_OPEN_TAG,
 		];
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getIgnoredAnnotationNames(): array
+	{
+		if ($this->normalizedIgnoredAnnotationNames === null) {
+			$this->normalizedIgnoredAnnotationNames = SniffSettingsHelper::normalizeArray($this->ignoredAnnotationNames);
+		}
+
+		return $this->normalizedIgnoredAnnotationNames;
 	}
 
 	/**
@@ -56,9 +75,6 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				continue;
 			}
 
-			if ($nameReferencedWithoutSubNamespace && !$referencedName->hasSameUseStatementType($unusedNames[$uniqueId])) {
-				continue;
-			}
 			if ($unusedNames[$uniqueId]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
 				$phpcsFile->addError(sprintf(
 					'Case of reference name "%s" and use statement "%s" do not match.',
@@ -91,7 +107,10 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					$uniqueId = UseStatement::getUniqueId($useStatement->getType(), $nameAsReferencedInFile);
 
 					foreach ($annotations as $annotationName => $annotationsByName) {
-						if (preg_match('~^@(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=[^a-z\\d]|$)~i', $annotationName, $matches)) {
+						if (
+							!in_array($annotationName, $this->getIgnoredAnnotationNames(), true)
+							&& preg_match('~^@(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=[^a-z\\d]|$)~i', $annotationName, $matches)
+						) {
 							$usedNames[$uniqueId] = true;
 
 							if ($matches[1] !== $nameAsReferencedInFile) {
@@ -101,7 +120,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 										'Case of reference name "%s" and use statement "%s" do not match.',
 										$matches[1],
 										$unusedNames[$uniqueId]->getNameAsReferencedInFile()
-									), $annotation->getPointer(), self::CODE_MISMATCHING_CASE);
+									), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 								}
 							}
 						}
@@ -129,7 +148,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 								'Case of reference name "%s" and use statement "%s" do not match.',
 								$matches[1],
 								$unusedNames[$uniqueId]->getNameAsReferencedInFile()
-							), $annotation->getPointer(), self::CODE_MISMATCHING_CASE);
+							), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 						}
 
 						/** @var \SlevomatCodingStandard\Helpers\Annotation $annotation */
@@ -140,27 +159,39 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 							$content = $annotation->getContent();
 
-							if ($annotationName === '@var' && preg_match('~^\$\\w+\\s+(.+)$~', $content, $matches)) {
-								$content = $matches[1];
+							$contentsToCheck = [];
+							if ($annotationName === '@method' && preg_match('~^(?:([\\\\\\w|]+)\\s+)?\\w+\(([^\)]*)\)~', $content, $matches)) {
+								if (preg_match_all('~(?:^|\?\\s*|,\\s*)([\\\\\\w]+)(?=\\s|=|\.)~', $matches[2], $submatches)) {
+									$contentsToCheck = $submatches[1];
+								}
+								if ($matches[1] !== '') {
+									$contentsToCheck[] = $matches[1];
+								}
+							} elseif ($annotationName === '@var' && preg_match('~^\$\\w+\\s+(.+)$~', $content, $matches)) {
+								$contentsToCheck[] = $matches[1];
 							} elseif (in_array($annotationName, ['@var', '@param', '@return', '@throws', '@property', '@property-read', '@property-write'], true)) {
-								$content = preg_split('~\\s+~', $content)[0];
+								$contentsToCheck[] = preg_split('~\\s+~', $content)[0];
+							} else {
+								$contentsToCheck[] = $content;
 							}
 
-							if (!preg_match('~(?<=^|\|)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|\\\\|\||\[|$)~i', $content, $matches)) {
-								continue;
+							foreach ($contentsToCheck as $contentToCheck) {
+								if (!preg_match('~(?<=^|\|)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|\\\\|\||\[|$)~i', $contentToCheck, $matches)) {
+									continue;
+								}
+
+								$usedNames[$uniqueId] = true;
+
+								if ($matches[1] === $nameAsReferencedInFile) {
+									continue;
+								}
+
+								$phpcsFile->addError(sprintf(
+									'Case of reference name "%s" and use statement "%s" do not match.',
+									$matches[1],
+									$unusedNames[$uniqueId]->getNameAsReferencedInFile()
+								), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 							}
-
-							$usedNames[$uniqueId] = true;
-
-							if ($matches[1] === $nameAsReferencedInFile) {
-								continue;
-							}
-
-							$phpcsFile->addError(sprintf(
-								'Case of reference name "%s" and use statement "%s" do not match.',
-								$matches[1],
-								$unusedNames[$uniqueId]->getNameAsReferencedInFile()
-							), $annotation->getPointer(), self::CODE_MISMATCHING_CASE);
 						}
 					}
 				}
