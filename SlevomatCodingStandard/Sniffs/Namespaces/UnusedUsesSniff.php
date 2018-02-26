@@ -159,27 +159,39 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 							$content = $annotation->getContent();
 
-							if ($annotationName === '@var' && preg_match('~^\$\\w+\\s+(.+)$~', $content, $matches)) {
-								$content = $matches[1];
+							$contentsToCheck = [];
+							if ($annotationName === '@method' && preg_match('~^(?:([\\\\\\w|]+)\\s+)?\\w+\(([^\)]*)\)~', $content, $matches)) {
+								if (preg_match_all('~(?:^|\?\\s*|,\\s*)([\\\\\\w]+)(?=\\s|=|\.)~', $matches[2], $submatches)) {
+									$contentsToCheck = $submatches[1];
+								}
+								if ($matches[1] !== '') {
+									$contentsToCheck[] = $matches[1];
+								}
+							} elseif ($annotationName === '@var' && preg_match('~^\$\\w+\\s+(.+)$~', $content, $matches)) {
+								$contentsToCheck[] = $matches[1];
 							} elseif (in_array($annotationName, ['@var', '@param', '@return', '@throws', '@property', '@property-read', '@property-write'], true)) {
-								$content = preg_split('~\\s+~', $content)[0];
+								$contentsToCheck[] = preg_split('~\\s+~', $content)[0];
+							} else {
+								$contentsToCheck[] = $content;
 							}
 
-							if (!preg_match('~(?<=^|\|)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|\\\\|\||\[|$)~i', $content, $matches)) {
-								continue;
+							foreach ($contentsToCheck as $contentToCheck) {
+								if (!preg_match('~(?<=^|\|)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|\\\\|\||\[|$)~i', $contentToCheck, $matches)) {
+									continue;
+								}
+
+								$usedNames[$uniqueId] = true;
+
+								if ($matches[1] === $nameAsReferencedInFile) {
+									continue;
+								}
+
+								$phpcsFile->addError(sprintf(
+									'Case of reference name "%s" and use statement "%s" do not match.',
+									$matches[1],
+									$unusedNames[$uniqueId]->getNameAsReferencedInFile()
+								), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 							}
-
-							$usedNames[$uniqueId] = true;
-
-							if ($matches[1] === $nameAsReferencedInFile) {
-								continue;
-							}
-
-							$phpcsFile->addError(sprintf(
-								'Case of reference name "%s" and use statement "%s" do not match.',
-								$matches[1],
-								$unusedNames[$uniqueId]->getNameAsReferencedInFile()
-							), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 						}
 					}
 				}

@@ -27,6 +27,11 @@ use VarAnnotation;
 use ParamAnnotation;
 use ReturnAnnotation;
 use ThrowsAnnotation;
+use MethodAnnotation;
+use MethodParameter1;
+use MethodParameter2;
+use MethodParameter3;
+use MethodParameter4;
 
 /**
  * @ORM\Entity()
@@ -93,6 +98,8 @@ class Boo
  * @property PropertyAnnotation $property propertyAnnotation description
  * @property-read PropertyReadAnnotation $propertyRead propertyReadAnnotation description
  * @property-write PropertyWriteAnnotation $propertyWrite propertyWriteAnnotation description
+ * @method MethodAnnotation method(MethodParameter1 $m, MethodParameter2 ...$m2) methodAnnotationDescription
+ * @method method(MethodParameter3 $m = null, ?MethodParameter4 $m2) methodAnnotationDescription
  */
 class Foo
 {
