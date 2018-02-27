@@ -9,7 +9,7 @@
 	<rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
 	<rule ref="Generic.Classes.DuplicateClassName"/>
 	<rule ref="Generic.CodeAnalysis.EmptyStatement">
-		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedCATCH"/><!-- empty catch statements are allowed -->
+		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedCatch"/><!-- empty catch statements are allowed -->
 	</rule>
 	<rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop"/>
 	<rule ref="Generic.CodeAnalysis.UnconditionalIfStatement"/>
