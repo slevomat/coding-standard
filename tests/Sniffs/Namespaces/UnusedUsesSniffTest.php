@@ -177,35 +177,6 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		self::assertSniffError($report, 75, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "uuid" and use statement "Uuid" do not match');
 	}
 
-	public function testIgnoredAnnotationNamesAreNotUsed(): void
-	{
-		$report = self::checkFile(__DIR__ . '/data/caseInsensitiveUse.php', [
-			'searchAnnotations' => true,
-			'ignoredAnnotationNames' => ['@ignore'],
-		], [UnusedUsesSniff::CODE_UNUSED_USE]);
-
-		self::assertSniffError($report, 8, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Ignore is not used in this file.');
-	}
-
-	public function testIgnoredAnnotationNames(): void
-	{
-		$report = self::checkFile(__DIR__ . '/data/caseInsensitiveUse.php', [
-			'searchAnnotations' => true,
-			'ignoredAnnotationNames' => ['@ignore'],
-		], [UnusedUsesSniff::CODE_MISMATCHING_CASE]);
-
-		self::assertSame(6, $report->getErrorCount());
-
-		self::assertSniffError($report, 26, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "bar" and use statement "Bar" do not match');
-		self::assertSniffError($report, 28, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "BAR" and use statement "Bar" do not match');
-
-		self::assertSniffError($report, 30, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "boo" and use statement "Boo" do not match');
-		self::assertSniffError($report, 31, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "BOO" and use statement "Boo" do not match');
-		self::assertSniffError($report, 33, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "boo" and use statement "Boo" do not match');
-
-		self::assertSniffError($report, 75, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "uuid" and use statement "Uuid" do not match');
-	}
-
 	public function testUsedTrait(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/usedTrait.php');
