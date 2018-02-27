@@ -157,6 +157,10 @@ Reports usage of superfluous prefix or suffix "Abstract" for abstract classes.
 
 Reports usage of superfluous prefix or suffix "Interface" for interfaces.
 
+#### SlevomatCodingStandard.Classes.SuperfluousExceptionNamingSniff
+
+Reports usage of superfluous suffix "Exception" for exceptions.
+
 #### SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses 🔧
 
 `LanguageConstructWithParenthesesSniff` checks and fixes language construct used with parentheses.
