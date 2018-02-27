@@ -155,7 +155,7 @@ Reports usage of superfluous prefix or suffix "Abstract" for abstract classes.
 
 #### SlevomatCodingStandard.Classes.SuperfluousInterfaceNamingSniff
 
-Reports usage of superfluous suffix "Interface" for interfaces.
+Reports usage of superfluous prefix or suffix "Interface" for interfaces.
 
 #### SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses 🔧
 

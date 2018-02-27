@@ -15,11 +15,15 @@ class SuperfluousInterfaceNamingSniffTest extends \SlevomatCodingStandard\Sniffs
 	{
 		$report = self::checkFile(__DIR__ . '/data/superfluousInterfaceNamingErrors.php');
 
-		self::assertSame(3, $report->getErrorCount());
+		self::assertSame(6, $report->getErrorCount());
 
-		self::assertSniffError($report, 3, SuperfluousInterfaceNamingSniff::CODE_SUPERFLUOUS_SUFFIX, 'Superfluous suffix "Interface".');
-		self::assertSniffError($report, 8, SuperfluousInterfaceNamingSniff::CODE_SUPERFLUOUS_SUFFIX, 'Superfluous suffix "interface".');
-		self::assertSniffError($report, 13, SuperfluousInterfaceNamingSniff::CODE_SUPERFLUOUS_SUFFIX, 'Superfluous suffix "iNtErFaCe".');
+		self::assertSniffError($report, 3, SuperfluousInterfaceNamingSniff::CODE_SUPERFLUOUS_PREFIX, 'Superfluous prefix "Interface".');
+		self::assertSniffError($report, 8, SuperfluousInterfaceNamingSniff::CODE_SUPERFLUOUS_PREFIX, 'Superfluous prefix "interface".');
+		self::assertSniffError($report, 13, SuperfluousInterfaceNamingSniff::CODE_SUPERFLUOUS_PREFIX, 'Superfluous prefix "iNtErFaCe".');
+
+		self::assertSniffError($report, 18, SuperfluousInterfaceNamingSniff::CODE_SUPERFLUOUS_SUFFIX, 'Superfluous suffix "Interface".');
+		self::assertSniffError($report, 23, SuperfluousInterfaceNamingSniff::CODE_SUPERFLUOUS_SUFFIX, 'Superfluous suffix "interface".');
+		self::assertSniffError($report, 28, SuperfluousInterfaceNamingSniff::CODE_SUPERFLUOUS_SUFFIX, 'Superfluous suffix "iNtErFaCe".');
 	}
 
 }

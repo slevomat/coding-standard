@@ -5,7 +5,7 @@ interface A
 
 }
 
-interface InterfaceA
+interface AInterfaceA
 {
 
 }
