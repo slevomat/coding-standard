@@ -13,12 +13,12 @@
 		"squizlabs/php_codesniffer": "^3.0.2"
 	},
 	"require-dev": {
-		"jakub-onderka/php-parallel-lint": "0.9.2",
+		"jakub-onderka/php-parallel-lint": "1.0.0",
 		"phing/phing": "2.16",
 		"phpstan/phpstan": "0.9.2",
 		"phpstan/phpstan-phpunit": "0.9.4",
 		"phpstan/phpstan-strict-rules": "0.9",
-		"phpunit/phpunit": "7.0.0",
+		"phpunit/phpunit": "7.0.2",
 		"phpunit/php-code-coverage": "6.0.1"
 	},
 	"autoload": {
