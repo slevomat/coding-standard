@@ -50,7 +50,7 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				$order = $this->compareUseStatements($useStatement, $this->lastUse);
 				if ($order < 0) {
 					$fix = $phpcsFile->addFixableError(
-						sprintf('Use statements are incorrectly ordered. The first wrong one is %s.', $useStatement->getFullyQualifiedTypeName()),
+						sprintf('Use statements should be sorted alphabetically. The first wrong one is %s.', $useStatement->getFullyQualifiedTypeName()),
 						$useStatement->getPointer(),
 						self::CODE_INCORRECT_ORDER
 					);
