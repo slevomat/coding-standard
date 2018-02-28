@@ -149,15 +149,15 @@ Commas after last element in an array make adding a new element easier and resul
 
 This sniff enforces trailing commas in multi-line arrays and requires short array syntax `[]`.
 
-#### SlevomatCodingStandard.Classes.SuperfluousAbstractClassNamingSniff
+#### SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
 
 Reports usage of superfluous prefix or suffix "Abstract" for abstract classes.
 
-#### SlevomatCodingStandard.Classes.SuperfluousInterfaceNamingSniff
+#### SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming
 
 Reports usage of superfluous prefix or suffix "Interface" for interfaces.
 
-#### SlevomatCodingStandard.Classes.SuperfluousExceptionNamingSniff
+#### SlevomatCodingStandard.Classes.SuperfluousExceptionNaming
 
 Reports usage of superfluous suffix "Exception" for exceptions.
 
