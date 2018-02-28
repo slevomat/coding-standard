@@ -22,6 +22,10 @@ use ThrowsAnnotation;
 use ThrowsAnnotationDescription;
 use MethodAnnotation;
 use MethodAnnotationDescription;
+use Param;
+use Throws;
+use Property;
+use Method;
 
 new bar();
 
