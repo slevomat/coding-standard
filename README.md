@@ -463,6 +463,10 @@ Reports invalid format of inline phpDocs with `@var`.
 
 Require comments with single-line content to be written as one-liners.
 
+#### SlevomatCodingStandard.Classes.DisallowOneLinePropertyDocComment 🔧
+
+Require comments with single-line content to be written as multi-liners.
+
 ## Installation
 
 The recommended way to install Slevomat Coding Standard is [through Composer](http://getcomposer.org).
