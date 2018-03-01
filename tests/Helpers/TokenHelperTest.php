@@ -207,6 +207,16 @@ class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		self::assertTokenPointer(T_STRING, 4, $codeSnifferFile, TokenHelper::findFirstTokenOnNextLine($codeSnifferFile, $variableTokenPointer));
 	}
 
+	public function testFindFirstTokenOnNextLineInDocComment(): void
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/sampleThree.php'
+		);
+		$docBlockTokenPointer = TokenHelper::findNext($codeSnifferFile, T_DOC_COMMENT_OPEN_TAG, 0);
+		self::assertTokenPointer(T_DOC_COMMENT_OPEN_TAG, 3, $codeSnifferFile, $docBlockTokenPointer);
+		self::assertTokenPointer(T_DOC_COMMENT_WHITESPACE, 4, $codeSnifferFile, TokenHelper::findFirstTokenOnNextLine($codeSnifferFile, $docBlockTokenPointer));
+	}
+
 	public function testFindFirstTokenOnIndentedNextLine(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(
