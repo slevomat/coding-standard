@@ -16,9 +16,7 @@ class ClassConstantVisibilitySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 */
 	public $enabled = true;
 
-	/**
-	 * @var bool
-	 */
+	/** @var bool */
 	public $fixable = false;
 
 	/**
