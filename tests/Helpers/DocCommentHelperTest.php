@@ -86,6 +86,11 @@ class DocCommentHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		self::assertFalse(DocCommentHelper::hasDocCommentDescription($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withoutDocComment')));
 	}
 
+	public function testPropertyInLegacyFormatHasDocComment(): void
+	{
+		self::assertTrue(DocCommentHelper::hasDocComment($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'legacyWithDocComment')));
+	}
+
 	public function testFunctionHasDocComment(): void
 	{
 		self::assertTrue(DocCommentHelper::hasDocComment($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withDocCommentAndDescription')));
@@ -152,11 +157,11 @@ class DocCommentHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	{
 		$codeSnifferFile = $this->getTestedCodeSnifferFile();
 
-		foreach ([3, 10, 18, 32, 46, 71, 94] as $line) {
+		foreach ([3, 10, 18, 32, 46, 51, 76, 99] as $line) {
 			self::assertFalse(DocCommentHelper::isInline($codeSnifferFile, $this->findPointerByLineAndType($codeSnifferFile, $line, T_DOC_COMMENT_OPEN_TAG)));
 		}
 
-		foreach ([91] as $line) {
+		foreach ([96] as $line) {
 			self::assertTrue(DocCommentHelper::isInline($codeSnifferFile, $this->findPointerByLineAndType($codeSnifferFile, $line, T_DOC_COMMENT_OPEN_TAG)));
 		}
 	}
