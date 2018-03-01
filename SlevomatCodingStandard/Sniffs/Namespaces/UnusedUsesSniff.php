@@ -49,6 +49,8 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					'@throws',
 					'@property',
 					'@method',
+					'@group',
+					'@expectedExceptionMessage',
 				]
 			);
 		}
