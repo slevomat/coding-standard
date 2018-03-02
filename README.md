@@ -463,7 +463,7 @@ Reports invalid format of inline phpDocs with `@var`.
 
 Require comments with single-line content to be written as one-liners.
 
-#### SlevomatCodingStandard.Classes.DisallowOneLinePropertyDocComment 🔧
+#### SlevomatCodingStandard.Commenting.DisallowOneLinePropertyDocComment 🔧
 
 Require comments with single-line content to be written as multi-liners.
 
