@@ -229,7 +229,7 @@ class TokenHelper
 	 */
 	public static function findFirstTokenOnNextLine(\PHP_CodeSniffer\Files\File $phpcsFile, int $pointer): ?int
 	{
-		$newLinePointer = self::findNextContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $pointer);
+		$newLinePointer = self::findNextContent($phpcsFile, [T_WHITESPACE, T_DOC_COMMENT_WHITESPACE], $phpcsFile->eolChar, $pointer);
 		if ($newLinePointer === null) {
 			return null;
 		}

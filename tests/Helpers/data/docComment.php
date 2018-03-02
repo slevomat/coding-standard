@@ -44,6 +44,11 @@ abstract class WithDocCommentAndDescription
 	public $withoutDocComment;
 
 	/**
+	 * @var bool
+	 */
+	public $legacyWithDocComment;
+
+	/**
 	 * Function with doc comment and description
 	 * And is multi-line
 	 *
