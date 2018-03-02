@@ -152,34 +152,34 @@ class YodaHelper
 
 		if ($sideTokensCount > 0) {
 			if ($sideTokens[0]['code'] === T_VARIABLE) {
-				// expression starts with a variable - wins over everything else
+				// Expression starts with a variable - wins over everything else
 				return self::DYNAMISM_VARIABLE;
 			}
 
 			if ($sideTokens[$sideTokensCount - 1]['code'] === T_CLOSE_PARENTHESIS) {
 				if (isset($sideTokens[$sideTokensCount - 1]['parenthesis_owner']) && $tokens[$sideTokens[$sideTokensCount - 1]['parenthesis_owner']]['code'] === T_ARRAY) {
-					// array()
+					// Array
 					return $dynamism[T_ARRAY];
 				}
 
-				// function or method call
+				// Function or method call
 				return self::DYNAMISM_FUNCTION_CALL;
 			}
 
 			if ($sideTokensCount === 1 && $sideTokens[0]['code'] === T_STRING) {
-				// constant
+				// Constant
 				return self::DYNAMISM_CONSTANT;
 			}
 		}
 
 		if ($sideTokensCount > 2 && $sideTokens[$sideTokensCount - 2]['code'] === T_DOUBLE_COLON) {
 			if ($sideTokens[$sideTokensCount - 1]['code'] === T_VARIABLE) {
-				// static property access
+				// Static property access
 				return self::DYNAMISM_VARIABLE;
 			}
 
 			if ($sideTokens[$sideTokensCount - 1]['code'] === T_STRING) {
-				// class constant
+				// Class constant
 				return self::DYNAMISM_CONSTANT;
 			}
 		}
@@ -231,7 +231,7 @@ class YodaHelper
 				T_DNUMBER => 0,
 				T_LNUMBER => 0,
 				T_OPEN_SHORT_ARRAY => 0,
-				T_ARRAY => 0, // do not stack error messages when the old-style array syntax is used
+				T_ARRAY => 0, // Do not stack error messages when the old-style array syntax is used
 				T_CONSTANT_ENCAPSED_STRING => 0,
 				T_VARIABLE => self::DYNAMISM_VARIABLE,
 				T_STRING => self::DYNAMISM_FUNCTION_CALL,

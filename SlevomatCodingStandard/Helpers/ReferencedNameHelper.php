@@ -88,8 +88,8 @@ class ReferencedNameHelper
 					}
 				} elseif (!in_array($tokens[$nextTokenAfterEndPointer]['code'], [
 						T_VARIABLE,
-						T_ELLIPSIS, // variadic parameter
-						T_BITWISE_AND, // parameter by reference
+						T_ELLIPSIS, // Variadic parameter
+						T_BITWISE_AND, // Parameter by reference
 					], true)
 				) {
 					if (
@@ -97,10 +97,10 @@ class ReferencedNameHelper
 							T_EXTENDS,
 							T_IMPLEMENTS,
 							T_INSTANCEOF,
-							T_USE, // trait
+							T_USE, // Trait
 							T_NEW,
-							T_COLON, // return type hint
-							T_NULLABLE, // nullable type hint
+							T_COLON, // Return type hint
+							T_NULLABLE, // Nullable type hint
 						], true)
 						&& $tokens[$nextTokenAfterEndPointer]['code'] !== T_DOUBLE_COLON
 					) {

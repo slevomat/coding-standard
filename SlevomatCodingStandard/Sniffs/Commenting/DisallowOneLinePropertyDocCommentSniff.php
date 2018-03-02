@@ -28,12 +28,12 @@ class DisallowOneLinePropertyDocCommentSniff implements \PHP_CodeSniffer\Sniffs\
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		// not a property
+		// Not a property
 		if (!PropertyHelper::isProperty($phpcsFile, $propertyPointer)) {
 			return;
 		}
 
-		// only validate properties with comment
+		// Only validate properties with comment
 		if (!DocCommentHelper::hasDocComment($phpcsFile, $propertyPointer)) {
 			return;
 		}
@@ -43,7 +43,7 @@ class DisallowOneLinePropertyDocCommentSniff implements \PHP_CodeSniffer\Sniffs\
 		$docCommentEndPointer = $tokens[$docCommentStartPointer]['comment_closer'];
 		$lineDifference = $tokens[$docCommentEndPointer]['line'] - $tokens[$docCommentStartPointer]['line'];
 
-		// already multi-line
+		// Already multi-line
 		if ($lineDifference !== 0) {
 			return;
 		}

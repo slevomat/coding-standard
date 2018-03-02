@@ -167,7 +167,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$methodCallTokenPointer = TokenHelper::findNextEffective($phpcsFile, $nextTokenPointer + 1);
 			$methodCallToken = $tokens[$methodCallTokenPointer];
 			if ($methodCallToken['code'] === T_OPEN_PARENTHESIS) {
-				// calling a method on $variable
+				// Calling a method on $variable
 				unset($reportedMethods[$this->getNormalizedMethodName($nextToken['content'])]);
 				return $methodCallTokenPointer + 1;
 			}

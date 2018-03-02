@@ -28,17 +28,17 @@ class RequireOneLinePropertyDocCommentSniff implements \PHP_CodeSniffer\Sniffs\S
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		// not a property
+		// Not a property
 		if (!PropertyHelper::isProperty($phpcsFile, $propertyPointer)) {
 			return;
 		}
 
-		// only validate properties with comment
+		// Only validate properties with comment
 		if (!DocCommentHelper::hasDocComment($phpcsFile, $propertyPointer)) {
 			return;
 		}
 
-		// only validate properties without description
+		// Only validate properties without description
 		if (DocCommentHelper::hasDocCommentDescription($phpcsFile, $propertyPointer)) {
 			return;
 		}
@@ -48,15 +48,20 @@ class RequireOneLinePropertyDocCommentSniff implements \PHP_CodeSniffer\Sniffs\S
 		$docCommentEndPointer = $tokens[$docCommentStartPointer]['comment_closer'];
 		$lineDifference = $tokens[$docCommentEndPointer]['line'] - $tokens[$docCommentStartPointer]['line'];
 
-		// already one-line
+		// Already one-line
 		if ($lineDifference === 0) {
 			return;
 		}
 
-		// ignore empty lines
-		for ($currentLinePointer = TokenHelper::findFirstTokenOnNextLine($phpcsFile, $docCommentStartPointer);
-			$currentLinePointer !== null && $currentLinePointer < $docCommentEndPointer;
-			$currentLinePointer = TokenHelper::findFirstTokenOnNextLine($phpcsFile, $currentLinePointer)) {
+		// Ignore empty lines
+		$currentLinePointer = $docCommentStartPointer;
+		do {
+			$currentLinePointer = TokenHelper::findFirstTokenOnNextLine($phpcsFile, $currentLinePointer);
+
+			if ($currentLinePointer === null || $currentLinePointer >= $docCommentEndPointer) {
+				break;
+			}
+
 			$startingPointer = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_STAR, T_DOC_COMMENT_CLOSE_TAG], $currentLinePointer, $docCommentEndPointer);
 
 			if ($startingPointer === null || $tokens[$startingPointer]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
@@ -70,9 +75,9 @@ class RequireOneLinePropertyDocCommentSniff implements \PHP_CodeSniffer\Sniffs\S
 			}
 
 			$lineDifference--;
-		}
+		} while (true);
 
-		// looks like a compound doc-comment
+		// Looks like a compound doc-comment
 		if ($lineDifference > 2) {
 			return;
 		}
