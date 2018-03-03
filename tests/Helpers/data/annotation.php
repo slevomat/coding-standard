@@ -73,6 +73,11 @@ abstract class WithoutAnnotation
 	private $multilineIndentedAnnotation;
 
 	/**
+	 * @var ObjectProphecy<Sample>
+	 */
+	private $annotationWithGeneric;
+
+	/**
 	 * @property-read Test
 	 */
 	private $annotationWithDash;
