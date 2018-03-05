@@ -44,6 +44,8 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			['\SecondExtendedInterface', false, false],
 			['\ThirdExtendedInterface', false, false],
 			['SomeTrait', false, false],
+			['OPENSSL_ALGO_SHA256', false, true],
+			['OPENSSL_ALGO_SHA512', false, true],
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
