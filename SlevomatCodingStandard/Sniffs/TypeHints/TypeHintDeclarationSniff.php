@@ -605,7 +605,7 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$parametersAnnotationTypeHints = $this->getFunctionParameterTypeHintsDefinitions($phpcsFile, $functionPointer);
 		$uselessParameterAnnotations = $this->getUselessParameterAnnotations($phpcsFile, $functionPointer, $parameterTypeHints, $parametersAnnotationTypeHints, $parametersContainDescription);
 
-		foreach (AnnotationHelper::getAnnotations($phpcsFile, $functionPointer) as list($annotation)) {
+		foreach (AnnotationHelper::getAnnotations($phpcsFile, $functionPointer) as [$annotation]) {
 			if ($annotation->getName() === SuppressHelper::ANNOTATION) {
 				$containsUsefulInformation = true;
 				break;
