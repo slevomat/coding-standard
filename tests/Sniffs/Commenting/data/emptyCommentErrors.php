@@ -61,3 +61,53 @@ class Whatever
 	}
 
 }
+
+//
+// Line comment
+
+// Line comment
+//
+
+/*
+ Block comment
+ */
+//
+
+//
+/*
+ Block comment
+ */
+
+if (true) {
+
+} // Line comment
+//
+
+//
+if (true) {
+
+}
+
+//
+if (true) {
+
+}
+
+//
+//
+//
+if (true) {
+
+}
+
+//
+//
+
+// Line comment
+//
+if (true) {
+
+}
+
+// Line comment
+//
