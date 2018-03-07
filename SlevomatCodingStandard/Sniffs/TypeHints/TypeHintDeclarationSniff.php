@@ -948,10 +948,6 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 	private function isReturnAnnotationUseless(\PHP_CodeSniffer\Files\File $phpcsFile, int $functionPointer, ?ReturnTypeHint $returnTypeHint = null, ?Annotation $returnAnnotation = null): bool
 	{
-		if (!FunctionHelper::isAbstract($phpcsFile, $functionPointer) && !FunctionHelper::returnsValue($phpcsFile, $functionPointer) && $returnTypeHint === null) {
-			return true;
-		}
-
 		if ($returnTypeHint === null || $returnAnnotation === null || $returnAnnotation->getContent() === null) {
 			return false;
 		}

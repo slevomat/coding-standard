@@ -145,16 +145,17 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 			'enableObjectTypeHint' => false,
 		]);
 
-		self::assertSame(8, $report->getErrorCount());
+		self::assertSame(9, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		self::assertSniffError($report, 14, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		self::assertSniffError($report, 16, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		self::assertSniffError($report, 24, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
-		self::assertSniffError($report, 31, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
-		self::assertSniffError($report, 35, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		self::assertSniffError($report, 32, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		self::assertSniffError($report, 39, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
-		self::assertSniffError($report, 51, TypeHintDeclarationSniff::CODE_INCORRECT_RETURN_TYPE_HINT);
+		self::assertSniffError($report, 43, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		self::assertSniffError($report, 47, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		self::assertSniffError($report, 59, TypeHintDeclarationSniff::CODE_INCORRECT_RETURN_TYPE_HINT);
 	}
 
 	public function testEnabledNullableTypeHintsNoErrors(): void
