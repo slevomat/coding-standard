@@ -21,9 +21,17 @@ abstract class VoidClass
 	/**
 	 * @return void
 	 */
-	public function withSuppress(): void
+	public function bothReturnTypeAndAnnotation(): void
 	{
 		return;
+	}
+
+	/**
+	 * @return void
+	 */
+	public function onlyReturnAnnotation()
+	{
+
 	}
 
 }
