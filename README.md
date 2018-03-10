@@ -93,11 +93,11 @@ Disallows using loose `==` and `!=` comparison operators. Use `===` and `!==` in
 
 #### SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator 🔧
 
-Require usage of null coalesce operator when possible.
+Requires use of null coalesce operator when possible.
 
 #### SlevomatCodingStandard.ControlStructures.EarlyExit 🔧
 
-Require usage of early exit.
+Requires use of early exit.
 
 ### Cleaning - detecting dead code
 
@@ -155,15 +155,15 @@ This sniff enforces trailing commas in multi-line arrays and requires short arra
 
 #### SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
 
-Reports usage of superfluous prefix or suffix "Abstract" for abstract classes.
+Reports use of superfluous prefix or suffix "Abstract" for abstract classes.
 
 #### SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming
 
-Reports usage of superfluous prefix or suffix "Interface" for interfaces.
+Reports use of superfluous prefix or suffix "Interface" for interfaces.
 
 #### SlevomatCodingStandard.Classes.SuperfluousExceptionNaming
 
-Reports usage of superfluous suffix "Exception" for exceptions.
+Reports use of superfluous suffix "Exception" for exceptions.
 
 #### SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses 🔧
 
@@ -171,7 +171,7 @@ Reports usage of superfluous suffix "Exception" for exceptions.
 
 #### SlevomatCodingStandard.ControlStructures.NewWithParentheses 🔧
 
-Require `new` with parentheses.
+Requires `new` with parentheses.
 
 #### SlevomatCodingStandard.ControlStructures.DisallowShortTernaryOperator 🔧
 
@@ -478,11 +478,11 @@ Reports invalid format of inline phpDocs with `@var`.
 
 #### SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment 🔧
 
-Require comments with single-line content to be written as one-liners.
+Requires comments with single-line content to be written as one-liners.
 
 #### SlevomatCodingStandard.Commenting.DisallowOneLinePropertyDocComment 🔧
 
-Require comments with single-line content to be written as multi-liners.
+Requires comments with single-line content to be written as multi-liners.
 
 ## Installation
 
