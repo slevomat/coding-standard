@@ -83,6 +83,10 @@ Assignment in `while` loop condition is specifically allowed because it's common
 
 This is a great addition to already existing `SlevomatCodingStandard.ControlStructures.DisallowYodaComparison` because it prevents the danger of assigning something by mistake instead of using comparison operator like `===`.
 
+#### SlevomatCodingStandard.ControlStructures.DisallowEmpty
+
+Disallows use of `empty()`.
+
 #### SlevomatCodingStandard.ControlStructures.DisallowEqualOperators 🔧
 
 Disallows using loose `==` and `!=` comparison operators. Use `===` and `!==` instead, they are much more secure and predictable.
