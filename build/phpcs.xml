@@ -8,6 +8,7 @@
 	<rule ref="SlevomatCodingStandard">
 		<exclude name="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming"/>
 		<exclude name="SlevomatCodingStandard.Commenting.DisallowOneLinePropertyDocComment"/>
+		<exclude name="SlevomatCodingStandard.ControlStructures.DisallowShortTernaryOperator"/>
 		<exclude name="SlevomatCodingStandard.ControlStructures.RequireYodaComparison"/>
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalConstants"/>
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions"/>
