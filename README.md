@@ -177,6 +177,10 @@ Requires `new` with parentheses.
 
 Disallows short ternary operator `?:`.
 
+#### SlevomatCodingStandard.ControlStructures.RequireShortTernaryOperator 🔧
+
+Requires short ternary operator `?:` when possible.
+
 #### SlevomatCodingStandard.ControlStructures.DisallowYodaComparison/RequireYodaComparison 🔧
 
 [Yoda conditions](https://en.wikipedia.org/wiki/Yoda_conditions) decrease code comprehensibility and readability by switching operands around comparison operators forcing the reader to read the code in an unnatural way.
