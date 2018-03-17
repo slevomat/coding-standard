@@ -38,7 +38,7 @@ install:
   - ps: $requested_php_version = %{If ($Env:dependencies -eq 'lowest') { $Env:php_version + '.0' } Else { (((choco search php --exact --all-versions -r | Select-String -pattern $Env:php_version) -replace '[php|]', '') | %{ New-Object System.Version $_ } | Sort-Object | Select-Object -Last 1).ToString() }}
   - ps: $php_version_url = %{If ($Env:dependencies -eq 'lowest') { 'http://windows.php.net/downloads/releases/archives/php-' + $requested_php_version + '-nts-Win32-VC' + $Env:vc + '-' + $Env:platform + '.zip' } Else { 'http://windows.php.net/downloads/releases/php-' + $requested_php_version + '-nts-Win32-VC' + $Env:vc + '-' + $Env:platform + '.zip' }}
   - ps: $php_version_file = $Env:php_archive_directory + '\php-' + $requested_php_version + '.zip'
-  - ps: If ((Test-Path $php_version_file) -eq $False) { appveyor-retry appveyor DownloadFile $php_version_url -FileName $php_version_file }
+  - ps: appveyor-retry curl -fsS -o $php_version_file $php_version_url
 
   # Prepare PHP
   - ps: New-Item -Path $Env:php_directory -ItemType 'directory'
@@ -54,7 +54,7 @@ install:
 
   # Prepare composer
   - ps: If ((Test-Path $Env:composer_directory) -eq $False) { New-Item -Path $Env:composer_directory -ItemType 'directory' }
-  - ps: If ((Test-Path $Env:composer_executable) -eq $False) { appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar -FileName $Env:composer_executable }
+  - ps: If ((Test-Path $Env:composer_executable) -eq $False) { appveyor-retry curl -fsS -o $Env:composer_executable https://getcomposer.org/composer.phar }
   - ps: Set-Content -Path ($Env:composer_directory + '\composer.bat') -Value ('@php ' + $Env:composer_executable + ' %*')
   - composer self-update
 
