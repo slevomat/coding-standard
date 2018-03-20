@@ -9,7 +9,7 @@ use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 
-abstract class AbstractFullyQualifiedGlobalReference
+abstract class AbstractFullyQualifiedGlobalReference implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	public const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified';
