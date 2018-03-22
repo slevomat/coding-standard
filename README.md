@@ -217,7 +217,7 @@ use LogableTrait;
 use LoggerInterface;
 ```
 
-#### SlevomatCodingStandard.Namespacec.RequireOneNamespaceInFile
+#### SlevomatCodingStandard.Namespaces.RequireOneNamespaceInFile
 
 Requires only one namespace in a file.
 
@@ -472,7 +472,7 @@ Sniff provides the following settings:
 * `linesCountBetweenDifferentAnnotationsTypes`: allows to configure the number of lines between two different annotations types.
 * `linesCountAfterLastContent`: allows to configure the number of lines after last content (description or annotation).
 
-#### SlevomatCodingStandard.Commenting.EmptyCommentSniff 🔧
+#### SlevomatCodingStandard.Commenting.EmptyComment 🔧
 
 Reports empty comments.
 
