@@ -49,7 +49,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		if (!array_key_exists('scope_opener', $tokens[$elsePointer])) {
-			throw new \Exception(sprintf('Probably invalid "elseif" on line %d.', $tokens[$elsePointer]['line']));
+			throw new \Exception('"else" without curly braces is not supported.');
 		}
 
 		$allConditionsPointers = $this->getAllConditionsPointers($phpcsFile, $elsePointer);
@@ -191,6 +191,10 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	private function processIf(\PHP_CodeSniffer\Files\File $phpcsFile, int $ifPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
+
+		if (!array_key_exists('scope_closer', $tokens[$ifPointer])) {
+			throw new \Exception('"if" without curly braces is not supported.');
+		}
 
 		$nextPointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $tokens[$ifPointer]['scope_closer'] + 1);
 		if ($nextPointer === null || $tokens[$nextPointer]['code'] !== T_CLOSE_CURLY_BRACKET) {
@@ -478,6 +482,10 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 
 		if ($tokens[$conditionPointer]['code'] !== T_ELSE) {
+			if (!array_key_exists('scope_closer', $tokens[$conditionPointer])) {
+				throw new \Exception(sprintf('"%s" without curly braces is not supported.', $tokens[$conditionPointer]['content']));
+			}
+
 			$currentConditionPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$conditionPointer]['scope_closer'] + 1);
 			while (in_array($tokens[$currentConditionPointer]['code'], [T_ELSEIF, T_ELSE], true)) {
 				$conditionsPointers[] = $currentConditionPointer;
