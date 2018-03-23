@@ -14,13 +14,26 @@
 	<rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop"/>
 	<rule ref="Generic.CodeAnalysis.UnconditionalIfStatement"/>
 	<rule ref="Generic.CodeAnalysis.UnnecessaryFinalModifier"/>
+	<rule ref="Generic.ControlStructures.InlineControlStructure"/>
+	<rule ref="Generic.Files.ByteOrderMark"/>
 	<rule ref="Generic.Files.InlineHTML"/>
+	<rule ref="Generic.Files.LineEndings">
+		<properties>
+			<property name="eolChar" value="\n"/>
+		</properties>
+	</rule>
+	<rule ref="Generic.Formatting.DisallowMultipleStatements"/>
 	<rule ref="Generic.Formatting.SpaceAfterCast"/>
+	<rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
 	<rule ref="Generic.Functions.OpeningFunctionBraceBsdAllman"/>
 	<rule ref="Generic.NamingConventions.ConstructorName"/>
+	<rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
 	<rule ref="Generic.PHP.CharacterBeforePHPOpeningTag"/>
 	<rule ref="Generic.PHP.DeprecatedFunctions"/>
+	<rule ref="Generic.PHP.DisallowShortOpenTag"/>
 	<rule ref="Generic.PHP.ForbiddenFunctions"/>
+	<rule ref="Generic.PHP.LowerCaseConstant"/>
+	<rule ref="Generic.PHP.LowerCaseKeyword"/>
 	<rule ref="Generic.Strings.UnnecessaryStringConcat">
 		<properties>
 			<property name="allowMultiline" value="true"/>
@@ -36,21 +49,27 @@
 	<rule ref="PEAR.Commenting.InlineComment"/>
 	<rule ref="PEAR.Formatting.MultiLineAssignment"/>
 	<rule ref="PEAR.WhiteSpace.ObjectOperatorIndent"/>
-	<rule ref="PSR2">
-		<exclude name="Generic.Files.LineLength"/><!-- can not be suppressed -->
-		<exclude name="Generic.WhiteSpace.DisallowTabIndent"/><!-- don't check indentation with spaces -->
-		<exclude name="PEAR.Functions.ValidDefaultValue"/><!-- we want to allow null as "default" value -->
-		<exclude name="PSR2.Classes.ClassDeclaration"/><!-- we want whitespace around class body and rules for extends and implements, using PEAR instead -->
+	<rule ref="PSR1.Classes.ClassDeclaration"/>
+	<rule ref="PSR1.Files.SideEffects"/>
+	<rule ref="PSR1.Methods.CamelCapsMethodName"/>
+	<rule ref="PSR2.Classes.PropertyDeclaration"/>
+	<rule ref="PSR2.ControlStructures.ControlStructureSpacing">
 		<exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/><!-- we want to put first expression of multiline condition on next line -->
+	</rule>
+	<rule ref="PSR2.ControlStructures.ElseIfDeclaration"/>
+	<rule ref="PSR2.ControlStructures.SwitchDeclaration">
 		<exclude name="PSR2.ControlStructures.SwitchDeclaration.caseIndent"/><!-- checked by more generic Generic.WhiteSpace.ScopeIndent.Incorrect -->
 		<exclude name="PSR2.ControlStructures.SwitchDeclaration.defaultIndent"/><!-- checked by more generic Generic.WhiteSpace.ScopeIndent.Incorrect -->
-		<exclude name="Squiz.Functions.LowercaseFunctionKeywords"/><!-- checked by more generic Generic.PHP.LowerCaseKeyword -->
-		<exclude name="Squiz.ControlStructures.LowercaseDeclaration"/><!-- checked by more generic Generic.PHP.LowerCaseKeyword -->
-		<exclude name="Squiz.Functions.MultiLineFunctionDeclaration.NewlineBeforeOpenBrace"/><!-- clashes with OpeningFunctionBraceBsdAllman -->
-		<exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingAfterOpen"/><!-- we want to allow empty line in control structure e.g. in catch blocks, where it can improve readability -->
-		<exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingAfterOpenBrace"/><!-- we want to put first expression of multiline condition on next line -->
-		<exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingBeforeClose"/><!-- we want to allow empty line in control structure e.g. in try blocks, where it can improve readability -->
 	</rule>
+	<rule ref="PSR2.Files.ClosingTag"/>
+	<rule ref="PSR2.Files.EndFileNewline"/>
+	<rule ref="PSR2.Methods.FunctionCallSignature">
+		<exclude name="PSR2.Methods.FunctionCallSignature.SpaceAfterCloseBracket"/><!-- space after closing bracked should be checked depending on where function is called, not as part of the function call -->
+	</rule>
+	<rule ref="PSR2.Methods.FunctionClosingBrace"/>
+	<rule ref="PSR2.Methods.MethodDeclaration"/>
+	<rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
+	<rule ref="PSR2.Namespaces.UseDeclaration"/>
 	<rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
 	<rule ref="Squiz.Arrays.ArrayDeclaration">
 		<exclude name="Squiz.Arrays.ArrayDeclaration.CloseBraceNewLine"/><!-- does not handle wrapped content -->
@@ -66,12 +85,14 @@
 	</rule>
 	<rule ref="Squiz.Classes.ClassFileName"/>
 	<rule ref="Squiz.Classes.SelfMemberReference"/>
+	<rule ref="Squiz.Classes.ValidClassName"/>
 	<rule ref="Squiz.Commenting.DocCommentAlignment">
 		<exclude name="Squiz.Commenting.DocCommentAlignment.SpaceAfterStar"/><!-- space needed for indented annotations -->
 	</rule>
 	<rule ref="Squiz.Commenting.EmptyCatchComment"/>
 	<rule ref="Squiz.Commenting.FunctionComment">
 		<exclude name="Squiz.Commenting.FunctionComment.EmptyThrows"/><!-- @throws are forbidden -->
+		<exclude name="Squiz.Commenting.FunctionComment.IncorrectParamVarName"/><!-- requires long boolean and integer parameters -->
 		<exclude name="Squiz.Commenting.FunctionComment.IncorrectTypeHint"/><!-- collection syntax such as string[] is not supported -->
 		<exclude name="Squiz.Commenting.FunctionComment.InvalidReturn"/><!-- enforces incorrect types -->
 		<exclude name="Squiz.Commenting.FunctionComment.InvalidReturnNotVoid"/><!-- is not able to detect return types such as string|null as correct -->
@@ -100,7 +121,20 @@
 	<rule ref="Squiz.Commenting.FunctionComment.MissingParamTag">
 		<message>@param annotation for parameter "%s" missing</message>
 	</rule>
+	<rule ref="Squiz.ControlStructures.ControlSignature"/>
+	<rule ref="Squiz.ControlStructures.ForEachLoopDeclaration"/>
+	<rule ref="Squiz.ControlStructures.ForLoopDeclaration"/>
+	<rule ref="Squiz.Functions.FunctionDeclaration"/>
+	<rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
+		<properties>
+			<property name="equalsSpacing" value="1"/>
+		</properties>
+		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterHint"/><!-- already checked by SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing.MultipleSpacesBetweenTypeHintAndParameter -->
+	</rule>
 	<rule ref="Squiz.Functions.GlobalFunction"/>
+	<rule ref="Squiz.Functions.MultiLineFunctionDeclaration">
+		<exclude name="Squiz.Functions.MultiLineFunctionDeclaration.NewlineBeforeOpenBrace"/><!-- clashes with OpeningFunctionBraceBsdAllman -->
+	</rule>
 	<rule ref="Squiz.Operators.IncrementDecrementUsage">
 		<exclude name="Squiz.Operators.IncrementDecrementUsage.NoBrackets"/><!-- afaik there is no need for brackets -->
 	</rule>
@@ -110,6 +144,7 @@
 	<rule ref="Squiz.PHP.InnerFunctions"/>
 	<rule ref="Squiz.PHP.LowercasePHPFunctions"/>
 	<rule ref="Squiz.PHP.NonExecutableCode"/>
+	<rule ref="Squiz.Scope.MethodScope"/>
 	<rule ref="Squiz.Scope.StaticThisUsage"/>
 	<rule ref="Squiz.Strings.DoubleQuoteUsage"/>
 	<rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar">
@@ -143,13 +178,8 @@
 			<property name="ignoreNewlines" value="true"/>
 		</properties>
 	</rule>
+	<rule ref="Squiz.WhiteSpace.ScopeClosingBrace"/>
+	<rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing"/>
 	<rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
-	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
-		<properties>
-			<property name="ignoreBlankLines" value="false"/><!-- turned on by PSR2 -> turning off to be more general -->
-		</properties>
-	</rule>
-	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines">
-		<severity>5</severity><!-- turned off by PSR2 -> turning on with default severity -->
-	</rule>
+	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>
 </ruleset>
