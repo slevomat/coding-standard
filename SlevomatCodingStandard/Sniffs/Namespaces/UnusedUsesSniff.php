@@ -168,7 +168,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 							$content = $annotation->getContent();
 
 							$contentsToCheck = [];
-							if ($annotationName === '@method' && preg_match('~^(?:([\\\\\\w|]+)\\s+)?\\w+\(([^\)]*)\)~', $content, $matches)) {
+							if ($annotationName === '@method' && preg_match('~^(?:([\\\\\\w|]+)\\s+)?\\w+\\s*\(([^\)]*)\)~', $content, $matches)) {
 								if (preg_match_all('~(?:^|\?\\s*|,\\s*)([\\\\\\w]+)(?=\\s|=|\.)~', $matches[2], $submatches)) {
 									$contentsToCheck = $submatches[1];
 								}

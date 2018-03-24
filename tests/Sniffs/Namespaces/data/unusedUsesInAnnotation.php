@@ -98,7 +98,7 @@ class Boo
  * @property PropertyAnnotation $property propertyAnnotation description
  * @property-read PropertyReadAnnotation $propertyRead propertyReadAnnotation description
  * @property-write PropertyWriteAnnotation $propertyWrite propertyWriteAnnotation description
- * @method MethodAnnotation method(MethodParameter1 $m, MethodParameter2 ...$m2) methodAnnotationDescription
+ * @method MethodAnnotation method (MethodParameter1 $m, MethodParameter2 ...$m2) methodAnnotationDescription
  * @method method(MethodParameter3 $m = null, ?MethodParameter4 $m2) methodAnnotationDescription
  */
 class Foo
