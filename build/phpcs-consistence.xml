@@ -3,6 +3,8 @@
 
 	<!-- copy of https://github.com/consistence/coding-standard/blob/master/Consistence/ruleset.xml for local checking usage -->
 
+	<config name="installed_paths" value="../../../SlevomatCodingStandard"/><!-- relative path from PHPCS source location -->
+
 	<rule ref="Generic.Arrays.ArrayIndent">
 		<exclude name="Generic.Arrays.ArrayIndent.CloseBraceNotNewLine"/><!-- multiline items causes evaluation as multiline array https://github.com/squizlabs/PHP_CodeSniffer/issues/1791 -->
 	</rule>
@@ -70,6 +72,64 @@
 	<rule ref="PSR2.Methods.MethodDeclaration"/>
 	<rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
 	<rule ref="PSR2.Namespaces.UseDeclaration"/>
+	<rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
+	<rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility"/>
+	<rule ref="SlevomatCodingStandard.Classes.UnusedPrivateElements"/>
+	<rule ref="SlevomatCodingStandard.Commenting.EmptyComment"/>
+	<rule ref="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration"/>
+	<rule ref="SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment"/>
+	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison"/>
+	<rule ref="SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses"/>
+	<rule ref="SlevomatCodingStandard.ControlStructures.NewWithParentheses"/>
+	<rule ref="SlevomatCodingStandard.Exceptions.DeadCatch"/>
+	<rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly"/>
+	<rule ref="SlevomatCodingStandard.PHP.TypeCast"/>
+	<rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses">
+		<properties>
+			<property name="caseSensitive" value="true"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Namespaces.DisallowGroupUse"/>
+	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword">
+		<properties>
+			<property name="keywordsToCheck" type="array" value="
+				T_EXTENDS,
+				T_IMPLEMENTS,
+				T_USE,
+			"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation"/>
+	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedExceptions"/>
+	<rule ref="SlevomatCodingStandard.Namespaces.MultipleUsesPerLine"/>
+	<rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
+		<properties>
+			<property name="allowFullyQualifiedExceptions" value="true"/>
+			<property name="allowPartialUses" value="false"/>
+			<property name="fullyQualifiedKeywords" type="array" value="
+				T_EXTENDS,
+				T_IMPLEMENTS,
+				T_USE,
+			"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
+		<properties>
+			<property name="searchAnnotations" value="true"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash"/>
+	<rule ref="SlevomatCodingStandard.Namespaces.UseFromSameNamespace"/>
+	<rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
+		<properties>
+			<property name="newlinesCountBetweenOpenTagAndDeclare" value="2"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
+	<rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue"/>
+	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
+	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
+	<rule ref="SlevomatCodingStandard.Types.EmptyLinesAroundTypeBraces"/>
 	<rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
 	<rule ref="Squiz.Arrays.ArrayDeclaration">
 		<exclude name="Squiz.Arrays.ArrayDeclaration.CloseBraceNewLine"/><!-- does not handle wrapped content -->

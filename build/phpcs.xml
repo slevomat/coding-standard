@@ -45,6 +45,11 @@
 			<property name="rootNamespaces" type="array" value="SlevomatCodingStandard=>SlevomatCodingStandard,tests=>SlevomatCodingStandard"/>
 		</properties>
 	</rule>
+	<rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses">
+		<properties>
+			<property name="caseSensitive" value="false"/>
+		</properties>
+	</rule>
 	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword">
 		<properties>
 			<property name="keywordsToCheck" type="array" value="T_EXTENDS,T_IMPLEMENTS"/>
@@ -60,6 +65,11 @@
 			<property name="allowPartialUses" value="false"/>
 		</properties>
 	</rule>
+	<rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
+		<properties>
+			<property name="searchAnnotations" value="false"/>
+		</properties>
+	</rule>
 	<rule ref="SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces">
 		<properties>
 			<property name="namespacesRequiredToUse" type="array" value="SlevomatCodingStandard"/>
@@ -71,6 +81,11 @@
 			<property name="usefulAnnotations" type="array" value="
 				@dataProvider
 			"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
+		<properties>
+			<property name="newlinesCountBetweenOpenTagAndDeclare" value="0"/>
 		</properties>
 	</rule>
 </ruleset>
