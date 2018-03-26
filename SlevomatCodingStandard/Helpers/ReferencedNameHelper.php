@@ -86,7 +86,8 @@ class ReferencedNameHelper
 					if ($tokens[$previousTokenBeforeStartPointer]['code'] !== T_NEW) {
 						$type = ReferencedName::TYPE_FUNCTION;
 					}
-				} elseif (!in_array($tokens[$nextTokenAfterEndPointer]['code'], [
+				} elseif (
+					!in_array($tokens[$nextTokenAfterEndPointer]['code'], [
 						T_VARIABLE,
 						T_ELLIPSIS, // Variadic parameter
 						T_BITWISE_AND, // Parameter by reference
