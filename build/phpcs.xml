@@ -5,14 +5,6 @@
 	<arg value="s"/>
 	<arg value="p"/>
 
-	<rule ref="SlevomatCodingStandard">
-		<exclude name="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming"/>
-		<exclude name="SlevomatCodingStandard.Commenting.DisallowOneLinePropertyDocComment"/>
-		<exclude name="SlevomatCodingStandard.ControlStructures.DisallowShortTernaryOperator"/>
-		<exclude name="SlevomatCodingStandard.ControlStructures.RequireYodaComparison"/>
-		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalConstants"/>
-		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions"/>
-	</rule>
 	<rule ref="./phpcs-consistence.xml">
 		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedIf"/><!-- Allow empty if statements - usually with a comment -->
 		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedElseif"/><!-- Allow empty elseif statements - usually with a comment -->
@@ -24,6 +16,8 @@
 	<rule ref="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming">
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Namespaces/AbstractFullyQualifiedGlobalReference.php</exclude-pattern>
 	</rule>
+	<rule ref="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming"/>
+	<rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing"/>
 	<rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
 		<properties>
 			<property name="forbiddenAnnotations" type="array" value="
@@ -37,6 +31,13 @@
 			"/>
 		</properties>
 	</rule>
+	<rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments"/>
+	<rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
+	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowEmpty"/>
+	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowEqualOperators"/>
+	<rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit"/>
+	<rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator"/>
+	<rule ref="SlevomatCodingStandard.ControlStructures.RequireShortTernaryOperator"/>
 	<rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly">
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Exceptions/ReferenceThrowableOnlySniff.php</exclude-pattern>
 	</rule>
@@ -65,6 +66,7 @@
 			<property name="allowPartialUses" value="false"/>
 		</properties>
 	</rule>
+	<rule ref="SlevomatCodingStandard.Namespaces.RequireOneNamespaceInFile"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
 		<properties>
 			<property name="searchAnnotations" value="false"/>
@@ -75,6 +77,8 @@
 			<property name="namespacesRequiredToUse" type="array" value="SlevomatCodingStandard"/>
 		</properties>
 	</rule>
+	<rule ref="SlevomatCodingStandard.Namespaces.UseSpacing"/>
+	<rule ref="SlevomatCodingStandard.PHP.ShortList"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
 		<properties>
 			<property name="enableObjectTypeHint" value="false"/>
