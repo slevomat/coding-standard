@@ -3,7 +3,7 @@
 namespace SlevomatCodingStandard\Sniffs\Commenting;
 
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
-use SlevomatCodingStandard\Helpers\PropertyHelper;
+use SlevomatCodingStandard\Helpers\TokenHelper;
 
 class InlineDocCommentDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
@@ -16,29 +16,26 @@ class InlineDocCommentDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	public function register(): array
 	{
 		return [
-			T_VARIABLE,
+			T_DOC_COMMENT_OPEN_TAG,
 		];
 	}
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param int $variablePointer
+	 * @param int $docCommentOpenPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $variablePointer): void
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $docCommentOpenPointer): void
 	{
-		if (PropertyHelper::isProperty($phpcsFile, $variablePointer)) {
-			return;
-		}
-
-		$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $variablePointer);
-		if ($docCommentOpenPointer === null) {
-			return;
-		}
-
 		$tokens = $phpcsFile->getTokens();
 
-		$docCommentContent = DocCommentHelper::getDocComment($phpcsFile, $variablePointer);
+		$pointerAfterDocComment = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $tokens[$docCommentOpenPointer]['comment_closer'] + 1);
+
+		if ($pointerAfterDocComment === null || !in_array($tokens[$pointerAfterDocComment]['code'], [T_VARIABLE, T_FOREACH, T_WHILE], true)) {
+			return;
+		}
+
+		$docCommentContent = DocCommentHelper::getDocComment($phpcsFile, $docCommentOpenPointer);
 
 		if (strpos($docCommentContent, '@var') !== 0) {
 			return;
@@ -51,14 +48,13 @@ class InlineDocCommentDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		if (preg_match('~^@var\\s+(\$\\S+)\\s+(\\S+)(\\s+.+)?$~', $docCommentContent, $matches)) {
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
-					'Invalid inline doc comment format "%s" for variable %s, expected "@var %s %s%s".',
+					'Invalid inline doc comment format "%s", expected "@var %s %s%s".',
 					$docCommentContent,
-					$tokens[$variablePointer]['content'],
 					$matches[2],
 					$matches[1],
 					$matches[3] ?? ''
 				),
-				$variablePointer,
+				$docCommentOpenPointer,
 				self::CODE_INVALID_FORMAT
 			);
 
@@ -72,8 +68,8 @@ class InlineDocCommentDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			}
 		} else {
 			$phpcsFile->addError(
-				sprintf('Invalid inline doc comment format "%1$s" for variable %2$s, expected "@var type %2$s".', $docCommentContent, $tokens[$variablePointer]['content']),
-				$variablePointer,
+				sprintf('Invalid inline doc comment format "%1$s", expected "@var type $variable".', $docCommentContent),
+				$docCommentOpenPointer,
 				self::CODE_INVALID_FORMAT
 			);
 		}

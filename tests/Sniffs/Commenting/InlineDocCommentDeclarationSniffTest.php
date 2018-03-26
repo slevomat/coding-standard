@@ -15,25 +15,40 @@ class InlineDocCommentDeclarationSniffTest extends \SlevomatCodingStandard\Sniff
 	{
 		$report = self::checkFile(__DIR__ . '/data/invalidInlineDocCommentDeclarations.php');
 
-		self::assertSame(3, $report->getErrorCount());
+		self::assertSame(5, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
-			12,
+			11,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
-			'Invalid inline doc comment format "@var $a string[]" for variable $a, expected "@var string[] $a".'
+			'Invalid inline doc comment format "@var $a string[]", expected "@var string[] $a".'
 		);
 		self::assertSniffError(
 			$report,
-			18,
+			17,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
-			'Invalid inline doc comment format "@var $c" for variable $c, expected "@var type $c".'
+			'Invalid inline doc comment format "@var $c", expected "@var type $variable".'
 		);
+
 		self::assertSniffError(
 			$report,
-			21,
+			20,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
-			'Invalid inline doc comment format "@var $d iterable|array|\Traversable Lorem ipsum" for variable $d, expected "@var iterable|array|\Traversable $d Lorem ipsum".'
+			'Invalid inline doc comment format "@var $d iterable|array|\Traversable Lorem ipsum", expected "@var iterable|array|\Traversable $d Lorem ipsum".'
+		);
+
+		self::assertSniffError(
+			$report,
+			23,
+			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
+			'Invalid inline doc comment format "@var $f string", expected "@var string $f".'
+		);
+
+		self::assertSniffError(
+			$report,
+			28,
+			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
+			'Invalid inline doc comment format "@var $h \DateTimeImmutable", expected "@var \DateTimeImmutable $h".'
 		);
 	}
 

@@ -19,6 +19,16 @@ class Foo
 
 		/** @var $d iterable|array|\Traversable Lorem ipsum */
 		$d = [];
+
+		/** @var $f string */
+		foreach ($e as $f) {
+
+		}
+
+		/** @var $h \DateTimeImmutable */
+		while ($h = current($g)) {
+
+		}
 	}
 
 	public function get()
