@@ -63,6 +63,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	/** @var string[] */
 	public $usefulAnnotations = [];
 
+	/** @var bool */
+	public $allAnnotationsAreUseful = false;
+
 	/** @var int[]|null [string => int] */
 	private $normalizedTraversableTypeHints;
 
@@ -607,6 +610,11 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		foreach (AnnotationHelper::getAnnotations($phpcsFile, $functionPointer) as [$annotation]) {
 			if ($annotation->getName() === SuppressHelper::ANNOTATION) {
+				$containsUsefulInformation = true;
+				break;
+			}
+
+			if ($this->allAnnotationsAreUseful && !in_array($annotation->getName(), ['@param', '@return'], true)) {
 				$containsUsefulInformation = true;
 				break;
 			}

@@ -50,7 +50,8 @@ Sniff provides the following settings:
 * **DEPRECATED** `enableVoidTypeHint`: enforces to transform `@return void` into native `void` return typehint.
 * `enableObjectTypeHint`: enforces to transform `@param object` or `@return object` into native `object` typehint. It's on by default if you're on PHP 7.2+
 * `traversableTypeHints`: enforces which typehints must have specified contained type. E. g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
-* `usefulAnnotations`: prevents reporting and removing useless phpDocs if they contain an additional configured annotation like `@dataProvider`.
+* **DEPRECATED** `usefulAnnotations`: prevents reporting and removing useless phpDocs if they contain an additional configured annotation like `@dataProvider`.
+* `allAnnotationsAreUseful`: phpDoc is useful if it contain any annotation.
 * `enableEachParameterAndReturnInspection`: enables inspection and fixing of `@param` and `@return` annotations separately. Useful when you only want to document parameters or return values that could not be expressed natively (i.e. member types of `array` or `Traversable`).
 
 This sniff can cause an error if you're overriding or implementing a parent method which does not have typehints. In such cases add `@phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint` annotation to the method to have this sniff skip it.

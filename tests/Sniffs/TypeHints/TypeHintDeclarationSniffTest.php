@@ -378,4 +378,37 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testAllAnnotationsAreUseful(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/typeHintDeclarationAllAnnotationsAreUseful.php', [
+			'allAnnotationsAreUseful' => true,
+		]);
+
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 9, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
+		self::assertSniffError($report, 19, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testAllAnnotationsAreUsefulAndEachParameterAndReturnInspectionEnabled(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/typeHintDeclarationAllAnnotationsAreUsefulAndEachParameterAndReturnInspectionEnabled.php', [
+			'allAnnotationsAreUseful' => true,
+			'enableEachParameterAndReturnInspection' => true,
+		]);
+
+		self::assertSame(6, $report->getErrorCount());
+
+		self::assertSniffError($report, 9, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
+		self::assertSniffError($report, 19, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
+		self::assertSniffError($report, 26, TypeHintDeclarationSniff::CODE_USELESS_RETURN_ANNOTATION);
+		self::assertSniffError($report, 34, TypeHintDeclarationSniff::CODE_USELESS_PARAMETER_ANNOTATION);
+		self::assertSniffError($report, 35, TypeHintDeclarationSniff::CODE_USELESS_PARAMETER_ANNOTATION);
+		self::assertSniffError($report, 36, TypeHintDeclarationSniff::CODE_USELESS_RETURN_ANNOTATION);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
