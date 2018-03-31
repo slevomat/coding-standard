@@ -163,7 +163,7 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 			'searchAnnotations' => true,
 		], [UnusedUsesSniff::CODE_MISMATCHING_CASE]);
 
-		self::assertSame(7, $report->getErrorCount());
+		self::assertSame(8, $report->getErrorCount());
 
 		self::assertSniffError($report, 30, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "bar" and use statement "Bar" do not match');
 		self::assertSniffError($report, 32, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "BAR" and use statement "Bar" do not match');
@@ -175,23 +175,27 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		self::assertSniffError($report, 79, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "ignore" and use statement "Ignore" do not match');
 
 		self::assertSniffError($report, 79, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "uuid" and use statement "Uuid" do not match');
+
+		self::assertSniffError($report, 107, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "ignore" and use statement "Ignore" do not match');
 	}
 
-	public function testIgnoredAnnotationNamesAreNotUsed(): void
+	public function testIgnoredAnnotationsAreNotUsed(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/caseInsensitiveUse.php', [
 			'searchAnnotations' => true,
 			'ignoredAnnotationNames' => ['@ignore'],
+			'ignoredAnnotations' => ['@group'],
 		], [UnusedUsesSniff::CODE_UNUSED_USE]);
 
 		self::assertSniffError($report, 8, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Ignore is not used in this file.');
 	}
 
-	public function testIgnoredAnnotationNames(): void
+	public function testIgnoredAnnotations(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/caseInsensitiveUse.php', [
 			'searchAnnotations' => true,
 			'ignoredAnnotationNames' => ['@ignore'],
+			'ignoredAnnotations' => ['@group'],
 		], [UnusedUsesSniff::CODE_MISMATCHING_CASE]);
 
 		self::assertSame(6, $report->getErrorCount());

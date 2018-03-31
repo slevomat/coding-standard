@@ -102,3 +102,11 @@ class Foo
 	}
 
 }
+
+/**
+ * @group ignore
+ */
+class Fooo
+{
+
+}

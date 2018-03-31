@@ -23,8 +23,14 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	/** @var string[] */
 	public $ignoredAnnotationNames = [];
 
+	/** @var string[] */
+	public $ignoredAnnotations = [];
+
 	/** @var string[]|null */
 	private $normalizedIgnoredAnnotationNames;
+
+	/** @var string[]|null */
+	private $normalizedIgnoredAnnotations;
 
 	/**
 	 * @return mixed[]
@@ -54,6 +60,18 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 
 		return $this->normalizedIgnoredAnnotationNames;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getIgnoredAnnotations(): array
+	{
+		if ($this->normalizedIgnoredAnnotations === null) {
+			$this->normalizedIgnoredAnnotations = SniffSettingsHelper::normalizeArray($this->ignoredAnnotations);
+		}
+
+		return $this->normalizedIgnoredAnnotations;
 	}
 
 	/**
@@ -115,6 +133,10 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					$uniqueId = UseStatement::getUniqueId($useStatement->getType(), $nameAsReferencedInFile);
 
 					foreach ($annotations as $annotationName => $annotationsByName) {
+						if (in_array($annotationName, $this->getIgnoredAnnotations(), true)) {
+							continue;
+						}
+
 						if (
 							!in_array($annotationName, $this->getIgnoredAnnotationNames(), true)
 							&& preg_match('~^@(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=[^-a-z\\d]|$)~i', $annotationName, $matches)
