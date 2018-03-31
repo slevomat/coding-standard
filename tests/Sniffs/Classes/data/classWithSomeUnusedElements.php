@@ -153,4 +153,9 @@ CODE;
 	 */
 	private const UNUSED_CONSTANT_WITH_SUPPRESS = 0;
 
+	/**
+	 * @Assert\Whatever()
+	 */
+	private $propertyWithPrefixAnnotation;
+
 }

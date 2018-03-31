@@ -12,6 +12,7 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 				'@get',
 				'@set',
 				'@ORM\Column',
+				'@Assert\\',
 			],
 			'alwaysUsedPropertiesSuffixes' => [
 				'Value',
@@ -103,6 +104,7 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		self::assertNoSniffError($resultFile, 123);
 		self::assertNoSniffError($resultFile, 130);
 		self::assertNoSniffError($resultFile, 135);
+		self::assertNoSniffError($resultFile, 159);
 	}
 
 	public function testOnlyPublicElements(): void

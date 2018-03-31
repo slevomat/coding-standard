@@ -367,14 +367,24 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			}
 
 			$findPropertiesStartTokenPointer = $propertyTokenPointer + 1;
-			$phpDocTags = $this->getPhpDocTags($phpcsFile, $visibilityModifierTokenPointer);
-			foreach ($phpDocTags as $tag) {
-				preg_match('#([@a-zA-Z\\\]+)#', $tag, $matches);
-				if (!in_array($matches[1], $this->getAlwaysUsedPropertiesAnnotations(), true)) {
-					continue;
-				}
+			$annotationNames = $this->getAnnotationNames($phpcsFile, $visibilityModifierTokenPointer);
 
-				continue 2;
+			$alwaysUsedProperty = false;
+			foreach ($annotationNames as $annotationName) {
+				foreach ($this->getAlwaysUsedPropertiesAnnotations() as $alwaysUsedPropertyAnnotationName) {
+					if ($annotationName === $alwaysUsedPropertyAnnotationName) {
+						$alwaysUsedProperty = true;
+						break 2;
+					}
+
+					if (substr($alwaysUsedPropertyAnnotationName, -1) !== '\\' || strpos($annotationName, $alwaysUsedPropertyAnnotationName) !== 0) {
+						$alwaysUsedProperty = true;
+						break 2;
+					}
+				}
+			}
+			if ($alwaysUsedProperty) {
+				continue;
 			}
 
 			$propertyToken = $tokens[$propertyTokenPointer];
@@ -399,7 +409,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param int $privateTokenPointer
 	 * @return string[]
 	 */
-	private function getPhpDocTags(\PHP_CodeSniffer\Files\File $phpcsFile, int $privateTokenPointer): array
+	private function getAnnotationNames(\PHP_CodeSniffer\Files\File $phpcsFile, int $privateTokenPointer): array
 	{
 		return array_keys(AnnotationHelper::getAnnotations($phpcsFile, $privateTokenPointer));
 	}
