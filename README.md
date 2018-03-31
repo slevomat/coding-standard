@@ -221,6 +221,10 @@ use LoggerInterface;
 
 Requires only one namespace in a file.
 
+#### SlevomatCodingStandard.Namespaces.NamespaceSpacing 🔧
+
+Enforces configurable number of lines before and after `namespace`.
+
 #### SlevomatCodingStandard.Namespaces.UseSpacing 🔧
 
 Enforces configurable number of lines before first `use`, after last `use` and between two different types of `use` (eg. between `use function` and `use const`).
