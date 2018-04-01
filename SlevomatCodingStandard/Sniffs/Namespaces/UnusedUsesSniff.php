@@ -206,7 +206,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 							}
 
 							foreach ($contentsToCheck as $contentToCheck) {
-								if (!preg_match('~(?<=^|\|)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|\\\\|\||\[|$)~i', $contentToCheck, $matches)) {
+								if (!preg_match('~(?<=\&|^|\||\(|\))(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|\\\\|\||\&|\[|\(|\)|$)~i', $contentToCheck, $matches)) {
 									continue;
 								}
 
