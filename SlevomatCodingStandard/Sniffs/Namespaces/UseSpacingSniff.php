@@ -157,6 +157,8 @@ class UseSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return;
 		}
 
+		$tokens = $phpcsFile->getTokens();
+
 		$requiredLinesCountBetweenUseTypes = SniffSettingsHelper::normalizeInteger($this->linesCountBetweenUseTypes);
 
 		$previousUse = null;
@@ -171,12 +173,7 @@ class UseSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				continue;
 			}
 
-			/** @var int $previousUseSemicolonPointer */
-			$previousUseSemicolonPointer = TokenHelper::findNextLocal($phpcsFile, T_SEMICOLON, $previousUse->getPointer() + 1);
-			$pointerAfterWhitespaceAfterPreviousUse = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $previousUseSemicolonPointer + 1);
-			$whitespaceAfterPreviousUse = TokenHelper::getContent($phpcsFile, $previousUseSemicolonPointer + 1, $pointerAfterWhitespaceAfterPreviousUse - 1);
-
-			$actualLinesCountAfterPreviousUse = substr_count($whitespaceAfterPreviousUse, $phpcsFile->eolChar) - 1;
+			$actualLinesCountAfterPreviousUse = $tokens[$use->getPointer()]['line'] - $tokens[$previousUse->getPointer()]['line'] - 1;
 
 			if ($actualLinesCountAfterPreviousUse === $requiredLinesCountBetweenUseTypes) {
 				$previousUse = $use;
@@ -197,6 +194,9 @@ class UseSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				$previousUse = $use;
 				continue;
 			}
+
+			/** @var int $previousUseSemicolonPointer */
+			$previousUseSemicolonPointer = TokenHelper::findNextLocal($phpcsFile, T_SEMICOLON, $previousUse->getPointer() + 1);
 
 			$phpcsFile->fixer->beginChangeset();
 			for ($i = $previousUseSemicolonPointer + 1; $i < $use->getPointer(); $i++) {
