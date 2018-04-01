@@ -122,4 +122,17 @@ class UseSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testSameUseTypesErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/useSpacingSameUseTypesErrors.php', [], [UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_SAME_TYPES_OF_USE]);
+
+		self::assertSame(3, $report->getErrorCount());
+
+		self::assertSniffError($report, 6, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_SAME_TYPES_OF_USE);
+		self::assertSniffError($report, 12, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_SAME_TYPES_OF_USE);
+		self::assertSniffError($report, 20, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_SAME_TYPES_OF_USE);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }

@@ -11,6 +11,7 @@ class UseSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	public const CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_USE = 'IncorrectLinesCountBeforeFirstUse';
+	public const CODE_INCORRECT_LINES_COUNT_BETWEEN_SAME_TYPES_OF_USE = 'IncorrectLinesCountBetweenSameTypeOfUse';
 	public const CODE_INCORRECT_LINES_COUNT_BETWEEN_DIFFERENT_TYPES_OF_USE = 'IncorrectLinesCountBetweenDifferentTypeOfUse';
 	public const CODE_INCORRECT_LINES_COUNT_AFTER_LAST_USE = 'IncorrectLinesCountAfterLastUse';
 
@@ -48,6 +49,7 @@ class UseSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$this->checkLinesBeforeFirstUse($phpcsFile, $useStatements[0]);
 		$this->checkLinesAfterLastUse($phpcsFile, $useStatements[count($useStatements) - 1]);
+		$this->checkLinesBetweenSameTypesOfUse($phpcsFile, $useStatements);
 		$this->checkLinesBetweenDifferentTypesOfUse($phpcsFile, $useStatements);
 	}
 
@@ -145,6 +147,68 @@ class UseSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$phpcsFile->fixer->addNewline($lastUseSemicolonPointer);
 		}
 		$phpcsFile->fixer->endChangeset();
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
+	 */
+	private function checkLinesBetweenSameTypesOfUse(\PHP_CodeSniffer\Files\File $phpcsFile, array $useStatements): void
+	{
+		if (count($useStatements) === 1) {
+			return;
+		}
+
+		$tokens = $phpcsFile->getTokens();
+
+		$requiredLinesCountBetweenUses = 0;
+
+		$previousUse = null;
+		foreach ($useStatements as $no => $use) {
+			if ($previousUse === null) {
+				$previousUse = $use;
+				continue;
+			}
+
+			if (!$use->hasSameType($previousUse)) {
+				$previousUse = null;
+				continue;
+			}
+
+			$actualLinesCountAfterPreviousUse = $tokens[$use->getPointer()]['line'] - $tokens[$previousUse->getPointer()]['line'] - 1;
+
+			if ($actualLinesCountAfterPreviousUse === $requiredLinesCountBetweenUses) {
+				$previousUse = $use;
+				continue;
+			}
+
+			$fix = $phpcsFile->addFixableError(
+				sprintf(
+					'Expected %d lines between same types of use statement, found %d.',
+					$requiredLinesCountBetweenUses,
+					$actualLinesCountAfterPreviousUse
+				),
+				$use->getPointer(),
+				self::CODE_INCORRECT_LINES_COUNT_BETWEEN_SAME_TYPES_OF_USE
+			);
+
+			if (!$fix) {
+				$previousUse = $use;
+				continue;
+			}
+
+			/** @var int $previousUseSemicolonPointer */
+			$previousUseSemicolonPointer = TokenHelper::findNextLocal($phpcsFile, T_SEMICOLON, $previousUse->getPointer() + 1);
+
+			$phpcsFile->fixer->beginChangeset();
+			for ($i = $previousUseSemicolonPointer + 1; $i < $use->getPointer(); $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
+			$phpcsFile->fixer->addNewline($previousUseSemicolonPointer);
+			$phpcsFile->fixer->endChangeset();
+
+			$previousUse = $use;
+		}
 	}
 
 	/**
