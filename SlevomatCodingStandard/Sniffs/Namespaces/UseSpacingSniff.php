@@ -11,7 +11,7 @@ class UseSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	public const CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_USE = 'IncorrectLinesCountBeforeFirstUse';
-	public const CODE_INCORRECT_LINES_COUNT_BETWEEN_DIFFERENT_TYPE_OF_USE = 'IncorrectLinesCountBetweenDifferentTypeOfUse';
+	public const CODE_INCORRECT_LINES_COUNT_BETWEEN_DIFFERENT_TYPES_OF_USE = 'IncorrectLinesCountBetweenDifferentTypeOfUse';
 	public const CODE_INCORRECT_LINES_COUNT_AFTER_LAST_USE = 'IncorrectLinesCountAfterLastUse';
 
 	/** @var int */
@@ -48,7 +48,7 @@ class UseSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$this->checkLinesBeforeFirstUse($phpcsFile, $useStatements[0]);
 		$this->checkLinesAfterLastUse($phpcsFile, $useStatements[count($useStatements) - 1]);
-		$this->checkLinesBetweenDifferentTypeOfUse($phpcsFile, $useStatements);
+		$this->checkLinesBetweenDifferentTypesOfUse($phpcsFile, $useStatements);
 	}
 
 	private function checkLinesBeforeFirstUse(\PHP_CodeSniffer\Files\File $phpcsFile, UseStatement $firstUse): void
@@ -151,7 +151,7 @@ class UseSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
 	 */
-	private function checkLinesBetweenDifferentTypeOfUse(\PHP_CodeSniffer\Files\File $phpcsFile, array $useStatements): void
+	private function checkLinesBetweenDifferentTypesOfUse(\PHP_CodeSniffer\Files\File $phpcsFile, array $useStatements): void
 	{
 		if (count($useStatements) === 1) {
 			return;
@@ -187,7 +187,7 @@ class UseSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					$actualLinesCountAfterPreviousUse
 				),
 				$use->getPointer(),
-				self::CODE_INCORRECT_LINES_COUNT_BETWEEN_DIFFERENT_TYPE_OF_USE
+				self::CODE_INCORRECT_LINES_COUNT_BETWEEN_DIFFERENT_TYPES_OF_USE
 			);
 
 			if (!$fix) {
