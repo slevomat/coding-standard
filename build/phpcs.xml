@@ -56,6 +56,8 @@
 			<property name="keywordsToCheck" type="array" value="T_EXTENDS,T_IMPLEMENTS"/>
 		</properties>
 	</rule>
+	<rule ref="SlevomatCodingStandard.Namespaces.NamespaceDeclaration"/>
+	<rule ref="SlevomatCodingStandard.Namespaces.NamespaceSpacing"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
 		<properties>
 			<property name="namespacesRequiredToUse" type="array" value="SlevomatCodingStandard"/>
