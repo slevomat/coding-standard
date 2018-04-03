@@ -223,6 +223,10 @@ use LoggerInterface;
 
 Requires only one namespace in a file.
 
+#### SlevomatCodingStandard.Namespaces.NamespaceDeclaration 🔧
+
+Enforces one space after `namespace`, disallows content between namespace name and semicolon and disallows use of bracketed syntax.
+
 #### SlevomatCodingStandard.Namespaces.NamespaceSpacing 🔧
 
 Enforces configurable number of lines before and after `namespace`.
