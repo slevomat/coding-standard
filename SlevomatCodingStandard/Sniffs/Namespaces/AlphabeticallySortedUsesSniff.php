@@ -13,9 +13,6 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	public const CODE_INCORRECT_ORDER = 'IncorrectlyOrderedUses';
 
 	/** @var bool */
-	public $psr12Compatible = false;
-
-	/** @var bool */
 	public $caseSensitive = false;
 
 	/** @var \SlevomatCodingStandard\Helpers\UseStatement|null */
@@ -107,8 +104,8 @@ class AlphabeticallySortedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		if (!$a->hasSameType($b)) {
 			$order = [
 				UseStatement::TYPE_DEFAULT => 1,
-				UseStatement::TYPE_FUNCTION => $this->psr12Compatible ? 2 : 3,
-				UseStatement::TYPE_CONSTANT => $this->psr12Compatible ? 3 : 2,
+				UseStatement::TYPE_FUNCTION => 2,
+				UseStatement::TYPE_CONSTANT => 3,
 			];
 
 			return $order[$a->getType()] <=> $order[$b->getType()];
