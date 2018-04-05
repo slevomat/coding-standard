@@ -15,7 +15,7 @@ class InlineDocCommentDeclarationSniffTest extends \SlevomatCodingStandard\Sniff
 	{
 		$report = self::checkFile(__DIR__ . '/data/invalidInlineDocCommentDeclarations.php');
 
-		self::assertSame(7, $report->getErrorCount());
+		self::assertSame(8, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -59,6 +59,12 @@ class InlineDocCommentDeclarationSniffTest extends \SlevomatCodingStandard\Sniff
 		self::assertSniffError(
 			$report,
 			33,
+			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT
+		);
+
+		self::assertSniffError(
+			$report,
+			36,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT
 		);
 

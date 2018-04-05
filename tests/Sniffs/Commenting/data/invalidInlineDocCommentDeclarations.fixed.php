@@ -32,6 +32,9 @@ class Foo
 
 		/** @var string $i */
 		$i = 'i';
+
+		/** @var */
+		$j = 10;
 	}
 
 	public function get()

@@ -54,7 +54,7 @@ class InlineDocCommentDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			$commentContent = trim(TokenHelper::getContent($phpcsFile, $commentOpenPointer + 1, $commentClosePointer - 1));
 		}
 
-		if (!preg_match('~^@var\\s+~', $commentContent)) {
+		if (!preg_match('~^@var~', $commentContent)) {
 			return;
 		}
 
