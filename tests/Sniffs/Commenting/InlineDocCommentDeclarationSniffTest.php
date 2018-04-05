@@ -15,46 +15,53 @@ class InlineDocCommentDeclarationSniffTest extends \SlevomatCodingStandard\Sniff
 	{
 		$report = self::checkFile(__DIR__ . '/data/invalidInlineDocCommentDeclarations.php');
 
-		self::assertSame(5, $report->getErrorCount());
+		self::assertSame(7, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
 			11,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
-			'Invalid inline doc comment format "@var $a string[]", expected "@var string[] $a".'
+			'Invalid inline documentation comment format "@var $a string[]", expected "@var string[] $a".'
 		);
 		self::assertSniffError(
 			$report,
 			17,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
-			'Invalid inline doc comment format "@var $c", expected "@var type $variable".'
+			'Invalid inline documentation comment format "@var $c", expected "@var type $variable".'
 		);
 
 		self::assertSniffError(
 			$report,
 			20,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
-			'Invalid inline doc comment format "@var $d iterable|array|\Traversable Lorem ipsum", expected "@var iterable|array|\Traversable $d Lorem ipsum".'
+			'Invalid inline documentation comment format "@var $d iterable|array|\Traversable Lorem ipsum", expected "@var iterable|array|\Traversable $d Lorem ipsum".'
 		);
 
 		self::assertSniffError(
 			$report,
 			23,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
-			'Invalid inline doc comment format "@var $f string", expected "@var string $f".'
+			'Invalid inline documentation comment format "@var $f string", expected "@var string $f".'
 		);
 
 		self::assertSniffError(
 			$report,
 			28,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
-			'Invalid inline doc comment format "@var $h \DateTimeImmutable", expected "@var \DateTimeImmutable $h".'
+			'Invalid inline documentation comment format "@var $h \DateTimeImmutable", expected "@var \DateTimeImmutable $h".'
 		);
-	}
 
-	public function testFixableInvalidInlineDocCommentDeclarations(): void
-	{
-		$report = self::checkFile(__DIR__ . '/data/invalidInlineDocCommentDeclarations.php', [], [InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT]);
+		self::assertSniffError(
+			$report,
+			33,
+			InlineDocCommentDeclarationSniff::CODE_INVALID_COMMENT_TYPE
+		);
+		self::assertSniffError(
+			$report,
+			33,
+			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT
+		);
+
 		self::assertAllFixedInFile($report);
 	}
 

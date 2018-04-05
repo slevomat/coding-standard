@@ -29,6 +29,9 @@ class Foo
 		while ($h = current($g)) {
 
 		}
+
+		/* @var $i string */
+		$i = 'i';
 	}
 
 	public function get()
