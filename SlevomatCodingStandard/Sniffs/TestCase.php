@@ -87,7 +87,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		);
 	}
 
-	protected function assertNoSniffError(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $line): void
+	protected static function assertNoSniffError(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $line): void
 	{
 		$errors = $codeSnifferFile->getErrors();
 		self::assertFalse(
@@ -102,7 +102,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		);
 	}
 
-	protected function assertAllFixedInFile(\PHP_CodeSniffer\Files\File $codeSnifferFile): void
+	protected static function assertAllFixedInFile(\PHP_CodeSniffer\Files\File $codeSnifferFile): void
 	{
 		$codeSnifferFile->disableCaching();
 		$codeSnifferFile->fixer->fixFile();
