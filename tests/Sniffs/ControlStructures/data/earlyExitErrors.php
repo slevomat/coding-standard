@@ -355,3 +355,17 @@ function ifElseInElse() {
 		}
 	}
 }
+
+function logicalCombinedComplicatedCondition() {
+	foreach ($records as $record) {
+		if (in_array($record['type'], ['A', 'C']) && (strpos($record['name'], 'www.') === 0 || strpos($record['name'], 'ftp.') === 0)) {
+			echo 'You should see this echo twice!'.PHP_EOL;
+		}
+	}
+}
+
+function logicalVeryComplicatedCondition() {
+	if ((true) && ((false || true) || (false && (true)))) {
+		doSomething();
+	}
+}

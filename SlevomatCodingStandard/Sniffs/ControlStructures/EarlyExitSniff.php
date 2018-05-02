@@ -124,13 +124,13 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 			$ifCode = $this->getScopeCode($phpcsFile, $ifPointer);
 			$elseCode = $this->getScopeCode($phpcsFile, $elsePointer);
-			$negativeIfCondition = $this->getNegativeCondition($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'] + 1, $tokens[$ifPointer]['parenthesis_closer'] - 1);
+			$negativeIfCondition = $this->getNegativeCondition($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'], $tokens[$ifPointer]['parenthesis_closer']);
 			$afterIfCode = $this->fixIndentation($ifCode, $phpcsFile->eolChar, $this->getIndentation($phpcsFile, $ifPointer));
 
 			$phpcsFile->fixer->addContent(
 				$ifPointer,
 				sprintf(
-					'if (%s) {%s}%s%s',
+					'if %s {%s}%s%s',
 					$negativeIfCondition,
 					$elseCode,
 					$phpcsFile->eolChar,
@@ -225,7 +225,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$earlyExitCode = $this->getEarlyExitCode($tokens[$scopePointer]['code']);
 		$earlyExitCodeIndentation = $this->prepareIndentation($ifIndentation);
 
-		$negativeIfCondition = $this->getNegativeCondition($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'] + 1, $tokens[$ifPointer]['parenthesis_closer'] - 1);
+		$negativeIfCondition = $this->getNegativeCondition($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'], $tokens[$ifPointer]['parenthesis_closer']);
 
 		$phpcsFile->fixer->beginChangeset();
 
@@ -238,7 +238,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$phpcsFile->fixer->addContent(
 			$ifPointer,
 			sprintf(
-				'if (%s) {%s%s%s;%s%s}%s%s',
+				'if %s {%s%s%s;%s%s}%s%s',
 				$negativeIfCondition,
 				$phpcsFile->eolChar,
 				$earlyExitCodeIndentation,
@@ -291,7 +291,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		return 'return';
 	}
 
-	private function getNegativeCondition(\PHP_CodeSniffer\Files\File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer, bool $nested = false): string
+	private function getNegativeConditionPart(\PHP_CodeSniffer\Files\File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer, bool $nested): string
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -314,7 +314,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			}
 		}
 
-		if (!$nested && count($booleanPointers) > 0) {
+		if (count($booleanPointers) > 0) {
 			return $this->getNegativeLogicalCondition($phpcsFile, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer);
 		}
 
@@ -405,7 +405,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				continue;
 			}
 
-			$negativeCondition .= $this->getNegativeNestedCondition($phpcsFile, $nestedConditionStartPointer, $actualPointer - 1);
+			$negativeCondition .= $this->getNegativeCondition($phpcsFile, $nestedConditionStartPointer, $actualPointer - 1, true);
 			$negativeCondition .= $booleanOperatorReplacements[$tokens[$actualPointer]['code']];
 
 			$nestedConditionStartPointer = $actualPointer + 1;
@@ -413,22 +413,30 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		} while (true);
 
-		$negativeCondition .= $this->getNegativeNestedCondition($phpcsFile, $nestedConditionStartPointer, $conditionBoundaryEndPointer);
+		$negativeCondition .= $this->getNegativeCondition($phpcsFile, $nestedConditionStartPointer, $conditionBoundaryEndPointer, true);
 
 		return $negativeCondition;
 	}
 
-	private function getNegativeNestedCondition(\PHP_CodeSniffer\Files\File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer): string
+	private function getNegativeCondition(\PHP_CodeSniffer\Files\File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer, bool $nested = false): string
 	{
 		/** @var int $conditionStartPointer */
 		$conditionStartPointer = TokenHelper::findNextEffective($phpcsFile, $conditionBoundaryStartPointer);
 		/** @var int $conditionEndPointer */
 		$conditionEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $conditionBoundaryEndPointer);
 
+		$tokens = $phpcsFile->getTokens();
+		if ($tokens[$conditionStartPointer]['code'] === T_OPEN_PARENTHESIS && $tokens[$conditionStartPointer]['parenthesis_closer'] === $conditionEndPointer) {
+			/** @var int $conditionStartPointer */
+			$conditionStartPointer = TokenHelper::findNextEffective($phpcsFile, $conditionStartPointer + 1);
+			/** @var int $conditionEndPointer */
+			$conditionEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $conditionEndPointer - 1);
+		}
+
 		return sprintf(
 			'%s%s%s',
 			$conditionBoundaryStartPointer !== $conditionStartPointer ? TokenHelper::getContent($phpcsFile, $conditionBoundaryStartPointer, $conditionStartPointer - 1) : '',
-			$this->getNegativeCondition($phpcsFile, $conditionStartPointer, $conditionEndPointer, true),
+			$this->getNegativeConditionPart($phpcsFile, $conditionStartPointer, $conditionEndPointer, $nested),
 			$conditionBoundaryEndPointer !== $conditionEndPointer ? TokenHelper::getContent($phpcsFile, $conditionEndPointer + 1, $conditionBoundaryEndPointer) : ''
 		);
 	}
