@@ -45,6 +45,7 @@ class TypeHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			['Foo\\'],
 			['Foo[]'],
 			['[]'],
+			['\Dogma\Math\Range\RangeSet<T>'],
 		];
 	}
 
