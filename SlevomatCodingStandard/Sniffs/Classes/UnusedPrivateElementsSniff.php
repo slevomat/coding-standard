@@ -124,8 +124,14 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return false;
 		};
 
-		$checkPropertyUsage = function (int $propertyNameTokenPointer) use ($phpcsFile, $tokens, &$reportedProperties, &$writeOnlyProperties): void {
+		$checkPropertyUsage = function (int $propertyNameTokenPointer, int $thisOrSelfTokenPointer) use ($phpcsFile, $tokens, &$reportedProperties, &$writeOnlyProperties): void {
 			$propertyName = $this->getNormalizedPropertyName($tokens[$propertyNameTokenPointer]['content']);
+
+			$possibleNewTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $thisOrSelfTokenPointer - 1);
+			if ($possibleNewTokenPointer !== null && $tokens[$possibleNewTokenPointer]['code'] === T_NEW) {
+				unset($reportedProperties[$propertyName]);
+				return;
+			}
 
 			$possibleAssignTokenPointer = TokenHelper::findNextEffective($phpcsFile, $propertyNameTokenPointer + 1);
 			$possibleAssignToken = $tokens[$possibleAssignTokenPointer];
@@ -157,34 +163,38 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			unset($reportedProperties[$propertyName]);
 		};
 
-		$checkObjectOperatorUsage = function (int $objectOperatorTokenPointer) use ($phpcsFile, $tokens, $checkPropertyUsage, &$reportedMethods): int {
+		$checkObjectOperatorUsage = function (int $objectOperatorTokenPointer, int $thisTokenPointer) use ($phpcsFile, $tokens, $checkPropertyUsage, &$reportedMethods): int {
 			$nextTokenPointer = TokenHelper::findNextEffective($phpcsFile, $objectOperatorTokenPointer + 1);
 			$nextToken = $tokens[$nextTokenPointer];
 			if ($nextToken['code'] !== T_STRING) {
 				// $variable-> but not accessing a specific property (e. g. $variable->$foo or $variable->{$foo})
 				return $objectOperatorTokenPointer + 1;
 			}
+
 			$methodCallTokenPointer = TokenHelper::findNextEffective($phpcsFile, $nextTokenPointer + 1);
 			$methodCallToken = $tokens[$methodCallTokenPointer];
 			if ($methodCallToken['code'] === T_OPEN_PARENTHESIS) {
-				// Calling a method on $variable
-				unset($reportedMethods[$this->getNormalizedMethodName($nextToken['content'])]);
-				return $methodCallTokenPointer + 1;
+				$possibleNewTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $thisTokenPointer - 1);
+				if ($possibleNewTokenPointer === null || $tokens[$possibleNewTokenPointer]['code'] !== T_NEW) {
+					// Calling a method on $variable
+					unset($reportedMethods[$this->getNormalizedMethodName($nextToken['content'])]);
+					return $methodCallTokenPointer + 1;
+				}
 			}
 
-			$checkPropertyUsage($nextTokenPointer);
+			$checkPropertyUsage($nextTokenPointer, $thisTokenPointer);
 
 			return $nextTokenPointer + 1;
 		};
 
-		$checkDoubleColonUsage = function (int $doubleColonTokenPointer) use ($phpcsFile, $tokens, $checkPropertyUsage, &$reportedMethods, &$reportedConstants): int {
+		$checkDoubleColonUsage = function (int $doubleColonTokenPointer, int $selfTokenPointer) use ($phpcsFile, $tokens, $checkPropertyUsage, &$reportedMethods, &$reportedConstants): int {
 			$nextTokenPointer = TokenHelper::findNextEffective($phpcsFile, $doubleColonTokenPointer + 1);
 			$nextToken = $tokens[$nextTokenPointer];
 			if ($nextToken['code'] !== T_STRING) {
 				// self:: or static:: not followed by a string - possible static property access
 
 				if ($nextToken['code'] === T_VARIABLE) {
-					$checkPropertyUsage($nextTokenPointer);
+					$checkPropertyUsage($nextTokenPointer, $selfTokenPointer);
 				}
 				return $nextTokenPointer + 1;
 			}
@@ -238,7 +248,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			} elseif ($token['code'] === T_OBJECT_OPERATOR) {
 				$variableTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokenPointer - 1);
 				if ($tokens[$variableTokenPointer]['code'] === T_VARIABLE && $tokens[$variableTokenPointer]['content'] === '$this') {
-					$findUsagesStartTokenPointer = $checkObjectOperatorUsage($tokenPointer);
+					$findUsagesStartTokenPointer = $checkObjectOperatorUsage($tokenPointer, $variableTokenPointer);
 				} else {
 					$possibleThisTokenPointer = $tokenPointer - 1;
 					do {
@@ -265,7 +275,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			} elseif ($token['code'] === T_DOUBLE_COLON) {
 				$previousTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokenPointer - 1);
 				if ($isCurrentClass($previousTokenPointer)) {
-					$findUsagesStartTokenPointer = $checkDoubleColonUsage($tokenPointer);
+					$findUsagesStartTokenPointer = $checkDoubleColonUsage($tokenPointer, $previousTokenPointer);
 				} else {
 					$findUsagesStartTokenPointer = $tokenPointer + 1;
 				}
@@ -281,9 +291,9 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 						$afterActualTokenPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
 						if ($tokens[$afterActualTokenPointer]['code'] === T_OBJECT_OPERATOR) {
-							$checkObjectOperatorUsage($afterActualTokenPointer);
+							$checkObjectOperatorUsage($afterActualTokenPointer, $i);
 						} elseif ($tokens[$afterActualTokenPointer]['code'] === T_DOUBLE_COLON) {
-							$checkDoubleColonUsage($afterActualTokenPointer);
+							$checkDoubleColonUsage($afterActualTokenPointer, $i);
 						}
 					}
 				}

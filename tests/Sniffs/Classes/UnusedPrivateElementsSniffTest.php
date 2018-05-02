@@ -105,6 +105,9 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 		self::assertNoSniffError($resultFile, 130);
 		self::assertNoSniffError($resultFile, 135);
 		self::assertNoSniffError($resultFile, 159);
+
+		self::assertNoSniffError($resultFile, 161);
+		self::assertNoSniffError($resultFile, 169);
 	}
 
 	public function testOnlyPublicElements(): void

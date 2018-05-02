@@ -158,4 +158,20 @@ CODE;
 	 */
 	private $propertyWithPrefixAnnotation;
 
+	private $propertyUsedToCreateNewInstanceWithoutParentheses;
+
+	public function createNewInstancesWithoutParentheses()
+	{
+		$this->propertyUsedToCreateNewInstanceWithoutParentheses = \stdClass::class;
+		new $this->propertyUsedToCreateNewInstanceWithoutParentheses;
+	}
+
+	private $propertyUsedToCreateNewInstanceWithParentheses;
+
+	public function createNewInstancesWithParentheses()
+	{
+		$this->propertyUsedToCreateNewInstanceWithParentheses = \stdClass::class;
+		new $this->propertyUsedToCreateNewInstanceWithParentheses();
+	}
+
 }
