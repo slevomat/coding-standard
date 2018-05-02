@@ -156,10 +156,6 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				return;
 			}
 
-			if (!isset($reportedProperties[$propertyName])) {
-				return;
-			}
-
 			unset($reportedProperties[$propertyName]);
 		};
 
@@ -205,17 +201,13 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 				// self::string or static::string not followed by ( - possible constant access
 
 				$name = $nextToken['content'];
-				if (isset($reportedConstants[$name])) {
-					unset($reportedConstants[$name]);
-				}
+				unset($reportedConstants[$name]);
 
 				return $tokenPointerAfterNextToken + 1;
 			}
 
 			$name = $this->getNormalizedMethodName($nextToken['content']);
-			if (isset($reportedMethods[$name])) {
-				unset($reportedMethods[$name]);
-			}
+			unset($reportedMethods[$name]);
 
 			return $tokenPointerAfterNextToken + 1;
 		};
