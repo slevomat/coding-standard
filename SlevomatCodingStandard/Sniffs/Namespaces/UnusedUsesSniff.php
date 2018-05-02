@@ -162,7 +162,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 							}
 
 							if (
-								!preg_match('~(?<=^|[^a-z\s\\\\])(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=::)~i', $annotation->getParameters(), $matches)
+								!preg_match('~(?<=^|[^a-z\\\\])(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=::)~i', $annotation->getParameters(), $matches)
 								&& !preg_match('~(?<=@)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\\\|\()~i', $annotation->getParameters(), $matches)
 							) {
 								continue;

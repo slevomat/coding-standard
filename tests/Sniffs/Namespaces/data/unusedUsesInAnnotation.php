@@ -32,9 +32,15 @@ use MethodParameter1;
 use MethodParameter2;
 use MethodParameter3;
 use MethodParameter4;
+use Discriminator\Lorem;
+use Discriminator\Ipsum;
 
 /**
  * @ORM\Entity()
+ * @ORM\DiscriminatorMap({
+ *     "lorem" = Lorem::class,
+ *     "ipsum" = Ipsum::class,
+ * })
  */
 class Boo
 {

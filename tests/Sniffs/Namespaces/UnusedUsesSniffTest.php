@@ -108,7 +108,7 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 			'searchAnnotations' => false,
 		]);
 
-		self::assertSame(30, $report->getErrorCount());
+		self::assertSame(32, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Assert is not used in this file.');
 		self::assertSniffError($report, 6, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Doctrine\ORM\Mapping (as ORM) is not used in this file.');
@@ -139,6 +139,8 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		self::assertSniffError($report, 32, UnusedUsesSniff::CODE_UNUSED_USE, 'Type MethodParameter2 is not used in this file.');
 		self::assertSniffError($report, 33, UnusedUsesSniff::CODE_UNUSED_USE, 'Type MethodParameter3 is not used in this file.');
 		self::assertSniffError($report, 34, UnusedUsesSniff::CODE_UNUSED_USE, 'Type MethodParameter4 is not used in this file.');
+		self::assertSniffError($report, 35, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Discriminator\Lorem is not used in this file.');
+		self::assertSniffError($report, 36, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Discriminator\Ipsum is not used in this file.');
 	}
 
 	public function testUsedUseInAnnotationWithEnabledSearchAnnotations(): void
