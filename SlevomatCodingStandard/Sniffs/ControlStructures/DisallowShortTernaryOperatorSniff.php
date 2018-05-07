@@ -9,6 +9,9 @@ class DisallowShortTernaryOperatorSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 	public const CODE_DISALLOWED_SHORT_TERNARY_OPERATOR = 'DisallowedShortTernaryOperator';
 
+	/** @var bool */
+	public $fixable = true;
+
 	/**
 	 * @return mixed[]
 	 */
@@ -39,6 +42,11 @@ class DisallowShortTernaryOperatorSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$message = 'Use of short ternary operator is disallowed.';
 
 		if ($tokens[$previousPointer]['code'] !== T_VARIABLE) {
+			$phpcsFile->addError($message, $inlineThenPointer, self::CODE_DISALLOWED_SHORT_TERNARY_OPERATOR);
+			return;
+		}
+
+		if (!$this->fixable) {
 			$phpcsFile->addError($message, $inlineThenPointer, self::CODE_DISALLOWED_SHORT_TERNARY_OPERATOR);
 			return;
 		}
