@@ -1,67 +1,65 @@
 build: false
-clone_depth: 50
 platform:
   - x64
+clone_folder: C:\projects\coding-standard
+clone_depth: 1
 environment:
   matrix:
     - dependencies: lowest
-      php_version: 7.1
-      vc: 14
+      php: 7.1
     - dependencies: highest
-      php_version: 7.1
-      vc: 14
+      php: 7.1
     - dependencies: lowest
-      php_version: 7.2
-      vc: 15
+      php: 7.2
     - dependencies: highest
-      php_version: 7.2
-      vc: 15
+      php: 7.2
 
-  project_directory: c:\projects\slevomat-coding-standard
-  composer_directory: c:\tools\composer
-  composer_executable: c:\tools\composer\composer.phar
-  php_archive_directory: c:\tools\php-archive
+  project_directory: c:\projects\coding-standard
   php_directory: c:\tools\php
-matrix:
-  fast_finish: true
-clone_folder: c:\projects\slevomat-coding-standard
+  composer_directory: c:\tools\composer
+  composer_binary: c:\tools\composer\composer.phar
 cache:
-  - c:\tools\composer
-  - c:\tools\php-archive
-  - '%LOCALAPPDATA%\Composer'
+  - C:\ProgramData\chocolatey\bin -> appveyor.yml
+  - C:\ProgramData\chocolatey\lib -> appveyor.yml
+  - C:\tools\php -> appveyor.yml
+  - c:\tools\composer -> appveyor.yml
+  #- '%LOCALAPPDATA%\Composer'
 init:
-  - ps: $Env:PATH = $Env:php_directory + ';' + $Env:composer_directory + ';' + $Env:PATH
-  - ps: $Env:ANSICON = '121x90 (121x90)'
+  - ps: $env:PATH = $env:php_directory + ';' + $env:composer_directory + ';' + $env:PATH
+  - SET COMPOSER_NO_INTERACTION=1
+  - SET ANSICON=121x90 (121x90)
 install:
-  # Download requested PHP version
-  - ps: If ((Test-Path $Env:php_archive_directory) -eq $False) { New-Item -Path $Env:php_archive_directory -ItemType 'directory' }
-  - ps: $requested_php_version = %{If ($Env:dependencies -eq 'lowest') { $Env:php_version + '.0' } Else { (((choco search php --exact --all-versions -r | Select-String -pattern $Env:php_version) -replace '[php|]', '') | %{ New-Object System.Version $_ } | Sort-Object | Select-Object -Last 1).ToString() }}
-  - ps: $php_version_url = %{If ($Env:dependencies -eq 'lowest') { 'http://windows.php.net/downloads/releases/archives/php-' + $requested_php_version + '-nts-Win32-VC' + $Env:vc + '-' + $Env:platform + '.zip' } Else { 'http://windows.php.net/downloads/releases/php-' + $requested_php_version + '-nts-Win32-VC' + $Env:vc + '-' + $Env:platform + '.zip' }}
-  - ps: $php_version_file = $Env:php_archive_directory + '\php-' + $requested_php_version + '.zip'
-  - ps: If ((Test-Path $php_version_file) -eq $False) { appveyor-retry appveyor DownloadFile $php_version_url -FileName $php_version_file }
+  - ps: |
+      # Check if installation is cached
+      if (!(Test-Path c:\tools\php)) {
+        appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
+        Get-ChildItem -Path c:\tools\php
+        cd c:\tools\php
 
-  # Prepare PHP
-  - ps: New-Item -Path $Env:php_directory -ItemType 'directory'
-  - ps: cd $Env:php_directory
-  - ps: 7z x $php_version_file
-  - ps: Copy-Item php.ini-production -Destination php.ini
-  - ps: Add-Content -Path php.ini -Value 'date.timezone="UTC"'
-  - ps: Add-Content -Path php.ini -Value 'extension_dir=ext'
-  - ps: Add-Content -Path php.ini -Value 'extension=php_curl.dll'
-  - ps: Add-Content -Path php.ini -Value 'extension=php_mbstring.dll'
-  - ps: Add-Content -Path php.ini -Value 'extension=php_openssl.dll'
-  - ps: php --version
+        # Prepare PHP
+        copy php.ini-production php.ini
+        Add-Content php.ini "`n date.timezone=UTC"
+        Add-Content php.ini "`n extension_dir=ext"
+        Add-Content php.ini "`n extension=php_curl.dll"
+        Add-Content php.ini "`n extension=php_openssl.dll"
+        Add-Content php.ini "`n extension=php_mbstring.dll"
 
-  # Prepare composer
-  - ps: If ((Test-Path $Env:composer_directory) -eq $False) { New-Item -Path $Env:composer_directory -ItemType 'directory' }
-  - ps: If ((Test-Path $Env:composer_executable) -eq $False) { appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar -FileName $Env:composer_executable }
-  - ps: Set-Content -Path ($Env:composer_directory + '\composer.bat') -Value ('@php ' + $Env:composer_executable + ' %*')
-  - composer self-update
+        php --version
+      }
+
+      if (!(Test-Path $env:composer_directory)) {
+        New-Item -path c:\tools\ -name composer -itemtype directory
+      }
+      if (!(Test-Path $env:composer_binary)) {
+        appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar -Filename $env:composer_binary
+        Set-Content -Path ($Env:composer_directory + '\composer.bat') -Value ('@php ' + $env:composer_binary + ' %*')
+      }
 
   # Install dependencies
-  - ps: cd $Env:project_directory
-  - IF %dependencies%==lowest composer update --prefer-lowest --prefer-dist --no-interaction --no-progress
-  - IF %dependencies%==highest composer update --prefer-dist --no-interaction --no-progress
+  - appveyor-retry composer self-update
+  - ps: cd $env:project_directory
+  - IF %dependencies%==lowest composer update --prefer-lowest --prefer-dist --no-progress
+  - IF %dependencies%==highest composer update --prefer-dist --no-progress
 test_script:
-  - ps: cd $Env:project_directory
+  - ps: cd $env:project_directory
   - bin\phing
