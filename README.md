@@ -100,6 +100,10 @@ Requires use of null coalesce operator when possible.
 
 Requires use of early exit.
 
+#### SlevomatCodingStandard.Operators.DisallowIncrementAndDecrementOperators
+
+Disallows using `++` and `--` operators.
+
 ### Cleaning - detecting dead code
 
 #### SlevomatCodingStandard.Classes.UnusedPrivateElements 🚧
