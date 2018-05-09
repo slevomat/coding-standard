@@ -34,6 +34,10 @@ use MethodParameter3;
 use MethodParameter4;
 use Discriminator\Lorem;
 use Discriminator\Ipsum;
+use Outer;
+use Inner1;
+use Inner2;
+use Inner3;
 
 /**
  * @ORM\Entity()
@@ -96,6 +100,14 @@ class Boo
  * @CustomAnnotation(prop=B::class)
  * @CustomAnnotation(@AnotherCustomAnnotation(C::class))
  * @CustomAnnotation(prop=@AnotherCustomAnnotation(D::class))
+ */
+
+/**
+ * @Outer({
+ *     @Inner1(type="string"),
+ *     @Inner2,
+ *     @Inner3(),
+ * })
  */
 
 /** @var $variable UglyInlineAnnotation */
