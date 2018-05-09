@@ -1,0 +1,65 @@
+build: false
+platform:
+  - x64
+clone_folder: C:\projects\coding-standard
+clone_depth: 1
+environment:
+  matrix:
+    - dependencies: lowest
+      php: 7.1
+    - dependencies: highest
+      php: 7.1
+    - dependencies: lowest
+      php: 7.2
+    - dependencies: highest
+      php: 7.2
+
+  project_directory: c:\projects\coding-standard
+  php_directory: c:\tools\php
+  composer_directory: c:\tools\composer
+  composer_binary: c:\tools\composer\composer.phar
+cache:
+  - C:\ProgramData\chocolatey\bin -> appveyor.yml
+  - C:\ProgramData\chocolatey\lib -> appveyor.yml
+  - C:\tools\php -> appveyor.yml
+  - c:\tools\composer -> appveyor.yml
+  #- '%LOCALAPPDATA%\Composer'
+init:
+  - ps: $env:PATH = $env:php_directory + ';' + $env:composer_directory + ';' + $env:PATH
+  - SET COMPOSER_NO_INTERACTION=1
+  - SET ANSICON=121x90 (121x90)
+install:
+  - ps: |
+      # Check if installation is cached
+      if (!(Test-Path c:\tools\php)) {
+        appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
+        Get-ChildItem -Path c:\tools\php
+        cd c:\tools\php
+
+        # Prepare PHP
+        copy php.ini-production php.ini
+        Add-Content php.ini "`n date.timezone=UTC"
+        Add-Content php.ini "`n extension_dir=ext"
+        Add-Content php.ini "`n extension=php_curl.dll"
+        Add-Content php.ini "`n extension=php_openssl.dll"
+        Add-Content php.ini "`n extension=php_mbstring.dll"
+
+        php --version
+      }
+
+      if (!(Test-Path $env:composer_directory)) {
+        New-Item -path c:\tools\ -name composer -itemtype directory
+      }
+      if (!(Test-Path $env:composer_binary)) {
+        appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar -Filename $env:composer_binary
+        Set-Content -Path ($Env:composer_directory + '\composer.bat') -Value ('@php ' + $env:composer_binary + ' %*')
+      }
+
+  # Install dependencies
+  - appveyor-retry composer self-update
+  - ps: cd $env:project_directory
+  - IF %dependencies%==lowest composer update --prefer-lowest --prefer-dist --no-progress
+  - IF %dependencies%==highest composer update --prefer-dist --no-progress
+test_script:
+  - ps: cd $env:project_directory
+  - bin\phing
