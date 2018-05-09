@@ -154,4 +154,13 @@ class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		self::assertCount(0, $names);
 	}
 
+	public function testGotoLabelIsNotReferencedName(): void
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/goto.php'
+		);
+		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
+		self::assertCount(0, $names);
+	}
+
 }
