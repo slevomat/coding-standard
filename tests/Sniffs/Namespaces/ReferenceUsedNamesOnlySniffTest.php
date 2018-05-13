@@ -682,6 +682,7 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 			'specialExceptionNames' => [
 				'BarErrorX',
 			],
+			'searchAnnotations' => true,
 		], [ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE]);
 		self::assertAllFixedInFile($report);
 	}

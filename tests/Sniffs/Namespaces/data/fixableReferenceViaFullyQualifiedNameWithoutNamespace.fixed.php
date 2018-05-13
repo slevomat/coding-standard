@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @param \Some\Exception $e
+ * @throws \Exception
+ */
 function bar(\Some\Exception $e)
 {
 	try {
@@ -13,7 +17,7 @@ function bar(\Some\Exception $e)
 	} catch (TypeError $ex) {
 
 	} catch (BarErrorX $ex) {
-
+		throw new Exception();
 	}
 }
 

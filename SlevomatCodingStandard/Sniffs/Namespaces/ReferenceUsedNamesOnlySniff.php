@@ -271,7 +271,17 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						), $startPointer, self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE);
 						if ($fix) {
 							$phpcsFile->fixer->beginChangeset();
-							$phpcsFile->fixer->replaceToken($startPointer, substr($tokens[$startPointer]['content'], 1));
+
+							if ($reference->fromDocComment) {
+								$fixedDocComment = preg_replace_callback('~(\\s|\|)(' . preg_quote($name, '~') . ')(\\s|\||\[|$)~', function (array $matches): string {
+									return $matches[1] . ltrim($matches[2], '\\\\') . $matches[3];
+								}, $tokens[$startPointer]['content']);
+
+								$phpcsFile->fixer->replaceToken($startPointer, $fixedDocComment);
+							} else {
+								$phpcsFile->fixer->replaceToken($startPointer, substr($tokens[$startPointer]['content'], 1));
+							}
+
 							$phpcsFile->fixer->endChangeset();
 						}
 					} else {
