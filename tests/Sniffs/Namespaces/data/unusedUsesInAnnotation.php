@@ -39,6 +39,12 @@ use Inner1;
 use Inner2;
 use Inner3;
 
+use Closure;
+use Generator;
+use Traversable;
+use Exception;
+
+
 /**
  * @ORM\Entity()
  * @ORM\DiscriminatorMap({
@@ -135,4 +141,51 @@ class Foo
 		return null;
 	}
 
+}
+
+/**
+ * Templates are used by Psalm and Phan
+ *
+ * @template TKey
+ * @template TValue
+ * @template-extends Traversable<TKey,TValue>
+ */
+class Generic
+{
+    /**
+     * @var array<TKey,TValue> PSR-5 collection
+     */
+    private $data;
+    public function __construct(array $data)
+    {
+        $this->data = $data;
+    }
+
+    /**
+     * @return Generator<TKey,TValue> generic/collection syntax
+     */
+    public function traverse()
+    {
+        foreach ($this->data as $key => $val) {
+            yield $key => $val;
+        }
+    }
+
+    /**
+     * @template T
+     * @param Closure(TValue):T $callable callable syntax
+     * @return Generic<TKey,T>
+     */
+    public function map($callable): self
+    {
+        return new self(array_map($callable, $this->data));
+    }
+
+    /**
+     * @psalm-return array{0:Exception,1:Exception} actually invalid
+     */
+    public function returnsArrayOfExceptions(): array
+    {
+        return [new stdClass, new stdClass];
+    }
 }

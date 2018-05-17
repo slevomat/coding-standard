@@ -108,7 +108,7 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 			'searchAnnotations' => false,
 		]);
 
-		self::assertSame(36, $report->getErrorCount());
+		self::assertSame(40, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Assert is not used in this file.');
 		self::assertSniffError($report, 6, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Doctrine\ORM\Mapping (as ORM) is not used in this file.');
@@ -145,6 +145,10 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		self::assertSniffError($report, 38, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Inner1 is not used in this file.');
 		self::assertSniffError($report, 39, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Inner2 is not used in this file.');
 		self::assertSniffError($report, 40, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Inner3 is not used in this file.');
+		self::assertSniffError($report, 42, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Closure is not used in this file.');
+		self::assertSniffError($report, 43, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Generator is not used in this file.');
+		self::assertSniffError($report, 44, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Traversable is not used in this file.');
+		self::assertSniffError($report, 45, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Exception is not used in this file.');
 	}
 
 	public function testUsedUseInAnnotationWithEnabledSearchAnnotations(): void
@@ -246,6 +250,17 @@ class UnusedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableUnusedUses.php', [], [UnusedUsesSniff::CODE_UNUSED_USE]);
 		self::assertAllFixedInFile($report);
+	}
+
+	public function testUsedGeneric(): void
+	{
+		// tests for PSR-5 collection syntax and psalm-specific generics and shapes
+		$report = self::checkFile(__DIR__ . '/data/unusedUsesInAnnotation.php', [
+			'searchAnnotations' => true,
+			'ignoredAnnotationNames' => ['@ignore'],
+			'ignoredAnnotations' => ['@group'],
+		]);
+		self::assertSame(1, $report->getErrorCount());
 	}
 
 }
