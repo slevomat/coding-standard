@@ -206,7 +206,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 							}
 
 							foreach ($contentsToCheck as $contentToCheck) {
-								$openers = ['|', '{', '(', ',', '<', ':'];
+								$openers = ['|', '{', '(', ',', '<', ':', '?'];
 								$openers = array_map('preg_quote', $openers, array_fill(0, count($openers), '~'));
 								$closers = ['\\', '|', '[', ',', '<', '>', '(' , ')', '{', '}', ':'];
 								$closers = array_map('preg_quote', $closers, array_fill(0, count($closers), '~'));

@@ -156,6 +156,8 @@ class Generic
      * @var array<TKey,TValue> PSR-5 collection
      */
     private $data;
+    /** @var ?Exception */
+    private $nullableException = null;
     public function __construct(array $data)
     {
         $this->data = $data;
