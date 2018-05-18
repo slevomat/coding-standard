@@ -43,6 +43,7 @@ use Closure;
 use Generator;
 use Traversable;
 use Exception;
+use ArrayAccess;
 
 
 /**
@@ -189,5 +190,13 @@ class Generic
     public function returnsArrayOfExceptions(): array
     {
         return [new stdClass, new stdClass];
+    }
+
+    /**
+     * @param iterable<TKey,TValue>&Countable&ArrayAccess
+     */
+    function f(iterable $i): void
+    {
+
     }
 }
