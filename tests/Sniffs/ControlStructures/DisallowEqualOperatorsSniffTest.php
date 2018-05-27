@@ -14,12 +14,13 @@ class DisallowEqualOperatorsSniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 	{
 		$report = self::checkFile(__DIR__ . '/data/disallowEqualOperatorsErrors.php');
 
-		self::assertSame(4, $report->getErrorCount());
+		self::assertSame(5, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, DisallowEqualOperatorsSniff::CODE_DISALLOWED_EQUAL_OPERATOR);
 		self::assertSniffError($report, 4, DisallowEqualOperatorsSniff::CODE_DISALLOWED_EQUAL_OPERATOR);
-		self::assertSniffError($report, 5, DisallowEqualOperatorsSniff::CODE_DISALLOWED_NOT_EQUAL_OPERATOR);
+		self::assertSniffError($report, 5, DisallowEqualOperatorsSniff::CODE_DISALLOWED_NOT_EQUAL_OPERATOR, 'Operator != is disallowed, use !== instead.');
 		self::assertSniffError($report, 6, DisallowEqualOperatorsSniff::CODE_DISALLOWED_NOT_EQUAL_OPERATOR);
+		self::assertSniffError($report, 7, DisallowEqualOperatorsSniff::CODE_DISALLOWED_NOT_EQUAL_OPERATOR, 'Operator <> is disallowed, use !== instead.');
 
 		$this->assertAllFixedInFile($report);
 	}
