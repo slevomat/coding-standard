@@ -18,7 +18,7 @@
 		"phpstan/phpstan": "0.9.2",
 		"phpstan/phpstan-phpunit": "0.9.4",
 		"phpstan/phpstan-strict-rules": "0.9",
-		"phpunit/phpunit": "7.1.5"
+		"phpunit/phpunit": "7.2.4"
 	},
 	"autoload": {
 		"psr-4": {
