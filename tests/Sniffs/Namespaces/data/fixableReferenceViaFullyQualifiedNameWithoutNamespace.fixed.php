@@ -2,7 +2,7 @@
 
 /**
  * @param \Some\Exception $e
- * @throws \Exception
+ * @throws Exception
  */
 function bar(\Some\Exception $e)
 {
@@ -27,6 +27,14 @@ class Lorem implements \Dolor, \Amet
 }
 
 class Ipsum extends Bar
+{
+
+}
+
+/**
+ * @return Lorem
+ */
+function getLorem(): Lorem
 {
 
 }

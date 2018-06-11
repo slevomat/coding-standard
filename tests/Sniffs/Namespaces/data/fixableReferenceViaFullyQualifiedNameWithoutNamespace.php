@@ -30,3 +30,11 @@ class Ipsum extends \Bar
 {
 
 }
+
+/**
+ * @return \Lorem
+ */
+function getLorem(): \Lorem
+{
+
+}
