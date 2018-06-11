@@ -2,6 +2,9 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+/**
+ * @internal
+ */
 class Annotation
 {
 
