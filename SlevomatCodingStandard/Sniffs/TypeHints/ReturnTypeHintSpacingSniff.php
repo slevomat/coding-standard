@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
+use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 
@@ -31,21 +32,28 @@ class ReturnTypeHintSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	public function register(): array
 	{
 		return [
-			T_RETURN_TYPE,
+			T_FUNCTION,
+			T_CLOSURE,
 		];
 	}
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param int $typeHintPointer
+	 * @param int $functionPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $typeHintPointer): void
+	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $functionPointer): void
 	{
+		$typeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
+
+		if ($typeHint === null) {
+			return;
+		}
+
 		$tokens = $phpcsFile->getTokens();
 
-		/** @var int $typeHintPointer */
-		$typeHintPointer = TokenHelper::findPreviousExcluding($phpcsFile, [T_NS_SEPARATOR, T_STRING], $typeHintPointer - 1) + 1;
+		$typeHintPointer = $typeHint->getStartPointer();
+
 		/** @var int $colonPointer */
 		$colonPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge([T_NULLABLE], TokenHelper::$ineffectiveTokenCodes), $typeHintPointer - 1);
 

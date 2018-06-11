@@ -315,6 +315,8 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer);
 		self::assertSame('\FooNamespace\FooInterface', $returnTypeHint->getTypeHint());
 		self::assertFalse($returnTypeHint->isNullable());
+		self::assertSame($functionPointer + 7, $returnTypeHint->getStartPointer());
+		self::assertSame($functionPointer + 10, $returnTypeHint->getEndPointer());
 
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'withoutReturnTypeHint');
 		self::assertFalse(FunctionHelper::hasReturnTypeHint($codeSnifferFile, $functionPointer));
@@ -325,6 +327,8 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer);
 		self::assertSame('bool', $returnTypeHint->getTypeHint());
 		self::assertFalse($returnTypeHint->isNullable());
+		self::assertSame($functionPointer + 7, $returnTypeHint->getStartPointer());
+		self::assertSame($functionPointer + 7, $returnTypeHint->getEndPointer());
 
 		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'abstractWithoutReturnTypeHint');
 		self::assertFalse(FunctionHelper::hasReturnTypeHint($codeSnifferFile, $functionPointer));

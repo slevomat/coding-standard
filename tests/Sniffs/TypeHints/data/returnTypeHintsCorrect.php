@@ -9,6 +9,11 @@ $callback = function () use ($x, $y): Foo {
 
 };
 
+function ()
+{
+
+};
+
 interface Foo
 {
 
@@ -17,6 +22,8 @@ interface Foo
 	public function doBar($param): \Bar;
 
 	public function doBaz($param): \Foo\Bar;
+
+	public function noReturnTypeHint();
 
 }
 
@@ -34,6 +41,11 @@ class FooBar implements Foo
 	}
 
 	public function doBaz($param): \Foo\Bar
+	{
+
+	}
+
+	public function noReturnTypeHint()
 	{
 
 	}
