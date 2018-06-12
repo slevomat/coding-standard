@@ -275,13 +275,14 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataReturnsValueOrNot(): array
+	public function dataFunctionReturnsValueOrNot(): array
 	{
 		return [
 			['returnsValue', true],
 			['returnsVariable', true],
 			['returnsValueInCondition', true],
 			['returnsGenerator', true],
+			['returnsGeneratorFrom', true],
 			['returnsGeneratorWithEarlyTermination', true],
 			['returnsGeneratorWithVeryEarlyTermination', true],
 			['generatorIsInClosure', false],
@@ -293,17 +294,44 @@ class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 	}
 
 	/**
-	 * @dataProvider dataReturnsValueOrNot
+	 * @dataProvider dataFunctionReturnsValueOrNot
 	 * @param string $functionName
 	 * @param bool $returnsValue
 	 */
-	public function testReturnsValueOrNot(
+	public function testFunctionReturnsValueOrNot(
 		string $functionName,
 		bool $returnsValue
 	): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionReturnsValueOrNot.php');
 		self::assertSame($returnsValue, FunctionHelper::returnsValue($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, $functionName)));
+	}
+
+	/**
+	 * @return mixed[][]
+	 */
+	public function dataClosureReturnsValueOrNot(): array
+	{
+		return [
+			[3, true],
+			[7, false],
+			[11, true],
+			[15, true],
+		];
+	}
+
+	/**
+	 * @dataProvider dataClosureReturnsValueOrNot
+	 * @param int $line
+	 * @param bool $returnsValue
+	 */
+	public function testClosureReturnsValueOrNot(
+		int $line,
+		bool $returnsValue
+	): void
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/closureReturnsValueOrNot.php');
+		self::assertSame($returnsValue, FunctionHelper::returnsValue($codeSnifferFile, $this->findPointerByLineAndType($codeSnifferFile, $line, T_CLOSURE)));
 	}
 
 	public function testReturnTypeHint(): void

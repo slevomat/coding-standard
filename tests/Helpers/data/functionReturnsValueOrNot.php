@@ -28,6 +28,11 @@ class FooClass
 		yield [];
 	}
 
+	public function returnsGeneratorFrom(): \Generator
+	{
+		yield from [];
+	}
+
 	public function returnsGeneratorWithEarlyTermination(): \Generator
 	{
 		if (true) {

@@ -151,7 +151,7 @@ class FunctionHelper
 		};
 
 		for ($i = $tokens[$functionPointer]['scope_opener'] + 1; $i < $tokens[$functionPointer]['scope_closer']; $i++) {
-			if ($tokens[$i]['code'] !== T_YIELD || !$isInSameLevel($i)) {
+			if (!in_array($tokens[$i]['code'], [T_YIELD, T_YIELD_FROM], true) || !$isInSameLevel($i)) {
 				continue;
 			}
 
