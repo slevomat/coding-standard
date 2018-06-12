@@ -27,6 +27,7 @@ class LanguageConstructWithParenthesesSniff implements \PHP_CodeSniffer\Sniffs\S
 			T_RETURN,
 			T_THROW,
 			T_YIELD,
+			T_YIELD_FROM,
 		];
 	}
 

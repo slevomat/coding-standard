@@ -14,7 +14,7 @@ class LanguageConstructWithParenthesesSniffTest extends \SlevomatCodingStandard\
 	{
 		$report = self::checkFile(__DIR__ . '/data/languageConstructWithParenthesesErrors.php', [], [LanguageConstructWithParenthesesSniff::CODE_USED_WITH_PARENTHESES]);
 
-		self::assertSame(13, $report->getErrorCount());
+		self::assertSame(14, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, LanguageConstructWithParenthesesSniff::CODE_USED_WITH_PARENTHESES, 'Usage of language construct "continue" with parentheses is disallowed.');
 		self::assertSniffError($report, 8, LanguageConstructWithParenthesesSniff::CODE_USED_WITH_PARENTHESES, 'Usage of language construct "break" with parentheses is disallowed.');
@@ -29,6 +29,7 @@ class LanguageConstructWithParenthesesSniffTest extends \SlevomatCodingStandard\
 		self::assertSniffError($report, 31, LanguageConstructWithParenthesesSniff::CODE_USED_WITH_PARENTHESES, 'Usage of language construct "throw" with parentheses is disallowed.');
 		self::assertSniffError($report, 36, LanguageConstructWithParenthesesSniff::CODE_USED_WITH_PARENTHESES, 'Usage of language construct "die" with parentheses is disallowed.');
 		self::assertSniffError($report, 37, LanguageConstructWithParenthesesSniff::CODE_USED_WITH_PARENTHESES, 'Usage of language construct "exit" with parentheses is disallowed.');
+		self::assertSniffError($report, 41, LanguageConstructWithParenthesesSniff::CODE_USED_WITH_PARENTHESES, 'Usage of language construct "yield from" with parentheses is disallowed.');
 
 		self::assertAllFixedInFile($report);
 	}

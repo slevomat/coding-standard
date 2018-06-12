@@ -35,3 +35,8 @@ try {
 
 die();
 exit();
+
+function booo()
+{
+	yield from ([]);
+}
