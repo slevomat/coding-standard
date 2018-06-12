@@ -421,3 +421,11 @@ function logicalVeryComplicatedCondition() {
 
 	doSomething();
 }
+
+function yieldFrom() {
+	if ($number < 0) {
+		yield from [];
+	}
+
+	// Something
+}

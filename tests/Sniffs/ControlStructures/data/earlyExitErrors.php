@@ -369,3 +369,11 @@ function logicalVeryComplicatedCondition() {
 		doSomething();
 	}
 }
+
+function yieldFrom() {
+	if ($number >= 0) {
+		// Something
+	} else {
+		yield from [];
+	}
+}

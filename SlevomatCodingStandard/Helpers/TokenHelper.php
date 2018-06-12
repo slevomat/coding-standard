@@ -48,6 +48,7 @@ class TokenHelper
 		T_BREAK,
 		T_THROW,
 		T_YIELD,
+		T_YIELD_FROM,
 		T_EXIT,
 	];
 
