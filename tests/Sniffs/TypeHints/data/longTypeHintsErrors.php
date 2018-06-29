@@ -32,9 +32,9 @@ class Foo
 	public $array;
 
 	/**
-	 * @param boolean|null $a
+	 * @param Boolean|null $a
 	 * @param null|boolean
-	 * @param integer|bool $c
+	 * @param Integer|bool $c
 	 * @return integer|null
 	 */
 	public function doSomething($a, $b, $c)
