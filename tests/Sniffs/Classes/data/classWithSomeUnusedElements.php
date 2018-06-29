@@ -174,4 +174,9 @@ CODE;
 		new $this->propertyUsedToCreateNewInstanceWithParentheses();
 	}
 
+	/**
+	 * @AssertX\Whatever()
+	 */
+	private $propertyWithPrefixUnsetAnnotation;
+
 }

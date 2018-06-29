@@ -379,7 +379,7 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						break 2;
 					}
 
-					if (substr($alwaysUsedPropertyAnnotationName, -1) !== '\\' || strpos($annotationName, $alwaysUsedPropertyAnnotationName) !== 0) {
+					if (substr($alwaysUsedPropertyAnnotationName, -1) === '\\' && strpos($annotationName, $alwaysUsedPropertyAnnotationName) === 0) {
 						$alwaysUsedProperty = true;
 						break 2;
 					}

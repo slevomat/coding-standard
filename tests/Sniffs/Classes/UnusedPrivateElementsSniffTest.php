@@ -108,6 +108,13 @@ class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\Test
 
 		self::assertNoSniffError($resultFile, 161);
 		self::assertNoSniffError($resultFile, 169);
+
+		self::assertSniffError(
+			$resultFile,
+			180,
+			UnusedPrivateElementsSniff::CODE_UNUSED_PROPERTY,
+			'Class ClassWithSomeUnusedProperties contains unused property $propertyWithPrefixUnsetAnnotation.'
+		);
 	}
 
 	public function testOnlyPublicElements(): void
