@@ -225,6 +225,15 @@ class UnusedPrivateElementsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 						unset($reportedProperties[$propertyInString]);
 					}
 				}
+				if (preg_match_all('~(?:self|static)::(.+?\b)~', $token['content'], $matches, PREG_PATTERN_ORDER)) {
+					foreach ($matches[1] as $constantInString) {
+						if (!isset($reportedConstants[$constantInString])) {
+							continue;
+						}
+
+						unset($reportedConstants[$constantInString]);
+					}
+				}
 				if (preg_match_all('~(?<=\{)\$this->(.+?\b)(?=\()~', $token['content'], $matches, PREG_PATTERN_ORDER)) {
 					foreach ($matches[1] as $methodInString) {
 						$normalizedMethodInString = $this->getNormalizedMethodName($methodInString);

@@ -179,4 +179,11 @@ CODE;
 	 */
 	private $propertyWithPrefixUnsetAnnotation;
 
+	private const USED_CONSTANT_IN_STRING = false;
+
+	public function usedConstantInString()
+	{
+		echo "{$this->whatever(self::USED_CONSTANT_IN_STRING)}";
+	}
+
 }
