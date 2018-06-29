@@ -662,4 +662,9 @@ abstract class FooClass
 
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
+	public $inheritdoc;
+
 }

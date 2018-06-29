@@ -781,6 +781,10 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return;
 		}
 
+		if ($this->hasInheritdocAnnotation($phpcsFile, $propertyPointer)) {
+			return;
+		}
+
 		$varAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $propertyPointer, '@var');
 		if (count($varAnnotations) === 0) {
 			if (SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, $this->getSniffName(self::CODE_MISSING_PROPERTY_TYPE_HINT))) {
@@ -1049,9 +1053,9 @@ class TypeHintDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		return $uselessParameterNames;
 	}
 
-	private function hasInheritdocAnnotation(\PHP_CodeSniffer\Files\File $phpcsFile, int $functionPointer): bool
+	private function hasInheritdocAnnotation(\PHP_CodeSniffer\Files\File $phpcsFile, int $pointer): bool
 	{
-		$docComment = DocCommentHelper::getDocComment($phpcsFile, $functionPointer);
+		$docComment = DocCommentHelper::getDocComment($phpcsFile, $pointer);
 		if ($docComment === null) {
 			return false;
 		}
