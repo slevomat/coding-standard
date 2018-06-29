@@ -733,6 +733,22 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 		self::assertSniffError($report, 14, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
 	}
 
+	public function testFixableWhenCollidingClassNames(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/fixableWhenCollidingClassNames.php',
+			[
+				'searchAnnotations' => true,
+				'allowFullyQualifiedNameForCollidingClasses' => true,
+				'allowFullyQualifiedGlobalClasses' => true,
+				'allowFullyQualifiedGlobalFunctions' => true,
+				'allowFullyQualifiedGlobalConstants' => true,
+			]
+		);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testCollidingClassNameExtendsAllowed(): void
 	{
 		$report = self::checkFile(
