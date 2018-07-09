@@ -63,7 +63,7 @@ class NullableTypeForNullDefaultValueSniff implements \PHP_CodeSniffer\Sniffs\Sn
 
 			if ($typeHintPointer === null || !in_array($tokens[$typeHintPointer]['code'], TokenHelper::$typeHintTokenCodes, true)) {
 				continue;
-			};
+			}
 
 			$ignoreTokensToSkipTypeHint = array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::$typeHintTokenCodes);
 			$beforeTypeHintPointer = TokenHelper::findPreviousExcluding($phpcsFile, $ignoreTokensToSkipTypeHint, $typeHintPointer - 1, $startPointer);
