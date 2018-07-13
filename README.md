@@ -149,6 +149,10 @@ Looks for `use` alias that is same as unqualified name.
 
 Looks for useless semicolons.
 
+#### SlevomatCodingStandard.Variables.UnusedVariable
+
+Looks for unused variables.
+
 #### SlevomatCodingStandard.Exceptions.DeadCatch
 
 This sniff finds unreachable catch blocks:

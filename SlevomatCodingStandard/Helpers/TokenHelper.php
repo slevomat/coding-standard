@@ -7,6 +7,7 @@ use const T_ARRAY_HINT;
 use const T_BREAK;
 use const T_CALLABLE;
 use const T_CLASS;
+use const T_CLOSURE;
 use const T_COMMENT;
 use const T_CONTINUE;
 use const T_DOC_COMMENT;
@@ -17,6 +18,7 @@ use const T_DOC_COMMENT_STRING;
 use const T_DOC_COMMENT_TAG;
 use const T_DOC_COMMENT_WHITESPACE;
 use const T_EXIT;
+use const T_FUNCTION;
 use const T_INTERFACE;
 use const T_NS_SEPARATOR;
 use const T_PARENT;
@@ -88,6 +90,12 @@ class TokenHelper
 		T_YIELD,
 		T_YIELD_FROM,
 		T_EXIT,
+	];
+
+	/** @var mixed[] */
+	public static $functionTokenCodes = [
+		T_FUNCTION,
+		T_CLOSURE,
 	];
 
 	/**
