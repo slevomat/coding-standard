@@ -120,7 +120,8 @@ class UseStatementHelper
 					$name,
 					self::getFullyQualifiedTypeNameFromUse($phpcsFile, $usePointer),
 					$usePointer,
-					$type
+					$type,
+					self::getAlias($phpcsFile, $usePointer)
 				);
 				$useStatements[UseStatement::getUniqueId($type, $name)] = $useStatement;
 			}
