@@ -117,4 +117,15 @@ class NamespaceSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testPhpcsCommentBefore(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/namespaceSpacingWithPhpcsCommentBefore.php');
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 4, NamespaceSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_NAMESPACE);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }

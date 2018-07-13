@@ -47,9 +47,11 @@ class NamespaceSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$whitespaceBeforeNamespace = '';
 
+		$commentTokensWithEolChar = array_merge([T_COMMENT], \PHP_CodeSniffer\Util\Tokens::$phpcsCommentTokens);
+
 		if ($tokens[$pointerBeforeNamespace]['code'] === T_OPEN_TAG) {
 			$whitespaceBeforeNamespace .= substr($tokens[$pointerBeforeNamespace]['content'], strlen('<?php'));
-		} elseif ($tokens[$pointerBeforeNamespace]['code'] === T_COMMENT) {
+		} elseif (in_array($tokens[$pointerBeforeNamespace]['code'], $commentTokensWithEolChar, true)) {
 			$whitespaceBeforeNamespace .= $phpcsFile->eolChar;
 		}
 
@@ -82,7 +84,7 @@ class NamespaceSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		if ($tokens[$pointerBeforeNamespace]['code'] === T_OPEN_TAG) {
 			$phpcsFile->fixer->replaceToken($pointerBeforeNamespace, '<?php');
-		} elseif ($tokens[$pointerBeforeNamespace]['code'] === T_COMMENT) {
+		} elseif (in_array($tokens[$pointerBeforeNamespace]['code'], $commentTokensWithEolChar, true)) {
 			$phpcsFile->fixer->replaceToken($pointerBeforeNamespace, rtrim($tokens[$pointerBeforeNamespace]['content'], $phpcsFile->eolChar));
 		}
 
