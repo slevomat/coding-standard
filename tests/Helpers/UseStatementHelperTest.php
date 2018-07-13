@@ -59,6 +59,21 @@ class UseStatementHelperTest extends TestCase
 		$this->assertFalse(UseStatementHelper::isTraitUse($codeSnifferFile, $usePointer));
 	}
 
+	public function testGetAlias(): void
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/useStatements.php'
+		);
+		$bazUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
+		self::assertNull(UseStatementHelper::getAlias($codeSnifferFile, $bazUsePointer));
+
+		$fooUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $bazUsePointer + 1);
+		self::assertNull(UseStatementHelper::getAlias($codeSnifferFile, $fooUsePointer));
+
+		$loremIpsumUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $fooUsePointer + 1);
+		self::assertSame('LoremIpsum', UseStatementHelper::getAlias($codeSnifferFile, $loremIpsumUsePointer));
+	}
+
 	public function testGetNameAsReferencedInClassFromUse(): void
 	{
 		$codeSnifferFile = $this->getCodeSnifferFile(

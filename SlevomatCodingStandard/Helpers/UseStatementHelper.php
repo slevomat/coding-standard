@@ -46,16 +46,27 @@ class UseStatementHelper
 		return false;
 	}
 
-	public static function getNameAsReferencedInClassFromUse(File $phpcsFile, int $usePointer): string
+	public static function getAlias(File $phpcsFile, int $usePointer): ?string
 	{
 		$endPointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_COMMA], $usePointer + 1);
 		$asPointer = TokenHelper::findNext($phpcsFile, T_AS, $usePointer + 1, $endPointer);
-		if ($asPointer !== null) {
-			$tokens = $phpcsFile->getTokens();
-			return $tokens[TokenHelper::findNext($phpcsFile, T_STRING, $asPointer + 1)]['content'];
-		}
-		$name = self::getFullyQualifiedTypeNameFromUse($phpcsFile, $usePointer);
 
+		if ($asPointer === null) {
+			return null;
+		}
+
+		$tokens = $phpcsFile->getTokens();
+		return $tokens[TokenHelper::findNext($phpcsFile, T_STRING, $asPointer + 1)]['content'];
+	}
+
+	public static function getNameAsReferencedInClassFromUse(File $phpcsFile, int $usePointer): string
+	{
+		$alias = self::getAlias($phpcsFile, $usePointer);
+		if ($alias !== null) {
+			return $alias;
+		}
+
+		$name = self::getFullyQualifiedTypeNameFromUse($phpcsFile, $usePointer);
 		return NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name);
 	}
 
