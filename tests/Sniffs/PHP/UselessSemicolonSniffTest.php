@@ -17,7 +17,7 @@ class UselessSemicolonSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/uselessSemicolonErrors.php');
 
-		self::assertSame(10, $report->getErrorCount());
+		self::assertSame(12, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, UselessSemicolonSniff::CODE_USELESS_SEMICOLON);
 		self::assertSniffError($report, 5, UselessSemicolonSniff::CODE_USELESS_SEMICOLON);
@@ -28,6 +28,7 @@ class UselessSemicolonSniffTest extends TestCase
 		self::assertSniffError($report, 23, UselessSemicolonSniff::CODE_USELESS_SEMICOLON);
 		self::assertSniffError($report, 28, UselessSemicolonSniff::CODE_USELESS_SEMICOLON);
 		self::assertSniffError($report, 33, UselessSemicolonSniff::CODE_USELESS_SEMICOLON);
+		self::assertSniffError($report, 35, UselessSemicolonSniff::CODE_USELESS_SEMICOLON);
 
 		self::assertAllFixedInFile($report);
 	}

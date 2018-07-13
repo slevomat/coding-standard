@@ -7,7 +7,9 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_ANON_CLASS;
 use const T_CLOSE_CURLY_BRACKET;
+use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
+use const T_FOR;
 use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_TAG;
 use const T_SEMICOLON;
@@ -47,6 +49,15 @@ class UselessSemicolonSniff implements Sniff
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $semicolonPointer - 1);
 		if ($tokens[$previousPointer]['code'] !== T_SEMICOLON) {
+			return;
+		}
+
+		$possibleEndScopePointer = TokenHelper::findNextLocal($phpcsFile, T_CLOSE_PARENTHESIS, $semicolonPointer + 1);
+		if (
+			$possibleEndScopePointer !== null
+			&& $tokens[$possibleEndScopePointer]['parenthesis_opener'] < $semicolonPointer
+			&& $tokens[$tokens[$possibleEndScopePointer]['parenthesis_owner']]['code'] === T_FOR
+		) {
 			return;
 		}
 

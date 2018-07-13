@@ -17,6 +17,10 @@ $anonymous = function () {
 };
 
 
+for (;;) {
+
+}
+
 new class extends Whatever {
 
 };
