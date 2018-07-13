@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Operators;
 
-class DisallowIncrementAndDecrementOperatorsSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class DisallowIncrementAndDecrementOperatorsSniffTest extends TestCase
 {
 
 	public function testNoErrors(): void

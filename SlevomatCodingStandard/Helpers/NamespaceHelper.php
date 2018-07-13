@@ -2,6 +2,16 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use PHP_CodeSniffer\Files\File;
+use const T_NAMESPACE;
+use function array_slice;
+use function count;
+use function explode;
+use function implode;
+use function ltrim;
+use function sprintf;
+use function strpos;
+
 /**
  * Terms "unqualified", "qualified" and "fully qualified" have the same meaning as described here:
  * http://php.net/manual/en/language.namespaces.rules.php
@@ -36,7 +46,7 @@ class NamespaceHelper
 		return explode(self::NAMESPACE_SEPARATOR, $name);
 	}
 
-	public static function findCurrentNamespaceName(\PHP_CodeSniffer\Files\File $phpcsFile, int $anyPointer): ?string
+	public static function findCurrentNamespaceName(File $phpcsFile, int $anyPointer): ?string
 	{
 		$namespacePointer = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $anyPointer);
 		if ($namespacePointer === null) {
@@ -82,7 +92,7 @@ class NamespaceHelper
 	 * @return string
 	 */
 	public static function resolveClassName(
-		\PHP_CodeSniffer\Files\File $phpcsFile,
+		File $phpcsFile,
 		string $nameAsReferencedInFile,
 		array $useStatements,
 		int $currentPointer
@@ -100,7 +110,7 @@ class NamespaceHelper
 	 * @return string
 	 */
 	public static function resolveName(
-		\PHP_CodeSniffer\Files\File $phpcsFile,
+		File $phpcsFile,
 		string $nameAsReferencedInFile,
 		string $type,
 		array $useStatements,

@@ -2,9 +2,15 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_INLINE_ELSE;
+use const T_INLINE_THEN;
+use const T_VARIABLE;
+use function sprintf;
 
-class DisallowShortTernaryOperatorSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class DisallowShortTernaryOperatorSniff implements Sniff
 {
 
 	public const CODE_DISALLOWED_SHORT_TERNARY_OPERATOR = 'DisallowedShortTernaryOperator';
@@ -27,7 +33,7 @@ class DisallowShortTernaryOperatorSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $inlineThenPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $inlineThenPointer): void
+	public function process(File $phpcsFile, $inlineThenPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class TestCaseChecksTokenBoundsTest extends \SlevomatCodingStandard\Helpers\TestCase
+use const T_OPEN_TAG;
+
+class TestCaseChecksTokenBoundsTest extends TestCase
 {
 
 	public function testThrowsTokenPointerOutOfBoundsException(): void
@@ -13,7 +15,7 @@ class TestCaseChecksTokenBoundsTest extends \SlevomatCodingStandard\Helpers\Test
 			);
 			self::assertTokenPointer(T_OPEN_TAG, 1, $codeSnifferFile, 5);
 			$this->fail();
-		} catch (\SlevomatCodingStandard\Helpers\TokenPointerOutOfBoundsException $e) {
+		} catch (TokenPointerOutOfBoundsException $e) {
 			self::assertSame('Attempted access to token pointer 5, last token pointer is 0', $e->getMessage());
 			self::assertSame(5, $e->getPointer());
 			self::assertSame(0, $e->getLastTokenPointer());

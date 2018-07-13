@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
-class DisallowShortTernaryOperatorSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class DisallowShortTernaryOperatorSniffTest extends TestCase
 {
 
 	public function testNoErrors(): void

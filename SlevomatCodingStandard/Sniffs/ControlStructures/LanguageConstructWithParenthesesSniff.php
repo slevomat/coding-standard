@@ -2,9 +2,28 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_BREAK;
+use const T_CONTINUE;
+use const T_ECHO;
+use const T_EXIT;
+use const T_INCLUDE;
+use const T_INCLUDE_ONCE;
+use const T_OPEN_PARENTHESIS;
+use const T_PRINT;
+use const T_REQUIRE;
+use const T_REQUIRE_ONCE;
+use const T_RETURN;
+use const T_SEMICOLON;
+use const T_THROW;
+use const T_WHITESPACE;
+use const T_YIELD;
+use const T_YIELD_FROM;
+use function sprintf;
 
-class LanguageConstructWithParenthesesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class LanguageConstructWithParenthesesSniff implements Sniff
 {
 
 	public const CODE_USED_WITH_PARENTHESES = 'UsedWithParentheses';
@@ -36,7 +55,7 @@ class LanguageConstructWithParenthesesSniff implements \PHP_CodeSniffer\Sniffs\S
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $languageConstructPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $languageConstructPointer): void
+	public function process(File $phpcsFile, $languageConstructPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 		/** @var int $openParenthesisPointer */

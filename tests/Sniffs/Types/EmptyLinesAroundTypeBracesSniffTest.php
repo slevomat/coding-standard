@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Types;
 
-class EmptyLinesAroundTypeBracesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class EmptyLinesAroundTypeBracesSniffTest extends TestCase
 {
 
 	public function testCorrectCorrectEmptyLines(): void

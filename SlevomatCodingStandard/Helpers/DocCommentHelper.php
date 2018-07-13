@@ -2,15 +2,40 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use PHP_CodeSniffer\Files\File;
+use const T_ABSTRACT;
+use const T_CLASS;
+use const T_COMMENT;
+use const T_CONST;
+use const T_DOC_COMMENT_CLOSE_TAG;
+use const T_DOC_COMMENT_OPEN_TAG;
+use const T_DOC_COMMENT_STAR;
+use const T_DOC_COMMENT_STRING;
+use const T_DOC_COMMENT_TAG;
+use const T_DOC_COMMENT_WHITESPACE;
+use const T_FINAL;
+use const T_INTERFACE;
+use const T_PRIVATE;
+use const T_PROTECTED;
+use const T_PUBLIC;
+use const T_STATIC;
+use const T_TRAIT;
+use const T_VAR;
+use const T_WHITESPACE;
+use function count;
+use function in_array;
+use function strpos;
+use function trim;
+
 class DocCommentHelper
 {
 
-	public static function hasDocComment(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $pointer): bool
+	public static function hasDocComment(File $codeSnifferFile, int $pointer): bool
 	{
 		return self::findDocCommentOpenToken($codeSnifferFile, $pointer) !== null;
 	}
 
-	public static function getDocComment(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $pointer): ?string
+	public static function getDocComment(File $codeSnifferFile, int $pointer): ?string
 	{
 		$docCommentOpenToken = self::findDocCommentOpenToken($codeSnifferFile, $pointer);
 		if ($docCommentOpenToken === null) {
@@ -25,7 +50,7 @@ class DocCommentHelper
 	 * @param int $pointer
 	 * @return \SlevomatCodingStandard\Helpers\Comment[]|null
 	 */
-	public static function getDocCommentDescription(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $pointer): ?array
+	public static function getDocCommentDescription(File $codeSnifferFile, int $pointer): ?array
 	{
 		$docCommentOpenPointer = self::findDocCommentOpenToken($codeSnifferFile, $pointer);
 
@@ -69,12 +94,12 @@ class DocCommentHelper
 		return count($comments) > 0 ? $comments : null;
 	}
 
-	public static function hasDocCommentDescription(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $pointer): bool
+	public static function hasDocCommentDescription(File $codeSnifferFile, int $pointer): bool
 	{
 		return self::getDocCommentDescription($codeSnifferFile, $pointer) !== null;
 	}
 
-	public static function findDocCommentOpenToken(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $pointer): ?int
+	public static function findDocCommentOpenToken(File $codeSnifferFile, int $pointer): ?int
 	{
 		$tokens = $codeSnifferFile->getTokens();
 
@@ -90,7 +115,7 @@ class DocCommentHelper
 		return null;
 	}
 
-	public static function isInline(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $docCommentOpenPointer): bool
+	public static function isInline(File $codeSnifferFile, int $docCommentOpenPointer): bool
 	{
 		$tokens = $codeSnifferFile->getTokens();
 

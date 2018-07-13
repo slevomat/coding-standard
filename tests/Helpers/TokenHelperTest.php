@@ -2,7 +2,22 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
+use const T_CLASS;
+use const T_CLOSE_PARENTHESIS;
+use const T_CLOSURE;
+use const T_DOC_COMMENT_OPEN_TAG;
+use const T_DOC_COMMENT_WHITESPACE;
+use const T_EQUAL;
+use const T_FOR;
+use const T_OPEN_PARENTHESIS;
+use const T_OPEN_TAG;
+use const T_SEMICOLON;
+use const T_STRING;
+use const T_VARIABLE;
+use const T_WHITESPACE;
+use function sprintf;
+
+class TokenHelperTest extends TestCase
 {
 
 	public function testFindNextAll(): void
@@ -281,7 +296,7 @@ class TokenHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 			);
 			TokenHelper::getLastTokenPointer($codeSnifferFile);
 			$this->fail();
-		} catch (\SlevomatCodingStandard\Helpers\EmptyFileException $e) {
+		} catch (EmptyFileException $e) {
 			self::assertContains('emptyFile.php is empty', $e->getMessage());
 			self::assertContains('emptyFile.php', $e->getFilename());
 		}

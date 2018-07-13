@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Classes;
 
-class SuperfluousAbstractClassNamingSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class SuperfluousAbstractClassNamingSniffTest extends TestCase
 {
 
 	public function testNoErrors(): void

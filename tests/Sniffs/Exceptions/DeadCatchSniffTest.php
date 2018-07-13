@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Exceptions;
 
-class DeadCatchSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class DeadCatchSniffTest extends TestCase
 {
 
 	public function testNoDeadCatches(): void

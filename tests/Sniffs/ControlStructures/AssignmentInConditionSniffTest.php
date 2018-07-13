@@ -2,7 +2,10 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
-class AssignmentInConditionSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+use function range;
+
+class AssignmentInConditionSniffTest extends TestCase
 {
 
 	public function testCorrectFile(): void

@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class ReferenceUsedNamesOnlySniffTest extends TestCase
 {
 
 	/**
@@ -579,7 +581,7 @@ class ReferenceUsedNamesOnlySniffTest extends \SlevomatCodingStandard\Sniffs\Tes
 
 	public function testThrowExceptionForUndefinedKeyword(): void
 	{
-		$this->expectException(\SlevomatCodingStandard\Sniffs\Namespaces\UndefinedKeywordTokenException::class);
+		$this->expectException(UndefinedKeywordTokenException::class);
 		$this->expectExceptionMessage('Value for keyword token not found, constant "T_FOO" is not defined');
 
 		self::checkFile(

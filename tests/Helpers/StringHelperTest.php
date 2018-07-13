@@ -2,7 +2,7 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class StringHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
+class StringHelperTest extends TestCase
 {
 
 	/**

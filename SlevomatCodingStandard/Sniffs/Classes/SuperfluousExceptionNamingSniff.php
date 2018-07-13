@@ -2,10 +2,17 @@
 
 namespace SlevomatCodingStandard\Sniffs\Classes;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_ABSTRACT;
+use const T_CLASS;
+use function sprintf;
+use function strtolower;
+use function substr;
 
-class SuperfluousExceptionNamingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class SuperfluousExceptionNamingSniff implements Sniff
 {
 
 	public const CODE_SUPERFLUOUS_SUFFIX = 'SuperfluousSuffix';
@@ -25,7 +32,7 @@ class SuperfluousExceptionNamingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $classPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $classPointer): void
+	public function process(File $phpcsFile, $classPointer): void
 	{
 		$className = ClassHelper::getName($phpcsFile, $classPointer);
 

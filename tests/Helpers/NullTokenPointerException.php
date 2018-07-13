@@ -2,10 +2,13 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class NullTokenPointerException extends \Exception
+use Exception;
+use Throwable;
+
+class NullTokenPointerException extends Exception
 {
 
-	public function __construct(?\Throwable $previous = null)
+	public function __construct(?Throwable $previous = null)
 	{
 		parent::__construct('', 0, $previous);
 	}

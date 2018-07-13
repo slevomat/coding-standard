@@ -2,13 +2,31 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use const T_COMMA;
+use const T_IMPLEMENTS;
+use const T_NAMESPACE;
+use const T_NS_SEPARATOR;
+use const T_OPEN_TAG;
+use const T_USE;
+use const T_WHITESPACE;
+use function array_map;
+use function array_merge;
+use function array_values;
+use function constant;
+use function count;
+use function defined;
+use function in_array;
+use function sprintf;
+use function ucfirst;
 
-class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 {
 
 	public const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified%s';
@@ -45,7 +63,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer\Sniff
 		}
 		return array_map(function (string $keyword) {
 			if (!defined($keyword)) {
-				throw new \SlevomatCodingStandard\Sniffs\Namespaces\UndefinedKeywordTokenException($keyword);
+				throw new UndefinedKeywordTokenException($keyword);
 			}
 			return constant($keyword);
 		}, $this->getKeywordsToCheck());
@@ -56,7 +74,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $keywordPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $keywordPointer): void
+	public function process(File $phpcsFile, $keywordPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -112,7 +130,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements \PHP_CodeSniffer\Sniff
 	 * @return int
 	 */
 	private function checkReferencedName(
-		\PHP_CodeSniffer\Files\File $phpcsFile,
+		File $phpcsFile,
 		array $useStatements,
 		int $keywordPointer,
 		int $nameStartPointer

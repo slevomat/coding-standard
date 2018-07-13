@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
-class LongTypeHintsSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class LongTypeHintsSniffTest extends TestCase
 {
 
 	public function testNoErrors(): void

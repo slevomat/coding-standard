@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
-class NullableTypeForNullDefaultValueSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class NullableTypeForNullDefaultValueSniffTest extends TestCase
 {
 
 	public function testNoErrors(): void

@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-class FullyQualifiedClassNameAfterKeywordSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class FullyQualifiedClassNameAfterKeywordSniffTest extends TestCase
 {
 
 	public function testThrowExceptionForUndefinedConstant(): void
@@ -13,7 +15,7 @@ class FullyQualifiedClassNameAfterKeywordSniffTest extends \SlevomatCodingStanda
 				['keywordsToCheck' => ['T_FOO']]
 			);
 			$this->fail();
-		} catch (\SlevomatCodingStandard\Sniffs\Namespaces\UndefinedKeywordTokenException $e) {
+		} catch (UndefinedKeywordTokenException $e) {
 			self::assertContains('T_FOO', $e->getMessage());
 			self::assertSame('T_FOO', $e->getKeyword());
 		}

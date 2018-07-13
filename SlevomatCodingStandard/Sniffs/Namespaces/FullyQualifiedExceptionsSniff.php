@@ -2,14 +2,20 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use Throwable;
+use const T_OPEN_TAG;
+use function in_array;
+use function sprintf;
 
-class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class FullyQualifiedExceptionsSniff implements Sniff
 {
 
 	public const CODE_NON_FULLY_QUALIFIED_EXCEPTION = 'NonFullyQualifiedException';
@@ -65,7 +71,7 @@ class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $openTagPointer): void
+	public function process(File $phpcsFile, $openTagPointer): void
 	{
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
 		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
@@ -79,7 +85,7 @@ class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					in_array($useStatement->getFullyQualifiedTypeName(), $this->getIgnoredNames(), true)
 					|| (
 						!StringHelper::endsWith($useStatement->getFullyQualifiedTypeName(), 'Exception')
-						&& $useStatement->getFullyQualifiedTypeName() !== \Throwable::class
+						&& $useStatement->getFullyQualifiedTypeName() !== Throwable::class
 						&& (!StringHelper::endsWith($useStatement->getFullyQualifiedTypeName(), 'Error') || NamespaceHelper::hasNamespace($useStatement->getFullyQualifiedTypeName()))
 						&& !in_array($useStatement->getFullyQualifiedTypeName(), $this->getSpecialExceptionNames(), true)
 					)
@@ -96,7 +102,7 @@ class FullyQualifiedExceptionsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 					in_array($canonicalName, $this->getIgnoredNames(), true)
 					|| (
 						!StringHelper::endsWith($name, 'Exception')
-						&& $name !== \Throwable::class
+						&& $name !== Throwable::class
 						&& (!StringHelper::endsWith($canonicalName, 'Error') || NamespaceHelper::hasNamespace($canonicalName))
 						&& !in_array($canonicalName, $this->getSpecialExceptionNames(), true)
 					)

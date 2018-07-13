@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Classes;
 
-class ClassConstantVisibilitySniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class ClassConstantVisibilitySniffTest extends TestCase
 {
 
 	public function testErrors(): void

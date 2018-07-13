@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 use SlevomatCodingStandard\Helpers\ReferencedName;
 
 class FullyQualifiedGlobalConstantsSniff
-	extends \SlevomatCodingStandard\Sniffs\Namespaces\AbstractFullyQualifiedGlobalReference
+	extends AbstractFullyQualifiedGlobalReference
 {
 
 	protected function getNotFullyQualifiedMessage(): string

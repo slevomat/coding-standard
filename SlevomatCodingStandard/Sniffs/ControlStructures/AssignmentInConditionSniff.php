@@ -2,9 +2,17 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_DO;
+use const T_ELSEIF;
+use const T_EQUAL;
+use const T_IF;
+use const T_WHILE;
+use function sprintf;
 
-class AssignmentInConditionSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class AssignmentInConditionSniff implements Sniff
 {
 
 	public const CODE_ASSIGNMENT_IN_CONDITION = 'AssignmentInCondition';
@@ -26,7 +34,7 @@ class AssignmentInConditionSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $conditionStartPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $conditionStartPointer): void
+	public function process(File $phpcsFile, $conditionStartPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 		$token = $tokens[$conditionStartPointer];
@@ -45,7 +53,7 @@ class AssignmentInConditionSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	}
 
 	private function processCondition(
-		\PHP_CodeSniffer\Files\File $phpcsFile,
+		File $phpcsFile,
 		int $parenthesisOpener,
 		int $parenthesisCloser,
 		string $conditionType

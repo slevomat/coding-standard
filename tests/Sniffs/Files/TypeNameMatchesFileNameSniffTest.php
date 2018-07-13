@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Files;
 
-class TypeNameMatchesFileNameSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class TypeNameMatchesFileNameSniffTest extends TestCase
 {
 
 	public function testError(): void

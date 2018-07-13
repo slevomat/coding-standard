@@ -2,6 +2,23 @@
 
 namespace SlevomatCodingStandard\Sniffs;
 
+use Exception;
+use PHP_CodeSniffer\Config;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Files\LocalFile;
+use PHP_CodeSniffer\Runner;
+use ReflectionClass;
+use const PHP_EOL;
+use function array_map;
+use function count;
+use function implode;
+use function in_array;
+use function preg_replace;
+use function sprintf;
+use function strlen;
+use function strpos;
+use function substr;
+
 /**
  * @codeCoverageIgnore
  */
@@ -14,10 +31,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 * @param string[] $codesToCheck
 	 * @return \PHP_CodeSniffer\Files\File
 	 */
-	protected static function checkFile(string $filePath, array $sniffProperties = [], array $codesToCheck = []): \PHP_CodeSniffer\Files\File
+	protected static function checkFile(string $filePath, array $sniffProperties = [], array $codesToCheck = []): File
 	{
-		$codeSniffer = new \PHP_CodeSniffer\Runner();
-		$codeSniffer->config = new \PHP_CodeSniffer\Config([
+		$codeSniffer = new Runner();
+		$codeSniffer->config = new Config([
 			'-s',
 		]);
 		$codeSniffer->init();
@@ -42,14 +59,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
 		$codeSniffer->ruleset->populateTokenListeners();
 
-		$file = new \PHP_CodeSniffer\Files\LocalFile($filePath, $codeSniffer->ruleset, $codeSniffer->config);
+		$file = new LocalFile($filePath, $codeSniffer->ruleset, $codeSniffer->config);
 		$file->process();
 
 		foreach ($file->getErrors() as $errorsOnLine) {
 			foreach ($errorsOnLine as $errorsOnPosition) {
 				foreach ($errorsOnPosition as $error) {
 					if (strpos($error['source'], 'Internal.') === 0) {
-						throw new \Exception($error['message']);
+						throw new Exception($error['message']);
 					}
 				}
 			}
@@ -58,13 +75,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		return $file;
 	}
 
-	protected static function assertNoSniffErrorInFile(\PHP_CodeSniffer\Files\File $file): void
+	protected static function assertNoSniffErrorInFile(File $file): void
 	{
 		$errors = $file->getErrors();
 		self::assertEmpty($errors, sprintf('No errors expected, but %d errors found.', count($errors)));
 	}
 
-	protected static function assertSniffError(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $line, string $code, ?string $message = null): void
+	protected static function assertSniffError(File $codeSnifferFile, int $line, string $code, ?string $message = null): void
 	{
 		$errors = $codeSnifferFile->getErrors();
 		self::assertTrue(isset($errors[$line]), sprintf('Expected error on line %s, but none found.', $line));
@@ -87,7 +104,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		);
 	}
 
-	protected static function assertNoSniffError(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $line): void
+	protected static function assertNoSniffError(File $codeSnifferFile, int $line): void
 	{
 		$errors = $codeSnifferFile->getErrors();
 		self::assertFalse(
@@ -102,7 +119,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		);
 	}
 
-	protected static function assertAllFixedInFile(\PHP_CodeSniffer\Files\File $codeSnifferFile): void
+	protected static function assertAllFixedInFile(File $codeSnifferFile): void
 	{
 		$codeSnifferFile->disableCaching();
 		$codeSnifferFile->fixer->fixFile();
@@ -167,13 +184,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		return substr(static::class, 0, -strlen('Test'));
 	}
 
-	protected static function getSniffClassReflection(): \ReflectionClass
+	protected static function getSniffClassReflection(): ReflectionClass
 	{
 		static $reflections;
 
 		$className = static::getSniffClassName();
 
-		return $reflections[$className] ?? $reflections[$className] = new \ReflectionClass($className);
+		return $reflections[$className] ?? $reflections[$className] = new ReflectionClass($className);
 	}
 
 }

@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-class UseSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class UseSpacingSniffTest extends TestCase
 {
 
 	public function testNoUseNoErrors(): void

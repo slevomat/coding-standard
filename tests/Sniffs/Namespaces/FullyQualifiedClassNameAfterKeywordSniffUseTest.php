@@ -2,7 +2,10 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-class FullyQualifiedClassNameAfterKeywordSniffUseTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use PHP_CodeSniffer\Files\File;
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class FullyQualifiedClassNameAfterKeywordSniffUseTest extends TestCase
 {
 
 	protected static function getSniffClassName(): string
@@ -10,7 +13,7 @@ class FullyQualifiedClassNameAfterKeywordSniffUseTest extends \SlevomatCodingSta
 		return FullyQualifiedClassNameAfterKeywordSniff::class;
 	}
 
-	private function getFileReport(): \PHP_CodeSniffer\Files\File
+	private function getFileReport(): File
 	{
 		return self::checkFile(
 			__DIR__ . '/data/fullyQualifiedUse.php',

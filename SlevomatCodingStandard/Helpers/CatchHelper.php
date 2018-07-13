@@ -2,6 +2,10 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use PHP_CodeSniffer\Files\File;
+use const T_BITWISE_OR;
+use function array_merge;
+
 class CatchHelper
 {
 
@@ -11,7 +15,7 @@ class CatchHelper
 	 * @param mixed[] $catchToken
 	 * @return string[]
 	 */
-	public static function findCatchedTypesInCatch(\PHP_CodeSniffer\Files\File $phpcsFile, array $useStatements, array $catchToken): array
+	public static function findCatchedTypesInCatch(File $phpcsFile, array $useStatements, array $catchToken): array
 	{
 		$nameEndPointer = $catchToken['parenthesis_opener'];
 		$tokens = $phpcsFile->getTokens();

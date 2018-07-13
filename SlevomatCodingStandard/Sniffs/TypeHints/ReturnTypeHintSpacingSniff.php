@@ -2,11 +2,21 @@
 
 namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_CLOSE_PARENTHESIS;
+use const T_CLOSURE;
+use const T_FUNCTION;
+use const T_NULLABLE;
+use const T_WHITESPACE;
+use function array_merge;
+use function sprintf;
+use function str_repeat;
 
-class ReturnTypeHintSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class ReturnTypeHintSpacingSniff implements Sniff
 {
 
 	public const CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT = 'NoSpaceBetweenColonAndTypeHint';
@@ -42,7 +52,7 @@ class ReturnTypeHintSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $functionPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $functionPointer): void
+	public function process(File $phpcsFile, $functionPointer): void
 	{
 		$typeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 

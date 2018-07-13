@@ -2,10 +2,19 @@
 
 namespace SlevomatCodingStandard\Sniffs\Commenting;
 
+use Exception;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
+use const T_DOC_COMMENT_OPEN_TAG;
+use function array_key_exists;
+use function is_array;
+use function preg_match;
+use function preg_replace;
+use function sprintf;
 
-class ForbiddenCommentsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class ForbiddenCommentsSniff implements Sniff
 {
 
 	public const CODE_COMMENT_FORBIDDEN = 'CommentForbidden';
@@ -28,7 +37,7 @@ class ForbiddenCommentsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $docCommentOpenPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $docCommentOpenPointer): void
+	public function process(File $phpcsFile, $docCommentOpenPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -40,7 +49,7 @@ class ForbiddenCommentsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		foreach (SniffSettingsHelper::normalizeArray($this->forbiddenCommentPatterns) as $forbiddenCommentPattern) {
 			if (!SniffSettingsHelper::isValidRegularExpression($forbiddenCommentPattern)) {
-				throw new \Exception(sprintf('%s is not valid PCRE pattern.', $forbiddenCommentPattern));
+				throw new Exception(sprintf('%s is not valid PCRE pattern.', $forbiddenCommentPattern));
 			}
 
 			foreach ($comments as $comment) {

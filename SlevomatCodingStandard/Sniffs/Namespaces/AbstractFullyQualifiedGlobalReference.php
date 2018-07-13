@@ -2,14 +2,22 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedName;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use const T_OPEN_TAG;
+use function array_flip;
+use function array_key_exists;
+use function array_map;
+use function sprintf;
+use function strtolower;
 
-abstract class AbstractFullyQualifiedGlobalReference implements \PHP_CodeSniffer\Sniffs\Sniff
+abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 {
 
 	public const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified';
@@ -35,7 +43,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements \PHP_CodeSniffer
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $openTagPointer): void
+	public function process(File $phpcsFile, $openTagPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

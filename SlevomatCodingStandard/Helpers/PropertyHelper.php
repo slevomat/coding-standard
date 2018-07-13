@@ -2,10 +2,23 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use PHP_CodeSniffer\Files\File;
+use const T_ANON_CLASS;
+use const T_PRIVATE;
+use const T_PROTECTED;
+use const T_PUBLIC;
+use const T_STATIC;
+use const T_VAR;
+use function array_keys;
+use function array_merge;
+use function array_reverse;
+use function in_array;
+use function sprintf;
+
 class PropertyHelper
 {
 
-	public static function isProperty(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $variablePointer): bool
+	public static function isProperty(File $codeSnifferFile, int $variablePointer): bool
 	{
 		$propertyDeterminingPointer = TokenHelper::findPreviousExcluding(
 			$codeSnifferFile,
@@ -21,7 +34,7 @@ class PropertyHelper
 		], true);
 	}
 
-	public static function getFullyQualifiedName(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $propertyPointer): string
+	public static function getFullyQualifiedName(File $codeSnifferFile, int $propertyPointer): string
 	{
 		$propertyToken = $codeSnifferFile->getTokens()[$propertyPointer];
 		$propertyName = $propertyToken['content'];

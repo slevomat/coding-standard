@@ -2,6 +2,11 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use PHP_CodeSniffer\Files\File;
+use const T_OPEN_TAG;
+use function array_key_exists;
+use function in_array;
+
 class TypeHintHelper
 {
 
@@ -24,7 +29,7 @@ class TypeHintHelper
 		return array_key_exists($typeHint, $longToShort) ? $longToShort[$typeHint] : $typeHint;
 	}
 
-	public static function getFullyQualifiedTypeHint(\PHP_CodeSniffer\Files\File $phpcsFile, int $pointer, string $typeHint): string
+	public static function getFullyQualifiedTypeHint(File $phpcsFile, int $pointer, string $typeHint): string
 	{
 		if (self::isSimpleTypeHint($typeHint)) {
 			return self::convertLongSimpleTypeHintToShort($typeHint);

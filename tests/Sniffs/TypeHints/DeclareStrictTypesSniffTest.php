@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
-class DeclareStrictTypesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class DeclareStrictTypesSniffTest extends TestCase
 {
 
 	public function testMultipleOpenTagsInFile(): void

@@ -2,13 +2,17 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class EmptyFileException extends \Exception
+use Exception;
+use Throwable;
+use function sprintf;
+
+class EmptyFileException extends Exception
 {
 
 	/** @var string */
 	private $filename;
 
-	public function __construct(string $filename, ?\Throwable $previous = null)
+	public function __construct(string $filename, ?Throwable $previous = null)
 	{
 		parent::__construct(sprintf(
 			'File %s is empty',

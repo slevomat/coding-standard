@@ -2,10 +2,15 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-class FullyQualifiedExceptionsSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use PHP_CodeSniffer\Files\File;
+use SlevomatCodingStandard\Sniffs\TestCase;
+use Throwable;
+use TypeError;
+
+class FullyQualifiedExceptionsSniffTest extends TestCase
 {
 
-	private function getFileReport(): \PHP_CodeSniffer\Files\File
+	private function getFileReport(): File
 	{
 		return self::checkFile(__DIR__ . '/data/fullyQualifiedExceptionNames.php');
 	}
@@ -42,13 +47,13 @@ class FullyQualifiedExceptionsSniffTest extends \SlevomatCodingStandard\Sniffs\T
 			$this->getFileReport(),
 			9,
 			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
-			\Throwable::class
+			Throwable::class
 		);
 		self::assertSniffError(
 			$this->getFileReport(),
 			11,
 			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
-			\TypeError::class
+			TypeError::class
 		);
 	}
 

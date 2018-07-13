@@ -2,6 +2,8 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\ConstantHelper;
@@ -16,8 +18,36 @@ use SlevomatCodingStandard\Helpers\TypeHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use stdClass;
+use const T_COMMA;
+use const T_DECLARE;
+use const T_DOC_COMMENT_OPEN_TAG;
+use const T_NAMESPACE;
+use const T_OPEN_CURLY_BRACKET;
+use const T_OPEN_TAG;
+use const T_SEMICOLON;
+use const T_WHITESPACE;
+use function array_filter;
+use function array_flip;
+use function array_key_exists;
+use function array_map;
+use function array_merge;
+use function array_values;
+use function constant;
+use function count;
+use function defined;
+use function explode;
+use function in_array;
+use function ltrim;
+use function preg_quote;
+use function preg_replace_callback;
+use function preg_split;
+use function rtrim;
+use function sprintf;
+use function strtolower;
+use function substr;
 
-class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class ReferenceUsedNamesOnlySniff implements Sniff
 {
 
 	public const CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME = 'ReferenceViaFullyQualifiedName';
@@ -143,7 +173,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		if ($this->normalizedFullyQualifiedKeywords === null) {
 			$this->normalizedFullyQualifiedKeywords = array_map(function (string $keyword) {
 				if (!defined($keyword)) {
-					throw new \SlevomatCodingStandard\Sniffs\Namespaces\UndefinedKeywordTokenException($keyword);
+					throw new UndefinedKeywordTokenException($keyword);
 				}
 				return constant($keyword);
 			}, SniffSettingsHelper::normalizeArray($this->fullyQualifiedKeywords));
@@ -157,7 +187,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $openTagPointer): void
+	public function process(File $phpcsFile, $openTagPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -173,7 +203,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$definedConstantsIndex = array_flip(ConstantHelper::getAllNames($phpcsFile));
 
 		if ($this->allowFullyQualifiedNameForCollidingClasses) {
-			$classReferences = array_filter($references, function (\stdClass $reference): bool {
+			$classReferences = array_filter($references, function (stdClass $reference): bool {
 				return !$reference->fromDocComment && $reference->isClass;
 			});
 
@@ -184,7 +214,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 
 		if ($this->allowFullyQualifiedNameForCollidingFunctions) {
-			$functionReferences = array_filter($references, function (\stdClass $reference): bool {
+			$functionReferences = array_filter($references, function (stdClass $reference): bool {
 				return !$reference->fromDocComment && $reference->isFunction;
 			});
 
@@ -195,7 +225,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 
 		if ($this->allowFullyQualifiedNameForCollidingConstants) {
-			$constantReferences = array_filter($references, function (\stdClass $reference): bool {
+			$constantReferences = array_filter($references, function (stdClass $reference): bool {
 				return !$reference->fromDocComment && $reference->isConstant;
 			});
 
@@ -403,7 +433,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
 	 * @return int
 	 */
-	private function getUseStatementPlacePointer(\PHP_CodeSniffer\Files\File $phpcsFile, int $openTagPointer, array $useStatements): int
+	private function getUseStatementPlacePointer(File $phpcsFile, int $openTagPointer, array $useStatements): int
 	{
 		if (count($useStatements) !== 0) {
 			$lastUseStatement = array_values($useStatements)[count($useStatements) - 1];
@@ -451,13 +481,13 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param int $openTagPointer
 	 * @return \stdClass[]
 	 */
-	private function getReferences(\PHP_CodeSniffer\Files\File $phpcsFile, int $openTagPointer): array
+	private function getReferences(File $phpcsFile, int $openTagPointer): array
 	{
 		$tokens = $phpcsFile->getTokens();
 
 		$references = [];
 		foreach (ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer) as $referencedName) {
-			$reference = new \stdClass();
+			$reference = new stdClass();
 			$reference->fromDocComment = false;
 			$reference->name = $referencedName->getNameAsReferencedInFile();
 			$reference->type = $referencedName->getType();
@@ -507,7 +537,7 @@ class ReferenceUsedNamesOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 							continue;
 						}
 
-						$reference = new \stdClass();
+						$reference = new stdClass();
 						$reference->fromDocComment = true;
 						$reference->name = $type;
 						$reference->type = ReferencedName::TYPE_DEFAULT;

@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
-class RequireNullCoalesceOperatorSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class RequireNullCoalesceOperatorSniffTest extends TestCase
 {
 
 	public function testNoErrors(): void

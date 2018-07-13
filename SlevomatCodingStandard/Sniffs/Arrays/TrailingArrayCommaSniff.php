@@ -2,9 +2,13 @@
 
 namespace SlevomatCodingStandard\Sniffs\Arrays;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_COMMA;
+use const T_OPEN_SHORT_ARRAY;
 
-class TrailingArrayCommaSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class TrailingArrayCommaSniff implements Sniff
 {
 
 	public const CODE_MISSING_TRAILING_COMMA = 'MissingTrailingComma';
@@ -24,7 +28,7 @@ class TrailingArrayCommaSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $stackPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $stackPointer): void
+	public function process(File $phpcsFile, $stackPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 		$arrayToken = $tokens[$stackPointer];

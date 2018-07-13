@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class TypeHintHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
+use function preg_split;
+
+class TypeHintHelperTest extends TestCase
 {
 
 	/**

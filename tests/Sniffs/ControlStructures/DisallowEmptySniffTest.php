@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
-class DisallowEmptySniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class DisallowEmptySniffTest extends TestCase
 {
 
 	public function testNoErrors(): void

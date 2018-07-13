@@ -2,6 +2,8 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedName;
@@ -10,8 +12,20 @@ use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use const T_DOC_COMMENT_OPEN_TAG;
+use const T_OPEN_TAG;
+use const T_SEMICOLON;
+use function array_diff_key;
+use function array_merge;
+use function count;
+use function in_array;
+use function preg_match;
+use function preg_match_all;
+use function preg_quote;
+use function preg_split;
+use function sprintf;
 
-class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class UnusedUsesSniff implements Sniff
 {
 
 	public const CODE_UNUSED_USE = 'UnusedUse';
@@ -79,7 +93,7 @@ class UnusedUsesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $openTagPointer): void
+	public function process(File $phpcsFile, $openTagPointer): void
 	{
 		$unusedNames = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);

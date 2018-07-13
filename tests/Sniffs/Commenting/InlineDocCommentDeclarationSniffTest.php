@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Commenting;
 
-class InlineDocCommentDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class InlineDocCommentDeclarationSniffTest extends TestCase
 {
 
 	public function testNoInvalidInlineDocCommentDeclarations(): void

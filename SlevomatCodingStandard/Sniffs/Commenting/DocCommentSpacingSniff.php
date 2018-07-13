@@ -2,13 +2,30 @@
 
 namespace SlevomatCodingStandard\Sniffs\Commenting;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\Annotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_DOC_COMMENT_OPEN_TAG;
+use const T_DOC_COMMENT_STAR;
+use const T_DOC_COMMENT_STRING;
+use const T_DOC_COMMENT_WHITESPACE;
+use const T_WHITESPACE;
+use function array_merge;
+use function array_values;
+use function count;
+use function max;
+use function preg_match;
+use function sprintf;
+use function strlen;
+use function substr;
+use function substr_count;
+use function uasort;
 
-class DocCommentSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class DocCommentSpacingSniff implements Sniff
 {
 
 	public const CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_CONTENT = 'IncorrectLinesCountBeforeFirstContent';
@@ -43,7 +60,7 @@ class DocCommentSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $docCommentOpenPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $docCommentOpenPointer): void
+	public function process(File $phpcsFile, $docCommentOpenPointer): void
 	{
 		if (DocCommentHelper::isInline($phpcsFile, $docCommentOpenPointer)) {
 			return;
@@ -97,7 +114,7 @@ class DocCommentSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	}
 
 	private function checkLinesBeforeFirstContent(
-		\PHP_CodeSniffer\Files\File $phpcsFile,
+		File $phpcsFile,
 		int $docCommentOpenPointer,
 		int $firstContentStartPointer
 	): void
@@ -142,7 +159,7 @@ class DocCommentSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	}
 
 	private function checkLinesBetweenDescriptionAndFirstAnnotation(
-		\PHP_CodeSniffer\Files\File $phpcsFile,
+		File $phpcsFile,
 		int $docCommentOpenPointer,
 		int $firstContentStartPointer,
 		int $firstContentEndPointer,
@@ -204,7 +221,7 @@ class DocCommentSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \SlevomatCodingStandard\Helpers\Annotation[] $annotations
 	 */
 	private function checkLinesBetweenDifferentAnnotationsTypes(
-		\PHP_CodeSniffer\Files\File $phpcsFile,
+		File $phpcsFile,
 		int $docCommentOpenPointer,
 		array $annotations
 	): void
@@ -276,7 +293,7 @@ class DocCommentSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	}
 
 	private function checkLinesAfterLastContent(
-		\PHP_CodeSniffer\Files\File $phpcsFile,
+		File $phpcsFile,
 		int $docCommentOpenPointer,
 		int $docCommentClosePointer,
 		int $lastContentEndPointer
@@ -318,7 +335,7 @@ class DocCommentSpacingSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
-	private function getIndentation(\PHP_CodeSniffer\Files\File $phpcsFile, int $pointer): string
+	private function getIndentation(File $phpcsFile, int $pointer): string
 	{
 		$pointerBeforeDocComment = TokenHelper::findPreviousExcluding($phpcsFile, [T_WHITESPACE, T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STAR], $pointer - 1);
 		$whitespaceBeforeDocComment = TokenHelper::getContent($phpcsFile, $pointerBeforeDocComment + 1, $pointer - 1);

@@ -2,7 +2,10 @@
 
 namespace SlevomatCodingStandard\Sniffs\Classes;
 
-class UnusedPrivateElementsSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+use function range;
+
+class UnusedPrivateElementsSniffTest extends TestCase
 {
 
 	public function testErrors(): void

@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-class RequireOneNamespaceInFileSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class RequireOneNamespaceInFileSniffTest extends TestCase
 {
 
 	public function testNoErrors(): void

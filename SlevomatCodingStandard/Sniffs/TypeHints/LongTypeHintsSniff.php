@@ -2,13 +2,24 @@
 
 namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_FUNCTION;
+use const T_VARIABLE;
+use function explode;
+use function preg_quote;
+use function preg_replace_callback;
+use function preg_split;
+use function sprintf;
+use function strtolower;
+use function trim;
 
-class LongTypeHintsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class LongTypeHintsSniff implements Sniff
 {
 
 	public const CODE_USED_LONG_TYPE_HINT = 'UsedLongTypeHint';
@@ -29,7 +40,7 @@ class LongTypeHintsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $pointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $pointer): void
+	public function process(File $phpcsFile, $pointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

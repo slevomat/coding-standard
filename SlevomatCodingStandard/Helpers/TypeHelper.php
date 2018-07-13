@@ -2,6 +2,10 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use Exception;
+use function preg_last_error;
+use function preg_match;
+
 class TypeHelper
 {
 
@@ -18,7 +22,7 @@ class TypeHelper
 		$result = preg_match('~^\\\\?([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)(\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*$~', $typeName, $matches);
 		if ($result === false) {
 			// @codeCoverageIgnoreStart
-			throw new \Exception('PREG error ' . preg_last_error());
+			throw new Exception('PREG error ' . preg_last_error());
 			// @codeCoverageIgnoreEnd
 		}
 

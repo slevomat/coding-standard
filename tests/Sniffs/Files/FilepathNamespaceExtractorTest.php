@@ -2,7 +2,11 @@
 
 namespace SlevomatCodingStandard\Sniffs\Files;
 
-class FilepathNamespaceExtractorTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+use const DIRECTORY_SEPARATOR;
+use function str_replace;
+
+class FilepathNamespaceExtractorTest extends TestCase
 {
 
 	/**

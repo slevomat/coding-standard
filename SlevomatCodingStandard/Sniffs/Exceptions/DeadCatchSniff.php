@@ -2,11 +2,16 @@
 
 namespace SlevomatCodingStandard\Sniffs\Exceptions;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\CatchHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use const T_CATCH;
+use const T_OPEN_TAG;
+use function in_array;
 
-class DeadCatchSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class DeadCatchSniff implements Sniff
 {
 
 	public const CODE_CATCH_AFTER_THROWABLE_CATCH = 'CatchAfterThrowableCatch';
@@ -26,7 +31,7 @@ class DeadCatchSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $catchPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $catchPointer): void
+	public function process(File $phpcsFile, $catchPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

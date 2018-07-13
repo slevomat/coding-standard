@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
-class NewWithParenthesesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class NewWithParenthesesSniffTest extends TestCase
 {
 
 	public function testNoErrors(): void

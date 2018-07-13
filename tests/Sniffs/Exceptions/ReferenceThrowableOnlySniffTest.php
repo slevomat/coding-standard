@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Exceptions;
 
-class ReferenceThrowableOnlySniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class ReferenceThrowableOnlySniffTest extends TestCase
 {
 
 	public function testExceptionReferences(): void

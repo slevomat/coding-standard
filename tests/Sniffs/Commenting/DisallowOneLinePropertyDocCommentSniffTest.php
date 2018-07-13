@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Commenting;
 
-class DisallowOneLinePropertyDocCommentSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class DisallowOneLinePropertyDocCommentSniffTest extends TestCase
 {
 
 	public function testNoErrors(): void

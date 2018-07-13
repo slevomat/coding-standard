@@ -2,9 +2,26 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_BOOLEAN_NOT;
+use const T_CLOSE_PARENTHESIS;
+use const T_CLOSE_SHORT_ARRAY;
+use const T_CLOSE_SQUARE_BRACKET;
+use const T_COALESCE;
+use const T_COMMA;
+use const T_DOUBLE_ARROW;
+use const T_INLINE_ELSE;
+use const T_INLINE_THEN;
+use const T_SEMICOLON;
+use const T_VARIABLE;
+use function in_array;
+use function sprintf;
+use function trim;
 
-class RequireShortTernaryOperatorSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class RequireShortTernaryOperatorSniff implements Sniff
 {
 
 	public const CODE_REQUIRED_SHORT_TERNARY_OPERATOR = 'RequiredShortTernaryOperator';
@@ -24,7 +41,7 @@ class RequireShortTernaryOperatorSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $inlineThenPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $inlineThenPointer): void
+	public function process(File $phpcsFile, $inlineThenPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -43,7 +60,7 @@ class RequireShortTernaryOperatorSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		/** @var int $pointerBeforeVariable */
 		$pointerBeforeVariable = TokenHelper::findPreviousEffective($phpcsFile, $variablePointer - 1);
 
-		if (in_array($tokens[$pointerBeforeVariable]['code'], \PHP_CodeSniffer\Util\Tokens::$comparisonTokens, true)) {
+		if (in_array($tokens[$pointerBeforeVariable]['code'], Tokens::$comparisonTokens, true)) {
 			// Yoda condition
 			return;
 		}

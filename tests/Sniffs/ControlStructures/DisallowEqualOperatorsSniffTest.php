@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
-class DisallowEqualOperatorsSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class DisallowEqualOperatorsSniffTest extends TestCase
 {
 
 	public function testNoErrors(): void

@@ -2,7 +2,11 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class UseStatementHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
+use const T_CLASS;
+use const T_FUNCTION;
+use const T_USE;
+
+class UseStatementHelperTest extends TestCase
 {
 
 	public function testIsAnonymousFunctionUse(): void

@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-class NamespaceDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class NamespaceDeclarationSniffTest extends TestCase
 {
 
 	public function testInvalidWhitespaceAfterNamespaceNoErrors(): void

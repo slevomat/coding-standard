@@ -2,16 +2,27 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use Generator;
+use PHP_CodeSniffer\Files\File;
+use const T_CONST;
+use const T_NAMESPACE;
+use const T_STRING;
+use function array_filter;
+use function array_map;
+use function array_reverse;
+use function iterator_to_array;
+use function sprintf;
+
 class ConstantHelper
 {
 
-	public static function getName(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $constantPointer): string
+	public static function getName(File $codeSnifferFile, int $constantPointer): string
 	{
 		$tokens = $codeSnifferFile->getTokens();
 		return $tokens[TokenHelper::findNext($codeSnifferFile, T_STRING, $constantPointer + 1)]['content'];
 	}
 
-	public static function getFullyQualifiedName(\PHP_CodeSniffer\Files\File $codeSnifferFile, int $constantPointer): string
+	public static function getFullyQualifiedName(File $codeSnifferFile, int $constantPointer): string
 	{
 		$name = self::getName($codeSnifferFile, $constantPointer);
 		$namespace = NamespaceHelper::findCurrentNamespaceName($codeSnifferFile, $constantPointer);
@@ -23,7 +34,7 @@ class ConstantHelper
 	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
 	 * @return string[]
 	 */
-	public static function getAllNames(\PHP_CodeSniffer\Files\File $codeSnifferFile): array
+	public static function getAllNames(File $codeSnifferFile): array
 	{
 		$previousConstantPointer = 0;
 
@@ -48,7 +59,7 @@ class ConstantHelper
 		);
 	}
 
-	private static function getAllConstantPointers(\PHP_CodeSniffer\Files\File $codeSnifferFile, int &$previousConstantPointer): \Generator
+	private static function getAllConstantPointers(File $codeSnifferFile, int &$previousConstantPointer): Generator
 	{
 		do {
 			$nextConstantPointer = TokenHelper::findNext($codeSnifferFile, T_CONST, $previousConstantPointer + 1);

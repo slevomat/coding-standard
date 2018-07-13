@@ -2,7 +2,11 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class DocCommentHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
+use PHP_CodeSniffer\Files\File;
+use const T_DOC_COMMENT_OPEN_TAG;
+use function array_map;
+
+class DocCommentHelperTest extends TestCase
 {
 
 	/** @var \PHP_CodeSniffer\Files\File */
@@ -166,7 +170,7 @@ class DocCommentHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		}
 	}
 
-	private function getTestedCodeSnifferFile(): \PHP_CodeSniffer\Files\File
+	private function getTestedCodeSnifferFile(): File
 	{
 		if ($this->testedCodeSnifferFile === null) {
 			$this->testedCodeSnifferFile = $this->getCodeSnifferFile(

@@ -2,12 +2,15 @@
 
 namespace SlevomatCodingStandard\Sniffs\Commenting;
 
-class ForbiddenCommentsSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+use Throwable;
+
+class ForbiddenCommentsSniffTest extends TestCase
 {
 
 	public function testThrowExceptionForInvalidPattern(): void
 	{
-		$this->expectException(\Throwable::class);
+		$this->expectException(Throwable::class);
 
 		self::checkFile(
 			__DIR__ . '/data/noForbiddenComments.php',

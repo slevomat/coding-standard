@@ -2,7 +2,10 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
-class DisallowYodaComparisonSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+use function range;
+
+class DisallowYodaComparisonSniffTest extends TestCase
 {
 
 	public function testNoErrors(): void

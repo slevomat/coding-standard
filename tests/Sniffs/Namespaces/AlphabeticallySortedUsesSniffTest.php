@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-class AlphabeticallySortedUsesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class AlphabeticallySortedUsesSniffTest extends TestCase
 {
 
 	public function testIncorrectOrder(): void

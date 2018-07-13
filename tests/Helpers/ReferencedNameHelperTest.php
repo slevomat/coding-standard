@@ -2,7 +2,11 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class ReferencedNameHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
+use const T_NS_SEPARATOR;
+use const T_STRING;
+use function count;
+
+class ReferencedNameHelperTest extends TestCase
 {
 
 	public function testGetAllReferencedNames(): void

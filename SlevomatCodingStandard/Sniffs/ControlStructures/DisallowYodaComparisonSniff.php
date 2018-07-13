@@ -2,7 +2,14 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\YodaHelper;
+use const T_IS_EQUAL;
+use const T_IS_IDENTICAL;
+use const T_IS_NOT_EQUAL;
+use const T_IS_NOT_IDENTICAL;
+use function count;
 
 /**
  * Bigger value must be on the left side:
@@ -11,7 +18,7 @@ use SlevomatCodingStandard\Helpers\YodaHelper;
  *  > (Foo::BAR, BAR)
  *  > (true, false, null, 1, 1.0, arrays, 'foo')
  */
-class DisallowYodaComparisonSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class DisallowYodaComparisonSniff implements Sniff
 {
 
 	public const CODE_DISALLOWED_YODA_COMPARISON = 'DisallowedYodaComparison';
@@ -34,7 +41,7 @@ class DisallowYodaComparisonSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $comparisonTokenPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $comparisonTokenPointer): void
+	public function process(File $phpcsFile, $comparisonTokenPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 		$leftSideTokens = YodaHelper::getLeftSideTokens($tokens, $comparisonTokenPointer);

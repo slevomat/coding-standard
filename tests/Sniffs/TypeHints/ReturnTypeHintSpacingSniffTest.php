@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
-class ReturnTypeHintSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class ReturnTypeHintSpacingSniffTest extends TestCase
 {
 
 	public function testCorrectSpacing(): void

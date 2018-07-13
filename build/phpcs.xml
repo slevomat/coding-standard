@@ -9,6 +9,8 @@
 		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedIf"/><!-- Allow empty if statements - usually with a comment -->
 		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedElseif"/><!-- Allow empty elseif statements - usually with a comment -->
 		<exclude name="Squiz.Commenting.FunctionComment.IncorrectParamVarName"/><!-- Throws error with short type hint for integer and boolean -->
+		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedExceptions"/>
+		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword"/>
 	</rule>
 
 	<rule ref="Generic.Commenting.Todo"/>
@@ -51,20 +53,17 @@
 			<property name="caseSensitive" value="false"/>
 		</properties>
 	</rule>
-	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword">
-		<properties>
-			<property name="keywordsToCheck" type="array" value="T_EXTENDS,T_IMPLEMENTS"/>
-		</properties>
-	</rule>
 	<rule ref="SlevomatCodingStandard.Namespaces.NamespaceDeclaration"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.NamespaceSpacing"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
 		<properties>
-			<property name="namespacesRequiredToUse" type="array" value="SlevomatCodingStandard"/>
-			<property name="fullyQualifiedKeywords" type="array" value="T_EXTENDS,T_IMPLEMENTS"/>
-			<property name="allowFullyQualifiedExceptions" value="true"/>
-			<property name="allowFullyQualifiedGlobalFunctions" value="true"/>
-			<property name="allowFullyQualifiedGlobalConstants" value="true"/>
+			<property name="fullyQualifiedKeywords" type="array" value=""/>
+			<property name="allowFallbackGlobalFunctions" value="false"/>
+			<property name="allowFallbackGlobalConstants" value="false"/>
+			<property name="allowFullyQualifiedExceptions" value="false"/>
+			<property name="allowFullyQualifiedNameForCollidingClasses" value="true"/>
+			<property name="allowFullyQualifiedNameForCollidingFunctions" value="true"/>
+			<property name="allowFullyQualifiedNameForCollidingConstants" value="true"/>
 			<property name="allowPartialUses" value="false"/>
 		</properties>
 	</rule>
@@ -72,11 +71,6 @@
 	<rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
 		<properties>
 			<property name="searchAnnotations" value="false"/>
-		</properties>
-	</rule>
-	<rule ref="SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces">
-		<properties>
-			<property name="namespacesRequiredToUse" type="array" value="SlevomatCodingStandard"/>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Namespaces.UseSpacing"/>

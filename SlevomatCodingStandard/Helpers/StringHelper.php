@@ -2,6 +2,10 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use function strlen;
+use function strpos;
+use function substr;
+
 class StringHelper
 {
 

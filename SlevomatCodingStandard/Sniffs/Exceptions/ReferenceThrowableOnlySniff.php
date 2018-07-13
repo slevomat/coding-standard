@@ -2,13 +2,27 @@
 
 namespace SlevomatCodingStandard\Sniffs\Exceptions;
 
+use Exception;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\CatchHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use Throwable;
+use const T_BITWISE_OR;
+use const T_CATCH;
+use const T_EXTENDS;
+use const T_INSTANCEOF;
+use const T_NEW;
+use const T_OPEN_PARENTHESIS;
+use const T_OPEN_TAG;
+use function array_merge;
+use function in_array;
+use function sprintf;
 
-class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class ReferenceThrowableOnlySniff implements Sniff
 {
 
 	public const CODE_REFERENCED_GENERAL_EXCEPTION = 'ReferencedGeneralException';
@@ -28,10 +42,10 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $openTagPointer): void
+	public function process(File $phpcsFile, $openTagPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
-		$message = sprintf('Referencing general \%s; use \%s instead.', \Exception::class, \Throwable::class);
+		$message = sprintf('Referencing general \%s; use \%s instead.', Exception::class, Throwable::class);
 		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
 		foreach ($referencedNames as $referencedName) {
@@ -87,7 +101,7 @@ class ReferenceThrowableOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param int $catchPointer
 	 * @return bool
 	 */
-	private function searchForThrowableInNextCatches(\PHP_CodeSniffer\Files\File $phpcsFile, array $useStatements, int $catchPointer): bool
+	private function searchForThrowableInNextCatches(File $phpcsFile, array $useStatements, int $catchPointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 		$nextCatchPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$catchPointer]['scope_closer'] + 1);

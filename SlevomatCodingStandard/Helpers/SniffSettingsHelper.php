@@ -2,6 +2,13 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use function array_filter;
+use function array_map;
+use function array_values;
+use function is_string;
+use function preg_match;
+use function trim;
+
 class SniffSettingsHelper
 {
 

@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\PHP;
 
-class ShortListSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class ShortListSniffTest extends TestCase
 {
 
 	public function testNoErrors(): void

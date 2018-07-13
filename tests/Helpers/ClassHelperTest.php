@@ -2,7 +2,7 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class ClassHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
+class ClassHelperTest extends TestCase
 {
 
 	public function testNameWithNamespace(): void

@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-class UseOnlyWhitelistedNamespacesSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class UseOnlyWhitelistedNamespacesSniffTest extends TestCase
 {
 
 	public function testUseOnlyWhitelistedNamespaces(): void

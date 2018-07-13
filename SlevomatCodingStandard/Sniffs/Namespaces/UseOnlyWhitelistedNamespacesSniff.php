@@ -2,11 +2,15 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use const T_USE;
+use function sprintf;
 
-class UseOnlyWhitelistedNamespacesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class UseOnlyWhitelistedNamespacesSniff implements Sniff
 {
 
 	public const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified';
@@ -47,7 +51,7 @@ class UseOnlyWhitelistedNamespacesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $usePointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $usePointer): void
+	public function process(File $phpcsFile, $usePointer): void
 	{
 		if (
 			UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer)

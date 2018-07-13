@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Commenting;
 
-class DocCommentSpacingSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class DocCommentSpacingSniffTest extends TestCase
 {
 
 	public function testEmptyDocComment(): void

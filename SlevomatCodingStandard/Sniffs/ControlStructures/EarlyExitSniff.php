@@ -2,9 +2,57 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
+use Exception;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_BITWISE_AND;
+use const T_BOOLEAN_AND;
+use const T_BOOLEAN_NOT;
+use const T_BOOLEAN_OR;
+use const T_CLOSE_CURLY_BRACKET;
+use const T_CLOSE_PARENTHESIS;
+use const T_CLOSURE;
+use const T_DO;
+use const T_ELSE;
+use const T_ELSEIF;
+use const T_FOR;
+use const T_FOREACH;
+use const T_FUNCTION;
+use const T_GREATER_THAN;
+use const T_IF;
+use const T_INSTANCEOF;
+use const T_IS_EQUAL;
+use const T_IS_GREATER_OR_EQUAL;
+use const T_IS_IDENTICAL;
+use const T_IS_NOT_EQUAL;
+use const T_IS_NOT_IDENTICAL;
+use const T_IS_SMALLER_OR_EQUAL;
+use const T_LESS_THAN;
+use const T_LOGICAL_AND;
+use const T_LOGICAL_OR;
+use const T_LOGICAL_XOR;
+use const T_OPEN_PARENTHESIS;
+use const T_SEMICOLON;
+use const T_WHILE;
+use const T_WHITESPACE;
+use function array_key_exists;
+use function array_map;
+use function array_merge;
+use function count;
+use function explode;
+use function implode;
+use function in_array;
+use function ltrim;
+use function preg_replace;
+use function rtrim;
+use function sort;
+use function sprintf;
+use function substr;
+use function trim;
 
-class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class EarlyExitSniff implements Sniff
 {
 
 	public const CODE_EARLY_EXIT_NOT_USED = 'EarlyExitNotUsed';
@@ -31,7 +79,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $pointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $pointer): void
+	public function process(File $phpcsFile, $pointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -44,12 +92,12 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 	}
 
-	private function processElse(\PHP_CodeSniffer\Files\File $phpcsFile, int $elsePointer): void
+	private function processElse(File $phpcsFile, int $elsePointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
 		if (!array_key_exists('scope_opener', $tokens[$elsePointer])) {
-			throw new \Exception('"else" without curly braces is not supported.');
+			throw new Exception('"else" without curly braces is not supported.');
 		}
 
 		$allConditionsPointers = $this->getAllConditionsPointers($phpcsFile, $elsePointer);
@@ -142,7 +190,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}
 	}
 
-	private function processElseIf(\PHP_CodeSniffer\Files\File $phpcsFile, int $elseIfPointer): void
+	private function processElseIf(File $phpcsFile, int $elseIfPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -188,12 +236,12 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
-	private function processIf(\PHP_CodeSniffer\Files\File $phpcsFile, int $ifPointer): void
+	private function processIf(File $phpcsFile, int $ifPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
 		if (!array_key_exists('scope_closer', $tokens[$ifPointer])) {
-			throw new \Exception('"if" without curly braces is not supported.');
+			throw new Exception('"if" without curly braces is not supported.');
 		}
 
 		$nextPointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $tokens[$ifPointer]['scope_closer'] + 1);
@@ -253,7 +301,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
-	private function getIndentation(\PHP_CodeSniffer\Files\File $phpcsFile, int $pointer): string
+	private function getIndentation(File $phpcsFile, int $pointer): string
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -272,7 +320,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		return $identation . ($identation[0] === self::TAB_INDENT ? self::TAB_INDENT : self::SPACES_INDENT);
 	}
 
-	private function getScopeCode(\PHP_CodeSniffer\Files\File $phpcsFile, int $scopePointer): string
+	private function getScopeCode(File $phpcsFile, int $scopePointer): string
 	{
 		$tokens = $phpcsFile->getTokens();
 		return TokenHelper::getContent($phpcsFile, $tokens[$scopePointer]['scope_opener'] + 1, $tokens[$scopePointer]['scope_closer'] - 1);
@@ -291,14 +339,14 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		return 'return';
 	}
 
-	private function getNegativeConditionPart(\PHP_CodeSniffer\Files\File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer, bool $nested): string
+	private function getNegativeConditionPart(File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer, bool $nested): string
 	{
 		$tokens = $phpcsFile->getTokens();
 
 		$condition = TokenHelper::getContent($phpcsFile, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer);
 
 		$pointerAfterConditionStart = TokenHelper::findNextEffective($phpcsFile, $conditionBoundaryStartPointer);
-		$booleanPointers = TokenHelper::findNextAll($phpcsFile, \PHP_CodeSniffer\Util\Tokens::$booleanOperators, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer + 1);
+		$booleanPointers = TokenHelper::findNextAll($phpcsFile, Tokens::$booleanOperators, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer + 1);
 
 		if ($tokens[$pointerAfterConditionStart]['code'] === T_BOOLEAN_NOT) {
 			if ($nested && count($booleanPointers) > 0) {
@@ -360,7 +408,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		return preg_replace('~^!\\s*~', '', $condition);
 	}
 
-	private function getNegativeLogicalCondition(\PHP_CodeSniffer\Files\File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer): string
+	private function getNegativeLogicalCondition(File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer): string
 	{
 		if (TokenHelper::findNext($phpcsFile, T_LOGICAL_XOR, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer) !== null) {
 			return sprintf('!(%s)', TokenHelper::getContent($phpcsFile, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer));
@@ -382,7 +430,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$parenthesesLevel = 0;
 
 		do {
-			$actualPointer = TokenHelper::findNext($phpcsFile, array_merge([T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS], \PHP_CodeSniffer\Util\Tokens::$booleanOperators), $actualPointer, $conditionBoundaryEndPointer + 1);
+			$actualPointer = TokenHelper::findNext($phpcsFile, array_merge([T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS], Tokens::$booleanOperators), $actualPointer, $conditionBoundaryEndPointer + 1);
 
 			if ($actualPointer === null) {
 				break;
@@ -418,7 +466,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		return $negativeCondition;
 	}
 
-	private function getNegativeCondition(\PHP_CodeSniffer\Files\File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer, bool $nested = false): string
+	private function getNegativeCondition(File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer, bool $nested = false): string
 	{
 		/** @var int $conditionStartPointer */
 		$conditionStartPointer = TokenHelper::findNextEffective($phpcsFile, $conditionBoundaryStartPointer);
@@ -460,7 +508,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		}, explode($eolChar, rtrim($code))));
 	}
 
-	private function isEarlyExitInScope(\PHP_CodeSniffer\Files\File $phpcsFile, int $startPointer, int $endPointer): bool
+	private function isEarlyExitInScope(File $phpcsFile, int $startPointer, int $endPointer): bool
 	{
 		$lastSemicolonInScopePointer = TokenHelper::findPreviousEffective($phpcsFile, $endPointer - 1);
 		return $phpcsFile->getTokens()[$lastSemicolonInScopePointer]['code'] === T_SEMICOLON
@@ -473,7 +521,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param int $conditionPointer
 	 * @return int[]
 	 */
-	private function getAllConditionsPointers(\PHP_CodeSniffer\Files\File $phpcsFile, int $conditionPointer): array
+	private function getAllConditionsPointers(File $phpcsFile, int $conditionPointer): array
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -491,7 +539,7 @@ class EarlyExitSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		if ($tokens[$conditionPointer]['code'] !== T_ELSE) {
 			if (!array_key_exists('scope_closer', $tokens[$conditionPointer])) {
-				throw new \Exception(sprintf('"%s" without curly braces is not supported.', $tokens[$conditionPointer]['content']));
+				throw new Exception(sprintf('"%s" without curly braces is not supported.', $tokens[$conditionPointer]['content']));
 			}
 
 			$currentConditionPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$conditionPointer]['scope_closer'] + 1);

@@ -2,7 +2,11 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class TokenPointerOutOfBoundsException extends \Exception
+use Exception;
+use Throwable;
+use function sprintf;
+
+class TokenPointerOutOfBoundsException extends Exception
 {
 
 	/** @var int */
@@ -11,7 +15,7 @@ class TokenPointerOutOfBoundsException extends \Exception
 	/** @var int */
 	private $lastTokenPointer;
 
-	public function __construct(int $pointer, int $lastTokenPointer, ?\Throwable $previous = null)
+	public function __construct(int $pointer, int $lastTokenPointer, ?Throwable $previous = null)
 	{
 		parent::__construct(
 			sprintf(

@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-class FullyQualifiedGlobalConstantsSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class FullyQualifiedGlobalConstantsSniffTest extends TestCase
 {
 
 	public function testNoErrors(): void

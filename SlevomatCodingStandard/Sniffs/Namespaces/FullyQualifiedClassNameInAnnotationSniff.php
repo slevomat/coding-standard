@@ -2,12 +2,24 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
+use const T_DOC_COMMENT_OPEN_TAG;
+use function explode;
+use function in_array;
+use function preg_match;
+use function preg_quote;
+use function preg_replace;
+use function preg_replace_callback;
+use function preg_split;
+use function sprintf;
+use function strtolower;
 
-class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 {
 
 	public const CODE_NON_FULLY_QUALIFIED_CLASS_NAME = 'NonFullyQualifiedClassName';
@@ -27,7 +39,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements \PHP_CodeSniffer\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $docCommentOpenPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $docCommentOpenPointer): void
+	public function process(File $phpcsFile, $docCommentOpenPointer): void
 	{
 		$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 

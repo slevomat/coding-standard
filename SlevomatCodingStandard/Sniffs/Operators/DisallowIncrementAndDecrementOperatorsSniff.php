@@ -2,9 +2,14 @@
 
 namespace SlevomatCodingStandard\Sniffs\Operators;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_DEC;
+use const T_INC;
+use const T_VARIABLE;
 
-class DisallowIncrementAndDecrementOperatorsSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class DisallowIncrementAndDecrementOperatorsSniff implements Sniff
 {
 
 	public const CODE_DISALLOWED_PRE_INCREMENT_OPERATOR = 'DisallowedPreIncrementOperator';
@@ -28,7 +33,7 @@ class DisallowIncrementAndDecrementOperatorsSniff implements \PHP_CodeSniffer\Sn
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $operatorPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $operatorPointer): void
+	public function process(File $phpcsFile, $operatorPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

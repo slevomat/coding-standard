@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
+use PHP_CodeSniffer\Files\File;
+
+class AnnotationHelperTest extends TestCase
 {
 
 	/** @var \PHP_CodeSniffer\Files\File */
@@ -131,7 +133,7 @@ class AnnotationHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		self::assertSame('Test', $annotations[0]->getContent());
 	}
 
-	private function getTestedCodeSnifferFile(): \PHP_CodeSniffer\Files\File
+	private function getTestedCodeSnifferFile(): File
 	{
 		if ($this->testedCodeSnifferFile === null) {
 			$this->testedCodeSnifferFile = $this->getCodeSnifferFile(

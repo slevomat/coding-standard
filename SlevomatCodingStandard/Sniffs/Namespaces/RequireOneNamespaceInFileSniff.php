@@ -2,9 +2,12 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_NAMESPACE;
 
-class RequireOneNamespaceInFileSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class RequireOneNamespaceInFileSniff implements Sniff
 {
 
 	public const CODE_MORE_NAMESPACES_IN_FILE = 'MoreNamespacesInFile';
@@ -24,7 +27,7 @@ class RequireOneNamespaceInFileSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $namespacePointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $namespacePointer): void
+	public function process(File $phpcsFile, $namespacePointer): void
 	{
 		if (TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $namespacePointer - 1) === null) {
 			return;

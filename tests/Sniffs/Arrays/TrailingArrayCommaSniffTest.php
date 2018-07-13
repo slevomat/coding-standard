@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Arrays;
 
-class TrailingArrayCommaSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class TrailingArrayCommaSniffTest extends TestCase
 {
 
 	public function testCheckFile(): void

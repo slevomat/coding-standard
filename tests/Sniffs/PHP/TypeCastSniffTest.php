@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\PHP;
 
-class TypeCastSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class TypeCastSniffTest extends TestCase
 {
 
 	public function testNoErrors(): void

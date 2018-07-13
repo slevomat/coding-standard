@@ -2,9 +2,23 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_ANON_CLASS;
+use const T_CLOSE_PARENTHESIS;
+use const T_CLOSE_SHORT_ARRAY;
+use const T_CLOSE_SQUARE_BRACKET;
+use const T_COALESCE;
+use const T_COMMA;
+use const T_DOUBLE_ARROW;
+use const T_INLINE_ELSE;
+use const T_INLINE_THEN;
+use const T_NEW;
+use const T_OPEN_PARENTHESIS;
+use const T_SEMICOLON;
 
-class NewWithParenthesesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class NewWithParenthesesSniff implements Sniff
 {
 
 	public const CODE_MISSING_PARENTHESES = 'MissingParentheses';
@@ -24,7 +38,7 @@ class NewWithParenthesesSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $newPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $newPointer): void
+	public function process(File $phpcsFile, $newPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 		/** @var int $nextPointer */

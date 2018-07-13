@@ -2,9 +2,20 @@
 
 namespace SlevomatCodingStandard\Sniffs\PHP;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_BOOL_CAST;
+use const T_DOUBLE_CAST;
+use const T_INT_CAST;
+use const T_STRING_CAST;
+use const T_UNSET_CAST;
+use function array_key_exists;
+use function preg_match;
+use function sprintf;
+use function strtolower;
 
-class TypeCastSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class TypeCastSniff implements Sniff
 {
 
 	public const CODE_FORBIDDEN_CAST_USED = 'ForbiddenCastUsed';
@@ -38,7 +49,7 @@ class TypeCastSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $pointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $pointer): void
+	public function process(File $phpcsFile, $pointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 		$cast = $tokens[$pointer]['content'];

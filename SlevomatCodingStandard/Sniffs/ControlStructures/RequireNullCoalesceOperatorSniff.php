@@ -2,9 +2,18 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_BOOLEAN_NOT;
+use const T_COMMA;
+use const T_INLINE_ELSE;
+use const T_INLINE_THEN;
+use const T_ISSET;
+use function sprintf;
+use function trim;
 
-class RequireNullCoalesceOperatorSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class RequireNullCoalesceOperatorSniff implements Sniff
 {
 
 	public const CODE_NULL_COALESCE_OPERATOR_NOT_USED = 'NullCoalesceOperatorNotUsed';
@@ -24,7 +33,7 @@ class RequireNullCoalesceOperatorSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $issetPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $issetPointer): void
+	public function process(File $phpcsFile, $issetPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

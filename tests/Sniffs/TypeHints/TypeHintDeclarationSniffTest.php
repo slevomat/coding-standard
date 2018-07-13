@@ -2,7 +2,12 @@
 
 namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
-class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use ArrayIterator;
+use SlevomatCodingStandard\Sniffs\TestCase;
+use Traversable;
+use function sprintf;
+
+class TypeHintDeclarationSniffTest extends TestCase
 {
 
 	public function testNoErrors(): void
@@ -12,7 +17,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 			'enableVoidTypeHint' => false,
 			'enableObjectTypeHint' => false,
 			'traversableTypeHints' => [
-				\Traversable::class,
+				Traversable::class,
 				'\QueryResultSet',
 				'\FooNamespace\ClassFromCurrentNamespace',
 				'\UsedNamespace\UsedClass',
@@ -34,7 +39,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 			'enableVoidTypeHint' => false,
 			'enableObjectTypeHint' => false,
 			'traversableTypeHints' => [
-				\Traversable::class,
+				Traversable::class,
 				'AnyNamespace\Traversable',
 				'\Doctrine\Common\Collections\ArrayCollection',
 			],
@@ -120,7 +125,7 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 			'enableVoidTypeHint' => false,
 			'enableObjectTypeHint' => false,
 			'traversableTypeHints' => [
-				\Traversable::class,
+				Traversable::class,
 			],
 		]);
 
@@ -264,8 +269,8 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 			'enableVoidTypeHint' => false,
 			'enableObjectTypeHint' => false,
 			'traversableTypeHints' => [
-				\ArrayIterator::class,
-				\Traversable::class,
+				ArrayIterator::class,
+				Traversable::class,
 			],
 		], [TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT]);
 
@@ -301,8 +306,8 @@ class TypeHintDeclarationSniffTest extends \SlevomatCodingStandard\Sniffs\TestCa
 			'enableVoidTypeHint' => false,
 			'enableObjectTypeHint' => false,
 			'traversableTypeHints' => [
-				\ArrayIterator::class,
-				\Traversable::class,
+				ArrayIterator::class,
+				Traversable::class,
 			],
 		], [TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT]);
 

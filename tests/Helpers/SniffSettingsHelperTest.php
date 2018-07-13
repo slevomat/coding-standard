@@ -2,7 +2,7 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class SniffSettingsHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
+class SniffSettingsHelperTest extends TestCase
 {
 
 	public function testNormalizeInteger(): void

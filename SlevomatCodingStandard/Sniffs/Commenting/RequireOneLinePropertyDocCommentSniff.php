@@ -2,11 +2,19 @@
 
 namespace SlevomatCodingStandard\Sniffs\Commenting;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_DOC_COMMENT_CLOSE_TAG;
+use const T_DOC_COMMENT_STAR;
+use const T_DOC_COMMENT_WHITESPACE;
+use const T_VARIABLE;
+use function rtrim;
+use function sprintf;
 
-class RequireOneLinePropertyDocCommentSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class RequireOneLinePropertyDocCommentSniff implements Sniff
 {
 
 	public const CODE_MULTI_LINE_PROPERTY_COMMENT = 'MultiLinePropertyComment';
@@ -24,7 +32,7 @@ class RequireOneLinePropertyDocCommentSniff implements \PHP_CodeSniffer\Sniffs\S
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $propertyPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $propertyPointer): void
+	public function process(File $phpcsFile, $propertyPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-class UseFromSameNamespaceSniffRootNamespaceTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class UseFromSameNamespaceSniffRootNamespaceTest extends TestCase
 {
 
 	protected static function getSniffClassName(): string

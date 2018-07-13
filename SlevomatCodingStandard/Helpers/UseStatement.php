@@ -2,6 +2,9 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use function sprintf;
+use function strtolower;
+
 /**
  * @internal
  */

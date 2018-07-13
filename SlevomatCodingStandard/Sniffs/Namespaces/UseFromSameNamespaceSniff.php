@@ -2,12 +2,20 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use const T_AS;
+use const T_SEMICOLON;
+use const T_USE;
+use function sprintf;
+use function strlen;
+use function substr;
 
-class UseFromSameNamespaceSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class UseFromSameNamespaceSniff implements Sniff
 {
 
 	public const CODE_USE_FROM_SAME_NAMESPACE = 'UseFromSameNamespace';
@@ -27,7 +35,7 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $usePointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $usePointer): void
+	public function process(File $phpcsFile, $usePointer): void
 	{
 		if (
 			UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer)
@@ -76,7 +84,7 @@ class UseFromSameNamespaceSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
-	private function findAsPointer(\PHP_CodeSniffer\Files\File $phpcsFile, int $startPointer): ?int
+	private function findAsPointer(File $phpcsFile, int $startPointer): ?int
 	{
 		return TokenHelper::findNextLocal($phpcsFile, T_AS, $startPointer);
 	}

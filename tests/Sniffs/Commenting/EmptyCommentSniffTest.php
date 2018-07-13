@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Commenting;
 
-class EmptyCommentSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class EmptyCommentSniffTest extends TestCase
 {
 
 	public function testNoErrors(): void

@@ -2,7 +2,10 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class PropertyHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
+use PHP_CodeSniffer\Files\File;
+use const T_VARIABLE;
+
+class PropertyHelperTest extends TestCase
 {
 
 	/** @var \PHP_CodeSniffer\Files\File */
@@ -68,7 +71,7 @@ class PropertyHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
 		self::assertSame('class@anonymous::$fooProperty', PropertyHelper::getFullyQualifiedName($codeSnifferFile, $this->findPropertyPointerByName($codeSnifferFile, 'fooProperty')));
 	}
 
-	private function getTestedCodeSnifferFile(): \PHP_CodeSniffer\Files\File
+	private function getTestedCodeSnifferFile(): File
 	{
 		if ($this->testedCodeSnifferFile === null) {
 			$this->testedCodeSnifferFile = $this->getCodeSnifferFile(

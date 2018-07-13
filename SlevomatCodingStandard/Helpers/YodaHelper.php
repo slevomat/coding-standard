@@ -2,6 +2,63 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
+use const T_ARRAY;
+use const T_ARRAY_CAST;
+use const T_BOOL_CAST;
+use const T_BOOLEAN_AND;
+use const T_BOOLEAN_OR;
+use const T_CASE;
+use const T_CLOSE_CURLY_BRACKET;
+use const T_CLOSE_PARENTHESIS;
+use const T_CLOSE_SHORT_ARRAY;
+use const T_COALESCE;
+use const T_COLON;
+use const T_COMMA;
+use const T_COMMENT;
+use const T_CONSTANT_ENCAPSED_STRING;
+use const T_DNUMBER;
+use const T_DOC_COMMENT;
+use const T_DOUBLE_CAST;
+use const T_DOUBLE_COLON;
+use const T_FALSE;
+use const T_INLINE_ELSE;
+use const T_INLINE_THEN;
+use const T_INT_CAST;
+use const T_LNUMBER;
+use const T_LOGICAL_AND;
+use const T_LOGICAL_OR;
+use const T_LOGICAL_XOR;
+use const T_MINUS;
+use const T_NS_SEPARATOR;
+use const T_NULL;
+use const T_OBJECT_CAST;
+use const T_OPEN_PARENTHESIS;
+use const T_OPEN_SHORT_ARRAY;
+use const T_OPEN_TAG;
+use const T_PLUS;
+use const T_RETURN;
+use const T_SEMICOLON;
+use const T_STRING;
+use const T_STRING_CAST;
+use const T_TRUE;
+use const T_UNSET_CAST;
+use const T_VARIABLE;
+use const T_WHITESPACE;
+use function array_fill_keys;
+use function array_filter;
+use function array_keys;
+use function array_map;
+use function array_reverse;
+use function array_values;
+use function count;
+use function current;
+use function end;
+use function implode;
+use function in_array;
+use function key;
+
 class YodaHelper
 {
 
@@ -16,7 +73,7 @@ class YodaHelper
 	 * @param mixed[] $leftSideTokens
 	 * @param mixed[] $rightSideTokens
 	 */
-	public static function fix(\PHP_CodeSniffer\Files\File $phpcsFile, array $leftSideTokens, array $rightSideTokens): void
+	public static function fix(File $phpcsFile, array $leftSideTokens, array $rightSideTokens): void
 	{
 		$phpcsFile->fixer->beginChangeset();
 		self::replace($phpcsFile, $leftSideTokens, $rightSideTokens);
@@ -29,7 +86,7 @@ class YodaHelper
 	 * @param mixed[] $oldTokens
 	 * @param mixed[] $newTokens
 	 */
-	private static function replace(\PHP_CodeSniffer\Files\File $phpcsFile, array $oldTokens, array $newTokens): void
+	private static function replace(File $phpcsFile, array $oldTokens, array $newTokens): void
 	{
 		current($oldTokens);
 		$firstOldPointer = key($oldTokens);
@@ -237,7 +294,7 @@ class YodaHelper
 				T_STRING => self::DYNAMISM_FUNCTION_CALL,
 			];
 
-			$tokenDynamism += array_fill_keys(array_keys(\PHP_CodeSniffer\Util\Tokens::$castTokens), 3);
+			$tokenDynamism += array_fill_keys(array_keys(Tokens::$castTokens), 3);
 		}
 
 		return $tokenDynamism;
@@ -269,7 +326,7 @@ class YodaHelper
 				T_CLOSE_CURLY_BRACKET => true,
 			];
 
-			$stopTokenCodes += array_fill_keys(array_keys(\PHP_CodeSniffer\Util\Tokens::$assignmentTokens), true);
+			$stopTokenCodes += array_fill_keys(array_keys(Tokens::$assignmentTokens), true);
 		}
 
 		return $stopTokenCodes;

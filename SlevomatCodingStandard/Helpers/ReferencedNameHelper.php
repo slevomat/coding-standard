@@ -2,6 +2,40 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use PHP_CodeSniffer\Files\File;
+use const T_ARRAY;
+use const T_AS;
+use const T_BITWISE_AND;
+use const T_BITWISE_OR;
+use const T_CATCH;
+use const T_CLASS;
+use const T_COLON;
+use const T_COMMA;
+use const T_CONST;
+use const T_DECLARE;
+use const T_DOUBLE_COLON;
+use const T_ELLIPSIS;
+use const T_EXTENDS;
+use const T_FUNCTION;
+use const T_GOTO;
+use const T_IMPLEMENTS;
+use const T_INSTANCEOF;
+use const T_NAMESPACE;
+use const T_NEW;
+use const T_NULLABLE;
+use const T_OBJECT_OPERATOR;
+use const T_OPEN_PARENTHESIS;
+use const T_OPEN_SHORT_ARRAY;
+use const T_RETURN_TYPE;
+use const T_TRAIT;
+use const T_USE;
+use const T_VARIABLE;
+use function array_merge;
+use function array_reverse;
+use function array_values;
+use function count;
+use function in_array;
+
 /**
  * Following type name occurrences are considered as a referenced name:
  *
@@ -29,7 +63,7 @@ class ReferencedNameHelper
 	 * @param int $openTagPointer
 	 * @return \SlevomatCodingStandard\Helpers\ReferencedName[] referenced names
 	 */
-	public static function getAllReferencedNames(\PHP_CodeSniffer\Files\File $phpcsFile, int $openTagPointer): array
+	public static function getAllReferencedNames(File $phpcsFile, int $openTagPointer): array
 	{
 		$cacheKey = $phpcsFile->getFilename() . '-' . $openTagPointer;
 
@@ -53,7 +87,7 @@ class ReferencedNameHelper
 	 * @param int $openTagPointer
 	 * @return \SlevomatCodingStandard\Helpers\ReferencedName[] referenced names
 	 */
-	private static function createAllReferencedNames(\PHP_CodeSniffer\Files\File $phpcsFile, int $openTagPointer): array
+	private static function createAllReferencedNames(File $phpcsFile, int $openTagPointer): array
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -153,13 +187,13 @@ class ReferencedNameHelper
 		return $types;
 	}
 
-	public static function getReferencedNameEndPointer(\PHP_CodeSniffer\Files\File $phpcsFile, int $startPointer): int
+	public static function getReferencedNameEndPointer(File $phpcsFile, int $startPointer): int
 	{
 		$pointerAfterEndPointer = TokenHelper::findNextExcluding($phpcsFile, array_merge([T_RETURN_TYPE], TokenHelper::$nameTokenCodes), $startPointer + 1);
 		return $pointerAfterEndPointer === null ? $startPointer : $pointerAfterEndPointer - 1;
 	}
 
-	private static function isReferencedName(\PHP_CodeSniffer\Files\File $phpcsFile, int $startPointer): bool
+	private static function isReferencedName(File $phpcsFile, int $startPointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 

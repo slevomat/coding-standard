@@ -2,9 +2,17 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_NAMESPACE;
+use const T_SEMICOLON;
+use const T_WHITESPACE;
+use function array_key_exists;
+use function sprintf;
+use function strlen;
 
-class NamespaceDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class NamespaceDeclarationSniff implements Sniff
 {
 
 	public const CODE_INVALID_WHITESPACE_AFTER_NAMESPACE = 'InvalidWhitespaceAfterNamespace';
@@ -26,14 +34,14 @@ class NamespaceDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $namespacePointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $namespacePointer): void
+	public function process(File $phpcsFile, $namespacePointer): void
 	{
 		$this->checkWhitespaceAfterNamespace($phpcsFile, $namespacePointer);
 		$this->checkDisallowedContentBetweenNamespaceNameAndSemicolon($phpcsFile, $namespacePointer);
 		$this->checkDisallowedBracketedSyntax($phpcsFile, $namespacePointer);
 	}
 
-	private function checkWhitespaceAfterNamespace(\PHP_CodeSniffer\Files\File $phpcsFile, int $namespacePointer): void
+	private function checkWhitespaceAfterNamespace(File $phpcsFile, int $namespacePointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -76,7 +84,7 @@ class NamespaceDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
-	private function checkDisallowedContentBetweenNamespaceNameAndSemicolon(\PHP_CodeSniffer\Files\File $phpcsFile, int $namespacePointer): void
+	private function checkDisallowedContentBetweenNamespaceNameAndSemicolon(File $phpcsFile, int $namespacePointer): void
 	{
 		if (array_key_exists('scope_opener', $phpcsFile->getTokens()[$namespacePointer])) {
 			return;
@@ -109,7 +117,7 @@ class NamespaceDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
-	private function checkDisallowedBracketedSyntax(\PHP_CodeSniffer\Files\File $phpcsFile, int $namespacePointer): void
+	private function checkDisallowedBracketedSyntax(File $phpcsFile, int $namespacePointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

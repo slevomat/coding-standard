@@ -2,7 +2,9 @@
 
 namespace SlevomatCodingStandard\Sniffs\Commenting;
 
-class ForbiddenAnnotationsSniffTest extends \SlevomatCodingStandard\Sniffs\TestCase
+use SlevomatCodingStandard\Sniffs\TestCase;
+
+class ForbiddenAnnotationsSniffTest extends TestCase
 {
 
 	public function testNoForbiddenAnnotations(): void

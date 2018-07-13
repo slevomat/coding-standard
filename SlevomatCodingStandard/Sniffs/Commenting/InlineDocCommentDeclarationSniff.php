@@ -2,9 +2,22 @@
 
 namespace SlevomatCodingStandard\Sniffs\Commenting;
 
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_COMMENT;
+use const T_DOC_COMMENT_OPEN_TAG;
+use const T_FOREACH;
+use const T_VARIABLE;
+use const T_WHILE;
+use const T_WHITESPACE;
+use function in_array;
+use function preg_match;
+use function sprintf;
+use function substr;
+use function trim;
 
-class InlineDocCommentDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class InlineDocCommentDeclarationSniff implements Sniff
 {
 
 	public const CODE_INVALID_FORMAT = 'InvalidFormat';
@@ -26,7 +39,7 @@ class InlineDocCommentDeclarationSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $commentOpenPointer
 	 */
-	public function process(\PHP_CodeSniffer\Files\File $phpcsFile, $commentOpenPointer): void
+	public function process(File $phpcsFile, $commentOpenPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

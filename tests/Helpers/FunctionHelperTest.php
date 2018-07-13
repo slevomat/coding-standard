@@ -2,7 +2,10 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-class FunctionHelperTest extends \SlevomatCodingStandard\Helpers\TestCase
+use const T_CLOSURE;
+use function array_map;
+
+class FunctionHelperTest extends TestCase
 {
 
 	public function testNameWithNamespace(): void
