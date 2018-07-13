@@ -1,0 +1,152 @@
+<?php declare(strict_types = 1);
+
+namespace SlevomatCodingStandard\Sniffs\PHP;
+
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_ANON_CLASS;
+use const T_CLOSE_CURLY_BRACKET;
+use const T_CLOSURE;
+use const T_OPEN_CURLY_BRACKET;
+use const T_OPEN_TAG;
+use const T_SEMICOLON;
+use const T_WHITESPACE;
+use function in_array;
+
+class UselessSemicolonSniff implements Sniff
+{
+
+	public const CODE_USELESS_SEMICOLON = 'UselessSemicolon';
+
+	/**
+	 * @return mixed[]
+	 */
+	public function register(): array
+	{
+		return [
+			T_SEMICOLON,
+		];
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $semicolonPointer
+	 */
+	public function process(File $phpcsFile, $semicolonPointer): void
+	{
+		$this->checkMultipleSemicolons($phpcsFile, $semicolonPointer);
+		$this->checkSemicolonAtTheBeginningOfScope($phpcsFile, $semicolonPointer);
+		$this->checkSemicolonAfterScope($phpcsFile, $semicolonPointer);
+	}
+
+	private function checkMultipleSemicolons(File $phpcsFile, int $semicolonPointer): void
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $semicolonPointer - 1);
+		if ($tokens[$previousPointer]['code'] !== T_SEMICOLON) {
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError(
+			'Useless semicolon.',
+			$semicolonPointer,
+			self::CODE_USELESS_SEMICOLON
+		);
+
+		if (!$fix) {
+			return;
+		}
+
+		$this->removeUselessSemicolon($phpcsFile, $semicolonPointer);
+	}
+
+	private function checkSemicolonAtTheBeginningOfScope(File $phpcsFile, int $semicolonPointer): void
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $semicolonPointer - 1);
+		if (!in_array($tokens[$previousPointer]['code'], [T_OPEN_TAG, T_OPEN_CURLY_BRACKET], true)) {
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError(
+			'Useless semicolon.',
+			$semicolonPointer,
+			self::CODE_USELESS_SEMICOLON
+		);
+
+		if (!$fix) {
+			return;
+		}
+
+		$this->removeUselessSemicolon($phpcsFile, $semicolonPointer);
+	}
+
+	private function checkSemicolonAfterScope(File $phpcsFile, int $semicolonPointer): void
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $semicolonPointer - 1);
+		if ($tokens[$previousPointer]['code'] !== T_CLOSE_CURLY_BRACKET) {
+			return;
+		}
+
+		$scopeOpenerPointer = $tokens[$previousPointer]['scope_condition'];
+		if (in_array($tokens[$scopeOpenerPointer]['code'], [T_CLOSURE, T_ANON_CLASS], true)) {
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError(
+			'Useless semicolon.',
+			$semicolonPointer,
+			self::CODE_USELESS_SEMICOLON
+		);
+
+		if (!$fix) {
+			return;
+		}
+
+		$this->removeUselessSemicolon($phpcsFile, $semicolonPointer);
+	}
+
+	private function removeUselessSemicolon(File $phpcsFile, int $semicolonPointer): void
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$fixStartPointer = $semicolonPointer;
+		do {
+			if ($tokens[$fixStartPointer - 1]['code'] !== T_WHITESPACE) {
+				break;
+			}
+
+			$fixStartPointer--;
+
+			if ($tokens[$fixStartPointer]['content'] === $phpcsFile->eolChar) {
+				break;
+			}
+		} while (true);
+
+		$fixEndPointer = $semicolonPointer;
+		do {
+			if ($tokens[$fixEndPointer + 1]['code'] !== T_WHITESPACE) {
+				break;
+			}
+
+			if ($tokens[$fixEndPointer + 1]['content'] === $phpcsFile->eolChar) {
+				break;
+			}
+
+			$fixEndPointer++;
+		} while (true);
+
+		$phpcsFile->fixer->beginChangeset();
+		for ($i = $fixStartPointer; $i <= $fixEndPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+		$phpcsFile->fixer->endChangeset();
+	}
+
+}

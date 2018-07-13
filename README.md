@@ -141,6 +141,10 @@ use Foo\Bar;
 
 Looks for `use` alias that is same as unqualified name.
 
+#### SlevomatCodingStandard.PHP.UselessSemicolon 🔧
+
+Looks for useless semicolons.
+
 #### SlevomatCodingStandard.Exceptions.DeadCatch
 
 This sniff finds unreachable catch blocks:
