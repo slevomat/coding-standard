@@ -137,6 +137,10 @@ namespace Foo;
 use Foo\Bar;
 ```
 
+#### SlevomatCodingStandard.Namespaces.UselessAlias 🔧
+
+Looks for `use` alias that is same as unqualified name.
+
 #### SlevomatCodingStandard.Exceptions.DeadCatch
 
 This sniff finds unreachable catch blocks:
