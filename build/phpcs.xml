@@ -35,7 +35,6 @@
 	</rule>
 	<rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
-	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowEmpty"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowEqualOperators"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator"/>
@@ -53,8 +52,6 @@
 			<property name="caseSensitive" value="false"/>
 		</properties>
 	</rule>
-	<rule ref="SlevomatCodingStandard.Namespaces.NamespaceDeclaration"/>
-	<rule ref="SlevomatCodingStandard.Namespaces.NamespaceSpacing"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
 		<properties>
 			<property name="fullyQualifiedKeywords" type="array" value=""/>
@@ -67,20 +64,15 @@
 			<property name="allowPartialUses" value="false"/>
 		</properties>
 	</rule>
-	<rule ref="SlevomatCodingStandard.Namespaces.RequireOneNamespaceInFile"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
 		<properties>
 			<property name="searchAnnotations" value="false"/>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Namespaces.UseSpacing"/>
-	<rule ref="SlevomatCodingStandard.PHP.ShortList"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
 		<properties>
 			<property name="enableObjectTypeHint" value="false"/>
-			<property name="usefulAnnotations" type="array" value="
-				@dataProvider
-			"/>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">

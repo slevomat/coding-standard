@@ -36,12 +36,19 @@
 	<rule ref="Generic.PHP.ForbiddenFunctions"/>
 	<rule ref="Generic.PHP.LowerCaseConstant"/>
 	<rule ref="Generic.PHP.LowerCaseKeyword"/>
+	<!--<rule ref="Generic.PHP.LowerCaseType"/>-->
 	<rule ref="Generic.Strings.UnnecessaryStringConcat">
 		<properties>
 			<property name="allowMultiline" value="true"/>
 		</properties>
 	</rule>
+	<!--<rule ref="Generic.WhiteSpace.ArbitraryParenthesesSpacing">-->
+		<!--<properties>-->
+			<!--<property name="ignoreNewlines" value="true"/>-->
+		<!--</properties>-->
+	<!--</rule>-->
 	<rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
+	<!--<rule ref="Generic.WhiteSpace.LanguageConstructSpacing"/>-->
 	<rule ref="Generic.WhiteSpace.ScopeIndent">
 		<properties>
 			<property name="tabIndent" value="true"/>
@@ -70,7 +77,6 @@
 	</rule>
 	<rule ref="PSR2.Methods.FunctionClosingBrace"/>
 	<rule ref="PSR2.Methods.MethodDeclaration"/>
-	<rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
 	<rule ref="PSR2.Namespaces.UseDeclaration"/>
 	<rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
 	<rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility"/>
@@ -78,11 +84,13 @@
 	<rule ref="SlevomatCodingStandard.Commenting.EmptyComment"/>
 	<rule ref="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration"/>
 	<rule ref="SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment"/>
+	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowEmpty"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.NewWithParentheses"/>
 	<rule ref="SlevomatCodingStandard.Exceptions.DeadCatch"/>
 	<rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly"/>
+	<rule ref="SlevomatCodingStandard.PHP.ShortList"/>
 	<rule ref="SlevomatCodingStandard.PHP.TypeCast"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses">
 		<properties>
@@ -102,6 +110,8 @@
 	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedExceptions"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.MultipleUsesPerLine"/>
+	<rule ref="SlevomatCodingStandard.Namespaces.NamespaceDeclaration"/>
+	<rule ref="SlevomatCodingStandard.Namespaces.NamespaceSpacing"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
 		<properties>
 			<property name="allowFullyQualifiedExceptions" value="true"/>
@@ -113,6 +123,7 @@
 			"/>
 		</properties>
 	</rule>
+	<rule ref="SlevomatCodingStandard.Namespaces.RequireOneNamespaceInFile"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
 		<properties>
 			<property name="searchAnnotations" value="true"/>
@@ -128,9 +139,19 @@
 	<rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
+	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
+		<properties>
+			<property name="allAnnotationsAreUseful" value="true"/>
+			<property name="traversableTypeHints" type="array" value="
+				Traversable,
+			"/>
+		</properties>
+	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
 	<rule ref="SlevomatCodingStandard.Types.EmptyLinesAroundTypeBraces"/>
-	<rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
+	<rule ref="Squiz.Arrays.ArrayBracketSpacing">
+		<exclude name="Squiz.Arrays.ArrayBracketSpacing.SpaceBeforeBracket"/><!-- does not handle nested array access across multiple lines -->
+	</rule>
 	<rule ref="Squiz.Arrays.ArrayDeclaration">
 		<exclude name="Squiz.Arrays.ArrayDeclaration.CloseBraceNewLine"/><!-- does not handle wrapped content -->
 		<exclude name="Squiz.Arrays.ArrayDeclaration.CloseBraceNotAligned"/><!-- expects closing brace at the same level as opening brace -->
@@ -139,6 +160,7 @@
 		<exclude name="Squiz.Arrays.ArrayDeclaration.FirstValueNoNewline"/><!-- expects multi-value array always written on multiple lines -->
 		<exclude name="Squiz.Arrays.ArrayDeclaration.KeyNotAligned"/><!-- uses indentation of only single space -->
 		<exclude name="Squiz.Arrays.ArrayDeclaration.MultiLineNotAllowed"/><!-- even a single-value array can be written on multiple lines -->
+		<exclude name="Squiz.Arrays.ArrayDeclaration.NoComma"/><!-- does not handle nested array access with complex keys on multiple lines; also already checked better by SlevomatCodingStandard.Arrays.TrailingArrayComma -->
 		<exclude name="Squiz.Arrays.ArrayDeclaration.NoCommaAfterLast"/><!-- expects multi-value array always written on multiple lines -->
 		<exclude name="Squiz.Arrays.ArrayDeclaration.SingleLineNotAllowed"/><!-- multiple values can be written on a single line -->
 		<exclude name="Squiz.Arrays.ArrayDeclaration.ValueNotAligned"/><!-- we don't want spacing with alignment -->
@@ -225,7 +247,6 @@
 			<property name="spacing" value="1"/>
 		</properties>
 	</rule>
-	<rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"/>
 	<rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing"/>
 	<rule ref="Squiz.WhiteSpace.MemberVarSpacing"/>
 	<rule ref="Squiz.WhiteSpace.ObjectOperatorSpacing">
