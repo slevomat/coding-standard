@@ -14,6 +14,7 @@ use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_TAG;
 use const T_SEMICOLON;
 use const T_WHITESPACE;
+use function array_key_exists;
 use function in_array;
 
 class UselessSemicolonSniff implements Sniff
@@ -102,6 +103,10 @@ class UselessSemicolonSniff implements Sniff
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $semicolonPointer - 1);
 		if ($tokens[$previousPointer]['code'] !== T_CLOSE_CURLY_BRACKET) {
+			return;
+		}
+
+		if (!array_key_exists('scope_condition', $tokens[$previousPointer])) {
 			return;
 		}
 

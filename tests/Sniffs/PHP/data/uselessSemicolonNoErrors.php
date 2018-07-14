@@ -24,3 +24,5 @@ for (;;) {
 new class extends Whatever {
 
 };
+
+$fooPropertyValue = $foo->{$fooProperty};
