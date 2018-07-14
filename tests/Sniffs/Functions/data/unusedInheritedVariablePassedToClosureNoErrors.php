@@ -14,3 +14,13 @@ function () use ($boo, $foo) {
 	})();
 	echo $boo;
 };
+
+function ($values) use ($doo): ?string {
+	foreach ($values as $key => $value) {
+		if ($value === 'boo') {
+			return $doo;
+		}
+	}
+
+	return null;
+};

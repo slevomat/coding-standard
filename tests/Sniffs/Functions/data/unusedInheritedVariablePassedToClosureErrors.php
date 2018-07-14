@@ -27,3 +27,10 @@ function () use (
 	})();
 };
 
+function ($arrays) use ($boo) {
+	foreach ($arrays as $key => $array) {
+		$value = array_filter($array, function ($boo) {
+			return $boo === 'boo';
+		});
+	}
+};

@@ -11,6 +11,8 @@ use const T_COMMA;
 use const T_OPEN_PARENTHESIS;
 use const T_USE;
 use const T_VARIABLE;
+use function array_keys;
+use function array_reverse;
 use function sprintf;
 
 class UnusedInheritedVariablePassedToClosureSniff implements Sniff
@@ -59,8 +61,7 @@ class UnusedInheritedVariablePassedToClosureSniff implements Sniff
 				$tokens[$parenthesisOpenerPointer]['parenthesis_closer'],
 				$variablePointer,
 				$tokens[$closurePointer]['scope_opener'],
-				$tokens[$closurePointer]['scope_closer'],
-				$tokens[$closurePointer]['level'] + 1
+				$tokens[$closurePointer]['scope_closer']
 			);
 
 			$currentPointer = $variablePointer + 1;
@@ -74,13 +75,26 @@ class UnusedInheritedVariablePassedToClosureSniff implements Sniff
 		int $useParenthesisCloserPointer,
 		int $variablePointer,
 		int $scopeOpener,
-		int $scopeCloser,
-		int $scopeLevel
+		int $scopeCloser
 	): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
 		$variableName = $tokens[$variablePointer]['content'];
+
+		$isInSameLevel = function (int $pointer) use ($variablePointer, $tokens): bool {
+			foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
+				if ($tokens[$conditionPointer]['level'] <= $tokens[$variablePointer]['level']) {
+					break;
+				}
+
+				if ($conditionTokenCode === T_CLOSURE) {
+					return false;
+				}
+			}
+
+			return true;
+		};
 
 		$currentPointer = $scopeOpener + 1;
 		do {
@@ -89,7 +103,19 @@ class UnusedInheritedVariablePassedToClosureSniff implements Sniff
 				break;
 			}
 
-			if ($tokens[$usedVariablePointer]['level'] === $scopeLevel) {
+			if (isset($tokens[$usedVariablePointer]['nested_parenthesis'])) {
+				$parenthesisOpenerPointer = array_reverse(array_keys($tokens[$usedVariablePointer]['nested_parenthesis']))[0];
+				if (isset($tokens[$parenthesisOpenerPointer]['parenthesis_owner'])) {
+					$parenthesisOwnerPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_owner'];
+					if ($tokens[$parenthesisOwnerPointer]['code'] === T_CLOSURE) {
+						// Parameter
+						$currentPointer = $usedVariablePointer + 1;
+						continue;
+					}
+				}
+			}
+
+			if ($isInSameLevel($usedVariablePointer)) {
 				return;
 			}
 

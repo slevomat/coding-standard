@@ -24,3 +24,10 @@ function ()  {
 	})();
 };
 
+function ($arrays)  {
+	foreach ($arrays as $key => $array) {
+		$value = array_filter($array, function ($boo) {
+			return $boo === 'boo';
+		});
+	}
+};
