@@ -20,6 +20,11 @@ use const T_EXIT;
 use const T_INTERFACE;
 use const T_NS_SEPARATOR;
 use const T_PARENT;
+use const T_PHPCS_DISABLE;
+use const T_PHPCS_ENABLE;
+use const T_PHPCS_IGNORE;
+use const T_PHPCS_IGNORE_FILE;
+use const T_PHPCS_SET;
 use const T_RETURN;
 use const T_SELF;
 use const T_STRING;
@@ -57,6 +62,11 @@ class TokenHelper
 		T_DOC_COMMENT_STRING,
 		T_DOC_COMMENT_TAG,
 		T_DOC_COMMENT_WHITESPACE,
+		T_PHPCS_DISABLE,
+		T_PHPCS_ENABLE,
+		T_PHPCS_IGNORE,
+		T_PHPCS_IGNORE_FILE,
+		T_PHPCS_SET,
 	];
 
 	/** @var mixed[] */
