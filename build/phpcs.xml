@@ -83,4 +83,5 @@
 			<property name="newlinesCountBetweenOpenTagAndDeclare" value="0"/>
 		</properties>
 	</rule>
+	<rule ref="SlevomatCodingStandard.Variables.UnusedVariable"/>
 </ruleset>

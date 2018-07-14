@@ -175,7 +175,7 @@ class UseSpacingSniff implements Sniff
 		$requiredLinesCountBetweenUses = 0;
 
 		$previousUse = null;
-		foreach ($useStatements as $no => $use) {
+		foreach ($useStatements as $use) {
 			if ($previousUse === null) {
 				$previousUse = $use;
 				continue;
@@ -237,7 +237,7 @@ class UseSpacingSniff implements Sniff
 		$requiredLinesCountBetweenUseTypes = SniffSettingsHelper::normalizeInteger($this->linesCountBetweenUseTypes);
 
 		$previousUse = null;
-		foreach ($useStatements as $no => $use) {
+		foreach ($useStatements as $use) {
 			if ($previousUse === null) {
 				$previousUse = $use;
 				continue;

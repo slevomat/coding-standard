@@ -237,7 +237,7 @@ class DocCommentSpacingSniff implements Sniff
 		$indentation = $this->getIndentation($phpcsFile, $docCommentOpenPointer);
 
 		$previousAnnotation = null;
-		foreach ($annotations as $no => $annotation) {
+		foreach ($annotations as $annotation) {
 			if ($previousAnnotation === null) {
 				$previousAnnotation = $annotation;
 				continue;
