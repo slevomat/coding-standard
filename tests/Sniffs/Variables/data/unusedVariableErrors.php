@@ -57,3 +57,24 @@ function () {
 function () use ($a, &$b) {
 	$c = 'c';
 };
+
+function () {
+	$a = 'a';
+
+	echo 'compact';
+
+	return compact('anything');
+};
+
+function () {
+    $a = 'a';
+
+    return function () {
+		return compact('a');
+	};
+};
+
+function () {
+	$unused = false;
+};
+

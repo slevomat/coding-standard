@@ -27,6 +27,7 @@ use const T_MINUS_EQUAL;
 use const T_MOD_EQUAL;
 use const T_MUL_EQUAL;
 use const T_OBJECT_OPERATOR;
+use const T_OPEN_PARENTHESIS;
 use const T_OPEN_TAG;
 use const T_OR_EQUAL;
 use const T_PLUS_EQUAL;
@@ -34,6 +35,7 @@ use const T_POW_EQUAL;
 use const T_SL_EQUAL;
 use const T_SR_EQUAL;
 use const T_STATIC;
+use const T_STRING;
 use const T_USE;
 use const T_VARIABLE;
 use const T_WHILE;
@@ -43,7 +45,9 @@ use function array_merge;
 use function array_reverse;
 use function count;
 use function in_array;
+use function preg_match;
 use function sprintf;
+use function substr;
 
 class UnusedVariableSniff implements Sniff
 {
@@ -111,28 +115,18 @@ class UnusedVariableSniff implements Sniff
 					return;
 				}
 			}
-		}
 
-		$isInSameScope = function (int $pointer) use ($variablePointer, $tokens): bool {
-			foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
-				if ($tokens[$conditionPointer]['level'] <= $tokens[$variablePointer]['level']) {
-					break;
-				}
-
-				if ($conditionTokenCode === T_CLOSURE) {
-					return false;
-				}
+			if ($this->isUsedInCompactFunction($phpcsFile, $scopeOwnerPointer, $variablePointer)) {
+				return;
 			}
-
-			return true;
-		};
+		}
 
 		for ($i = $variablePointer + 1; $i <= $scopeCloserPointer; $i++) {
 			if ($tokens[$i]['code'] !== T_VARIABLE) {
 				continue;
 			}
 
-			if (!$isInSameScope($i)) {
+			if (!$this->isInSameScope($phpcsFile, $variablePointer, $i)) {
 				continue;
 			}
 
@@ -146,6 +140,23 @@ class UnusedVariableSniff implements Sniff
 			$variablePointer,
 			self::CODE_UNUSED_VARIABLE
 		);
+	}
+
+	private function isInSameScope(File $phpcsFile, int $variablePointer, int $pointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
+			if ($tokens[$variablePointer]['level'] > $tokens[$conditionPointer]['level']) {
+				break;
+			}
+
+			if (in_array($conditionTokenCode, TokenHelper::$functionTokenCodes, true)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private function isAssignment(File $phpcsFile, int $variablePointer): bool
@@ -388,6 +399,44 @@ class UnusedVariableSniff implements Sniff
 				return true;
 			}
 		}
+
+		return false;
+	}
+
+	private function isUsedInCompactFunction(File $phpcsFile, int $functionPointer, int $variablePointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$variableNameWithoutDollar = substr($tokens[$variablePointer]['content'], 1);
+
+		$currentPointer = $tokens[$functionPointer]['scope_opener'] + 1;
+		do {
+			$compactFunctionPointer = TokenHelper::findNextContent($phpcsFile, T_STRING, 'compact', $currentPointer, $tokens[$functionPointer]['scope_closer']);
+			if ($compactFunctionPointer === null) {
+				break;
+			}
+
+			$parenthesisOpenerPointer = TokenHelper::findNextEffective($phpcsFile, $compactFunctionPointer + 1);
+			if ($tokens[$parenthesisOpenerPointer]['code'] !== T_OPEN_PARENTHESIS) {
+				$currentPointer = $parenthesisOpenerPointer + 1;
+				continue;
+			}
+
+			if (!$this->isInSameScope($phpcsFile, $variablePointer, $compactFunctionPointer)) {
+				$currentPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1;
+				continue;
+			}
+
+			for ($i = $parenthesisOpenerPointer + 1; $i < $tokens[$parenthesisOpenerPointer]['parenthesis_closer']; $i++) {
+				if (!preg_match('~^([\'"])' . $variableNameWithoutDollar . '\\1$~', $tokens[$i]['content'])) {
+					continue;
+				}
+
+				return true;
+			}
+
+			$currentPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1;
+		} while (true);
 
 		return false;
 	}

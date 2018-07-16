@@ -104,3 +104,12 @@ function () {
 
 	$static = true;
 };
+
+function () {
+    $a = 'a';
+    $b = 'b';
+
+    $this->compact;
+
+	return compact('a', "b");
+};
