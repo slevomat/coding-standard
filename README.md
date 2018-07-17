@@ -121,6 +121,10 @@ Sniff provides the following settings:
 
 Looks for unused inherited variables passed to closure via `use`.  
 
+#### SlevomatCodingStandard.Functions.UnusedParameter 🚧
+
+Looks for unused parameters.
+
 #### SlevomatCodingStandard.Namespaces.UnusedUses 🔧
 
 Looks for unused imports from other namespaces.
