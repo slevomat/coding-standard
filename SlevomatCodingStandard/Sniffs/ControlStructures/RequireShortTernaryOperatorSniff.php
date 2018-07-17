@@ -55,7 +55,14 @@ class RequireShortTernaryOperatorSniff implements Sniff
 
 		$inlineElseEndPointer = $inlineElsePointer + 1;
 		while (true) {
-			if (in_array($tokens[$inlineElseEndPointer]['code'], [T_SEMICOLON, T_COMMA, T_DOUBLE_ARROW, T_CLOSE_SHORT_ARRAY, T_COALESCE, T_CLOSE_PARENTHESIS], true)) {
+			if (in_array($tokens[$inlineElseEndPointer]['code'], [T_SEMICOLON, T_COMMA, T_DOUBLE_ARROW, T_CLOSE_SHORT_ARRAY, T_COALESCE], true)) {
+				break;
+			}
+
+			if (
+				$tokens[$inlineElseEndPointer]['code'] === T_CLOSE_PARENTHESIS
+				&& $tokens[$inlineElseEndPointer]['parenthesis_opener'] < $inlineElsePointer
+			) {
 				break;
 			}
 

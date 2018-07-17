@@ -46,6 +46,16 @@ class Whatever
 		$x = $this->$$parameter ?: null;
 		$x = $this->{'a'} ?: null;
 		$x = $this->${'a'}[0]->$$b[1][2]::$c[3][4][5]->{" $d"} ?: null;
+
+		$x = a() ?: null;
+
+		if (a() ?: null) {
+
+		}
+
+		if (a() ?: null) {
+
+		}
 	}
 
 }

@@ -46,6 +46,16 @@ class Whatever
 		$x = $this->$$parameter ? $this->$$parameter : null;
 		$x = $this->{'a'} ? $this->{'a'} : null;
 		$x = !$this->${'a'}[0]->$$b[1][2]::$c[3][4][5]->{" $d"} ? null : $this->${'a'}[0]->$$b[1][2]::$c[3][4][5]->{" $d"};
+
+		$x = a() ? a() : null;
+
+		if (a() ? a() : null) {
+
+		}
+
+		if (!a() ? null : a()) {
+
+		}
 	}
 
 }
