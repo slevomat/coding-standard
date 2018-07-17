@@ -78,3 +78,16 @@ function () {
 	$unused = false;
 };
 
+
+function () {
+	$a = '';
+	echo "$b";
+};
+
+function () {
+	$a = '';
+	echo <<<TEXT
+	$b
+TEXT;
+};
+

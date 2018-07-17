@@ -113,3 +113,15 @@ function () {
 
 	return compact('a', "b");
 };
+
+function () {
+	$a = '';
+	echo "$a";
+};
+
+function () {
+	$a = '';
+	echo <<<TEXT
+	$a
+TEXT;
+};

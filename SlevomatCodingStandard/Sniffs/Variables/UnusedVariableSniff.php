@@ -18,9 +18,11 @@ use const T_DIV_EQUAL;
 use const T_DO;
 use const T_DOUBLE_ARROW;
 use const T_DOUBLE_COLON;
+use const T_DOUBLE_QUOTED_STRING;
 use const T_EQUAL;
 use const T_FOR;
 use const T_FOREACH;
+use const T_HEREDOC;
 use const T_INC;
 use const T_LIST;
 use const T_MINUS_EQUAL;
@@ -46,6 +48,7 @@ use function array_reverse;
 use function count;
 use function in_array;
 use function preg_match;
+use function preg_quote;
 use function sprintf;
 use function substr;
 
@@ -110,13 +113,18 @@ class UnusedVariableSniff implements Sniff
 				return;
 			}
 
-			if ($tokens[$scopeOwnerPointer]['code'] === T_CLOSURE) {
-				if ($this->isInheritedVariablePassedByReference($phpcsFile, $scopeOwnerPointer, $variableName)) {
-					return;
-				}
+			if (
+				$tokens[$scopeOwnerPointer]['code'] === T_CLOSURE
+				&& $this->isInheritedVariablePassedByReference($phpcsFile, $scopeOwnerPointer, $variableName)
+			) {
+				return;
 			}
 
 			if ($this->isUsedInCompactFunction($phpcsFile, $scopeOwnerPointer, $variablePointer)) {
+				return;
+			}
+
+			if ($this->isUsedInString($phpcsFile, $scopeOwnerPointer, $variableName)) {
 				return;
 			}
 		}
@@ -399,6 +407,33 @@ class UnusedVariableSniff implements Sniff
 				return true;
 			}
 		}
+
+		return false;
+	}
+
+	private function isUsedInString(File $phpcsFile, int $functionPointer, string $variableName): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$currentPointer = $tokens[$functionPointer]['scope_opener'] + 1;
+		do {
+			$stringPointer = TokenHelper::findNext(
+				$phpcsFile,
+				[T_DOUBLE_QUOTED_STRING, T_HEREDOC],
+				$currentPointer,
+				$tokens[$functionPointer]['scope_closer']
+			);
+
+			if ($stringPointer === null) {
+				break;
+			}
+
+			if (preg_match('~(?<!\\\\)' . preg_quote($variableName, '~') . '\b(?!\()~', $tokens[$stringPointer]['content'])) {
+				return true;
+			}
+
+			$currentPointer = $stringPointer + 1;
+		} while (true);
 
 		return false;
 	}
