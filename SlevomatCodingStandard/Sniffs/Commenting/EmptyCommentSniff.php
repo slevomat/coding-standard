@@ -159,7 +159,7 @@ class EmptyCommentSniff implements Sniff
 			return false;
 		}
 
-		if (!$this->isNonEmptyLineCommentAfter($phpcsFile, $commentStartPointer, $commentEndPointer)) {
+		if (!$this->isNonEmptyLineCommentAfter($phpcsFile, $commentEndPointer)) {
 			return false;
 		}
 
@@ -194,7 +194,7 @@ class EmptyCommentSniff implements Sniff
 		return $this->isNonEmptyLineCommentBefore($phpcsFile, $beforeCommentStartPointer);
 	}
 
-	private function isNonEmptyLineCommentAfter(File $phpcsFile, int $commentStartPointer, int $commentEndPointer): bool
+	private function isNonEmptyLineCommentAfter(File $phpcsFile, int $commentEndPointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -222,7 +222,7 @@ class EmptyCommentSniff implements Sniff
 			return true;
 		}
 
-		return $this->isNonEmptyLineCommentAfter($phpcsFile, $afterCommentStartPointer, $afterCommentEndPointer);
+		return $this->isNonEmptyLineCommentAfter($phpcsFile, $afterCommentEndPointer);
 	}
 
 }
