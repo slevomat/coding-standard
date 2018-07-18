@@ -16,3 +16,10 @@ class ClassWithConstants
 	}
 
 }
+
+$class = new class ()
+{
+
+	const PUBLIC_FOO = 'public';
+
+};

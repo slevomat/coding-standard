@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use const T_ANON_CLASS;
 use const T_ARRAY;
 use const T_AS;
 use const T_BITWISE_AND;
@@ -221,7 +222,7 @@ class ReferencedNameHelper
 		];
 
 		if ($previousToken['code'] === T_USE) {
-			$classPointer = TokenHelper::findPrevious($phpcsFile, [T_CLASS, T_TRAIT], $startPointer - 1);
+			$classPointer = TokenHelper::findPrevious($phpcsFile, [T_CLASS, T_TRAIT, T_ANON_CLASS], $startPointer - 1);
 			if ($classPointer !== null) {
 				$classToken = $tokens[$classPointer];
 				return $startPointer > $classToken['scope_opener'] && $startPointer < $classToken['scope_closer'];

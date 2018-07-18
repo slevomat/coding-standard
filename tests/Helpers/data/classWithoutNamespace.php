@@ -14,3 +14,8 @@ trait FooTrait
 {
 
 }
+
+$class = new class ()
+{
+
+};

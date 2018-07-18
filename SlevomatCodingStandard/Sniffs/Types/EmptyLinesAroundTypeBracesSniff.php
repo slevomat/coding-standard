@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_ANON_CLASS;
 use const T_CLASS;
 use const T_INTERFACE;
 use const T_TRAIT;
@@ -40,6 +41,7 @@ class EmptyLinesAroundTypeBracesSniff implements Sniff
 	{
 		return [
 			T_CLASS,
+			T_ANON_CLASS,
 			T_INTERFACE,
 			T_TRAIT,
 		];

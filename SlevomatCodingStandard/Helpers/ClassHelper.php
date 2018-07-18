@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Helpers;
 
 use Generator;
 use PHP_CodeSniffer\Files\File;
+use const T_ANON_CLASS;
 use const T_STRING;
 use function array_map;
 use function iterator_to_array;
@@ -14,7 +15,14 @@ class ClassHelper
 
 	public static function getFullyQualifiedName(File $codeSnifferFile, int $classPointer): string
 	{
-		$name = sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, self::getName($codeSnifferFile, $classPointer));
+		$className = self::getName($codeSnifferFile, $classPointer);
+
+		$tokens = $codeSnifferFile->getTokens();
+		if ($tokens[$classPointer]['code'] === T_ANON_CLASS) {
+			return $className;
+		}
+
+		$name = sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $className);
 		$namespace = NamespaceHelper::findCurrentNamespaceName($codeSnifferFile, $classPointer);
 		return $namespace !== null ? sprintf('%s%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $namespace, $name) : $name;
 	}
@@ -22,6 +30,11 @@ class ClassHelper
 	public static function getName(File $codeSnifferFile, int $classPointer): string
 	{
 		$tokens = $codeSnifferFile->getTokens();
+
+		if ($tokens[$classPointer]['code'] === T_ANON_CLASS) {
+			return 'class@anonymous';
+		}
+
 		return $tokens[TokenHelper::findNext($codeSnifferFile, T_STRING, $classPointer + 1, $tokens[$classPointer]['scope_opener'])]['content'];
 	}
 

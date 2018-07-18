@@ -102,3 +102,8 @@ class OpenSsl
         OPENSSL_ALGO_SHA512 => 132,
     ];
 }
+
+$class = new class ()
+{
+	use SomeTrait;
+};

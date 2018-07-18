@@ -13,7 +13,7 @@ class ClassConstantVisibilitySniffTest extends TestCase
 			'enabled' => true,
 		]);
 
-		self::assertSame(1, $report->getErrorCount());
+		self::assertSame(2, $report->getErrorCount());
 
 		self::assertNoSniffError($report, 7);
 		self::assertNoSniffError($report, 9);
@@ -24,6 +24,13 @@ class ClassConstantVisibilitySniffTest extends TestCase
 			6,
 			ClassConstantVisibilitySniff::CODE_MISSING_CONSTANT_VISIBILITY,
 			'Constant \ClassWithConstants::PUBLIC_FOO visibility missing.'
+		);
+
+		self::assertSniffError(
+			$report,
+			23,
+			ClassConstantVisibilitySniff::CODE_MISSING_CONSTANT_VISIBILITY,
+			'Constant class@anonymous::PUBLIC_FOO visibility missing.'
 		);
 	}
 

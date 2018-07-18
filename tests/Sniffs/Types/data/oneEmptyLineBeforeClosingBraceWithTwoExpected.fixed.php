@@ -1,6 +1,6 @@
 <?php
 
-class Foo
+$class = new class ()
 {
 
 
@@ -10,4 +10,4 @@ class Foo
 	}
 
 
-}
+};
