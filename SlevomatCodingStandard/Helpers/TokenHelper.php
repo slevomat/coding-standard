@@ -232,6 +232,21 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param mixed|mixed[] $types
+	 * @param string $content
+	 * @param int $startPointer
+	 * @param int|null $endPointer
+	 * @return int|null
+	 */
+	public static function findPreviousContent(File $phpcsFile, $types, string $content, int $startPointer, ?int $endPointer = null): ?int
+	{
+		/** @var int|false $token */
+		$token = $phpcsFile->findPrevious($types, $startPointer, $endPointer, false, $content);
+		return $token === false ? null : $token;
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $startPointer search starts at this token, inclusive
 	 * @param int|null $endPointer search ends at this token, exclusive
 	 * @return int|null

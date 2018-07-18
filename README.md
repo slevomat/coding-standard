@@ -196,6 +196,16 @@ Reports use of superfluous prefix or suffix "Interface" for interfaces.
 
 Reports use of superfluous suffix "Exception" for exceptions.
 
+#### SlevomatCodingStandard.Classes.TraitUseSpacing 🔧
+
+Enforces configurable number of lines before first `use`, after last `use` and between two `use` statements.
+
+Sniff provides the following settings:
+
+* `linesCountBeforeFirstUse`: allows to configure the number of lines before first `use`.
+* `linesCountBetweenUses`: allows to configure the number of lines between two `use` statements.
+* `linesCountAfterLastUse`: allows to configure the number of lines after last `use`.
+
 #### SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses 🔧
 
 `LanguageConstructWithParenthesesSniff` checks and fixes language construct used with parentheses.
