@@ -6,6 +6,7 @@ use Generator;
 use PHP_CodeSniffer\Files\File;
 use const T_ANON_CLASS;
 use const T_STRING;
+use const T_USE;
 use function array_map;
 use function iterator_to_array;
 use function sprintf;
@@ -65,6 +66,33 @@ class ClassHelper
 			$previousClassPointer = $nextClassPointer;
 			yield $nextClassPointer;
 		} while (true);
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $classPointer
+	 * @return int[]
+	 */
+	public static function getTraitUsePointers(File $phpcsFile, int $classPointer): array
+	{
+		$useStatements = [];
+
+		$tokens = $phpcsFile->getTokens();
+
+		$scopeLevel = $tokens[$classPointer]['level'] + 1;
+		for ($i = $tokens[$classPointer]['scope_opener'] + 1; $i < $tokens[$classPointer]['scope_closer']; $i++) {
+			if ($tokens[$i]['code'] !== T_USE) {
+				continue;
+			}
+
+			if ($tokens[$i]['level'] !== $scopeLevel) {
+				continue;
+			}
+
+			$useStatements[] = $i;
+		}
+
+		return $useStatements;
 	}
 
 }

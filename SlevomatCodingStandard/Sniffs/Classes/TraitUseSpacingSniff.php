@@ -4,13 +4,13 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_ANON_CLASS;
 use const T_CLASS;
 use const T_SEMICOLON;
 use const T_TRAIT;
-use const T_USE;
 use const T_WHITESPACE;
 use function count;
 use function sprintf;
@@ -51,7 +51,7 @@ class TraitUseSpacingSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $classPointer): void
 	{
-		$usePointers = $this->getUsePointers($phpcsFile, $classPointer);
+		$usePointers = ClassHelper::getTraitUsePointers($phpcsFile, $classPointer);
 
 		if (count($usePointers) === 0) {
 			return;
@@ -60,33 +60,6 @@ class TraitUseSpacingSniff implements Sniff
 		$this->checkLinesBeforeFirstUse($phpcsFile, $usePointers[0]);
 		$this->checkLinesAfterLastUse($phpcsFile, $usePointers[count($usePointers) - 1]);
 		$this->checkLinesBetweenUses($phpcsFile, $usePointers);
-	}
-
-	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param int $classPointer
-	 * @return int[]
-	 */
-	private function getUsePointers(File $phpcsFile, int $classPointer): array
-	{
-		$useStatements = [];
-
-		$tokens = $phpcsFile->getTokens();
-
-		$scopeLevel = $tokens[$classPointer]['level'] + 1;
-		for ($i = $tokens[$classPointer]['scope_opener'] + 1; $i < $tokens[$classPointer]['scope_closer']; $i++) {
-			if ($tokens[$i]['code'] !== T_USE) {
-				continue;
-			}
-
-			if ($tokens[$i]['level'] !== $scopeLevel) {
-				continue;
-			}
-
-			$useStatements[] = $i;
-		}
-
-		return $useStatements;
 	}
 
 	private function checkLinesBeforeFirstUse(File $phpcsFile, int $firstUsePointer): void
