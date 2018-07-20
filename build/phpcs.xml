@@ -15,6 +15,7 @@
 
 	<rule ref="Generic.Commenting.Todo"/>
 
+	<rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference"/>
 	<rule ref="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming">
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Namespaces/AbstractFullyQualifiedGlobalReference.php</exclude-pattern>
 	</rule>
