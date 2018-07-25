@@ -220,7 +220,12 @@ class UnusedUsesSniff implements Sniff
 							}
 
 							foreach ($contentsToCheck as $contentToCheck) {
-								if (!preg_match('~(?<=^|\|)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|\\\\|\||\[|$)~i', $contentToCheck, $matches)) {
+								$openers = ['|', '{', '(', ',', '<', ':', '?', '&'];
+								$openers = array_map('preg_quote', $openers, array_fill(0, count($openers), '~'));
+								$closers = ['\\', '|', '[', ',', '<', '>', '(' , ')', '{', '}', ':', '&'];
+								$closers = array_map('preg_quote', $closers, array_fill(0, count($closers), '~'));
+								$regex = '~(?<=^|' . join('|', $openers) . ')(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|' . join('|', $closers) . '|$)~i';
+								if (!preg_match($regex, $contentToCheck, $matches)) {
 									continue;
 								}
 
