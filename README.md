@@ -550,6 +550,11 @@ Requires comments with single-line content to be written as one-liners.
 
 Requires comments with single-line content to be written as multi-liners.
 
+#### SlevomatCodingStandard.Commenting.UselessConstantDocComment 🔧
+
+Reports useless `@var` annotation (or whole documentation comment) for class constants because the type of constant is always clear.
+
+
 ## Installation
 
 The recommended way to install Slevomat Coding Standard is [through Composer](http://getcomposer.org).
