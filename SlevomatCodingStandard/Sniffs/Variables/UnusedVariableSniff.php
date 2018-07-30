@@ -87,6 +87,10 @@ class UnusedVariableSniff implements Sniff
 
 		$variableName = $tokens[$variablePointer]['content'];
 
+		if ($this->isUsedAsParameter($phpcsFile, $variablePointer)) {
+			return;
+		}
+
 		if ($this->isUsedInForLoopCondition($phpcsFile, $variablePointer, $variableName)) {
 			return;
 		}
@@ -150,12 +154,12 @@ class UnusedVariableSniff implements Sniff
 		);
 	}
 
-	private function isInSameScope(File $phpcsFile, int $variablePointer, int $pointer): bool
+	private function isInSameScope(File $phpcsFile, int $firstPointer, int $secondPointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
-			if ($tokens[$variablePointer]['level'] > $tokens[$conditionPointer]['level']) {
+		foreach (array_reverse($tokens[$secondPointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
+			if ($tokens[$firstPointer]['level'] > $tokens[$conditionPointer]['level']) {
 				break;
 			}
 
@@ -246,6 +250,23 @@ class UnusedVariableSniff implements Sniff
 		}
 
 		return false;
+	}
+
+	private function isUsedAsParameter(File $phpcsFile, int $variablePointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		if (!isset($tokens[$variablePointer]['nested_parenthesis'])) {
+			return false;
+		}
+
+		$parenthesisOpenerPointer = array_reverse(array_keys($tokens[$variablePointer]['nested_parenthesis']))[0];
+
+		if (!$this->isInSameScope($phpcsFile, $parenthesisOpenerPointer, $variablePointer)) {
+			return false;
+		}
+
+		return $tokens[TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1)]['code'] === T_STRING;
 	}
 
 	private function isUsedInForLoopCondition(File $phpcsFile, int $variablePointer, string $variableName): bool

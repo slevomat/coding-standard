@@ -125,3 +125,8 @@ function () {
 	$a
 TEXT;
 };
+
+function () {
+	$a = 10;
+	max(1, $a += 10);
+};
