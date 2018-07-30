@@ -95,7 +95,8 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 						function (array $matches) use ($fullyQualifiedTypeHint): string {
 							return $matches[1] . $fullyQualifiedTypeHint . $matches[2];
 						},
-						TokenHelper::getContent($phpcsFile, $annotation->getStartPointer(), $annotation->getEndPointer())
+						TokenHelper::getContent($phpcsFile, $annotation->getStartPointer(), $annotation->getEndPointer()),
+						1
 					);
 					$phpcsFile->fixer->addContent($annotation->getStartPointer(), $fixedAnnoationContent);
 

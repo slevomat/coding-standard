@@ -73,4 +73,12 @@ class Foo
 
 	}
 
+	/**
+	 * @param Partial $partial Partial
+	 */
+	public function classNameInDescription($partial)
+	{
+
+	}
+
 }
