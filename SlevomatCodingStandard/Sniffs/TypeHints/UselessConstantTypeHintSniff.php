@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace SlevomatCodingStandard\Sniffs\Commenting;
+namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
@@ -13,7 +13,7 @@ use const T_WHITESPACE;
 use function array_key_exists;
 use function count;
 
-class UselessConstantDocCommentSniff implements Sniff
+class UselessConstantTypeHintSniff implements Sniff
 {
 
 	public const CODE_USELESS_DOC_COMMENT = 'UselessDocComment';

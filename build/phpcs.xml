@@ -37,7 +37,6 @@
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments"/>
-	<rule ref="SlevomatCodingStandard.Commenting.UselessConstantDocComment"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowEqualOperators"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit"/>
@@ -88,5 +87,6 @@
 			<property name="newlinesCountBetweenOpenTagAndDeclare" value="0"/>
 		</properties>
 	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.UselessConstantTypeHint"/>
 	<rule ref="SlevomatCodingStandard.Variables.UnusedVariable"/>
 </ruleset>
