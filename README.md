@@ -302,6 +302,9 @@ Sniff provides the following settings:
 
 Enforces using shorthand scalar typehint variants in phpDocs: `int` instead of `integer` and `bool` instead of `boolean`. This is for consistency with native scalar typehints which also allow shorthand variants only.
 
+#### SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition 🔧
+
+Enforces `null` type hint on last position in `@var`, `@param` and `@return` annotations.
 
 #### SlevomatCodingStandard.PHP.ShortList 🔧
 
