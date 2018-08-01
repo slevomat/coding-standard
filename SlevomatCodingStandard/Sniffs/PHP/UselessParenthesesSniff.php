@@ -6,10 +6,16 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\VariableHelper;
+use const T_BOOLEAN_NOT;
 use const T_CLOSURE;
+use const T_DOLLAR;
 use const T_EMPTY;
 use const T_ISSET;
+use const T_NS_SEPARATOR;
 use const T_OPEN_PARENTHESIS;
+use const T_PARENT;
+use const T_SELF;
+use const T_STATIC;
 use const T_STRING;
 use const T_UNSET;
 use const T_USE;
@@ -50,24 +56,44 @@ class UselessParenthesesSniff implements Sniff
 			return;
 		}
 
-		$this->checkParenthesesAroundVariable($phpcsFile, $parenthesisOpenerPointer);
+		$this->checkParenthesesAroundVariableOrFunctionCall($phpcsFile, $parenthesisOpenerPointer);
 	}
 
-	private function checkParenthesesAroundVariable(File $phpcsFile, int $parenthesisOpenerPointer): void
+	private function checkParenthesesAroundVariableOrFunctionCall(File $phpcsFile, int $parenthesisOpenerPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		/** @var int $variableStartPointer */
-		$variableStartPointer = TokenHelper::findNextEffective($phpcsFile, $parenthesisOpenerPointer + 1);
-		$variableEndPointer = VariableHelper::findVariableEndPointer($phpcsFile, $variableStartPointer);
+		/** @var int $contentStartPointer */
+		$contentStartPointer = TokenHelper::findNextEffective($phpcsFile, $parenthesisOpenerPointer + 1);
+		$notBooleanNotOperatorPointer = $contentStartPointer;
 
-		if ($variableEndPointer === null) {
+		if ($tokens[$contentStartPointer]['code'] === T_BOOLEAN_NOT) {
+			/** @var int $notBooleanNotOperatorPointer */
+			$notBooleanNotOperatorPointer = TokenHelper::findNextEffective($phpcsFile, $contentStartPointer + 1);
+		}
+
+		if (in_array($tokens[$notBooleanNotOperatorPointer]['code'], [T_NS_SEPARATOR, T_STRING, T_SELF, T_STATIC, T_PARENT, T_VARIABLE, T_DOLLAR], true)) {
+			$contentEndPointer = VariableHelper::findVariableEndPointer($phpcsFile, $notBooleanNotOperatorPointer);
+
+			do {
+				$nextPointer = TokenHelper::findNextEffective($phpcsFile, $contentEndPointer + 1);
+
+				if ($tokens[$nextPointer]['code'] !== T_OPEN_PARENTHESIS) {
+					break;
+				}
+
+				$contentEndPointer = $tokens[$nextPointer]['parenthesis_closer'];
+			} while (true);
+		} elseif (in_array($tokens[$notBooleanNotOperatorPointer]['code'], [T_ISSET, T_EMPTY], true)) {
+			$nextPointer = TokenHelper::findNext($phpcsFile, T_OPEN_PARENTHESIS, $notBooleanNotOperatorPointer + 1);
+			$contentEndPointer = $tokens[$nextPointer]['parenthesis_closer'];
+		} else {
 			return;
 		}
 
-		$pointerAfterVariable = TokenHelper::findNextEffective($phpcsFile, $variableEndPointer + 1);
+		$pointerAfterContent = TokenHelper::findNextEffective($phpcsFile, $contentEndPointer + 1);
 
-		if ($pointerAfterVariable !== $tokens[$parenthesisOpenerPointer]['parenthesis_closer']) {
+		if ($pointerAfterContent !== $tokens[$parenthesisOpenerPointer]['parenthesis_closer']) {
 			return;
 		}
 
@@ -78,10 +104,10 @@ class UselessParenthesesSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		for ($i = $parenthesisOpenerPointer; $i < $variableStartPointer; $i++) {
+		for ($i = $parenthesisOpenerPointer; $i < $contentStartPointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
-		for ($i = $variableEndPointer + 1; $i <= $tokens[$parenthesisOpenerPointer]['parenthesis_closer']; $i++) {
+		for ($i = $contentEndPointer + 1; $i <= $tokens[$parenthesisOpenerPointer]['parenthesis_closer']; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 		$phpcsFile->fixer->endChangeset();

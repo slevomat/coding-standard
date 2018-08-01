@@ -24,6 +24,8 @@ class VariableHelper
 
 		if (in_array($tokens[$startPointer]['code'], TokenHelper::$nameTokenCodes, true)) {
 			$startPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $startPointer + 1) - 1;
+		} elseif ($tokens[$startPointer]['code'] === T_DOLLAR) {
+			$startPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer + 1);
 		}
 
 		/** @var int $nextPointer */
