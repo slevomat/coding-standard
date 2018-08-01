@@ -33,3 +33,6 @@ if (empty($a)) {
 }
 
 unset($a);
+
+$class = new class ($number) {
+};
