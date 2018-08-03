@@ -36,3 +36,5 @@ unset($a);
 
 $class = new class ($number) {
 };
+
+(bool) $a;

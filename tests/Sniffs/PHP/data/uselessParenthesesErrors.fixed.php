@@ -31,6 +31,8 @@ class Whatever
 		$x = !isset($xxx) ? 1 : 0;
 		$x = empty($xxx) ? 1 : 0;
 		$x = !empty($xxx) ? 1 : 0;
+		$x = ! in_array($foo, ['bar', 'foo']) ? 1 : 0;
+		$x = intval($foo);
 	}
 
 }

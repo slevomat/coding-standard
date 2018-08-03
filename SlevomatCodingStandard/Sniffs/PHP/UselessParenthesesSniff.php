@@ -76,6 +76,13 @@ class UselessParenthesesSniff implements Sniff
 		if (in_array($tokens[$notBooleanNotOperatorPointer]['code'], [T_NS_SEPARATOR, T_STRING, T_SELF, T_STATIC, T_PARENT, T_VARIABLE, T_DOLLAR], true)) {
 			$contentEndPointer = VariableHelper::findVariableEndPointer($phpcsFile, $notBooleanNotOperatorPointer);
 
+			if ($contentEndPointer === null && $tokens[$notBooleanNotOperatorPointer]['code'] === T_STRING) {
+				$nextPointer = TokenHelper::findNextEffective($phpcsFile, $contentStartPointer + 1);
+				if ($tokens[$nextPointer]['code'] === T_OPEN_PARENTHESIS) {
+					$contentEndPointer = $contentStartPointer;
+				}
+			}
+
 			do {
 				$nextPointer = TokenHelper::findNextEffective($phpcsFile, $contentEndPointer + 1);
 
