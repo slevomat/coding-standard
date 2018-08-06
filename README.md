@@ -567,7 +567,7 @@ Requires comments with single-line content to be written as multi-liners.
 
 #### SlevomatCodingStandard.Commenting.UselessInheritDocComment 🔧
 
-Reports documentation comments containing only `{@inheritDoc}` annotation because inheritance is automatic and it's not needed to use a special annotatio for it.
+Reports documentation comments containing only `{@inheritDoc}` annotation because inheritance is automatic and it's not needed to use a special annotation for it.
 
 ## Installation
 
