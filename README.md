@@ -565,6 +565,10 @@ Requires comments with single-line content to be written as one-liners.
 
 Requires comments with single-line content to be written as multi-liners.
 
+#### SlevomatCodingStandard.Commenting.UselessInheritDocComment 🔧
+
+Reports documentation comments containing only `{@inheritDoc}` annotation because inheritance is automatic and it's not needed to use a special annotatio for it.
+
 ## Installation
 
 The recommended way to install Slevomat Coding Standard is [through Composer](http://getcomposer.org).
