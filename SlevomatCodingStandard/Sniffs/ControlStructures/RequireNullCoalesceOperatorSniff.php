@@ -4,8 +4,8 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use SlevomatCodingStandard\Helpers\VariableHelper;
 use const T_BOOLEAN_NOT;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSE_SHORT_ARRAY;
@@ -82,8 +82,8 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 
 		$inlineElsePointer = TokenHelper::findNext($phpcsFile, T_INLINE_ELSE, $inlineThenPointer + 1);
 
-		$variableContent = VariableHelper::getVariableContent($phpcsFile, $openParenthesisPointer + 1, $closeParenthesisPointer - 1);
-		$thenContent = VariableHelper::getVariableContent($phpcsFile, $inlineThenPointer + 1, $inlineElsePointer - 1);
+		$variableContent = IdentificatorHelper::getContent($phpcsFile, $openParenthesisPointer + 1, $closeParenthesisPointer - 1);
+		$thenContent = IdentificatorHelper::getContent($phpcsFile, $inlineThenPointer + 1, $inlineElsePointer - 1);
 
 		if ($variableContent !== $thenContent) {
 			return;
@@ -130,7 +130,7 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 			/** @var int $tmpPointer */
 			$tmpPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$tmpPointer]['parenthesis_opener'] - 1);
 		}
-		$variableStartPointer = VariableHelper::findVariableStartPointer($phpcsFile, $tmpPointer);
+		$variableStartPointer = IdentificatorHelper::findStartPointer($phpcsFile, $tmpPointer);
 
 		if ($variableStartPointer === null) {
 			return;
@@ -166,14 +166,14 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 			$inlineElseEndPointer++;
 		}
 
-		$variableContent = VariableHelper::getVariableContent($phpcsFile, $variableStartPointer, $variableEndPointer);
+		$variableContent = IdentificatorHelper::getContent($phpcsFile, $variableStartPointer, $variableEndPointer);
 
 		/** @var int $compareToStartPointer */
 		$compareToStartPointer = TokenHelper::findNextEffective($phpcsFile, ($tokens[$identicalOperator]['code'] === T_IS_IDENTICAL ? $inlineElsePointer : $inlineThenPointer) + 1);
 		/** @var int $compareToEndPointer */
 		$compareToEndPointer = TokenHelper::findPreviousEffective($phpcsFile, ($tokens[$identicalOperator]['code'] === T_IS_IDENTICAL ? $inlineElseEndPointer : $inlineElsePointer) - 1);
 
-		$compareToContent = VariableHelper::getVariableContent($phpcsFile, $compareToStartPointer, $compareToEndPointer);
+		$compareToContent = IdentificatorHelper::getContent($phpcsFile, $compareToStartPointer, $compareToEndPointer);
 
 		if ($compareToContent !== $variableContent) {
 			return;

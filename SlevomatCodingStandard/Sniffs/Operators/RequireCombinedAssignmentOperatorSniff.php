@@ -4,8 +4,8 @@ namespace SlevomatCodingStandard\Sniffs\Operators;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use SlevomatCodingStandard\Helpers\VariableHelper;
 use const T_BITWISE_AND;
 use const T_BITWISE_OR;
 use const T_BITWISE_XOR;
@@ -48,7 +48,7 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 	{
 		/** @var int $variableStartPointer */
 		$variableStartPointer = TokenHelper::findNextEffective($phpcsFile, $equalPointer + 1);
-		$variableEndPointer = VariableHelper::findVariableEndPointer($phpcsFile, $variableStartPointer);
+		$variableEndPointer = IdentificatorHelper::findEndPointer($phpcsFile, $variableStartPointer);
 
 		if ($variableEndPointer === null) {
 			return;
@@ -76,7 +76,7 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 			return;
 		}
 
-		$variableContent = VariableHelper::getVariableContent($phpcsFile, $variableStartPointer, $variableEndPointer);
+		$variableContent = IdentificatorHelper::getContent($phpcsFile, $variableStartPointer, $variableEndPointer);
 
 		$beforeEqualVariableContent = '';
 		for ($i = $equalPointer - 1; $i >= 0; $i--) {

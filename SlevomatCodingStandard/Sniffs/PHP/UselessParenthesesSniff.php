@@ -4,8 +4,8 @@ namespace SlevomatCodingStandard\Sniffs\PHP;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use SlevomatCodingStandard\Helpers\VariableHelper;
 use const T_ANON_CLASS;
 use const T_BOOLEAN_NOT;
 use const T_CLOSURE;
@@ -74,7 +74,7 @@ class UselessParenthesesSniff implements Sniff
 		}
 
 		if (in_array($tokens[$notBooleanNotOperatorPointer]['code'], [T_NS_SEPARATOR, T_STRING, T_SELF, T_STATIC, T_PARENT, T_VARIABLE, T_DOLLAR], true)) {
-			$contentEndPointer = VariableHelper::findVariableEndPointer($phpcsFile, $notBooleanNotOperatorPointer);
+			$contentEndPointer = IdentificatorHelper::findEndPointer($phpcsFile, $notBooleanNotOperatorPointer);
 
 			if ($contentEndPointer === null && $tokens[$notBooleanNotOperatorPointer]['code'] === T_STRING) {
 				$nextPointer = TokenHelper::findNextEffective($phpcsFile, $contentStartPointer + 1);

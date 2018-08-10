@@ -18,10 +18,10 @@ use const T_STRING;
 use const T_VARIABLE;
 use function in_array;
 
-class VariableHelper
+class IdentificatorHelper
 {
 
-	public static function getVariableContent(File $phpcsFile, int $startPointer, int $endPointer): string
+	public static function getContent(File $phpcsFile, int $startPointer, int $endPointer): string
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -37,7 +37,7 @@ class VariableHelper
 		return $variableContent;
 	}
 
-	public static function findVariableStartPointer(File $phpcsFile, int $endPointer): ?int
+	public static function findStartPointer(File $phpcsFile, int $endPointer): ?int
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -45,24 +45,24 @@ class VariableHelper
 			/** @var int $previousPointer */
 			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $endPointer - 1);
 			if (in_array($tokens[$previousPointer]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
-				return self::getVariableStartPointerBeforeOperator($phpcsFile, $previousPointer);
+				return self::getStartPointerBeforeOperator($phpcsFile, $previousPointer);
 			}
 
 			return $endPointer;
 		}
 
 		if (in_array($tokens[$endPointer]['code'], [T_CLOSE_CURLY_BRACKET, T_CLOSE_SQUARE_BRACKET], true)) {
-			return self::getVariableStartPointerBeforeVariablePart($phpcsFile, $tokens[$endPointer]['bracket_opener']);
+			return self::getStartPointerBeforeVariablePart($phpcsFile, $tokens[$endPointer]['bracket_opener']);
 		}
 
 		if ($tokens[$endPointer]['code'] === T_VARIABLE) {
-			return self::getVariableStartPointerBeforeVariablePart($phpcsFile, $endPointer);
+			return self::getStartPointerBeforeVariablePart($phpcsFile, $endPointer);
 		}
 
 		return null;
 	}
 
-	private static function getVariableStartPointerBeforeOperator(File $phpcsFile, int $operatorPointer): int
+	private static function getStartPointerBeforeOperator(File $phpcsFile, int $operatorPointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -84,18 +84,18 @@ class VariableHelper
 			/** @var int $possibleOperatorPointer */
 			$possibleOperatorPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
 			if ($tokens[$possibleOperatorPointer]['code'] === T_OBJECT_OPERATOR) {
-				return self::getVariableStartPointerBeforeOperator($phpcsFile, $possibleOperatorPointer);
+				return self::getStartPointerBeforeOperator($phpcsFile, $possibleOperatorPointer);
 			}
 		}
 
 		if (in_array($tokens[$previousPointer]['code'], [T_CLOSE_CURLY_BRACKET, T_CLOSE_SQUARE_BRACKET], true)) {
-			return self::getVariableStartPointerBeforeVariablePart($phpcsFile, $tokens[$previousPointer]['bracket_opener']);
+			return self::getStartPointerBeforeVariablePart($phpcsFile, $tokens[$previousPointer]['bracket_opener']);
 		}
 
-		return self::getVariableStartPointerBeforeVariablePart($phpcsFile, $previousPointer);
+		return self::getStartPointerBeforeVariablePart($phpcsFile, $previousPointer);
 	}
 
-	private static function getVariableStartPointerBeforeVariablePart(File $phpcsFile, int $variablePartPointer): int
+	private static function getStartPointerBeforeVariablePart(File $phpcsFile, int $variablePartPointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -108,21 +108,21 @@ class VariableHelper
 		}
 
 		if (in_array($tokens[$previousPointer]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
-			return self::getVariableStartPointerBeforeOperator($phpcsFile, $previousPointer);
+			return self::getStartPointerBeforeOperator($phpcsFile, $previousPointer);
 		}
 
 		if (in_array($tokens[$previousPointer]['code'], [T_CLOSE_CURLY_BRACKET, T_CLOSE_SQUARE_BRACKET], true)) {
-			return self::getVariableStartPointerBeforeVariablePart($phpcsFile, $tokens[$previousPointer]['bracket_opener']);
+			return self::getStartPointerBeforeVariablePart($phpcsFile, $tokens[$previousPointer]['bracket_opener']);
 		}
 
 		if ($tokens[$previousPointer]['code'] === T_VARIABLE) {
-			return self::getVariableStartPointerBeforeVariablePart($phpcsFile, $previousPointer);
+			return self::getStartPointerBeforeVariablePart($phpcsFile, $previousPointer);
 		}
 
 		return $variablePartPointer;
 	}
 
-	public static function findVariableEndPointer(File $phpcsFile, int $startPointer): ?int
+	public static function findEndPointer(File $phpcsFile, int $startPointer): ?int
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -139,12 +139,12 @@ class VariableHelper
 			in_array($tokens[$startPointer]['code'], [T_STRING, T_SELF, T_STATIC, T_PARENT], true)
 			&& $tokens[$nextPointer]['code'] === T_DOUBLE_COLON
 		) {
-			return self::getVariableEndPointerAfterOperator($phpcsFile, $nextPointer);
+			return self::getEndPointerAfterOperator($phpcsFile, $nextPointer);
 		}
 
 		if ($tokens[$startPointer]['code'] === T_VARIABLE) {
 			if (in_array($tokens[$nextPointer]['code'], [T_DOUBLE_COLON, T_OBJECT_OPERATOR], true)) {
-				return self::getVariableEndPointerAfterOperator($phpcsFile, $nextPointer);
+				return self::getEndPointerAfterOperator($phpcsFile, $nextPointer);
 			}
 
 			return $startPointer;
@@ -153,7 +153,7 @@ class VariableHelper
 		return null;
 	}
 
-	private static function getVariableEndPointerAfterOperator(File $phpcsFile, int $operatorPointer): int
+	private static function getEndPointerAfterOperator(File $phpcsFile, int $operatorPointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -166,13 +166,13 @@ class VariableHelper
 		}
 
 		if ($tokens[$nextPointer]['code'] === T_OPEN_CURLY_BRACKET) {
-			return self::getVariableEndPointerAfterVariablePart($phpcsFile, $tokens[$nextPointer]['bracket_closer']);
+			return self::getEndPointerAfterVariablePart($phpcsFile, $tokens[$nextPointer]['bracket_closer']);
 		}
 
-		return self::getVariableEndPointerAfterVariablePart($phpcsFile, $nextPointer);
+		return self::getEndPointerAfterVariablePart($phpcsFile, $nextPointer);
 	}
 
-	private static function getVariableEndPointerAfterVariablePart(File $phpcsFile, int $variablePartPointer): int
+	private static function getEndPointerAfterVariablePart(File $phpcsFile, int $variablePartPointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -180,11 +180,11 @@ class VariableHelper
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $variablePartPointer + 1);
 
 		if (in_array($tokens[$nextPointer]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
-			return self::getVariableEndPointerAfterOperator($phpcsFile, $nextPointer);
+			return self::getEndPointerAfterOperator($phpcsFile, $nextPointer);
 		}
 
 		if ($tokens[$nextPointer]['code'] === T_OPEN_SQUARE_BRACKET) {
-			return self::getVariableEndPointerAfterVariablePart($phpcsFile, $tokens[$nextPointer]['bracket_closer']);
+			return self::getEndPointerAfterVariablePart($phpcsFile, $tokens[$nextPointer]['bracket_closer']);
 		}
 
 		return $variablePartPointer;
