@@ -11,4 +11,9 @@ class Whatever
 	use D;
 
 
+	public function __construct()
+	{
+
+	}
+
 }

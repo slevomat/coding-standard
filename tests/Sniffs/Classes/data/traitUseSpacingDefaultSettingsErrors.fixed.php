@@ -8,4 +8,9 @@ class Whatever
 	use C;
 	use D;
 
+	public function __construct()
+	{
+
+	}
+
 }

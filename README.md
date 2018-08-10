@@ -221,6 +221,7 @@ Sniff provides the following settings:
 * `linesCountBeforeFirstUse`: allows to configure the number of lines before first `use`.
 * `linesCountBetweenUses`: allows to configure the number of lines between two `use` statements.
 * `linesCountAfterLastUse`: allows to configure the number of lines after last `use`.
+* `linesCountAfterLastUseWhenLastInClass`: allows to configure the number of lines after last `use` when the `use` is the last statement in the class.
 
 #### SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses 🔧
 

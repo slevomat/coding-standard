@@ -9,6 +9,7 @@ use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_ANON_CLASS;
 use const T_CLASS;
+use const T_CLOSE_CURLY_BRACKET;
 use const T_SEMICOLON;
 use const T_TRAIT;
 use const T_WHITESPACE;
@@ -31,6 +32,9 @@ class TraitUseSpacingSniff implements Sniff
 
 	/** @var int */
 	public $linesCountAfterLastUse = 1;
+
+	/** @var int */
+	public $linesCountAfterLastUseWhenLastInClass = 1;
 
 	/**
 	 * @return mixed[]
@@ -110,13 +114,22 @@ class TraitUseSpacingSniff implements Sniff
 
 	private function checkLinesAfterLastUse(File $phpcsFile, int $lastUsePointer): void
 	{
+		$tokens = $phpcsFile->getTokens();
+
 		/** @var int $lastUseSemicolonPointer */
 		$lastUseSemicolonPointer = TokenHelper::findNextLocal($phpcsFile, T_SEMICOLON, $lastUsePointer + 1);
 
-		$pointerAfterWhitespaceEnd = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $lastUseSemicolonPointer + 1);
-		$whitespaceAfterLastUse = TokenHelper::getContent($phpcsFile, $lastUseSemicolonPointer + 1, $pointerAfterWhitespaceEnd - 1);
+		$pointerAfterLastUse = TokenHelper::findNextEffective($phpcsFile, $lastUseSemicolonPointer + 1);
+		$isAtTheEndOfClass = $tokens[$pointerAfterLastUse]['code'] === T_CLOSE_CURLY_BRACKET;
 
-		$requiredLinesCountAfterLastUse = SniffSettingsHelper::normalizeInteger($this->linesCountAfterLastUse);
+		$whitespaceEnd = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $lastUseSemicolonPointer + 1) - 1;
+		if ($lastUseSemicolonPointer !== $whitespaceEnd && $tokens[$whitespaceEnd]['content'] !== $phpcsFile->eolChar) {
+			$lastEolPointer = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $whitespaceEnd - 1, $lastUseSemicolonPointer);
+			$whitespaceEnd = $lastEolPointer !== null ? $lastEolPointer : $lastUseSemicolonPointer;
+		}
+		$whitespaceAfterLastUse = TokenHelper::getContent($phpcsFile, $lastUseSemicolonPointer + 1, $whitespaceEnd);
+
+		$requiredLinesCountAfterLastUse = SniffSettingsHelper::normalizeInteger($isAtTheEndOfClass ? $this->linesCountAfterLastUseWhenLastInClass : $this->linesCountAfterLastUse);
 		$actualLinesCountAfterLastUse = substr_count($whitespaceAfterLastUse, $phpcsFile->eolChar) - 1;
 
 		if ($actualLinesCountAfterLastUse === $requiredLinesCountAfterLastUse) {
@@ -138,7 +151,7 @@ class TraitUseSpacingSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		for ($i = $lastUseSemicolonPointer + 1; $i < $pointerAfterWhitespaceEnd; $i++) {
+		for ($i = $lastUseSemicolonPointer + 1; $i <= $whitespaceEnd; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 		for ($i = 0; $i <= $requiredLinesCountAfterLastUse; $i++) {
