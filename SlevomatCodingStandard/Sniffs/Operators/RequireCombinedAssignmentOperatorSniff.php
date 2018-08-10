@@ -76,14 +76,7 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 			return;
 		}
 
-		$variableContent = '';
-		for ($i = $variableStartPointer; $i <= $variableEndPointer; $i++) {
-			if (in_array($tokens[$i]['code'], TokenHelper::$ineffectiveTokenCodes, true)) {
-				continue;
-			}
-
-			$variableContent .= $tokens[$i]['content'];
-		}
+		$variableContent = VariableHelper::getVariableContent($phpcsFile, $variableStartPointer, $variableEndPointer);
 
 		$beforeEqualVariableContent = '';
 		for ($i = $equalPointer - 1; $i >= 0; $i--) {
