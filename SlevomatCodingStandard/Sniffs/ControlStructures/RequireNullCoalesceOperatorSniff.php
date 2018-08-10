@@ -55,7 +55,7 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 			return;
 		}
 
-		$inlineElsePointer = TokenHelper::findNext($phpcsFile, T_INLINE_ELSE, $closeParenthesisPointer + 1);
+		$inlineElsePointer = TokenHelper::findNext($phpcsFile, T_INLINE_ELSE, $inlineThenPointer + 1);
 
 		$variableContent = trim(TokenHelper::getContent($phpcsFile, $openParenthesisPointer + 1, $closeParenthesisPointer - 1));
 		$thenContent = trim(TokenHelper::getContent($phpcsFile, $inlineThenPointer + 1, $inlineElsePointer - 1));
