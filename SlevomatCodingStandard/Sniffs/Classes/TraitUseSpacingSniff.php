@@ -125,7 +125,7 @@ class TraitUseSpacingSniff implements Sniff
 		$whitespaceEnd = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $lastUseSemicolonPointer + 1) - 1;
 		if ($lastUseSemicolonPointer !== $whitespaceEnd && $tokens[$whitespaceEnd]['content'] !== $phpcsFile->eolChar) {
 			$lastEolPointer = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $whitespaceEnd - 1, $lastUseSemicolonPointer);
-			$whitespaceEnd = $lastEolPointer !== null ? $lastEolPointer : $lastUseSemicolonPointer;
+			$whitespaceEnd = $lastEolPointer ?? $lastUseSemicolonPointer;
 		}
 		$whitespaceAfterLastUse = TokenHelper::getContent($phpcsFile, $lastUseSemicolonPointer + 1, $whitespaceEnd);
 
