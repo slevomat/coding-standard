@@ -38,3 +38,5 @@ $class = new class ($number) {
 };
 
 (bool) $a;
+
+$b = $array['function']($parameter);
