@@ -45,6 +45,7 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 		$openParenthesisPointer = TokenHelper::findNextEffective($phpcsFile, $issetPointer + 1);
 		$closeParenthesisPointer = $tokens[$openParenthesisPointer]['parenthesis_closer'];
 
+		/** @var int $inlineThenPointer */
 		$inlineThenPointer = TokenHelper::findNextEffective($phpcsFile, $closeParenthesisPointer + 1);
 		if ($tokens[$inlineThenPointer]['code'] !== T_INLINE_THEN) {
 			return;
@@ -66,7 +67,7 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 
 		$fix = $phpcsFile->addFixableError(
 			'Use null coalesce operator instead of ternary operator.',
-			$issetPointer,
+			$inlineThenPointer,
 			self::CODE_NULL_COALESCE_OPERATOR_NOT_USED
 		);
 		if (!$fix) {
