@@ -20,9 +20,7 @@ use const T_SL;
 use const T_SR;
 use const T_STRING_CONCAT;
 use function array_key_exists;
-use function in_array;
 use function sprintf;
-use function strlen;
 
 class RequireCombinedAssignmentOperatorSniff implements Sniff
 {
@@ -78,18 +76,12 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 
 		$variableContent = IdentificatorHelper::getContent($phpcsFile, $variableStartPointer, $variableEndPointer);
 
-		$beforeEqualVariableContent = '';
-		for ($i = $equalPointer - 1; $i >= 0; $i--) {
-			if (in_array($tokens[$i]['code'], TokenHelper::$ineffectiveTokenCodes, true)) {
-				continue;
-			}
+		/** @var int $beforeEqualEndPointer */
+		$beforeEqualEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $equalPointer - 1);
+		/** @var int $beforeEqualStartPointer */
+		$beforeEqualStartPointer = IdentificatorHelper::findStartPointer($phpcsFile, $beforeEqualEndPointer);
 
-			$beforeEqualVariableContent = $tokens[$i]['content'] . $beforeEqualVariableContent;
-
-			if (strlen($beforeEqualVariableContent) >= strlen($variableContent)) {
-				break;
-			}
-		}
+		$beforeEqualVariableContent = IdentificatorHelper::getContent($phpcsFile, $beforeEqualStartPointer, $beforeEqualEndPointer);
 
 		if ($beforeEqualVariableContent !== $variableContent) {
 			return;
