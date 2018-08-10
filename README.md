@@ -104,6 +104,10 @@ Requires use of null coalesce operator when possible.
 
 Requires use of early exit.
 
+#### SlevomatCodingStandard.Functions.StaticClosure 🔧
+
+Reports closures not using `$this` that are not declared `static`.
+
 #### SlevomatCodingStandard.Operators.DisallowIncrementAndDecrementOperators
 
 Disallows using `++` and `--` operators.
