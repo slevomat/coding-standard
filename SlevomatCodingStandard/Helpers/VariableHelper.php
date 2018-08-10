@@ -81,6 +81,7 @@ class VariableHelper
 		}
 
 		if ($tokens[$previousPointer]['code'] === T_STRING) {
+			/** @var int $possibleOperatorPointer */
 			$possibleOperatorPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
 			if ($tokens[$possibleOperatorPointer]['code'] === T_OBJECT_OPERATOR) {
 				return self::getVariableStartPointerBeforeOperator($phpcsFile, $possibleOperatorPointer);
@@ -102,6 +103,7 @@ class VariableHelper
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $variablePartPointer - 1);
 
 		if ($tokens[$previousPointer]['code'] === T_DOLLAR) {
+			/** @var int $previousPointer */
 			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
 		}
 
