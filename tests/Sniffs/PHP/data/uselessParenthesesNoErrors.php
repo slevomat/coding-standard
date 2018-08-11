@@ -40,3 +40,7 @@ $class = new class ($number) {
 (bool) $a;
 
 $b = $array['function']($parameter);
+
+new self($a);
+new static($b);
+new parent($c);
