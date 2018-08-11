@@ -10,6 +10,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_ANON_CLASS;
 use const T_CLASS;
 use const T_CLOSE_CURLY_BRACKET;
+use const T_OPEN_CURLY_BRACKET;
 use const T_SEMICOLON;
 use const T_TRAIT;
 use const T_WHITESPACE;
@@ -116,18 +117,21 @@ class TraitUseSpacingSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		/** @var int $lastUseSemicolonPointer */
-		$lastUseSemicolonPointer = TokenHelper::findNextLocal($phpcsFile, T_SEMICOLON, $lastUsePointer + 1);
+		/** @var int $lastUseEndPointer */
+		$lastUseEndPointer = TokenHelper::findNextLocal($phpcsFile, [T_SEMICOLON, T_OPEN_CURLY_BRACKET], $lastUsePointer + 1);
+		if ($tokens[$lastUseEndPointer]['code'] === T_OPEN_CURLY_BRACKET) {
+			$lastUseEndPointer = $tokens[$lastUseEndPointer]['bracket_closer'];
+		}
 
-		$pointerAfterLastUse = TokenHelper::findNextEffective($phpcsFile, $lastUseSemicolonPointer + 1);
+		$pointerAfterLastUse = TokenHelper::findNextEffective($phpcsFile, $lastUseEndPointer + 1);
 		$isAtTheEndOfClass = $tokens[$pointerAfterLastUse]['code'] === T_CLOSE_CURLY_BRACKET;
 
-		$whitespaceEnd = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $lastUseSemicolonPointer + 1) - 1;
-		if ($lastUseSemicolonPointer !== $whitespaceEnd && $tokens[$whitespaceEnd]['content'] !== $phpcsFile->eolChar) {
-			$lastEolPointer = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $whitespaceEnd - 1, $lastUseSemicolonPointer);
-			$whitespaceEnd = $lastEolPointer ?? $lastUseSemicolonPointer;
+		$whitespaceEnd = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $lastUseEndPointer + 1) - 1;
+		if ($lastUseEndPointer !== $whitespaceEnd && $tokens[$whitespaceEnd]['content'] !== $phpcsFile->eolChar) {
+			$lastEolPointer = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $whitespaceEnd - 1, $lastUseEndPointer);
+			$whitespaceEnd = $lastEolPointer ?? $lastUseEndPointer;
 		}
-		$whitespaceAfterLastUse = TokenHelper::getContent($phpcsFile, $lastUseSemicolonPointer + 1, $whitespaceEnd);
+		$whitespaceAfterLastUse = TokenHelper::getContent($phpcsFile, $lastUseEndPointer + 1, $whitespaceEnd);
 
 		$requiredLinesCountAfterLastUse = SniffSettingsHelper::normalizeInteger($isAtTheEndOfClass ? $this->linesCountAfterLastUseWhenLastInClass : $this->linesCountAfterLastUse);
 		$actualLinesCountAfterLastUse = substr_count($whitespaceAfterLastUse, $phpcsFile->eolChar) - 1;
@@ -151,11 +155,11 @@ class TraitUseSpacingSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		for ($i = $lastUseSemicolonPointer + 1; $i <= $whitespaceEnd; $i++) {
+		for ($i = $lastUseEndPointer + 1; $i <= $whitespaceEnd; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 		for ($i = 0; $i <= $requiredLinesCountAfterLastUse; $i++) {
-			$phpcsFile->fixer->addNewline($lastUseSemicolonPointer);
+			$phpcsFile->fixer->addNewline($lastUseEndPointer);
 		}
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -181,7 +185,13 @@ class TraitUseSpacingSniff implements Sniff
 				continue;
 			}
 
-			$actualLinesCountAfterPreviousUse = $tokens[$usePointer]['line'] - $tokens[$previousUsePointer]['line'] - 1;
+			/** @var int $previousUseEndPointer */
+			$previousUseEndPointer = TokenHelper::findNextLocal($phpcsFile, [T_SEMICOLON, T_OPEN_CURLY_BRACKET], $previousUsePointer + 1);
+			if ($tokens[$previousUseEndPointer]['code'] === T_OPEN_CURLY_BRACKET) {
+				$previousUseEndPointer = $tokens[$previousUseEndPointer]['bracket_closer'];
+			}
+
+			$actualLinesCountAfterPreviousUse = $tokens[$usePointer]['line'] - $tokens[$previousUseEndPointer]['line'] - 1;
 
 			if ($actualLinesCountAfterPreviousUse === $requiredLinesCountBetweenUses) {
 				$previousUsePointer = $usePointer;
@@ -203,18 +213,16 @@ class TraitUseSpacingSniff implements Sniff
 				continue;
 			}
 
-			/** @var int $previousUseSemicolonPointer */
-			$previousUseSemicolonPointer = TokenHelper::findNextLocal($phpcsFile, T_SEMICOLON, $previousUsePointer + 1);
-			$pointerBeforeIndentation = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $usePointer, $previousUseSemicolonPointer);
+			$pointerBeforeIndentation = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $usePointer, $previousUseEndPointer);
 
 			$phpcsFile->fixer->beginChangeset();
 			if ($pointerBeforeIndentation !== null) {
-				for ($i = $previousUseSemicolonPointer + 1; $i <= $pointerBeforeIndentation; $i++) {
+				for ($i = $previousUseEndPointer + 1; $i <= $pointerBeforeIndentation; $i++) {
 					$phpcsFile->fixer->replaceToken($i, '');
 				}
 			}
 			for ($i = 0; $i <= $requiredLinesCountBetweenUses; $i++) {
-				$phpcsFile->fixer->addNewline($previousUseSemicolonPointer);
+				$phpcsFile->fixer->addNewline($previousUseEndPointer);
 			}
 			$phpcsFile->fixer->endChangeset();
 

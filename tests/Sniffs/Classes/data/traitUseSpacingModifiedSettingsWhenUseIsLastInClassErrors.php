@@ -8,7 +8,9 @@ class Whatever
 
 
 	use C;
-	use D;
+	use D {
+		D::d as dd;
+	}
 
 
 

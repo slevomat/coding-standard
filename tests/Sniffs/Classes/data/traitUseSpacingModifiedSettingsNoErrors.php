@@ -4,7 +4,9 @@ class Whatever
 {
 	use A;
 
-	use B;
+	use B {
+		B::b as bb;
+	}
 
 	use C;
 
