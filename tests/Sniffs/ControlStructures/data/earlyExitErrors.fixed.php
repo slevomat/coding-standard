@@ -429,3 +429,17 @@ function yieldFrom() {
 
 	// Something
 }
+
+function negativeInstanceOf($phpEditor, $jsonEditor) {
+	$this->phpEditor = $phpEditor;
+	$this->jsonEditor = $jsonEditor;
+
+	if ($this->phpEditor instanceof CallbackReceiver) {
+		$this->phpEditor->setCallback($this->getCallback());
+	}
+	if ($this->jsonEditor instanceof CallbackReceiver) {
+		return;
+	}
+
+	doSomething();
+}
