@@ -215,6 +215,8 @@ class UnusedUsesSniff implements Sniff
 								$contentsToCheck[] = $matches[1];
 							} elseif (in_array($annotationName, ['@var', '@param', '@return', '@throws', '@property', '@property-read', '@property-write'], true)) {
 								$contentsToCheck[] = preg_split('~\\s+~', $content)[0];
+							} elseif ($annotationName === '@see') {
+								$contentsToCheck[] = preg_split('~(\\s+|::)~', $content)[0];
 							} else {
 								$contentsToCheck[] = $content;
 							}

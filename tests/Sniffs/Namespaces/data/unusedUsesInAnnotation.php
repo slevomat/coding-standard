@@ -38,6 +38,8 @@ use Outer;
 use Inner1;
 use Inner2;
 use Inner3;
+use SeeWithMethod;
+use SeeWithoutMethod;
 
 /**
  * @ORM\Entity()
@@ -135,4 +137,14 @@ class Foo
 		return null;
 	}
 
+	/**
+	 * @see SeeWithMethod::method()
+	 * @see SeeWithoutMethod
+	 */
+	public function see()
+	{
+
+	}
+
 }
+
