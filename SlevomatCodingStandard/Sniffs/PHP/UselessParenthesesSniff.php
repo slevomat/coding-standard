@@ -8,6 +8,7 @@ use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_ANON_CLASS;
 use const T_BOOLEAN_NOT;
+use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
 use const T_DOLLAR;
 use const T_EMPTY;
@@ -55,7 +56,7 @@ class UselessParenthesesSniff implements Sniff
 
 		/** @var int $pointerBeforeParenthesisOpener */
 		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
-		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], [T_VARIABLE, T_STRING, T_ISSET, T_UNSET, T_EMPTY, T_CLOSURE, T_USE, T_ANON_CLASS, T_SELF, T_STATIC, T_EXIT], true)) {
+		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], [T_VARIABLE, T_STRING, T_ISSET, T_UNSET, T_EMPTY, T_CLOSURE, T_USE, T_ANON_CLASS, T_SELF, T_STATIC, T_EXIT, T_CLOSE_PARENTHESIS], true)) {
 			return;
 		}
 

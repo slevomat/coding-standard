@@ -50,3 +50,7 @@ $zz = ($a + $b);
 
 exit($a);
 die($a);
+
+(function ($b): void {
+	// Do something
+})($b);
