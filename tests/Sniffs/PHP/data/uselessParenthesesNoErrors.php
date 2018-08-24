@@ -47,6 +47,7 @@ new parent($c);
 
 $z = ($a ? '0' : '1') ? '2' : '3';
 $zz = ($a + $b);
+$zzz = !($a) ? true : false;
 
 exit($a);
 die($a);
