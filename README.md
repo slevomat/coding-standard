@@ -173,6 +173,10 @@ Looks for useless semicolons.
 
 Looks for unused variables.
 
+#### SlevomatCodingStandard.Variables.UselessVariable
+
+Looks for useless variables.
+
 #### SlevomatCodingStandard.Exceptions.DeadCatch
 
 This sniff finds unreachable catch blocks:
