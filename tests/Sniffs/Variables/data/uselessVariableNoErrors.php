@@ -47,3 +47,9 @@ function withDocComment() {
 	$h = 'h';
 	return $h;
 }
+
+function moreAssigments() {
+	$i = 'i';
+	$i .= 'ii';
+	return $i;
+}

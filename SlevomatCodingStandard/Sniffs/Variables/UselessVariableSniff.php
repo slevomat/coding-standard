@@ -70,67 +70,24 @@ class UselessVariableSniff implements Sniff
 
 		$variableName = $tokens[$variablePointer]['content'];
 
-		$previousVariablePointer = null;
-		for ($i = $returnPointer - 1; $i >= 0; $i--) {
-			if (
-				in_array($tokens[$i]['code'], TokenHelper::$functionTokenCodes, true)
-				&& $this->isInSameScope($phpcsFile, $tokens[$i]['scope_opener'] + 1, $returnPointer)
-			) {
-				return;
-			}
-
-			if ($tokens[$i]['code'] !== T_VARIABLE) {
-				continue;
-			}
-
-			if ($tokens[$i]['content'] !== $variableName) {
-				continue;
-			}
-
-			if (!$this->isInSameScope($phpcsFile, $i, $variablePointer)) {
-				continue;
-			}
-
-			$previousVariablePointer = $i;
-			break;
-		}
-
+		$previousVariablePointer = $this->findPreviousVariablePointer($phpcsFile, $returnPointer, $variableName);
 		if ($previousVariablePointer === null) {
 			return;
 		}
 
-		$effectivePointerBeforePreviousVariable = TokenHelper::findPreviousEffective($phpcsFile, $previousVariablePointer - 1);
-		if ($tokens[$effectivePointerBeforePreviousVariable]['code'] === T_STATIC) {
+		if (!$this->isAssigmentToVariable($phpcsFile, $previousVariablePointer)) {
 			return;
 		}
 
-		$pointerBeforePreviousVariable = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $previousVariablePointer - 1);
-		if (
-			$tokens[$pointerBeforePreviousVariable]['code'] === T_DOC_COMMENT_CLOSE_TAG
-		) {
-			$docCommentContent = TokenHelper::getContent($phpcsFile, $tokens[$pointerBeforePreviousVariable]['comment_opener'], $pointerBeforePreviousVariable);
-			if (preg_match('~@var\\s+\\S+\\s+' . preg_quote($variableName, '~') . '~', $docCommentContent)) {
-				return;
-			}
+		if ($this->isStaticVariable($phpcsFile, $previousVariablePointer)) {
+			return;
 		}
 
-		/** @var int $assigmentPointer */
-		$assigmentPointer = TokenHelper::findNextEffective($phpcsFile, $previousVariablePointer + 1);
-		if (!in_array($tokens[$assigmentPointer]['code'], [
-			T_EQUAL,
-			T_PLUS_EQUAL,
-			T_MINUS_EQUAL,
-			T_MUL_EQUAL,
-			T_DIV_EQUAL,
-			T_POW_EQUAL,
-			T_MOD_EQUAL,
-			T_AND_EQUAL,
-			T_OR_EQUAL,
-			T_XOR_EQUAL,
-			T_SL_EQUAL,
-			T_SR_EQUAL,
-			T_CONCAT_EQUAL,
-		], true)) {
+		if ($this->hasVariableVarAnnotation($phpcsFile, $previousVariablePointer)) {
+			return;
+		}
+
+		if ($this->hasAnotherAssigmentBefore($phpcsFile, $previousVariablePointer, $variableName)) {
 			return;
 		}
 
@@ -199,6 +156,9 @@ class UselessVariableSniff implements Sniff
 			return;
 		}
 
+		/** @var int $assigmentPointer */
+		$assigmentPointer = TokenHelper::findNextEffective($phpcsFile, $previousVariablePointer + 1);
+
 		$assigmentFixerMapping = [
 			T_PLUS_EQUAL => '+',
 			T_MINUS_EQUAL => '-',
@@ -250,6 +210,92 @@ class UselessVariableSniff implements Sniff
 		};
 
 		return $getScopeLevel($firstPointer) === $getScopeLevel($secondPointer);
+	}
+
+	private function findPreviousVariablePointer(File $phpcsFile, int $pointer, string $variableName): ?int
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		for ($i = $pointer - 1; $i >= 0; $i--) {
+			if (
+				in_array($tokens[$i]['code'], TokenHelper::$functionTokenCodes, true)
+				&& $this->isInSameScope($phpcsFile, $tokens[$i]['scope_opener'] + 1, $pointer)
+			) {
+				return null;
+			}
+
+			if ($tokens[$i]['code'] !== T_VARIABLE) {
+				continue;
+			}
+
+			if ($tokens[$i]['content'] !== $variableName) {
+				continue;
+			}
+
+			if (!$this->isInSameScope($phpcsFile, $i, $pointer)) {
+				continue;
+			}
+
+			return $i;
+		}
+
+		return null;
+	}
+
+	private function isAssigmentToVariable(File $phpcsFile, int $pointer): bool
+	{
+		$assigmentPointer = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
+		return in_array($phpcsFile->getTokens()[$assigmentPointer]['code'], [
+			T_EQUAL,
+			T_PLUS_EQUAL,
+			T_MINUS_EQUAL,
+			T_MUL_EQUAL,
+			T_DIV_EQUAL,
+			T_POW_EQUAL,
+			T_MOD_EQUAL,
+			T_AND_EQUAL,
+			T_OR_EQUAL,
+			T_XOR_EQUAL,
+			T_SL_EQUAL,
+			T_SR_EQUAL,
+			T_CONCAT_EQUAL,
+		], true);
+	}
+
+	private function isStaticVariable(File $phpcsFile, int $variablePointer): bool
+	{
+		$pointerBeforeVariable = TokenHelper::findPreviousEffective($phpcsFile, $variablePointer - 1);
+		return $phpcsFile->getTokens()[$pointerBeforeVariable]['code'] === T_STATIC;
+	}
+
+	private function hasVariableVarAnnotation(File $phpcsFile, int $variablePointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$pointerBeforeVariable = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $variablePointer - 1);
+		if ($tokens[$pointerBeforeVariable]['code'] !== T_DOC_COMMENT_CLOSE_TAG) {
+			return false;
+		}
+
+		$docCommentContent = TokenHelper::getContent($phpcsFile, $tokens[$pointerBeforeVariable]['comment_opener'], $pointerBeforeVariable);
+		return preg_match('~@var\\s+\\S+\\s+' . preg_quote($tokens[$variablePointer]['content'], '~') . '~', $docCommentContent) > 0;
+	}
+
+	private function hasAnotherAssigmentBefore(File $phpcsFile, int $variablePointer, string $variableName): bool
+	{
+		$previousVariablePointer = $this->findPreviousVariablePointer($phpcsFile, $variablePointer, $variableName);
+		if ($previousVariablePointer === null) {
+			return false;
+		}
+
+		if (!$this->isAssigmentToVariable($phpcsFile, $previousVariablePointer)) {
+			return false;
+		}
+
+		$previousVariableSemicolonPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $previousVariablePointer + 1);
+		$pointerAfterPreviousVariableSemicolon = TokenHelper::findNextEffective($phpcsFile, $previousVariableSemicolonPointer + 1);
+
+		return $pointerAfterPreviousVariableSemicolon === $variablePointer;
 	}
 
 }

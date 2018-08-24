@@ -83,12 +83,19 @@ function differentVariableAfterReturn() {
 	$p = 1;
 }
 
-function moreReturns() {
+function moreVariables() {
 	try {
 		$result = true;
 	} catch (Throwable $e) {
 		$result = false;
 	}
+
+	return $result;
+}
+
+function moreVariableOneWithoutAssigment() {
+	$result++;
+	$result = 10;
 
 	return $result;
 }
