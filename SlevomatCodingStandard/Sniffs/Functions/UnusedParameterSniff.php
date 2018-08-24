@@ -159,15 +159,17 @@ class UnusedParameterSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$functionScopeLevel = $tokens[$parameterPointer]['level'];
+		$isInSameScope = false;
 		foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
 			if (!in_array($conditionTokenCode, TokenHelper::$functionTokenCodes, true)) {
 				continue;
 			}
 
-			return $tokens[$conditionPointer]['level'] === $functionScopeLevel;
+			$isInSameScope = $tokens[$conditionPointer]['level'] === $functionScopeLevel;
+			break;
 		}
 
-		return false;
+		return $isInSameScope;
 	}
 
 	private function getSniffName(string $sniffName): string
