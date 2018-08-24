@@ -17,9 +17,9 @@ class UselessParenthesesSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/uselessParenthesesErrors.php');
 
-		self::assertSame(26, $report->getErrorCount());
+		self::assertSame(27, $report->getErrorCount());
 
-		foreach ([3, 5, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35] as $line) {
+		foreach ([8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 36, 37, 38] as $line) {
 			self::assertSniffError($report, $line, UselessParenthesesSniff::CODE_USELESS_PARENTHESES);
 		}
 

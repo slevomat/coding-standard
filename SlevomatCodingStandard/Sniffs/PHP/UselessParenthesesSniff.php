@@ -11,6 +11,7 @@ use const T_BOOLEAN_NOT;
 use const T_CLOSURE;
 use const T_DOLLAR;
 use const T_EMPTY;
+use const T_INLINE_THEN;
 use const T_ISSET;
 use const T_NS_SEPARATOR;
 use const T_OPEN_PARENTHESIS;
@@ -62,12 +63,54 @@ class UselessParenthesesSniff implements Sniff
 			return;
 		}
 
+		$this->checkParenthesesAroundConditionInTernaryOperator($phpcsFile, $parenthesisOpenerPointer);
 		$this->checkParenthesesAroundVariableOrFunctionCall($phpcsFile, $parenthesisOpenerPointer);
+	}
+
+	private function checkParenthesesAroundConditionInTernaryOperator(File $phpcsFile, int $parenthesisOpenerPointer): void
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$ternaryOperatorPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1);
+
+		if ($tokens[$ternaryOperatorPointer]['code'] !== T_INLINE_THEN) {
+			return;
+		}
+
+		$contentStartPointer = TokenHelper::findNextEffective($phpcsFile, $parenthesisOpenerPointer + 1);
+		$contentEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] - 1);
+
+		for ($i = $contentStartPointer; $i <= $contentEndPointer; $i++) {
+			if ($tokens[$i]['code'] === T_INLINE_THEN) {
+				return;
+			}
+		}
+
+		$fix = $phpcsFile->addFixableError('Useless parentheses.', $parenthesisOpenerPointer, self::CODE_USELESS_PARENTHESES);
+
+		if (!$fix) {
+			return;
+		}
+
+		$phpcsFile->fixer->beginChangeset();
+		for ($i = $parenthesisOpenerPointer; $i < $contentStartPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+		for ($i = $contentEndPointer + 1; $i <= $tokens[$parenthesisOpenerPointer]['parenthesis_closer']; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+		$phpcsFile->fixer->endChangeset();
 	}
 
 	private function checkParenthesesAroundVariableOrFunctionCall(File $phpcsFile, int $parenthesisOpenerPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
+
+		$ternaryOperatorPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1);
+
+		if ($tokens[$ternaryOperatorPointer]['code'] === T_INLINE_THEN) {
+			return;
+		}
 
 		/** @var int $contentStartPointer */
 		$contentStartPointer = TokenHelper::findNextEffective($phpcsFile, $parenthesisOpenerPointer + 1);

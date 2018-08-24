@@ -12,9 +12,9 @@ if ($true) {
 
 }
 
-$a = (10) ? 1 : 0;
+$a = 10 ? 1 : 0;
 
-$b = ($c + $d) ? 1 : 0;
+$b = $c + $d ? 1 : 0;
 
 $closure = function ($parameter) use ($inheritedVariable) {
 
@@ -44,3 +44,6 @@ $b = $array['function']($parameter);
 new self($a);
 new static($b);
 new parent($c);
+
+$z = ($a ? '0' : '1') ? '2' : '3';
+$zz = ($a + $b);

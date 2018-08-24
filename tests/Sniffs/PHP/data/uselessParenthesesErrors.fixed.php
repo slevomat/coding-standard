@@ -1,38 +1,38 @@
 <?php
 
-$a = $b ? 1 : 0;
-
-$c = $d ? 1 : 0;
-
 class Whatever
 {
 
 	public function __construct($parameter)
 	{
-		$x = self::$a ? 1 : 0;
-		$x = static::$a ? 1 : 0;
-		$x = self::$$parameter ? 1 : 0;
-		$x = parent::${'a'} ? 1 : 0;
-		$x = self::${'a'}[0] ? 1 : 0;
-		$x = Anything::$a ? 1 : 0;
-		$x = Something\Anything::$a ? 1 : 0;
-		$x = \Something\Anything::$a ? 1 : 0;
-		$x = self::$a::$b ? 1 : 0;
-		$x = $this::$a ? 1 : 0;
-		$x = $this->a ? 1 : 0;
-		$x = $this->$$parameter ? 1 : 0;
-		$x = $this->{'a'} ? 1 : 0;
-		$x = $$parameter ? 1 : 0;
-		$x = $this->${'a'}[0]->$$b[1][2]::$c[3][4][5]->{" $d"} ? 1 : 0;
-		$x = $this->${'a'}[0]->$$b[1][2]::$c[3][4][5]->{" $d"}() ? 1 : 0;
-		$x = $this->${'a'}[0]->$$b[1][2]::$c[3][4][5]->{" $d"}()()()() ? 1 : 0;
-		$x = !$this->${'a'}[0]->$$b[1][2]::$c[3][4][5]->{" $d"}()()()() ? 1 : 0;
-		$x = isset($xxx) ? 1 : 0;
-		$x = !isset($xxx) ? 1 : 0;
-		$x = empty($xxx) ? 1 : 0;
-		$x = !empty($xxx) ? 1 : 0;
-		$x = ! in_array($foo, ['bar', 'foo']) ? 1 : 0;
+		$x = self::$a;
+		$x = static::$a;
+		$x = self::$$parameter;
+		$x = parent::${'a'};
+		$x = self::${'a'}[0];
+		$x = Anything::$a;
+		$x = Something\Anything::$a;
+		$x = \Something\Anything::$a;
+		$x = self::$a::$b;
+		$x = $this::$a;
+		$x = $this->a;
+		$x = $this->$$parameter;
+		$x = $this->{'a'};
+		$x = $$parameter;
+		$x = $this->${'a'}[0]->$$b[1][2]::$c[3][4][5]->{" $d"};
+		$x = $this->${'a'}[0]->$$b[1][2]::$c[3][4][5]->{" $d"}();
+		$x = $this->${'a'}[0]->$$b[1][2]::$c[3][4][5]->{" $d"}()()()();
+		$x = !$this->${'a'}[0]->$$b[1][2]::$c[3][4][5]->{" $d"}()()()();
+		$x = isset($xxx);
+		$x = !isset($xxx);
+		$x = empty($xxx);
+		$x = !empty($xxx);
+		$x = ! in_array($foo, ['bar', 'foo']);
 		$x = intval($foo);
 	}
 
 }
+
+$x = $y !== null ? true : false;
+$a = $b ? 1 : 0;
+$c = $d ? 1 : 0;
