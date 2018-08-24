@@ -12,6 +12,7 @@ use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
 use const T_DOLLAR;
 use const T_EMPTY;
+use const T_EXIT;
 use const T_INLINE_THEN;
 use const T_ISSET;
 use const T_NS_SEPARATOR;
