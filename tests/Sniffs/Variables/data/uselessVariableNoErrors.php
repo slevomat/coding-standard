@@ -36,3 +36,14 @@ function differentVariable() {
 	$e = 10;
 	return $f;
 }
+
+function staticVariable() {
+	static $g = null;
+	return $g;
+}
+
+function withDocComment() {
+	/** @var string $h */
+	$h = 'h';
+	return $h;
+}

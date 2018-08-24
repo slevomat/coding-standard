@@ -9,6 +9,7 @@ use const T_AND_EQUAL;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CONCAT_EQUAL;
 use const T_DIV_EQUAL;
+use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_EQUAL;
 use const T_MINUS_EQUAL;
 use const T_MOD_EQUAL;
@@ -20,12 +21,16 @@ use const T_RETURN;
 use const T_SEMICOLON;
 use const T_SL_EQUAL;
 use const T_SR_EQUAL;
+use const T_STATIC;
 use const T_VARIABLE;
+use const T_WHITESPACE;
 use const T_XOR_EQUAL;
 use function array_key_exists;
 use function array_reverse;
 use function count;
 use function in_array;
+use function preg_match;
+use function preg_quote;
 use function sprintf;
 
 class UselessVariableSniff implements Sniff
@@ -92,6 +97,21 @@ class UselessVariableSniff implements Sniff
 
 		if ($previousVariablePointer === null) {
 			return;
+		}
+
+		$effectivePointerBeforePreviousVariable = TokenHelper::findPreviousEffective($phpcsFile, $previousVariablePointer - 1);
+		if ($tokens[$effectivePointerBeforePreviousVariable]['code'] === T_STATIC) {
+			return;
+		}
+
+		$pointerBeforePreviousVariable = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $previousVariablePointer - 1);
+		if (
+			$tokens[$pointerBeforePreviousVariable]['code'] === T_DOC_COMMENT_CLOSE_TAG
+		) {
+			$docCommentContent = TokenHelper::getContent($phpcsFile, $tokens[$pointerBeforePreviousVariable]['comment_opener'], $pointerBeforePreviousVariable);
+			if (preg_match('~@var\\s+\\S+\\s+' . preg_quote($variableName, '~') . '~', $docCommentContent)) {
+				return;
+			}
 		}
 
 		/** @var int $assigmentPointer */
