@@ -57,7 +57,7 @@ function parameterInParenthesis($a) {
 
 
 function compactIsNotFunction($a, $b) {
-    $b->compact;
+	$b->compact;
 
 	return compact('a');
 }

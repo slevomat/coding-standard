@@ -106,10 +106,10 @@ function () {
 };
 
 function () {
-    $a = 'a';
-    $b = 'b';
+	$a = 'a';
+	$b = 'b';
 
-    $this->compact;
+	$this->compact;
 
 	return compact('a', "b");
 };

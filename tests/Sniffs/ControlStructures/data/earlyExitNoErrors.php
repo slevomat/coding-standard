@@ -176,7 +176,7 @@ function allConditionsWithEarlyExitButCodeAfter($dateTime) {
 
 // Code in the end of file
 if (!empty($_SERVER['argv'])) {
-    something();
+	something();
 } elseif (PHP_SAPI !== 'cli') {
-    somethingElse();
+	somethingElse();
 }

@@ -67,9 +67,9 @@ function () {
 };
 
 function () {
-    $a = 'a';
+	$a = 'a';
 
-    return function () {
+	return function () {
 		return compact('a');
 	};
 };
