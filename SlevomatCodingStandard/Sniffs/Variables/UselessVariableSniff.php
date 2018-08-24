@@ -6,7 +6,6 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_AND_EQUAL;
-use const T_CLOSE_CURLY_BRACKET;
 use const T_CONCAT_EQUAL;
 use const T_DIV_EQUAL;
 use const T_DOC_COMMENT_CLOSE_TAG;
@@ -25,7 +24,6 @@ use const T_STATIC;
 use const T_VARIABLE;
 use const T_WHITESPACE;
 use const T_XOR_EQUAL;
-use function array_key_exists;
 use function array_reverse;
 use function count;
 use function in_array;
@@ -91,66 +89,11 @@ class UselessVariableSniff implements Sniff
 			return;
 		}
 
-		for ($i = $variablePointer + 1; $i < count($tokens); $i++) {
-			if (
-				in_array($tokens[$i]['code'], TokenHelper::$functionTokenCodes, true)
-				&& $this->isInSameScope($phpcsFile, $variablePointer, $i)
-			) {
-				$i = $tokens[$i]['scope_closer'];
-				continue;
-			}
-
-			if ($tokens[$i]['code'] !== T_VARIABLE) {
-				continue;
-			}
-
-			if ($tokens[$i]['content'] !== $variableName) {
-				continue;
-			}
-
-			if ($this->isInSameScope($phpcsFile, $variablePointer, $i)) {
-				return;
-			}
-		}
-
-		$errorParameters = [
-			sprintf('Useless variable %s.', $variableName),
-			$previousVariablePointer,
-			self::CODE_USELESS_VARIABLE,
-		];
-
-		$pointerAfterReturnSemicolon = TokenHelper::findNextEffective($phpcsFile, $returnSemicolonPointer + 1);
-
-		if (
-			$tokens[$pointerAfterReturnSemicolon]['code'] !== T_CLOSE_CURLY_BRACKET
-			|| !array_key_exists('scope_condition', $tokens[$pointerAfterReturnSemicolon])
-			|| !in_array($tokens[$tokens[$pointerAfterReturnSemicolon]['scope_condition']]['code'], TokenHelper::$functionTokenCodes, true)
-		) {
-			$phpcsFile->addError(...$errorParameters);
+		if (!$this->areBothPointersNearby($phpcsFile, $previousVariablePointer, $returnPointer)) {
 			return;
 		}
 
-		$previousVariableSemicolonPointer = null;
-		for ($i = $previousVariablePointer + 1; $i < $returnPointer - 1; $i++) {
-			if ($tokens[$i]['code'] !== T_SEMICOLON) {
-				continue;
-			}
-
-			if (!$this->isInSameScope($phpcsFile, $previousVariablePointer, $i)) {
-				continue;
-			}
-
-			$previousVariableSemicolonPointer = $i;
-			break;
-		}
-		$pointerAfterPreviousVariableSemicolon = TokenHelper::findNextEffective($phpcsFile, $previousVariableSemicolonPointer + 1);
-
-		if ($returnPointer !== $pointerAfterPreviousVariableSemicolon) {
-			$phpcsFile->addError(...$errorParameters);
-			return;
-		}
-
-		$fix = $phpcsFile->addFixableError(...$errorParameters);
+		$fix = $phpcsFile->addFixableError(sprintf('Useless variable %s.', $variableName), $previousVariablePointer, self::CODE_USELESS_VARIABLE);
 
 		if (!$fix) {
 			return;
@@ -173,6 +116,8 @@ class UselessVariableSniff implements Sniff
 			T_SR_EQUAL => '>>',
 			T_CONCAT_EQUAL => '.',
 		];
+
+		$previousVariableSemicolonPointer = $this->findSemicolon($phpcsFile, $previousVariablePointer);
 
 		$phpcsFile->fixer->beginChangeset();
 
@@ -198,15 +143,17 @@ class UselessVariableSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$getScopeLevel = function (int $pointer) use ($tokens): int {
+			$level = $tokens[$pointer]['level'];
 			foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
 				if (!in_array($conditionTokenCode, TokenHelper::$functionTokenCodes, true)) {
 					continue;
 				}
 
-				return $tokens[$conditionPointer]['level'];
+				$level = $tokens[$conditionPointer]['level'];
+				break;
 			}
 
-			return $tokens[$pointer]['level'];
+			return $level;
 		};
 
 		return $getScopeLevel($firstPointer) === $getScopeLevel($secondPointer);
@@ -292,10 +239,38 @@ class UselessVariableSniff implements Sniff
 			return false;
 		}
 
-		$previousVariableSemicolonPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $previousVariablePointer + 1);
-		$pointerAfterPreviousVariableSemicolon = TokenHelper::findNextEffective($phpcsFile, $previousVariableSemicolonPointer + 1);
+		return $this->areBothPointersNearby($phpcsFile, $previousVariablePointer, $variablePointer);
+	}
 
-		return $pointerAfterPreviousVariableSemicolon === $variablePointer;
+	private function areBothPointersNearby(File $phpcsFile, int $firstPointer, int $secondPointer): bool
+	{
+		$firstVariableSemicolonPointer = $this->findSemicolon($phpcsFile, $firstPointer);
+		$pointerAfterFirstVariableSemicolon = TokenHelper::findNextEffective($phpcsFile, $firstVariableSemicolonPointer + 1);
+
+		return $pointerAfterFirstVariableSemicolon === $secondPointer;
+	}
+
+	private function findSemicolon(File $phpcsFile, int $pointer): int
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$semicolonPointer = null;
+		for ($i = $pointer + 1; $i < count($tokens) - 1; $i++) {
+			if ($tokens[$i]['code'] !== T_SEMICOLON) {
+				continue;
+			}
+
+			if (!$this->isInSameScope($phpcsFile, $pointer, $i)) {
+				continue;
+			}
+
+			$semicolonPointer = $i;
+			break;
+		}
+
+		/** @var int $semicolonPointer */
+		$semicolonPointer = $semicolonPointer;
+		return $semicolonPointer;
 	}
 
 }

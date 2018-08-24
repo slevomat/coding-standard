@@ -73,29 +73,9 @@ function sameVariableInDifferentScope() {
 	return $n;
 }
 
-function differentVariableAfterReturn() {
-	$o = 0;
-
-	if (true) {
-		return $o;
-	}
-
-	$p = 1;
-}
-
-function moreVariables() {
-	try {
-		$result = true;
-	} catch (Throwable $e) {
-		$result = false;
-	}
-
-	return $result;
-}
-
 function moreVariableOneWithoutAssigment() {
-	$result++;
-	$result = 10;
+	$o++;
+	$o = 10;
 
-	return $result;
+	return $o;
 }

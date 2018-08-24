@@ -53,3 +53,17 @@ function moreAssigments() {
 	$i .= 'ii';
 	return $i;
 }
+
+function somethingBetweenAssigmentAndReturn() {
+	$j = 'j';
+	doSomething();
+	return $j;
+}
+
+function differentScope() {
+	$k = 'k';
+
+	if (true) {
+		return $k;
+	}
+}
