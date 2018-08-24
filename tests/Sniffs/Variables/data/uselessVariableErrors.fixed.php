@@ -1,76 +1,61 @@
 <?php
 
 function () {
-	$a = true;
-	return $a;
+	return true;
 };
 
 function () {
-	$b += 1;
-	return $b;
+	return $b + 1;
 };
 
 function () {
-	$c -= 1;
-	return $c;
+	return $c - 1;
 };
 
 function () {
-	$d *= 1;
-	return $d;
+	return $d * 1;
 };
 
 function () {
-	$e /= 1;
-	return $e;
+	return $e / 1;
 };
 
 function () {
-	$f **= 1;
-	return $f;
+	return $f ** 1;
 };
 
 function () {
-	$g %= 1;
-	return $g;
+	return $g % 1;
 };
 
 function () {
-	$h &= 1;
-	return $h;
+	return $h & 1;
 };
 
 function () {
-	$i |= 1;
-	return $i;
+	return $i | 1;
 };
 
 function () {
-	$j ^= 1;
-	return $j;
+	return $j ^ 1;
 };
 
 function () {
-	$k <<= 1;
-	return $k;
+	return $k << 1;
 };
 
 function () {
-	$l >>= 1;
-	return $l;
+	return $l >> 1;
 };
 
 function () {
-	$m .= 1;
-	return $m;
+	return $m . 1;
 };
 
 function sameVariableInDifferentScope() {
-	$n = array_map(function () {
+	return array_map(function () {
 		return $n + 1;
 	}, []);
-
-	return $n;
 }
 
 function differentVariableAfterReturn() {

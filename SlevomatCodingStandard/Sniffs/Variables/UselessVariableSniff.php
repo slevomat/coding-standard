@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_AND_EQUAL;
+use const T_CLOSE_CURLY_BRACKET;
 use const T_CONCAT_EQUAL;
 use const T_DIV_EQUAL;
 use const T_EQUAL;
@@ -21,6 +22,7 @@ use const T_SL_EQUAL;
 use const T_SR_EQUAL;
 use const T_VARIABLE;
 use const T_XOR_EQUAL;
+use function array_key_exists;
 use function array_reverse;
 use function count;
 use function in_array;
@@ -56,8 +58,8 @@ class UselessVariableSniff implements Sniff
 			return;
 		}
 
-		$pointerAfterVariable = TokenHelper::findNextEffective($phpcsFile, $variablePointer + 1);
-		if ($tokens[$pointerAfterVariable]['code'] !== T_SEMICOLON) {
+		$returnSemicolonPointer = TokenHelper::findNextEffective($phpcsFile, $variablePointer + 1);
+		if ($tokens[$returnSemicolonPointer]['code'] !== T_SEMICOLON) {
 			return;
 		}
 
@@ -92,8 +94,9 @@ class UselessVariableSniff implements Sniff
 			return;
 		}
 
-		$pointerAfterPreviousVariable = TokenHelper::findNextEffective($phpcsFile, $previousVariablePointer + 1);
-		if (!in_array($tokens[$pointerAfterPreviousVariable]['code'], [
+		/** @var int $assigmentPointer */
+		$assigmentPointer = TokenHelper::findNextEffective($phpcsFile, $previousVariablePointer + 1);
+		if (!in_array($tokens[$assigmentPointer]['code'], [
 			T_EQUAL,
 			T_PLUS_EQUAL,
 			T_MINUS_EQUAL,
@@ -133,7 +136,81 @@ class UselessVariableSniff implements Sniff
 			}
 		}
 
-		$phpcsFile->addError(sprintf('Useless variable %s.', $variableName), $previousVariablePointer, self::CODE_USELESS_VARIABLE);
+		$errorParameters = [
+			sprintf('Useless variable %s.', $variableName),
+			$previousVariablePointer,
+			self::CODE_USELESS_VARIABLE,
+		];
+
+		$pointerAfterReturnSemicolon = TokenHelper::findNextEffective($phpcsFile, $returnSemicolonPointer + 1);
+
+		if (
+			$tokens[$pointerAfterReturnSemicolon]['code'] !== T_CLOSE_CURLY_BRACKET
+			|| !array_key_exists('scope_condition', $tokens[$pointerAfterReturnSemicolon])
+			|| !in_array($tokens[$tokens[$pointerAfterReturnSemicolon]['scope_condition']]['code'], TokenHelper::$functionTokenCodes, true)
+		) {
+			$phpcsFile->addError(...$errorParameters);
+			return;
+		}
+
+		$previousVariableSemicolonPointer = null;
+		for ($i = $previousVariablePointer + 1; $i < $returnPointer - 1; $i++) {
+			if ($tokens[$i]['code'] !== T_SEMICOLON) {
+				continue;
+			}
+
+			if (!$this->isInSameScope($phpcsFile, $previousVariablePointer, $i)) {
+				continue;
+			}
+
+			$previousVariableSemicolonPointer = $i;
+			break;
+		}
+		$pointerAfterPreviousVariableSemicolon = TokenHelper::findNextEffective($phpcsFile, $previousVariableSemicolonPointer + 1);
+
+		if ($returnPointer !== $pointerAfterPreviousVariableSemicolon) {
+			$phpcsFile->addError(...$errorParameters);
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError(...$errorParameters);
+
+		if (!$fix) {
+			return;
+		}
+
+		$assigmentFixerMapping = [
+			T_PLUS_EQUAL => '+',
+			T_MINUS_EQUAL => '-',
+			T_MUL_EQUAL => '*',
+			T_DIV_EQUAL => '/',
+			T_POW_EQUAL => '**',
+			T_MOD_EQUAL => '%',
+			T_AND_EQUAL => '&',
+			T_OR_EQUAL => '|',
+			T_XOR_EQUAL => '^',
+			T_SL_EQUAL => '<<',
+			T_SR_EQUAL => '>>',
+			T_CONCAT_EQUAL => '.',
+		];
+
+		$phpcsFile->fixer->beginChangeset();
+
+		if ($tokens[$assigmentPointer]['code'] === T_EQUAL) {
+			for ($i = $previousVariablePointer; $i < $assigmentPointer; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
+			$phpcsFile->fixer->replaceToken($assigmentPointer, 'return');
+		} else {
+			$phpcsFile->fixer->addContentBefore($previousVariablePointer, 'return ');
+			$phpcsFile->fixer->replaceToken($assigmentPointer, $assigmentFixerMapping[$tokens[$assigmentPointer]['code']]);
+		}
+
+		for ($i = $previousVariableSemicolonPointer + 1; $i <= $returnSemicolonPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+
+		$phpcsFile->fixer->endChangeset();
 	}
 
 	private function isInSameScope(File $phpcsFile, int $firstPointer, int $secondPointer): bool
