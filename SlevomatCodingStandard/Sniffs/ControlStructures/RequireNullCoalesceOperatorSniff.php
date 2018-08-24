@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_BOOLEAN_NOT;
@@ -133,6 +134,12 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 		$variableStartPointer = IdentificatorHelper::findStartPointer($phpcsFile, $tmpPointer);
 
 		if ($variableStartPointer === null) {
+			return;
+		}
+
+		$pointerBeforeCondition = TokenHelper::findPreviousEffective($phpcsFile, ($isYodaCondition ? $pointerBeforeIdenticalOperator : $variableStartPointer) - 1);
+
+		if (in_array($tokens[$pointerBeforeCondition]['code'], Tokens::$booleanOperators, true)) {
 			return;
 		}
 

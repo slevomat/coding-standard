@@ -35,3 +35,7 @@ $n = true === null ? true : false;
 $o = $oo !== null ? $oo->property : null;
 
 $p = $pp === null ? null : $pp + 1;
+
+$q = $r !== null && $s !== null
+	? $s
+	: '';
