@@ -235,6 +235,10 @@ Sniff provides the following settings:
 
 Requires `new` with parentheses.
 
+#### SlevomatCodingStandard.ControlStructures.NewWithoutParentheses 🔧
+
+Reports `new` with useless parentheses.
+
 #### SlevomatCodingStandard.ControlStructures.DisallowShortTernaryOperator 🔧
 
 Disallows short ternary operator `?:`.
