@@ -461,9 +461,7 @@ class EarlyExitSniff implements Sniff
 
 		} while (true);
 
-		$negativeCondition .= $this->getNegativeCondition($phpcsFile, $nestedConditionStartPointer, $conditionBoundaryEndPointer, true);
-
-		return $negativeCondition;
+		return $negativeCondition . $this->getNegativeCondition($phpcsFile, $nestedConditionStartPointer, $conditionBoundaryEndPointer, true);
 	}
 
 	private function getNegativeCondition(File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer, bool $nested = false): string
