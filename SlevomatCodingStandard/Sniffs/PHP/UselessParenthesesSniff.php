@@ -12,9 +12,11 @@ use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
 use const T_DOLLAR;
 use const T_EMPTY;
+use const T_EVAL;
 use const T_EXIT;
 use const T_INLINE_THEN;
 use const T_ISSET;
+use const T_LIST;
 use const T_NS_SEPARATOR;
 use const T_OPEN_PARENTHESIS;
 use const T_PARENT;
@@ -57,7 +59,7 @@ class UselessParenthesesSniff implements Sniff
 
 		/** @var int $pointerBeforeParenthesisOpener */
 		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
-		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], [T_VARIABLE, T_STRING, T_ISSET, T_UNSET, T_EMPTY, T_CLOSURE, T_USE, T_ANON_CLASS, T_SELF, T_STATIC, T_EXIT, T_CLOSE_PARENTHESIS], true)) {
+		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], [T_VARIABLE, T_STRING, T_ISSET, T_UNSET, T_EMPTY, T_CLOSURE, T_USE, T_ANON_CLASS, T_SELF, T_STATIC, T_EXIT, T_CLOSE_PARENTHESIS, T_EVAL, T_LIST], true)) {
 			return;
 		}
 
