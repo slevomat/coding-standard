@@ -55,3 +55,7 @@ die($a);
 (function ($b): void {
 	// Do something
 })($b);
+
+eval($c);
+
+list($c) = [];
