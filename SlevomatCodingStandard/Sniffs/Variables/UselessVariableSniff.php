@@ -13,6 +13,7 @@ use const T_EQUAL;
 use const T_MINUS_EQUAL;
 use const T_MOD_EQUAL;
 use const T_MUL_EQUAL;
+use const T_OPEN_CURLY_BRACKET;
 use const T_OR_EQUAL;
 use const T_PLUS_EQUAL;
 use const T_POW_EQUAL;
@@ -93,7 +94,19 @@ class UselessVariableSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError(sprintf('Useless variable %s.', $variableName), $previousVariablePointer, self::CODE_USELESS_VARIABLE);
+		$errorParameters = [
+			sprintf('Useless variable %s.', $variableName),
+			$previousVariablePointer,
+			self::CODE_USELESS_VARIABLE,
+		];
+
+		$pointerBeforePreviousVariable = TokenHelper::findPreviousEffective($phpcsFile, $previousVariablePointer - 1);
+		if (!in_array($tokens[$pointerBeforePreviousVariable]['code'], [T_SEMICOLON, T_OPEN_CURLY_BRACKET], true)) {
+			$phpcsFile->addError(...$errorParameters);
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError(...$errorParameters);
 
 		if (!$fix) {
 			return;

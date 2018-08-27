@@ -79,3 +79,13 @@ function moreVariableOneWithoutAssigment() {
 
 	return $o;
 }
+
+function assigmentAsFunctionParametr() {
+	doSomething($p = 0);
+	return $p;
+}
+
+function assigmentAfterAssignment() {
+	doSomething($qq = $q = 0);
+	return $q;
+}
