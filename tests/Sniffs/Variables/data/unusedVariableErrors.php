@@ -91,3 +91,14 @@ function () {
 TEXT;
 };
 
+$sameNameAsParameter = null;
+
+function ($sameNameAsParameter) {
+
+};
+
+function () {
+	$a = null;
+	self::$a = null;
+};
+
