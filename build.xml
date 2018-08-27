@@ -70,9 +70,6 @@
 		>
 			<arg value="--configuration"/>
 			<arg value="tests/phpunit.xml"/>
-			<arg value="--cache-result"/>
-			<arg value="--order-by=defects"/>
-			<arg value="--stop-on-defect"/>
 			<arg path="tests"/>
 		</exec>
 	</target>

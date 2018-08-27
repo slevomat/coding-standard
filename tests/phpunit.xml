@@ -8,6 +8,10 @@
 	beStrictAboutOutputDuringTests="true"
 	beStrictAboutTestsThatDoNotTestAnything="true"
 	beStrictAboutTodoAnnotatedTests="true"
+	cacheResult="true"
+	cacheResultFile="../.phpunit.result.cache"
+	stopOnDefect="true"
+	executionOrder="defects"
 >
 	<logging>
 		<log
