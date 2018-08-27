@@ -59,3 +59,7 @@ die($a);
 eval($c);
 
 list($c) = [];
+
+switch (true) {
+	case !($boo !== null):
+}

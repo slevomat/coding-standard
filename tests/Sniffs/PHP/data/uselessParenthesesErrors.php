@@ -36,3 +36,10 @@ class Whatever
 $x = ($y !== null) ? true : false;
 $a = ($b) ? 1 : 0;
 $c = (   $d    ) ? 1 : 0;
+
+switch (true) {
+	case ($boo):
+	case ($boo === true):
+	case ($boo ? true : false):
+	case ($boo) ? true : false:
+}
