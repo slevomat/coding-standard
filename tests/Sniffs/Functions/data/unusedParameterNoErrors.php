@@ -39,10 +39,10 @@ function parameterInString($a, $b)
 	echo "${b}";
 }
 
-function parameterInHeredoc($a)
+function parameterInHeredoc($a, $b)
 {
 	echo <<<TEXT
-	$a
+	$a ${b}
 TEXT;
 }
 
