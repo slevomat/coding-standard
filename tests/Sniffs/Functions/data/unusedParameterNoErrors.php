@@ -33,9 +33,10 @@ function usedParameterInAnotherScope($a)
 	}
 }
 
-function parameterInString($a)
+function parameterInString($a, $b)
 {
 	echo "$a";
+	echo "${b}";
 }
 
 function parameterInHeredoc($a)

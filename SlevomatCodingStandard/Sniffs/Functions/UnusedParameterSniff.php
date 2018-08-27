@@ -129,7 +129,16 @@ class UnusedParameterSniff implements Sniff
 
 	private function isUsedInString(string $stringContent, string $variableName): bool
 	{
-		return preg_match('~(?<!\\\\)' . preg_quote($variableName, '~') . '\b(?!\()~', $stringContent) > 0;
+		if (preg_match('~(?<!\\\\)' . preg_quote($variableName, '~') . '\b(?!\()~', $stringContent) > 0) {
+			return true;
+		}
+
+		$variableNameWithoutDollar = substr($variableName, 1);
+		if (preg_match('~\$\{' . preg_quote($variableNameWithoutDollar, '~') . '\}~', $stringContent) > 0) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private function isUsedInCompactFunction(File $phpcsFile, int $compactFunctionPointer, string $variableName): bool
