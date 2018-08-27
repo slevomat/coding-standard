@@ -4,8 +4,11 @@ namespace SlevomatCodingStandard\Sniffs\Variables;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\ParameterHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
+use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\VariableHelper;
 use const T_AND_EQUAL;
 use const T_AS;
 use const T_BITWISE_AND;
@@ -18,18 +21,15 @@ use const T_DIV_EQUAL;
 use const T_DO;
 use const T_DOUBLE_ARROW;
 use const T_DOUBLE_COLON;
-use const T_DOUBLE_QUOTED_STRING;
 use const T_EQUAL;
 use const T_FOR;
 use const T_FOREACH;
-use const T_HEREDOC;
 use const T_INC;
 use const T_LIST;
 use const T_MINUS_EQUAL;
 use const T_MOD_EQUAL;
 use const T_MUL_EQUAL;
 use const T_OBJECT_OPERATOR;
-use const T_OPEN_PARENTHESIS;
 use const T_OPEN_TAG;
 use const T_OR_EQUAL;
 use const T_PLUS_EQUAL;
@@ -45,12 +45,8 @@ use const T_XOR_EQUAL;
 use function array_keys;
 use function array_merge;
 use function array_reverse;
-use function count;
 use function in_array;
-use function preg_match;
-use function preg_quote;
 use function sprintf;
-use function substr;
 
 class UnusedVariableSniff implements Sniff
 {
@@ -106,7 +102,6 @@ class UnusedVariableSniff implements Sniff
 				break;
 			}
 		}
-		$scopeCloserPointer = $tokens[$scopeOwnerPointer]['code'] === T_OPEN_TAG ? count($tokens) - 1 : $tokens[$scopeOwnerPointer]['scope_closer'];
 
 		if (in_array($tokens[$scopeOwnerPointer]['code'], TokenHelper::$functionTokenCodes, true)) {
 			if ($this->isStaticVariable($phpcsFile, $scopeOwnerPointer, $variableName)) {
@@ -123,28 +118,10 @@ class UnusedVariableSniff implements Sniff
 			) {
 				return;
 			}
-
-			if ($this->isUsedInCompactFunction($phpcsFile, $scopeOwnerPointer, $variablePointer)) {
-				return;
-			}
-
-			if ($this->isUsedInString($phpcsFile, $scopeOwnerPointer, $variableName)) {
-				return;
-			}
 		}
 
-		for ($i = $variablePointer + 1; $i <= $scopeCloserPointer; $i++) {
-			if ($tokens[$i]['code'] !== T_VARIABLE) {
-				continue;
-			}
-
-			if (!$this->isInSameScope($phpcsFile, $variablePointer, $i)) {
-				continue;
-			}
-
-			if ($tokens[$i]['content'] === $variableName) {
-				return;
-			}
+		if (VariableHelper::isUsedInScopeAfterPointer($phpcsFile, $scopeOwnerPointer, $variablePointer, $variablePointer + 1)) {
+			return;
 		}
 
 		$phpcsFile->addError(
@@ -152,23 +129,6 @@ class UnusedVariableSniff implements Sniff
 			$variablePointer,
 			self::CODE_UNUSED_VARIABLE
 		);
-	}
-
-	private function isInSameScope(File $phpcsFile, int $firstPointer, int $secondPointer): bool
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		foreach (array_reverse($tokens[$secondPointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
-			if ($tokens[$firstPointer]['level'] > $tokens[$conditionPointer]['level']) {
-				break;
-			}
-
-			if (in_array($conditionTokenCode, TokenHelper::$functionTokenCodes, true)) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	private function isAssignment(File $phpcsFile, int $variablePointer): bool
@@ -196,15 +156,8 @@ class UnusedVariableSniff implements Sniff
 					return false;
 				}
 
-				if (isset($tokens[$variablePointer]['nested_parenthesis'])) {
-					$parenthesisOpenerPointer = array_reverse(array_keys($tokens[$variablePointer]['nested_parenthesis']))[0];
-					if (isset($tokens[$parenthesisOpenerPointer]['parenthesis_owner'])) {
-						$parenthesisOwnerPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_owner'];
-						if (in_array($tokens[$parenthesisOwnerPointer]['code'], TokenHelper::$functionTokenCodes, true)) {
-							// Parameter with default value
-							return false;
-						}
-					}
+				if (ParameterHelper::isParameter($phpcsFile, $variablePointer)) {
+					return false;
 				}
 			}
 
@@ -262,7 +215,7 @@ class UnusedVariableSniff implements Sniff
 
 		$parenthesisOpenerPointer = array_reverse(array_keys($tokens[$variablePointer]['nested_parenthesis']))[0];
 
-		if (!$this->isInSameScope($phpcsFile, $parenthesisOpenerPointer, $variablePointer)) {
+		if (!ScopeHelper::isInSameScope($phpcsFile, $parenthesisOpenerPointer, $variablePointer)) {
 			return false;
 		}
 
@@ -428,76 +381,6 @@ class UnusedVariableSniff implements Sniff
 				return true;
 			}
 		}
-
-		return false;
-	}
-
-	private function isUsedInString(File $phpcsFile, int $functionPointer, string $variableName): bool
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		$currentPointer = $tokens[$functionPointer]['scope_opener'] + 1;
-		do {
-			$stringPointer = TokenHelper::findNext(
-				$phpcsFile,
-				[T_DOUBLE_QUOTED_STRING, T_HEREDOC],
-				$currentPointer,
-				$tokens[$functionPointer]['scope_closer']
-			);
-
-			if ($stringPointer === null) {
-				break;
-			}
-
-			if (preg_match('~(?<!\\\\)' . preg_quote($variableName, '~') . '\b(?!\()~', $tokens[$stringPointer]['content'])) {
-				return true;
-			}
-
-			$variableNameWithoutDollar = substr($variableName, 1);
-			if (preg_match('~\$\{' . preg_quote($variableNameWithoutDollar, '~') . '\}~', $tokens[$stringPointer]['content'])) {
-				return true;
-			}
-
-			$currentPointer = $stringPointer + 1;
-		} while (true);
-
-		return false;
-	}
-
-	private function isUsedInCompactFunction(File $phpcsFile, int $functionPointer, int $variablePointer): bool
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		$variableNameWithoutDollar = substr($tokens[$variablePointer]['content'], 1);
-
-		$currentPointer = $tokens[$functionPointer]['scope_opener'] + 1;
-		do {
-			$compactFunctionPointer = TokenHelper::findNextContent($phpcsFile, T_STRING, 'compact', $currentPointer, $tokens[$functionPointer]['scope_closer']);
-			if ($compactFunctionPointer === null) {
-				break;
-			}
-
-			$parenthesisOpenerPointer = TokenHelper::findNextEffective($phpcsFile, $compactFunctionPointer + 1);
-			if ($tokens[$parenthesisOpenerPointer]['code'] !== T_OPEN_PARENTHESIS) {
-				$currentPointer = $parenthesisOpenerPointer + 1;
-				continue;
-			}
-
-			if (!$this->isInSameScope($phpcsFile, $variablePointer, $compactFunctionPointer)) {
-				$currentPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1;
-				continue;
-			}
-
-			for ($i = $parenthesisOpenerPointer + 1; $i < $tokens[$parenthesisOpenerPointer]['parenthesis_closer']; $i++) {
-				if (!preg_match('~^([\'"])' . $variableNameWithoutDollar . '\\1$~', $tokens[$i]['content'])) {
-					continue;
-				}
-
-				return true;
-			}
-
-			$currentPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1;
-		} while (true);
 
 		return false;
 	}

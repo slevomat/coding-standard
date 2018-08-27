@@ -7,7 +7,6 @@ use PHP_CodeSniffer\Files\File;
 use const T_ANON_CLASS;
 use const T_BITWISE_AND;
 use const T_CLASS;
-use const T_CLOSURE;
 use const T_COLON;
 use const T_COMMA;
 use const T_ELLIPSIS;
@@ -165,31 +164,26 @@ class FunctionHelper
 	{
 		$tokens = $codeSnifferFile->getTokens();
 
-		$isInSameLevel = function (int $pointer) use ($functionPointer, $tokens): bool {
-			foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
-				if ($conditionPointer === $functionPointer) {
-					break;
-				}
+		$firstPointerInScope = $tokens[$functionPointer]['scope_opener'] + 1;
 
-				if ($conditionTokenCode !== T_CLOSURE && $conditionTokenCode !== T_ANON_CLASS) {
-					continue;
-				}
-
-				return false;
+		for ($i = $firstPointerInScope; $i < $tokens[$functionPointer]['scope_closer']; $i++) {
+			if (!in_array($tokens[$i]['code'], [T_YIELD, T_YIELD_FROM], true)) {
+				continue;
 			}
-			return true;
-		};
 
-		for ($i = $tokens[$functionPointer]['scope_opener'] + 1; $i < $tokens[$functionPointer]['scope_closer']; $i++) {
-			if (!in_array($tokens[$i]['code'], [T_YIELD, T_YIELD_FROM], true) || !$isInSameLevel($i)) {
+			if (!ScopeHelper::isInSameScope($codeSnifferFile, $i, $firstPointerInScope)) {
 				continue;
 			}
 
 			return true;
 		}
 
-		for ($i = $tokens[$functionPointer]['scope_opener'] + 1; $i < $tokens[$functionPointer]['scope_closer']; $i++) {
-			if ($tokens[$i]['code'] !== T_RETURN || !$isInSameLevel($i)) {
+		for ($i = $firstPointerInScope; $i < $tokens[$functionPointer]['scope_closer']; $i++) {
+			if ($tokens[$i]['code'] !== T_RETURN) {
+				continue;
+			}
+
+			if (!ScopeHelper::isInSameScope($codeSnifferFile, $i, $firstPointerInScope)) {
 				continue;
 			}
 

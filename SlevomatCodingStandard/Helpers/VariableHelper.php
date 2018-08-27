@@ -1,0 +1,142 @@
+<?php declare(strict_types = 1);
+
+namespace SlevomatCodingStandard\Helpers;
+
+use PHP_CodeSniffer\Files\File;
+use const T_DOUBLE_COLON;
+use const T_DOUBLE_QUOTED_STRING;
+use const T_HEREDOC;
+use const T_OPEN_PARENTHESIS;
+use const T_OPEN_TAG;
+use const T_STRING;
+use const T_VARIABLE;
+use function count;
+use function in_array;
+use function preg_match;
+use function preg_quote;
+use function strtolower;
+use function substr;
+
+/**
+ * @internal
+ */
+class VariableHelper
+{
+
+	public static function isUsedInScope(File $phpcsFile, int $scopeOwnerPointer, int $variablePointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$firstPointerInScope = $tokens[$scopeOwnerPointer]['code'] === T_OPEN_TAG ? $scopeOwnerPointer + 1 : $tokens[$scopeOwnerPointer]['scope_opener'] + 1;
+		return self::isUsedInScopeInternal($phpcsFile, $scopeOwnerPointer, $variablePointer, $firstPointerInScope);
+	}
+
+	public static function isUsedInScopeAfterPointer(File $phpcsFile, int $scopeOwnerPointer, int $variablePointer, int $startCheckPointer): bool
+	{
+		return self::isUsedInScopeInternal($phpcsFile, $scopeOwnerPointer, $variablePointer, $startCheckPointer);
+	}
+
+	private static function isUsedInScopeInternal(File $phpcsFile, int $scopeOwnerPointer, int $variablePointer, int $startCheckPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$scopeCloserPointer = $tokens[$scopeOwnerPointer]['code'] === T_OPEN_TAG
+			? count($tokens) - 1
+			: $tokens[$scopeOwnerPointer]['scope_closer'] - 1;
+		$firstPointerInScope = $tokens[$scopeOwnerPointer]['code'] === T_OPEN_TAG
+			? $scopeOwnerPointer + 1
+			: $tokens[$scopeOwnerPointer]['scope_opener'] + 1;
+
+		for ($i = $startCheckPointer; $i <= $scopeCloserPointer; $i++) {
+			if (!ScopeHelper::isInSameScope($phpcsFile, $i, $firstPointerInScope)) {
+				continue;
+			}
+
+			if (
+				$tokens[$i]['code'] === T_VARIABLE
+				&& self::isUsedAsVariable($phpcsFile, $variablePointer, $i)
+			) {
+				return true;
+			}
+
+			if (
+				$tokens[$i]['code'] === T_STRING
+				&& self::isUsedInCompactFunction($phpcsFile, $variablePointer, $i)
+			) {
+				return true;
+			}
+
+			if (
+				in_array($tokens[$i]['code'], [T_DOUBLE_QUOTED_STRING, T_HEREDOC], true)
+				&& self::isUsedInScopeInString($phpcsFile, $variablePointer, $i)
+			) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static function isUsedAsVariable(File $phpcsFile, int $variablePointer, int $variableToCheckPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		if ($tokens[$variablePointer]['content'] !== $tokens[$variableToCheckPointer]['content']) {
+			return false;
+		}
+
+		if ($tokens[$variableToCheckPointer - 1]['code'] === T_DOUBLE_COLON) {
+			return false;
+		}
+
+		if (ParameterHelper::isParameter($phpcsFile, $variableToCheckPointer)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public static function isUsedInCompactFunction(File $phpcsFile, int $variablePointer, int $stringPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$stringContent = $tokens[$stringPointer]['content'];
+		if (strtolower($stringContent) !== 'compact') {
+			return false;
+		}
+
+		$parenthesisOpenerPointer = TokenHelper::findNextEffective($phpcsFile, $stringPointer + 1);
+		if ($tokens[$parenthesisOpenerPointer]['code'] !== T_OPEN_PARENTHESIS) {
+			return false;
+		}
+
+		$variableNameWithoutDollar = substr($tokens[$variablePointer]['content'], 1);
+		for ($i = $parenthesisOpenerPointer + 1; $i < $tokens[$parenthesisOpenerPointer]['parenthesis_closer']; $i++) {
+			if (preg_match('~^([\'"])' . $variableNameWithoutDollar . '\\1$~', $tokens[$i]['content'])) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private static function isUsedInScopeInString(File $phpcsFile, int $variablePointer, int $stringPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$stringContent = $tokens[$stringPointer]['content'];
+
+		$variableName = $tokens[$variablePointer]['content'];
+		if (preg_match('~(?<!\\\\)' . preg_quote($variableName, '~') . '\b(?!\()~', $stringContent)) {
+			return true;
+		}
+
+		$variableNameWithoutDollar = substr($variableName, 1);
+		if (preg_match('~\$\{' . preg_quote($variableNameWithoutDollar, '~') . '\}~', $stringContent)) {
+			return true;
+		}
+
+		return false;
+	}
+
+}

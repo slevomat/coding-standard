@@ -5,14 +5,13 @@ namespace SlevomatCodingStandard\Sniffs\Functions;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\VariableHelper;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
 use const T_COMMA;
 use const T_OPEN_PARENTHESIS;
 use const T_USE;
 use const T_VARIABLE;
-use function array_keys;
-use function array_reverse;
 use function sprintf;
 
 class UnusedInheritedVariablePassedToClosureSniff implements Sniff
@@ -45,6 +44,7 @@ class UnusedInheritedVariablePassedToClosureSniff implements Sniff
 			return;
 		}
 
+		/** @var int $closurePointer */
 		$closurePointer = TokenHelper::findPrevious($phpcsFile, T_CLOSURE, $usePointer - 1);
 
 		$currentPointer = $parenthesisOpenerPointer + 1;
@@ -60,8 +60,7 @@ class UnusedInheritedVariablePassedToClosureSniff implements Sniff
 				$parenthesisOpenerPointer,
 				$tokens[$parenthesisOpenerPointer]['parenthesis_closer'],
 				$variablePointer,
-				$tokens[$closurePointer]['scope_opener'],
-				$tokens[$closurePointer]['scope_closer']
+				$closurePointer
 			);
 
 			$currentPointer = $variablePointer + 1;
@@ -74,56 +73,17 @@ class UnusedInheritedVariablePassedToClosureSniff implements Sniff
 		int $useParenthesisOpenerPointer,
 		int $useParenthesisCloserPointer,
 		int $variablePointer,
-		int $scopeOpener,
-		int $scopeCloser
+		int $scopeOwnerPointer
 	): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$variableName = $tokens[$variablePointer]['content'];
-
-		$isInSameLevel = function (int $pointer) use ($variablePointer, $tokens): bool {
-			foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
-				if ($tokens[$conditionPointer]['level'] <= $tokens[$variablePointer]['level']) {
-					break;
-				}
-
-				if ($conditionTokenCode === T_CLOSURE) {
-					return false;
-				}
-			}
-
-			return true;
-		};
-
-		$currentPointer = $scopeOpener + 1;
-		do {
-			$usedVariablePointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $currentPointer, $scopeCloser - 1);
-			if ($usedVariablePointer === null) {
-				break;
-			}
-
-			if (isset($tokens[$usedVariablePointer]['nested_parenthesis'])) {
-				$parenthesisOpenerPointer = array_reverse(array_keys($tokens[$usedVariablePointer]['nested_parenthesis']))[0];
-				if (isset($tokens[$parenthesisOpenerPointer]['parenthesis_owner'])) {
-					$parenthesisOwnerPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_owner'];
-					if ($tokens[$parenthesisOwnerPointer]['code'] === T_CLOSURE) {
-						// Parameter
-						$currentPointer = $usedVariablePointer + 1;
-						continue;
-					}
-				}
-			}
-
-			if ($isInSameLevel($usedVariablePointer)) {
-				return;
-			}
-
-			$currentPointer = $usedVariablePointer + 1;
-		} while (true);
+		if (VariableHelper::isUsedInScope($phpcsFile, $scopeOwnerPointer, $variablePointer)) {
+			return;
+		}
 
 		$fix = $phpcsFile->addFixableError(
-			sprintf('Unused inherited variable %s passed to closure.', $variableName),
+			sprintf('Unused inherited variable %s passed to closure.', $tokens[$variablePointer]['content']),
 			$variablePointer,
 			self::CODE_UNUSED_INHERITED_VARIABLE
 		);

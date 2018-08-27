@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Variables;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_AND_EQUAL;
 use const T_CONCAT_EQUAL;
@@ -25,7 +26,6 @@ use const T_STATIC;
 use const T_VARIABLE;
 use const T_WHITESPACE;
 use const T_XOR_EQUAL;
-use function array_reverse;
 use function count;
 use function in_array;
 use function preg_match;
@@ -151,27 +151,6 @@ class UselessVariableSniff implements Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
-	private function isInSameScope(File $phpcsFile, int $firstPointer, int $secondPointer): bool
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		$getScopeLevel = function (int $pointer) use ($tokens): int {
-			$level = $tokens[$pointer]['level'];
-			foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
-				if (!in_array($conditionTokenCode, TokenHelper::$functionTokenCodes, true)) {
-					continue;
-				}
-
-				$level = $tokens[$conditionPointer]['level'];
-				break;
-			}
-
-			return $level;
-		};
-
-		return $getScopeLevel($firstPointer) === $getScopeLevel($secondPointer);
-	}
-
 	private function findPreviousVariablePointer(File $phpcsFile, int $pointer, string $variableName): ?int
 	{
 		$tokens = $phpcsFile->getTokens();
@@ -179,7 +158,7 @@ class UselessVariableSniff implements Sniff
 		for ($i = $pointer - 1; $i >= 0; $i--) {
 			if (
 				in_array($tokens[$i]['code'], TokenHelper::$functionTokenCodes, true)
-				&& $this->isInSameScope($phpcsFile, $tokens[$i]['scope_opener'] + 1, $pointer)
+				&& ScopeHelper::isInSameScope($phpcsFile, $tokens[$i]['scope_opener'] + 1, $pointer)
 			) {
 				return null;
 			}
@@ -192,7 +171,7 @@ class UselessVariableSniff implements Sniff
 				continue;
 			}
 
-			if (!$this->isInSameScope($phpcsFile, $i, $pointer)) {
+			if (!ScopeHelper::isInSameScope($phpcsFile, $i, $pointer)) {
 				continue;
 			}
 
@@ -273,7 +252,7 @@ class UselessVariableSniff implements Sniff
 				continue;
 			}
 
-			if (!$this->isInSameScope($phpcsFile, $pointer, $i)) {
+			if (!ScopeHelper::isInSameScope($phpcsFile, $pointer, $i)) {
 				continue;
 			}
 
