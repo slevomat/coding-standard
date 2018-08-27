@@ -24,3 +24,13 @@ function ($values) use ($doo): ?string {
 
 	return null;
 };
+
+function () use ($eoo) {
+	echo "$eoo";
+};
+
+function () use ($foo) {
+	echo <<<TEXT
+	${foo}
+TEXT;
+};
