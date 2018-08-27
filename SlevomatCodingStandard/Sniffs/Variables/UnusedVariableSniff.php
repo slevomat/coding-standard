@@ -453,6 +453,11 @@ class UnusedVariableSniff implements Sniff
 				return true;
 			}
 
+			$variableNameWithoutDollar = substr($variableName, 1);
+			if (preg_match('~\$\{' . preg_quote($variableNameWithoutDollar, '~') . '\}~', $tokens[$stringPointer]['content'])) {
+				return true;
+			}
+
 			$currentPointer = $stringPointer + 1;
 		} while (true);
 

@@ -121,8 +121,20 @@ function () {
 
 function () {
 	$a = '';
+	echo "${a}";
+};
+
+function () {
+	$a = '';
 	echo <<<TEXT
 	$a
+TEXT;
+};
+
+function () {
+	$a = '';
+	echo <<<TEXT
+	${a}
 TEXT;
 };
 
