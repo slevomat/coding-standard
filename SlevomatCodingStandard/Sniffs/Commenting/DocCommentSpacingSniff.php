@@ -101,6 +101,7 @@ class DocCommentSpacingSniff implements Sniff
 		uasort($annotations, function (Annotation $a, Annotation $b): int {
 			return $a->getStartPointer() <=> $b->getEndPointer();
 		});
+		$annotations = array_values($annotations);
 		$annotationsCount = count($annotations);
 
 		$firstAnnotation = $annotationsCount > 0 ? $annotations[0] : null;
