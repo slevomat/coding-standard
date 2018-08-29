@@ -30,6 +30,7 @@ use const T_MINUS_EQUAL;
 use const T_MOD_EQUAL;
 use const T_MUL_EQUAL;
 use const T_OBJECT_OPERATOR;
+use const T_OPEN_SHORT_ARRAY;
 use const T_OPEN_TAG;
 use const T_OR_EQUAL;
 use const T_PLUS_EQUAL;
@@ -92,6 +93,10 @@ class UnusedVariableSniff implements Sniff
 		}
 
 		if ($this->isUsedInLoop($phpcsFile, $variablePointer, $variableName)) {
+			return;
+		}
+
+		if ($this->isUsedAsKeyOrValueInArray($phpcsFile, $variablePointer)) {
 			return;
 		}
 
@@ -314,6 +319,29 @@ class UnusedVariableSniff implements Sniff
 		}
 
 		return false;
+	}
+
+	private function isUsedAsKeyOrValueInArray(File $phpcsFile, int $variablePointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$arrayOpenerPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_SHORT_ARRAY, $variablePointer - 1);
+		if ($arrayOpenerPointer === null) {
+			return false;
+		}
+
+		$arrayCloserPointer = $tokens[$arrayOpenerPointer]['bracket_closer'];
+		if ($arrayCloserPointer < $variablePointer) {
+			return false;
+		}
+
+		$pointerAfterArrayCloser = TokenHelper::findNextEffective($phpcsFile, $arrayCloserPointer + 1);
+		if ($tokens[$pointerAfterArrayCloser]['code'] === T_EQUAL) {
+			return false;
+		}
+
+		$pointerBeforeVariable = TokenHelper::findPreviousEffective($phpcsFile, $variablePointer - 1);
+		return in_array($tokens[$pointerBeforeVariable]['code'], [T_OPEN_SHORT_ARRAY, T_COMMA, T_DOUBLE_ARROW], true);
 	}
 
 	private function isStaticVariable(File $phpcsFile, int $functionPointer, string $variableName): bool

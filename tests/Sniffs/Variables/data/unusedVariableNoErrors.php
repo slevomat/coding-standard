@@ -142,3 +142,12 @@ function () {
 	$a = 10;
 	max(1, $a += 10);
 };
+
+function () {
+	$a = 1;
+	$b = 1;
+	$c = [
+		$b-- => $a++
+	];
+	return $c;
+};
