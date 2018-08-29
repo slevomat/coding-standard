@@ -27,4 +27,10 @@ class Whatever
 	{
 		return get_class($this->anything);
 	}
+
+	public function getClassWithSomethingElse()
+	{
+		return get_class(new stdClass());
+	}
+
 }

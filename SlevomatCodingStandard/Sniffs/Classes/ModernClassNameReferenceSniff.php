@@ -89,8 +89,13 @@ class ModernClassNameReferenceSniff implements Sniff
 		}
 
 		if ($functionName === 'get_class') {
-			$parameterPointer = TokenHelper::findNext($phpcsFile, T_VARIABLE, $openParenthesisPointer + 1, $tokens[$openParenthesisPointer]['parenthesis_closer']);
-			if ($parameterPointer !== null) {
+			$parameterPointer = TokenHelper::findNextEffective($phpcsFile, $openParenthesisPointer + 1, $tokens[$openParenthesisPointer]['parenthesis_closer']);
+
+			if ($parameterPointer === null) {
+				$fixedContent = 'self::class';
+			} elseif ($tokens[$parameterPointer]['code'] !== T_VARIABLE) {
+				return;
+			} else {
 				$parameterName = strtolower($tokens[$parameterPointer]['content']);
 				if ($parameterName !== '$this') {
 					return;
@@ -102,8 +107,6 @@ class ModernClassNameReferenceSniff implements Sniff
 				}
 
 				$fixedContent = 'static::class';
-			} else {
-				$fixedContent = 'self::class';
 			}
 
 		} elseif ($functionName === 'get_parent_class') {
