@@ -10,11 +10,14 @@ use const T_AND_EQUAL;
 use const T_CONCAT_EQUAL;
 use const T_DIV_EQUAL;
 use const T_DOC_COMMENT_CLOSE_TAG;
+use const T_ELSEIF;
 use const T_EQUAL;
+use const T_IF;
 use const T_MINUS_EQUAL;
 use const T_MOD_EQUAL;
 use const T_MUL_EQUAL;
 use const T_OPEN_CURLY_BRACKET;
+use const T_OPEN_PARENTHESIS;
 use const T_OR_EQUAL;
 use const T_PLUS_EQUAL;
 use const T_POW_EQUAL;
@@ -24,8 +27,10 @@ use const T_SL_EQUAL;
 use const T_SR_EQUAL;
 use const T_STATIC;
 use const T_VARIABLE;
+use const T_WHILE;
 use const T_WHITESPACE;
 use const T_XOR_EQUAL;
+use function array_key_exists;
 use function count;
 use function in_array;
 use function preg_match;
@@ -101,6 +106,14 @@ class UselessVariableSniff implements Sniff
 		];
 
 		$pointerBeforePreviousVariable = TokenHelper::findPreviousEffective($phpcsFile, $previousVariablePointer - 1);
+		if (
+			$tokens[$pointerBeforePreviousVariable]['code'] === T_OPEN_PARENTHESIS
+			&& array_key_exists('parenthesis_owner', $tokens[$pointerBeforePreviousVariable])
+			&& in_array($tokens[$tokens[$pointerBeforePreviousVariable]['parenthesis_owner']]['code'], [T_IF, T_ELSEIF, T_WHILE], true)
+		) {
+			return;
+		}
+
 		if (!in_array($tokens[$pointerBeforePreviousVariable]['code'], [T_SEMICOLON, T_OPEN_CURLY_BRACKET], true)) {
 			$phpcsFile->addError(...$errorParameters);
 			return;

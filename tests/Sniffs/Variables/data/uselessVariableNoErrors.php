@@ -67,3 +67,11 @@ function differentScope() {
 		return $k;
 	}
 }
+
+function assigmentInCondition() {
+	if ($l = 'l') {
+	    $this->doSomething();
+	    return $l;
+	}
+
+}
