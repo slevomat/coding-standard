@@ -12,6 +12,7 @@ use const T_OPEN_PARENTHESIS;
 use const T_STRING;
 use const T_VARIABLE;
 use function in_array;
+use function sprintf;
 use function strtolower;
 
 class ModernClassNameReferenceSniff implements Sniff
@@ -50,7 +51,7 @@ class ModernClassNameReferenceSniff implements Sniff
 
 	private function checkMagicConstant(File $phpcsFile, int $pointer): void
 	{
-		$fix = $phpcsFile->addFixableError('Class name referenced via magic constant', $pointer, self::CODE_CLASS_NAME_REFERENCED_VIA_MAGIC_CONSTANT);
+		$fix = $phpcsFile->addFixableError('Class name referenced via magic constant.', $pointer, self::CODE_CLASS_NAME_REFERENCED_VIA_MAGIC_CONSTANT);
 
 		if (!$fix) {
 			return;
@@ -111,7 +112,7 @@ class ModernClassNameReferenceSniff implements Sniff
 			$fixedContent = 'static::class';
 		}
 
-		$fix = $phpcsFile->addFixableError('Class name referenced via call of function %s', $pointer, self::CODE_CLASS_NAME_REFERENCED_VIA_FUNCTION_CALL);
+		$fix = $phpcsFile->addFixableError(sprintf('Class name referenced via call of function %s().', $functionName), $pointer, self::CODE_CLASS_NAME_REFERENCED_VIA_FUNCTION_CALL);
 
 		if (!$fix) {
 			return;
