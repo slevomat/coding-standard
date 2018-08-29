@@ -39,3 +39,9 @@ $p = $pp === null ? null : $pp + 1;
 $q = $r !== null && $s !== null
 	? $s
 	: '';
+
+$t = $t && isset($v) ? $v : null;
+$t = $t || isset($v) ? $v : null;
+$t = $t and isset($v) ? $v : null;
+$t = $t or isset($v) ? $v : null;
+$t = $t xor isset($v) ? $v : null;

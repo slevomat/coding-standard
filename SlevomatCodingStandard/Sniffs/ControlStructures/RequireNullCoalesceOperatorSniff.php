@@ -67,6 +67,10 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 			return;
 		}
 
+		if (in_array($tokens[$previousPointer]['code'], Tokens::$booleanOperators, true)) {
+			return;
+		}
+
 		$openParenthesisPointer = TokenHelper::findNextEffective($phpcsFile, $issetPointer + 1);
 		$closeParenthesisPointer = $tokens[$openParenthesisPointer]['parenthesis_closer'];
 
