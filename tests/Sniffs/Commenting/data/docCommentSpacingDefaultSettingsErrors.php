@@ -48,4 +48,18 @@ class Whatever
 
 	}
 
+	/**
+	 * Another method.
+	 *
+	 * @link https://github.com/slevomat/coding-standard
+	 *
+	 * @todo Make things happen.
+	 *
+	 * @link https://github.com/slevomat/coding-standard
+	 */
+	public function anotherMethod()
+	{
+
+	}
+
 }
