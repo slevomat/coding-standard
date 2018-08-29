@@ -35,7 +35,7 @@ class DocCommentSpacingSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/docCommentSpacingDefaultSettingsErrors.php');
 
-		self::assertSame(7, $report->getErrorCount());
+		self::assertSame(9, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, DocCommentSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_CONTENT);
 		self::assertSniffError($report, 26, DocCommentSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_CONTENT);
@@ -44,6 +44,8 @@ class DocCommentSpacingSniffTest extends TestCase
 		self::assertSniffError($report, 30, DocCommentSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_DESCRIPTION_AND_ANNOTATIONS);
 
 		self::assertSniffError($report, 42, DocCommentSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_DIFFERENT_ANNOTATIONS_TYPES);
+		self::assertSniffError($report, 56, DocCommentSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_DIFFERENT_ANNOTATIONS_TYPES);
+		self::assertSniffError($report, 58, DocCommentSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_DIFFERENT_ANNOTATIONS_TYPES);
 
 		self::assertSniffError($report, 9, DocCommentSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTENT);
 		self::assertSniffError($report, 42, DocCommentSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTENT);
