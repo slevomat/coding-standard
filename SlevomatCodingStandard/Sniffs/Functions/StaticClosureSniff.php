@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_CLOSURE;
+use const T_PARENT;
 use const T_STATIC;
 use const T_VARIABLE;
 
@@ -40,6 +41,11 @@ class StaticClosureSniff implements Sniff
 
 		$thisPointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, '$this', $tokens[$closurePointer]['scope_opener'] + 1, $tokens[$closurePointer]['scope_closer']);
 		if ($thisPointer !== null) {
+			return;
+		}
+
+		$parentPointer = TokenHelper::findNext($phpcsFile, T_PARENT, $tokens[$closurePointer]['scope_opener'] + 1, $tokens[$closurePointer]['scope_closer']);
+		if ($parentPointer !== null) {
 			return;
 		}
 
