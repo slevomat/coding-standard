@@ -8,7 +8,7 @@ function noParameter()
 /**
  * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
  */
-function wholeSniffSupress($a)
+function wholeSniffSuppress($a)
 {
 
 }
@@ -16,10 +16,18 @@ function wholeSniffSupress($a)
 /**
  * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
  */
-function codeSupress($a)
+function codeSuppress($a)
 {
 
 }
+
+/**
+ * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
+ */
+function ($closureSuppress)
+{
+
+};
 
 function usedParameter($a)
 {
