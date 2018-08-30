@@ -127,7 +127,7 @@ class VariableHelper
 		$stringContent = $tokens[$stringPointer]['content'];
 
 		$variableName = $tokens[$variablePointer]['content'];
-		if (preg_match('~(?<!\\\\)' . preg_quote($variableName, '~') . '\b(?!\()~', $stringContent)) {
+		if (preg_match('~(?<!\\\\)' . preg_quote($variableName, '~') . '\b~', $stringContent)) {
 			return true;
 		}
 
