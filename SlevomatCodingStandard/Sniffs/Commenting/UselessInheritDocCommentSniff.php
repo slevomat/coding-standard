@@ -11,6 +11,7 @@ use const T_DOC_COMMENT_OPEN_TAG;
 use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_WHITESPACE;
 use const T_WHITESPACE;
+use function array_merge;
 use function in_array;
 use function preg_match;
 
@@ -51,6 +52,7 @@ class UselessInheritDocCommentSniff implements Sniff
 			return;
 		}
 
+		/** @var int $docCommentOwnerPointer */
 		$docCommentOwnerPointer = TokenHelper::findNext($phpcsFile, array_merge(TokenHelper::$functionTokenCodes, TokenHelper::$typeHintTokenCodes), $tokens[$docCommentOpenPointer]['comment_closer'] + 1);
 		if (in_array($tokens[$docCommentOwnerPointer]['code'], TokenHelper::$functionTokenCodes, true)) {
 			$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $docCommentOwnerPointer);
