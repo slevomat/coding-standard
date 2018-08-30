@@ -32,4 +32,9 @@ class Whatever extends Anything
 		return static::class;
 	}
 
+	public function getMethodWithFullyQualifiedName()
+	{
+		return static::class;
+	}
+
 }

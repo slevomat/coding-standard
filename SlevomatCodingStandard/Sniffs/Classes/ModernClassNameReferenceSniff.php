@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_CLASS_C;
 use const T_DOUBLE_COLON;
+use const T_NS_SEPARATOR;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
 use const T_STRING;
@@ -122,6 +123,9 @@ class ModernClassNameReferenceSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
+		if ($tokens[$pointer - 1]['code'] === T_NS_SEPARATOR) {
+			$phpcsFile->fixer->replaceToken($pointer - 1, '');
+		}
 		$phpcsFile->fixer->replaceToken($pointer, $fixedContent);
 		for ($i = $pointer + 1; $i <= $tokens[$openParenthesisPointer]['parenthesis_closer']; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');

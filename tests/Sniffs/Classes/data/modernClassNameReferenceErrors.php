@@ -32,4 +32,9 @@ class Whatever extends Anything
 		return get_called_class();
 	}
 
+	public function getMethodWithFullyQualifiedName()
+	{
+		return \get_called_class();
+	}
+
 }
