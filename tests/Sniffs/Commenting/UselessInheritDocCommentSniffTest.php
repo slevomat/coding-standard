@@ -17,12 +17,14 @@ class UselessInheritDocCommentSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/uselessInheritDocCommentSniffErrors.php');
 
-		self::assertSame(4, $report->getErrorCount());
+		self::assertSame(6, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, UselessInheritDocCommentSniff::CODE_USELESS_INHERIT_DOC_COMMENT);
 		self::assertSniffError($report, 11, UselessInheritDocCommentSniff::CODE_USELESS_INHERIT_DOC_COMMENT);
 		self::assertSniffError($report, 19, UselessInheritDocCommentSniff::CODE_USELESS_INHERIT_DOC_COMMENT);
 		self::assertSniffError($report, 27, UselessInheritDocCommentSniff::CODE_USELESS_INHERIT_DOC_COMMENT);
+		self::assertSniffError($report, 41, UselessInheritDocCommentSniff::CODE_USELESS_INHERIT_DOC_COMMENT);
+		self::assertSniffError($report, 49, UselessInheritDocCommentSniff::CODE_USELESS_INHERIT_DOC_COMMENT);
 
 		self::assertAllFixedInFile($report);
 	}

@@ -4,7 +4,9 @@ namespace SlevomatCodingStandard\Sniffs\Commenting;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_WHITESPACE;
@@ -47,6 +49,29 @@ class UselessInheritDocCommentSniff implements Sniff
 
 		if (!preg_match('~^(?:\{@inheritDoc\}|@inheritDoc)$~i', $docCommentContent)) {
 			return;
+		}
+
+		$docCommentOwnerPointer = TokenHelper::findNext($phpcsFile, array_merge(TokenHelper::$functionTokenCodes, TokenHelper::$typeHintTokenCodes), $tokens[$docCommentOpenPointer]['comment_closer'] + 1);
+		if (in_array($tokens[$docCommentOwnerPointer]['code'], TokenHelper::$functionTokenCodes, true)) {
+			$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $docCommentOwnerPointer);
+			if ($returnTypeHint === null) {
+				return;
+			}
+
+			if (TypeHintHelper::isSimpleIterableTypeHint($returnTypeHint->getTypeHint())) {
+				return;
+			}
+
+			$parametersTypeHints = FunctionHelper::getParametersTypeHints($phpcsFile, $docCommentOwnerPointer);
+			foreach ($parametersTypeHints as $parameterTypeHint) {
+				if ($parameterTypeHint === null) {
+					return;
+				}
+
+				if (TypeHintHelper::isSimpleIterableTypeHint($parameterTypeHint->getTypeHint())) {
+					return;
+				}
+			}
 		}
 
 		$fix = $phpcsFile->addFixableError('Useless documentation comment with @inheritDoc.', $docCommentOpenPointer, self::CODE_USELESS_INHERIT_DOC_COMMENT);
