@@ -63,3 +63,17 @@ list($c) = [];
 switch (true) {
 	case !($boo !== null):
 }
+
+class ClassWithClosure
+{
+	private $closure;
+
+	public function __construct()
+	{
+		$this->closure = function () {
+			echo 123;
+		};
+
+		($this->closure)();
+	}
+}

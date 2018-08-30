@@ -155,8 +155,8 @@ class UselessParenthesesSniff implements Sniff
 			return;
 		}
 
-		$ternaryOperatorPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1);
-		if ($tokens[$ternaryOperatorPointer]['code'] === T_INLINE_THEN) {
+		$pointerAfterParenthesisCloser = TokenHelper::findNextEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1);
+		if (in_array($tokens[$pointerAfterParenthesisCloser]['code'], [T_INLINE_THEN, T_OPEN_PARENTHESIS], true)) {
 			return;
 		}
 
