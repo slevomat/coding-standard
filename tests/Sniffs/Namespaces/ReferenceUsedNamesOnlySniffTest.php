@@ -115,6 +115,14 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 		);
 	}
 
+	public function testReferencingDefinedFunction(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/referencingDefinedFunction.php', [
+			'allowFallbackGlobalFunctions' => false,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
 	public function testReferencingGlobalConstantViaFallback(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/shouldBeInUseStatement.php', [
@@ -126,6 +134,14 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FALLBACK_GLOBAL_NAME,
 			'PHP_VERSION'
 		);
+	}
+
+	public function testReferencingDefinedConstant(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/referencingDefinedConstant.php', [
+			'allowFallbackGlobalConstants' => false,
+		]);
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	/**

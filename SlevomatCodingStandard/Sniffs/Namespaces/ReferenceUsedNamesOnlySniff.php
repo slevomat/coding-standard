@@ -246,8 +246,15 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 				&& !NamespaceHelper::hasNamespace($name)
 				&& NamespaceHelper::findCurrentNamespaceName($phpcsFile, $startPointer) !== null
 				&& !array_key_exists(UseStatement::getUniqueId($reference->type, $name), $useStatements);
-			$isGlobalFunctionFallback = $reference->isFunction && $isGlobalFallback;
-			$isGlobalConstantFallback = $reference->isConstant && $isGlobalFallback;
+
+			$isGlobalFunctionFallback = false;
+			if ($reference->isFunction && $isGlobalFallback) {
+				$isGlobalFunctionFallback = !array_key_exists(strtolower($reference->name), $definedFunctionsIndex);
+			}
+			$isGlobalConstantFallback = false;
+			if ($reference->isConstant && $isGlobalFallback) {
+				$isGlobalConstantFallback = !array_key_exists($reference->name, $definedConstantsIndex);
+			}
 
 			if ($isFullyQualified) {
 				if ($reference->isClass && $this->allowFullyQualifiedNameForCollidingClasses) {
