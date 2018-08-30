@@ -73,5 +73,10 @@ abstract class Whatever
 		$this->$property = $value;
 	}
 
+	private static function staticMethodCallViaVariable(string $methodName): ?self
+	{
+		return self::$methodName();
+	}
+
 }
 

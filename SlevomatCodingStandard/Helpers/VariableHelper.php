@@ -86,7 +86,8 @@ class VariableHelper
 		}
 
 		if ($tokens[$variableToCheckPointer - 1]['code'] === T_DOUBLE_COLON) {
-			return false;
+			$pointerAfterVariable = TokenHelper::findNextEffective($phpcsFile, $variableToCheckPointer + 1);
+			return $tokens[$pointerAfterVariable]['code'] === T_OPEN_PARENTHESIS;
 		}
 
 		if (ParameterHelper::isParameter($phpcsFile, $variableToCheckPointer)) {
