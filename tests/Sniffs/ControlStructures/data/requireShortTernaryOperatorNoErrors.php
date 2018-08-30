@@ -36,6 +36,8 @@ $array[$$a ?: 0] = null;
 
 $x = true ?: false;
 
+$x = $xx && $yy ? $yy : false;
+
 class Whatever
 {
 

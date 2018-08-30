@@ -106,6 +106,10 @@ class RequireShortTernaryOperatorSniff implements Sniff
 		/** @var int $pointerBeforeCondition */
 		$pointerBeforeCondition = TokenHelper::findPreviousEffective($phpcsFile, $conditionStartPointer - 1);
 
+		if (in_array($tokens[$pointerBeforeCondition]['code'], Tokens::$booleanOperators, true)) {
+			return;
+		}
+
 		if (in_array($tokens[$pointerBeforeCondition]['code'], Tokens::$comparisonTokens, true)) {
 			// Yoda condition
 			return;
