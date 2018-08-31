@@ -89,28 +89,40 @@ class ModernClassNameReferenceSniff implements Sniff
 			return;
 		}
 
-		if ($functionName === 'get_class') {
-			$parameterPointer = TokenHelper::findNextEffective($phpcsFile, $openParenthesisPointer + 1, $tokens[$openParenthesisPointer]['parenthesis_closer']);
+		$parameterPointer = TokenHelper::findNextEffective($phpcsFile, $openParenthesisPointer + 1, $tokens[$openParenthesisPointer]['parenthesis_closer']);
 
+		$isThisParameter = function () use ($phpcsFile, $tokens, $openParenthesisPointer, $parameterPointer): bool {
+			if ($tokens[$parameterPointer]['code'] !== T_VARIABLE) {
+				return false;
+			}
+
+			$parameterName = strtolower($tokens[$parameterPointer]['content']);
+			if ($parameterName !== '$this') {
+				return false;
+			}
+
+			$pointerAfterParameterPointer = TokenHelper::findNextEffective($phpcsFile, $parameterPointer + 1);
+			if ($pointerAfterParameterPointer !== $tokens[$openParenthesisPointer]['parenthesis_closer']) {
+				return false;
+			}
+
+			return true;
+		};
+
+		if ($functionName === 'get_class') {
 			if ($parameterPointer === null) {
 				$fixedContent = 'self::class';
-			} elseif ($tokens[$parameterPointer]['code'] !== T_VARIABLE) {
-				return;
-			} else {
-				$parameterName = strtolower($tokens[$parameterPointer]['content']);
-				if ($parameterName !== '$this') {
-					return;
-				}
-
-				$pointerAfterParameterPointer = TokenHelper::findNextEffective($phpcsFile, $parameterPointer + 1);
-				if ($pointerAfterParameterPointer !== $tokens[$openParenthesisPointer]['parenthesis_closer']) {
-					return;
-				}
-
+			} elseif ($isThisParameter()) {
 				$fixedContent = 'static::class';
+			} else {
+				return;
 			}
 
 		} elseif ($functionName === 'get_parent_class') {
+			if ($parameterPointer !== null && !$isThisParameter()) {
+				return;
+			}
+
 			$fixedContent = 'parent::class';
 		} else {
 			$fixedContent = 'static::class';
