@@ -54,6 +54,52 @@ function moreAssigments() {
 	return $i;
 }
 
+function moreAssigmentsWithIf() {
+	$i = 'i';
+	if (true) {
+		$i .= 'ii';
+	}
+	$i .= 'ii';
+	return $i;
+}
+
+function moreAssigmentsWithFor($values) {
+	$i = 'i';
+	for ($x = 0; $x < count($values); $x++) {
+		$i .= $values[$x];
+	}
+	$i .= 'ii';
+	return $i;
+}
+
+function moreAssigmentsWithForeach($values) {
+	$i = 'i';
+	foreach ($values as $value) {
+		$i .= $value;
+	}
+	$i .= 'ii';
+	return $i;
+}
+
+function moreAssigmentsWithWhile($values) {
+	$i = 'i';
+	while ($value = current($values)) {
+		$i .= $value;
+	}
+	$i .= 'ii';
+	return $i;
+}
+
+function moreAssigmentsWithDo($values) {
+	$i = 'i';
+	$value = current($values);
+	do {
+		$i .= $value;
+	} while ($value = next($values));
+	$i .= 'ii';
+	return $i;
+}
+
 function somethingBetweenAssigmentAndReturn() {
 	$j = 'j';
 	doSomething();

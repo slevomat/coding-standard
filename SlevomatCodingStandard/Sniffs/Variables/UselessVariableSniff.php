@@ -9,6 +9,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_AND_EQUAL;
 use const T_CONCAT_EQUAL;
 use const T_DIV_EQUAL;
+use const T_DO;
 use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_ELSEIF;
 use const T_EQUAL;
@@ -31,6 +32,8 @@ use const T_WHILE;
 use const T_WHITESPACE;
 use const T_XOR_EQUAL;
 use function array_key_exists;
+use function array_keys;
+use function array_reverse;
 use function count;
 use function in_array;
 use function preg_match;
@@ -244,7 +247,7 @@ class UselessVariableSniff implements Sniff
 			return false;
 		}
 
-		return $this->areBothPointersNearby($phpcsFile, $previousVariablePointer, $variablePointer);
+		return $this->areBothVariablesNearby($phpcsFile, $previousVariablePointer, $variablePointer);
 	}
 
 	private function areBothPointersNearby(File $phpcsFile, int $firstPointer, int $secondPointer): bool
@@ -253,6 +256,23 @@ class UselessVariableSniff implements Sniff
 		$pointerAfterFirstVariableSemicolon = TokenHelper::findNextEffective($phpcsFile, $firstVariableSemicolonPointer + 1);
 
 		return $pointerAfterFirstVariableSemicolon === $secondPointer;
+	}
+
+	private function areBothVariablesNearby(File $phpcsFile, int $firstVariablePointer, int $secondVariablePointer): bool
+	{
+		if ($this->areBothPointersNearby($phpcsFile, $firstVariablePointer, $secondVariablePointer)) {
+			return true;
+		}
+
+		$tokens = $phpcsFile->getTokens();
+
+		$lastConditionPointer = array_reverse(array_keys($tokens[$firstVariablePointer]['conditions']))[0];
+		$lastConditionScopeCloserPointer = $tokens[$lastConditionPointer]['scope_closer'];
+		if ($tokens[$lastConditionPointer]['code'] === T_DO) {
+			$lastConditionScopeCloserPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $lastConditionScopeCloserPointer + 1);
+		}
+
+		return TokenHelper::findNextEffective($phpcsFile, $lastConditionScopeCloserPointer + 1) === $secondVariablePointer;
 	}
 
 	private function findSemicolon(File $phpcsFile, int $pointer): int
