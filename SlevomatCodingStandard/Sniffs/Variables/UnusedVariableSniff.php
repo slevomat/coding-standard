@@ -77,12 +77,16 @@ class UnusedVariableSniff implements Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
+		$variableName = $tokens[$variablePointer]['content'];
+
+		if ($variableName === '$this') {
+			return;
+		}
+
 		if (in_array($tokens[$variablePointer - 1]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
 			// Property
 			return;
 		}
-
-		$variableName = $tokens[$variablePointer]['content'];
 
 		if ($this->isUsedAsParameter($phpcsFile, $variablePointer)) {
 			return;

@@ -156,3 +156,12 @@ function () {
 	];
 	return $c;
 };
+
+class Whatever
+{
+
+	public function listFunction($a, $b) {
+		list($this->a, $this->b) = [$a, $b];
+	}
+
+}
