@@ -114,7 +114,7 @@ Disallows using `++` and `--` operators.
 
 #### SlevomatCodingStandard.Operators.RequireCombinedAssignmentOperator 🔧
 
-Requires using combined assigment operators, eg `+=`, `.=` etc.
+Requires using combined assignment operators, eg `+=`, `.=` etc.
 
 ### Cleaning - detecting dead code
 
