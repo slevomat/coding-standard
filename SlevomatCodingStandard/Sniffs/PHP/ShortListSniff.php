@@ -41,7 +41,9 @@ class ShortListSniff implements Sniff
 		$endPointer = $tokens[$startPointer]['parenthesis_closer'];
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($pointer, '');
+		for ($i = $pointer; $i < $startPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 		$phpcsFile->fixer->replaceToken($startPointer, '[');
 		$phpcsFile->fixer->replaceToken($endPointer, ']');
 		$phpcsFile->fixer->endChangeset();

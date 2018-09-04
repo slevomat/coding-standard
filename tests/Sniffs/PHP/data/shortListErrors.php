@@ -30,3 +30,5 @@ foreach (
 		)
 	)
 ) {}
+
+list ($b) = $a;

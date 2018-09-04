@@ -16,7 +16,7 @@ class ShortListSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/shortListErrors.php');
 
-		self::assertSame(14, $report->getErrorCount());
+		self::assertSame(15, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, ShortListSniff::CODE_LONG_LIST_USED);
 		self::assertSniffError($report, 4, ShortListSniff::CODE_LONG_LIST_USED);
@@ -32,6 +32,7 @@ class ShortListSniffTest extends TestCase
 		self::assertSniffError($report, 25, ShortListSniff::CODE_LONG_LIST_USED);
 		self::assertSniffError($report, 27, ShortListSniff::CODE_LONG_LIST_USED);
 		self::assertSniffError($report, 29, ShortListSniff::CODE_LONG_LIST_USED);
+		self::assertSniffError($report, 34, ShortListSniff::CODE_LONG_LIST_USED);
 
 		self::assertAllFixedInFile($report);
 	}
