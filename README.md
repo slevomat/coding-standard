@@ -88,6 +88,10 @@ Assignment in `while` loop condition is specifically allowed because it's common
 
 This is a great addition to already existing `SlevomatCodingStandard.ControlStructures.DisallowYodaComparison` because it prevents the danger of assigning something by mistake instead of using comparison operator like `===`.
 
+#### SlevomatCodingStandard.ControlStructures.DisallowContinueWithoutIntegerOperandInSwitch 🔧
+
+Disallows use of `continue` without integer operand in `switch` because it's emits warning in PHP 7.3 and higher.
+
 #### SlevomatCodingStandard.ControlStructures.DisallowEmpty
 
 Disallows use of `empty()`.
