@@ -188,7 +188,7 @@ class UselessParenthesesSniff implements Sniff
 
 				$contentEndPointer = $tokens[$nextPointer]['parenthesis_closer'];
 			} while (true);
-		} elseif (in_array($tokens[$notBooleanNotOperatorPointer]['code'], [T_ISSET, T_EMPTY], true)) {
+		} else {
 			$nextPointer = TokenHelper::findNext($phpcsFile, T_OPEN_PARENTHESIS, $notBooleanNotOperatorPointer + 1);
 			$contentEndPointer = $tokens[$nextPointer]['parenthesis_closer'];
 		}
