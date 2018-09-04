@@ -327,6 +327,14 @@ Enforces using shorthand scalar typehint variants in phpDocs: `int` instead of `
 
 Enforces `null` type hint on last position in `@var`, `@param` and `@return` annotations.
 
+
+#### SlevomatCodingStandard.PHP.OptimizedFunctionsWithoutUnpacking
+
+PHP optimizes some internal functions into special opcodes on VM level. Such optimization results in much faster execution compared to calling standard function. This only works when these functions are not invoked with argument unpacking (`...`).
+
+The list of these functions varies across PHP versions, but is the same as functions that must be referenced by their global name (either by `\ ` prefix or using `use function`), not a fallback name inside namespaced code.
+
+
 #### SlevomatCodingStandard.PHP.ShortList 🔧
 
 Enforces using short form of list syntax, `[...]` instead of `list(...)`.
