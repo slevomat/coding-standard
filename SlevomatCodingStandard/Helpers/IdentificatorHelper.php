@@ -16,6 +16,7 @@ use const T_SELF;
 use const T_STATIC;
 use const T_STRING;
 use const T_VARIABLE;
+use function array_key_exists;
 use function in_array;
 
 class IdentificatorHelper
@@ -111,7 +112,11 @@ class IdentificatorHelper
 			return self::getStartPointerBeforeOperator($phpcsFile, $previousPointer);
 		}
 
-		if (in_array($tokens[$previousPointer]['code'], [T_CLOSE_CURLY_BRACKET, T_CLOSE_SQUARE_BRACKET], true)) {
+		if ($tokens[$previousPointer]['code'] === T_CLOSE_SQUARE_BRACKET) {
+			return self::getStartPointerBeforeVariablePart($phpcsFile, $tokens[$previousPointer]['bracket_opener']);
+		}
+
+		if ($tokens[$previousPointer]['code'] === T_CLOSE_CURLY_BRACKET && !array_key_exists('scope_condition', $tokens[$previousPointer])) {
 			return self::getStartPointerBeforeVariablePart($phpcsFile, $tokens[$previousPointer]['bracket_opener']);
 		}
 
