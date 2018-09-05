@@ -145,6 +145,10 @@ Looks for unused inherited variables passed to closure via `use`.
 
 Looks for unused parameters.
 
+#### SlevomatCodingStandard.Functions.UselessParameterDefaultValue 🚧
+
+Looks for useless parameter default value.
+
 #### SlevomatCodingStandard.Namespaces.UnusedUses 🔧
 
 Looks for unused imports from other namespaces.
