@@ -42,4 +42,12 @@ class UnusedVariableSniffTest extends TestCase
 		self::assertSniffError($report, 101, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $a.');
 	}
 
+	public function testNoErrorsWithIgnoredUnusedValuesWhenOnlyKeysAreUsedInForeach(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/unusedVariableNoErrorsWithIgnoredUnusedValuesWhenOnlyKeysAreUsedInForeach.php', [
+			'ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach' => true,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
 }

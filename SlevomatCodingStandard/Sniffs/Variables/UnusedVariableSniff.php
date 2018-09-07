@@ -30,6 +30,7 @@ use const T_MINUS_EQUAL;
 use const T_MOD_EQUAL;
 use const T_MUL_EQUAL;
 use const T_OBJECT_OPERATOR;
+use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_OPEN_TAG;
 use const T_OR_EQUAL;
@@ -43,6 +44,7 @@ use const T_USE;
 use const T_VARIABLE;
 use const T_WHILE;
 use const T_XOR_EQUAL;
+use function array_key_exists;
 use function array_keys;
 use function array_merge;
 use function array_reverse;
@@ -53,6 +55,9 @@ class UnusedVariableSniff implements Sniff
 {
 
 	public const CODE_UNUSED_VARIABLE = 'UnusedVariable';
+
+	/** @var bool */
+	public $ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach = false;
 
 	/**
 	 * @return mixed[]
@@ -101,6 +106,10 @@ class UnusedVariableSniff implements Sniff
 		}
 
 		if ($this->isUsedAsKeyOrValueInArray($phpcsFile, $variablePointer)) {
+			return;
+		}
+
+		if ($this->isValueInForeachAndErrorIsIgnored($phpcsFile, $variablePointer)) {
 			return;
 		}
 
@@ -346,6 +355,27 @@ class UnusedVariableSniff implements Sniff
 
 		$pointerBeforeVariable = TokenHelper::findPreviousEffective($phpcsFile, $variablePointer - 1);
 		return in_array($tokens[$pointerBeforeVariable]['code'], [T_OPEN_SHORT_ARRAY, T_COMMA, T_DOUBLE_ARROW], true);
+	}
+
+	private function isValueInForeachAndErrorIsIgnored(File $phpcsFile, int $variablePointer): bool
+	{
+		if (!$this->ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach) {
+			return false;
+		}
+
+		$tokens = $phpcsFile->getTokens();
+
+		$parenthesisOpenerPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_PARENTHESIS, $variablePointer - 1);
+		if ($parenthesisOpenerPointer === null) {
+			return false;
+		}
+
+		if ($tokens[$parenthesisOpenerPointer]['parenthesis_closer'] < $variablePointer) {
+			return false;
+		}
+
+		return array_key_exists('parenthesis_owner', $tokens[$parenthesisOpenerPointer])
+			&& $tokens[$tokens[$parenthesisOpenerPointer]['parenthesis_owner']]['code'] === T_FOREACH;
 	}
 
 	private function isStaticVariable(File $phpcsFile, int $functionPointer, string $variableName): bool
