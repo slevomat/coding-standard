@@ -186,7 +186,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
 	protected static function getSniffClassReflection(): ReflectionClass
 	{
-		static $reflections;
+		static $reflections = [];
 
 		$className = static::getSniffClassName();
 
