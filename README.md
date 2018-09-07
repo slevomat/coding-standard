@@ -74,6 +74,10 @@ Sniff provides the following settings:
 * `newlinesCountAfterDeclare`: allows to set 0 to N newlines to be between `declare` and next statement
 * `spacesCountAroundEqualsSign`: allows to set number of required spaces around the `=` operator
 
+#### SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation
+
+Disallows implicit array creation.
+
 #### SlevomatCodingStandard.ControlStructures.AssignmentInCondition
 
 Disallows assignments in `if`, `elseif` and `do-while` loop conditions:
