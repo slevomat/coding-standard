@@ -78,7 +78,9 @@ class UselessParenthesesSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$ternaryOperatorPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1);
+		$parenthesisCloserPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_closer'];
+
+		$ternaryOperatorPointer = TokenHelper::findNextEffective($phpcsFile, $parenthesisCloserPointer + 1);
 		if ($tokens[$ternaryOperatorPointer]['code'] !== T_INLINE_THEN) {
 			return;
 		}
@@ -89,7 +91,7 @@ class UselessParenthesesSniff implements Sniff
 		}
 
 		$contentStartPointer = TokenHelper::findNextEffective($phpcsFile, $parenthesisOpenerPointer + 1);
-		$contentEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] - 1);
+		$contentEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisCloserPointer - 1);
 
 		for ($i = $contentStartPointer; $i <= $contentEndPointer; $i++) {
 			if ($tokens[$i]['code'] === T_INLINE_THEN) {
@@ -107,7 +109,7 @@ class UselessParenthesesSniff implements Sniff
 		for ($i = $parenthesisOpenerPointer; $i < $contentStartPointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
-		for ($i = $contentEndPointer + 1; $i <= $tokens[$parenthesisOpenerPointer]['parenthesis_closer']; $i++) {
+		for ($i = $contentEndPointer + 1; $i <= $parenthesisCloserPointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 		$phpcsFile->fixer->endChangeset();
