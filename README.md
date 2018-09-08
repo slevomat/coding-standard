@@ -181,6 +181,10 @@ Looks for `use` alias that is same as unqualified name.
 
 Looks for useless parentheses.
 
+Sniff provides the following settings:
+
+* `ignoreComplexTernaryConditions` (defaults to `false`): ignores complex ternary conditions - condition must contain `&&`, `||` etc or end of line.
+
 #### SlevomatCodingStandard.PHP.OptimizedFunctionsWithoutUnpacking
 
 PHP optimizes some internal functions into special opcodes on VM level. Such optimization results in much faster execution compared to calling standard function. This only works when these functions are not invoked with argument unpacking (`...`).

@@ -26,4 +26,12 @@ class UselessParenthesesSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testNoErrorsWithIgnoredComplexTernaryConditions(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/uselessParenthesesNoErrorsWithIgnoredComplexTernaryConditions.php', [
+			'ignoreComplexTernaryConditions' => true,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
 }

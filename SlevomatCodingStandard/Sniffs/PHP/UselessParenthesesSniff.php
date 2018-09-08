@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\PHP;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_ANON_CLASS;
@@ -28,6 +29,7 @@ use const T_STRING;
 use const T_UNSET;
 use const T_USE;
 use const T_VARIABLE;
+use const T_WHITESPACE;
 use function array_key_exists;
 use function in_array;
 
@@ -35,6 +37,9 @@ class UselessParenthesesSniff implements Sniff
 {
 
 	public const CODE_USELESS_PARENTHESES = 'UselessParentheses';
+
+	/** @var bool */
+	public $ignoreComplexTernaryConditions = false;
 
 	/**
 	 * @return mixed[]
@@ -88,6 +93,16 @@ class UselessParenthesesSniff implements Sniff
 		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
 		if ($tokens[$pointerBeforeParenthesisOpener]['code'] === T_BOOLEAN_NOT) {
 			return;
+		}
+
+		if ($this->ignoreComplexTernaryConditions) {
+			if (TokenHelper::findNext($phpcsFile, Tokens::$booleanOperators, $parenthesisOpenerPointer + 1, $parenthesisCloserPointer) !== null) {
+				return;
+			}
+
+			if (TokenHelper::findNextContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $parenthesisOpenerPointer + 1, $parenthesisCloserPointer) !== null) {
+				return;
+			}
 		}
 
 		$contentStartPointer = TokenHelper::findNextEffective($phpcsFile, $parenthesisOpenerPointer + 1);
