@@ -180,3 +180,12 @@ if (!empty($_SERVER['argv'])) {
 } elseif (PHP_SAPI !== 'cli') {
 	somethingElse();
 }
+
+function twoYields(bool $flag)
+{
+    if ($flag) {
+        yield 1;
+    } else {
+        yield 2;
+    }
+}

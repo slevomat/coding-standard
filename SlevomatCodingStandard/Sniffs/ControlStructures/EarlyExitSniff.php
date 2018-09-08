@@ -37,6 +37,7 @@ use const T_OPEN_PARENTHESIS;
 use const T_SEMICOLON;
 use const T_WHILE;
 use const T_WHITESPACE;
+use const T_YIELD;
 use function array_key_exists;
 use function array_map;
 use function array_merge;
@@ -102,19 +103,26 @@ class EarlyExitSniff implements Sniff
 
 		$allConditionsPointers = $this->getAllConditionsPointers($phpcsFile, $elsePointer);
 
+		$ifEarlyExitPointer = null;
 		foreach ($allConditionsPointers as $conditionPointer) {
 			if ($tokens[$conditionPointer]['code'] === T_IF) {
 				continue;
 			}
 
-			if (!$this->isEarlyExitInScope($phpcsFile, $tokens[$conditionPointer]['scope_opener'], $tokens[$conditionPointer]['scope_closer'])) {
+			$ifEarlyExitPointer = $this->findEarlyExitInScope($phpcsFile, $tokens[$conditionPointer]['scope_opener'], $tokens[$conditionPointer]['scope_closer']);
+			if ($ifEarlyExitPointer === null) {
 				return;
 			}
 		}
 
 		$previousConditionPointer = $allConditionsPointers[count($allConditionsPointers) - 2];
 
-		if ($this->isEarlyExitInScope($phpcsFile, $tokens[$previousConditionPointer]['scope_opener'], $tokens[$previousConditionPointer]['scope_closer'])) {
+		$elseEarlyExitPointer = $this->findEarlyExitInScope($phpcsFile, $tokens[$previousConditionPointer]['scope_opener'], $tokens[$previousConditionPointer]['scope_closer']);
+		if ($elseEarlyExitPointer !== null) {
+			if ($tokens[$ifEarlyExitPointer]['code'] === T_YIELD && $tokens[$elseEarlyExitPointer]['code'] === T_YIELD) {
+				return;
+			}
+
 			$pointerAfterElseCondition = TokenHelper::findNextEffective($phpcsFile, $tokens[$elsePointer]['scope_closer'] + 1);
 			if ($pointerAfterElseCondition === null || $tokens[$pointerAfterElseCondition]['code'] !== T_CLOSE_CURLY_BRACKET) {
 				return;
@@ -506,12 +514,17 @@ class EarlyExitSniff implements Sniff
 		}, explode($eolChar, rtrim($code))));
 	}
 
-	private function isEarlyExitInScope(File $phpcsFile, int $startPointer, int $endPointer): bool
+	private function findEarlyExitInScope(File $phpcsFile, int $startPointer, int $endPointer): ?int
 	{
 		$lastSemicolonInScopePointer = TokenHelper::findPreviousEffective($phpcsFile, $endPointer - 1);
 		return $phpcsFile->getTokens()[$lastSemicolonInScopePointer]['code'] === T_SEMICOLON
-			? TokenHelper::findPreviousLocal($phpcsFile, TokenHelper::$earlyExitTokenCodes, $lastSemicolonInScopePointer - 1, $startPointer) !== null
-			: false;
+			? TokenHelper::findPreviousLocal($phpcsFile, TokenHelper::$earlyExitTokenCodes, $lastSemicolonInScopePointer - 1, $startPointer)
+			: null;
+	}
+
+	private function isEarlyExitInScope(File $phpcsFile, int $startPointer, int $endPointer): bool
+	{
+		return $this->findEarlyExitInScope($phpcsFile, $startPointer, $endPointer) !== null;
 	}
 
 	/**
