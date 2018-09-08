@@ -1,3 +1,3 @@
 <?php
 
-$a = $a = true;
+$a = $a = $a = true;
