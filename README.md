@@ -78,6 +78,10 @@ Sniff provides the following settings:
 
 Disallows implicit array creation.
 
+#### SlevomatCodingStandard.Classes.UselessLateStaticBindingSniff 🔧
+
+Reports useless late static binding.
+
 #### SlevomatCodingStandard.ControlStructures.AssignmentInCondition
 
 Disallows assignments in `if`, `elseif` and `do-while` loop conditions:
