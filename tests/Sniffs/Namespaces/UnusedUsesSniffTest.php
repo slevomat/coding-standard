@@ -176,18 +176,18 @@ class UnusedUsesSniffTest extends TestCase
 
 		self::assertSame(8, $report->getErrorCount());
 
-		self::assertSniffError($report, 30, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "bar" and use statement "Bar" do not match');
-		self::assertSniffError($report, 32, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "BAR" and use statement "Bar" do not match');
+		self::assertSniffError($report, 30, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "bar" and use statement "Bar" does not match');
+		self::assertSniffError($report, 32, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "BAR" and use statement "Bar" does not match');
 
-		self::assertSniffError($report, 34, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "boo" and use statement "Boo" do not match');
-		self::assertSniffError($report, 35, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "BOO" and use statement "Boo" do not match');
-		self::assertSniffError($report, 37, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "boo" and use statement "Boo" do not match');
+		self::assertSniffError($report, 34, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "boo" and use statement "Boo" does not match');
+		self::assertSniffError($report, 35, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "BOO" and use statement "Boo" does not match');
+		self::assertSniffError($report, 37, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "boo" and use statement "Boo" does not match');
 
-		self::assertSniffError($report, 79, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "ignore" and use statement "Ignore" do not match');
+		self::assertSniffError($report, 79, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "ignore" and use statement "Ignore" does not match');
 
-		self::assertSniffError($report, 79, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "uuid" and use statement "Uuid" do not match');
+		self::assertSniffError($report, 79, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "uuid" and use statement "Uuid" does not match');
 
-		self::assertSniffError($report, 107, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "ignore" and use statement "Ignore" do not match');
+		self::assertSniffError($report, 107, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "ignore" and use statement "Ignore" does not match');
 	}
 
 	public function testIgnoredAnnotationsAreNotUsed(): void
@@ -211,14 +211,14 @@ class UnusedUsesSniffTest extends TestCase
 
 		self::assertSame(6, $report->getErrorCount());
 
-		self::assertSniffError($report, 30, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "bar" and use statement "Bar" do not match');
-		self::assertSniffError($report, 32, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "BAR" and use statement "Bar" do not match');
+		self::assertSniffError($report, 30, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "bar" and use statement "Bar" does not match');
+		self::assertSniffError($report, 32, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "BAR" and use statement "Bar" does not match');
 
-		self::assertSniffError($report, 34, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "boo" and use statement "Boo" do not match');
-		self::assertSniffError($report, 35, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "BOO" and use statement "Boo" do not match');
-		self::assertSniffError($report, 37, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "boo" and use statement "Boo" do not match');
+		self::assertSniffError($report, 34, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "boo" and use statement "Boo" does not match');
+		self::assertSniffError($report, 35, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "BOO" and use statement "Boo" does not match');
+		self::assertSniffError($report, 37, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "boo" and use statement "Boo" does not match');
 
-		self::assertSniffError($report, 79, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "uuid" and use statement "Uuid" do not match');
+		self::assertSniffError($report, 79, UnusedUsesSniff::CODE_MISMATCHING_CASE, 'Case of reference name "uuid" and use statement "Uuid" does not match');
 	}
 
 	public function testUsedTrait(): void
