@@ -409,4 +409,18 @@ class FunctionHelperTest extends TestCase
 		self::assertSame(['foo', 'boo'], FunctionHelper::getAllFunctionNames($codeSnifferFile));
 	}
 
+	public function testFindClassPointer(): void
+	{
+		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionNames.php');
+
+		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'foo');
+		self::assertNull(FunctionHelper::findClassPointer($codeSnifferFile, $functionPointer));
+
+		$closurePointer = $this->findPointerByLineAndType($codeSnifferFile, 9, T_CLOSURE);
+		self::assertNull(FunctionHelper::findClassPointer($codeSnifferFile, $closurePointer));
+
+		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'doo');
+		self::assertNotNull(FunctionHelper::findClassPointer($codeSnifferFile, $methodPointer));
+	}
+
 }

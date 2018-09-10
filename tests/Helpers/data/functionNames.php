@@ -2,12 +2,14 @@
 
 namespace FooNamespace;
 
-function foo()
-{
+if (true) {
+	function foo()
+	{
 
-	return array_map(function () {
-	}, []);
+		return array_map(function () {
+		}, []);
 
+	}
 }
 
 function boo()

@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Files\File;
 use const T_ANON_CLASS;
 use const T_BITWISE_AND;
 use const T_CLASS;
+use const T_CLOSURE;
 use const T_COLON;
 use const T_COMMA;
 use const T_ELLIPSIS;
@@ -79,6 +80,25 @@ class FunctionHelper
 		}
 
 		return false;
+	}
+
+	public static function findClassPointer(File $codeSnifferFile, int $functionPointer): ?int
+	{
+		$tokens = $codeSnifferFile->getTokens();
+
+		if ($tokens[$functionPointer]['code'] === T_CLOSURE) {
+			return null;
+		}
+
+		foreach (array_reverse($tokens[$functionPointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
+			if (!in_array($conditionTokenCode, [T_CLASS, T_INTERFACE, T_TRAIT, T_ANON_CLASS], true)) {
+				continue;
+			}
+
+			return $conditionPointer;
+		}
+
+		return null;
 	}
 
 	/**
