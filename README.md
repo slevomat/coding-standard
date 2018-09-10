@@ -120,9 +120,9 @@ Reports closures not using `$this` that are not declared `static`.
 
 Disallows using `++` and `--` operators.
 
-#### SlevomatCodingStandard.Operators.IncrementAndDecrementOperatorsAsSingleInstruction
+#### SlevomatCodingStandard.Operators.RequireOnlyStandaloneIncrementAndDecrenentOperators
 
-Reports `++` and `--` operators not used as single instruction.
+Reports `++` and `--` operators not used standalone.
 
 #### SlevomatCodingStandard.Operators.RequireCombinedAssignmentOperator 🔧
 

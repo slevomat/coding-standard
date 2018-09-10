@@ -82,8 +82,8 @@
 	<rule ref="SlevomatCodingStandard.PHP.OptimizedFunctionsWithoutUnpacking"/>
 	<rule ref="SlevomatCodingStandard.PHP.UselessParentheses"/>
 	<rule ref="SlevomatCodingStandard.PHP.UselessSemicolon"/>
-	<rule ref="SlevomatCodingStandard.Operators.IncrementAndDecrementOperatorsAsSingleInstruction"/>
 	<rule ref="SlevomatCodingStandard.Operators.RequireCombinedAssignmentOperator"/>
+	<rule ref="SlevomatCodingStandard.Operators.RequireOnlyStandaloneIncrementAndDecrenentOperators"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
 		<properties>
 			<property name="enableObjectTypeHint" value="false"/>

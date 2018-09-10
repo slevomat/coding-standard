@@ -18,13 +18,13 @@ use const T_WHILE;
 use function array_key_exists;
 use function in_array;
 
-class IncrementAndDecrementOperatorsAsSingleInstructionSniff implements Sniff
+class RequireOnlyStandaloneIncrementAndDecrenentOperatorsSniff implements Sniff
 {
 
-	public const CODE_PRE_INCREMENT_OPERATOR_NOT_USED_AS_SINGLE_INSTRUCTION = 'PreIncrementOperatorNotUsedAsSingleInstruction';
-	public const CODE_POST_INCREMENT_OPERATOR_NOT_USED_AS_SINGLE_INSTRUCTION = 'PostIncrementOperatorNotUsedAsSingleInstruction';
-	public const CODE_PRE_DECREMENT_OPERATOR_NOT_USED_AS_SINGLE_INSTRUCTION = 'PreDecrementOperatorNotUsedAsSingleInstruction';
-	public const CODE_POST_DECREMENT_OPERATOR_NOT_USED_AS_SINGLE_INSTRUCTION = 'PostDecrementOperatorNotUsedAsSingleInstruction';
+	public const CODE_PRE_INCREMENT_OPERATOR_NOT_USED_STANDALONE = 'PreIncrementOperatorNotUsedStandalone';
+	public const CODE_POST_INCREMENT_OPERATOR_NOT_USED_STANDALONE = 'PostIncrementOperatorNotUsedStandalone';
+	public const CODE_PRE_DECREMENT_OPERATOR_NOT_USED_STANDALONE = 'PreDecrementOperatorNotUsedAsStandalone';
+	public const CODE_POST_DECREMENT_OPERATOR_NOT_USED_STANDALONE = 'PostDecrementOperatorNotUsedStandalone';
 
 	/**
 	 * @return mixed[]
@@ -70,18 +70,18 @@ class IncrementAndDecrementOperatorsAsSingleInstructionSniff implements Sniff
 
 		if ($tokens[$operatorPointer]['code'] === T_INC) {
 			if ($isPostOperator) {
-				$code = self::CODE_POST_INCREMENT_OPERATOR_NOT_USED_AS_SINGLE_INSTRUCTION;
+				$code = self::CODE_POST_INCREMENT_OPERATOR_NOT_USED_STANDALONE;
 				$message = 'Post-increment operator should be used only as single instruction.';
 			} else {
-				$code = self::CODE_PRE_INCREMENT_OPERATOR_NOT_USED_AS_SINGLE_INSTRUCTION;
+				$code = self::CODE_PRE_INCREMENT_OPERATOR_NOT_USED_STANDALONE;
 				$message = 'Pre-increment operator should be used only as single instruction.';
 			}
 		} else {
 			if ($isPostOperator) {
-				$code = self::CODE_POST_DECREMENT_OPERATOR_NOT_USED_AS_SINGLE_INSTRUCTION;
+				$code = self::CODE_POST_DECREMENT_OPERATOR_NOT_USED_STANDALONE;
 				$message = 'Post-decrement operator should be used only as single instruction.';
 			} else {
-				$code = self::CODE_PRE_DECREMENT_OPERATOR_NOT_USED_AS_SINGLE_INSTRUCTION;
+				$code = self::CODE_PRE_DECREMENT_OPERATOR_NOT_USED_STANDALONE;
 				$message = 'Pre-decrement operator should be used only as single instruction.';
 			}
 		}
