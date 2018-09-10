@@ -49,4 +49,9 @@ class Whatever
 		return get_parent_class(new stdClass());
 	}
 
+	public function getParentClassWithThis()
+	{
+		return get_parent_class($this);
+	}
+
 }

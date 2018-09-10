@@ -4,6 +4,8 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\ClassHelper;
+use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_CLASS_C;
 use const T_DOUBLE_COLON;
@@ -63,11 +65,11 @@ class ModernClassNameReferenceSniff implements Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
-	private function checkFunctionCall(File $phpcsFile, int $pointer): void
+	private function checkFunctionCall(File $phpcsFile, int $functionPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$functionName = strtolower($tokens[$pointer]['content']);
+		$functionName = strtolower($tokens[$functionPointer]['content']);
 
 		$functionNames = [
 			'get_class',
@@ -79,12 +81,12 @@ class ModernClassNameReferenceSniff implements Sniff
 			return;
 		}
 
-		$openParenthesisPointer = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
+		$openParenthesisPointer = TokenHelper::findNextEffective($phpcsFile, $functionPointer + 1);
 		if ($tokens[$openParenthesisPointer]['code'] !== T_OPEN_PARENTHESIS) {
 			return;
 		}
 
-		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $functionPointer - 1);
 		if (in_array($tokens[$previousPointer]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
 			return;
 		}
@@ -119,8 +121,15 @@ class ModernClassNameReferenceSniff implements Sniff
 			}
 
 		} elseif ($functionName === 'get_parent_class') {
-			if ($parameterPointer !== null && !$isThisParameter()) {
-				return;
+			if ($parameterPointer !== null) {
+				if (!$isThisParameter()) {
+					return;
+				}
+
+				$classPointer = FunctionHelper::findClassPointer($phpcsFile, $functionPointer);
+				if (!ClassHelper::isFinal($phpcsFile, $classPointer)) {
+					return;
+				}
 			}
 
 			$fixedContent = 'parent::class';
@@ -128,18 +137,18 @@ class ModernClassNameReferenceSniff implements Sniff
 			$fixedContent = 'static::class';
 		}
 
-		$fix = $phpcsFile->addFixableError(sprintf('Class name referenced via call of function %s().', $functionName), $pointer, self::CODE_CLASS_NAME_REFERENCED_VIA_FUNCTION_CALL);
+		$fix = $phpcsFile->addFixableError(sprintf('Class name referenced via call of function %s().', $functionName), $functionPointer, self::CODE_CLASS_NAME_REFERENCED_VIA_FUNCTION_CALL);
 
 		if (!$fix) {
 			return;
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		if ($tokens[$pointer - 1]['code'] === T_NS_SEPARATOR) {
-			$phpcsFile->fixer->replaceToken($pointer - 1, '');
+		if ($tokens[$functionPointer - 1]['code'] === T_NS_SEPARATOR) {
+			$phpcsFile->fixer->replaceToken($functionPointer - 1, '');
 		}
-		$phpcsFile->fixer->replaceToken($pointer, $fixedContent);
-		for ($i = $pointer + 1; $i <= $tokens[$openParenthesisPointer]['parenthesis_closer']; $i++) {
+		$phpcsFile->fixer->replaceToken($functionPointer, $fixedContent);
+		for ($i = $functionPointer + 1; $i <= $tokens[$openParenthesisPointer]['parenthesis_closer']; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 		$phpcsFile->fixer->endChangeset();

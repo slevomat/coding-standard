@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Helpers;
 use Generator;
 use PHP_CodeSniffer\Files\File;
 use const T_ANON_CLASS;
+use const T_FINAL;
 use const T_STRING;
 use const T_USE;
 use function array_map;
@@ -13,6 +14,11 @@ use function sprintf;
 
 class ClassHelper
 {
+
+	public static function isFinal(File $codeSnifferFile, int $classPointer): bool
+	{
+		return $codeSnifferFile->getTokens()[TokenHelper::findPreviousEffective($codeSnifferFile, $classPointer - 1)]['code'] === T_FINAL;
+	}
 
 	public static function getFullyQualifiedName(File $codeSnifferFile, int $classPointer): string
 	{

@@ -5,7 +5,7 @@ class Anything
 
 }
 
-class Whatever extends Anything
+final class Whatever extends Anything
 {
 	public function magicConstant()
 	{
@@ -25,6 +25,11 @@ class Whatever extends Anything
 	public function getParentClass()
 	{
 		return get_parent_class();
+	}
+
+	public function getParentClassWithThis()
+	{
+		return get_parent_class($this);
 	}
 
 	public function getCalledClass()
