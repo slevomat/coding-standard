@@ -117,7 +117,7 @@ class UnusedUsesSniff implements Sniff
 
 			if ($unusedNames[$uniqueId]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
 				$phpcsFile->addError(sprintf(
-					'Case of reference name "%s" and use statement "%s" do not match.',
+					'Case of reference name "%s" and use statement "%s" does not match.',
 					$nameAsReferencedInFile,
 					$unusedNames[$uniqueId]->getNameAsReferencedInFile()
 				), $pointer, self::CODE_MISMATCHING_CASE);
@@ -161,7 +161,7 @@ class UnusedUsesSniff implements Sniff
 								/** @var \SlevomatCodingStandard\Helpers\Annotation $annotation */
 								foreach ($annotationsByName as $annotation) {
 									$phpcsFile->addError(sprintf(
-										'Case of reference name "%s" and use statement "%s" do not match.',
+										'Case of reference name "%s" and use statement "%s" does not match.',
 										$matches[1],
 										$unusedNames[$uniqueId]->getNameAsReferencedInFile()
 									), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
@@ -189,7 +189,7 @@ class UnusedUsesSniff implements Sniff
 							}
 
 							$phpcsFile->addError(sprintf(
-								'Case of reference name "%s" and use statement "%s" do not match.',
+								'Case of reference name "%s" and use statement "%s" does not match.',
 								$matches[1],
 								$unusedNames[$uniqueId]->getNameAsReferencedInFile()
 							), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
@@ -233,7 +233,7 @@ class UnusedUsesSniff implements Sniff
 								}
 
 								$phpcsFile->addError(sprintf(
-									'Case of reference name "%s" and use statement "%s" do not match.',
+									'Case of reference name "%s" and use statement "%s" does not match.',
 									$matches[1],
 									$unusedNames[$uniqueId]->getNameAsReferencedInFile()
 								), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
