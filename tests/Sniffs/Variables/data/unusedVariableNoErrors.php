@@ -152,7 +152,8 @@ function () {
 	$a = 1;
 	$b = 1;
 	$c = [
-		$b-- => $a++
+		$b-- => $a++,
+		--$b => ++$a,
 	];
 	return $c;
 };
@@ -165,3 +166,27 @@ class Whatever
 	}
 
 }
+
+function () {
+	$i = 0;
+	while ($i++ <= 10) {
+	}
+};
+
+function () {
+	$i = 0;
+	do {
+	} while (++$i <= 10);
+};
+
+function () {
+	$i = 10;
+	while ($i-- > 0) {
+	}
+};
+
+function () {
+	$i = 10;
+	do {
+	} while (--$i > 0);
+};

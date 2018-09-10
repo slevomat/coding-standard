@@ -196,7 +196,7 @@ class UnusedVariableSniff implements Sniff
 				return true;
 			}
 
-			return $tokens[$parenthesisOwnerPointer]['code'] !== T_FOR;
+			return !in_array($tokens[$parenthesisOwnerPointer]['code'], [T_FOR, T_WHILE], true);
 		}
 
 		if ($parenthesisOwnerPointer !== null && $tokens[$parenthesisOwnerPointer]['code'] === T_FOREACH) {
