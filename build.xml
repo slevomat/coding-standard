@@ -69,7 +69,7 @@
 			checkreturn="true"
 		>
 			<arg value="--configuration"/>
-			<arg value="tests/phpunit.xml"/>
+			<arg value="tests/phpunit.xml.dist"/>
 			<arg path="tests"/>
 		</exec>
 	</target>
