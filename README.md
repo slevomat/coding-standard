@@ -667,6 +667,10 @@ Requires comments with single-line content to be written as multi-liners.
 
 Reports documentation comments containing only `{@inheritDoc}` annotation because inheritance is automatic and it's not needed to use a special annotation for it.
 
+#### SlevomatCodingStandard.ControlStructure.UselessConditionWithReturn 🔧
+
+Reports useless conditions where both branches return `true` or `false`.
+
 ## Installation
 
 The recommended way to install Slevomat Coding Standard is [through Composer](http://getcomposer.org).
