@@ -275,6 +275,30 @@ Sniff provides the following settings:
 * `linesCountAfterLastUse`: allows to configure the number of lines after last `use`.
 * `linesCountAfterLastUseWhenLastInClass`: allows to configure the number of lines after last `use` when the `use` is the last statement in the class.
 
+#### SlevomatCodingStandard.ControlStructures.ControlStructureSpacing 🔧
+
+Enforces configurable number of lines around control structures.
+
+Sniff provides the following settings:
+
+* `linesCountAroundControlStructure`: allows to configure the number of lines around control structure.
+* `linesCountBeforeFirstControlStructure`: allows to configure the number of lines before first control structure.
+* `linesCountAfterLastControlStructure`: allows to configure the number of lines after last control structure.
+* `tokensToCheck`: allows to narrow the list of checked tokens.
+
+For example, with the following setting, only `if` and `switch` tokens are checked.
+
+```xml
+<rule ref="SlevomatCodingStandard.ControlStructures.ControlStructureSpacing">
+	<properties>
+		<property name="tokensToCheck" type="array" value="
+			T_IF,
+			T_SWITCH,
+		"/>
+	</properties>
+</rule>
+```
+
 #### SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses 🔧
 
 `LanguageConstructWithParenthesesSniff` checks and fixes language construct used with parentheses.
