@@ -18,7 +18,7 @@ use const T_WHILE;
 use function array_key_exists;
 use function in_array;
 
-class RequireOnlyStandaloneIncrementAndDecrenentOperatorsSniff implements Sniff
+class RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff implements Sniff
 {
 
 	public const CODE_PRE_INCREMENT_OPERATOR_NOT_USED_STANDALONE = 'PreIncrementOperatorNotUsedStandalone';
