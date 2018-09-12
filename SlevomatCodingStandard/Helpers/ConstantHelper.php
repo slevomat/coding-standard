@@ -68,6 +68,7 @@ class ConstantHelper
 			}
 
 			$previousConstantPointer = $nextConstantPointer;
+
 			yield $nextConstantPointer;
 		} while (true);
 	}

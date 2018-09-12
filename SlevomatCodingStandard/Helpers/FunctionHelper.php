@@ -318,6 +318,7 @@ class FunctionHelper
 			}
 
 			$previousFunctionPointer = $nextFunctionPointer;
+
 			yield $nextFunctionPointer;
 		} while (true);
 	}

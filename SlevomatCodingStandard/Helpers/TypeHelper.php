@@ -23,6 +23,7 @@ class TypeHelper
 		if ($result === false) {
 			// @codeCoverageIgnoreStart
 			throw new Exception('PREG error ' . preg_last_error());
+
 			// @codeCoverageIgnoreEnd
 		}
 

@@ -70,6 +70,7 @@ class ClassHelper
 			}
 
 			$previousClassPointer = $nextClassPointer;
+
 			yield $nextClassPointer;
 		} while (true);
 	}

@@ -41,6 +41,18 @@
 	<rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments"/>
 	<rule ref="SlevomatCodingStandard.Commenting.UselessInheritDocComment"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
+	<rule ref="SlevomatCodingStandard.ControlStructures.ControlStructureSpacing">
+		<properties>
+			<property name="tokensToCheck" type="array" value="
+				T_GOTO,
+				T_SWITCH,
+				T_THROW,
+				T_TRY,
+				T_YIELD,
+				T_YIELD_FROM,
+			"/>
+		</properties>
+	</rule>
 	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowContinueWithoutIntegerOperandInSwitch"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowEqualOperators"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit"/>
