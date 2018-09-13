@@ -68,4 +68,25 @@ class EarlyExitSniffTest extends TestCase
 		self::checkFile(__DIR__ . '/data/earlyExitInvalidElseif.php', [], [EarlyExitSniff::CODE_USELESS_ELSEIF]);
 	}
 
+	public function testIgnoredStandaloneIfInScopeNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/earlyExitIgnoredStandaloneIfInScope.php', [
+			'ignoreStandaloneIfInScope' => true,
+		]);
+
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testNotIgnoredStandaloneIfInScopeErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/earlyExitIgnoredStandaloneIfInScope.php', [
+			'ignoreStandaloneIfInScope' => false,
+		]);
+
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 4, EarlyExitSniff::CODE_EARLY_EXIT_NOT_USED, 'Use early exit to reduce code nesting.');
+		self::assertSniffError($report, 11, EarlyExitSniff::CODE_EARLY_EXIT_NOT_USED, 'Use early exit to reduce code nesting.');
+	}
+
 }

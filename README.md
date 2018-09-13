@@ -120,6 +120,18 @@ Requires use of null coalesce operator when possible.
 
 Requires use of early exit.
 
+Sniff provides the following settings:
+
+* `ignoreStandaloneIfInScope`: ignores `if` that is standalone in scope, like this:
+
+```php
+foreach ($values as $value) {
+	if ($value) {
+		doSomething();
+	}
+}
+```
+
 #### SlevomatCodingStandard.Functions.StaticClosure 🔧
 
 Reports closures not using `$this` that are not declared `static`.

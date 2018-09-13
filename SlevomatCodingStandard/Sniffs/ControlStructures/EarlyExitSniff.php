@@ -14,6 +14,7 @@ use const T_BOOLEAN_OR;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
+use const T_COLON;
 use const T_DO;
 use const T_ELSE;
 use const T_ELSEIF;
@@ -33,6 +34,7 @@ use const T_LESS_THAN;
 use const T_LOGICAL_AND;
 use const T_LOGICAL_OR;
 use const T_LOGICAL_XOR;
+use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_PARENTHESIS;
 use const T_SEMICOLON;
 use const T_WHILE;
@@ -62,6 +64,9 @@ class EarlyExitSniff implements Sniff
 
 	private const TAB_INDENT = "\t";
 	private const SPACES_INDENT = '    ';
+
+	/** @var bool */
+	public $ignoreStandaloneIfInScope = false;
 
 	/**
 	 * @return mixed[]
@@ -254,6 +259,11 @@ class EarlyExitSniff implements Sniff
 
 		$nextPointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $tokens[$ifPointer]['scope_closer'] + 1);
 		if ($nextPointer === null || $tokens[$nextPointer]['code'] !== T_CLOSE_CURLY_BRACKET) {
+			return;
+		}
+
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $ifPointer - 1);
+		if ($this->ignoreStandaloneIfInScope && in_array($tokens[$previousPointer]['code'], [T_OPEN_CURLY_BRACKET, T_COLON], true)) {
 			return;
 		}
 
