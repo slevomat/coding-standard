@@ -16,6 +16,7 @@
 	<rule ref="Generic.Commenting.Todo"/>
 
 	<rule ref="SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation"/>
+	<rule ref="SlevomatCodingStandard.Classes.DisallowLateStaticBindingForContants"/>
 	<rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference"/>
 	<rule ref="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming">
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Namespaces/AbstractFullyQualifiedGlobalReference.php</exclude-pattern>
