@@ -27,6 +27,7 @@ use function array_merge;
 use function count;
 use function preg_replace;
 use function sprintf;
+use function strtolower;
 
 class ConditionHelper
 {
@@ -59,6 +60,13 @@ class ConditionHelper
 		$tokens = $phpcsFile->getTokens();
 
 		$condition = TokenHelper::getContent($phpcsFile, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer);
+
+		if (strtolower($condition) === 'true') {
+			return 'false';
+		}
+		if (strtolower($condition) === 'false') {
+			return 'true';
+		}
 
 		$pointerAfterConditionStart = TokenHelper::findNextEffective($phpcsFile, $conditionBoundaryStartPointer);
 		$booleanPointers = TokenHelper::findNextAll($phpcsFile, Tokens::$booleanOperators, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer + 1);

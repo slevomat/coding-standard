@@ -1,7 +1,7 @@
 <?php
 
 function () {
-	if (!true) {
+	if (false) {
 		return false;
 	}
 
@@ -101,11 +101,11 @@ function instanceOfCondition($e) {
 }
 
 function noSemicolonInIfScope() {
-	if (!true) {
+	if (false) {
 		return;
 	}
 
-	if (!false) {
+	if (true) {
 		return;
 	}
 
@@ -156,7 +156,7 @@ for ($i = 0; $i < 100; $i++) {
 }
 
 function logicalAndCondition($nullableString, $e) {
-	if (!true || $nullableString === null || $e instanceof Exception) {
+	if (false || $nullableString === null || $e instanceof Exception) {
 		return;
 	}
 
@@ -164,7 +164,7 @@ function logicalAndCondition($nullableString, $e) {
 }
 
 function logicalOrCondition($e, $number) {
-	if (!true && !($e instanceof Exception) && $number > 0) {
+	if (false && !($e instanceof Exception) && $number > 0) {
 		return;
 	}
 
@@ -172,7 +172,7 @@ function logicalOrCondition($e, $number) {
 }
 
 function indentedBySpaces() {
-    if (!true) {
+    if (false) {
         return;
     }
 
@@ -198,7 +198,7 @@ function exitCodeIsNotOnFirstLineOfScope() {
 }
 
 function inlineCommentAfterIf() {
-	if (!true) {
+	if (false) {
 		return false;
 	}
 	// Comment
@@ -206,7 +206,7 @@ function inlineCommentAfterIf() {
 }
 
 function logicalCombinedCondition() {
-	if ((!true || !true) && !false) {
+	if ((false || false) && true) {
 		return;
 	}
 
@@ -389,7 +389,7 @@ function allConditionsWithEarlyExitButWithoutElse($dateTime) {
 }
 
 function ifElseInElse() {
-	if (!true) {
+	if (false) {
 		if (true) {
 			return;
 		}
@@ -415,7 +415,7 @@ function logicalCombinedComplicatedCondition() {
 }
 
 function logicalVeryComplicatedCondition() {
-	if ((!true) || ((!false && !true) && (!false || (!true)))) {
+	if ((false) || ((true && false) && (true || (false)))) {
 		return;
 	}
 
