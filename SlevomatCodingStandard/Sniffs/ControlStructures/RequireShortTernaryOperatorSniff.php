@@ -80,7 +80,7 @@ class RequireShortTernaryOperatorSniff implements Sniff
 			$content = $tokens[$conditionEndPointer]['content'];
 
 			$conditionStartPointer = $conditionEndPointer;
-			while (strlen($content) < strlen($contentToFind)) {
+			while (strlen($content) < strlen($contentToFind) && isset($tokens[$conditionStartPointer - 1])) {
 				$conditionStartPointer--;
 				$content = $tokens[$conditionStartPointer]['content'] . $content;
 			}
