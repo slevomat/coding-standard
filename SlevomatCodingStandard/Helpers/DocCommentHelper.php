@@ -30,37 +30,37 @@ use function trim;
 class DocCommentHelper
 {
 
-	public static function hasDocComment(File $codeSnifferFile, int $pointer): bool
+	public static function hasDocComment(File $phpcsFile, int $pointer): bool
 	{
-		return self::findDocCommentOpenToken($codeSnifferFile, $pointer) !== null;
+		return self::findDocCommentOpenToken($phpcsFile, $pointer) !== null;
 	}
 
-	public static function getDocComment(File $codeSnifferFile, int $pointer): ?string
+	public static function getDocComment(File $phpcsFile, int $pointer): ?string
 	{
-		$docCommentOpenToken = self::findDocCommentOpenToken($codeSnifferFile, $pointer);
+		$docCommentOpenToken = self::findDocCommentOpenToken($phpcsFile, $pointer);
 		if ($docCommentOpenToken === null) {
 			return null;
 		}
 
-		return trim(TokenHelper::getContent($codeSnifferFile, $docCommentOpenToken + 1, $codeSnifferFile->getTokens()[$docCommentOpenToken]['comment_closer'] - 1));
+		return trim(TokenHelper::getContent($phpcsFile, $docCommentOpenToken + 1, $phpcsFile->getTokens()[$docCommentOpenToken]['comment_closer'] - 1));
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $pointer
 	 * @return \SlevomatCodingStandard\Helpers\Comment[]|null
 	 */
-	public static function getDocCommentDescription(File $codeSnifferFile, int $pointer): ?array
+	public static function getDocCommentDescription(File $phpcsFile, int $pointer): ?array
 	{
-		$docCommentOpenPointer = self::findDocCommentOpenToken($codeSnifferFile, $pointer);
+		$docCommentOpenPointer = self::findDocCommentOpenToken($phpcsFile, $pointer);
 
 		if ($docCommentOpenPointer === null) {
 			return null;
 		}
 
-		$tokens = $codeSnifferFile->getTokens();
+		$tokens = $phpcsFile->getTokens();
 		$descriptionStartPointer = TokenHelper::findNextExcluding(
-			$codeSnifferFile,
+			$phpcsFile,
 			[T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STAR],
 			$docCommentOpenPointer + 1,
 			$tokens[$docCommentOpenPointer]['comment_closer']
@@ -75,7 +75,7 @@ class DocCommentHelper
 		}
 
 		$tokenAfterDescriptionPointer = TokenHelper::findNext(
-			$codeSnifferFile,
+			$phpcsFile,
 			[T_DOC_COMMENT_TAG, T_DOC_COMMENT_CLOSE_TAG],
 			$descriptionStartPointer + 1,
 			$tokens[$docCommentOpenPointer]['comment_closer'] + 1
@@ -94,20 +94,20 @@ class DocCommentHelper
 		return count($comments) > 0 ? $comments : null;
 	}
 
-	public static function hasDocCommentDescription(File $codeSnifferFile, int $pointer): bool
+	public static function hasDocCommentDescription(File $phpcsFile, int $pointer): bool
 	{
-		return self::getDocCommentDescription($codeSnifferFile, $pointer) !== null;
+		return self::getDocCommentDescription($phpcsFile, $pointer) !== null;
 	}
 
-	public static function findDocCommentOpenToken(File $codeSnifferFile, int $pointer): ?int
+	public static function findDocCommentOpenToken(File $phpcsFile, int $pointer): ?int
 	{
-		$tokens = $codeSnifferFile->getTokens();
+		$tokens = $phpcsFile->getTokens();
 
 		if ($tokens[$pointer]['code'] === T_DOC_COMMENT_OPEN_TAG) {
 			return $pointer;
 		}
 
-		$found = TokenHelper::findPreviousExcluding($codeSnifferFile, [T_WHITESPACE, T_COMMENT, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_VAR, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT], $pointer - 1);
+		$found = TokenHelper::findPreviousExcluding($phpcsFile, [T_WHITESPACE, T_COMMENT, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_VAR, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT], $pointer - 1);
 		if ($found !== null && $tokens[$found]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
 			return $tokens[$found]['comment_opener'];
 		}
@@ -115,17 +115,17 @@ class DocCommentHelper
 		return null;
 	}
 
-	public static function isInline(File $codeSnifferFile, int $docCommentOpenPointer): bool
+	public static function isInline(File $phpcsFile, int $docCommentOpenPointer): bool
 	{
-		$tokens = $codeSnifferFile->getTokens();
+		$tokens = $phpcsFile->getTokens();
 
-		$nextPointer = TokenHelper::findNextExcluding($codeSnifferFile, T_WHITESPACE, $tokens[$docCommentOpenPointer]['comment_closer'] + 1);
+		$nextPointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $tokens[$docCommentOpenPointer]['comment_closer'] + 1);
 
 		if ($nextPointer !== null && in_array($tokens[$nextPointer]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT], true)) {
 			return false;
 		}
 
-		$docCommentContent = self::getDocComment($codeSnifferFile, $docCommentOpenPointer);
+		$docCommentContent = self::getDocComment($phpcsFile, $docCommentOpenPointer);
 		return strpos($docCommentContent, '@var') === 0;
 	}
 

@@ -159,14 +159,14 @@ class DocCommentHelperTest extends TestCase
 
 	public function testIsInline(): void
 	{
-		$codeSnifferFile = $this->getTestedCodeSnifferFile();
+		$phpcsFile = $this->getTestedCodeSnifferFile();
 
 		foreach ([3, 10, 18, 32, 46, 51, 76, 99] as $line) {
-			self::assertFalse(DocCommentHelper::isInline($codeSnifferFile, $this->findPointerByLineAndType($codeSnifferFile, $line, T_DOC_COMMENT_OPEN_TAG)));
+			self::assertFalse(DocCommentHelper::isInline($phpcsFile, $this->findPointerByLineAndType($phpcsFile, $line, T_DOC_COMMENT_OPEN_TAG)));
 		}
 
 		foreach ([96] as $line) {
-			self::assertTrue(DocCommentHelper::isInline($codeSnifferFile, $this->findPointerByLineAndType($codeSnifferFile, $line, T_DOC_COMMENT_OPEN_TAG)));
+			self::assertTrue(DocCommentHelper::isInline($phpcsFile, $this->findPointerByLineAndType($phpcsFile, $line, T_DOC_COMMENT_OPEN_TAG)));
 		}
 	}
 

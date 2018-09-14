@@ -130,37 +130,37 @@ class NamespaceHelperTest extends TestCase
 
 	public function testFindCurrentNamespaceName(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/namespacedFile.php'
 		);
 		$namespace = NamespaceHelper::findCurrentNamespaceName(
-			$codeSnifferFile,
-			TokenHelper::getLastTokenPointer($codeSnifferFile)
+			$phpcsFile,
+			TokenHelper::getLastTokenPointer($phpcsFile)
 		);
 		self::assertSame('Foo\Bar', $namespace);
 	}
 
 	public function testFindCurrentNamespaceNameInFileWithoutNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/fileWithoutNamespace.php'
 		);
 		self::assertNull(
 			NamespaceHelper::findCurrentNamespaceName(
-				$codeSnifferFile,
-				TokenHelper::getLastTokenPointer($codeSnifferFile)
+				$phpcsFile,
+				TokenHelper::getLastTokenPointer($phpcsFile)
 			)
 		);
 	}
 
 	public function testClosestNamespaceNameWithMultipleNamespacesInFile(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/multipleNamespaces.php'
 		);
 		$namespace = NamespaceHelper::findCurrentNamespaceName(
-			$codeSnifferFile,
-			TokenHelper::getLastTokenPointer($codeSnifferFile)
+			$phpcsFile,
+			TokenHelper::getLastTokenPointer($phpcsFile)
 		);
 		self::assertSame('Lorem\Ipsum', $namespace);
 	}

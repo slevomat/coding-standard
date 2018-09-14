@@ -11,7 +11,7 @@ class ReferencedNameHelperTest extends TestCase
 
 	public function testGetAllReferencedNames(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/lotsOfReferencedNames.php'
 		);
 
@@ -53,7 +53,7 @@ class ReferencedNameHelperTest extends TestCase
 			['SomeTrait', false, false],
 		];
 
-		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
+		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
 		self::assertCount(count($foundTypes), $names);
 		foreach ($names as $i => $referencedName) {
 			[$type, $isFunction, $isConstant] = $foundTypes[$i];
@@ -66,7 +66,7 @@ class ReferencedNameHelperTest extends TestCase
 
 	public function testGetAllReferencedNamesWithNullableTypehints(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/referencedNamesWithNullableTypeHints.php'
 		);
 
@@ -75,7 +75,7 @@ class ReferencedNameHelperTest extends TestCase
 			['NullableReturnTypeHint', false, false],
 		];
 
-		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
+		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
 		self::assertCount(count($foundTypes), $names);
 		foreach ($names as $i => $referencedName) {
 			[$type, $isFunction, $isConstant] = $foundTypes[$i];
@@ -88,15 +88,15 @@ class ReferencedNameHelperTest extends TestCase
 
 	public function testGetAllReferencedNamesOnNonReferencedName(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/fileWithoutReferencedName.php'
 		);
-		self::assertCount(0, ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0));
+		self::assertCount(0, ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0));
 	}
 
 	public function testMultipleExceptionsCatch(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/multipleExceptionsCatch.php'
 		);
 
@@ -109,7 +109,7 @@ class ReferencedNameHelperTest extends TestCase
 			['ThirdMultipleException', false, false],
 		];
 
-		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
+		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
 		self::assertCount(count($foundTypes), $names);
 		foreach ($names as $i => $referencedName) {
 			[$type, $isFunction, $isConstant] = $foundTypes[$i];
@@ -122,20 +122,20 @@ class ReferencedNameHelperTest extends TestCase
 
 	public function testGetReferencedNameEndPointer(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/referencedName.php'
 		);
-		$backslashTokenPointer = TokenHelper::findNext($codeSnifferFile, T_NS_SEPARATOR, 0);
-		$endTokenPointer = ReferencedNameHelper::getReferencedNameEndPointer($codeSnifferFile, $backslashTokenPointer);
-		self::assertTokenPointer(T_STRING, 3, $codeSnifferFile, $endTokenPointer);
+		$backslashTokenPointer = TokenHelper::findNext($phpcsFile, T_NS_SEPARATOR, 0);
+		$endTokenPointer = ReferencedNameHelper::getReferencedNameEndPointer($phpcsFile, $backslashTokenPointer);
+		self::assertTokenPointer(T_STRING, 3, $phpcsFile, $endTokenPointer);
 	}
 
 	public function testReturnTypeHint(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/return-typehint.php'
 		);
-		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
+		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
 		self::assertCount(2, $names);
 		self::assertSame('Bar', $names[0]->getNameAsReferencedInFile());
 		self::assertSame('\OtherNamespace\Lorem', $names[1]->getNameAsReferencedInFile());
@@ -143,28 +143,28 @@ class ReferencedNameHelperTest extends TestCase
 
 	public function testConstantIsNotReferencedName(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/classConstant.php'
 		);
-		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
+		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
 		self::assertCount(0, $names);
 	}
 
 	public function testMethodReturningReferenceIsNotReferencedName(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/methodReturnsReference.php'
 		);
-		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
+		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
 		self::assertCount(0, $names);
 	}
 
 	public function testGotoLabelIsNotReferencedName(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/goto.php'
 		);
-		$names = ReferencedNameHelper::getAllReferencedNames($codeSnifferFile, 0);
+		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
 		self::assertCount(0, $names);
 	}
 

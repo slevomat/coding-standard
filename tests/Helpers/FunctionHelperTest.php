@@ -10,43 +10,43 @@ class FunctionHelperTest extends TestCase
 
 	public function testNameWithNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionWithNamespace.php');
-		self::assertSame('\FooNamespace\fooFunction', FunctionHelper::getFullyQualifiedName($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooFunction')));
-		self::assertSame('fooFunction', FunctionHelper::getName($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooFunction')));
-		self::assertSame('\FooNamespace\FooClass::fooMethod', FunctionHelper::getFullyQualifiedName($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooMethod')));
-		self::assertSame('fooMethod', FunctionHelper::getName($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooMethod')));
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionWithNamespace.php');
+		self::assertSame('\FooNamespace\fooFunction', FunctionHelper::getFullyQualifiedName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooFunction')));
+		self::assertSame('fooFunction', FunctionHelper::getName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooFunction')));
+		self::assertSame('\FooNamespace\FooClass::fooMethod', FunctionHelper::getFullyQualifiedName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod')));
+		self::assertSame('fooMethod', FunctionHelper::getName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod')));
 	}
 
 	public function testNameWithoutNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionWithoutNamespace.php');
-		self::assertSame('fooFunction', FunctionHelper::getFullyQualifiedName($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooFunction')));
-		self::assertSame('fooFunction', FunctionHelper::getName($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooFunction')));
-		self::assertSame('\FooClass::fooMethod', FunctionHelper::getFullyQualifiedName($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooMethod')));
-		self::assertSame('fooMethod', FunctionHelper::getName($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooMethod')));
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionWithoutNamespace.php');
+		self::assertSame('fooFunction', FunctionHelper::getFullyQualifiedName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooFunction')));
+		self::assertSame('fooFunction', FunctionHelper::getName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooFunction')));
+		self::assertSame('\FooClass::fooMethod', FunctionHelper::getFullyQualifiedName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod')));
+		self::assertSame('fooMethod', FunctionHelper::getName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod')));
 	}
 
 	public function testNameInAnonymousClass(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionInAnonymousClass.php');
-		self::assertSame('class@anonymous::fooMethod', FunctionHelper::getFullyQualifiedName($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooMethod')));
-		self::assertSame('fooMethod', FunctionHelper::getName($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooMethod')));
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionInAnonymousClass.php');
+		self::assertSame('class@anonymous::fooMethod', FunctionHelper::getFullyQualifiedName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod')));
+		self::assertSame('fooMethod', FunctionHelper::getName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod')));
 	}
 
 	public function testAbstractOrNot(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionAbstractOrNot.php');
-		self::assertFalse(FunctionHelper::isAbstract($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooMethod')));
-		self::assertTrue(FunctionHelper::isAbstract($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooAbstractMethod')));
-		self::assertTrue(FunctionHelper::isAbstract($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooInterfaceMethod')));
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionAbstractOrNot.php');
+		self::assertFalse(FunctionHelper::isAbstract($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod')));
+		self::assertTrue(FunctionHelper::isAbstract($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooAbstractMethod')));
+		self::assertTrue(FunctionHelper::isAbstract($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooInterfaceMethod')));
 	}
 
 	public function testFunctionOrMethod(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionOrMethod.php');
-		self::assertTrue(FunctionHelper::isMethod($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooMethod')));
-		self::assertFalse(FunctionHelper::isMethod($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooFunction')));
-		self::assertFalse(FunctionHelper::isMethod($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionInCondition')));
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionOrMethod.php');
+		self::assertTrue(FunctionHelper::isMethod($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod')));
+		self::assertFalse(FunctionHelper::isMethod($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooFunction')));
+		self::assertFalse(FunctionHelper::isMethod($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooFunctionInCondition')));
 	}
 
 	/**
@@ -92,10 +92,10 @@ class FunctionHelperTest extends TestCase
 		array $expectedParametersNames
 	): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersNames.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersNames.php');
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, $functionName);
-		self::assertSame($expectedParametersNames, FunctionHelper::getParametersNames($codeSnifferFile, $functionPointer));
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, $functionName);
+		self::assertSame($expectedParametersNames, FunctionHelper::getParametersNames($phpcsFile, $functionPointer));
 	}
 
 	/**
@@ -232,10 +232,10 @@ class FunctionHelperTest extends TestCase
 		array $expectedParametersWithoutTypeHints
 	): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersTypeHints.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersTypeHints.php');
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, $functionName);
-		$parametersTypeHints = FunctionHelper::getParametersTypeHints($codeSnifferFile, $functionPointer);
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, $functionName);
+		$parametersTypeHints = FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer);
 		foreach ($expectedParametersTypeHints as $expectedParameterName => $expectedParameterTypeHint) {
 			self::assertArrayHasKey($expectedParameterName, $parametersTypeHints);
 			$parameterTypeHint = $parametersTypeHints[$expectedParameterName];
@@ -248,7 +248,7 @@ class FunctionHelperTest extends TestCase
 				self::assertSame($expectedParameterTypeHint->isOptional(), $parameterTypeHint->isOptional());
 			}
 		}
-		self::assertSame($expectedParametersWithoutTypeHints, FunctionHelper::getParametersWithoutTypeHint($codeSnifferFile, $functionPointer));
+		self::assertSame($expectedParametersWithoutTypeHints, FunctionHelper::getParametersWithoutTypeHint($phpcsFile, $functionPointer));
 	}
 
 	/**
@@ -261,10 +261,10 @@ class FunctionHelperTest extends TestCase
 		array $expectedParametersTypeHints
 	): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersNullableTypeHints.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersNullableTypeHints.php');
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, $functionName);
-		$parametersTypeHints = FunctionHelper::getParametersTypeHints($codeSnifferFile, $functionPointer);
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, $functionName);
+		$parametersTypeHints = FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer);
 		foreach ($expectedParametersTypeHints as $expectedParameterName => $expectedParameterTypeHint) {
 			self::assertArrayHasKey($expectedParameterName, $parametersTypeHints);
 			$parameterTypeHint = $parametersTypeHints[$expectedParameterName];
@@ -306,8 +306,8 @@ class FunctionHelperTest extends TestCase
 		bool $returnsValue
 	): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionReturnsValueOrNot.php');
-		self::assertSame($returnsValue, FunctionHelper::returnsValue($codeSnifferFile, $this->findFunctionPointerByName($codeSnifferFile, $functionName)));
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionReturnsValueOrNot.php');
+		self::assertSame($returnsValue, FunctionHelper::returnsValue($phpcsFile, $this->findFunctionPointerByName($phpcsFile, $functionName)));
 	}
 
 	/**
@@ -333,94 +333,94 @@ class FunctionHelperTest extends TestCase
 		bool $returnsValue
 	): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/closureReturnsValueOrNot.php');
-		self::assertSame($returnsValue, FunctionHelper::returnsValue($codeSnifferFile, $this->findPointerByLineAndType($codeSnifferFile, $line, T_CLOSURE)));
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/closureReturnsValueOrNot.php');
+		self::assertSame($returnsValue, FunctionHelper::returnsValue($phpcsFile, $this->findPointerByLineAndType($phpcsFile, $line, T_CLOSURE)));
 	}
 
 	public function testReturnTypeHint(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionReturnTypeHint.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionReturnTypeHint.php');
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'withReturnTypeHint');
-		self::assertTrue(FunctionHelper::hasReturnTypeHint($codeSnifferFile, $functionPointer));
-		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer);
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'withReturnTypeHint');
+		self::assertTrue(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 		self::assertSame('\FooNamespace\FooInterface', $returnTypeHint->getTypeHint());
 		self::assertFalse($returnTypeHint->isNullable());
 		self::assertSame($functionPointer + 7, $returnTypeHint->getStartPointer());
 		self::assertSame($functionPointer + 10, $returnTypeHint->getEndPointer());
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'withoutReturnTypeHint');
-		self::assertFalse(FunctionHelper::hasReturnTypeHint($codeSnifferFile, $functionPointer));
-		self::assertNull(FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer));
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'withoutReturnTypeHint');
+		self::assertFalse(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
+		self::assertNull(FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer));
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'abstractWithReturnTypeHint');
-		self::assertTrue(FunctionHelper::hasReturnTypeHint($codeSnifferFile, $functionPointer));
-		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer);
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'abstractWithReturnTypeHint');
+		self::assertTrue(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 		self::assertSame('bool', $returnTypeHint->getTypeHint());
 		self::assertFalse($returnTypeHint->isNullable());
 		self::assertSame($functionPointer + 7, $returnTypeHint->getStartPointer());
 		self::assertSame($functionPointer + 7, $returnTypeHint->getEndPointer());
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'abstractWithoutReturnTypeHint');
-		self::assertFalse(FunctionHelper::hasReturnTypeHint($codeSnifferFile, $functionPointer));
-		self::assertNull(FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer));
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'abstractWithoutReturnTypeHint');
+		self::assertFalse(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
+		self::assertNull(FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer));
 	}
 
 	public function testReturnNullableTypeHint(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionReturnsNullableTypeHint.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionReturnsNullableTypeHint.php');
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'withReturnNullableTypeHint');
-		self::assertTrue(FunctionHelper::hasReturnTypeHint($codeSnifferFile, $functionPointer));
-		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer);
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'withReturnNullableTypeHint');
+		self::assertTrue(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 		self::assertSame('\FooNamespace\FooInterface', $returnTypeHint->getTypeHint());
 		self::assertTrue($returnTypeHint->isNullable());
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'abstractWithReturnNullableTypeHint');
-		self::assertTrue(FunctionHelper::hasReturnTypeHint($codeSnifferFile, $functionPointer));
-		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer);
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'abstractWithReturnNullableTypeHint');
+		self::assertTrue(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 		self::assertSame('bool', $returnTypeHint->getTypeHint());
 		self::assertTrue($returnTypeHint->isNullable());
 	}
 
 	public function testAnnotations(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionAnnotations.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionAnnotations.php');
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'withAnnotations');
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'withAnnotations');
 
 		$parametersAnnotations = array_map(function (Annotation $annotation) {
 			return $annotation->getContent();
-		}, FunctionHelper::getParametersAnnotations($codeSnifferFile, $functionPointer));
+		}, FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer));
 		self::assertSame([
 			'string $a',
 			'int $b',
 		], $parametersAnnotations);
-		self::assertSame('bool', FunctionHelper::findReturnAnnotation($codeSnifferFile, $functionPointer)->getContent());
+		self::assertSame('bool', FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer)->getContent());
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'withoutAnnotations');
-		self::assertCount(0, FunctionHelper::getParametersAnnotations($codeSnifferFile, $functionPointer));
-		self::assertNull(FunctionHelper::findReturnAnnotation($codeSnifferFile, $functionPointer));
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'withoutAnnotations');
+		self::assertCount(0, FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer));
+		self::assertNull(FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer));
 	}
 
 	public function testGetAllFunctionNames(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionNames.php');
-		self::assertSame(['foo', 'boo'], FunctionHelper::getAllFunctionNames($codeSnifferFile));
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionNames.php');
+		self::assertSame(['foo', 'boo'], FunctionHelper::getAllFunctionNames($phpcsFile));
 	}
 
 	public function testFindClassPointer(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionNames.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionNames.php');
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'foo');
-		self::assertNull(FunctionHelper::findClassPointer($codeSnifferFile, $functionPointer));
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'foo');
+		self::assertNull(FunctionHelper::findClassPointer($phpcsFile, $functionPointer));
 
-		$closurePointer = $this->findPointerByLineAndType($codeSnifferFile, 9, T_CLOSURE);
-		self::assertNull(FunctionHelper::findClassPointer($codeSnifferFile, $closurePointer));
+		$closurePointer = $this->findPointerByLineAndType($phpcsFile, 9, T_CLOSURE);
+		self::assertNull(FunctionHelper::findClassPointer($phpcsFile, $closurePointer));
 
-		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'doo');
-		self::assertNotNull(FunctionHelper::findClassPointer($codeSnifferFile, $methodPointer));
+		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'doo');
+		self::assertNotNull(FunctionHelper::findClassPointer($phpcsFile, $methodPointer));
 	}
 
 }

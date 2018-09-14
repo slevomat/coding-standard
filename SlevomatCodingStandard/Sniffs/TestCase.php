@@ -75,15 +75,15 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		return $file;
 	}
 
-	protected static function assertNoSniffErrorInFile(File $file): void
+	protected static function assertNoSniffErrorInFile(File $phpcsFile): void
 	{
-		$errors = $file->getErrors();
+		$errors = $phpcsFile->getErrors();
 		self::assertEmpty($errors, sprintf('No errors expected, but %d errors found.', count($errors)));
 	}
 
-	protected static function assertSniffError(File $codeSnifferFile, int $line, string $code, ?string $message = null): void
+	protected static function assertSniffError(File $phpcsFile, int $line, string $code, ?string $message = null): void
 	{
-		$errors = $codeSnifferFile->getErrors();
+		$errors = $phpcsFile->getErrors();
 		self::assertTrue(isset($errors[$line]), sprintf('Expected error on line %s, but none found.', $line));
 
 		$sniffCode = sprintf('%s.%s', static::getSniffName(), $code);
@@ -104,9 +104,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		);
 	}
 
-	protected static function assertNoSniffError(File $codeSnifferFile, int $line): void
+	protected static function assertNoSniffError(File $phpcsFile, int $line): void
 	{
-		$errors = $codeSnifferFile->getErrors();
+		$errors = $phpcsFile->getErrors();
 		self::assertFalse(
 			isset($errors[$line]),
 			sprintf(
@@ -119,11 +119,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		);
 	}
 
-	protected static function assertAllFixedInFile(File $codeSnifferFile): void
+	protected static function assertAllFixedInFile(File $phpcsFile): void
 	{
-		$codeSnifferFile->disableCaching();
-		$codeSnifferFile->fixer->fixFile();
-		self::assertStringEqualsFile(preg_replace('~(\\.php)$~', '.fixed\\1', $codeSnifferFile->getFilename()), $codeSnifferFile->fixer->getContents());
+		$phpcsFile->disableCaching();
+		$phpcsFile->fixer->fixFile();
+		self::assertStringEqualsFile(preg_replace('~(\\.php)$~', '.fixed\\1', $phpcsFile->getFilename()), $phpcsFile->fixer->getContents());
 	}
 
 	/**

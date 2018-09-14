@@ -14,10 +14,10 @@ class DisallowGroupUseSniffTest extends TestCase
 
 	public function testErrors(): void
 	{
-		$codeSnifferFile = self::checkFile(__DIR__ . '/data/disallowGroupUseErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/disallowGroupUseErrors.php');
 
-		self::assertSniffError($codeSnifferFile, 5, DisallowGroupUseSniff::CODE_DISALLOWED_GROUP_USE);
-		self::assertSniffError($codeSnifferFile, 9, DisallowGroupUseSniff::CODE_DISALLOWED_GROUP_USE);
+		self::assertSniffError($report, 5, DisallowGroupUseSniff::CODE_DISALLOWED_GROUP_USE);
+		self::assertSniffError($report, 9, DisallowGroupUseSniff::CODE_DISALLOWED_GROUP_USE);
 	}
 
 }

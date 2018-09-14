@@ -18,14 +18,14 @@ class AnnotationHelper
 {
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $pointer
 	 * @param string $annotationName
 	 * @return \SlevomatCodingStandard\Helpers\Annotation[]
 	 */
-	public static function getAnnotationsByName(File $codeSnifferFile, int $pointer, string $annotationName): array
+	public static function getAnnotationsByName(File $phpcsFile, int $pointer, string $annotationName): array
 	{
-		$annotations = self::getAnnotations($codeSnifferFile, $pointer);
+		$annotations = self::getAnnotations($phpcsFile, $pointer);
 
 		if (!array_key_exists($annotationName, $annotations)) {
 			return [];
@@ -35,20 +35,20 @@ class AnnotationHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $pointer
 	 * @return \SlevomatCodingStandard\Helpers\Annotation[][]
 	 */
-	public static function getAnnotations(File $codeSnifferFile, int $pointer): array
+	public static function getAnnotations(File $phpcsFile, int $pointer): array
 	{
 		$annotations = [];
 
-		$docCommentOpenToken = DocCommentHelper::findDocCommentOpenToken($codeSnifferFile, $pointer);
+		$docCommentOpenToken = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $pointer);
 		if ($docCommentOpenToken === null) {
 			return $annotations;
 		}
 
-		$tokens = $codeSnifferFile->getTokens();
+		$tokens = $phpcsFile->getTokens();
 		$i = $docCommentOpenToken + 1;
 		while ($i < $tokens[$docCommentOpenToken]['comment_closer']) {
 			if ($tokens[$i]['code'] !== T_DOC_COMMENT_TAG) {

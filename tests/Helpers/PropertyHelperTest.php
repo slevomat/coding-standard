@@ -47,28 +47,28 @@ class PropertyHelperTest extends TestCase
 	 */
 	public function testIsProperty(string $variableName, bool $isProperty): void
 	{
-		$codeSnifferFile = $this->getTestedCodeSnifferFile();
+		$phpcsFile = $this->getTestedCodeSnifferFile();
 
-		$variablePointer = TokenHelper::findNextContent($codeSnifferFile, T_VARIABLE, $variableName, 0);
-		self::assertSame($isProperty, PropertyHelper::isProperty($codeSnifferFile, $variablePointer));
+		$variablePointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, 0);
+		self::assertSame($isProperty, PropertyHelper::isProperty($phpcsFile, $variablePointer));
 	}
 
 	public function testNameWithNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/propertyWithNamespace.php');
-		self::assertSame('\FooNamespace\FooClass::$fooProperty', PropertyHelper::getFullyQualifiedName($codeSnifferFile, $this->findPropertyPointerByName($codeSnifferFile, 'fooProperty')));
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/propertyWithNamespace.php');
+		self::assertSame('\FooNamespace\FooClass::$fooProperty', PropertyHelper::getFullyQualifiedName($phpcsFile, $this->findPropertyPointerByName($phpcsFile, 'fooProperty')));
 	}
 
 	public function testNameWithoutsNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/propertyWithoutNamespace.php');
-		self::assertSame('\FooClass::$fooProperty', PropertyHelper::getFullyQualifiedName($codeSnifferFile, $this->findPropertyPointerByName($codeSnifferFile, 'fooProperty')));
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/propertyWithoutNamespace.php');
+		self::assertSame('\FooClass::$fooProperty', PropertyHelper::getFullyQualifiedName($phpcsFile, $this->findPropertyPointerByName($phpcsFile, 'fooProperty')));
 	}
 
 	public function testNameInAnonymousClass(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/propertyInAnonymousClass.php');
-		self::assertSame('class@anonymous::$fooProperty', PropertyHelper::getFullyQualifiedName($codeSnifferFile, $this->findPropertyPointerByName($codeSnifferFile, 'fooProperty')));
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/propertyInAnonymousClass.php');
+		self::assertSame('class@anonymous::$fooProperty', PropertyHelper::getFullyQualifiedName($phpcsFile, $this->findPropertyPointerByName($phpcsFile, 'fooProperty')));
 	}
 
 	private function getTestedCodeSnifferFile(): File

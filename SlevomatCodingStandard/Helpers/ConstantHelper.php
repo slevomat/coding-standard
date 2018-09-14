@@ -16,36 +16,36 @@ use function sprintf;
 class ConstantHelper
 {
 
-	public static function getName(File $codeSnifferFile, int $constantPointer): string
+	public static function getName(File $phpcsFile, int $constantPointer): string
 	{
-		$tokens = $codeSnifferFile->getTokens();
-		return $tokens[TokenHelper::findNext($codeSnifferFile, T_STRING, $constantPointer + 1)]['content'];
+		$tokens = $phpcsFile->getTokens();
+		return $tokens[TokenHelper::findNext($phpcsFile, T_STRING, $constantPointer + 1)]['content'];
 	}
 
-	public static function getFullyQualifiedName(File $codeSnifferFile, int $constantPointer): string
+	public static function getFullyQualifiedName(File $phpcsFile, int $constantPointer): string
 	{
-		$name = self::getName($codeSnifferFile, $constantPointer);
-		$namespace = NamespaceHelper::findCurrentNamespaceName($codeSnifferFile, $constantPointer);
+		$name = self::getName($phpcsFile, $constantPointer);
+		$namespace = NamespaceHelper::findCurrentNamespaceName($phpcsFile, $constantPointer);
 
 		return $namespace !== null ? sprintf('%s%s%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $namespace, NamespaceHelper::NAMESPACE_SEPARATOR, $name) : $name;
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @return string[]
 	 */
-	public static function getAllNames(File $codeSnifferFile): array
+	public static function getAllNames(File $phpcsFile): array
 	{
 		$previousConstantPointer = 0;
 
 		return array_map(
-			function (int $constantPointer) use ($codeSnifferFile): string {
-				return self::getName($codeSnifferFile, $constantPointer);
+			function (int $constantPointer) use ($phpcsFile): string {
+				return self::getName($phpcsFile, $constantPointer);
 			},
 			array_filter(
-				iterator_to_array(self::getAllConstantPointers($codeSnifferFile, $previousConstantPointer)),
-				function (int $constantPointer) use ($codeSnifferFile): bool {
-					foreach (array_reverse($codeSnifferFile->getTokens()[$constantPointer]['conditions']) as $conditionTokenCode) {
+				iterator_to_array(self::getAllConstantPointers($phpcsFile, $previousConstantPointer)),
+				function (int $constantPointer) use ($phpcsFile): bool {
+					foreach (array_reverse($phpcsFile->getTokens()[$constantPointer]['conditions']) as $conditionTokenCode) {
 						if ($conditionTokenCode === T_NAMESPACE) {
 							return true;
 						}
@@ -59,10 +59,10 @@ class ConstantHelper
 		);
 	}
 
-	private static function getAllConstantPointers(File $codeSnifferFile, int &$previousConstantPointer): Generator
+	private static function getAllConstantPointers(File $phpcsFile, int &$previousConstantPointer): Generator
 	{
 		do {
-			$nextConstantPointer = TokenHelper::findNext($codeSnifferFile, T_CONST, $previousConstantPointer + 1);
+			$nextConstantPointer = TokenHelper::findNext($phpcsFile, T_CONST, $previousConstantPointer + 1);
 			if ($nextConstantPointer === null) {
 				break;
 			}

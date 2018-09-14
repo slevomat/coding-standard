@@ -34,12 +34,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	/**
 	 * @param int|string $code
 	 * @param int $line
-	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int|null $tokenPointer
 	 */
-	protected function assertTokenPointer($code, int $line, File $codeSnifferFile, ?int $tokenPointer = null): void
+	protected function assertTokenPointer($code, int $line, File $phpcsFile, ?int $tokenPointer = null): void
 	{
-		$token = $this->getTokenFromPointer($codeSnifferFile, $tokenPointer);
+		$token = $this->getTokenFromPointer($phpcsFile, $tokenPointer);
 		$expectedTokenName = $this->findTokenName($code);
 		self::assertSame(
 			$code,
@@ -49,15 +49,15 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		self::assertSame($line, $token['line']);
 	}
 
-	protected function findClassPointerByName(File $codeSnifferFile, string $name): ?int
+	protected function findClassPointerByName(File $phpcsFile, string $name): ?int
 	{
-		$tokens = $codeSnifferFile->getTokens();
+		$tokens = $phpcsFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
 			if ($tokens[$i]['code'] !== T_STRING || $tokens[$i]['content'] !== $name) {
 				continue;
 			}
 
-			$classPointer = TokenHelper::findPrevious($codeSnifferFile, [T_CLASS, T_INTERFACE, T_TRAIT], $i - 1);
+			$classPointer = TokenHelper::findPrevious($phpcsFile, [T_CLASS, T_INTERFACE, T_TRAIT], $i - 1);
 			if ($classPointer === null) {
 				continue;
 			}
@@ -67,15 +67,15 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		return null;
 	}
 
-	protected function findConstantPointerByName(File $codeSnifferFile, string $name): ?int
+	protected function findConstantPointerByName(File $phpcsFile, string $name): ?int
 	{
-		$tokens = $codeSnifferFile->getTokens();
+		$tokens = $phpcsFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
 			if ($tokens[$i]['code'] !== T_STRING || $tokens[$i]['content'] !== $name) {
 				continue;
 			}
 
-			$constantPointer = TokenHelper::findPrevious($codeSnifferFile, T_CONST, $i - 1);
+			$constantPointer = TokenHelper::findPrevious($phpcsFile, T_CONST, $i - 1);
 			if ($constantPointer === null) {
 				continue;
 			}
@@ -85,15 +85,15 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		return null;
 	}
 
-	protected function findPropertyPointerByName(File $codeSnifferFile, string $name): ?int
+	protected function findPropertyPointerByName(File $phpcsFile, string $name): ?int
 	{
-		$tokens = $codeSnifferFile->getTokens();
+		$tokens = $phpcsFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
 			if ($tokens[$i]['code'] !== T_VARIABLE || $tokens[$i]['content'] !== sprintf('$%s', $name)) {
 				continue;
 			}
 
-			$propertyPointer = TokenHelper::findPrevious($codeSnifferFile, [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_STATIC], $i - 1);
+			$propertyPointer = TokenHelper::findPrevious($phpcsFile, [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_STATIC], $i - 1);
 			if ($propertyPointer === null) {
 				continue;
 			}
@@ -103,15 +103,15 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		return null;
 	}
 
-	protected function findFunctionPointerByName(File $codeSnifferFile, string $name): ?int
+	protected function findFunctionPointerByName(File $phpcsFile, string $name): ?int
 	{
-		$tokens = $codeSnifferFile->getTokens();
+		$tokens = $phpcsFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
 			if ($tokens[$i]['code'] !== T_STRING || $tokens[$i]['content'] !== $name) {
 				continue;
 			}
 
-			$functionPointer = TokenHelper::findPrevious($codeSnifferFile, T_FUNCTION, $i - 1);
+			$functionPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $i - 1);
 			if ($functionPointer === null) {
 				continue;
 			}
@@ -122,14 +122,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $line
 	 * @param int|string $tokenCode
 	 * @return int|null
 	 */
-	protected function findPointerByLineAndType(File $codeSnifferFile, int $line, $tokenCode): ?int
+	protected function findPointerByLineAndType(File $phpcsFile, int $line, $tokenCode): ?int
 	{
-		$tokens = $codeSnifferFile->getTokens();
+		$tokens = $phpcsFile->getTokens();
 		for ($i = 0; $i < count($tokens); $i++) {
 			if ($tokens[$i]['line'] > $line) {
 				return null;
@@ -175,12 +175,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int|null $tokenPointer
 	 * @return mixed[]
 	 */
 	private function getTokenFromPointer(
-		File $codeSnifferFile,
+		File $phpcsFile,
 		?int $tokenPointer = null
 	): array
 	{
@@ -188,11 +188,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 			throw new NullTokenPointerException();
 		}
 
-		$tokens = $codeSnifferFile->getTokens();
+		$tokens = $phpcsFile->getTokens();
 		if (!isset($tokens[$tokenPointer])) {
 			throw new TokenPointerOutOfBoundsException(
 				$tokenPointer,
-				TokenHelper::getLastTokenPointer($codeSnifferFile)
+				TokenHelper::getLastTokenPointer($phpcsFile)
 			);
 		}
 
@@ -207,15 +207,15 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		]);
 		$codeSniffer->init();
 
-		$codeSnifferFile = new LocalFile(
+		$phpcsFile = new LocalFile(
 			$filename,
 			$codeSniffer->ruleset,
 			$codeSniffer->config
 		);
 
-		$codeSnifferFile->process();
+		$phpcsFile->process();
 
-		return $codeSnifferFile;
+		return $phpcsFile;
 	}
 
 }

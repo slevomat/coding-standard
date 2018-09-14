@@ -15,56 +15,56 @@ use function sprintf;
 class ClassHelper
 {
 
-	public static function isFinal(File $codeSnifferFile, int $classPointer): bool
+	public static function isFinal(File $phpcsFile, int $classPointer): bool
 	{
-		return $codeSnifferFile->getTokens()[TokenHelper::findPreviousEffective($codeSnifferFile, $classPointer - 1)]['code'] === T_FINAL;
+		return $phpcsFile->getTokens()[TokenHelper::findPreviousEffective($phpcsFile, $classPointer - 1)]['code'] === T_FINAL;
 	}
 
-	public static function getFullyQualifiedName(File $codeSnifferFile, int $classPointer): string
+	public static function getFullyQualifiedName(File $phpcsFile, int $classPointer): string
 	{
-		$className = self::getName($codeSnifferFile, $classPointer);
+		$className = self::getName($phpcsFile, $classPointer);
 
-		$tokens = $codeSnifferFile->getTokens();
+		$tokens = $phpcsFile->getTokens();
 		if ($tokens[$classPointer]['code'] === T_ANON_CLASS) {
 			return $className;
 		}
 
 		$name = sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $className);
-		$namespace = NamespaceHelper::findCurrentNamespaceName($codeSnifferFile, $classPointer);
+		$namespace = NamespaceHelper::findCurrentNamespaceName($phpcsFile, $classPointer);
 		return $namespace !== null ? sprintf('%s%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $namespace, $name) : $name;
 	}
 
-	public static function getName(File $codeSnifferFile, int $classPointer): string
+	public static function getName(File $phpcsFile, int $classPointer): string
 	{
-		$tokens = $codeSnifferFile->getTokens();
+		$tokens = $phpcsFile->getTokens();
 
 		if ($tokens[$classPointer]['code'] === T_ANON_CLASS) {
 			return 'class@anonymous';
 		}
 
-		return $tokens[TokenHelper::findNext($codeSnifferFile, T_STRING, $classPointer + 1, $tokens[$classPointer]['scope_opener'])]['content'];
+		return $tokens[TokenHelper::findNext($phpcsFile, T_STRING, $classPointer + 1, $tokens[$classPointer]['scope_opener'])]['content'];
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $codeSnifferFile
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @return string[]
 	 */
-	public static function getAllNames(File $codeSnifferFile): array
+	public static function getAllNames(File $phpcsFile): array
 	{
 		$previousClassPointer = 0;
 
 		return array_map(
-			function (int $classPointer) use ($codeSnifferFile): string {
-				return self::getName($codeSnifferFile, $classPointer);
+			function (int $classPointer) use ($phpcsFile): string {
+				return self::getName($phpcsFile, $classPointer);
 			},
-			iterator_to_array(self::getAllClassPointers($codeSnifferFile, $previousClassPointer))
+			iterator_to_array(self::getAllClassPointers($phpcsFile, $previousClassPointer))
 		);
 	}
 
-	private static function getAllClassPointers(File $codeSnifferFile, int &$previousClassPointer): Generator
+	private static function getAllClassPointers(File $phpcsFile, int &$previousClassPointer): Generator
 	{
 		do {
-			$nextClassPointer = TokenHelper::findNext($codeSnifferFile, TokenHelper::$typeKeywordTokenCodes, $previousClassPointer + 1);
+			$nextClassPointer = TokenHelper::findNext($phpcsFile, TokenHelper::$typeKeywordTokenCodes, $previousClassPointer + 1);
 			if ($nextClassPointer === null) {
 				break;
 			}

@@ -127,150 +127,150 @@ class TypeHintHelperTest extends TestCase
 
 	public function testFunctionReturnAnnotationWithNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionWithReturnAnnotation');
-		$returnAnnotation = FunctionHelper::findReturnAnnotation($codeSnifferFile, $functionPointer);
-		self::assertSame('void', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $returnAnnotation->getContent()));
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithReturnAnnotation');
+		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
+		self::assertSame('void', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnAnnotation->getContent()));
 	}
 
 	public function testFunctionReturnTypeHintWithNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionWithReturnTypeHint');
-		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer);
-		self::assertSame('\FooNamespace\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $returnTypeHint->getTypeHint()));
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithReturnTypeHint');
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
+		self::assertSame('\FooNamespace\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()));
 	}
 
 	public function testFunctionParameterAnnotationWithNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionWithParameterAnnotation');
-		$parameterAnnotation = FunctionHelper::getParametersAnnotations($codeSnifferFile, $functionPointer)[0];
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithParameterAnnotation');
+		$parameterAnnotation = FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer)[0];
 		$parameterTypeHint = preg_split('~\\s+~', $parameterAnnotation->getContent())[0];
-		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $parameterTypeHint));
+		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint));
 	}
 
 	public function testFunctionParameterTypeHintWithNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionWithParameterTypeHint');
-		$parameterTypeHint = FunctionHelper::getParametersTypeHints($codeSnifferFile, $functionPointer)['$parameter'];
-		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $parameterTypeHint->getTypeHint()));
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithParameterTypeHint');
+		$parameterTypeHint = FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer)['$parameter'];
+		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()));
 	}
 
 	public function testMethodReturnAnnotationWithNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
 
-		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooMethodWithReturnAnnotation');
-		$returnAnnotation = FunctionHelper::findReturnAnnotation($codeSnifferFile, $methodPointer);
-		self::assertSame('\FooNamespace\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $returnAnnotation->getContent()));
+		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithReturnAnnotation');
+		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $methodPointer);
+		self::assertSame('\FooNamespace\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $returnAnnotation->getContent()));
 	}
 
 	public function testMethodReturnTypeHintWithNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
 
-		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooMethodWithReturnTypeHint');
-		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $methodPointer);
-		self::assertSame('bool', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $returnTypeHint->getTypeHint()));
+		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithReturnTypeHint');
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $methodPointer);
+		self::assertSame('bool', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $returnTypeHint->getTypeHint()));
 	}
 
 	public function testMethodParameterAnnotationWithNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
 
-		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooMethodWithParameterAnnotation');
-		$parameterAnnotation = FunctionHelper::getParametersAnnotations($codeSnifferFile, $methodPointer)[0];
+		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithParameterAnnotation');
+		$parameterAnnotation = FunctionHelper::getParametersAnnotations($phpcsFile, $methodPointer)[0];
 		$parameterTypeHint = preg_split('~\\s+~', $parameterAnnotation->getContent())[0];
-		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $parameterTypeHint));
+		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint));
 	}
 
 	public function testMethodParameterTypeHintWithNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
 
-		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooMethodWithParameterTypeHint');
-		$parameterTypeHint = FunctionHelper::getParametersTypeHints($codeSnifferFile, $methodPointer)['$parameter'];
-		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $parameterTypeHint->getTypeHint()));
+		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithParameterTypeHint');
+		$parameterTypeHint = FunctionHelper::getParametersTypeHints($phpcsFile, $methodPointer)['$parameter'];
+		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint->getTypeHint()));
 	}
 
 	public function testFunctionReturnAnnotationWithoutNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionWithReturnAnnotation');
-		$returnAnnotation = FunctionHelper::findReturnAnnotation($codeSnifferFile, $functionPointer);
-		self::assertSame('void', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $returnAnnotation->getContent()));
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithReturnAnnotation');
+		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
+		self::assertSame('void', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnAnnotation->getContent()));
 	}
 
 	public function testFunctionReturnTypeHintWithoutNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionWithReturnTypeHint');
-		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $functionPointer);
-		self::assertSame('\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $returnTypeHint->getTypeHint()));
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithReturnTypeHint');
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
+		self::assertSame('\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()));
 	}
 
 	public function testFunctionParameterAnnotationWithoutNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionWithParameterAnnotation');
-		$parameterAnnotation = FunctionHelper::getParametersAnnotations($codeSnifferFile, $functionPointer)[0];
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithParameterAnnotation');
+		$parameterAnnotation = FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer)[0];
 		$parameterTypeHint = preg_split('~\\s+~', $parameterAnnotation->getContent())[0];
-		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $parameterTypeHint));
+		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint));
 	}
 
 	public function testFunctionParameterTypeHintWithoutNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
 
-		$functionPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooFunctionWithParameterTypeHint');
-		$parameterTypeHint = FunctionHelper::getParametersTypeHints($codeSnifferFile, $functionPointer)['$parameter'];
-		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $functionPointer, $parameterTypeHint->getTypeHint()));
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithParameterTypeHint');
+		$parameterTypeHint = FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer)['$parameter'];
+		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()));
 	}
 
 	public function testMethodReturnAnnotationWithoutNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
 
-		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooMethodWithReturnAnnotation');
-		$returnAnnotation = FunctionHelper::findReturnAnnotation($codeSnifferFile, $methodPointer);
-		self::assertSame('\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $returnAnnotation->getContent()));
+		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithReturnAnnotation');
+		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $methodPointer);
+		self::assertSame('\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $returnAnnotation->getContent()));
 	}
 
 	public function testMethodReturnTypeHintWithoutNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
 
-		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooMethodWithReturnTypeHint');
-		$returnTypeHint = FunctionHelper::findReturnTypeHint($codeSnifferFile, $methodPointer);
-		self::assertSame('bool', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $returnTypeHint->getTypeHint()));
+		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithReturnTypeHint');
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $methodPointer);
+		self::assertSame('bool', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $returnTypeHint->getTypeHint()));
 	}
 
 	public function testMethodParameterAnnotationWithoutNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
 
-		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooMethodWithParameterAnnotation');
-		$parameterAnnotation = FunctionHelper::getParametersAnnotations($codeSnifferFile, $methodPointer)[0];
+		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithParameterAnnotation');
+		$parameterAnnotation = FunctionHelper::getParametersAnnotations($phpcsFile, $methodPointer)[0];
 		$parameterTypeHint = preg_split('~\\s+~', $parameterAnnotation->getContent())[0];
-		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $parameterTypeHint));
+		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint));
 	}
 
 	public function testMethodParameterTypeHintWithoutNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
 
-		$methodPointer = $this->findFunctionPointerByName($codeSnifferFile, 'fooMethodWithParameterTypeHint');
-		$parameterTypeHint = FunctionHelper::getParametersTypeHints($codeSnifferFile, $methodPointer)['$parameter'];
-		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($codeSnifferFile, $methodPointer, $parameterTypeHint->getTypeHint()));
+		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithParameterTypeHint');
+		$parameterTypeHint = FunctionHelper::getParametersTypeHints($phpcsFile, $methodPointer)['$parameter'];
+		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint->getTypeHint()));
 	}
 
 }

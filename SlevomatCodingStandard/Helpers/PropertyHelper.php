@@ -18,15 +18,15 @@ use function sprintf;
 class PropertyHelper
 {
 
-	public static function isProperty(File $codeSnifferFile, int $variablePointer): bool
+	public static function isProperty(File $phpcsFile, int $variablePointer): bool
 	{
 		$propertyDeterminingPointer = TokenHelper::findPreviousExcluding(
-			$codeSnifferFile,
+			$phpcsFile,
 			array_merge([T_STATIC], TokenHelper::$ineffectiveTokenCodes),
 			$variablePointer - 1
 		);
 
-		return in_array($codeSnifferFile->getTokens()[$propertyDeterminingPointer]['code'], [
+		return in_array($phpcsFile->getTokens()[$propertyDeterminingPointer]['code'], [
 			T_PRIVATE,
 			T_PROTECTED,
 			T_PUBLIC,
@@ -34,18 +34,18 @@ class PropertyHelper
 		], true);
 	}
 
-	public static function getFullyQualifiedName(File $codeSnifferFile, int $propertyPointer): string
+	public static function getFullyQualifiedName(File $phpcsFile, int $propertyPointer): string
 	{
-		$propertyToken = $codeSnifferFile->getTokens()[$propertyPointer];
+		$propertyToken = $phpcsFile->getTokens()[$propertyPointer];
 		$propertyName = $propertyToken['content'];
 
 		$classPointer = array_reverse(array_keys($propertyToken['conditions']))[0];
-		if ($codeSnifferFile->getTokens()[$classPointer]['code'] === T_ANON_CLASS) {
+		if ($phpcsFile->getTokens()[$classPointer]['code'] === T_ANON_CLASS) {
 			return sprintf('class@anonymous::%s', $propertyName);
 		}
 
-		$name = sprintf('%s%s::%s', NamespaceHelper::NAMESPACE_SEPARATOR, ClassHelper::getName($codeSnifferFile, $classPointer), $propertyName);
-		$namespace = NamespaceHelper::findCurrentNamespaceName($codeSnifferFile, $propertyPointer);
+		$name = sprintf('%s%s::%s', NamespaceHelper::NAMESPACE_SEPARATOR, ClassHelper::getName($phpcsFile, $classPointer), $propertyName);
+		$namespace = NamespaceHelper::findCurrentNamespaceName($phpcsFile, $propertyPointer);
 		return $namespace !== null ? sprintf('%s%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $namespace, $name) : $name;
 	}
 

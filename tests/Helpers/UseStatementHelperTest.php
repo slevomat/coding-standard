@@ -11,117 +11,117 @@ class UseStatementHelperTest extends TestCase
 
 	public function testIsAnonymousFunctionUse(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/anonymousFunction.php'
 		);
-		$usePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
-		self::assertTrue(UseStatementHelper::isAnonymousFunctionUse($codeSnifferFile, $usePointer));
+		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
+		self::assertTrue(UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer));
 	}
 
 	public function testIsNotAnonymousFunctionUse(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/useStatements.php'
 		);
-		$usePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
-		self::assertFalse(UseStatementHelper::isAnonymousFunctionUse($codeSnifferFile, $usePointer));
+		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
+		self::assertFalse(UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer));
 	}
 
 	public function testIsTraitUse(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/classWithTrait.php'
 		);
-		$usePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
-		self::assertTrue(UseStatementHelper::isTraitUse($codeSnifferFile, $usePointer));
+		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
+		self::assertTrue(UseStatementHelper::isTraitUse($phpcsFile, $usePointer));
 	}
 
 	public function testIsTraitUseInAnonymousClass(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/anonymousClassWithTrait.php'
 		);
-		$usePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
-		self::assertTrue(UseStatementHelper::isTraitUse($codeSnifferFile, $usePointer));
+		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
+		self::assertTrue(UseStatementHelper::isTraitUse($phpcsFile, $usePointer));
 	}
 
 	public function testIsNotTraitUse(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/useStatements.php'
 		);
-		$usePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
-		self::assertFalse(UseStatementHelper::isTraitUse($codeSnifferFile, $usePointer));
+		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
+		self::assertFalse(UseStatementHelper::isTraitUse($phpcsFile, $usePointer));
 
-		$classPointer = TokenHelper::findNext($codeSnifferFile, T_CLASS, 0);
-		$methodPointer = TokenHelper::findNext($codeSnifferFile, T_FUNCTION, $classPointer);
-		$usePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $methodPointer);
-		$this->assertFalse(UseStatementHelper::isTraitUse($codeSnifferFile, $usePointer));
+		$classPointer = TokenHelper::findNext($phpcsFile, T_CLASS, 0);
+		$methodPointer = TokenHelper::findNext($phpcsFile, T_FUNCTION, $classPointer);
+		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, $methodPointer);
+		$this->assertFalse(UseStatementHelper::isTraitUse($phpcsFile, $usePointer));
 	}
 
 	public function testGetAlias(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/useStatements.php'
 		);
-		$bazUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
-		self::assertNull(UseStatementHelper::getAlias($codeSnifferFile, $bazUsePointer));
+		$bazUsePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
+		self::assertNull(UseStatementHelper::getAlias($phpcsFile, $bazUsePointer));
 
-		$fooUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $bazUsePointer + 1);
-		self::assertNull(UseStatementHelper::getAlias($codeSnifferFile, $fooUsePointer));
+		$fooUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $bazUsePointer + 1);
+		self::assertNull(UseStatementHelper::getAlias($phpcsFile, $fooUsePointer));
 
-		$loremIpsumUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $fooUsePointer + 1);
-		self::assertSame('LoremIpsum', UseStatementHelper::getAlias($codeSnifferFile, $loremIpsumUsePointer));
+		$loremIpsumUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $fooUsePointer + 1);
+		self::assertSame('LoremIpsum', UseStatementHelper::getAlias($phpcsFile, $loremIpsumUsePointer));
 	}
 
 	public function testGetNameAsReferencedInClassFromUse(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/useStatements.php'
 		);
-		$bazUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
-		self::assertSame('Baz', UseStatementHelper::getNameAsReferencedInClassFromUse($codeSnifferFile, $bazUsePointer));
+		$bazUsePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
+		self::assertSame('Baz', UseStatementHelper::getNameAsReferencedInClassFromUse($phpcsFile, $bazUsePointer));
 
-		$fooUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $bazUsePointer + 1);
-		self::assertSame('Foo', UseStatementHelper::getNameAsReferencedInClassFromUse($codeSnifferFile, $fooUsePointer));
+		$fooUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $bazUsePointer + 1);
+		self::assertSame('Foo', UseStatementHelper::getNameAsReferencedInClassFromUse($phpcsFile, $fooUsePointer));
 
-		$loremIpsumUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $fooUsePointer + 1);
-		self::assertSame('LoremIpsum', UseStatementHelper::getNameAsReferencedInClassFromUse($codeSnifferFile, $loremIpsumUsePointer));
+		$loremIpsumUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $fooUsePointer + 1);
+		self::assertSame('LoremIpsum', UseStatementHelper::getNameAsReferencedInClassFromUse($phpcsFile, $loremIpsumUsePointer));
 	}
 
 	public function testGetFullyQualifiedTypeNameFromUse(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/useStatements.php'
 		);
-		$bazUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, 0);
-		self::assertSame('Bar\Baz', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $bazUsePointer));
+		$bazUsePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
+		self::assertSame('Bar\Baz', UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $bazUsePointer));
 
-		$fooUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $bazUsePointer + 1);
-		self::assertSame('Foo', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $fooUsePointer));
+		$fooUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $bazUsePointer + 1);
+		self::assertSame('Foo', UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $fooUsePointer));
 
-		$loremIpsumUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $fooUsePointer + 1);
-		self::assertSame('Lorem\Ipsum', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $loremIpsumUsePointer));
+		$loremIpsumUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $fooUsePointer + 1);
+		self::assertSame('Lorem\Ipsum', UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $loremIpsumUsePointer));
 
-		$lerdorfIsBarConstantUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $loremIpsumUsePointer + 1);
-		self::assertSame('Lerdorf\IS_BAR', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $lerdorfIsBarConstantUsePointer));
+		$lerdorfIsBarConstantUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $loremIpsumUsePointer + 1);
+		self::assertSame('Lerdorf\IS_BAR', UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $lerdorfIsBarConstantUsePointer));
 
-		$rasmusFooConstantUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $lerdorfIsBarConstantUsePointer + 1);
-		self::assertSame('Rasmus\FOO', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $rasmusFooConstantUsePointer));
+		$rasmusFooConstantUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $lerdorfIsBarConstantUsePointer + 1);
+		self::assertSame('Rasmus\FOO', UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $rasmusFooConstantUsePointer));
 
-		$lerdorfIsBarFunctionUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $rasmusFooConstantUsePointer + 1);
-		self::assertSame('Lerdorf\isBar', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $lerdorfIsBarFunctionUsePointer));
+		$lerdorfIsBarFunctionUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $rasmusFooConstantUsePointer + 1);
+		self::assertSame('Lerdorf\isBar', UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $lerdorfIsBarFunctionUsePointer));
 
-		$rasmusFooFunctionUsePointer = TokenHelper::findNext($codeSnifferFile, T_USE, $lerdorfIsBarFunctionUsePointer + 1);
-		self::assertSame('Rasmus\foo', UseStatementHelper::getFullyQualifiedTypeNameFromUse($codeSnifferFile, $rasmusFooFunctionUsePointer));
+		$rasmusFooFunctionUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $lerdorfIsBarFunctionUsePointer + 1);
+		self::assertSame('Rasmus\foo', UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $rasmusFooFunctionUsePointer));
 	}
 
 	public function testGetUseStatements(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(
+		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/useStatements.php'
 		);
-		$useStatements = UseStatementHelper::getUseStatements($codeSnifferFile, 0);
+		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, 0);
 		self::assertCount(8, $useStatements);
 		self::assertSame(2, $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Baz')]->getPointer());
 		self::assertUseStatement('Bar\Baz', 'Baz', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Baz')], false, false, null);

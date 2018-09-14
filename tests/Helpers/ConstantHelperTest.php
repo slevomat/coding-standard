@@ -7,32 +7,32 @@ class ConstantHelperTest extends TestCase
 
 	public function testNameWithNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/constantWithNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/constantWithNamespace.php');
 
-		$constantPointer = $this->findConstantPointerByName($codeSnifferFile, 'FOO');
-		self::assertSame('\FooNamespace\FOO', ConstantHelper::getFullyQualifiedName($codeSnifferFile, $constantPointer));
-		self::assertSame('FOO', ConstantHelper::getName($codeSnifferFile, $constantPointer));
+		$constantPointer = $this->findConstantPointerByName($phpcsFile, 'FOO');
+		self::assertSame('\FooNamespace\FOO', ConstantHelper::getFullyQualifiedName($phpcsFile, $constantPointer));
+		self::assertSame('FOO', ConstantHelper::getName($phpcsFile, $constantPointer));
 	}
 
 	public function testNameWithoutNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/constantWithoutNamespace.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/constantWithoutNamespace.php');
 
-		$constantPointer = $this->findConstantPointerByName($codeSnifferFile, 'FOO');
-		self::assertSame('FOO', ConstantHelper::getFullyQualifiedName($codeSnifferFile, $constantPointer));
-		self::assertSame('FOO', ConstantHelper::getName($codeSnifferFile, $constantPointer));
+		$constantPointer = $this->findConstantPointerByName($phpcsFile, 'FOO');
+		self::assertSame('FOO', ConstantHelper::getFullyQualifiedName($phpcsFile, $constantPointer));
+		self::assertSame('FOO', ConstantHelper::getName($phpcsFile, $constantPointer));
 	}
 
 	public function testGetAllNames(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/constantNames.php');
-		self::assertSame(['FOO', 'BOO'], ConstantHelper::getAllNames($codeSnifferFile));
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/constantNames.php');
+		self::assertSame(['FOO', 'BOO'], ConstantHelper::getAllNames($phpcsFile));
 	}
 
 	public function testGetAllNamesNoNamespace(): void
 	{
-		$codeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/constantWithoutNamespace.php');
-		self::assertSame(['FOO'], ConstantHelper::getAllNames($codeSnifferFile));
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/constantWithoutNamespace.php');
+		self::assertSame(['FOO'], ConstantHelper::getAllNames($phpcsFile));
 	}
 
 }
