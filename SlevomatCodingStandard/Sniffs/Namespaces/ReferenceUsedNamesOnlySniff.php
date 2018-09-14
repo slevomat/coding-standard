@@ -37,6 +37,7 @@ use function constant;
 use function count;
 use function defined;
 use function explode;
+use function function_exists;
 use function in_array;
 use function ltrim;
 use function preg_quote;
@@ -249,11 +250,11 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 			$isGlobalFunctionFallback = false;
 			if ($reference->isFunction && $isGlobalFallback) {
-				$isGlobalFunctionFallback = !array_key_exists(strtolower($reference->name), $definedFunctionsIndex);
+				$isGlobalFunctionFallback = !array_key_exists(strtolower($reference->name), $definedFunctionsIndex) && function_exists($reference->name);
 			}
 			$isGlobalConstantFallback = false;
 			if ($reference->isConstant && $isGlobalFallback) {
-				$isGlobalConstantFallback = !array_key_exists($reference->name, $definedConstantsIndex);
+				$isGlobalConstantFallback = !array_key_exists($reference->name, $definedConstantsIndex) && defined($reference->name);
 			}
 
 			if ($isFullyQualified) {
