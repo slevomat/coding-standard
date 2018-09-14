@@ -100,11 +100,11 @@
 	<rule ref="SlevomatCodingStandard.Namespaces.DisallowGroupUse"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword">
 		<properties>
-			<property name="keywordsToCheck" type="array" value="
-				T_EXTENDS,
-				T_IMPLEMENTS,
-				T_USE,
-			"/>
+			<property name="keywordsToCheck" type="array">
+			    <element value="T_EXTENDS"/>
+			    <element value="T_IMPLEMENTS"/>
+			    <element value="T_USE"/>
+			</property>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation"/>
@@ -116,11 +116,11 @@
 		<properties>
 			<property name="allowFullyQualifiedExceptions" value="true"/>
 			<property name="allowPartialUses" value="false"/>
-			<property name="fullyQualifiedKeywords" type="array" value="
-				T_EXTENDS,
-				T_IMPLEMENTS,
-				T_USE,
-			"/>
+			<property name="fullyQualifiedKeywords" type="array">
+			    <element value="T_EXTENDS"/>
+			    <element value="T_IMPLEMENTS"/>
+			    <element value="T_USE"/>
+			</property>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Namespaces.RequireOneNamespaceInFile"/>
@@ -142,9 +142,9 @@
 	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
 		<properties>
 			<property name="allAnnotationsAreUseful" value="true"/>
-			<property name="traversableTypeHints" type="array" value="
-				Traversable,
-			"/>
+			<property name="traversableTypeHints" type="array">
+			    <element value="Traversable"/>
+			</property>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>

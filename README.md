@@ -307,10 +307,10 @@ For example, with the following setting, only `if` and `switch` tokens are check
 ```xml
 <rule ref="SlevomatCodingStandard.ControlStructures.ControlStructureSpacing">
 	<properties>
-		<property name="tokensToCheck" type="array" value="
-			T_IF,
-			T_SWITCH,
-		"/>
+		<property name="tokensToCheck" type="array">
+		    <element value="T_IF"/>
+		    <element value="T_SWITCH"/>
+		</property>
 	</properties>
 </rule>
 ```
@@ -431,9 +431,26 @@ Other than enforcing that the type name must match the name of the file it's con
 ```xml
 <rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
 	<properties>
-		<property name="rootNamespaces" type="array" value="app/ui=>Slevomat\UI,app=>Slevomat,build/SlevomatSniffs/Sniffs=>SlevomatSniffs\Sniffs,tests/ui=>Slevomat\UI,tests=>Slevomat"/>
-		<property name="skipDirs" type="array" value="components,forms,model,models,services,stubs,data,new"/>
-		<property name="ignoredNamespaces" type="array" value="Slevomat\Services"/>
+		<property name="rootNamespaces" type="array">
+		    <element key="app/ui" value="Slevomat\UI"/>
+		    <element key="app" value="Slevomat"/>
+		    <element key="build/SlevomatSniffs/Sniffs" value="SlevomatSniffs\Sniffs"/>
+		    <element key="tests/ui" value="Slevomat\UI"/>
+		    <element key="tests" value="Slevomat"/>
+		</property>
+		<property name="skipDirs" type="array">
+		    <element value="components"/>
+		    <element value="forms"/>
+		    <element value="model"/>
+		    <element value="models"/>
+		    <element value="services"/>
+		    <element value="stubs"/>
+		    <element value="data"/>
+		    <element value="new"/>
+		</property>
+		<property name="ignoredNamespaces" type="array">
+		    <element value="Slevomat\Services"/>
+		</property>
 	</properties>
 </rule>
 ```
@@ -501,7 +518,10 @@ For example, with the following setting, extended or implemented type must alway
 ```xml
 <rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword">
 	<properties>
-		<property name="keywordsToCheck" type="array" value="T_EXTENDS,T_IMPLEMENTS"/>
+		<property name="keywordsToCheck" type="array">
+		    <element value="T_EXTENDS"/>
+		    <element value="T_IMPLEMENTS"/>
+		</property>
 	</properties>
 </rule>
 ```

@@ -28,15 +28,15 @@
 	<rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing"/>
 	<rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
 		<properties>
-			<property name="forbiddenAnnotations" type="array" value="
-				@author,
-				@created,
-				@copyright,
-				@license,
-				@package,
-				@throws,
-				@version
-			"/>
+			<property name="forbiddenAnnotations" type="array">
+			    <element value="@author"/>
+			    <element value="@created"/>
+			    <element value="@copyright"/>
+			    <element value="@license"/>
+			    <element value="@package"/>
+			    <element value="@throws"/>
+			    <element value="@version"/>
+			</property>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments"/>
@@ -44,14 +44,14 @@
 	<rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.ControlStructureSpacing">
 		<properties>
-			<property name="tokensToCheck" type="array" value="
-				T_GOTO,
-				T_SWITCH,
-				T_THROW,
-				T_TRY,
-				T_YIELD,
-				T_YIELD_FROM,
-			"/>
+			<property name="tokensToCheck" type="array">
+			    <element value="T_GOTO"/>
+			    <element value="T_SWITCH"/>
+			    <element value="T_THROW"/>
+			    <element value="T_TRY"/>
+			    <element value="T_YIELD"/>
+			    <element value="T_YIELD_FROM"/>
+			</property>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowContinueWithoutIntegerOperandInSwitch"/>
@@ -64,7 +64,10 @@
 	</rule>
 	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
 		<properties>
-			<property name="rootNamespaces" type="array" value="SlevomatCodingStandard=>SlevomatCodingStandard,tests=>SlevomatCodingStandard"/>
+			<property name="rootNamespaces" type="array">
+			    <element key="SlevomatCodingStandard" value="SlevomatCodingStandard"/>
+			    <element key="tests" value="SlevomatCodingStandard"/>
+			</property>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure"/>
@@ -76,7 +79,7 @@
 	</rule>
 	<rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
 		<properties>
-			<property name="fullyQualifiedKeywords" type="array" value=""/>
+			<property name="fullyQualifiedKeywords" type="array"/>
 			<property name="allowFallbackGlobalFunctions" value="false"/>
 			<property name="allowFallbackGlobalConstants" value="false"/>
 			<property name="allowFullyQualifiedExceptions" value="false"/>
