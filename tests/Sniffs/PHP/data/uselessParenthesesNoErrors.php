@@ -77,3 +77,5 @@ class ClassWithClosure
 		($this->closure)();
 	}
 }
+
+$response = (new Response())->withStatus(200);
