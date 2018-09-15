@@ -102,3 +102,9 @@ function () {
 	self::$a = null;
 };
 
+function () {
+	$a = 10;
+	for ($i = 0; $i < 10; $i++) {
+		$a++;
+	}
+};
