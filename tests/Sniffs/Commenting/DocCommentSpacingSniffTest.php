@@ -93,4 +93,54 @@ class DocCommentSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testAnnotationsGroupsNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/docCommentSpacingAnnotationsGroupsNoErrors.php', [
+			'linesCountBetweenAnnotationsGroups' => 1,
+			'annotationsGroups' => [
+				'@param',
+				'@X\\Boo,@X\\,@XX',
+				'@throws',
+				'@link,@todo',
+				'@whatever',
+				'@anything',
+			],
+		], [
+			DocCommentSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_ANNOTATIONS_GROUPS,
+			DocCommentSpacingSniff::CODE_INCORRECT_ANNOTATIONS_GROUP,
+			DocCommentSpacingSniff::CODE_INCORRECT_ORDER_OF_ANNOTATIONS_GROUPS,
+			DocCommentSpacingSniff::CODE_INCORRECT_ORDER_OF_ANNOTATIONS_IN_GROUP,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testAnnotationsGroupsErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/docCommentSpacingAnnotationsGroupsErrors.php', [
+			'linesCountBetweenAnnotationsGroups' => 1,
+			'annotationsGroups' => [
+				'@param',
+				'@X\\Boo,@X\\,@XX',
+				'@throws',
+				'@link,@todo',
+				'@whatever',
+				'@anything',
+			],
+		], [
+			DocCommentSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_ANNOTATIONS_GROUPS,
+			DocCommentSpacingSniff::CODE_INCORRECT_ANNOTATIONS_GROUP,
+			DocCommentSpacingSniff::CODE_INCORRECT_ORDER_OF_ANNOTATIONS_GROUPS,
+			DocCommentSpacingSniff::CODE_INCORRECT_ORDER_OF_ANNOTATIONS_IN_GROUP,
+		]);
+
+		self::assertSame(4, $report->getErrorCount());
+
+		self::assertSniffError($report, 20, DocCommentSpacingSniff::CODE_INCORRECT_ANNOTATIONS_GROUP);
+		self::assertSniffError($report, 34, DocCommentSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_ANNOTATIONS_GROUPS);
+		self::assertSniffError($report, 46, DocCommentSpacingSniff::CODE_INCORRECT_ORDER_OF_ANNOTATIONS_GROUPS);
+		self::assertSniffError($report, 49, DocCommentSpacingSniff::CODE_INCORRECT_ORDER_OF_ANNOTATIONS_IN_GROUP);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
