@@ -82,7 +82,7 @@ Disallows implicit array creation.
 
 Disallows late static binding for constants.
 
-#### SlevomatCodingStandard.Classes.UselessLateStaticBindingSniff 🔧
+#### SlevomatCodingStandard.Classes.UselessLateStaticBinding 🔧
 
 Reports useless late static binding.
 
