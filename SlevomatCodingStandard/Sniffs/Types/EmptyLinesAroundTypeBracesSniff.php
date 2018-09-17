@@ -74,17 +74,11 @@ class EmptyLinesAroundTypeBracesSniff implements Sniff
 		}
 
 		if ($linesCountAfterOpeningBrace === 1) {
-			if ($lines === 0) {
-				$fix = $phpcsFile->addFixableError(sprintf(
-					'There must be one empty line after %s opening brace.',
-					$typeToken['content']
-				), $openerPointer, self::CODE_NO_EMPTY_LINE_AFTER_OPENING_BRACE);
-			} else {
-				$fix = $phpcsFile->addFixableError(sprintf(
-					'There must be one empty line after %s opening brace.',
-					$typeToken['content']
-				), $openerPointer, self::CODE_MULTIPLE_EMPTY_LINES_AFTER_OPENING_BRACE);
-			}
+			$fix = $phpcsFile->addFixableError(
+				sprintf('There must be one empty line after %s opening brace.', $typeToken['content']),
+				$openerPointer,
+				$lines === 0 ? self::CODE_NO_EMPTY_LINE_AFTER_OPENING_BRACE : self::CODE_MULTIPLE_EMPTY_LINES_AFTER_OPENING_BRACE
+			);
 		} else {
 			$fix = $phpcsFile->addFixableError(sprintf(
 				'There must be exactly %d empty lines after %s opening brace.',
@@ -131,17 +125,11 @@ class EmptyLinesAroundTypeBracesSniff implements Sniff
 		}
 
 		if ($linesCountBeforeClosingBrace === 1) {
-			if ($lines === 0) {
-				$fix = $phpcsFile->addFixableError(sprintf(
-					'There must be one empty line before %s closing brace.',
-					$typeToken['content']
-				), $closerPointer, self::CODE_NO_EMPTY_LINE_BEFORE_CLOSING_BRACE);
-			} else {
-				$fix = $phpcsFile->addFixableError(sprintf(
-					'There must be one empty line before %s closing brace.',
-					$typeToken['content']
-				), $closerPointer, self::CODE_MULTIPLE_EMPTY_LINES_BEFORE_CLOSING_BRACE);
-			}
+			$fix = $phpcsFile->addFixableError(
+				sprintf('There must be one empty line before %s closing brace.', $typeToken['content']),
+				$closerPointer,
+				$lines === 0 ? self::CODE_NO_EMPTY_LINE_BEFORE_CLOSING_BRACE : self::CODE_MULTIPLE_EMPTY_LINES_BEFORE_CLOSING_BRACE
+			);
 		} else {
 			$fix = $phpcsFile->addFixableError(sprintf(
 				'There must be exactly %d empty lines before %s closing brace.',

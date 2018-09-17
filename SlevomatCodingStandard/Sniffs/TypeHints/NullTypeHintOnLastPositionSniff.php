@@ -53,11 +53,9 @@ class NullTypeHintOnLastPositionSniff implements Sniff
 					continue;
 				}
 
-				if ($annotationName === '@var' && preg_match('~^(\$\\S+\\s+)(.+)~', $annotation->getContent(), $matches)) {
-					$typeHintsDefinition = $matches[2];
-				} else {
-					$typeHintsDefinition = preg_split('~\\s+~', $annotation->getContent())[0];
-				}
+				$typeHintsDefinition = $annotationName === '@var' && preg_match('~^(\$\\S+\\s+)(.+)~', $annotation->getContent(), $matches)
+					? $matches[2]
+					: preg_split('~\\s+~', $annotation->getContent())[0];
 
 				$typeHints = explode('|', $typeHintsDefinition);
 				$lowercasedTypeHints = array_map(function (string $typeHint): string {

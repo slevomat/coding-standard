@@ -53,11 +53,9 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 					continue;
 				}
 
-				if ($annotationName === '@var' && preg_match('~^\$\\S+\\s+(.+)~', $annotation->getContent(), $matches)) {
-					$typeHintsDefinition = $matches[1];
-				} else {
-					$typeHintsDefinition = preg_split('~\\s+~', $annotation->getContent())[0];
-				}
+				$typeHintsDefinition = $annotationName === '@var' && preg_match('~^\$\\S+\\s+(.+)~', $annotation->getContent(), $matches)
+					? $matches[1]
+					: preg_split('~\\s+~', $annotation->getContent())[0];
 
 				$typeHints = explode('|', $typeHintsDefinition);
 				foreach ($typeHints as $typeHint) {

@@ -117,15 +117,13 @@ class ReturnTypeHintSpacingSniff implements Sniff
 		$expectedSpaces = str_repeat(' ', $spacesCountBeforeColon);
 
 		if ($tokens[$colonPointer - 1]['code'] !== T_CLOSE_PARENTHESIS && $tokens[$colonPointer - 1]['content'] !== $expectedSpaces) {
-			if ($spacesCountBeforeColon === 0) {
-				$fix = $phpcsFile->addFixableError('There must be no whitespace between closing parenthesis and return type colon.', $typeHintPointer, self::CODE_WHITESPACE_BEFORE_COLON);
-			} else {
-				$fix = $phpcsFile->addFixableError(
+			$fix = $spacesCountBeforeColon === 0
+				? $phpcsFile->addFixableError('There must be no whitespace between closing parenthesis and return type colon.', $typeHintPointer, self::CODE_WHITESPACE_BEFORE_COLON)
+				: $phpcsFile->addFixableError(
 					sprintf('There must be exactly %d whitespace%s between closing parenthesis and return type colon.', $spacesCountBeforeColon, $spacesCountBeforeColon !== 1 ? 's' : ''),
 					$typeHintPointer,
 					self::CODE_INCORRECT_SPACES_BEFORE_COLON
 				);
-			}
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
 				$phpcsFile->fixer->replaceToken($colonPointer - 1, $expectedSpaces);

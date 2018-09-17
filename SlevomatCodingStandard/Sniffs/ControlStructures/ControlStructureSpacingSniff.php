@@ -149,11 +149,9 @@ class ControlStructureSpacingSniff implements Sniff
 			in_array($tokens[$pointerBefore]['code'], Tokens::$commentTokens, true)
 			&& $tokens[$pointerBefore]['line'] + 1 === $tokens[$controlStructurePointer]['line']
 		) {
-			if (array_key_exists('comment_opener', $tokens[$pointerBefore])) {
-				$controlStructureStartPointer = $tokens[$pointerBefore]['comment_opener'];
-			} else {
-				$controlStructureStartPointer = TokenHelper::findPreviousExcluding($phpcsFile, T_COMMENT, $pointerBefore - 1) + 1;
-			}
+			$controlStructureStartPointer = array_key_exists('comment_opener', $tokens[$pointerBefore])
+				? $tokens[$pointerBefore]['comment_opener']
+				: TokenHelper::findPreviousExcluding($phpcsFile, T_COMMENT, $pointerBefore - 1) + 1;
 
 			/** @var int $pointerBefore */
 			$pointerBefore = TokenHelper::findPreviousEffective($phpcsFile, $pointerBefore - 1);

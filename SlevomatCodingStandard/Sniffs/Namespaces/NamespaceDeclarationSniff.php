@@ -60,14 +60,9 @@ class NamespaceDeclarationSniff implements Sniff
 			return;
 		}
 
-		if ($tokens[$whitespacePointer]['content'][0] === "\t") {
-			$errorMessage = 'Expected one space after namespace statement, found tab.';
-		} else {
-			$errorMessage = sprintf(
-				'Expected one space after namespace statement, found %d.',
-				strlen($tokens[$whitespacePointer]['content'])
-			);
-		}
+		$errorMessage = $tokens[$whitespacePointer]['content'][0] === "\t"
+			? 'Expected one space after namespace statement, found tab.'
+			: sprintf('Expected one space after namespace statement, found %d.', strlen($tokens[$whitespacePointer]['content']));
 
 		$fix = $phpcsFile->addFixableError(
 			$errorMessage,

@@ -318,11 +318,9 @@ class UnusedPrivateElementsSniff implements Sniff
 				}
 			} elseif ($token['code'] === T_DOUBLE_COLON) {
 				$previousTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokenPointer - 1);
-				if ($isCurrentClass($previousTokenPointer)) {
-					$findUsagesStartTokenPointer = $checkDoubleColonUsage($tokenPointer, $previousTokenPointer);
-				} else {
-					$findUsagesStartTokenPointer = $tokenPointer + 1;
-				}
+				$findUsagesStartTokenPointer = $isCurrentClass($previousTokenPointer)
+					? $checkDoubleColonUsage($tokenPointer, $previousTokenPointer)
+					: $tokenPointer + 1;
 			} elseif ($token['code'] === T_NEW) {
 				$variableTokenPointer = TokenHelper::findPreviousLocal($phpcsFile, T_VARIABLE, $tokenPointer - 1);
 				$nextTokenPointer = TokenHelper::findNextEffective($phpcsFile, $tokenPointer + 1);
