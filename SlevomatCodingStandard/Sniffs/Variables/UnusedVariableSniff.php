@@ -88,8 +88,28 @@ class UnusedVariableSniff implements Sniff
 			return;
 		}
 
-		if (in_array($tokens[$variablePointer - 1]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $variablePointer - 1);
+
+		if (in_array($tokens[$previousPointer]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
 			// Property
+			return;
+		}
+
+		if (in_array($tokens[$previousPointer]['code'], [
+			T_EQUAL,
+			T_PLUS_EQUAL,
+			T_MINUS_EQUAL,
+			T_MUL_EQUAL,
+			T_DIV_EQUAL,
+			T_POW_EQUAL,
+			T_MOD_EQUAL,
+			T_AND_EQUAL,
+			T_OR_EQUAL,
+			T_XOR_EQUAL,
+			T_SL_EQUAL,
+			T_SR_EQUAL,
+			T_CONCAT_EQUAL,
+		], true)) {
 			return;
 		}
 

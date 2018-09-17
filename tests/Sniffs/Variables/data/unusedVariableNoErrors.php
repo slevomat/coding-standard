@@ -190,3 +190,12 @@ function () {
 	do {
 	} while (--$i > 0);
 };
+
+function ($data) {
+	$i = 0;
+	$c = '';
+	foreach ($data as $c) {
+		$c = $i++;
+	}
+	echo $c;
+};
