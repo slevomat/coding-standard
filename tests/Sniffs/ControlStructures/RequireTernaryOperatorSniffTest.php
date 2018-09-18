@@ -27,6 +27,26 @@ class RequireTernaryOperatorSniffTest extends TestCase
 		$this->assertAllFixedInFile($report);
 	}
 
+	public function testWithIgnoredMultilineNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireTernaryOperatorWithIgnoredMultilineNoErrors.php', [
+			'ignoreMultiline' => true,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testWithIgnoredMultilineErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireTernaryOperatorWithIgnoredMultilineErrors.php', [
+			'ignoreMultiline' => true,
+		]);
+
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 3, RequireTernaryOperatorSniff::CODE_TERNARY_OPERATOR_NOT_USED);
+		self::assertSniffError($report, 16, RequireTernaryOperatorSniff::CODE_TERNARY_OPERATOR_NOT_USED);
+	}
+
 	public function testIfWithoutCurlyBraces(): void
 	{
 		self::expectException(Throwable::class);

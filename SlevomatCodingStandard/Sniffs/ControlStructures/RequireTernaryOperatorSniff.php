@@ -13,6 +13,7 @@ use const T_IF;
 use const T_INLINE_THEN;
 use const T_RETURN;
 use const T_SEMICOLON;
+use const T_WHITESPACE;
 use function array_key_exists;
 use function sprintf;
 
@@ -20,6 +21,9 @@ class RequireTernaryOperatorSniff implements Sniff
 {
 
 	public const CODE_TERNARY_OPERATOR_NOT_USED = 'TernaryOperatorNotUsed';
+
+	/** @var bool */
+	public $ignoreMultiline = false;
 
 	/**
 	 * @return mixed[]
@@ -181,6 +185,13 @@ class RequireTernaryOperatorSniff implements Sniff
 
 		if (TokenHelper::findNext($phpcsFile, T_INLINE_THEN, $scopeOpenerPointer + 1, $semicolonPointer) !== null) {
 			return false;
+		}
+
+		if ($this->ignoreMultiline) {
+			$firstContentPointer = TokenHelper::findNextEffective($phpcsFile, $scopeOpenerPointer + 1);
+			if (TokenHelper::findNextContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $firstContentPointer + 1, $semicolonPointer) !== null) {
+				return false;
+			}
 		}
 
 		$pointerAfterSemicolon = TokenHelper::findNextEffective($phpcsFile, $semicolonPointer + 1);
