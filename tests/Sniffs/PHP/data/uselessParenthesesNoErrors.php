@@ -79,3 +79,13 @@ class ClassWithClosure
 }
 
 $response = (new Response())->withStatus(200);
+
+function () {
+	return [
+		'a' => ('aa' . 'bb'),
+	];
+};
+
+$a = $b / (100 + $c);
+$a = (100 - $b) * $c;
+$a = ('100' . '000') * $c;

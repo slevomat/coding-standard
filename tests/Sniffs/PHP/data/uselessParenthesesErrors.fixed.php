@@ -43,3 +43,9 @@ switch (true) {
 	case $boo ? true : false:
 	case $boo ? true : false:
 }
+
+function () {
+	return [
+		'a' => 'aa',
+	];
+};

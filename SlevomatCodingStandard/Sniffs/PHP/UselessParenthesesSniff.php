@@ -13,6 +13,8 @@ use const T_CASE;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
 use const T_COLON;
+use const T_CONSTANT_ENCAPSED_STRING;
+use const T_DIVIDE;
 use const T_DOLLAR;
 use const T_EMPTY;
 use const T_EVAL;
@@ -20,13 +22,17 @@ use const T_EXIT;
 use const T_INLINE_THEN;
 use const T_ISSET;
 use const T_LIST;
+use const T_MINUS;
+use const T_MULTIPLY;
 use const T_NEW;
 use const T_NS_SEPARATOR;
 use const T_OPEN_PARENTHESIS;
 use const T_PARENT;
+use const T_PLUS;
 use const T_SELF;
 use const T_STATIC;
 use const T_STRING;
+use const T_STRING_CONCAT;
 use const T_UNSET;
 use const T_USE;
 use const T_VARIABLE;
@@ -81,9 +87,35 @@ class UselessParenthesesSniff implements Sniff
 			return;
 		}
 
+		if ($this->containsOperators($phpcsFile, $parenthesisOpenerPointer)) {
+			return;
+		}
+
 		$this->checkParenthesesAroundConditionInTernaryOperator($phpcsFile, $parenthesisOpenerPointer);
 		$this->checkParenthesesAroundCaseInSwitch($phpcsFile, $parenthesisOpenerPointer);
 		$this->checkParenthesesAroundVariableOrFunctionCall($phpcsFile, $parenthesisOpenerPointer);
+		$this->checkParenthesesAroundString($phpcsFile, $parenthesisOpenerPointer);
+	}
+
+	private function containsOperators(File $phpcsFile, int $parenthesisOpenerPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		if (TokenHelper::findNext($phpcsFile, [T_PLUS, T_MINUS, T_STRING_CONCAT], $parenthesisOpenerPointer + 1, $tokens[$parenthesisOpenerPointer]['parenthesis_closer']) === null) {
+			return false;
+		}
+
+		$pointerAfterParenthesis = TokenHelper::findNextEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1);
+		if (in_array($tokens[$pointerAfterParenthesis]['code'], [T_MULTIPLY, T_DIVIDE], true)) {
+			return true;
+		}
+
+		$pointerBeforeParenthesis = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
+		if (in_array($tokens[$pointerBeforeParenthesis]['code'], [T_MULTIPLY, T_DIVIDE], true)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private function checkParenthesesAroundConditionInTernaryOperator(File $phpcsFile, int $parenthesisOpenerPointer): void
@@ -186,6 +218,11 @@ class UselessParenthesesSniff implements Sniff
 
 		/** @var int $contentStartPointer */
 		$contentStartPointer = TokenHelper::findNextEffective($phpcsFile, $parenthesisOpenerPointer + 1);
+
+		if ($tokens[$contentStartPointer]['code'] === T_CONSTANT_ENCAPSED_STRING) {
+			return;
+		}
+
 		$notBooleanNotOperatorPointer = $contentStartPointer;
 
 		if ($tokens[$contentStartPointer]['code'] === T_BOOLEAN_NOT) {
@@ -234,6 +271,38 @@ class UselessParenthesesSniff implements Sniff
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 		for ($i = $contentEndPointer + 1; $i <= $tokens[$parenthesisOpenerPointer]['parenthesis_closer']; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+		$phpcsFile->fixer->endChangeset();
+	}
+
+	private function checkParenthesesAroundString(File $phpcsFile, int $parenthesisOpenerPointer): void
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		/** @var int $stringPointer */
+		$stringPointer = TokenHelper::findNextEffective($phpcsFile, $parenthesisOpenerPointer + 1);
+
+		if ($tokens[$stringPointer]['code'] !== T_CONSTANT_ENCAPSED_STRING) {
+			return;
+		}
+
+		$pointerAfterString = TokenHelper::findNextEffective($phpcsFile, $stringPointer + 1);
+		if ($pointerAfterString !== $tokens[$parenthesisOpenerPointer]['parenthesis_closer']) {
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError('Useless parentheses.', $parenthesisOpenerPointer, self::CODE_USELESS_PARENTHESES);
+
+		if (!$fix) {
+			return;
+		}
+
+		$phpcsFile->fixer->beginChangeset();
+		for ($i = $parenthesisOpenerPointer; $i < $stringPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+		for ($i = $stringPointer + 1; $i <= $tokens[$parenthesisOpenerPointer]['parenthesis_closer']; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 		$phpcsFile->fixer->endChangeset();
