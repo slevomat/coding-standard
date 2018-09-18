@@ -459,7 +459,7 @@ class DocCommentSpacingSniff implements Sniff
 		$incorrectAnnotationsGroupsExist = false;
 		$annotationsGroupsPositions = [];
 
-		$fix = true;
+		$fix = false;
 		foreach ($annotationsGroups as $annotationsGroupPosition => $annotationsGroup) {
 			foreach ($sortedAnnotationsGroups as $sortedAnnotationsGroupPosition => $sortedAnnotationsGroup) {
 				if ($equals($annotationsGroup, $sortedAnnotationsGroup)) {
@@ -486,12 +486,11 @@ class DocCommentSpacingSniff implements Sniff
 
 			$incorrectAnnotationsGroupsExist = true;
 
-			$incorrectAnnotationGroupFix = $phpcsFile->addFixableError(
+			$fix = $phpcsFile->addFixableError(
 				'Incorrect annotations group.',
 				$annotationsGroup[0]->getStartPointer(),
 				self::CODE_INCORRECT_ANNOTATIONS_GROUP
 			);
-			$fix = $fix && $incorrectAnnotationGroupFix;
 		}
 
 		if (!$incorrectAnnotationsGroupsExist) {
@@ -502,12 +501,11 @@ class DocCommentSpacingSniff implements Sniff
 					continue;
 				}
 
-				$incorrectOrderOfAnnotationsGroup = $phpcsFile->addFixableError(
+				$fix = $phpcsFile->addFixableError(
 					'Incorrect order of annotations groups.',
 					$annotationsGroups[$annotationsGroupPosition][0]->getStartPointer(),
 					self::CODE_INCORRECT_ORDER_OF_ANNOTATIONS_GROUPS
 				);
-				$fix = $fix && $incorrectOrderOfAnnotationsGroup;
 				break;
 			}
 		}
@@ -524,12 +522,11 @@ class DocCommentSpacingSniff implements Sniff
 					continue;
 				}
 
-				$incorrectOrderOfAnnotationsInGroup = $phpcsFile->addFixableError(
+				$fix = $phpcsFile->addFixableError(
 					'Incorrent order of annotations in group.',
 					$annotation->getStartPointer(),
 					self::CODE_INCORRECT_ORDER_OF_ANNOTATIONS_IN_GROUP
 				);
-				$fix = $fix && $incorrectOrderOfAnnotationsInGroup;
 				break;
 			}
 		}
