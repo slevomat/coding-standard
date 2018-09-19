@@ -35,3 +35,5 @@ $a['a']++;
 ++$a['a'];
 $a['a']--;
 --$a['a'];
+
+$this->typeCounter[$value]++;
