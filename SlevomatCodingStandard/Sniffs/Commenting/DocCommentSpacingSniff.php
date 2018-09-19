@@ -616,7 +616,7 @@ class DocCommentSpacingSniff implements Sniff
 					}
 				};
 
-				return $getExpectedOrder($firstAnnotation->getName()) <=> $getExpectedOrder($secondAnnotation->getName());
+				return $getExpectedOrder($firstAnnotation->getName()) <=> $getExpectedOrder($secondAnnotation->getName()) ?: $firstAnnotation->getStartPointer() <=> $secondAnnotation->getStartPointer();
 			});
 		}
 
