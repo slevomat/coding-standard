@@ -54,4 +54,14 @@ class Whatever
 
 	}
 
+	/**
+	 * @param string $a
+	 *
+	 * @anything
+	 */
+	public function oneMoreMethod($a)
+	{
+
+	}
+
 }

@@ -14,6 +14,7 @@ use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_STRING;
 use const T_DOC_COMMENT_WHITESPACE;
 use const T_WHITESPACE;
+use function array_combine;
 use function array_diff;
 use function array_flip;
 use function array_key_exists;
@@ -21,11 +22,11 @@ use function array_keys;
 use function array_map;
 use function array_merge;
 use function array_values;
+use function asort;
 use function count;
 use function explode;
 use function ksort;
 use function max;
-use function min;
 use function preg_match;
 use function sprintf;
 use function strlen;
@@ -495,16 +496,19 @@ class DocCommentSpacingSniff implements Sniff
 		}
 
 		if (!$incorrectAnnotationsGroupsExist) {
-			$positionDiff = min($annotationsGroupsPositions) - min(array_keys($annotationsGroupsPositions));
+			$positionsMappedToGroups = array_keys($annotationsGroupsPositions);
+			$tmp = array_values($annotationsGroupsPositions);
+			asort($tmp);
+			$normalizedAnnotationsGroupsPositions = array_combine(array_keys($positionsMappedToGroups), array_keys($tmp));
 
-			foreach ($annotationsGroupsPositions as $annotationsGroupPosition => $sortedAnnotationsGroupPosition) {
-				if ($annotationsGroupPosition === $sortedAnnotationsGroupPosition - $positionDiff) {
+			foreach ($normalizedAnnotationsGroupsPositions as $normalizedAnnotationsGroupPosition => $sortedAnnotationsGroupPosition) {
+				if ($normalizedAnnotationsGroupPosition === $sortedAnnotationsGroupPosition) {
 					continue;
 				}
 
 				$fix = $phpcsFile->addFixableError(
 					'Incorrect order of annotations groups.',
-					$annotationsGroups[$annotationsGroupPosition][0]->getStartPointer(),
+					$annotationsGroups[$positionsMappedToGroups[$normalizedAnnotationsGroupPosition]][0]->getStartPointer(),
 					self::CODE_INCORRECT_ORDER_OF_ANNOTATIONS_GROUPS
 				);
 				break;
