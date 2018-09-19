@@ -83,3 +83,9 @@ function createdByReferencedParameterInFunctionCall($query)
 	parse_str($query, $arguments);
 	$arguments[] = 'a';
 }
+
+function staticVariable()
+{
+	static $value;
+	$value[] = true;
+}

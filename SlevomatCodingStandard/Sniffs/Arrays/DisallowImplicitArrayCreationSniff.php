@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
 use const T_DOUBLE_COLON;
 use const T_EQUAL;
@@ -16,6 +17,7 @@ use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_OPEN_SQUARE_BRACKET;
 use const T_OPEN_TAG;
+use const T_STATIC;
 use const T_STRING;
 use const T_USE;
 use const T_VARIABLE;
@@ -161,11 +163,16 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 				return true;
 			}
 
-			if ($this->isCreatedInList($phpcsFile, $i, $scopeOpenerPointer)) {
+			$staticPointer = TokenHelper::findPreviousEffective($phpcsFile, $i - 1);
+			if ($tokens[$staticPointer]['code'] === T_STATIC) {
 				return true;
 			}
 
-			if ($this->isCreatedInForeach($phpcsFile, $i, $scopeOpenerPointer)) {
+			if ($this->isCreatedInForeach($phpcsFile, $i, $scopeCloserPointer)) {
+				return true;
+			}
+
+			if ($this->isCreatedInList($phpcsFile, $i, $scopeOpenerPointer)) {
 				return true;
 			}
 
@@ -198,15 +205,15 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 		return $tokens[$parenthesisOpenerPointer]['bracket_closer'] > $variablePointer;
 	}
 
-	private function isCreatedInForeach(File $phpcsFile, int $variablePointer, int $scopeOpenerPointer): bool
+	private function isCreatedInForeach(File $phpcsFile, int $variablePointer, int $scopeCloserPointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$parenthesisOpenerPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_PARENTHESIS, $variablePointer - 1, $scopeOpenerPointer);
-		return $parenthesisOpenerPointer !== null
-			&& array_key_exists('parenthesis_owner', $tokens[$parenthesisOpenerPointer])
-			&& $tokens[$tokens[$parenthesisOpenerPointer]['parenthesis_owner']]['code'] === T_FOREACH
-			&& $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] > $variablePointer;
+		$parenthesisCloserPointer = TokenHelper::findNext($phpcsFile, T_CLOSE_PARENTHESIS, $variablePointer + 1, $scopeCloserPointer);
+		return $parenthesisCloserPointer !== null
+			&& array_key_exists('parenthesis_owner', $tokens[$parenthesisCloserPointer])
+			&& $tokens[$tokens[$parenthesisCloserPointer]['parenthesis_owner']]['code'] === T_FOREACH
+			&& $tokens[$parenthesisCloserPointer]['parenthesis_opener'] < $variablePointer;
 	}
 
 	private function isCreatedByReferencedParameterInFunctionCall(File $phpcsFile, int $variablePointer, int $scopeOpenerPointer): bool

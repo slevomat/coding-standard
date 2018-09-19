@@ -20,3 +20,9 @@ function differentScope()
 		$a[] = 'a';
 	})();
 }
+
+function parenthesesBefore()
+{
+	$x = (10) + $value;
+	$value[] = 'a';
+}
