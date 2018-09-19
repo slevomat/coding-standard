@@ -78,8 +78,11 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 
 		/** @var int $beforeEqualEndPointer */
 		$beforeEqualEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $equalPointer - 1);
-		/** @var int $beforeEqualStartPointer */
 		$beforeEqualStartPointer = IdentificatorHelper::findStartPointer($phpcsFile, $beforeEqualEndPointer);
+
+		if ($beforeEqualStartPointer === null) {
+			return;
+		}
 
 		$beforeEqualVariableContent = IdentificatorHelper::getContent($phpcsFile, $beforeEqualStartPointer, $beforeEqualEndPointer);
 

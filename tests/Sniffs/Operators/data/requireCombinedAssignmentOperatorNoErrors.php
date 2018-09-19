@@ -27,4 +27,11 @@ class Whatever
 	{
 		$a = ($b * $c);
 	}
+
+	public function shortList($array)
+	{
+		[$a, $b, $c, $d, $e] = $array + range(0, 4);
+	}
+
 }
+
