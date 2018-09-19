@@ -58,4 +58,16 @@ class Whatever
 
 	}
 
+	/**
+	 * @param int $a
+	 * @param int|null $b
+	 * @param string $c
+	 *
+	 * @dataProvider oneMoreMethodData
+	 */
+	public function oneMoreMethod($a, $b, $c)
+	{
+
+	}
+
 }

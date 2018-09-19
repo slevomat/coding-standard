@@ -14,7 +14,6 @@ use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_STRING;
 use const T_DOC_COMMENT_WHITESPACE;
 use const T_WHITESPACE;
-use function array_combine;
 use function array_diff;
 use function array_flip;
 use function array_key_exists;
@@ -26,8 +25,8 @@ use function count;
 use function explode;
 use function ksort;
 use function max;
+use function min;
 use function preg_match;
-use function range;
 use function sprintf;
 use function strlen;
 use function strpos;
@@ -494,10 +493,10 @@ class DocCommentSpacingSniff implements Sniff
 		}
 
 		if (!$incorrectAnnotationsGroupsExist) {
-			$recalculatedAnnotationsGroupsPositions = array_combine(array_keys($annotationsGroupsPositions), range(0, count($annotationsGroupsPositions) - 1));
+			$positionDiff = min($annotationsGroupsPositions) - min(array_keys($annotationsGroupsPositions));
 
-			foreach ($recalculatedAnnotationsGroupsPositions as $annotationsGroupPosition => $sortedAnnotationsGroupPosition) {
-				if ($annotationsGroupPosition === $sortedAnnotationsGroupPosition) {
+			foreach ($annotationsGroupsPositions as $annotationsGroupPosition => $sortedAnnotationsGroupPosition) {
+				if ($annotationsGroupPosition === $sortedAnnotationsGroupPosition - $positionDiff) {
 					continue;
 				}
 
