@@ -23,7 +23,7 @@ class RequireTernaryOperatorSniff implements Sniff
 	public const CODE_TERNARY_OPERATOR_NOT_USED = 'TernaryOperatorNotUsed';
 
 	/** @var bool */
-	public $ignoreMultiline = false;
+	public $ignoreMultiLine = false;
 
 	/**
 	 * @return mixed[]
@@ -187,7 +187,7 @@ class RequireTernaryOperatorSniff implements Sniff
 			return false;
 		}
 
-		if ($this->ignoreMultiline) {
+		if ($this->ignoreMultiLine) {
 			$firstContentPointer = TokenHelper::findNextEffective($phpcsFile, $scopeOpenerPointer + 1);
 			if (TokenHelper::findNextContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $firstContentPointer + 1, $semicolonPointer) !== null) {
 				return false;

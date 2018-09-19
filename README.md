@@ -345,7 +345,7 @@ Requires ternary operator when possible.
 
 Sniff provides the following settings:
 
-* `ignoreMultiline` (defaults to `false`): ignores multiline statements.
+* `ignoreMultiLine` (defaults to `false`): ignores multiLine statements.
 
 #### SlevomatCodingStandard.ControlStructures.DisallowYodaComparison/RequireYodaComparison 🔧
 
