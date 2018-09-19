@@ -237,7 +237,9 @@ class TypeHintDeclarationSniff implements Sniff
 			} elseif ($this->definitionContainsJustTwoTypeHints($parameterTypeHintDefinition)) {
 				if ($this->definitionContainsNullTypeHint($parameterTypeHintDefinition)) {
 					$parameterTypeHintDefinitionParts = explode('|', $parameterTypeHintDefinition);
-					$possibleParameterTypeHint = strtolower($parameterTypeHintDefinitionParts[0]) === 'null' ? $parameterTypeHintDefinitionParts[1] : $parameterTypeHintDefinitionParts[0];
+					$possibleParameterTypeHint = strtolower($parameterTypeHintDefinitionParts[0]) === 'null'
+						? $parameterTypeHintDefinitionParts[1]
+						: $parameterTypeHintDefinitionParts[0];
 					$nullableParameterTypeHint = true;
 					if ($this->definitionContainsTraversableTypeHintSpeficication($possibleParameterTypeHint)) {
 						$phpcsFile->addError(
@@ -297,7 +299,9 @@ class TypeHintDeclarationSniff implements Sniff
 
 			$phpcsFile->fixer->beginChangeset();
 
-			$parameterTypeHint = TypeHintHelper::isSimpleTypeHint($possibleParameterTypeHint) ? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleParameterTypeHint) : $possibleParameterTypeHint;
+			$parameterTypeHint = TypeHintHelper::isSimpleTypeHint($possibleParameterTypeHint)
+				? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleParameterTypeHint)
+				: $possibleParameterTypeHint;
 
 			$tokens = $phpcsFile->getTokens();
 			/** @var int $parameterPointer */
@@ -535,7 +539,9 @@ class TypeHintDeclarationSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$returnTypeHint = TypeHintHelper::isSimpleTypeHint($possibleReturnTypeHint) ? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleReturnTypeHint) : $possibleReturnTypeHint;
+		$returnTypeHint = TypeHintHelper::isSimpleTypeHint($possibleReturnTypeHint)
+			? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleReturnTypeHint)
+			: $possibleReturnTypeHint;
 		$phpcsFile->fixer->addContent($phpcsFile->getTokens()[$functionPointer]['parenthesis_closer'], sprintf(': %s%s', ($nullableReturnTypeHint ? '?' : ''), $returnTypeHint));
 		$phpcsFile->fixer->endChangeset();
 	}
