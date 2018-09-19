@@ -152,6 +152,10 @@ class IdentificatorHelper
 				return self::getEndPointerAfterOperator($phpcsFile, $nextPointer);
 			}
 
+			if ($tokens[$nextPointer]['code'] === T_OPEN_SQUARE_BRACKET) {
+				return self::getEndPointerAfterVariablePart($phpcsFile, $startPointer);
+			}
+
 			return $startPointer;
 		}
 
