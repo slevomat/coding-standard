@@ -4,10 +4,10 @@ namespace SlevomatCodingStandard\Sniffs\Operators;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_DEC;
 use const T_INC;
-use const T_VARIABLE;
 
 class DisallowIncrementAndDecrementOperatorsSniff implements Sniff
 {
@@ -37,9 +37,10 @@ class DisallowIncrementAndDecrementOperatorsSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $operatorPointer - 1);
-
-		$isPostOperator = $tokens[$previousPointer]['code'] === T_VARIABLE;
+		/** @var int $nextPointer */
+		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $operatorPointer + 1);
+		$afterVariableEndPointer = IdentificatorHelper::findEndPointer($phpcsFile, $nextPointer);
+		$isPostOperator = $afterVariableEndPointer === null;
 
 		if ($tokens[$operatorPointer]['code'] === T_INC) {
 			if ($isPostOperator) {
