@@ -335,6 +335,14 @@ Sniff provides the following settings:
 
 * `fixable`: the sniff is fixable by default, however in strict code it makes sense to forbid this weakly typed form of ternary altogether, you can disable fixability with this option.
 
+#### SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator 🔧
+
+Ternary operator has to be reformatted to more lines when the line length exceeds the given limit.
+
+Sniff provides the following settings:
+
+* `lineLengthLimit` (defaults to `0`)
+
 #### SlevomatCodingStandard.ControlStructures.RequireShortTernaryOperator 🔧
 
 Requires short ternary operator `?:` when possible.
