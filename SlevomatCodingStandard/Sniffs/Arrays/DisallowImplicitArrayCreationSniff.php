@@ -6,16 +6,20 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use const T_ARRAY;
 use const T_CLOSURE;
 use const T_DOUBLE_COLON;
 use const T_EQUAL;
+use const T_FOREACH;
+use const T_LIST;
 use const T_OBJECT_OPERATOR;
+use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_OPEN_SQUARE_BRACKET;
 use const T_OPEN_TAG;
+use const T_STRING;
 use const T_USE;
 use const T_VARIABLE;
+use function array_key_exists;
 use function array_reverse;
 use function count;
 use function in_array;
@@ -52,6 +56,20 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 		/** @var int $variablePointer */
 		$variablePointer = TokenHelper::findPreviousEffective($phpcsFile, $bracketOpenerPointer - 1);
 		if ($tokens[$variablePointer]['code'] !== T_VARIABLE) {
+			return;
+		}
+
+		if (in_array($tokens[$variablePointer]['content'], [
+			'$GLOBALS',
+			'$_SERVER',
+			'$_REQUEST',
+			'$_POST',
+			'$_GET',
+			'$_FILES',
+			'$_ENV',
+			'$_COOKIE',
+			'$_SESSION',
+		], true)) {
 			return;
 		}
 
@@ -134,22 +152,78 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 				continue;
 			}
 
+			if (!ScopeHelper::isInSameScope($phpcsFile, $variablePointer, $i)) {
+				continue;
+			}
+
 			$assigmentPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
-			if ($tokens[$assigmentPointer]['code'] !== T_EQUAL) {
-				continue;
+			if ($tokens[$assigmentPointer]['code'] === T_EQUAL) {
+				return true;
 			}
 
-			$arrayPointer = TokenHelper::findNextEffective($phpcsFile, $assigmentPointer + 1);
-			if (!in_array($tokens[$arrayPointer]['code'], [T_ARRAY, T_OPEN_SHORT_ARRAY], true)) {
-				continue;
+			if ($this->isCreatedInList($phpcsFile, $i, $scopeOpenerPointer)) {
+				return true;
 			}
 
-			if (ScopeHelper::isInSameScope($phpcsFile, $variablePointer, $i)) {
+			if ($this->isCreatedInForeach($phpcsFile, $i, $scopeOpenerPointer)) {
+				return true;
+			}
+
+			if ($this->isCreatedByReferencedParameterInFunctionCall($phpcsFile, $i, $scopeOpenerPointer)) {
 				return true;
 			}
 		}
 
 		return false;
+	}
+
+	private function isCreatedInList(File $phpcsFile, int $variablePointer, int $scopeOpenerPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$parenthesisOpenerPointer = TokenHelper::findPrevious($phpcsFile, [T_OPEN_PARENTHESIS, T_OPEN_SHORT_ARRAY, T_OPEN_SQUARE_BRACKET], $variablePointer - 1, $scopeOpenerPointer);
+		if ($parenthesisOpenerPointer === null) {
+			return false;
+		}
+
+		if ($tokens[$parenthesisOpenerPointer]['code'] === T_OPEN_PARENTHESIS) {
+			if ($tokens[$parenthesisOpenerPointer]['parenthesis_closer'] < $variablePointer) {
+				return false;
+			}
+
+			$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
+			return $tokens[$pointerBeforeParenthesisOpener]['code'] === T_LIST;
+		}
+
+		return $tokens[$parenthesisOpenerPointer]['bracket_closer'] > $variablePointer;
+	}
+
+	private function isCreatedInForeach(File $phpcsFile, int $variablePointer, int $scopeOpenerPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$parenthesisOpenerPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_PARENTHESIS, $variablePointer - 1, $scopeOpenerPointer);
+		return $parenthesisOpenerPointer !== null
+			&& array_key_exists('parenthesis_owner', $tokens[$parenthesisOpenerPointer])
+			&& $tokens[$tokens[$parenthesisOpenerPointer]['parenthesis_owner']]['code'] === T_FOREACH
+			&& $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] > $variablePointer;
+	}
+
+	private function isCreatedByReferencedParameterInFunctionCall(File $phpcsFile, int $variablePointer, int $scopeOpenerPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$parenthesisOpenerPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_PARENTHESIS, $variablePointer - 1, $scopeOpenerPointer);
+
+		if (
+			$parenthesisOpenerPointer === null
+			|| $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] < $variablePointer
+		) {
+			return false;
+		}
+
+		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
+		return $tokens[$pointerBeforeParenthesisOpener]['code'] === T_STRING;
 	}
 
 }

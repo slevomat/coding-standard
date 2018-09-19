@@ -46,3 +46,40 @@ function longArray()
 	$a = array();
 	$a[] = 'a';
 }
+
+function createByFunctionCall()
+{
+	$a = array_map(function () {
+	}, []);
+	$a[] = 'a';
+}
+
+function globalArrays()
+{
+	$_SERVER['x'] = 'x';
+}
+
+function createdInForeach($values)
+{
+	foreach ($values as $value) {
+		$value[] = true;
+	}
+}
+
+function createdByList($values)
+{
+	list($value) = $values;
+	$value[] = 'a';
+}
+
+function createdByShortList($values)
+{
+	[$value] = $values;
+	$value[] = 'a';
+}
+
+function createdByReferencedParameterInFunctionCall($query)
+{
+	parse_str($query, $arguments);
+	$arguments[] = 'a';
+}

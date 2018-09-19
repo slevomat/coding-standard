@@ -7,12 +7,6 @@ function ()
 	$a[] = 'a';
 };
 
-function invalidExplicitCreation()
-{
-	$a = true;
-	$a[] = 'a';
-}
-
 function differentVariable()
 {
 	$b = [];
