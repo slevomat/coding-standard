@@ -14,7 +14,7 @@ class Whatever
 	private $property;
 
 	/**
-	 * Multiline
+	 * MultiLine
 	 * description
 	 *
 	 * @throws \Exception
@@ -27,7 +27,7 @@ class Whatever
 	 *     }
 	 * ) Description
 	 * @XX
-	 * @X\Boo Multiline
+	 * @X\Boo MultiLine
 	 *    description
 	 *
 	 *

@@ -55,7 +55,7 @@ abstract class WithoutAnnotation
 	 * @Route("/configs/{config}/domains/{domain}/locales/{locale}/messages", name="jms_translation_update_message",
 	 *     defaults = {"id" = null}, options = {"i18n" = false}, methods={"PUT"})
 	 */
-	abstract public function withMultilineParametrizedAnnotation();
+	abstract public function withMultiLineParametrizedAnnotation();
 
 	/** @ORM\OneToMany(targetEntity=Bar::class, mappedBy="boo") */
 	private $inlineDocComment;
@@ -70,7 +70,7 @@ abstract class WithoutAnnotation
 	 *     }
 	 * ) Content
 	 */
-	private $multilineIndentedAnnotation;
+	private $multiLineIndentedAnnotation;
 
 	/**
 	 * @property-read Test

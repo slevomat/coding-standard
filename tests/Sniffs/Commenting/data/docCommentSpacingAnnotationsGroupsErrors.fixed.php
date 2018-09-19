@@ -14,12 +14,12 @@ class Whatever
 	private $property;
 
 	/**
-	 * Multiline
+	 * MultiLine
 	 * description
 	 *
 	 * @param bool $a
 	 *
-	 * @X\Boo Multiline
+	 * @X\Boo MultiLine
 	 *    description
 	 * @X\Foo(
 	 *     a=Y::SOME,

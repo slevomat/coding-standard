@@ -80,9 +80,9 @@ class AnnotationHelperTest extends TestCase
 		self::assertNull($annotations[0]->getContent());
 	}
 
-	public function testFunctionWithMultilineParametrizedAnnotation(): void
+	public function testFunctionWithMultiLineParametrizedAnnotation(): void
 	{
-		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withMultilineParametrizedAnnotation'), '@Route');
+		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withMultiLineParametrizedAnnotation'), '@Route');
 		self::assertCount(1, $annotations);
 		self::assertSame("\"/configs/{config}/domains/{domain}/locales/{locale}/messages\", name=\"jms_translation_update_message\",\ndefaults = {\"id\" = null}, options = {\"i18n\" = false}, methods={\"PUT\"}", $annotations[0]->getParameters());
 		self::assertNull($annotations[0]->getContent());
@@ -109,9 +109,9 @@ class AnnotationHelperTest extends TestCase
 		self::assertCount(0, AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withoutAnnotation'), '@param'));
 	}
 
-	public function testMultilineIndentedAnnotation(): void
+	public function testMultiLineIndentedAnnotation(): void
 	{
-		$annotations = AnnotationHelper::getAnnotations($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'multilineIndentedAnnotation'));
+		$annotations = AnnotationHelper::getAnnotations($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'multiLineIndentedAnnotation'));
 
 		self::assertCount(1, $annotations);
 		self::assertArrayHasKey('@X', $annotations);

@@ -18,7 +18,7 @@ class Whatever
 	private $property;
 
 	/**
-	 * Multiline
+	 * MultiLine
 	 * description
 	 *
 	 * @param bool $a

@@ -4,7 +4,7 @@
 
 /**
  * This is
- * multiline.
+ * multiLine.
  */
 
 /**

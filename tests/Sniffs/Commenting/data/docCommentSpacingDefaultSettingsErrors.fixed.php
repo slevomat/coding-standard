@@ -18,7 +18,7 @@ class Whatever
 	private $property;
 
 	/**
-	 * Multiline
+	 * MultiLine
 	 * description
 	 *
 	 * @param bool $a
@@ -30,7 +30,7 @@ class Whatever
 	 *         )
 	 *     }
 	 * ) Description
-	 * @X Multiline
+	 * @X MultiLine
 	 *    description
 	 * @throws \Exception
 	 */

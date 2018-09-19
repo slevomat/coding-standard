@@ -152,7 +152,7 @@ class DocCommentHelperTest extends TestCase
 	public function testUnboundMultiLineGetDocCommentDescription(): void
 	{
 		self::assertSame(
-			['This is', 'multiline.'],
+			['This is', 'multiLine.'],
 			$this->stringifyComments(DocCommentHelper::getDocCommentDescription($this->getTestedCodeSnifferFile(), $this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 5, T_DOC_COMMENT_OPEN_TAG)))
 		);
 	}

@@ -23,7 +23,7 @@ class Foo
 	/**
 	 * @var Foo
 	 */
-	private $propertyMultilineBlock;
+	private $propertyMultiLineBlock;
 
 	/**
 	 * @var Foo foo

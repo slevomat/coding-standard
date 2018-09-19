@@ -17,7 +17,7 @@ class Foo
 
 	/**
 	 * @return int
-	 * @see multiline()
+	 * @see multiLine()
 	 * @throws \Exception
 	 */
 	public function get(): int
@@ -33,7 +33,7 @@ class Foo
 	 * text text text
 	 *
 	 */
-	public function multiline()
+	public function multiLine()
 	{
 
 	}

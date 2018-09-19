@@ -21,7 +21,7 @@ class Foo
 		return 0;
 	}
 
-	public function multiline()
+	public function multiLine()
 	{
 
 	}

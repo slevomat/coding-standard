@@ -6,7 +6,7 @@ class Whatever
 	/**
 	 * @var null|bool
 	 */
-	private $multilineAnnotation;
+	private $multiLineAnnotation;
 
 	/** @var null|bool */
 	private $singleLineAnnotation;

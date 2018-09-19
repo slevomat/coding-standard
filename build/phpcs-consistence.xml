@@ -6,7 +6,7 @@
 	<config name="installed_paths" value="../../../SlevomatCodingStandard"/><!-- relative path from PHPCS source location -->
 
 	<rule ref="Generic.Arrays.ArrayIndent">
-		<exclude name="Generic.Arrays.ArrayIndent.CloseBraceNotNewLine"/><!-- multiline items causes evaluation as multiline array https://github.com/squizlabs/PHP_CodeSniffer/issues/1791 -->
+		<exclude name="Generic.Arrays.ArrayIndent.CloseBraceNotNewLine"/><!-- multiLine items causes evaluation as multiLine array https://github.com/squizlabs/PHP_CodeSniffer/issues/1791 -->
 	</rule>
 	<rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
 	<rule ref="Generic.Classes.DuplicateClassName"/>
@@ -39,7 +39,7 @@
 	<!--<rule ref="Generic.PHP.LowerCaseType"/>-->
 	<rule ref="Generic.Strings.UnnecessaryStringConcat">
 		<properties>
-			<property name="allowMultiline" value="true"/>
+			<property name="allowMultiLine" value="true"/>
 		</properties>
 	</rule>
 	<!--<rule ref="Generic.WhiteSpace.ArbitraryParenthesesSpacing">-->
@@ -63,7 +63,7 @@
 	<rule ref="PSR1.Methods.CamelCapsMethodName"/>
 	<rule ref="PSR2.Classes.PropertyDeclaration"/>
 	<rule ref="PSR2.ControlStructures.ControlStructureSpacing">
-		<exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/><!-- we want to put first expression of multiline condition on next line -->
+		<exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/><!-- we want to put first expression of multiLine condition on next line -->
 	</rule>
 	<rule ref="PSR2.ControlStructures.ElseIfDeclaration"/>
 	<rule ref="PSR2.ControlStructures.SwitchDeclaration">

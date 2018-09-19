@@ -25,7 +25,7 @@ class Whatever
 	private $property;
 
 	/**
-	 * Multiline
+	 * MultiLine
 	 * description
 	 * @param bool $a
 	 * @X(
@@ -36,7 +36,7 @@ class Whatever
 	 *         )
 	 *     }
 	 * ) Description
-	 * @X Multiline
+	 * @X MultiLine
 	 *    description
 	 *
 	 *

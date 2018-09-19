@@ -54,7 +54,7 @@ class EmptyCommentSniff implements Sniff
 			return;
 		}
 
-		if ($isLineComment && $this->isPartOfMultilineInlineComments($phpcsFile, $commentStartPointer, $commentEndPointer)) {
+		if ($isLineComment && $this->isPartOfMultiLineInlineComments($phpcsFile, $commentStartPointer, $commentEndPointer)) {
 			return;
 		}
 
@@ -153,7 +153,7 @@ class EmptyCommentSniff implements Sniff
 		return substr(TokenHelper::getContent($phpcsFile, $commentStartPointer, $commentEndPointer), 2, -2);
 	}
 
-	private function isPartOfMultilineInlineComments(File $phpcsFile, int $commentStartPointer, int $commentEndPointer): bool
+	private function isPartOfMultiLineInlineComments(File $phpcsFile, int $commentStartPointer, int $commentEndPointer): bool
 	{
 		if (!$this->isNonEmptyLineCommentBefore($phpcsFile, $commentStartPointer)) {
 			return false;

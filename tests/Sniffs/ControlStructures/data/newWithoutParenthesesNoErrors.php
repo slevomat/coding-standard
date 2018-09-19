@@ -59,7 +59,7 @@ $aaa = [
 
 new WithParameters($a);
 
-new WithMultilineParameters(
+new WithMultiLineParameters(
 	$b
 );
 

@@ -25,7 +25,7 @@ class Foo
 	 * text text text
 	 *
 	 */
-	public function multiline()
+	public function multiLine()
 	{
 
 	}

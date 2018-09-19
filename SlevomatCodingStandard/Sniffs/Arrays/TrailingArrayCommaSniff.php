@@ -51,7 +51,7 @@ class TrailingArrayCommaSniff implements Sniff
 		}
 
 		$fix = $phpcsFile->addFixableError(
-			'Multiline arrays must have a trailing comma after the last element.',
+			'MultiLine arrays must have a trailing comma after the last element.',
 			$previousToCloseParenthesisPointer,
 			self::CODE_MISSING_TRAILING_COMMA
 		);

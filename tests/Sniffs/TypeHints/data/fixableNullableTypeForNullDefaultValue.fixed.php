@@ -30,7 +30,7 @@ class FooBar
 
 	}
 
-	public function multiline(
+	public function multiLine(
 		?bool $param1 = null,
 		?array $param2 = null,
 		?callable $param3 = null,

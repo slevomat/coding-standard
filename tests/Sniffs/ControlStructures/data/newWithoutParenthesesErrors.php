@@ -26,7 +26,7 @@ $aoo = new $classNamesInArray[0]();
 
 $whitespaceBetweenClassNameAndParentheses = new stdClass    ();
 $whitespaceBetweenParentheses = new stdClass(    );
-$multilineBetweenParentheses = new stdClass(
+$multiLineBetweenParentheses = new stdClass(
 );
 
 new $a->{'b'}["c"]->$d['e'][1]();

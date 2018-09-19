@@ -26,7 +26,7 @@ class Whatever
 
 	/**
 	 *
-	 * Multiline
+	 * MultiLine
 	 * description
 	 *
 	 *
@@ -40,7 +40,7 @@ class Whatever
 	 *         )
 	 *     }
 	 * ) Description
-	 * @X Multiline
+	 * @X MultiLine
 	 *    description
 	 *
 	 * @throws \Exception

@@ -24,7 +24,7 @@ class Whatever
 
 	/**
 	 *
-	 * Multiline
+	 * MultiLine
 	 * description
 	 * @param bool $a
 	 *
