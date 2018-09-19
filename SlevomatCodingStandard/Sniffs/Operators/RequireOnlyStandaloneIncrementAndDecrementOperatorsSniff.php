@@ -64,7 +64,7 @@ class RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff implements Sniff
 			$instructionEndPointer = $afterVariableEndPointer;
 		}
 
-		if ($this->isSingleInstruction($phpcsFile, $instructionStartPointer, $instructionEndPointer)) {
+		if ($this->isStandalone($phpcsFile, $instructionStartPointer, $instructionEndPointer)) {
 			return;
 		}
 
@@ -89,7 +89,7 @@ class RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff implements Sniff
 		$phpcsFile->addError($message, $operatorPointer, $code);
 	}
 
-	private function isSingleInstruction(File $phpcsFile, int $instructionStartPointer, int $instructionEndPointer): bool
+	private function isStandalone(File $phpcsFile, int $instructionStartPointer, int $instructionEndPointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 
