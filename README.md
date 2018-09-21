@@ -78,7 +78,7 @@ Sniff provides the following settings:
 
 Disallows implicit array creation.
 
-#### SlevomatCodingStandard.Classes.DisallowLateStaticBindingForContants 🔧
+#### SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants 🔧
 
 Disallows late static binding for constants.
 

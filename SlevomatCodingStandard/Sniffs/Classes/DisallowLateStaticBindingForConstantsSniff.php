@@ -11,7 +11,7 @@ use const T_STATIC;
 use const T_STRING;
 use function strtolower;
 
-class DisallowLateStaticBindingForContantsSniff implements Sniff
+class DisallowLateStaticBindingForConstantsSniff implements Sniff
 {
 
 	public const CODE_DISALLOWED_LATE_STATIC_BINDING_FOR_CONSTANT = 'DisallowedLateStaticBindingForConstant';
