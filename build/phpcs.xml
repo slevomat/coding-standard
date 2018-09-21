@@ -32,6 +32,7 @@
 			    <element value="
 			        @internal,
 					@deprecated,
+					@codeCoverageIgnore,
 					@phpcsSuppress,
 					@dataProvider,
 					@link,
