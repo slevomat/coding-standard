@@ -210,6 +210,10 @@ class ControlStructureSpacingSniff implements Sniff
 		$controlStructureEndPointer = $this->findControlStructureEnd($phpcsFile, $controlStructurePointer);
 		$pointerAfter = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $controlStructureEndPointer + 1);
 
+		if ($pointerAfter === null) {
+			return;
+		}
+
 		$isLastControlStructure = in_array($tokens[$pointerAfter]['code'], [T_CLOSE_CURLY_BRACKET, T_CASE, T_DEFAULT], true);
 
 		$requiredLinesCountAfter = SniffSettingsHelper::normalizeInteger($isLastControlStructure ? $this->linesCountAfterLastControlStructure : $this->linesCountAroundControlStructure);
@@ -251,6 +255,10 @@ class ControlStructureSpacingSniff implements Sniff
 			$controlStructureEndPointer = $tokens[$controlStructurePointer]['scope_closer'];
 			do {
 				$nextPointer = TokenHelper::findNextEffective($phpcsFile, $controlStructureEndPointer + 1);
+				if ($nextPointer === null) {
+					return $controlStructureEndPointer;
+				}
+
 				if ($tokens[$nextPointer]['code'] === T_ELSE) {
 					return $tokens[$nextPointer]['scope_closer'];
 				}

@@ -103,3 +103,7 @@ function () {
 
 	return yield from $array;
 };
+
+if (true) {
+
+}
