@@ -276,6 +276,10 @@ Reports use of superfluous prefix or suffix "Interface" for interfaces.
 
 Reports use of superfluous suffix "Exception" for exceptions.
 
+#### SlevomatCodingStandard.Classes.SuperfluousTraitNaming
+
+Reports use of superfluous suffix "Trait" for traits.
+
 #### SlevomatCodingStandard.Classes.TraitUseDeclaration 🔧
 
 Prohibits multiple traits separated by commas in one `use` statement.
