@@ -6,8 +6,10 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_CLOSURE;
+use const T_OPEN_PARENTHESIS;
 use const T_PARENT;
 use const T_STATIC;
+use const T_STRING;
 use const T_VARIABLE;
 
 class StaticClosureSniff implements Sniff
@@ -37,6 +39,16 @@ class StaticClosureSniff implements Sniff
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $closurePointer - 1);
 		if ($tokens[$previousPointer]['code'] === T_STATIC) {
 			return;
+		}
+
+		if ($tokens[$previousPointer]['code'] === T_OPEN_PARENTHESIS) {
+			$pointerBeforeParenthesis = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
+			if (
+				$tokens[$pointerBeforeParenthesis]['code'] === T_STRING
+				&& $tokens[$pointerBeforeParenthesis]['content'] === 'bind'
+			) {
+				return;
+			}
 		}
 
 		$thisPointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, '$this', $tokens[$closurePointer]['scope_opener'] + 1, $tokens[$closurePointer]['scope_closer']);

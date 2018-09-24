@@ -29,3 +29,7 @@ class Whatever extends Something
 	}
 
 }
+
+Closure::bind(function ($instance, $value) {
+	$instance->property = $value;
+}, $instance, $instance);
