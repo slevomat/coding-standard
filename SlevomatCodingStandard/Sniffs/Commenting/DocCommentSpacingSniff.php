@@ -403,7 +403,7 @@ class DocCommentSpacingSniff implements Sniff
 			);
 
 			if (!$fix) {
-				$previousAnnotationsGroup = $annotationsGroups;
+				$previousAnnotationsGroup = $annotationsGroup;
 				continue;
 			}
 
