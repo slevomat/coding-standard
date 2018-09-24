@@ -69,4 +69,24 @@ class Whatever
 
 	}
 
+	/**
+	 * @return bool
+	 *
+	 * @param int $a
+	 */
+	public function methodBeforeInvalidDocComment($a): bool
+	{
+
+	}
+
+	/**
+	 * @param int $a
+	 *
+	 * @return bool
+	 */
+	public function methodWithInvalidDocComment($a): bool
+	{
+
+	}
+
 }

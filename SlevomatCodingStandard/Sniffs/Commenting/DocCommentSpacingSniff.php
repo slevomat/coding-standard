@@ -567,13 +567,20 @@ class DocCommentSpacingSniff implements Sniff
 			}
 		}
 
-		$endOfLineBeforeFirstAnnotation = TokenHelper::findPreviousContent($phpcsFile, T_DOC_COMMENT_WHITESPACE, $phpcsFile->eolChar, $firstAnnotation->getStartPointer() - 1);
+		$endOfLineBeforeFirstAnnotation = TokenHelper::findPreviousContent($phpcsFile, T_DOC_COMMENT_WHITESPACE, $phpcsFile->eolChar, $firstAnnotation->getStartPointer() - 1, $docCommentOpenerPointer);
 		$endOfLineAfterLastAnnotation = TokenHelper::findNextContent($phpcsFile, T_DOC_COMMENT_WHITESPACE, $phpcsFile->eolChar, $lastAnnotation->getEndPointer() + 1);
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($endOfLineBeforeFirstAnnotation + 1, $fixedAnnotations);
-		for ($i = $endOfLineBeforeFirstAnnotation + 2; $i <= $endOfLineAfterLastAnnotation; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
+		if ($endOfLineBeforeFirstAnnotation === null) {
+			$phpcsFile->fixer->replaceToken($docCommentOpenerPointer, '/**' . $phpcsFile->eolChar . $fixedAnnotations);
+			for ($i = $docCommentOpenerPointer + 1; $i <= $endOfLineAfterLastAnnotation; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
+		} else {
+			$phpcsFile->fixer->replaceToken($endOfLineBeforeFirstAnnotation + 1, $fixedAnnotations);
+			for ($i = $endOfLineBeforeFirstAnnotation + 2; $i <= $endOfLineAfterLastAnnotation; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
 		}
 		$phpcsFile->fixer->endChangeset();
 	}
