@@ -499,7 +499,7 @@ class DocCommentSpacingSniff implements Sniff
 
 		if (!$incorrectAnnotationsGroupsExist) {
 			foreach ($undefinedAnnotationsGroups as $undefinedAnnotationsGroupPosition) {
-				$annotationsGroupsPositions[$undefinedAnnotationsGroupPosition] = max($annotationsGroupsPositions) + 1;
+				$annotationsGroupsPositions[$undefinedAnnotationsGroupPosition] = (count($annotationsGroupsPositions) > 0 ? max($annotationsGroupsPositions) : 0) + 1;
 			}
 			ksort($annotationsGroupsPositions);
 

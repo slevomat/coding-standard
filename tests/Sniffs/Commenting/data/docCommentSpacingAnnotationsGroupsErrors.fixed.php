@@ -89,4 +89,14 @@ class Whatever
 
 	}
 
+	/**
+	 * @first
+	 *
+	 * @second
+	 */
+	public function twoUndefinedAnnotations()
+	{
+
+	}
+
 }
