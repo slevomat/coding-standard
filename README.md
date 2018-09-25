@@ -807,7 +807,10 @@ Then mention both standards in `ruleset.xml`:
 <?xml version="1.0"?>
 <ruleset name="AcmeProject">
 	<rule ref="vendor/consistence/coding-standard/Consistence/ruleset.xml" />
-	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml" />
+	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
+		<exclude name="SlevomatCodingStandard.ControlStructures.RequireYodaComparison" />
+		<!-- <exclude name="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison" /> -->
+	</rule>
 	<!-- additional settings -->
 </ruleset>
 ```
