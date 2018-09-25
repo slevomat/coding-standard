@@ -70,9 +70,9 @@ class Whatever
 	}
 
 	/**
-	 * @return bool
-	 *
 	 * @param int $a
+	 *
+	 * @return bool
 	 */
 	public function methodBeforeInvalidDocComment($a): bool
 	{

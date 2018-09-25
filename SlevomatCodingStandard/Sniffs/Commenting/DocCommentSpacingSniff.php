@@ -462,6 +462,7 @@ class DocCommentSpacingSniff implements Sniff
 		$annotationsGroupsPositions = [];
 
 		$fix = false;
+		$undefinedAnnotationsGroups = [];
 		foreach ($annotationsGroups as $annotationsGroupPosition => $annotationsGroup) {
 			foreach ($sortedAnnotationsGroups as $sortedAnnotationsGroupPosition => $sortedAnnotationsGroup) {
 				if ($equals($annotationsGroup, $sortedAnnotationsGroup)) {
@@ -482,6 +483,7 @@ class DocCommentSpacingSniff implements Sniff
 				}
 
 				if ($undefinedAnnotationsGroup) {
+					$undefinedAnnotationsGroups[] = $annotationsGroupPosition;
 					continue 2;
 				}
 			}
@@ -496,6 +498,11 @@ class DocCommentSpacingSniff implements Sniff
 		}
 
 		if (!$incorrectAnnotationsGroupsExist) {
+			foreach ($undefinedAnnotationsGroups as $undefinedAnnotationsGroupPosition) {
+				$annotationsGroupsPositions[$undefinedAnnotationsGroupPosition] = max($annotationsGroupsPositions) + 1;
+			}
+			ksort($annotationsGroupsPositions);
+
 			$positionsMappedToGroups = array_keys($annotationsGroupsPositions);
 			$tmp = array_values($annotationsGroupsPositions);
 			asort($tmp);
@@ -517,6 +524,10 @@ class DocCommentSpacingSniff implements Sniff
 
 		foreach ($annotationsGroups as $annotationsGroupPosition => $annotationsGroup) {
 			if (!array_key_exists($annotationsGroupPosition, $annotationsGroupsPositions)) {
+				continue;
+			}
+
+			if (!array_key_exists($annotationsGroupsPositions[$annotationsGroupPosition], $sortedAnnotationsGroups)) {
 				continue;
 			}
 
