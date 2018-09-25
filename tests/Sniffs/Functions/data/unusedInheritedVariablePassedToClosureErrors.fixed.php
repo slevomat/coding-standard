@@ -31,3 +31,7 @@ function ($arrays)  {
 		});
 	}
 };
+
+(function ($type, $buffer) use (&$successful) : void {
+    $successful = false;
+})();
