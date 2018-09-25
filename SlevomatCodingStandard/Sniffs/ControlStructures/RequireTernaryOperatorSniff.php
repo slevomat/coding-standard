@@ -48,9 +48,8 @@ class RequireTernaryOperatorSniff implements Sniff
 			throw new Exception('"if" without curly braces is not supported.');
 		}
 
-		/** @var int $elsePointer */
 		$elsePointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$ifPointer]['scope_closer'] + 1);
-		if ($tokens[$elsePointer]['code'] !== T_ELSE) {
+		if ($elsePointer === null || $tokens[$elsePointer]['code'] !== T_ELSE) {
 			return;
 		}
 

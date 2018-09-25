@@ -74,3 +74,7 @@ if (true) {
 } else {
 	$a = true ? true : false;
 }
+
+if (true) {
+	echo 'true';
+}
