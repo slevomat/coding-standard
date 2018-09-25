@@ -497,6 +497,16 @@ class DocCommentSpacingSniff implements Sniff
 			);
 		}
 
+		if (count($annotationsGroupsPositions) === 0 && count($undefinedAnnotationsGroups) > 1) {
+			$incorrectAnnotationsGroupsExist = true;
+
+			$fix = $phpcsFile->addFixableError(
+				'Incorrect annotations group.',
+				$annotationsGroups[0][0]->getStartPointer(),
+				self::CODE_INCORRECT_ANNOTATIONS_GROUP
+			);
+		}
+
 		if (!$incorrectAnnotationsGroupsExist) {
 			foreach ($undefinedAnnotationsGroups as $undefinedAnnotationsGroupPosition) {
 				$annotationsGroupsPositions[$undefinedAnnotationsGroupPosition] = (count($annotationsGroupsPositions) > 0 ? max($annotationsGroupsPositions) : 0) + 1;
