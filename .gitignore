@@ -1,4 +1,5 @@
 /bin
 /composer.lock
 /.phpunit.result.cache
+/temp
 /vendor
