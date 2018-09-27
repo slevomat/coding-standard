@@ -42,6 +42,7 @@
 		>
 			<arg value="--standard=build/phpcs.xml"/>
 			<arg value="--ignore=*/data/*"/>
+			<arg value="--cache=temp/phpcs"/>
 			<arg path="SlevomatCodingStandard"/>
 			<arg path="tests"/>
 		</exec>
