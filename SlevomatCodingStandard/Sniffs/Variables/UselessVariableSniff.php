@@ -77,16 +77,16 @@ class UselessVariableSniff implements Sniff
 
 		$variableName = $tokens[$variablePointer]['content'];
 
+		if ($this->isStaticVariable($phpcsFile, $variablePointer, $variableName)) {
+			return;
+		}
+
 		$previousVariablePointer = $this->findPreviousVariablePointer($phpcsFile, $returnPointer, $variableName);
 		if ($previousVariablePointer === null) {
 			return;
 		}
 
 		if (!$this->isAssigmentToVariable($phpcsFile, $previousVariablePointer)) {
-			return;
-		}
-
-		if ($this->isStaticVariable($phpcsFile, $previousVariablePointer)) {
 			return;
 		}
 
@@ -217,10 +217,37 @@ class UselessVariableSniff implements Sniff
 		], true);
 	}
 
-	private function isStaticVariable(File $phpcsFile, int $variablePointer): bool
+	private function isStaticVariable(File $phpcsFile, int $variablePointer, string $variableName): bool
 	{
-		$pointerBeforeVariable = TokenHelper::findPreviousEffective($phpcsFile, $variablePointer - 1);
-		return $phpcsFile->getTokens()[$pointerBeforeVariable]['code'] === T_STATIC;
+		$tokens = $phpcsFile->getTokens();
+
+		$functionPointer = null;
+		foreach (array_reverse($tokens[$variablePointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
+			if (in_array($conditionTokenCode, TokenHelper::$functionTokenCodes, true)) {
+				$functionPointer = $conditionPointer;
+				break;
+			}
+		}
+
+		if ($functionPointer === null) {
+			return false;
+		}
+
+		for ($i = $tokens[$functionPointer]['scope_opener'] + 1; $i < $variablePointer; $i++) {
+			if ($tokens[$i]['code'] !== T_VARIABLE) {
+				continue;
+			}
+			if ($tokens[$i]['content'] !== $variableName) {
+				continue;
+			}
+
+			$pointerBeforeParameter = TokenHelper::findPreviousEffective($phpcsFile, $i - 1);
+			if ($tokens[$pointerBeforeParameter]['code'] === T_STATIC) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private function hasVariableVarAnnotation(File $phpcsFile, int $variablePointer): bool

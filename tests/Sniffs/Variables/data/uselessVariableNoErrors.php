@@ -42,6 +42,18 @@ function staticVariable() {
 	return $g;
 }
 
+function uglyStaticVariable() {
+	static $g;
+
+	if (is_string($g)) {
+		return $g;
+	}
+
+	$g = 'g';
+
+	return $g;
+}
+
 function withDocComment() {
 	/** @var string $h */
 	$h = 'h';
