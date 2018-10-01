@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
+use Exception;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
@@ -260,6 +261,10 @@ class ControlStructureSpacingSniff implements Sniff
 				}
 
 				if ($tokens[$nextPointer]['code'] === T_ELSE) {
+					if (!array_key_exists('scope_closer', $tokens[$nextPointer])) {
+						throw new Exception('"else" without curly braces is not supported.');
+					}
+
 					return $tokens[$nextPointer]['scope_closer'];
 				}
 
