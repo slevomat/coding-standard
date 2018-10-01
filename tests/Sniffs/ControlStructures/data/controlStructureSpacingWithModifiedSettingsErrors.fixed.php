@@ -126,3 +126,23 @@ function () {
 
 
 };
+
+function () {
+	doSomething(); // Do something
+	foreach ([] as $value) {
+
+	}
+
+
+
+};
+
+function () {
+	doSomething();
+	foreach ([] as $value) {
+
+	} // Foreach
+
+
+
+};

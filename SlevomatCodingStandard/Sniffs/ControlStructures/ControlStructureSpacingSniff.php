@@ -150,12 +150,14 @@ class ControlStructureSpacingSniff implements Sniff
 			in_array($tokens[$pointerBefore]['code'], Tokens::$commentTokens, true)
 			&& $tokens[$pointerBefore]['line'] + 1 === $tokens[$controlStructurePointer]['line']
 		) {
-			$controlStructureStartPointer = array_key_exists('comment_opener', $tokens[$pointerBefore])
-				? $tokens[$pointerBefore]['comment_opener']
-				: TokenHelper::findPreviousExcluding($phpcsFile, T_COMMENT, $pointerBefore - 1) + 1;
-
-			/** @var int $pointerBefore */
-			$pointerBefore = TokenHelper::findPreviousEffective($phpcsFile, $pointerBefore - 1);
+			$pointerBeforeComment = TokenHelper::findPreviousEffective($phpcsFile, $pointerBefore - 1);
+			if ($tokens[$pointerBeforeComment]['line'] !== $tokens[$pointerBefore]['line']) {
+				$controlStructureStartPointer = array_key_exists('comment_opener', $tokens[$pointerBefore])
+					? $tokens[$pointerBefore]['comment_opener']
+					: TokenHelper::findPreviousExcluding($phpcsFile, T_COMMENT, $pointerBefore - 1) + 1;
+				/** @var int $pointerBefore */
+				$pointerBefore = TokenHelper::findPreviousEffective($phpcsFile, $pointerBefore - 1);
+			}
 		}
 
 		$isFirstControlStructure = in_array($tokens[$pointerBefore]['code'], [T_OPEN_CURLY_BRACKET, T_COLON], true);
@@ -164,6 +166,11 @@ class ControlStructureSpacingSniff implements Sniff
 
 		if ($tokens[$pointerBefore]['code'] === T_OPEN_TAG) {
 			$whitespaceBefore .= substr($tokens[$pointerBefore]['content'], strlen('<?php'));
+		}
+
+		$hasCommentWithLineEndBefore = $tokens[$pointerBefore]['code'] === T_COMMENT && substr($tokens[$pointerBefore]['content'], -strlen($phpcsFile->eolChar)) === $phpcsFile->eolChar;
+		if ($hasCommentWithLineEndBefore) {
+			$whitespaceBefore .= $phpcsFile->eolChar;
 		}
 
 		if ($pointerBefore + 1 !== $controlStructurePointer) {
@@ -198,9 +205,12 @@ class ControlStructureSpacingSniff implements Sniff
 		for ($i = $pointerBefore + 1; $i <= $endOfLineBeforePointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
-		for ($i = 0; $i <= $requiredLinesCountBefore; $i++) {
+
+		$linesToAdd = $hasCommentWithLineEndBefore ? $requiredLinesCountBefore - 1 : $requiredLinesCountBefore;
+		for ($i = 0; $i <= $linesToAdd; $i++) {
 			$phpcsFile->fixer->addNewline($pointerBefore);
 		}
+
 		$phpcsFile->fixer->endChangeset();
 	}
 
@@ -209,11 +219,14 @@ class ControlStructureSpacingSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$controlStructureEndPointer = $this->findControlStructureEnd($phpcsFile, $controlStructurePointer);
-		$pointerAfter = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $controlStructureEndPointer + 1);
+		$notWhitespacePointerAfter = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $controlStructureEndPointer + 1);
 
-		if ($pointerAfter === null) {
+		if ($notWhitespacePointerAfter === null) {
 			return;
 		}
+
+		$hasCommentAfter = in_array($tokens[$notWhitespacePointerAfter]['code'], Tokens::$commentTokens, true) && $tokens[$notWhitespacePointerAfter]['line'] === $tokens[$controlStructureEndPointer]['line'];
+		$pointerAfter = $hasCommentAfter ? TokenHelper::findNextEffective($phpcsFile, $controlStructureEndPointer + 1) : $notWhitespacePointerAfter;
 
 		$isLastControlStructure = in_array($tokens[$pointerAfter]['code'], [T_CLOSE_CURLY_BRACKET, T_CASE, T_DEFAULT], true);
 
@@ -236,13 +249,21 @@ class ControlStructureSpacingSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
+		$replaceStartPointer = $hasCommentAfter ? $notWhitespacePointerAfter : $controlStructureEndPointer;
 		$endOfLineBeforeAfterPointer = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $pointerAfter - 1);
 
-		for ($i = $controlStructureEndPointer + 1; $i <= $endOfLineBeforeAfterPointer; $i++) {
+		for ($i = $replaceStartPointer + 1; $i <= $endOfLineBeforeAfterPointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
-		for ($i = 0; $i <= $requiredLinesCountAfter; $i++) {
-			$phpcsFile->fixer->addNewline($controlStructureEndPointer);
+
+		if ($hasCommentAfter) {
+			for ($i = 0; $i < $requiredLinesCountAfter; $i++) {
+				$phpcsFile->fixer->addNewline($notWhitespacePointerAfter);
+			}
+		} else {
+			for ($i = 0; $i <= $requiredLinesCountAfter; $i++) {
+				$phpcsFile->fixer->addNewline($controlStructureEndPointer);
+			}
 		}
 
 		$phpcsFile->fixer->endChangeset();

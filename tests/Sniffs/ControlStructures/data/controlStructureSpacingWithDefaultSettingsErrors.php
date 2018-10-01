@@ -118,3 +118,44 @@ function () {
 	$array = [];
 	return yield from $array;
 };
+
+function () {
+	doSomething(); // Do something
+	if (true) {
+
+	}
+};
+
+function () {
+	doSomething(); // Do something
+
+
+	if (true) {
+
+	}
+};
+
+function () {
+	foreach ([] as $value) {
+		doSomething($value);
+
+		break; // Break
+
+	}
+};
+
+function () {
+	if (true) {
+
+	} // If
+	doSomething();
+};
+
+function () {
+	if (true) {
+
+	} // If
+
+
+	doSomething();
+};
