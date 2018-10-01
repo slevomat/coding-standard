@@ -134,6 +134,10 @@ class UselessParenthesesSniff implements Sniff
 			return;
 		}
 
+		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], Tokens::$booleanOperators, true)) {
+			return;
+		}
+
 		if ($this->ignoreComplexTernaryConditions) {
 			if (TokenHelper::findNext($phpcsFile, Tokens::$booleanOperators, $parenthesisOpenerPointer + 1, $parenthesisCloserPointer) !== null) {
 				return;
