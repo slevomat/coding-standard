@@ -21,9 +21,11 @@ use const T_DIV_EQUAL;
 use const T_DO;
 use const T_DOUBLE_ARROW;
 use const T_DOUBLE_COLON;
+use const T_ELSEIF;
 use const T_EQUAL;
 use const T_FOR;
 use const T_FOREACH;
+use const T_IF;
 use const T_INC;
 use const T_LIST;
 use const T_MINUS_EQUAL;
@@ -202,14 +204,8 @@ class UnusedVariableSniff implements Sniff
 			return true;
 		}
 
-		$parenthesisOwnerPointer = null;
-		$parenthesisOpenerPointer = null;
-		if (isset($tokens[$variablePointer]['nested_parenthesis'])) {
-			$parenthesisOpenerPointer = array_reverse(array_keys($tokens[$variablePointer]['nested_parenthesis']))[0];
-			if (isset($tokens[$parenthesisOpenerPointer]['parenthesis_owner'])) {
-				$parenthesisOwnerPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_owner'];
-			}
-		}
+		$parenthesisOpenerPointer = $this->findOpenerOfNestedParentheses($phpcsFile, $variablePointer);
+		$parenthesisOwnerPointer = $this->findOwnerOfNestedParentheses($phpcsFile, $variablePointer);
 
 		if (in_array($tokens[$nextPointer]['code'], [T_INC, T_DEC], true)) {
 			if ($parenthesisOwnerPointer === null) {
@@ -245,35 +241,32 @@ class UnusedVariableSniff implements Sniff
 
 	private function isUsedAsParameter(File $phpcsFile, int $variablePointer): bool
 	{
-		$tokens = $phpcsFile->getTokens();
-
-		if (!isset($tokens[$variablePointer]['nested_parenthesis'])) {
+		$parenthesisOpenerPointer = $this->findOpenerOfNestedParentheses($phpcsFile, $variablePointer);
+		if ($parenthesisOpenerPointer === null) {
 			return false;
 		}
-
-		$parenthesisOpenerPointer = array_reverse(array_keys($tokens[$variablePointer]['nested_parenthesis']))[0];
 
 		if (!ScopeHelper::isInSameScope($phpcsFile, $parenthesisOpenerPointer, $variablePointer)) {
 			return false;
 		}
 
-		return $tokens[TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1)]['code'] === T_STRING;
+		return $phpcsFile->getTokens()[TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1)]['code'] === T_STRING;
 	}
 
 	private function isUsedInForLoopCondition(File $phpcsFile, int $variablePointer, string $variableName): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		if (!isset($tokens[$variablePointer]['nested_parenthesis'])) {
+		$parenthesisOpenerPointer = $this->findOpenerOfNestedParentheses($phpcsFile, $variablePointer);
+		if ($parenthesisOpenerPointer === null) {
 			return false;
 		}
 
-		$parenthesisOpenerPointer = array_reverse(array_keys($tokens[$variablePointer]['nested_parenthesis']))[0];
-		if (!isset($tokens[$parenthesisOpenerPointer]['parenthesis_owner'])) {
+		$parenthesisOwnerPointer = $this->findOwnerOfNestedParentheses($phpcsFile, $variablePointer);
+		if ($parenthesisOwnerPointer === null) {
 			return false;
 		}
 
-		$parenthesisOwnerPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_owner'];
 		if ($tokens[$parenthesisOwnerPointer]['code'] !== T_FOR) {
 			return false;
 		}
@@ -347,6 +340,16 @@ class UnusedVariableSniff implements Sniff
 			}
 
 			if (!$this->isAssignment($phpcsFile, $i)) {
+				return true;
+			}
+
+			$nextPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
+			if (!in_array($tokens[$nextPointer]['code'], [T_INC, T_DEC], true)) {
+				continue;
+			}
+
+			$parenthesisOwnerPointer = $this->findOwnerOfNestedParentheses($phpcsFile, $i);
+			if ($parenthesisOwnerPointer !== null && in_array($tokens[$parenthesisOwnerPointer]['code'], [T_IF, T_ELSEIF], true)) {
 				return true;
 			}
 		}
@@ -465,6 +468,32 @@ class UnusedVariableSniff implements Sniff
 		}
 
 		return false;
+	}
+
+	private function findOpenerOfNestedParentheses(File $phpcsFile, int $pointer): ?int
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		if (!array_key_exists('nested_parenthesis', $tokens[$pointer])) {
+			return null;
+		}
+
+		return array_reverse(array_keys($tokens[$pointer]['nested_parenthesis']))[0];
+	}
+
+	private function findOwnerOfNestedParentheses(File $phpcsFile, int $pointer): ?int
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$parenthesisOpenerPointer = $this->findOpenerOfNestedParentheses($phpcsFile, $pointer);
+
+		if ($parenthesisOpenerPointer === null) {
+			return null;
+		}
+
+		return array_key_exists('parenthesis_owner', $tokens[$parenthesisOpenerPointer])
+			? $tokens[$parenthesisOpenerPointer]['parenthesis_owner']
+			: null;
 	}
 
 }

@@ -199,3 +199,15 @@ function ($data) {
 	}
 	echo $c;
 };
+
+function ($values) {
+	$expectedKey = 0;
+
+	foreach ($values as $key => $value) {
+		if ($key !== $expectedKey++) {
+			return $value;
+		}
+	}
+
+	return null;
+};
