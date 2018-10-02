@@ -95,3 +95,8 @@ $a = $b + (100 - $c);
 $a = 'a' . '/' . (32 - ($b * 8));
 
 $var = $foo && ($bar > 0 || $baz > 0) ? true : false;
+
+include($file);
+include_once($file);
+require($file);
+require_once($file);
