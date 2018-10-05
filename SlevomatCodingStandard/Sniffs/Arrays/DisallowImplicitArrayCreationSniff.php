@@ -71,6 +71,7 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 			'$_ENV',
 			'$_COOKIE',
 			'$_SESSION',
+			'$this',
 		], true)) {
 			return;
 		}

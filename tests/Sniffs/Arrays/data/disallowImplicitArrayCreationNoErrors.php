@@ -13,6 +13,7 @@ class Whatever
 	{
 		$this->a[] = 'a';
 		self::$a[] = 'a';
+		$this['a'] = 'a';
 	}
 
 }
