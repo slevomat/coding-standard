@@ -146,7 +146,7 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 
 		$variableName = $tokens[$variablePointer]['content'];
 
-		for ($i = $scopeOpenerPointer + 1; $i < $scopeCloserPointer; $i++) {
+		for ($i = $scopeOpenerPointer + 1; $i < $variablePointer; $i++) {
 			if ($tokens[$i]['code'] !== T_VARIABLE) {
 				continue;
 			}

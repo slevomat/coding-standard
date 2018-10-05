@@ -26,3 +26,9 @@ function parenthesesBefore()
 	$x = (10) + $value;
 	$value[] = 'a';
 }
+
+function variableReset()
+{
+	$a[] = 'a';
+	$a = null;
+}
