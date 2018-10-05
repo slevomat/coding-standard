@@ -100,3 +100,7 @@ include($file);
 include_once($file);
 require($file);
 require_once($file);
+
+return true
+    ? 100
+    : (int) ((100 / 50) * 100);

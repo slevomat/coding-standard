@@ -269,7 +269,6 @@ class UselessParenthesesSniff implements Sniff
 
 			do {
 				$nextPointer = TokenHelper::findNextEffective($phpcsFile, $contentEndPointer + 1);
-
 				if ($tokens[$nextPointer]['code'] !== T_OPEN_PARENTHESIS) {
 					break;
 				}
@@ -278,6 +277,10 @@ class UselessParenthesesSniff implements Sniff
 			} while (true);
 		} else {
 			$nextPointer = TokenHelper::findNext($phpcsFile, T_OPEN_PARENTHESIS, $notBooleanNotOperatorPointer + 1);
+			if ($nextPointer === null) {
+				return;
+			}
+
 			$contentEndPointer = $tokens[$nextPointer]['parenthesis_closer'];
 		}
 
