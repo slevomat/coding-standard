@@ -21,6 +21,15 @@ function differentScope()
 	})();
 }
 
+function differentScope2()
+{
+	(function () {
+		$a = [];
+	})();
+
+	$a[] = 'a';
+}
+
 function parenthesesBefore()
 {
 	$x = (10) + $value;
@@ -31,4 +40,10 @@ function variableReset()
 {
 	$a[] = 'a';
 	$a = null;
+}
+
+function undefinedVariable()
+{
+	$b = $a ? true : false;
+	$a[] = 2;
 }
