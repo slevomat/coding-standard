@@ -9,6 +9,10 @@ matrix:
       env: DEPENDENCIES=lowest
     - php: 7.2
       env: DEPENDENCIES=highest
+    - php: 7.3
+      env: DEPENDENCIES=lowest
+    - php: 7.3
+      env: DEPENDENCIES=highest
 cache:
   directories:
     - $HOME/.composer/cache
