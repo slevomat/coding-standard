@@ -23,3 +23,7 @@ in_array(
 );
 
 \is_bool(...foo());
+
+call_user_func(function ($a, $b) {
+	doSomething($a, $b);
+});
