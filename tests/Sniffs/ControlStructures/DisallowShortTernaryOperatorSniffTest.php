@@ -22,7 +22,7 @@ class DisallowShortTernaryOperatorSniffTest extends TestCase
 		self::assertSniffError($report, 5, DisallowShortTernaryOperatorSniff::CODE_DISALLOWED_SHORT_TERNARY_OPERATOR);
 		self::assertSniffError($report, 7, DisallowShortTernaryOperatorSniff::CODE_DISALLOWED_SHORT_TERNARY_OPERATOR);
 
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableDisabled(): void
@@ -35,7 +35,7 @@ class DisallowShortTernaryOperatorSniffTest extends TestCase
 		self::assertSniffError($report, 5, DisallowShortTernaryOperatorSniff::CODE_DISALLOWED_SHORT_TERNARY_OPERATOR);
 		self::assertSniffError($report, 7, DisallowShortTernaryOperatorSniff::CODE_DISALLOWED_SHORT_TERNARY_OPERATOR);
 
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 }

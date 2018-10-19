@@ -47,7 +47,7 @@ class RequireShortTernaryOperatorSniffTest extends TestCase
 		self::assertSniffError($report, 52, RequireShortTernaryOperatorSniff::CODE_REQUIRED_SHORT_TERNARY_OPERATOR);
 		self::assertSniffError($report, 56, RequireShortTernaryOperatorSniff::CODE_REQUIRED_SHORT_TERNARY_OPERATOR);
 
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 }

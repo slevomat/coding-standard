@@ -14,7 +14,7 @@ class FullyQualifiedClassNameAfterKeywordSniffTest extends TestCase
 				__DIR__ . '/data/fullyQualifiedExtends.php',
 				['keywordsToCheck' => ['T_FOO']]
 			);
-			$this->fail();
+			self::fail();
 		} catch (UndefinedKeywordTokenException $e) {
 			self::assertContains('T_FOO', $e->getMessage());
 			self::assertSame('T_FOO', $e->getKeyword());

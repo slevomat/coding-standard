@@ -37,7 +37,7 @@ class EarlyExitSniffTest extends TestCase
 			self::assertSniffError($report, $line, EarlyExitSniff::CODE_USELESS_ELSEIF, 'Remove useless elseif to reduce code nesting.');
 		}
 
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testIfWithoutCurlyBraces(): void

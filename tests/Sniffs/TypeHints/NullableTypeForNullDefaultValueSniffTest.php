@@ -9,7 +9,7 @@ class NullableTypeForNullDefaultValueSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		$this->assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/nullableTypeForNullDefaultValueNoErrors.php', [
+		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/nullableTypeForNullDefaultValueNoErrors.php', [
 			'enabled' => true,
 		]));
 	}
@@ -20,21 +20,21 @@ class NullableTypeForNullDefaultValueSniffTest extends TestCase
 			'enabled' => true,
 		]);
 
-		$this->assertSame(12, $report->getErrorCount());
+		self::assertSame(12, $report->getErrorCount());
 
 		$code = NullableTypeForNullDefaultValueSniff::CODE_NULLABILITY_SYMBOL_REQUIRED;
-		$this->assertSniffError($report, 3, $code);
-		$this->assertSniffError($report, 8, $code);
-		$this->assertSniffError($report, 15, $code);
-		$this->assertSniffError($report, 22, $code);
-		$this->assertSniffError($report, 27, $code);
-		$this->assertSniffError($report, 32, $code);
-		$this->assertSniffError($report, 37, $code);
-		$this->assertSniffError($report, 42, $code);
-		$this->assertSniffError($report, 47, $code);
-		$this->assertSniffError($report, 52, $code);
-		$this->assertSniffError($report, 57, $code);
-		$this->assertSniffError($report, 62, $code);
+		self::assertSniffError($report, 3, $code);
+		self::assertSniffError($report, 8, $code);
+		self::assertSniffError($report, 15, $code);
+		self::assertSniffError($report, 22, $code);
+		self::assertSniffError($report, 27, $code);
+		self::assertSniffError($report, 32, $code);
+		self::assertSniffError($report, 37, $code);
+		self::assertSniffError($report, 42, $code);
+		self::assertSniffError($report, 47, $code);
+		self::assertSniffError($report, 52, $code);
+		self::assertSniffError($report, 57, $code);
+		self::assertSniffError($report, 62, $code);
 	}
 
 	public function testFixable(): void
@@ -43,7 +43,7 @@ class NullableTypeForNullDefaultValueSniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/fixableNullableTypeForNullDefaultValue.php', [
 			'enabled' => true,
 		], $codes);
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testDisabledSniff(): void
@@ -51,7 +51,7 @@ class NullableTypeForNullDefaultValueSniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/nullableTypeForNullDefaultValueErrors.php', [
 			'enabled' => false,
 		]);
-		$this->assertNoSniffErrorInFile($report);
+		self::assertNoSniffErrorInFile($report);
 	}
 
 }

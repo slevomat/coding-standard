@@ -24,7 +24,7 @@ class RequireTernaryOperatorSniffTest extends TestCase
 		self::assertSniffError($report, 22, RequireTernaryOperatorSniff::CODE_TERNARY_OPERATOR_NOT_USED);
 		self::assertSniffError($report, 31, RequireTernaryOperatorSniff::CODE_TERNARY_OPERATOR_NOT_USED);
 
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testWithIgnoredMultiLineNoErrors(): void

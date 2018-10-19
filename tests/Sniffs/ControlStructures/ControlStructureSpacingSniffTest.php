@@ -154,7 +154,7 @@ class ControlStructureSpacingSniffTest extends TestCase
 				__DIR__ . '/data/controlStructureSpacingWithDefaultSettingsNoErrors.php',
 				['tokensToCheck' => ['T_FOO']]
 			);
-			$this->fail();
+			self::fail();
 		} catch (UndefinedKeywordTokenException $e) {
 			self::assertContains('T_FOO', $e->getMessage());
 			self::assertSame('T_FOO', $e->getKeyword());

@@ -56,7 +56,7 @@ class UseStatementHelperTest extends TestCase
 		$classPointer = TokenHelper::findNext($phpcsFile, T_CLASS, 0);
 		$methodPointer = TokenHelper::findNext($phpcsFile, T_FUNCTION, $classPointer);
 		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, $methodPointer);
-		$this->assertFalse(UseStatementHelper::isTraitUse($phpcsFile, $usePointer));
+		self::assertFalse(UseStatementHelper::isTraitUse($phpcsFile, $usePointer));
 	}
 
 	public function testGetAlias(): void

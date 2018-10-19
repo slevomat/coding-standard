@@ -24,7 +24,7 @@ class DisallowEqualOperatorsSniffTest extends TestCase
 		self::assertSniffError($report, 6, DisallowEqualOperatorsSniff::CODE_DISALLOWED_NOT_EQUAL_OPERATOR);
 		self::assertSniffError($report, 7, DisallowEqualOperatorsSniff::CODE_DISALLOWED_NOT_EQUAL_OPERATOR, 'Operator <> is disallowed, use !== instead.');
 
-		$this->assertAllFixedInFile($report);
+		self::assertAllFixedInFile($report);
 	}
 
 }
