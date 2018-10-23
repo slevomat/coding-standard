@@ -44,6 +44,7 @@
 			<arg value="--ignore=*/data/*"/>
 			<arg value="--cache=temp/phpcs"/>
 			<arg path="SlevomatCodingStandard"/>
+			<arg path="build/PHPStan"/>
 			<arg path="tests"/>
 		</exec>
 	</target>
@@ -58,6 +59,7 @@
 			<arg value="--standard=build/phpcs.xml"/>
 			<arg value="--ignore=*/data/*"/>
 			<arg path="SlevomatCodingStandard"/>
+			<arg path="build/PHPStan"/>
 			<arg path="tests"/>
 		</exec>
 	</target>
@@ -84,9 +86,9 @@
 		>
 			<arg value="analyse"/>
 			<arg value="-l"/>
-			<arg value="7"/>
+			<arg value="6"/>
 			<arg value="-c"/>
-			<arg path="build/phpstan.neon"/>
+			<arg path="build/PHPStan/phpstan.neon"/>
 			<arg path="SlevomatCodingStandard"/>
 		</exec>
 
@@ -100,7 +102,7 @@
 			<arg value="-l"/>
 			<arg value="6"/>
 			<arg value="-c"/>
-			<arg path="build/phpstan.neon"/>
+			<arg path="build/PHPStan/phpstan.neon"/>
 			<arg path="tests"/>
 		</exec>
 	</target>

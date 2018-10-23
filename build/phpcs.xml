@@ -88,8 +88,9 @@
 	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
 		<properties>
 			<property name="rootNamespaces" type="array">
-			    <element key="SlevomatCodingStandard" value="SlevomatCodingStandard"/>
-			    <element key="tests" value="SlevomatCodingStandard"/>
+				<element key="SlevomatCodingStandard" value="SlevomatCodingStandard"/>
+				<element key="build/PHPStan" value="SlevomatCodingStandard\PHPStan"/>
+				<element key="tests" value="SlevomatCodingStandard"/>
 			</property>
 		</properties>
 	</rule>
