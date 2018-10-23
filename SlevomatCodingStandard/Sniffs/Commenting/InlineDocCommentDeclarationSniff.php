@@ -44,7 +44,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		if ($tokens[$commentOpenPointer]['code'] === T_COMMENT) {
-			if (!preg_match('~^/\*\\s*@var\\s+~', $tokens[$commentOpenPointer]['content'])) {
+			if (preg_match('~^/\*\\s*@var\\s+~', $tokens[$commentOpenPointer]['content']) === 0) {
 				return;
 			}
 
@@ -67,7 +67,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 			$commentContent = trim(TokenHelper::getContent($phpcsFile, $commentOpenPointer + 1, $commentClosePointer - 1));
 		}
 
-		if (!preg_match('~^@var~', $commentContent)) {
+		if (preg_match('~^@var~', $commentContent) === 0) {
 			return;
 		}
 
@@ -76,11 +76,11 @@ class InlineDocCommentDeclarationSniff implements Sniff
 			return;
 		}
 
-		if (preg_match('~^@var\\s+\\S+\s+\$\\S+(?:\\s+.+)?$~', $commentContent)) {
+		if (preg_match('~^@var\\s+\\S+\s+\$\\S+(?:\\s+.+)?$~', $commentContent) !== 0) {
 			return;
 		}
 
-		if (preg_match('~^@var\\s+(\$\\S+)\\s+(\\S+)(\\s+.+)?$~', $commentContent, $matches)) {
+		if (preg_match('~^@var\\s+(\$\\S+)\\s+(\\S+)(\\s+.+)?$~', $commentContent, $matches) !== 0) {
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
 					'Invalid inline documentation comment format "%s", expected "@var %s %s%s".',

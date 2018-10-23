@@ -153,7 +153,7 @@ class UnusedUsesSniff implements Sniff
 
 						if (
 							!in_array($annotationName, $this->getIgnoredAnnotationNames(), true)
-							&& preg_match('~^@(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=[^-a-z\\d]|$)~i', $annotationName, $matches)
+							&& preg_match('~^@(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=[^-a-z\\d]|$)~i', $annotationName, $matches) !== 0
 						) {
 							$usedNames[$uniqueId] = true;
 
@@ -176,8 +176,8 @@ class UnusedUsesSniff implements Sniff
 							}
 
 							if (
-								!preg_match('~(?<=^|[^a-z\\\\])(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=::)~i', $annotation->getParameters(), $matches)
-								&& !preg_match('~(?<=@)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=[^\\w])~i', $annotation->getParameters(), $matches)
+								preg_match('~(?<=^|[^a-z\\\\])(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=::)~i', $annotation->getParameters(), $matches) === 0
+								&& preg_match('~(?<=@)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=[^\\w])~i', $annotation->getParameters(), $matches) === 0
 							) {
 								continue;
 							}
@@ -204,14 +204,14 @@ class UnusedUsesSniff implements Sniff
 							$content = $annotation->getContent();
 
 							$contentsToCheck = [];
-							if ($annotationName === '@method' && preg_match('~^(?:([\\\\\\w\|\[\]]+)\\s+)?\\w+\\s*\(([^\)]*)\)~', $content, $matches)) {
-								if (preg_match_all('~(?:^|\?\\s*|,\\s*)([\\\\\\w]+)(?=\\s|=|\.)~', $matches[2], $submatches)) {
+							if ($annotationName === '@method' && preg_match('~^(?:([\\\\\\w\|\[\]]+)\\s+)?\\w+\\s*\(([^\)]*)\)~', $content, $matches) !== 0) {
+								if (preg_match_all('~(?:^|\?\\s*|,\\s*)([\\\\\\w]+)(?=\\s|=|\.)~', $matches[2], $submatches) !== 0) {
 									$contentsToCheck = $submatches[1];
 								}
 								if ($matches[1] !== '') {
 									$contentsToCheck[] = $matches[1];
 								}
-							} elseif ($annotationName === '@var' && preg_match('~^\$\\w+\\s+(.+)$~', $content, $matches)) {
+							} elseif ($annotationName === '@var' && preg_match('~^\$\\w+\\s+(.+)$~', $content, $matches) !== 0) {
 								$contentsToCheck[] = $matches[1];
 							} elseif (in_array($annotationName, ['@var', '@param', '@return', '@throws', '@property', '@property-read', '@property-write'], true)) {
 								$contentsToCheck[] = preg_split('~\\s+~', $content)[0];
@@ -222,7 +222,7 @@ class UnusedUsesSniff implements Sniff
 							}
 
 							foreach ($contentsToCheck as $contentToCheck) {
-								if (!preg_match('~(?<=^|\|)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|\\\\|\||\[|$)~i', $contentToCheck, $matches)) {
+								if (preg_match('~(?<=^|\|)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|\\\\|\||\[|$)~i', $contentToCheck, $matches) === 0) {
 									continue;
 								}
 

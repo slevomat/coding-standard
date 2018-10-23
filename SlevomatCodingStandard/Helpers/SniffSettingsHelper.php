@@ -61,8 +61,8 @@ class SniffSettingsHelper
 
 	public static function isValidRegularExpression(string $expression): bool
 	{
-		return preg_match('~^(?:\(.*\)|\{.*\}|\[.*\])[a-z]*\z~i', $expression) > 0
-			|| preg_match('~^([^a-z\s\\\\]).*\\1[a-z]*\z~i', $expression) > 0;
+		return preg_match('~^(?:\(.*\)|\{.*\}|\[.*\])[a-z]*\z~i', $expression) !== 0
+			|| preg_match('~^([^a-z\s\\\\]).*\\1[a-z]*\z~i', $expression) !== 0;
 	}
 
 }

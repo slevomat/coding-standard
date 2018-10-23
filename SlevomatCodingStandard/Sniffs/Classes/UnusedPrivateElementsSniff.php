@@ -135,12 +135,12 @@ class UnusedPrivateElementsSniff implements Sniff
 		$openTagPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $classPointer - 1);
 		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 
-		$reportedProperties = $this->getProperties($phpcsFile, $tokens, $classToken);
-		$reportedConstants = $this->getConstants($phpcsFile, $tokens, $classToken);
+		$reportedProperties = $this->getProperties($phpcsFile, $classPointer);
+		$reportedConstants = $this->getConstants($phpcsFile, $classPointer);
 
 		$reportedMethods = [];
 		$originalMethods = [];
-		foreach ($this->getMethods($phpcsFile, $tokens, $classToken) as $methodName => $methodPointer) {
+		foreach ($this->getMethods($phpcsFile, $classPointer) as $methodName => $methodPointer) {
 			$normalizedMethodName = $this->getNormalizedMethodName($methodName);
 			$reportedMethods[$normalizedMethodName] = $methodPointer;
 			$originalMethods[$normalizedMethodName] = $methodName;
@@ -260,7 +260,7 @@ class UnusedPrivateElementsSniff implements Sniff
 			$token = $tokens[$tokenPointer];
 
 			if (in_array($token['code'], [T_HEREDOC, T_DOUBLE_QUOTED_STRING], true)) {
-				if (preg_match_all('~(?<!\\\\)\$this->(.+?\b)(?!\()~', $token['content'], $matches, PREG_PATTERN_ORDER)) {
+				if (preg_match_all('~(?<!\\\\)\$this->(.+?\b)(?!\()~', $token['content'], $matches, PREG_PATTERN_ORDER) !== 0) {
 					foreach ($matches[1] as $propertyInString) {
 						if (!isset($reportedProperties[$propertyInString])) {
 							continue;
@@ -269,7 +269,7 @@ class UnusedPrivateElementsSniff implements Sniff
 						unset($reportedProperties[$propertyInString]);
 					}
 				}
-				if (preg_match_all('~(?:self|static)::(.+?\b)~', $token['content'], $matches, PREG_PATTERN_ORDER)) {
+				if (preg_match_all('~(?:self|static)::(.+?\b)~', $token['content'], $matches, PREG_PATTERN_ORDER) !== 0) {
 					foreach ($matches[1] as $constantInString) {
 						if (!isset($reportedConstants[$constantInString])) {
 							continue;
@@ -278,7 +278,7 @@ class UnusedPrivateElementsSniff implements Sniff
 						unset($reportedConstants[$constantInString]);
 					}
 				}
-				if (preg_match_all('~(?<=\{)\$this->(.+?\b)(?=\()~', $token['content'], $matches, PREG_PATTERN_ORDER)) {
+				if (preg_match_all('~(?<=\{)\$this->(.+?\b)(?=\()~', $token['content'], $matches, PREG_PATTERN_ORDER) !== 0) {
 					foreach ($matches[1] as $methodInString) {
 						$normalizedMethodInString = $this->getNormalizedMethodName($methodInString);
 						if (!isset($reportedMethods[$normalizedMethodInString])) {
@@ -423,12 +423,13 @@ class UnusedPrivateElementsSniff implements Sniff
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed[] $tokens
-	 * @param mixed[] $classToken
+	 * @param int $classTokenPointer
 	 * @return int[] string(name) => pointer
 	 */
-	private function getProperties(File $phpcsFile, array $tokens, array $classToken): array
+	private function getProperties(File $phpcsFile, int $classTokenPointer): array
 	{
+		$tokens = $phpcsFile->getTokens();
+		$classToken = $tokens[$classTokenPointer];
 		$reportedProperties = [];
 		$findPropertiesStartTokenPointer = $classToken['scope_opener'] + 1;
 		while (true) {
@@ -493,12 +494,13 @@ class UnusedPrivateElementsSniff implements Sniff
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed[] $tokens
-	 * @param mixed[] $classToken
+	 * @param int $classTokenPointer
 	 * @return int[] string(name) => pointer
 	 */
-	private function getMethods(File $phpcsFile, array $tokens, array $classToken): array
+	private function getMethods(File $phpcsFile, int $classTokenPointer): array
 	{
+		$tokens = $phpcsFile->getTokens();
+		$classToken = $tokens[$classTokenPointer];
 		$reportedMethods = [];
 		$findMethodsStartTokenPointer = $classToken['scope_opener'] + 1;
 		while (true) {
@@ -536,12 +538,13 @@ class UnusedPrivateElementsSniff implements Sniff
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed[] $tokens
-	 * @param mixed[] $classToken
+	 * @param int $classTokenPointer
 	 * @return int[] string(name) => pointer
 	 */
-	private function getConstants(File $phpcsFile, array $tokens, array $classToken): array
+	private function getConstants(File $phpcsFile, int $classTokenPointer): array
 	{
+		$tokens = $phpcsFile->getTokens();
+		$classToken = $tokens[$classTokenPointer];
 		$reportedConstants = [];
 		$findConstantsStartTokenPointer = $classToken['scope_opener'] + 1;
 		while (true) {

@@ -89,8 +89,10 @@ class YodaHelper
 	private static function replace(File $phpcsFile, array $oldTokens, array $newTokens): void
 	{
 		current($oldTokens);
+		/** @var int $firstOldPointer */
 		$firstOldPointer = key($oldTokens);
 		end($oldTokens);
+		/** @var int $lastOldPointer */
 		$lastOldPointer = key($oldTokens);
 
 		for ($i = $firstOldPointer; $i <= $lastOldPointer; $i++) {

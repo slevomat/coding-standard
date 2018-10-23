@@ -48,7 +48,7 @@ class UselessInheritDocCommentSniff implements Sniff
 			$docCommentContent .= $tokens[$i]['content'];
 		}
 
-		if (!preg_match('~^(?:\{@inheritDoc\}|@inheritDoc)$~i', $docCommentContent)) {
+		if (preg_match('~^(?:\{@inheritDoc\}|@inheritDoc)$~i', $docCommentContent) === 0) {
 			return;
 		}
 

@@ -1,0 +1,19 @@
+includes:
+	- ../../vendor/phpstan/phpstan-phpunit/extension.neon
+	- ../../vendor/phpstan/phpstan-phpunit/rules.neon
+	- ../../vendor/phpstan/phpstan-strict-rules/rules.neon
+
+parameters:
+	autoload_files:
+		- %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/autoload.php
+		- %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/src/Util/Tokens.php
+	excludes_analyse:
+		- */tests/*/data/*
+	ignoreErrors:
+		- "#Call to function array_key_exists\\(\\) with '(scope_(opener|closer)|parenthesis_(owner|opener|closer)|nested_parenthesis)'#"
+
+services:
+	-
+		class: SlevomatCodingStandard\PHPStan\GetTokenDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension

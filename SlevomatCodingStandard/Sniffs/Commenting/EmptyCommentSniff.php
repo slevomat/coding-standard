@@ -146,7 +146,7 @@ class EmptyCommentSniff implements Sniff
 			return TokenHelper::getContent($phpcsFile, $commentStartPointer + 1, $commentEndPointer - 1);
 		}
 
-		if (preg_match('~^(?://|#)(.*)~', $tokens[$commentStartPointer]['content'], $matches)) {
+		if (preg_match('~^(?://|#)(.*)~', $tokens[$commentStartPointer]['content'], $matches) !== 0) {
 			return $matches[1];
 		}
 

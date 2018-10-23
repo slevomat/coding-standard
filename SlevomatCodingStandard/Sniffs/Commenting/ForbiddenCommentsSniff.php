@@ -90,7 +90,7 @@ class ForbiddenCommentsSniff implements Sniff
 					$docCommentContent .= is_array($token) ? $token['content'] : $token;
 				}
 
-				if (preg_match('~^[\\s\*]*$~', $docCommentContent)) {
+				if (preg_match('~^[\\s\*]*$~', $docCommentContent) !== 0) {
 					$pointerBeforeDocComment = $docCommentOpenPointer - 1;
 					$contentBeforeWithoutSpaces = preg_replace('~[\t ]+$~', '', $tokens[$pointerBeforeDocComment]['content'], -1, $replacedCount);
 					if ($replacedCount !== 0) {

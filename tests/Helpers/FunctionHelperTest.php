@@ -355,6 +355,8 @@ class FunctionHelperTest extends TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'abstractWithReturnTypeHint');
 		self::assertTrue(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
+
+		/** @var \SlevomatCodingStandard\Helpers\ReturnTypeHint  $returnTypeHint */
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 		self::assertSame('bool', $returnTypeHint->getTypeHint());
 		self::assertFalse($returnTypeHint->isNullable());

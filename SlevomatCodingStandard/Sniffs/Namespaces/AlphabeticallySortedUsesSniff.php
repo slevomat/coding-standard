@@ -90,7 +90,9 @@ class AlphabeticallySortedUsesSniff implements Sniff
 		array $useStatements
 	): void
 	{
+		/** @var \SlevomatCodingStandard\Helpers\UseStatement $firstUseStatement */
 		$firstUseStatement = reset($useStatements);
+		/** @var \SlevomatCodingStandard\Helpers\UseStatement $lastUseStatement */
 		$lastUseStatement = end($useStatements);
 		$lastSemicolonPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $lastUseStatement->getPointer());
 		$phpcsFile->fixer->beginChangeset();

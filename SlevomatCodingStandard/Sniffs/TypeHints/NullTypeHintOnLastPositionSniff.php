@@ -53,7 +53,7 @@ class NullTypeHintOnLastPositionSniff implements Sniff
 					continue;
 				}
 
-				$typeHintsDefinition = $annotationName === '@var' && preg_match('~^(\$\\S+\\s+)(.+)~', $annotation->getContent(), $matches)
+				$typeHintsDefinition = $annotationName === '@var' && preg_match('~^(\$\\S+\\s+)(.+)~', $annotation->getContent(), $matches) !== 0
 					? $matches[2]
 					: preg_split('~\\s+~', $annotation->getContent())[0];
 

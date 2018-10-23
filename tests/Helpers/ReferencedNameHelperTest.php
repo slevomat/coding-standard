@@ -71,18 +71,18 @@ class ReferencedNameHelperTest extends TestCase
 		);
 
 		$foundTypes = [
-			['NullableParameterTypeHint', false, false],
-			['NullableReturnTypeHint', false, false],
+			'NullableParameterTypeHint',
+			'NullableReturnTypeHint',
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
 		self::assertCount(count($foundTypes), $names);
 		foreach ($names as $i => $referencedName) {
-			[$type, $isFunction, $isConstant] = $foundTypes[$i];
+			$type = $foundTypes[$i];
 
 			self::assertSame($type, $referencedName->getNameAsReferencedInFile());
-			self::assertSame($isFunction, $referencedName->isFunction(), $type);
-			self::assertSame($isConstant, $referencedName->isConstant(), $type);
+			self::assertFalse($referencedName->isFunction(), $type);
+			self::assertFalse($referencedName->isConstant(), $type);
 		}
 	}
 
@@ -101,22 +101,22 @@ class ReferencedNameHelperTest extends TestCase
 		);
 
 		$foundTypes = [
-			['doSomething', true, false],
-			['FirstDoubleException', false, false],
-			['\Foo\SecondDoubleException', false, false],
-			['\Foo\Bar\FirstMultipleException', false, false],
-			['SecondMultipleException', false, false],
-			['ThirdMultipleException', false, false],
+			['doSomething', true],
+			['FirstDoubleException', false],
+			['\Foo\SecondDoubleException', false],
+			['\Foo\Bar\FirstMultipleException', false],
+			['SecondMultipleException', false],
+			['ThirdMultipleException', false],
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
 		self::assertCount(count($foundTypes), $names);
 		foreach ($names as $i => $referencedName) {
-			[$type, $isFunction, $isConstant] = $foundTypes[$i];
+			[$type, $isFunction] = $foundTypes[$i];
 
 			self::assertSame($type, $referencedName->getNameAsReferencedInFile());
 			self::assertSame($isFunction, $referencedName->isFunction(), $type);
-			self::assertSame($isConstant, $referencedName->isConstant(), $type);
+			self::assertFalse($referencedName->isConstant(), $type);
 		}
 	}
 

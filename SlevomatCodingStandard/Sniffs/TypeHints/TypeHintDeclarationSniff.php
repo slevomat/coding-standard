@@ -624,7 +624,7 @@ class TypeHintDeclarationSniff implements Sniff
 				continue;
 			}
 
-			if (!preg_match('~^\\S+\\s++(?:(?:\.{3}\\s*)?(\$\\S+)\\s+)?[^$]~', $parameterAnnotation->getContent(), $matches)) {
+			if (preg_match('~^\\S+\\s++(?:(?:\.{3}\\s*)?(\$\\S+)\\s+)?[^$]~', $parameterAnnotation->getContent(), $matches) === 0) {
 				continue;
 			}
 
@@ -754,7 +754,7 @@ class TypeHintDeclarationSniff implements Sniff
 							continue;
 						}
 
-						if (!preg_match('~\S+\s+(\$\S+)~', $tokens[$parameterInformationPointer]['content'], $match)) {
+						if (preg_match('~\S+\s+(\$\S+)~', $tokens[$parameterInformationPointer]['content'], $match) === 0) {
 							continue;
 						}
 
@@ -920,7 +920,7 @@ class TypeHintDeclarationSniff implements Sniff
 
 	private function definitionContainsItemsSpecificationForTraversable(File $phpcsFile, int $pointer, string $typeHintDefinition): bool
 	{
-		if (preg_match_all('~(?<=^|\|)(.+?)\[\](?=\||$)~', $typeHintDefinition, $matches)) {
+		if (preg_match_all('~(?<=^|\|)(.+?)\[\](?=\||$)~', $typeHintDefinition, $matches) !== 0) {
 			foreach ($matches[1] as $typeHint) {
 				if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeHint))) {
 					continue;
@@ -976,7 +976,7 @@ class TypeHintDeclarationSniff implements Sniff
 				continue;
 			}
 
-			if (!preg_match('~^([^$]\\S*)(?:\\s+(?:\.{3}\\s*)?(\$\\S+))?~', $parameterAnnotation->getContent(), $matches)) {
+			if (preg_match('~^([^$]\\S*)(?:\\s+(?:\.{3}\\s*)?(\$\\S+))?~', $parameterAnnotation->getContent(), $matches) === 0) {
 				continue;
 			}
 
@@ -1001,7 +1001,7 @@ class TypeHintDeclarationSniff implements Sniff
 			return false;
 		}
 
-		if (preg_match('~^\\S+\\s+\\S+~', $returnAnnotation->getContent())) {
+		if (preg_match('~^\\S+\\s+\\S+~', $returnAnnotation->getContent()) !== 0) {
 			return false;
 		}
 

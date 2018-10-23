@@ -339,6 +339,9 @@ class EarlyExitSniff implements Sniff
 
 	private function fixIndentation(string $code, string $eolChar, string $defaultIndentation): string
 	{
+		/** @var string[] $lines */
+		$lines = explode($eolChar, rtrim($code));
+
 		return implode($eolChar, array_map(function (string $line) use ($defaultIndentation): string {
 			if ($line === '') {
 				return $line;
@@ -353,7 +356,7 @@ class EarlyExitSniff implements Sniff
 			}
 
 			return $defaultIndentation . ltrim($line);
-		}, explode($eolChar, rtrim($code))));
+		}, $lines));
 	}
 
 	private function findEarlyExitInScope(File $phpcsFile, int $startPointer, int $endPointer): ?int

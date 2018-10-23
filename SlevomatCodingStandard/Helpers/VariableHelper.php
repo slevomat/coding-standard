@@ -114,7 +114,7 @@ class VariableHelper
 
 		$variableNameWithoutDollar = substr($tokens[$variablePointer]['content'], 1);
 		for ($i = $parenthesisOpenerPointer + 1; $i < $tokens[$parenthesisOpenerPointer]['parenthesis_closer']; $i++) {
-			if (preg_match('~^([\'"])' . $variableNameWithoutDollar . '\\1$~', $tokens[$i]['content'])) {
+			if (preg_match('~^([\'"])' . $variableNameWithoutDollar . '\\1$~', $tokens[$i]['content']) !== 0) {
 				return true;
 			}
 		}
@@ -129,7 +129,7 @@ class VariableHelper
 		$stringContent = $tokens[$stringPointer]['content'];
 
 		$variableName = $tokens[$variablePointer]['content'];
-		if (preg_match('~(\\\\)?(' . preg_quote($variableName, '~') . ')\b~', $stringContent, $matches)) {
+		if (preg_match('~(\\\\)?(' . preg_quote($variableName, '~') . ')\b~', $stringContent, $matches) !== 0) {
 			if ($matches[1] === '') {
 				return true;
 			}
@@ -140,7 +140,7 @@ class VariableHelper
 		}
 
 		$variableNameWithoutDollar = substr($variableName, 1);
-		if (preg_match('~\$\{' . preg_quote($variableNameWithoutDollar, '~') . '\}~', $stringContent)) {
+		if (preg_match('~\$\{' . preg_quote($variableNameWithoutDollar, '~') . '\}~', $stringContent) !== 0) {
 			return true;
 		}
 
