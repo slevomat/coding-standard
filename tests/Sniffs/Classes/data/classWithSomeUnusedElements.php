@@ -187,4 +187,15 @@ CODE;
 		echo "{$this->whatever(self::USED_CONSTANT_FROM_PARENT_IN_STRING)}";
 	}
 
+    private function usedPrivateMethodViaCallableInSameClass()
+    {
+
+    }
+
+    public function callPrivateMethodOfSelfClassFromInsideCallable()
+    {
+        return function (self $self) {
+            $self->usedPrivateMethodViaCallableInSameClass();
+        };
+    }
 }
