@@ -18,8 +18,8 @@ class RequireOneNamespaceInFileSniffTest extends TestCase
 
 		self::assertSame(2, $report->getErrorCount());
 
-		self::assertSniffError($report, 8, RequireOneNamespaceInFileSniff::CODE_MORE_NAMESPACES_IN_FILE);
-		self::assertSniffError($report, 13, RequireOneNamespaceInFileSniff::CODE_MORE_NAMESPACES_IN_FILE);
+		self::assertSniffError($report, 10, RequireOneNamespaceInFileSniff::CODE_MORE_NAMESPACES_IN_FILE);
+		self::assertSniffError($report, 18, RequireOneNamespaceInFileSniff::CODE_MORE_NAMESPACES_IN_FILE);
 	}
 
 	public function testNoNamespaceNoError(): void
