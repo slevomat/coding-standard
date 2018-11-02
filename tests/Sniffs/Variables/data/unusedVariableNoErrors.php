@@ -211,3 +211,10 @@ function ($values) {
 
 	return null;
 };
+
+function () {
+	$foo = 'ok';
+	$bar = "\\$foo";
+
+	echo $bar;
+};

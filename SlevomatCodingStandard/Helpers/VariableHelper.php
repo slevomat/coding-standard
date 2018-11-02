@@ -14,6 +14,7 @@ use function count;
 use function in_array;
 use function preg_match;
 use function preg_quote;
+use function strlen;
 use function strtolower;
 use function substr;
 
@@ -128,8 +129,14 @@ class VariableHelper
 		$stringContent = $tokens[$stringPointer]['content'];
 
 		$variableName = $tokens[$variablePointer]['content'];
-		if (preg_match('~(?<!\\\\)' . preg_quote($variableName, '~') . '\b~', $stringContent)) {
-			return true;
+		if (preg_match('~(\\\\)?(' . preg_quote($variableName, '~') . ')\b~', $stringContent, $matches)) {
+			if ($matches[1] === '') {
+				return true;
+			}
+
+			if (strlen($matches[1]) % 2 === 1) {
+				return true;
+			}
 		}
 
 		$variableNameWithoutDollar = substr($variableName, 1);
