@@ -218,3 +218,15 @@ function () {
 
 	echo $bar;
 };
+
+function ($values) {
+	$expectedKey = 0;
+
+	foreach ($values as $key => $value) {
+		if ($key !== ($expectedKey += 1)) {
+			return $value;
+		}
+	}
+
+	return null;
+};

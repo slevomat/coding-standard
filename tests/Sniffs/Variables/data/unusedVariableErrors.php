@@ -108,3 +108,11 @@ function () {
 		$a++;
 	}
 };
+
+function ($values) {
+	$a = 0;
+
+	foreach ($values as $value) {
+		($a += $value);
+	}
+};

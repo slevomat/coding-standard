@@ -344,11 +344,26 @@ class UnusedVariableSniff implements Sniff
 			}
 
 			$nextPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
-			if (!in_array($tokens[$nextPointer]['code'], [T_INC, T_DEC], true)) {
+			if (!in_array($tokens[$nextPointer]['code'], [
+				T_INC,
+				T_DEC,
+				T_PLUS_EQUAL,
+				T_MINUS_EQUAL,
+				T_MUL_EQUAL,
+				T_DIV_EQUAL,
+				T_POW_EQUAL,
+				T_MOD_EQUAL,
+				T_AND_EQUAL,
+				T_OR_EQUAL,
+				T_XOR_EQUAL,
+				T_SL_EQUAL,
+				T_SR_EQUAL,
+				T_CONCAT_EQUAL,
+			], true)) {
 				continue;
 			}
 
-			$parenthesisOwnerPointer = $this->findOwnerOfNestedParentheses($phpcsFile, $i);
+			$parenthesisOwnerPointer = $this->findNestedParenthesisWithOwner($phpcsFile, $i);
 			if ($parenthesisOwnerPointer !== null && in_array($tokens[$parenthesisOwnerPointer]['code'], [T_IF, T_ELSEIF], true)) {
 				return true;
 			}
@@ -468,6 +483,23 @@ class UnusedVariableSniff implements Sniff
 		}
 
 		return false;
+	}
+
+	private function findNestedParenthesisWithOwner(File $phpcsFile, int $pointer): ?int
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		if (!array_key_exists('nested_parenthesis', $tokens[$pointer])) {
+			return null;
+		}
+
+		foreach (array_reverse(array_keys($tokens[$pointer]['nested_parenthesis'])) as $nestedParenthesisOpener) {
+			if (array_key_exists('parenthesis_owner', $tokens[$nestedParenthesisOpener])) {
+				return $tokens[$nestedParenthesisOpener]['parenthesis_owner'];
+			}
+		}
+
+		return null;
 	}
 
 	private function findOpenerOfNestedParentheses(File $phpcsFile, int $pointer): ?int
