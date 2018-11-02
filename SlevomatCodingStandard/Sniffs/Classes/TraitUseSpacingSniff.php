@@ -188,6 +188,7 @@ class TraitUseSpacingSniff implements Sniff
 			/** @var int $previousUseEndPointer */
 			$previousUseEndPointer = TokenHelper::findNextLocal($phpcsFile, [T_SEMICOLON, T_OPEN_CURLY_BRACKET], $previousUsePointer + 1);
 			if ($tokens[$previousUseEndPointer]['code'] === T_OPEN_CURLY_BRACKET) {
+				/** @var int $previousUseEndPointer */
 				$previousUseEndPointer = $tokens[$previousUseEndPointer]['bracket_closer'];
 			}
 
@@ -198,15 +199,25 @@ class TraitUseSpacingSniff implements Sniff
 				continue;
 			}
 
-			$fix = $phpcsFile->addFixableError(
+			$errorParameters = [
 				sprintf(
 					'Expected %d lines between same types of use statement, found %d.',
 					$requiredLinesCountBetweenUses,
 					$actualLinesCountAfterPreviousUse
 				),
 				$usePointer,
-				self::CODE_INCORRECT_LINES_COUNT_BETWEEN_USES
-			);
+				self::CODE_INCORRECT_LINES_COUNT_BETWEEN_USES,
+			];
+
+			$pointerBeforeUse = TokenHelper::findPreviousEffective($phpcsFile, $usePointer - 1);
+
+			if ($previousUseEndPointer !== $pointerBeforeUse) {
+				$phpcsFile->addError(...$errorParameters);
+				$previousUsePointer = $usePointer;
+				continue;
+			}
+
+			$fix = $phpcsFile->addFixableError(...$errorParameters);
 
 			if (!$fix) {
 				$previousUsePointer = $usePointer;

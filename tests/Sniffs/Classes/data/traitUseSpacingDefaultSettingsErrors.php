@@ -15,4 +15,5 @@ class Whatever
 
 	}
 
+	use E;
 }
