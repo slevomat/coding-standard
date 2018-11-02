@@ -104,6 +104,13 @@ function () {
 	return yield from $array;
 };
 
+function () {
+	// Multiline
+	// Comment
+	// Multiline
+	return true;
+};
+
 if (true) {
 
 }

@@ -154,7 +154,7 @@ class ControlStructureSpacingSniff implements Sniff
 			if ($tokens[$pointerBeforeComment]['line'] !== $tokens[$pointerBefore]['line']) {
 				$controlStructureStartPointer = array_key_exists('comment_opener', $tokens[$pointerBefore])
 					? $tokens[$pointerBefore]['comment_opener']
-					: TokenHelper::findPreviousExcluding($phpcsFile, T_COMMENT, $pointerBefore - 1) + 1;
+					: $this->getMultilineCommentStartPointer($phpcsFile, $pointerBefore);
 				/** @var int $pointerBefore */
 				$pointerBefore = TokenHelper::findPreviousEffective($phpcsFile, $pointerBefore - 1);
 			}
@@ -267,6 +267,27 @@ class ControlStructureSpacingSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->endChangeset();
+	}
+
+	private function getMultilineCommentStartPointer(File $phpcsFile, int $commentEndPointer): int
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$commentStartPointer = $commentEndPointer;
+		do {
+			$commentBefore = TokenHelper::findPrevious($phpcsFile, T_COMMENT, $commentStartPointer - 1);
+			if ($commentBefore === null) {
+				break;
+			}
+			if ($tokens[$commentBefore]['line'] + 1 !== $tokens[$commentStartPointer]['line']) {
+				break;
+			}
+
+			/** @var int $commentStartPointer */
+			$commentStartPointer = $commentBefore;
+		} while (true);
+
+		return $commentStartPointer;
 	}
 
 	private function findControlStructureEnd(File $phpcsFile, int $controlStructurePointer): int

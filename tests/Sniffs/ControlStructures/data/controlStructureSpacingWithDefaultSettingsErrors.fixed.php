@@ -144,3 +144,10 @@ function () {
 
 	doSomething();
 };
+
+function () {
+	// Multiline
+	// Comment
+	// Multiline
+	return true;
+};
