@@ -11,9 +11,16 @@ use const T_CLOSE_SHORT_ARRAY;
 use const T_CLOSE_SQUARE_BRACKET;
 use const T_COALESCE;
 use const T_COMMA;
+use const T_COMMENT;
 use const T_DOUBLE_ARROW;
 use const T_INLINE_ELSE;
 use const T_INLINE_THEN;
+use const T_OPEN_TAG;
+use const T_PHPCS_DISABLE;
+use const T_PHPCS_ENABLE;
+use const T_PHPCS_IGNORE;
+use const T_PHPCS_IGNORE_FILE;
+use const T_PHPCS_SET;
 use const T_SEMICOLON;
 use const T_WHITESPACE;
 use function in_array;
@@ -89,8 +96,7 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 			return;
 		}
 
-		/** @var int $endOfLineBeforeInlineThenPointer */
-		$endOfLineBeforeInlineThenPointer = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $inlineThenPointer - 1);
+		$endOfLineBeforeInlineThenPointer = $this->getEndOfLineBefore($phpcsFile, $inlineThenPointer);
 
 		$lineLengthLimit = SniffSettingsHelper::normalizeInteger($this->lineLengthLimit);
 		$actualLineLength = strlen(TokenHelper::getContent($phpcsFile, $endOfLineBeforeInlineThenPointer + 1, $pointerAfterInlineElseEnd));
@@ -122,6 +128,45 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 		$phpcsFile->fixer->addContentBefore($inlineElsePointer, $phpcsFile->eolChar . $indentation);
 
 		$phpcsFile->fixer->endChangeset();
+	}
+
+	private function getEndOfLineBefore(File $phpcsFile, int $pointer): int
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$endOfLineBefore = null;
+
+		$startPointer = $pointer - 1;
+		while (true) {
+			$possibleEndOfLinePointer = TokenHelper::findPrevious(
+				$phpcsFile,
+				[T_WHITESPACE, T_OPEN_TAG, T_COMMENT, T_PHPCS_DISABLE, T_PHPCS_ENABLE, T_PHPCS_IGNORE, T_PHPCS_IGNORE_FILE, T_PHPCS_SET],
+				$startPointer
+			);
+			if ($tokens[$possibleEndOfLinePointer]['code'] === T_WHITESPACE && $tokens[$possibleEndOfLinePointer]['content'] === $phpcsFile->eolChar) {
+				$endOfLineBefore = $possibleEndOfLinePointer;
+				break;
+			}
+
+			if ($tokens[$possibleEndOfLinePointer]['code'] === T_OPEN_TAG) {
+				$endOfLineBefore = $possibleEndOfLinePointer;
+				break;
+			}
+
+			if (
+				in_array($tokens[$possibleEndOfLinePointer]['code'], [T_COMMENT, T_PHPCS_DISABLE, T_PHPCS_ENABLE, T_PHPCS_IGNORE, T_PHPCS_IGNORE_FILE, T_PHPCS_SET], true)
+				&& substr($tokens[$possibleEndOfLinePointer]['content'], -1) === $phpcsFile->eolChar
+			) {
+				$endOfLineBefore = $possibleEndOfLinePointer;
+				break;
+			}
+
+			$startPointer = $possibleEndOfLinePointer - 1;
+		}
+
+		/** @var int $endOfLineBefore */
+		$endOfLineBefore = $endOfLineBefore;
+		return $endOfLineBefore;
 	}
 
 	private function getIndentation(File $phpcsFile, int $endOfLinePointer): string
