@@ -304,17 +304,13 @@ class UnusedVariableSniff implements Sniff
 				break;
 			}
 
-			if (!in_array($conditionTokenCode, [T_FOREACH, T_FOR, T_DO, T_WHILE], true)) {
+			if (!in_array($conditionTokenCode, [T_FOREACH, T_DO, T_WHILE], true)) {
 				continue;
 			}
 
 			$loopPointer = $conditionPointer;
 
-			if (in_array($tokens[$loopPointer]['code'], [T_FOR, T_FOREACH], true)) {
-				continue;
-			}
-
-			$loopConditionPointer = $tokens[$loopPointer]['code'] === T_DO
+			$loopConditionPointer = $conditionTokenCode === T_DO
 				? TokenHelper::findNextEffective($phpcsFile, $tokens[$loopPointer]['scope_closer'] + 1)
 				: $loopPointer;
 
@@ -325,7 +321,16 @@ class UnusedVariableSniff implements Sniff
 				$tokens[$loopConditionPointer]['parenthesis_opener'] + 1,
 				$tokens[$loopConditionPointer]['parenthesis_closer']
 			);
-			if ($variableUsedInLoopConditionPointer !== null && $variableUsedInLoopConditionPointer !== $variablePointer) {
+			if ($variableUsedInLoopConditionPointer === null || $variableUsedInLoopConditionPointer === $variablePointer) {
+				continue;
+			}
+
+			if ($conditionTokenCode !== T_FOREACH) {
+				return true;
+			}
+
+			$pointerBeforeVariableUsedInLoopCondition = TokenHelper::findPreviousEffective($phpcsFile, $variableUsedInLoopConditionPointer - 1);
+			if ($tokens[$pointerBeforeVariableUsedInLoopCondition]['code'] === T_BITWISE_AND) {
 				return true;
 			}
 		}

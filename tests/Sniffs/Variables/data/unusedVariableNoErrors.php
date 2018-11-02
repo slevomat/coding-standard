@@ -235,3 +235,9 @@ function () {
 	$x =& getReference();
 	$x = '';
 };
+
+function ($values) {
+	foreach ($values as &$value) {
+	   $value = 'changed';
+	}
+};
