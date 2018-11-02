@@ -160,6 +160,10 @@ class UnusedVariableSniff implements Sniff
 			}
 		}
 
+		if ($this->isReference($phpcsFile, $scopeOwnerPointer, $variablePointer)) {
+			return;
+		}
+
 		if (VariableHelper::isUsedInScopeAfterPointer($phpcsFile, $scopeOwnerPointer, $variablePointer, $variablePointer + 1)) {
 			return;
 		}
@@ -478,6 +482,36 @@ class UnusedVariableSniff implements Sniff
 
 			$pointerBeforeInheritedVariable = TokenHelper::findPreviousEffective($phpcsFile, $i - 1);
 			if ($tokens[$pointerBeforeInheritedVariable]['code'] === T_BITWISE_AND) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private function isReference(File $phpcsFile, int $scopeOwnerPointer, int $variablePointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$scopeOpenerPointer = $tokens[$scopeOwnerPointer]['code'] === T_OPEN_TAG
+			? $scopeOwnerPointer
+			: $tokens[$scopeOwnerPointer]['scope_opener'];
+
+		for ($i = $scopeOpenerPointer + 1; $i < $variablePointer; $i++) {
+			if ($tokens[$i]['code'] !== T_VARIABLE) {
+				continue;
+			}
+			if ($tokens[$i]['content'] !== $tokens[$variablePointer]['content']) {
+				continue;
+			}
+
+			$assigmentPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
+			if ($tokens[$assigmentPointer]['code'] !== T_EQUAL) {
+				continue;
+			}
+
+			$referencePointer = TokenHelper::findNextEffective($phpcsFile, $assigmentPointer + 1);
+			if ($tokens[$referencePointer]['code'] === T_BITWISE_AND) {
 				return true;
 			}
 		}

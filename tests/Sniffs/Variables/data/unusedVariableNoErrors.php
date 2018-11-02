@@ -230,3 +230,8 @@ function ($values) {
 
 	return null;
 };
+
+function () {
+	$x =& getReference();
+	$x = '';
+};
