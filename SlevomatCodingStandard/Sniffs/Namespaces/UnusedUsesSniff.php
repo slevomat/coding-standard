@@ -204,7 +204,7 @@ class UnusedUsesSniff implements Sniff
 							$content = $annotation->getContent();
 
 							$contentsToCheck = [];
-							if ($annotationName === '@method' && preg_match('~^(?:([\\\\\\w|]+)\\s+)?\\w+\\s*\(([^\)]*)\)~', $content, $matches)) {
+							if ($annotationName === '@method' && preg_match('~^(?:([\\\\\\w\|\[\]]+)\\s+)?\\w+\\s*\(([^\)]*)\)~', $content, $matches)) {
 								if (preg_match_all('~(?:^|\?\\s*|,\\s*)([\\\\\\w]+)(?=\\s|=|\.)~', $matches[2], $submatches)) {
 									$contentsToCheck = $submatches[1];
 								}

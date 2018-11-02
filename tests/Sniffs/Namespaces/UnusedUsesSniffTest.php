@@ -111,7 +111,7 @@ class UnusedUsesSniffTest extends TestCase
 			'searchAnnotations' => false,
 		]);
 
-		self::assertSame(38, $report->getErrorCount());
+		self::assertSame(41, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Assert is not used in this file.');
 		self::assertSniffError($report, 6, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Doctrine\ORM\Mapping (as ORM) is not used in this file.');
@@ -150,6 +150,9 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertSniffError($report, 40, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Inner3 is not used in this file.');
 		self::assertSniffError($report, 41, UnusedUsesSniff::CODE_UNUSED_USE, 'Type SeeWithMethod is not used in this file.');
 		self::assertSniffError($report, 42, UnusedUsesSniff::CODE_UNUSED_USE, 'Type SeeWithoutMethod is not used in this file.');
+		self::assertSniffError($report, 43, UnusedUsesSniff::CODE_UNUSED_USE, 'Type MethodReturn is not used in this file.');
+		self::assertSniffError($report, 44, UnusedUsesSniff::CODE_UNUSED_USE, 'Type MethodReturnCollection is not used in this file.');
+		self::assertSniffError($report, 45, UnusedUsesSniff::CODE_UNUSED_USE, 'Type MethodParameter5 is not used in this file.');
 	}
 
 	public function testUsedUseInAnnotationWithEnabledSearchAnnotations(): void

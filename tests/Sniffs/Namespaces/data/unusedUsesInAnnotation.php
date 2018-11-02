@@ -40,6 +40,9 @@ use Inner2;
 use Inner3;
 use SeeWithMethod;
 use SeeWithoutMethod;
+use MethodReturn;
+use MethodReturnCollection;
+use MethodParameter5;
 
 /**
  * @ORM\Entity()
@@ -120,6 +123,7 @@ class Boo
  * @property-write PropertyWriteAnnotation $propertyWrite propertyWriteAnnotation description
  * @method MethodAnnotation method (MethodParameter1 $m, MethodParameter2 ...$m2) methodAnnotationDescription
  * @method method(MethodParameter3 $m = null, ?MethodParameter4 $m2) methodAnnotationDescription
+ * @method MethodReturn[]|MethodReturnCollection method(MethodParameter5 $m)
  */
 class Foo
 {
