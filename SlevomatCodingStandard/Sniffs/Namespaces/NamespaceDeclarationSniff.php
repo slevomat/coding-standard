@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_NAMESPACE;
+use const T_NS_SEPARATOR;
 use const T_SEMICOLON;
 use const T_WHITESPACE;
 use function array_key_exists;
@@ -36,6 +37,13 @@ class NamespaceDeclarationSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $namespacePointer): void
 	{
+		$tokens = $phpcsFile->getTokens();
+
+		$pointerAfterNamespace = TokenHelper::findNextEffective($phpcsFile, $namespacePointer + 1);
+		if ($tokens[$pointerAfterNamespace]['code'] === T_NS_SEPARATOR) {
+			return;
+		}
+
 		$this->checkWhitespaceAfterNamespace($phpcsFile, $namespacePointer);
 		$this->checkDisallowedContentBetweenNamespaceNameAndSemicolon($phpcsFile, $namespacePointer);
 		$this->checkDisallowedBracketedSyntax($phpcsFile, $namespacePointer);
