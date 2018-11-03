@@ -106,6 +106,9 @@ if ($a
 	&& (null === $b || null === $c)) {
 }
 
+$a = ($b * $c) - $d;
+$a = ($b * 60 * 60) + ($c * 60) + $d;
+
 // Must be last
 return true
     ? 100

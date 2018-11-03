@@ -124,18 +124,50 @@ class UselessParenthesesSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		if (TokenHelper::findNext($phpcsFile, [T_PLUS, T_MINUS, T_STRING_CONCAT], $parenthesisOpenerPointer + 1, $tokens[$parenthesisOpenerPointer]['parenthesis_closer']) === null) {
+		$operators = [T_PLUS, T_MINUS, T_MULTIPLY, T_DIVIDE, T_STRING_CONCAT];
+
+		$operatorsPointers = TokenHelper::findNextAll($phpcsFile, $operators, $parenthesisOpenerPointer + 1, $tokens[$parenthesisOpenerPointer]['parenthesis_closer']);
+		if (count($operatorsPointers) === 0) {
 			return false;
 		}
 
+		$containsPlusOrMinus = false;
+		$containsMultiplyOrDivide = false;
+		$containsStringConcat = false;
+		foreach ($operatorsPointers as $operatorsPointer) {
+			if (in_array($tokens[$operatorsPointer]['code'], [T_PLUS, T_MINUS], true)) {
+				$containsPlusOrMinus = true;
+			} elseif (in_array($tokens[$operatorsPointer]['code'], [T_MULTIPLY, T_DIVIDE], true)) {
+				$containsMultiplyOrDivide = true;
+			} else {
+				$containsStringConcat = true;
+			}
+		}
+
 		$pointerAfterParenthesis = TokenHelper::findNextEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1);
-		if (in_array($tokens[$pointerAfterParenthesis]['code'], [T_MULTIPLY, T_DIVIDE, T_STRING_CONCAT], true)) {
-			return true;
+		if (in_array($tokens[$pointerAfterParenthesis]['code'], $operators, true)) {
+			if ($containsPlusOrMinus && in_array($tokens[$pointerAfterParenthesis]['code'], [T_MULTIPLY, T_DIVIDE], true)) {
+				return true;
+			}
+			if ($containsMultiplyOrDivide && in_array($tokens[$pointerAfterParenthesis]['code'], [T_PLUS, T_MINUS], true)) {
+				return true;
+			}
+			if ($containsStringConcat || $tokens[$pointerAfterParenthesis]['code'] === T_STRING_CONCAT) {
+				return true;
+			}
 		}
 
 		$pointerBeforeParenthesis = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
-		if (in_array($tokens[$pointerBeforeParenthesis]['code'], [T_MULTIPLY, T_DIVIDE, T_STRING_CONCAT], true)) {
-			return true;
+		if (in_array($tokens[$pointerBeforeParenthesis]['code'], $operators, true)) {
+			if ($containsPlusOrMinus && in_array($tokens[$pointerBeforeParenthesis]['code'], [T_MULTIPLY, T_DIVIDE], true)) {
+				return true;
+			}
+			if ($containsMultiplyOrDivide && in_array($tokens[$pointerBeforeParenthesis]['code'], [T_PLUS, T_MINUS], true)) {
+				return true;
+			}
+			if ($containsStringConcat || $tokens[$pointerBeforeParenthesis]['code'] === T_STRING_CONCAT) {
+				return true;
+			}
 		}
 
 		return false;
