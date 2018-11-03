@@ -42,6 +42,7 @@ use const T_USE;
 use const T_VARIABLE;
 use const T_WHITESPACE;
 use function array_key_exists;
+use function count;
 use function in_array;
 
 class UselessParenthesesSniff implements Sniff

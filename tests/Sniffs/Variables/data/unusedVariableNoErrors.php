@@ -241,3 +241,12 @@ function ($values) {
 	   $value = 'changed';
 	}
 };
+
+function () {
+	$bool = false;
+	for ($i = 0; $i < 10; $i++) {
+		if (!$bool) {
+			$bool = true;
+		}
+	}
+};
