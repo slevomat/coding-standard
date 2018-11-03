@@ -46,6 +46,7 @@ use const T_STRING;
 use const T_VARIABLE;
 use const T_XOR_EQUAL;
 use function array_keys;
+use function array_reverse;
 use function count;
 use function in_array;
 use function preg_match_all;
@@ -291,8 +292,32 @@ class UnusedPrivateElementsSniff implements Sniff
 				$findUsagesStartTokenPointer = $tokenPointer + 1;
 			} elseif ($token['code'] === T_OBJECT_OPERATOR) {
 				$variableTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokenPointer - 1);
-				if ($tokens[$variableTokenPointer]['code'] === T_VARIABLE && $tokens[$variableTokenPointer]['content'] === '$this') {
-					$findUsagesStartTokenPointer = $checkObjectOperatorUsage($tokenPointer, $variableTokenPointer);
+				if ($tokens[$variableTokenPointer]['code'] === T_VARIABLE) {
+					$variableName = $tokens[$variableTokenPointer]['content'];
+
+					if ($variableName === '$this') {
+						$findUsagesStartTokenPointer = $checkObjectOperatorUsage($tokenPointer, $variableTokenPointer);
+					} else {
+						$functionPointer = null;
+						foreach (array_reverse($tokens[$variableTokenPointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
+							if (in_array($conditionTokenCode, TokenHelper::$functionTokenCodes, true)) {
+								$functionPointer = $conditionPointer;
+								break;
+							}
+						}
+
+						if ($functionPointer !== null) {
+							$parameterPointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $tokens[$functionPointer]['parenthesis_opener'] + 1, $tokens[$functionPointer]['parenthesis_closer']);
+							if ($parameterPointer !== null) {
+								$typeHintPointer = TokenHelper::findPreviousEffective($phpcsFile, $parameterPointer - 1);
+								if ($isCurrentClass($typeHintPointer)) {
+									$checkObjectOperatorUsage($tokenPointer, $variableTokenPointer);
+								}
+							}
+						}
+
+						$findUsagesStartTokenPointer = $tokenPointer + 1;
+					}
 				} else {
 					$possibleThisTokenPointer = $tokenPointer - 1;
 					do {
