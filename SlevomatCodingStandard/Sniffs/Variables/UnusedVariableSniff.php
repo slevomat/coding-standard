@@ -304,7 +304,7 @@ class UnusedVariableSniff implements Sniff
 				break;
 			}
 
-			if (!in_array($conditionTokenCode, [T_FOREACH, T_DO, T_WHILE], true)) {
+			if (!in_array($conditionTokenCode, [T_FOREACH, T_FOR, T_DO, T_WHILE], true)) {
 				continue;
 			}
 
