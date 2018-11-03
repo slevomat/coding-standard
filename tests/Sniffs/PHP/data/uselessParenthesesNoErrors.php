@@ -46,7 +46,7 @@ new static($b);
 new parent($c);
 
 $z = ($a ? '0' : '1') ? '2' : '3';
-$zz = ($a + $b);
+$zz = ($a + $b * 3);
 $zzz = !($a) ? true : false;
 $zzzz = null !== ($a = 'a') ? true : false;
 

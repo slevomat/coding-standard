@@ -17,6 +17,7 @@ use const T_CONSTANT_ENCAPSED_STRING;
 use const T_DIVIDE;
 use const T_DOLLAR;
 use const T_EMPTY;
+use const T_EQUAL;
 use const T_EVAL;
 use const T_EXIT;
 use const T_INCLUDE;
@@ -25,12 +26,14 @@ use const T_INLINE_THEN;
 use const T_ISSET;
 use const T_LIST;
 use const T_MINUS;
+use const T_MODULUS;
 use const T_MULTIPLY;
 use const T_NEW;
 use const T_NS_SEPARATOR;
 use const T_OPEN_PARENTHESIS;
 use const T_PARENT;
 use const T_PLUS;
+use const T_POW;
 use const T_REQUIRE;
 use const T_REQUIRE_ONCE;
 use const T_SELF;
@@ -42,6 +45,9 @@ use const T_USE;
 use const T_VARIABLE;
 use const T_WHITESPACE;
 use function array_key_exists;
+use function array_map;
+use function array_unique;
+use function count;
 use function in_array;
 
 class UselessParenthesesSniff implements Sniff
@@ -110,7 +116,7 @@ class UselessParenthesesSniff implements Sniff
 			return;
 		}
 
-		if ($this->containsOperators($phpcsFile, $parenthesisOpenerPointer)) {
+		if ($this->isPartOfArithmeticOperation($phpcsFile, $parenthesisOpenerPointer)) {
 			return;
 		}
 
@@ -118,9 +124,10 @@ class UselessParenthesesSniff implements Sniff
 		$this->checkParenthesesAroundCaseInSwitch($phpcsFile, $parenthesisOpenerPointer);
 		$this->checkParenthesesAroundVariableOrFunctionCall($phpcsFile, $parenthesisOpenerPointer);
 		$this->checkParenthesesAroundString($phpcsFile, $parenthesisOpenerPointer);
+		$this->checkParenthesesAroundOperators($phpcsFile, $parenthesisOpenerPointer);
 	}
 
-	private function containsOperators(File $phpcsFile, int $parenthesisOpenerPointer): bool
+	private function isPartOfArithmeticOperation(File $phpcsFile, int $parenthesisOpenerPointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -337,6 +344,47 @@ class UselessParenthesesSniff implements Sniff
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 		for ($i = $stringPointer + 1; $i <= $tokens[$parenthesisOpenerPointer]['parenthesis_closer']; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+		$phpcsFile->fixer->endChangeset();
+	}
+
+	private function checkParenthesesAroundOperators(File $phpcsFile, int $parenthesisOpenerPointer): void
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$operatorsPointers = TokenHelper::findNextAll($phpcsFile, [T_MINUS, T_PLUS, T_MULTIPLY, T_DIVIDE, T_MODULUS, T_POW], $parenthesisOpenerPointer + 1, $tokens[$parenthesisOpenerPointer]['parenthesis_closer']);
+		if (count($operatorsPointers) === 0) {
+			return;
+		}
+
+		$operatorsTokens = array_map(function (int $pointer) use ($tokens) {
+			return $tokens[$pointer]['code'];
+		}, $operatorsPointers);
+
+		if (count(array_unique($operatorsTokens)) > 1) {
+			return;
+		}
+
+		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
+		if ($tokens[$pointerBeforeParenthesisOpener]['code'] !== T_EQUAL) {
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError('Useless parentheses.', $parenthesisOpenerPointer, self::CODE_USELESS_PARENTHESES);
+
+		if (!$fix) {
+			return;
+		}
+
+		$contentStartPointer = TokenHelper::findNextEffective($phpcsFile, $parenthesisOpenerPointer + 1);
+		$contentEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] - 1);
+
+		$phpcsFile->fixer->beginChangeset();
+		for ($i = $parenthesisOpenerPointer; $i < $contentStartPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+		for ($i = $contentEndPointer + 1; $i <= $tokens[$parenthesisOpenerPointer]['parenthesis_closer']; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 		$phpcsFile->fixer->endChangeset();
