@@ -102,6 +102,12 @@ include_once($file);
 require($file);
 require_once($file);
 
+if ($a
+	&& (null === $b || null === $c)) {
+}
+
+// Must be last
 return true
     ? 100
     : (int) ((100 / 50) * 100);
+
