@@ -9,6 +9,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSE_SHORT_ARRAY;
 use const T_CLOSE_SQUARE_BRACKET;
+use const T_CLOSE_TAG;
 use const T_COALESCE;
 use const T_COMMA;
 use const T_COMMENT;
@@ -16,6 +17,7 @@ use const T_DOUBLE_ARROW;
 use const T_INLINE_ELSE;
 use const T_INLINE_THEN;
 use const T_OPEN_TAG;
+use const T_OPEN_TAG_WITH_ECHO;
 use const T_PHPCS_DISABLE;
 use const T_PHPCS_ENABLE;
 use const T_PHPCS_IGNORE;
@@ -71,7 +73,7 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 
 		$pointerAfterInlineElseEnd = $inlineElsePointer + 1;
 		while (true) {
-			if (in_array($tokens[$pointerAfterInlineElseEnd]['code'], [T_SEMICOLON, T_COMMA, T_DOUBLE_ARROW, T_CLOSE_SHORT_ARRAY, T_COALESCE], true)) {
+			if (in_array($tokens[$pointerAfterInlineElseEnd]['code'], [T_CLOSE_TAG, T_SEMICOLON, T_COMMA, T_DOUBLE_ARROW, T_CLOSE_SHORT_ARRAY, T_COALESCE], true)) {
 				break;
 			}
 
@@ -140,7 +142,7 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 		while (true) {
 			$possibleEndOfLinePointer = TokenHelper::findPrevious(
 				$phpcsFile,
-				[T_WHITESPACE, T_OPEN_TAG, T_COMMENT, T_PHPCS_DISABLE, T_PHPCS_ENABLE, T_PHPCS_IGNORE, T_PHPCS_IGNORE_FILE, T_PHPCS_SET],
+				[T_WHITESPACE, T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO, T_COMMENT, T_PHPCS_DISABLE, T_PHPCS_ENABLE, T_PHPCS_IGNORE, T_PHPCS_IGNORE_FILE, T_PHPCS_SET],
 				$startPointer
 			);
 			if ($tokens[$possibleEndOfLinePointer]['code'] === T_WHITESPACE && $tokens[$possibleEndOfLinePointer]['content'] === $phpcsFile->eolChar) {
@@ -148,7 +150,7 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 				break;
 			}
 
-			if ($tokens[$possibleEndOfLinePointer]['code'] === T_OPEN_TAG) {
+			if ($tokens[$possibleEndOfLinePointer]['code'] === T_OPEN_TAG || $tokens[$possibleEndOfLinePointer]['code'] === T_OPEN_TAG_WITH_ECHO) {
 				$endOfLineBefore = $possibleEndOfLinePointer;
 				break;
 			}

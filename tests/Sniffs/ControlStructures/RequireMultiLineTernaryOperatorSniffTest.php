@@ -29,4 +29,12 @@ class RequireMultiLineTernaryOperatorSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testNoErrorRecurrence(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireMultiLineTernaryOperatorCloseTagNoNewline.php', [
+			'lineLengthLimit' => 120,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
 }
