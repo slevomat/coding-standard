@@ -328,7 +328,7 @@ class ControlStructureSpacingSniff implements Sniff
 			do {
 				$nextPointer = TokenHelper::findNextEffective($phpcsFile, $controlStructureEndPointer + 1);
 
-				if (!in_array($tokens[$nextPointer]['code'], [T_CATCH, T_FINALLY], true)) {
+				if (!isset($tokens[$nextPointer]) || !in_array($tokens[$nextPointer]['code'], [T_CATCH, T_FINALLY], true)) {
 					return $controlStructureEndPointer;
 				}
 
