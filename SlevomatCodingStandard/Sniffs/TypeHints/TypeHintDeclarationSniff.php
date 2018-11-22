@@ -4,6 +4,16 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\PhpDocParser\Parser\TokenIterator;
+use PHPStan\PhpDocParser\Parser\TypeParser;
 use SlevomatCodingStandard\Helpers\Annotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
@@ -150,8 +160,8 @@ class TypeHintDeclarationSniff implements Sniff
 		if (!SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_MISSING_TRAVERSABLE_PARAMETER_TYPE_HINT_SPECIFICATION))) {
 			foreach (FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer) as $parameterName => $parameterTypeHint) {
 				$traversableTypeHint = false;
-				if ($parameterTypeHint !== null && $this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()))) {
-					$traversableTypeHint = true;
+				if ($parameterTypeHint !== null) {
+                    $traversableTypeHint = $this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $this->parseType($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()));
 				} elseif (array_key_exists($parameterName, $parametersTypeHintsDefinitions) && $this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $parametersTypeHintsDefinitions[$parameterName]['definition'])) {
 					$traversableTypeHint = true;
 				}
@@ -167,10 +177,10 @@ class TypeHintDeclarationSniff implements Sniff
 						$functionPointer,
 						self::CODE_MISSING_TRAVERSABLE_PARAMETER_TYPE_HINT_SPECIFICATION
 					);
-				} elseif (($traversableTypeHint && !$this->definitionContainsTraversableTypeHintSpeficication($parametersTypeHintsDefinitions[$parameterName]['definition']))
+				} elseif (($traversableTypeHint && !$this->definitionContainsTraversableTypeHintSpecification($phpcsFile, $functionPointer, $parametersTypeHintsDefinitions[$parameterName]['definition']))
 					|| (
 						array_key_exists($parameterName, $parametersTypeHintsDefinitions)
-						&& $this->definitionContainsTraversableTypeHintSpeficication($parametersTypeHintsDefinitions[$parameterName]['definition'])
+						&& $this->definitionContainsTraversableTypeHintSpecification($phpcsFile, $functionPointer, $parametersTypeHintsDefinitions[$parameterName]['definition'])
 						&& !$this->definitionContainsItemsSpecificationForTraversable($phpcsFile, $functionPointer, $parametersTypeHintsDefinitions[$parameterName]['definition'])
 					)
 				) {
@@ -210,12 +220,12 @@ class TypeHintDeclarationSniff implements Sniff
 
 			$parameterTypeHintDefinition = $parametersTypeHintsDefinitions[$parameterName]['definition'];
 
-			if (strtolower($parameterTypeHintDefinition) === 'null') {
+			if ($parameterTypeHintDefinition instanceof IdentifierTypeNode && $parameterTypeHintDefinition->name === 'null') {
 				continue;
 			}
 
 			if ($this->definitionContainsOneTypeHint($parameterTypeHintDefinition)) {
-				if ($this->definitionContainsTraversableTypeHintSpeficication($parameterTypeHintDefinition)) {
+				if ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $parameterTypeHintDefinition)) {
 					$phpcsFile->addError(
 						sprintf(
 							'%s %s() does not have parameter type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
@@ -228,7 +238,7 @@ class TypeHintDeclarationSniff implements Sniff
 						self::CODE_MISSING_PARAMETER_TYPE_HINT
 					);
 					return;
-				} elseif ($this->isValidTypeHint($parameterTypeHintDefinition)) {
+				} elseif ($this->isValidTypeHint((string) $parameterTypeHintDefinition)) {
 					$possibleParameterTypeHint = $parameterTypeHintDefinition;
 					$nullableParameterTypeHint = false;
 				} else {
@@ -236,12 +246,14 @@ class TypeHintDeclarationSniff implements Sniff
 				}
 			} elseif ($this->definitionContainsJustTwoTypeHints($parameterTypeHintDefinition)) {
 				if ($this->definitionContainsNullTypeHint($parameterTypeHintDefinition)) {
-					$parameterTypeHintDefinitionParts = explode('|', $parameterTypeHintDefinition);
-					$possibleParameterTypeHint = strtolower($parameterTypeHintDefinitionParts[0]) === 'null'
-						? $parameterTypeHintDefinitionParts[1]
-						: $parameterTypeHintDefinitionParts[0];
+					$parameterTypeHintDefinitionParts = $parameterTypeHintDefinition->types;
+					if($parameterTypeHintDefinitionParts[0] instanceof IdentifierTypeNode && $parameterTypeHintDefinitionParts[0]->name === 'null') {
+						$possibleParameterTypeHint = $parameterTypeHintDefinitionParts[1];
+					} else {
+						$possibleParameterTypeHint = $parameterTypeHintDefinitionParts[0];
+					}
 					$nullableParameterTypeHint = true;
-					if ($this->definitionContainsTraversableTypeHintSpeficication($possibleParameterTypeHint)) {
+					if ($this->definitionContainsTraversableTypeHintSpecification($phpcsFile, $functionPointer, $possibleParameterTypeHint)) {
 						$phpcsFile->addError(
 							sprintf(
 								'%s %s() does not have parameter type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
@@ -256,14 +268,14 @@ class TypeHintDeclarationSniff implements Sniff
 						return;
 					}
 
-					if (!$this->isValidTypeHint($possibleParameterTypeHint)) {
+					if (!$this->isValidTypeHint((string) $possibleParameterTypeHint)) {
 						return;
 					}
 				} elseif ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $parameterTypeHintDefinition)) {
-					$parameterTypeHintDefinitionParts = explode('|', $parameterTypeHintDefinition);
+					$parameterTypeHintDefinitionParts = $parameterTypeHintDefinition->types;
 					$nullableParameterTypeHint = false;
 
-					if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHintDefinitionParts[0]))) {
+					if ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $parameterTypeHintDefinitionParts[0])) {
 						$possibleParameterTypeHint = $parameterTypeHintDefinitionParts[0];
 						$itemsTypeHintDefinition = $parameterTypeHintDefinitionParts[1];
 					} else {
@@ -271,7 +283,7 @@ class TypeHintDeclarationSniff implements Sniff
 						$itemsTypeHintDefinition = $parameterTypeHintDefinitionParts[0];
 					}
 
-					if (!$this->definitionContainsTraversableTypeHintSpeficication($itemsTypeHintDefinition)) {
+					if (!$this->definitionContainsTraversableTypeHintSpecification($phpcsFile, $functionPointer, $itemsTypeHintDefinition)) {
 						return;
 					}
 
@@ -346,14 +358,14 @@ class TypeHintDeclarationSniff implements Sniff
 
 		if ($returnAnnotation !== null && $returnAnnotation->getContent() !== null) {
 			$hasReturnAnnotation = true;
-			$returnTypeHintDefinition = preg_split('~\\s+~', $returnAnnotation->getContent())[0];
+			$returnTypeHintDefinition = $this->parseType($phpcsFile, $functionPointer, $returnAnnotation->getContent());
 		} else {
 			$hasReturnAnnotation = false;
-			$returnTypeHintDefinition = '';
+			$returnTypeHintDefinition = null;
 		}
 
 		$traversableTypeHint = false;
-		if ($returnTypeHint !== null && $this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()))) {
+		if ($returnTypeHint !== null && $this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $this->parseType($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()))) {
 			$traversableTypeHint = true;
 		} elseif ($hasReturnAnnotation && $this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $returnTypeHintDefinition)) {
 			$traversableTypeHint = true;
@@ -370,10 +382,11 @@ class TypeHintDeclarationSniff implements Sniff
 					$functionPointer,
 					self::CODE_MISSING_TRAVERSABLE_RETURN_TYPE_HINT_SPECIFICATION
 				);
-			} elseif (($traversableTypeHint && !$this->definitionContainsTraversableTypeHintSpeficication($returnTypeHintDefinition))
+			} elseif (($traversableTypeHint && $baz = !$this->definitionContainsTraversableTypeHintSpecification($phpcsFile, $functionPointer, $returnTypeHintDefinition))
 				|| (
-					$this->definitionContainsTraversableTypeHintSpeficication($returnTypeHintDefinition)
-					&& !$this->definitionContainsItemsSpecificationForTraversable($phpcsFile, $functionPointer, $returnTypeHintDefinition)
+				    $returnTypeHintDefinition
+					&& $foo = $this->definitionContainsTraversableTypeHintSpecification($phpcsFile, $functionPointer, $returnTypeHintDefinition)
+					&& $bar = !$this->definitionContainsItemsSpecificationForTraversable($phpcsFile, $functionPointer, $returnTypeHintDefinition)
 				)
 			) {
 				/** @var \SlevomatCodingStandard\Helpers\Annotation $returnAnnotation */
@@ -456,7 +469,7 @@ class TypeHintDeclarationSniff implements Sniff
 		}
 
 		if ($this->definitionContainsOneTypeHint($returnTypeHintDefinition)) {
-			if ($this->definitionContainsTraversableTypeHintSpeficication($returnTypeHintDefinition)) {
+			if ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $returnTypeHintDefinition)) {
 				$phpcsFile->addError(
 					sprintf(
 						'%s %s() does not have return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
@@ -468,7 +481,7 @@ class TypeHintDeclarationSniff implements Sniff
 					self::CODE_MISSING_RETURN_TYPE_HINT
 				);
 				return;
-			} elseif ($this->isValidTypeHint($returnTypeHintDefinition)) {
+			} elseif ($this->isValidTypeHint($returnAnnotation->getContent())) {
 				$possibleReturnTypeHint = $returnTypeHintDefinition;
 				$nullableReturnTypeHint = false;
 			} else {
@@ -484,7 +497,7 @@ class TypeHintDeclarationSniff implements Sniff
 				$possibleReturnTypeHint = strtolower($returnTypeHintDefinitionParts[0]) === 'null' ? $returnTypeHintDefinitionParts[1] : $returnTypeHintDefinitionParts[0];
 				$nullableReturnTypeHint = true;
 
-				if ($this->definitionContainsTraversableTypeHintSpeficication($possibleReturnTypeHint)) {
+				if ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $possibleReturnTypeHint)) {
 					$phpcsFile->addError(
 						sprintf(
 							'%s %s() does not have return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
@@ -502,10 +515,10 @@ class TypeHintDeclarationSniff implements Sniff
 					return;
 				}
 			} elseif ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $returnTypeHintDefinition)) {
-				$returnTypeHintDefinitionParts = explode('|', $returnTypeHintDefinition);
+				$returnTypeHintDefinitionParts = $returnTypeHintDefinition->types;
 				$nullableReturnTypeHint = false;
 
-				if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHintDefinitionParts[0]))) {
+				if ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $returnTypeHintDefinitionParts[0])) {
 					$possibleReturnTypeHint = $returnTypeHintDefinitionParts[0];
 					$itemsTypeHintDefinition = $returnTypeHintDefinitionParts[1];
 				} else {
@@ -513,7 +526,7 @@ class TypeHintDeclarationSniff implements Sniff
 					$itemsTypeHintDefinition = $returnTypeHintDefinitionParts[0];
 				}
 
-				if (!$this->definitionContainsTraversableTypeHintSpeficication($itemsTypeHintDefinition)) {
+				if (!$this->definitionContainsTraversableTypeHintSpecification($phpcsFile, $functionPointer, $itemsTypeHintDefinition)) {
 					return;
 				}
 
@@ -841,11 +854,11 @@ class TypeHintDeclarationSniff implements Sniff
 				return;
 			}
 
-			$propertyTypeHintDefinition = preg_split('~\\s+~', (string) $varAnnotations[0]->getContent())[0];
+			$propertyTypeHintDefinition = $this->parseType($phpcsFile, $propertyPointer, $varAnnotations[0]->getContent());
 
-			if (($this->definitionContainsTraversableTypeHint($phpcsFile, $propertyPointer, $propertyTypeHintDefinition) && !$this->definitionContainsTraversableTypeHintSpeficication($propertyTypeHintDefinition))
+			if (($this->definitionContainsTraversableTypeHint($phpcsFile, $propertyPointer, $propertyTypeHintDefinition) && !$this->definitionContainsTraversableTypeHintSpecification($phpcsFile, $propertyPointer, $propertyTypeHintDefinition))
 				|| (
-					$this->definitionContainsTraversableTypeHintSpeficication($propertyTypeHintDefinition)
+					$this->definitionContainsTraversableTypeHintSpecification($phpcsFile, $propertyPointer, $propertyTypeHintDefinition)
 					&& !$this->definitionContainsItemsSpecificationForTraversable($phpcsFile, $propertyPointer, $propertyTypeHintDefinition)
 				)
 			) {
@@ -879,33 +892,68 @@ class TypeHintDeclarationSniff implements Sniff
 		return !TypeHintHelper::isSimpleUnofficialTypeHints($typeHint);
 	}
 
-	private function definitionContainsNullTypeHint(string $typeHintDefinition): bool
+	private function definitionContainsNullTypeHint(TypeNode $typeHintDefinition): bool
 	{
-		return preg_match('~(?:^null$)|(?:^null\|)|(?:\|null\|)|(?:\|null$)~i', $typeHintDefinition) !== 0;
+		if ($typeHintDefinition instanceof IdentifierTypeNode && $typeHintDefinition->name === 'null') {
+			return true;
+		}
+
+		if($typeHintDefinition instanceof UnionTypeNode) {
+			foreach($typeHintDefinition->types as $type) {
+				if($this->definitionContainsNullTypeHint($type)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
-	private function definitionContainsStaticOrThisTypeHint(string $typeHintDefinition): bool
+	private function definitionContainsStaticOrThisTypeHint(TypeNode $typeHintDefinition): bool
 	{
-		return preg_match('~(?:^static$)|(?:^static\|)|(?:\|static\|)|(?:\|static$)~i', $typeHintDefinition) !== 0
-			|| preg_match('~(?:^\$this$)|(?:^\$this\|)|(?:\|\$this\|)|(?:\|\$this$)~i', $typeHintDefinition) !== 0;
+		switch (true) {
+			case $typeHintDefinition instanceof ThisTypeNode:
+				return true;
+			case $typeHintDefinition instanceof IdentifierTypeNode:
+				return $typeHintDefinition->name === 'static';
+			default:
+				return false;
+		}
 	}
 
-	private function definitionContainsOneTypeHint(string $typeHintDefinition): bool
+	private function definitionContainsOneTypeHint(TypeNode $typeHintDefinition): bool
 	{
-		return strpos($typeHintDefinition, '|') === false;
+		return !$typeHintDefinition instanceof UnionTypeNode;
 	}
 
-	private function definitionContainsJustTwoTypeHints(string $typeHintDefinition): bool
+	private function definitionContainsJustTwoTypeHints(UnionTypeNode $typeHintDefinition): bool
 	{
-		return count(explode('|', $typeHintDefinition)) === 2;
+		return count($typeHintDefinition->types) === 2;
 	}
 
-	private function definitionContainsTraversableTypeHint(File $phpcsFile, int $pointer, string $typeHintDefinition): bool
+	private function definitionContainsTraversableTypeHint(File $phpcsFile, int $pointer, TypeNode $typeHintDefinition): bool
 	{
-		return array_reduce(explode('|', $typeHintDefinition), function (bool $carry, string $typeHint) use ($phpcsFile, $pointer): bool {
-			$fullyQualifiedTypeHint = TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeHint);
-			return $this->isTraversableTypeHint($fullyQualifiedTypeHint) ? true : $carry;
-		}, false);
+	    switch(true) {
+            case $typeHintDefinition instanceof UnionTypeNode:
+                return array_reduce($typeHintDefinition->types, function (bool $carry, TypeNode $typeHint) use ($phpcsFile, $pointer): bool {
+                    return $this->definitionContainsTraversableTypeHint($phpcsFile, $pointer, $typeHint) ? true : $carry;
+                }, false);
+            case $typeHintDefinition instanceof IntersectionTypeNode:
+                foreach ($typeHintDefinition->types as $type) {
+                    if ($this->definitionContainsTraversableTypeHint($phpcsFile, $pointer, $type)) {
+                        return true;
+                    }
+                }
+                return false;
+            case $typeHintDefinition instanceof ArrayTypeNode:
+                return true;
+            case $typeHintDefinition instanceof GenericTypeNode:
+                return $this->definitionContainsTraversableTypeHint($phpcsFile, $pointer, $typeHintDefinition->type);
+			case $typeHintDefinition instanceof IdentifierTypeNode:
+				return $this->isTraversableTypeHint($typeHintDefinition->name);
+            default:
+                return false;
+        }
 	}
 
 	private function isTraversableTypeHint(string $typeHint): bool
@@ -913,20 +961,94 @@ class TypeHintDeclarationSniff implements Sniff
 		return TypeHintHelper::isSimpleIterableTypeHint($typeHint) || array_key_exists($typeHint, $this->getNormalizedTraversableTypeHints());
 	}
 
-	private function definitionContainsTraversableTypeHintSpeficication(string $typeHintDefinition): bool
-	{
-		return (bool) preg_match('~\[\](?=\||$)~', $typeHintDefinition);
+	private function parseType(File $phpcsFile, int $pointer, string $type): TypeNode {
+        $type = (new TypeParser())->parse(new TokenIterator((new Lexer())->tokenize($type)));
+
+        $this->fixType($phpcsFile, $pointer, $type);
+
+        return $type;
+    }
+
+    private function fixType(File $phpcsFile, int $pointer, TypeNode $typeNode): void {
+		switch(true) {
+			case $typeNode instanceof GenericTypeNode:
+				$this->fixType($phpcsFile, $pointer, $typeNode->type);
+				foreach ($typeNode->genericTypes as $genericType) {
+					$this->fixType($phpcsFile, $pointer, $genericType);
+				}
+				break;
+			case $typeNode instanceof ArrayTypeNode:
+			case $typeNode instanceof NullableTypeNode:
+				$this->fixType($phpcsFile, $pointer, $typeNode->type);
+				break;
+			case $typeNode instanceof IntersectionTypeNode:
+			case $typeNode instanceof UnionTypeNode:
+				foreach ($typeNode->types as $type) {
+					$this->fixType($phpcsFile, $pointer, $type);
+				}
+				break;
+			case $typeNode instanceof IdentifierTypeNode:
+				$typeNode->name = TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeNode->name);
+				break;
+		}
 	}
 
-	private function definitionContainsItemsSpecificationForTraversable(File $phpcsFile, int $pointer, string $typeHintDefinition): bool
-	{
-		if (preg_match_all('~(?<=^|\|)(.+?)\[\](?=\||$)~', $typeHintDefinition, $matches)) {
-			foreach ($matches[1] as $typeHint) {
-				if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeHint))) {
-					continue;
-				}
+/*
+	private function definitionContainsTraversableGeneric(string $typeHintDefinition): bool
+    {
+        if ('' === $typeHintDefinition) {
+            return false;
+        }
 
-				return true;
+        $type = (new TypeParser())->parse(new TokenIterator((new Lexer())->tokenize($typeHintDefinition)));
+
+        return $type instanceof GenericTypeNode;
+    }*/
+
+    private function definitionContainsTraversableTypeHintSpecification(File $phpcsFile, int $pointer, TypeNode $typeHintDefinition): bool
+	{
+		/*if ($typeHintDefinition instanceof ArrayTypeNode) {
+			return true;
+		}*/
+
+		if($typeHintDefinition instanceof UnionTypeNode) {
+			foreach($typeHintDefinition->types as $type) {
+				if($this->definitionContainsTraversableTypeHintSpecification($phpcsFile, $pointer, $type)) {
+					return true;
+				}
+			}
+		}
+
+		if ($typeHintDefinition instanceof GenericTypeNode) {
+			$typeHintDefinition = $typeHintDefinition->type;
+		}
+
+		if($typeHintDefinition instanceof IdentifierTypeNode && $typeHintDefinition->name === '\array') { // TODO huh?
+			return true;
+		}
+
+		return $this->definitionContainsTraversableTypeHint($phpcsFile, $pointer, $typeHintDefinition);
+	}
+
+	private function definitionContainsItemsSpecificationForTraversable(File $phpcsFile, int $pointer, TypeNode $typeHintDefinition): bool
+	{
+		if($typeHintDefinition instanceof ArrayTypeNode) {
+			if($typeHintDefinition->type instanceof IdentifierTypeNode) {
+				return !$this->isTraversableTypeHint($typeHintDefinition->type->name);
+			}
+
+			return true;
+		}
+
+		if($typeHintDefinition instanceof GenericTypeNode) {
+			return $this->definitionContainsTraversableTypeHint($phpcsFile, $pointer, $typeHintDefinition->type);
+		}
+
+		if($typeHintDefinition instanceof UnionTypeNode) {
+			foreach($typeHintDefinition->types as $type) {
+				if($this->definitionContainsItemsSpecificationForTraversable($phpcsFile, $pointer, $type)) {
+					return true;
+				}
 			}
 		}
 
@@ -971,20 +1093,17 @@ class TypeHintDeclarationSniff implements Sniff
 	{
 		$parametersNames = FunctionHelper::getParametersNames($phpcsFile, $functionPointer);
 		$parametersTypeHintsDefinitions = [];
+		$lexer = new Lexer();
+		$parser = new TypeParser();
 		foreach (FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer) as $parameterAnnotationNo => $parameterAnnotation) {
 			if ($parameterAnnotation->getContent() === null) {
 				continue;
 			}
 
-			if (!preg_match('~^([^$]\\S*)(?:\\s+(?:\.{3}\\s*)?(\$\\S+))?~', $parameterAnnotation->getContent(), $matches)) {
-				continue;
-			}
+            $tokens = $lexer->tokenize($parameterAnnotation->getContent());
+            $parsed = $parser->parse(new TokenIterator($tokens));
 
-			if (isset($matches[2])) {
-				$parametersTypeHintsDefinitions[$matches[2]] = ['pointer' => $parameterAnnotation->getStartPointer(), 'definition' => $matches[1]];
-			} elseif (isset($parametersNames[$parameterAnnotationNo])) {
-				$parametersTypeHintsDefinitions[$parametersNames[$parameterAnnotationNo]] = ['pointer' => $parameterAnnotation->getStartPointer(), 'definition' => $matches[1]];
-			}
+			$parametersTypeHintsDefinitions[$parametersNames[$parameterAnnotationNo]] = ['pointer' => $parameterAnnotation->getStartPointer(), 'definition' => $parsed];
 		}
 
 		return $parametersTypeHintsDefinitions;
@@ -1005,9 +1124,9 @@ class TypeHintDeclarationSniff implements Sniff
 			return false;
 		}
 
-		$returnTypeHintDefinition = preg_split('~\\s+~', $returnAnnotation->getContent())[0];
+		$returnTypeHintDefinition = $this->parseType($phpcsFile, $functionPointer, $returnAnnotation->getContent());
 
-		if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()))) {
+		if ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $this->parseType($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()))) {
 			return false;
 		}
 
@@ -1023,7 +1142,7 @@ class TypeHintDeclarationSniff implements Sniff
 			return false;
 		}
 
-		if (!$this->typeHintEqualsAnnotation($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint(), $returnTypeHintDefinition)) {
+		if (!$this->typeHintEqualsAnnotation($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint(), (string) $returnTypeHintDefinition)) {
 			return false;
 		}
 
@@ -1066,7 +1185,7 @@ class TypeHintDeclarationSniff implements Sniff
 				continue;
 			}
 
-			if ($this->isTraversableTypeHint(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()))) {
+			if ($this->definitionContainsTraversableTypeHint($phpcsFile, $functionPointer, $this->parseType($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()))) {
 				continue;
 			}
 
@@ -1074,13 +1193,13 @@ class TypeHintDeclarationSniff implements Sniff
 			$parameterTypeHintDefinition = $parametersTypeHintsDefinitions[$parameterName]['definition'];
 			if ($this->definitionContainsStaticOrThisTypeHint($parameterTypeHintDefinition)) {
 				continue;
-			} elseif ($this->isTypeHintDefinitionCompoundOfNull($parameterTypeHintDefinition)) {
-				if (!$this->typeHintEqualsAnnotation($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint(), $this->getTypeFromNullableTypeHintDefinition($parameterTypeHintDefinition))) {
-					continue;
-				}
+//			} elseif ($this->isTypeHintDefinitionCompoundOfNull($parameterTypeHintDefinition)) {
+//				if (!$this->typeHintEqualsAnnotation($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint(), $this->getTypeFromNullableTypeHintDefinition($parameterTypeHintDefinition))) {
+//					continue;
+//				}
 			} elseif (!$this->definitionContainsOneTypeHint($parameterTypeHintDefinition)) {
 				continue;
-			} elseif (!$this->typeHintEqualsAnnotation($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint(), $parameterTypeHintDefinition)) {
+			} elseif (!$this->typeHintEqualsAnnotation($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint(), (string) $parameterTypeHintDefinition)) {
 				continue;
 			}
 

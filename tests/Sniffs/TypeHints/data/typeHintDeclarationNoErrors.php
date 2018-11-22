@@ -66,12 +66,40 @@ abstract class FooClass
 	{
 	}
 
+    /**
+     * @param array<string> $a
+     */
+    public function arrayGenericsParameter(array $a)
+    {
+    }
+
+    /**
+     * @param array<int, string> $a
+     */
+    public function arrayGenericsParameterWithKeys(array $a)
+    {
+    }
+
 	/**
 	 * @param string[] $a
 	 */
 	public function traversableParameter(\Traversable $a)
 	{
 	}
+
+    /**
+     * @param \Traversable<string> $a
+     */
+    public function traversableGenericsParameter(\Traversable $a)
+    {
+    }
+
+    /**
+     * @param \Traversable<int, string> $a
+     */
+    public function traversableGenericsParameterWithKeys(\Traversable $a)
+    {
+    }
 
 	/**
 	 * @param \FooClass[]|\QueryResultSet $a
@@ -367,6 +395,22 @@ abstract class FooClass
 	 * @return iterable|string[]
 	 */
 	private function returnTraversableIterable(): iterable
+	{
+		return [];
+	}
+
+	/**
+	 * @return iterable<string>
+	 */
+	private function returnTraversableIterableGeneric(): iterable
+	{
+		return [];
+	}
+
+	/**
+	 * @return iterable<int, string>
+	 */
+	private function returnTraversableIterableGenericWitHkeys(): iterable
 	{
 		return [];
 	}

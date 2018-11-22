@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Files\LocalFile;
 use PHP_CodeSniffer\Runner;
+use function print_r;
 use ReflectionClass;
 use const PHP_EOL;
 use function array_map;
@@ -78,7 +79,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	protected static function assertNoSniffErrorInFile(File $phpcsFile): void
 	{
 		$errors = $phpcsFile->getErrors();
-		self::assertEmpty($errors, sprintf('No errors expected, but %d errors found.', count($errors)));
+		self::assertEmpty($errors, sprintf('No errors expected, but %d errors found. %s', count($errors), print_r
+        ($errors, true)));
 	}
 
 	protected static function assertSniffError(File $phpcsFile, int $line, string $code, ?string $message = null): void
