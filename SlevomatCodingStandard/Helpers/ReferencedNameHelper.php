@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
 use const T_ANON_CLASS;
 use const T_ARRAY;
 use const T_AS;
@@ -190,7 +191,7 @@ class ReferencedNameHelper
 
 	public static function getReferencedNameEndPointer(File $phpcsFile, int $startPointer): int
 	{
-		$pointerAfterEndPointer = TokenHelper::findNextExcluding($phpcsFile, array_merge([T_RETURN_TYPE], TokenHelper::$nameTokenCodes), $startPointer + 1);
+		$pointerAfterEndPointer = TokenHelper::findNextExcluding($phpcsFile, array_merge([T_RETURN_TYPE], TokenHelper::$nameTokenCodes, Tokens::$emptyTokens), $startPointer + 1);
 		return $pointerAfterEndPointer === null ? $startPointer : $pointerAfterEndPointer - 1;
 	}
 
