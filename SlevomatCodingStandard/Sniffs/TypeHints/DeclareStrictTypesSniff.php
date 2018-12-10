@@ -63,13 +63,13 @@ class DeclareStrictTypesSniff implements Sniff
 
 		if ($declarePointer === null || $tokens[$declarePointer]['code'] !== T_DECLARE) {
 			$fix = $phpcsFile->addFixableError(
-				'Missing declare(strict_types = 1).',
+				sprintf('Missing declare(%s).', $this->getStrictTypeDeclaration()),
 				$openTagPointer,
 				self::CODE_DECLARE_STRICT_TYPES_MISSING
 			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContent($openTagPointer, sprintf('declare(strict_types = 1);%s', $phpcsFile->eolChar));
+				$phpcsFile->fixer->addContent($openTagPointer, sprintf('declare(%s);%s', $this->getStrictTypeDeclaration(), $phpcsFile->eolChar));
 				$phpcsFile->fixer->endChangeset();
 			}
 			return;
@@ -87,13 +87,13 @@ class DeclareStrictTypesSniff implements Sniff
 
 		if ($strictTypesPointer === null) {
 			$fix = $phpcsFile->addFixableError(
-				'Missing declare(strict_types = 1).',
+				sprintf('Missing declare(%s).', $this->getStrictTypeDeclaration()),
 				$declarePointer,
 				self::CODE_DECLARE_STRICT_TYPES_MISSING
 			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContentBefore($tokens[$declarePointer]['parenthesis_closer'], ', strict_types = 1');
+				$phpcsFile->fixer->addContentBefore($tokens[$declarePointer]['parenthesis_closer'], ', ' . $this->getStrictTypeDeclaration());
 				$phpcsFile->fixer->endChangeset();
 			}
 			return;
@@ -104,7 +104,8 @@ class DeclareStrictTypesSniff implements Sniff
 		if ($tokens[$numberPointer]['content'] !== '1') {
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
-					'Expected strict_types = 1, found %s.',
+					'Expected %s, found %s.',
+					$this->getStrictTypeDeclaration(),
 					TokenHelper::getContent($phpcsFile, $strictTypesPointer, $numberPointer)
 				),
 				$declarePointer,
@@ -232,6 +233,15 @@ class DeclareStrictTypesSniff implements Sniff
 			$phpcsFile->fixer->addNewline($declareSemicolonPointer);
 		}
 		$phpcsFile->fixer->endChangeset();
+	}
+
+	protected function getStrictTypeDeclaration(): string
+	{
+		return sprintf(
+			'strict_types%s=%s1',
+			str_repeat(' ', SniffSettingsHelper::normalizeInteger($this->spacesCountAroundEqualsSign)),
+			str_repeat(' ', SniffSettingsHelper::normalizeInteger($this->spacesCountAroundEqualsSign))
+		);
 	}
 
 }
