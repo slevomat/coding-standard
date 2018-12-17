@@ -515,7 +515,7 @@ class UnusedPrivateElementsSniff implements Sniff
 
 			$methodName = FunctionHelper::getName($phpcsFile, $methodTokenPointer);
 
-			if ($methodName !== '__construct') {
+			if (!in_array($methodName, ['__construct', '__clone'], true)) {
 				$reportedMethods[$methodName] = $methodTokenPointer;
 			}
 			$findMethodsStartTokenPointer = $methodTokenPointer + 1;

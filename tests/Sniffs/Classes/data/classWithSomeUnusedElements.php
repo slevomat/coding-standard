@@ -202,4 +202,9 @@ CODE;
 		};
 	}
 
+	private function __clone()
+	{
+
+	}
+
 }
