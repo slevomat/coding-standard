@@ -41,6 +41,10 @@ class SuperfluousExceptionNamingSniff implements Sniff
 			return;
 		}
 
+		if (strtolower($className) === 'exception') {
+			return;
+		}
+
 		$suffix = substr($className, -9);
 		if (strtolower($suffix) !== 'exception') {
 			return;
