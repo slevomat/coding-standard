@@ -41,6 +41,7 @@ $class = new class ($number) {
 
 $b = $array['function']($parameter);
 
+$foo = new Foo();
 new self($a);
 new static($b);
 new parent($c);
