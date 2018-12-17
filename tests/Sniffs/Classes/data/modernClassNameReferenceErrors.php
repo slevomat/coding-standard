@@ -37,7 +37,27 @@ final class Whatever extends Anything
 		return get_called_class();
 	}
 
-	public function getMethodWithFullyQualifiedName()
+	public function getClassWithoutArgumentsWithFullyQualifiedName()
+	{
+		return \get_class();
+	}
+
+	public function getClassWithThisWithFullyQualifiedName()
+	{
+		return \get_class($this);
+	}
+
+	public function getParentClassWithFullyQualifiedName()
+	{
+		return \get_parent_class();
+	}
+
+	public function getParentClassWithThisWithFullyQualifiedName()
+	{
+		return \get_parent_class($this);
+	}
+
+	public function getCalledClassWithFullyQualifiedName()
 	{
 		return \get_called_class();
 	}
