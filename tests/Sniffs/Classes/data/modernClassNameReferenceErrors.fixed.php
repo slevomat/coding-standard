@@ -37,7 +37,27 @@ final class Whatever extends Anything
 		return static::class;
 	}
 
-	public function getMethodWithFullyQualifiedName()
+	public function getClassWithoutArgumentsWithFullyQualifiedName()
+	{
+		return self::class;
+	}
+
+	public function getClassWithThisWithFullyQualifiedName()
+	{
+		return static::class;
+	}
+
+	public function getParentClassWithFullyQualifiedName()
+	{
+		return parent::class;
+	}
+
+	public function getParentClassWithThisWithFullyQualifiedName()
+	{
+		return parent::class;
+	}
+
+	public function getCalledClassWithFullyQualifiedName()
 	{
 		return static::class;
 	}
