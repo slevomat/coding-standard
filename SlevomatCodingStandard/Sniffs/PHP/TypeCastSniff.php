@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\PHP;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_BINARY_CAST;
 use const T_BOOL_CAST;
 use const T_DOUBLE_CAST;
 use const T_INT_CAST;
@@ -41,6 +42,7 @@ class TypeCastSniff implements Sniff
 			T_DOUBLE_CAST,
 			T_INT_CAST,
 			T_UNSET_CAST,
+			T_BINARY_CAST,
 		];
 	}
 
