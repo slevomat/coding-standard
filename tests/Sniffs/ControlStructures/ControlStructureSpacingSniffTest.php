@@ -162,6 +162,13 @@ class ControlStructureSpacingSniffTest extends TestCase
 		}
 	}
 
+	public function testIfWithoutCurlyBraces(): void
+	{
+		self::expectException(Throwable::class);
+		self::expectExceptionMessage('"if" without curly braces is not supported.');
+		self::checkFile(__DIR__ . '/data/controlStructureSpacingIfWithoutCurlyBraces.php');
+	}
+
 	public function testElseWithoutCurlyBraces(): void
 	{
 		self::expectException(Throwable::class);

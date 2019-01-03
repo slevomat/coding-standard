@@ -295,6 +295,10 @@ class ControlStructureSpacingSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		if ($tokens[$controlStructurePointer]['code'] === T_IF) {
+			if (!array_key_exists('scope_closer', $tokens[$controlStructurePointer])) {
+				throw new Exception('"if" without curly braces is not supported.');
+			}
+
 			$controlStructureEndPointer = $tokens[$controlStructurePointer]['scope_closer'];
 			do {
 				$nextPointer = TokenHelper::findNextEffective($phpcsFile, $controlStructureEndPointer + 1);
