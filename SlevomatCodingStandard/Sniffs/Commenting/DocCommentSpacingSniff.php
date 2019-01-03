@@ -718,8 +718,12 @@ class DocCommentSpacingSniff implements Sniff
 
 	private function getIndentation(File $phpcsFile, int $docCommentOpenerPointer): string
 	{
-		/** @var int $endOfLinePointer */
 		$endOfLinePointer = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $docCommentOpenerPointer - 1);
+
+		if ($endOfLinePointer === null) {
+			return '';
+		}
+
 		return TokenHelper::getContent($phpcsFile, $endOfLinePointer + 1, $docCommentOpenerPointer - 1);
 	}
 
