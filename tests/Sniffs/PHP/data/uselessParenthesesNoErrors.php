@@ -110,10 +110,9 @@ if ($a
 $a = ($b * $c) - $d;
 $a = ($b * 60 * 60) + ($c * 60) + $d;
 
+$c = (clone $a->foo())->bar($b);
+
 // Must be last
 return true
     ? 100
     : (int) ((100 / 50) * 100);
-
-
-$c = (clone $a->foo())->bar($b);
