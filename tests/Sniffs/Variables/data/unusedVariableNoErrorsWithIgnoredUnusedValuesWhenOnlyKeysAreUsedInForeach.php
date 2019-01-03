@@ -10,3 +10,7 @@ $used = true;
 while ($used) {
 
 }
+
+foreach (range(0, 5) as $otherKey => $otherValue) {
+	echo $otherKey;
+}
