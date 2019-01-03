@@ -32,7 +32,6 @@ use const T_MINUS_EQUAL;
 use const T_MOD_EQUAL;
 use const T_MUL_EQUAL;
 use const T_OBJECT_OPERATOR;
-use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_OPEN_TAG;
 use const T_OR_EQUAL;
@@ -412,17 +411,12 @@ class UnusedVariableSniff implements Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
-		$parenthesisOpenerPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_PARENTHESIS, $variablePointer - 1);
-		if ($parenthesisOpenerPointer === null) {
-			return false;
+		$parenthesisOwnerPointer = $this->findNestedParenthesisWithOwner($phpcsFile, $variablePointer);
+		if ($parenthesisOwnerPointer !== null && $tokens[$parenthesisOwnerPointer]['code'] === T_FOREACH) {
+			return true;
 		}
 
-		if ($tokens[$parenthesisOpenerPointer]['parenthesis_closer'] < $variablePointer) {
-			return false;
-		}
-
-		return array_key_exists('parenthesis_owner', $tokens[$parenthesisOpenerPointer])
-			&& $tokens[$tokens[$parenthesisOpenerPointer]['parenthesis_owner']]['code'] === T_FOREACH;
+		return false;
 	}
 
 	private function isStaticVariable(File $phpcsFile, int $functionPointer, string $variableName): bool
