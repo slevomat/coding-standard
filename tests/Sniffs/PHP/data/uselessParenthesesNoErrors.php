@@ -115,3 +115,5 @@ return true
     ? 100
     : (int) ((100 / 50) * 100);
 
+
+$c = (clone $a->foo())->bar($b);
