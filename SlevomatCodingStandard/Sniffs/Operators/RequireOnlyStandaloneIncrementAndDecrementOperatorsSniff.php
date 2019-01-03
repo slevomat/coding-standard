@@ -8,6 +8,7 @@ use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CLOSE_PARENTHESIS;
+use const T_COLON;
 use const T_DEC;
 use const T_FOR;
 use const T_INC;
@@ -94,7 +95,7 @@ class RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$pointerBeforeInstructionStart = TokenHelper::findPreviousEffective($phpcsFile, $instructionStartPointer - 1);
-		if (!in_array($tokens[$pointerBeforeInstructionStart]['code'], [T_SEMICOLON, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_OPEN_TAG], true)) {
+		if (!in_array($tokens[$pointerBeforeInstructionStart]['code'], [T_SEMICOLON, T_COLON, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_OPEN_TAG], true)) {
 			return false;
 		}
 
