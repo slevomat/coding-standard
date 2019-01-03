@@ -122,7 +122,7 @@ class VariableHelper
 		return false;
 	}
 
-	private static function isUsedInScopeInString(File $phpcsFile, int $variablePointer, int $stringPointer): bool
+	public static function isUsedInScopeInString(File $phpcsFile, int $variablePointer, int $stringPointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 

@@ -21,10 +21,12 @@ use const T_DIV_EQUAL;
 use const T_DO;
 use const T_DOUBLE_ARROW;
 use const T_DOUBLE_COLON;
+use const T_DOUBLE_QUOTED_STRING;
 use const T_ELSEIF;
 use const T_EQUAL;
 use const T_FOR;
 use const T_FOREACH;
+use const T_HEREDOC;
 use const T_IF;
 use const T_INC;
 use const T_LIST;
@@ -339,6 +341,13 @@ class UnusedVariableSniff implements Sniff
 		}
 
 		for ($i = $tokens[$loopPointer]['scope_opener'] + 1; $i < $tokens[$loopPointer]['scope_closer']; $i++) {
+			if (
+				in_array($tokens[$i]['code'], [T_DOUBLE_QUOTED_STRING, T_HEREDOC], true)
+				&& VariableHelper::isUsedInScopeInString($phpcsFile, $variablePointer, $i)
+			) {
+				return true;
+			}
+
 			if ($tokens[$i]['code'] !== T_VARIABLE) {
 				continue;
 			}
