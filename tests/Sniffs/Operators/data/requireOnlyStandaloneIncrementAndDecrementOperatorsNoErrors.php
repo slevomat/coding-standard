@@ -37,3 +37,9 @@ $a['a']--;
 --$a['a'];
 
 $this->typeCounter[$value]++;
+
+switch ($foo) {
+	case 1:
+		$bar++;
+		break;
+}
