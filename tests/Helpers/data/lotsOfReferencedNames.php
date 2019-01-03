@@ -8,7 +8,7 @@ use UsedNamespace\UsedNameFooBar as UsedNameFooBarBaz;
 class FooClass extends \ExtendedClass implements \ImplementedInterface, \SecondImplementedInterface, \ThirdImplementedInterface
 {
 
-	use \FullyQualified\SomeOtherTrait, SomeDifferentTrait, \FullyQualified\SometTotallyDifferentTrait;
+	use \FullyQualified\SomeOtherTrait, SomeDifferentTrait, \FullyQualified \ SometTotallyDifferentTrait;
 	use SomeTrait;
 
 	/** @ORM\Column(name="foo") */

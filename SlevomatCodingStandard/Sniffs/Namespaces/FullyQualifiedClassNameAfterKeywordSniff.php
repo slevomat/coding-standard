@@ -154,7 +154,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 		$nameStartToken = $tokens[$nameStartPointer];
 		$endPointer = ReferencedNameHelper::getReferencedNameEndPointer($phpcsFile, $nameStartPointer);
 		if ($nameStartToken['code'] !== T_NS_SEPARATOR) {
-			$name = TokenHelper::getContent($phpcsFile, $nameStartPointer, $endPointer);
+			$name = ReferencedNameHelper::getReferenceName($phpcsFile, $nameStartPointer, $endPointer);
 			$keyword = $tokens[$keywordPointer]['content'];
 
 			$fix = $phpcsFile->addFixableError(sprintf(

@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
 use const T_ANON_CLASS;
 use const T_ARRAY;
 use const T_AS;
@@ -182,16 +183,49 @@ class ReferencedNameHelper
 					}
 				}
 			}
-			$types[] = new ReferencedName(TokenHelper::getContent($phpcsFile, $nameStartPointer, $nameEndPointer), $nameStartPointer, $nameEndPointer, $type);
+			$types[] = new ReferencedName(self::getReferenceName($phpcsFile, $nameStartPointer, $nameEndPointer), $nameStartPointer, $nameEndPointer, $type);
 			$beginSearchAtPointer = $nameEndPointer + 1;
 		}
 		return $types;
 	}
 
+	public static function getReferenceName(File $phpcsFile, int $nameStartPointer, int $nameEndPointer): string
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$referencedName = '';
+		for ($i = $nameStartPointer; $i <= $nameEndPointer; $i++) {
+			if (in_array($tokens[$i]['code'], Tokens::$emptyTokens, true)) {
+				continue;
+			}
+
+			$referencedName .= $tokens[$i]['content'];
+		}
+
+		return $referencedName;
+	}
+
 	public static function getReferencedNameEndPointer(File $phpcsFile, int $startPointer): int
 	{
-		$pointerAfterEndPointer = TokenHelper::findNextExcluding($phpcsFile, array_merge([T_RETURN_TYPE], TokenHelper::$nameTokenCodes), $startPointer + 1);
-		return $pointerAfterEndPointer === null ? $startPointer : $pointerAfterEndPointer - 1;
+		$tokens = $phpcsFile->getTokens();
+
+		$nameTokenCodes = array_merge([T_RETURN_TYPE], TokenHelper::$nameTokenCodes);
+		$nameTokenCodesWithWhitespace = array_merge($nameTokenCodes, Tokens::$emptyTokens);
+
+		$lastNamePointer = $startPointer;
+		for ($i = $startPointer + 1; $i < count($tokens); $i++) {
+			if (!in_array($tokens[$i]['code'], $nameTokenCodesWithWhitespace, true)) {
+				break;
+			}
+
+			if (!in_array($tokens[$i]['code'], $nameTokenCodes, true)) {
+				continue;
+			}
+
+			$lastNamePointer = $i;
+		}
+
+		return $lastNamePointer;
 	}
 
 	private static function isReferencedName(File $phpcsFile, int $startPointer): bool
@@ -255,7 +289,7 @@ class ReferencedNameHelper
 		}
 
 		$endPointer = self::getReferencedNameEndPointer($phpcsFile, $startPointer);
-		$referencedName = TokenHelper::getContent($phpcsFile, $startPointer, $endPointer);
+		$referencedName = self::getReferenceName($phpcsFile, $startPointer, $endPointer);
 
 		return !TypeHintHelper::isSimpleTypeHint($referencedName) && $referencedName !== 'object';
 	}
