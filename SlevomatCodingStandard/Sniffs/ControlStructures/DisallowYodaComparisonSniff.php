@@ -4,11 +4,14 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\YodaHelper;
+use const T_EQUAL;
 use const T_IS_EQUAL;
 use const T_IS_IDENTICAL;
 use const T_IS_NOT_EQUAL;
 use const T_IS_NOT_IDENTICAL;
+use function array_keys;
 use function count;
 
 /**
@@ -57,8 +60,22 @@ class DisallowYodaComparisonSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError('Yoda comparisons are disallowed.', $comparisonTokenPointer, self::CODE_DISALLOWED_YODA_COMPARISON);
-		if (!$fix || count($leftSideTokens) === 0 || count($rightSideTokens) === 0) {
+		$errorParameters = [
+			'Yoda comparisons are disallowed.',
+			$comparisonTokenPointer,
+			self::CODE_DISALLOWED_YODA_COMPARISON,
+		];
+
+		$lastRightSideTokenPointer = array_keys($rightSideTokens)[count($rightSideTokens) - 1];
+
+		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $lastRightSideTokenPointer + 1);
+		if ($tokens[$nextPointer]['code'] === T_EQUAL) {
+			$phpcsFile->addError(...$errorParameters);
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError(...$errorParameters);
+		if (!$fix) {
 			return;
 		}
 
