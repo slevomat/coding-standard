@@ -250,3 +250,11 @@ function () {
 		}
 	}
 };
+
+function () {
+	$x = 1;
+	foreach ([2, 4, 8] as $y) {
+		print "$x => $y\n";
+		$x++;
+	}
+};
