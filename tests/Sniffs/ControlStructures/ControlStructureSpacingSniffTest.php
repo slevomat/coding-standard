@@ -169,4 +169,10 @@ class ControlStructureSpacingSniffTest extends TestCase
 		self::checkFile(__DIR__ . '/data/controlStructureSpacingElseWithoutCurlyBraces.php');
 	}
 
+	public function testAtTheEndOfFile(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/controlStructureSpacingAtTheEndOfFile.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
 }
