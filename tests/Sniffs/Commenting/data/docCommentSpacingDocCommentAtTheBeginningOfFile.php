@@ -1,0 +1,5 @@
+<?php
+/**
+ * @var string $title
+ *
+ */

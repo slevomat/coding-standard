@@ -19,6 +19,17 @@ class DocCommentSpacingSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testDocCommentAtTheBeginningOfFile(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/docCommentSpacingDocCommentAtTheBeginningOfFile.php');
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 3, DocCommentSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTENT);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testOneLineDocComment(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/docCommentSpacingOneLineDocComment.php');
