@@ -65,3 +65,7 @@ $x = $username === [$a, $b, $c];
 $param === A::TYPE_A and $param === A::TYPE_B;
 $param === A::TYPE_A or $param === A::TYPE_B;
 $param === A::TYPE_A xor $param === A::TYPE_B;
+
+if (null === $env = $parameters['env']) {
+    // ...
+}
