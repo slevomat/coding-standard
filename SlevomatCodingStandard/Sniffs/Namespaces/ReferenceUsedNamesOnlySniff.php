@@ -522,7 +522,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 			$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 
 			foreach ($annotations as $annotationName => $annotationsByName) {
-				if (!in_array($annotationName, ['@var', '@param', '@return', '@throws', '@property', '@property-read', '@property-write'], true)) {
+				if (!in_array($annotationName, ['@var', '@param', '@return', '@throws', '@property', '@property-read', '@property-write', '@method'], true)) {
 					continue;
 				}
 

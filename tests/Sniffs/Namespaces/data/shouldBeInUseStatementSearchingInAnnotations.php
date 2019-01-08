@@ -4,6 +4,9 @@ namespace Foo\Test\Bla;
 
 use Foo\Something;
 
+/**
+ * @method \DateTimeImmutable|int|\Foo\DateTime getProperty()
+ */
 abstract class Bar
 {
 

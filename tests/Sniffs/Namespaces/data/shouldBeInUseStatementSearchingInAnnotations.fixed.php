@@ -8,6 +8,9 @@ use Foo\ArrayObject;
 use Foo\Exception;
 use Foo\Traversable;
 
+/**
+ * @method \DateTimeImmutable|int|DateTime getProperty()
+ */
 abstract class Bar
 {
 
