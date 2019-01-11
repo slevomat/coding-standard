@@ -6,6 +6,7 @@ use Foo\Something;
 
 /**
  * @method \DateTimeImmutable|int|\Foo\DateTime getProperty()
+ * @method doSomething(\Foo\DateTime $date, $mixed)
  */
 abstract class Bar
 {
@@ -53,5 +54,13 @@ abstract class Bar
 	 * @return void
 	 */
 	abstract function abstractMethod(Something $something);
+
+	/**
+	 * @param $parameter
+	 */
+	public function invalidAnnotation($parameter)
+	{
+
+	}
 
 }

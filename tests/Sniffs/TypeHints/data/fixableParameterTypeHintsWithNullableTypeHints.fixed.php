@@ -137,7 +137,7 @@ function more(string $a, bool $b, int $c, float $d, callable $e, array $f, itera
  * @param string Description
  * @param bool|null
  */
-function withoutTypeHintAndWithAnnotationWithoutParameterName(string $a, ?bool $b)
+function withoutTypeHintAndWithInvalidAnnotation($a, $b)
 {
 }
 
@@ -146,7 +146,7 @@ function withoutTypeHintAndWithAnnotationWithoutParameterName(string $a, ?bool $
  * @param bool|null
  * @param float $c
  */
-function oneWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, ?bool $b, float $c)
+function oneWithoutTypeHintAndWithInvalidAnnotation(string $a, string $b, float $c)
 {
 }
 
@@ -330,7 +330,7 @@ abstract class Foo
 	 * @param string Description
 	 * @param bool|null
 	 */
-	public function withoutTypeHintAndWithAnnotationWithoutParameterName(string $a, ?bool $b)
+	public function withoutTypeHintAndWithInvalidAnnotation($a, $b)
 	{
 	}
 
@@ -339,7 +339,7 @@ abstract class Foo
 	 * @param bool|null
 	 * @param float $c
 	 */
-	public function oneWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, ?bool $b, float $c)
+	public function oneWithoutTypeHintAndWithInvalidAnnotation(string $a, string $b, float $c)
 	{
 	}
 

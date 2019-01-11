@@ -14,7 +14,7 @@ abstract class WithAnnotation
 	const WITHOUT_ANNOTATION = false;
 
 	/**
-	 * @var int
+	 * @var null|int|float
 	 */
 	protected static $withAnnotation = 1;
 
@@ -27,7 +27,7 @@ abstract class WithoutAnnotation
 
 	/**
 	 * @param string $a
-	 * @param string $b
+	 * @param int|null $b
 	 */
 	abstract public function withAnnotation($b, $c);
 
@@ -73,8 +73,16 @@ abstract class WithoutAnnotation
 	private $multiLineIndentedAnnotation;
 
 	/**
-	 * @property-read Test
+	 * @property-read Foo $propertyRead Description
 	 */
 	private $annotationWithDash;
+
+	/**
+	 * @return string|null
+	 */
+	public function withReturnAnnotation()
+	{
+
+	}
 
 }

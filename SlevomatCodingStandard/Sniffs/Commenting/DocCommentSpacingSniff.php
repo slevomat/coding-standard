@@ -4,7 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Commenting;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\Annotation;
+use SlevomatCodingStandard\Helpers\Annotation\Annotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
@@ -251,7 +251,7 @@ class DocCommentSpacingSniff implements Sniff
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $docCommentOpenerPointer
-	 * @param \SlevomatCodingStandard\Helpers\Annotation[] $annotations
+	 * @param \SlevomatCodingStandard\Helpers\Annotation\Annotation[] $annotations
 	 */
 	private function checkLinesBetweenDifferentAnnotationsTypes(
 		File $phpcsFile,
@@ -324,7 +324,7 @@ class DocCommentSpacingSniff implements Sniff
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $docCommentOpenerPointer
-	 * @param \SlevomatCodingStandard\Helpers\Annotation[] $annotations
+	 * @param \SlevomatCodingStandard\Helpers\Annotation\Annotation[] $annotations
 	 */
 	private function checkAnnotationsGroups(
 		File $phpcsFile,
@@ -363,7 +363,7 @@ class DocCommentSpacingSniff implements Sniff
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $docCommentOpenerPointer
-	 * @param \SlevomatCodingStandard\Helpers\Annotation[][] $annotationsGroups
+	 * @param \SlevomatCodingStandard\Helpers\Annotation\Annotation[][] $annotationsGroups
 	 */
 	private function checkLinesBetweenAnnotationsGroups(
 		File $phpcsFile,
@@ -382,7 +382,7 @@ class DocCommentSpacingSniff implements Sniff
 				continue;
 			}
 
-			/** @var \SlevomatCodingStandard\Helpers\Annotation $lastAnnotationInPreviousGroup */
+			/** @var \SlevomatCodingStandard\Helpers\Annotation\Annotation $lastAnnotationInPreviousGroup */
 			$lastAnnotationInPreviousGroup = $previousAnnotationsGroup[count($previousAnnotationsGroup) - 1];
 			$firstAnnotationInActualGroup = $annotationsGroup[0];
 
@@ -435,8 +435,8 @@ class DocCommentSpacingSniff implements Sniff
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $docCommentOpenerPointer
-	 * @param \SlevomatCodingStandard\Helpers\Annotation[][] $annotationsGroups
-	 * @param \SlevomatCodingStandard\Helpers\Annotation[] $annotations
+	 * @param \SlevomatCodingStandard\Helpers\Annotation\Annotation[][] $annotationsGroups
+	 * @param \SlevomatCodingStandard\Helpers\Annotation\Annotation[] $annotations
 	 */
 	private function checkAnnotationsGroupsOrder(
 		File $phpcsFile,
@@ -608,8 +608,8 @@ class DocCommentSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @param \SlevomatCodingStandard\Helpers\Annotation[] $annotations
-	 * @return \SlevomatCodingStandard\Helpers\Annotation[][]
+	 * @param \SlevomatCodingStandard\Helpers\Annotation\Annotation[] $annotations
+	 * @return \SlevomatCodingStandard\Helpers\Annotation\Annotation[][]
 	 */
 	private function sortAnnotationsToGroups(array $annotations): array
 	{

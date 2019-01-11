@@ -438,23 +438,6 @@ abstract class FooClass
 	public $traversableWithSuppress = [];
 
 	/**
-	 * @param string|int Description
-	 * @param \Traversable|string[]
-	 */
-	public function parametersWithoutTypeHintAndWithAnnotationWithoutParameterName($a, \Traversable $b): void
-	{
-	}
-
-	/**
-	 * @param string $b
-	 * @param \Traversable|string[]
-	 * @param float $c
-	 */
-	public function oneParameterWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, \Traversable $b, float $c): void
-	{
-	}
-
-	/**
 	 * @param string $a A
 	 */
 	public function withParameterDescriptionWithParameterNameInAnnotation(string $a): void
@@ -465,13 +448,6 @@ abstract class FooClass
 	 * @param string ...$a A
 	 */
 	public function varadicWithParameterDescriptionWithParameterNameInAnnotation(string ...$a): void
-	{
-	}
-
-	/**
-	 * @param string A
-	 */
-	public function withParameterDescriptionWithoutParameterNameInAnnotation(string $a): void
 	{
 	}
 
@@ -666,5 +642,29 @@ abstract class FooClass
 	 * {@inheritdoc}
 	 */
 	public $inheritdoc;
+
+	/**
+	 * @return $this
+	 */
+	public function returnThis()
+	{
+		return $this;
+	}
+
+	/**
+	 * @return $this|null
+	 */
+	public function returnNullableThis()
+	{
+		return $this;
+	}
+
+	/**
+	 * @return ###
+	 */
+	public function invalidReturnAnnotation(): bool
+	{
+		return true;
+	}
 
 }

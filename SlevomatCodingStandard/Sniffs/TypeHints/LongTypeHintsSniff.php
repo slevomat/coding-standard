@@ -4,18 +4,13 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
-use SlevomatCodingStandard\Helpers\DocCommentHelper;
+use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
-use SlevomatCodingStandard\Helpers\TokenHelper;
-use function explode;
-use function preg_quote;
-use function preg_replace_callback;
-use function preg_split;
 use function sprintf;
 use function strtolower;
-use function trim;
 use const T_FUNCTION;
 use const T_VARIABLE;
 
@@ -60,29 +55,40 @@ class LongTypeHintsSniff implements Sniff
 		}
 
 		foreach ($allAnnotations as $annotationName => $annotations) {
+			/** @var \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation $annotation */
 			foreach ($annotations as $annotation) {
 				if ($annotation->getContent() === null) {
 					continue;
 				}
 
-				$types = preg_split('~\\s+~', $annotation->getContent())[0];
-				foreach (explode('|', $types) as $type) {
-					$type = strtolower(trim($type, '[]'));
-					$suggestType = null;
-					if ($type === 'integer') {
-						$suggestType = 'int';
-					} elseif ($type === 'boolean') {
-						$suggestType = 'bool';
+				if ($annotation->isInvalid()) {
+					continue;
+				}
+
+				$annotationType = $annotation->getType();
+				$typeNodes = $annotationType instanceof UnionTypeNode ? $annotationType->types : [$annotationType];
+
+				foreach ($typeNodes as $typeNode) {
+					$typeHintNode = AnnotationTypeHelper::getTypeHintNode($typeNode);
+					$typeHint = AnnotationTypeHelper::getTypeHintFromNode($typeHintNode);
+
+					$lowercasedTypeHint = strtolower($typeHint);
+
+					$shortTypeHint = null;
+					if ($lowercasedTypeHint === 'integer') {
+						$shortTypeHint = 'int';
+					} elseif ($lowercasedTypeHint === 'boolean') {
+						$shortTypeHint = 'bool';
 					}
 
-					if ($suggestType === null) {
+					if ($shortTypeHint === null) {
 						continue;
 					}
 
 					$fix = $phpcsFile->addFixableError(sprintf(
 						'Expected "%s" but found "%s" in %s annotation.',
-						$suggestType,
-						$type,
+						$shortTypeHint,
+						$typeHint,
 						$annotationName
 					), $annotation->getStartPointer(), self::CODE_USED_LONG_TYPE_HINT);
 
@@ -90,22 +96,14 @@ class LongTypeHintsSniff implements Sniff
 						continue;
 					}
 
-					/** @var int $docCommentOpenPointer */
-					$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $pointer);
-					$docCommentClosePointer = $tokens[$docCommentOpenPointer]['comment_closer'];
-
 					$phpcsFile->fixer->beginChangeset();
-					for ($i = $docCommentOpenPointer; $i <= $docCommentClosePointer; $i++) {
+
+					$fixedAnnotationContent = AnnotationHelper::fixAnnotation($phpcsFile, $annotation, $typeHintNode, $shortTypeHint);
+
+					$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
+					for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {
 						$phpcsFile->fixer->replaceToken($i, '');
 					}
-
-					$docComment = TokenHelper::getContent($phpcsFile, $docCommentOpenPointer, $docCommentClosePointer);
-
-					$fixedDocComment = preg_replace_callback('~((?:@(?:var|param|return)\\s+)|\|)' . preg_quote($type, '~') . '(?=\\s|\||\[)~i', function (array $matches) use ($suggestType): string {
-						return $matches[1] . $suggestType;
-					}, $docComment);
-
-					$phpcsFile->fixer->addContent($docCommentOpenPointer, $fixedDocComment);
 
 					$phpcsFile->fixer->endChangeset();
 				}

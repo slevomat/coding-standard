@@ -10,6 +10,7 @@ use Foo\Traversable;
 
 /**
  * @method \DateTimeImmutable|int|DateTime getProperty()
+ * @method doSomething(DateTime $date, $mixed)
  */
 abstract class Bar
 {
@@ -57,5 +58,13 @@ abstract class Bar
 	 * @return void
 	 */
 	abstract function abstractMethod(Something $something);
+
+	/**
+	 * @param $parameter
+	 */
+	public function invalidAnnotation($parameter)
+	{
+
+	}
 
 }

@@ -32,10 +32,7 @@ function usefulVaradicWithParameterDescription(string $a)
 
 }
 
-/**
- * @param string A
- */
-function usefulWithoutParameterNameInAnnotation(string $a)
+function withMalformedParameters(string $a)
 {
 
 }

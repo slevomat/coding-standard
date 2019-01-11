@@ -3,7 +3,25 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\PhpDocParser\Parser\ConstExprParser;
+use PHPStan\PhpDocParser\Parser\PhpDocParser;
+use PHPStan\PhpDocParser\Parser\TokenIterator;
+use PHPStan\PhpDocParser\Parser\TypeParser;
+use SlevomatCodingStandard\Helpers\Annotation\Annotation;
+use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use function array_key_exists;
+use function get_class;
 use function in_array;
 use function preg_match;
 use function substr_count;
@@ -18,10 +36,65 @@ class AnnotationHelper
 {
 
 	/**
+	 * @internal
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation|\SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation|\SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation $annotation
+	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
+	 * @param string $type
+	 * @return string
+	 */
+	public static function fixAnnotation(File $phpcsFile, Annotation $annotation, TypeNode $typeNode, string $type): string
+	{
+		if ($annotation instanceof MethodAnnotation) {
+			$fixedContentNode = clone $annotation->getContentNode();
+
+			if ($fixedContentNode->returnType !== null) {
+				$fixedContentNode->returnType = AnnotationTypeHelper::change($fixedContentNode->returnType, $typeNode, new IdentifierTypeNode($type));
+			}
+			foreach ($fixedContentNode->parameters as $parameterNo => $parameterNode) {
+				if ($parameterNode->type === null) {
+					continue;
+				}
+
+				$fixedContentNode->parameters[$parameterNo] = clone $parameterNode;
+				$fixedContentNode->parameters[$parameterNo]->type = AnnotationTypeHelper::change($parameterNode->type, $typeNode, new IdentifierTypeNode($type));
+			}
+
+			$fixedAnnotation = new MethodAnnotation(
+				$annotation->getName(),
+				$annotation->getStartPointer(),
+				$annotation->getEndPointer(),
+				$annotation->getContent(),
+				$fixedContentNode
+			);
+		} else {
+			$fixedTypeNode = AnnotationTypeHelper::change($annotation->getType(), $typeNode, new IdentifierTypeNode($type));
+			$fixedContentNode = clone $annotation->getContentNode();
+			$fixedContentNode->type = $fixedTypeNode;
+
+			$annotationClassName = get_class($annotation);
+			$fixedAnnotation = new $annotationClassName(
+				$annotation->getName(),
+				$annotation->getStartPointer(),
+				$annotation->getEndPointer(),
+				$annotation->getContent(),
+				$fixedContentNode
+			);
+		}
+
+		$spaceAfterContent = '';
+		if (preg_match('~(\\s+)$~', TokenHelper::getContent($phpcsFile, $annotation->getStartPointer(), $annotation->getEndPointer()), $matches) > 0) {
+			$spaceAfterContent = $matches[1];
+		}
+
+		return $fixedAnnotation->export() . $spaceAfterContent;
+	}
+
+	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $pointer
 	 * @param string $annotationName
-	 * @return \SlevomatCodingStandard\Helpers\Annotation[]
+	 * @return \SlevomatCodingStandard\Helpers\Annotation\Annotation[]
 	 */
 	public static function getAnnotationsByName(File $phpcsFile, int $pointer, string $annotationName): array
 	{
@@ -37,7 +110,7 @@ class AnnotationHelper
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $pointer
-	 * @return \SlevomatCodingStandard\Helpers\Annotation[][]
+	 * @return \SlevomatCodingStandard\Helpers\Annotation\Annotation[][]
 	 */
 	public static function getAnnotations(File $phpcsFile, int $pointer): array
 	{
@@ -108,10 +181,65 @@ class AnnotationHelper
 				}
 			}
 
-			$annotations[$annotationName][] = new Annotation($annotationName, $annotationStartPointer, $annotationEndPointer, $annotationParameters, $annotationContent);
+			$mapping = [
+				'@param' => ParameterAnnotation::class,
+				'@return' => ReturnAnnotation::class,
+				'@var' => VariableAnnotation::class,
+				'@throws' => ThrowsAnnotation::class,
+				'@property' => PropertyAnnotation::class,
+				'@property-read' => PropertyAnnotation::class,
+				'@property-write' => PropertyAnnotation::class,
+				'@method' => MethodAnnotation::class,
+			];
+
+			if (array_key_exists($annotationName, $mapping)) {
+				$className = $mapping[$annotationName];
+
+				$parsedContent = null;
+				if ($annotationContent !== null) {
+					$parsedContent = self::parseAnnotationContent($annotationName, $annotationContent);
+					if ($parsedContent instanceof InvalidTagValueNode) {
+						$parsedContent = null;
+					}
+				}
+
+				$annotation = new $className($annotationName, $annotationStartPointer, $annotationEndPointer, $annotationContent, $parsedContent);
+			} else {
+				$annotation = new GenericAnnotation($annotationName, $annotationStartPointer, $annotationEndPointer, $annotationParameters, $annotationContent);
+			}
+
+			$annotations[$annotationName][] = $annotation;
 		}
 
 		return $annotations;
+	}
+
+	private static function parseAnnotationContent(string $annotationName, string $annotationContent): PhpDocTagValueNode
+	{
+		$tokens = new TokenIterator(self::getPhpDocLexer()->tokenize($annotationContent));
+		return self::getPhpDocParser()->parseTagValue($tokens, $annotationName);
+	}
+
+	private static function getPhpDocLexer(): Lexer
+	{
+		static $phpDocLexer;
+
+		if ($phpDocLexer === null) {
+			$phpDocLexer = new Lexer();
+		}
+
+		return $phpDocLexer;
+	}
+
+	private static function getPhpDocParser(): PhpDocParser
+	{
+		static $phpDocParser;
+
+		if ($phpDocParser === null) {
+			$phpDocParser = new PhpDocParser(new TypeParser(), new ConstExprParser());
+		}
+
+		return $phpDocParser;
 	}
 
 }

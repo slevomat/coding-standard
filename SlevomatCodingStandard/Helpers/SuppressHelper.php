@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use SlevomatCodingStandard\Helpers\Annotation\Annotation;
 use function array_reduce;
 use function sprintf;
 use function strpos;

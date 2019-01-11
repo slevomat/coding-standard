@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Helpers;
 
 use Generator;
 use PHP_CodeSniffer\Files\File;
+use SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation;
 use function array_filter;
 use function array_keys;
 use function array_map;
@@ -270,15 +271,18 @@ class FunctionHelper
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $functionPointer
-	 * @return \SlevomatCodingStandard\Helpers\Annotation[]
+	 * @return \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation[]
 	 */
 	public static function getParametersAnnotations(File $phpcsFile, int $functionPointer): array
 	{
-		return AnnotationHelper::getAnnotationsByName($phpcsFile, $functionPointer, '@param');
+		/** @var \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation[] $parametersAnnotations */
+		$parametersAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $functionPointer, '@param');
+		return $parametersAnnotations;
 	}
 
-	public static function findReturnAnnotation(File $phpcsFile, int $functionPointer): ?Annotation
+	public static function findReturnAnnotation(File $phpcsFile, int $functionPointer): ?ReturnAnnotation
 	{
+		/** @var \SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation[] $returnAnnotations */
 		$returnAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $functionPointer, '@return');
 
 		if (count($returnAnnotations) === 0) {

@@ -58,7 +58,7 @@ class FooClass
 	 */
 	public function resultSet()
 	{
-		/** @var $coo FooClass */
+		/** @var $invalid Annotation */
 		$coo = $this->get();
 	}
 

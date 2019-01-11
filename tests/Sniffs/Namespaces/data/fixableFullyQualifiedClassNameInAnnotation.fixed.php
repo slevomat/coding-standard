@@ -53,7 +53,7 @@ class Foo
 		/** @var \XXX\VariableSameNamespace $x */
 		$x = true;
 
-		/** @var $x \XXX\VariableInversedOrderSameNamespace */
+		/** @var $x InvalidAnnotation */
 		$x = true;
 
 		/** @var \XXX\VariableWithCommentSameNamespace $x comment*/

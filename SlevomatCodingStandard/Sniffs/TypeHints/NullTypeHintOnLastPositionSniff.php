@@ -4,18 +4,14 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
+use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use function array_map;
-use function array_merge;
-use function array_search;
 use function count;
-use function explode;
-use function implode;
 use function in_array;
-use function preg_match;
 use function preg_replace_callback;
-use function preg_split;
 use function strtolower;
 use const T_DOC_COMMENT_OPEN_TAG;
 
@@ -48,27 +44,41 @@ class NullTypeHintOnLastPositionSniff implements Sniff
 				continue;
 			}
 
+			/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation $annotation */
 			foreach ($annotationByName as $annotation) {
 				if ($annotation->getContent() === null) {
 					continue;
 				}
 
-				$typeHintsDefinition = $annotationName === '@var' && preg_match('~^(\$\\S+\\s+)(.+)~', $annotation->getContent(), $matches) !== 0
-					? $matches[2]
-					: preg_split('~\\s+~', $annotation->getContent())[0];
-
-				$typeHints = explode('|', $typeHintsDefinition);
-				$lowercasedTypeHints = array_map(function (string $typeHint): string {
-					return strtolower($typeHint);
-				}, $typeHints);
-
-				$nullPosition = array_search('null', $lowercasedTypeHints, true);
-
-				if ($nullPosition === false) {
+				if ($annotation->isInvalid()) {
 					continue;
 				}
 
-				if ($nullPosition === count($typeHints) - 1) {
+				if (!$annotation->getType() instanceof UnionTypeNode) {
+					continue;
+				}
+
+				/** @var \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $annotationType */
+				$annotationType = $annotation->getType();
+
+				$nullTypeNode = null;
+				$nullPosition = 0;
+				$position = 0;
+				foreach ($annotationType->types as $typeNode) {
+					if ($typeNode instanceof IdentifierTypeNode && strtolower($typeNode->name) === 'null') {
+						$nullTypeNode = $typeNode;
+						$nullPosition = $position;
+						break;
+					}
+
+					$position++;
+				}
+
+				if ($nullTypeNode === null) {
+					continue;
+				}
+
+				if ($nullPosition === count($annotationType->types) - 1) {
 					continue;
 				}
 
@@ -88,18 +98,25 @@ class NullTypeHintOnLastPositionSniff implements Sniff
 					$phpcsFile->fixer->replaceToken($i, '');
 				}
 
-				$fixedAnnoationContent = preg_replace_callback(
-					'~^((?:(?:@var\\s+\$\\S+)|' . $annotationName . ')\\s+)(\\S+)~',
-					function (array $matches) use ($typeHints, $nullPosition): string {
-						$nullType = $typeHints[$nullPosition];
-						unset($typeHints[$nullPosition]);
-						$fixedTypeHints = array_merge($typeHints, [$nullType]);
+				$fixedTypeNodes = [];
+				foreach ($annotationType->types as $typeNode) {
+					if ($typeNode === $nullTypeNode) {
+						continue;
+					}
 
-						return $matches[1] . implode('|', $fixedTypeHints);
+					$fixedTypeNodes[] = $typeNode;
+				}
+				$fixedTypeNodes[] = $nullTypeNode;
+				$fixedAnnotationType = new UnionTypeNode($fixedTypeNodes);
+
+				$fixedAnnotationContent = preg_replace_callback(
+					'~^(' . $annotationName . '\\s+)(\\S+)~',
+					function (array $matches) use ($fixedAnnotationType): string {
+						return $matches[1] . AnnotationTypeHelper::export($fixedAnnotationType);
 					},
 					TokenHelper::getContent($phpcsFile, $annotation->getStartPointer(), $annotation->getEndPointer())
 				);
-				$phpcsFile->fixer->addContent($annotation->getStartPointer(), $fixedAnnoationContent);
+				$phpcsFile->fixer->addContent($annotation->getStartPointer(), $fixedAnnotationContent);
 
 				$phpcsFile->fixer->endChangeset();
 			}

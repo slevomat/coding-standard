@@ -4,17 +4,12 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
-use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\TypeHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
-use function explode;
 use function in_array;
-use function preg_match;
-use function preg_quote;
-use function preg_replace;
-use function preg_replace_callback;
-use function preg_split;
 use function sprintf;
 use function strtolower;
 use const T_DOC_COMMENT_OPEN_TAG;
@@ -48,18 +43,23 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 				continue;
 			}
 
+			/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation $annotation */
 			foreach ($annotationByName as $annotation) {
 				if ($annotation->getContent() === null) {
 					continue;
 				}
 
-				$typeHintsDefinition = $annotationName === '@var' && preg_match('~^\$\\S+\\s+(.+)~', $annotation->getContent(), $matches) !== 0
-					? $matches[1]
-					: preg_split('~\\s+~', $annotation->getContent())[0];
+				if ($annotation->isInvalid()) {
+					continue;
+				}
 
-				$typeHints = explode('|', $typeHintsDefinition);
-				foreach ($typeHints as $typeHint) {
-					$typeHint = preg_replace('~(\[\])+$~', '', $typeHint);
+				$annotationType = $annotation->getType();
+				$typeNodes = $annotationType instanceof UnionTypeNode ? $annotationType->types : [$annotationType];
+
+				foreach ($typeNodes as $typeNode) {
+					$typeHintNode = AnnotationTypeHelper::getTypeHintNode($typeNode);
+					$typeHint = AnnotationTypeHelper::getTypeHintFromNode($typeHintNode);
+
 					$lowercasedTypeHint = strtolower($typeHint);
 					if (
 						TypeHintHelper::isSimpleTypeHint($lowercasedTypeHint)
@@ -78,25 +78,19 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 						$fullyQualifiedTypeHint,
 						$annotationName
 					), $annotation->getStartPointer(), self::CODE_NON_FULLY_QUALIFIED_CLASS_NAME);
+
 					if (!$fix) {
 						continue;
 					}
 
 					$phpcsFile->fixer->beginChangeset();
 
-					for ($i = $annotation->getStartPointer(); $i <= $annotation->getEndPointer(); $i++) {
+					$fixedAnnotationContent = AnnotationHelper::fixAnnotation($phpcsFile, $annotation, $typeHintNode, $fullyQualifiedTypeHint);
+
+					$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
+					for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {
 						$phpcsFile->fixer->replaceToken($i, '');
 					}
-
-					$fixedAnnoationContent = preg_replace_callback(
-						'~(\s|\|)' . preg_quote($typeHint, '~') . '(\s|\||\[|$)~',
-						function (array $matches) use ($fullyQualifiedTypeHint): string {
-							return $matches[1] . $fullyQualifiedTypeHint . $matches[2];
-						},
-						TokenHelper::getContent($phpcsFile, $annotation->getStartPointer(), $annotation->getEndPointer()),
-						1
-					);
-					$phpcsFile->fixer->addContent($annotation->getStartPointer(), $fixedAnnoationContent);
 
 					$phpcsFile->fixer->endChangeset();
 				}

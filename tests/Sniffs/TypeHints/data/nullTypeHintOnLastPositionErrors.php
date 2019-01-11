@@ -19,7 +19,7 @@ class Whatever
 		/** @var null|float|int $number */
 		$inlineAnnotation = 0.0;
 
-		/** @var $number null|float|int */
+		/** @var $invalidAnnotation null|float|int */
 		$inlineAnnotationInSecondFormat = 0.0;
 	}
 
@@ -40,7 +40,7 @@ class Whatever
 	}
 
 	/**
-	 * @return float|null|int
+	 * @return float|null|int|int[]
 	 */
 	public function nullInTheMiddle()
 	{

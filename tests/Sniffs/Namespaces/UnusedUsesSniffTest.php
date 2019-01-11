@@ -129,7 +129,7 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertSniffError($report, 19, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Foo\Boo\B is not used in this file.');
 		self::assertSniffError($report, 20, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Foo\Boo\C is not used in this file.');
 		self::assertSniffError($report, 21, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Foo\Boo\D is not used in this file.');
-		self::assertSniffError($report, 22, UnusedUsesSniff::CODE_UNUSED_USE, 'Type UglyInlineAnnotation is not used in this file.');
+		self::assertSniffError($report, 22, UnusedUsesSniff::CODE_UNUSED_USE, 'Type InvalidAnnotation is not used in this file.');
 		self::assertSniffError($report, 23, UnusedUsesSniff::CODE_UNUSED_USE, 'Type PropertyAnnotation is not used in this file.');
 		self::assertSniffError($report, 24, UnusedUsesSniff::CODE_UNUSED_USE, 'Type PropertyReadAnnotation is not used in this file.');
 		self::assertSniffError($report, 25, UnusedUsesSniff::CODE_UNUSED_USE, 'Type PropertyWriteAnnotation is not used in this file.');
@@ -161,13 +161,20 @@ class UnusedUsesSniffTest extends TestCase
 			'searchAnnotations' => true,
 		], [UnusedUsesSniff::CODE_UNUSED_USE]);
 
-		self::assertSame(1, $report->getErrorCount());
+		self::assertSame(2, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
 			9,
 			UnusedUsesSniff::CODE_UNUSED_USE,
 			'Type XX is not used in this file.'
+		);
+
+		self::assertSniffError(
+			$report,
+			22,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'Type InvalidAnnotation is not used in this file.'
 		);
 	}
 

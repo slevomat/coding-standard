@@ -33,7 +33,7 @@ class Foo
 
 	/**
 	 * @param bool|null $a
-	 * @param null|bool
+	 * @param null|boolean
 	 * @param int|bool $c
 	 * @return int|null
 	 */

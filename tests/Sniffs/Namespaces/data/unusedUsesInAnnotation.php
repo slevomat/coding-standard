@@ -19,7 +19,7 @@ use Foo\Boo\A;
 use Foo\Boo\B;
 use Foo\Boo\C;
 use Foo\Boo\D;
-use UglyInlineAnnotation;
+use InvalidAnnotation;
 use PropertyAnnotation;
 use PropertyReadAnnotation;
 use PropertyWriteAnnotation;
@@ -115,14 +115,14 @@ class Boo
  * })
  */
 
-/** @var $variable UglyInlineAnnotation */
+/** @var $variable InvalidAnnotation */
 
 /**
  * @property PropertyAnnotation $property propertyAnnotation description
  * @property-read PropertyReadAnnotation $propertyRead propertyReadAnnotation description
  * @property-write PropertyWriteAnnotation $propertyWrite propertyWriteAnnotation description
  * @method MethodAnnotation method (MethodParameter1 $m, MethodParameter2 ...$m2) methodAnnotationDescription
- * @method method(MethodParameter3 $m = null, ?MethodParameter4 $m2) methodAnnotationDescription
+ * @method method(MethodParameter3 $m = null, ?MethodParameter4 $m2, $m3) methodAnnotationDescription
  * @method MethodReturn[]|MethodReturnCollection method(MethodParameter5 $m)
  */
 class Foo

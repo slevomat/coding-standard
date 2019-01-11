@@ -1,40 +1,35 @@
 <?php declare(strict_types = 1);
 
-namespace SlevomatCodingStandard\Helpers;
+namespace SlevomatCodingStandard\Helpers\Annotation;
 
 /**
  * @internal
  */
-class Annotation
+abstract class Annotation
 {
 
 	/** @var string */
-	private $name;
+	protected $name;
 
 	/** @var int */
-	private $startPointer;
+	protected $startPointer;
 
 	/** @var int */
-	private $endPointer;
+	protected $endPointer;
 
 	/** @var string|null */
-	private $parameters;
-
-	/** @var string|null */
-	private $content;
+	protected $content;
 
 	public function __construct(
 		string $name,
 		int $startPointer,
 		int $endPointer,
-		?string $parameters,
 		?string $content
 	)
 	{
 		$this->name = $name;
 		$this->startPointer = $startPointer;
 		$this->endPointer = $endPointer;
-		$this->parameters = $parameters;
 		$this->content = $content;
 	}
 
@@ -53,14 +48,13 @@ class Annotation
 		return $this->endPointer;
 	}
 
-	public function getParameters(): ?string
-	{
-		return $this->parameters;
-	}
-
 	public function getContent(): ?string
 	{
 		return $this->content;
 	}
+
+	abstract public function isInvalid(): bool;
+
+	abstract public function export(): string;
 
 }

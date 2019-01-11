@@ -121,23 +121,6 @@ abstract class FooClass
 	 */
 	abstract public function traversableMixedParameterTypeHint($a): void;
 
-	/**
-	 * @param string Description
-	 * @param bool|null
-	 */
-	public function parametersWithoutTypeHintAndWithAnnotationWithoutParameterName($a, $b): void
-	{
-	}
-
-	/**
-	 * @param string $b
-	 * @param bool
-	 * @param float $c
-	 */
-	public function oneParameterWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, $b, float $c): void
-	{
-	}
-
 	public function returnTraversableArrayWithoutAnnotation(): array
 	{
 		return [];
@@ -294,7 +277,7 @@ abstract class FooClass
 	}
 
 	/**
-	 * @var array[]
+	 * @var array[][]
 	 */
 	public $multidimensionalArray = [];
 

@@ -14,7 +14,12 @@ class Whatever
 	/**
 	 * @var
 	 */
-	private $missingTypeHint;
+	private $invalidAnnotation;
+
+	/**
+	 * @var string
+	 */
+	private $noUnion;
 
 	/** @var bool|null */
 	private $varAnnotation;
