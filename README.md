@@ -102,7 +102,7 @@ This is a great addition to already existing `SlevomatCodingStandard.ControlStru
 
 #### SlevomatCodingStandard.ControlStructures.DisallowContinueWithoutIntegerOperandInSwitch 🔧
 
-Disallows use of `continue` without integer operand in `switch` because it's emits warning in PHP 7.3 and higher.
+Disallows use of `continue` without integer operand in `switch` because it emits a warning in PHP 7.3 and higher.
 
 #### SlevomatCodingStandard.ControlStructures.DisallowEmpty
 
