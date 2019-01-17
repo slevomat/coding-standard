@@ -7,7 +7,7 @@ abstract class FooClass
 
 	abstract public function withNullableReturnTypeHint(): ?string;
 
-	public function withNullableParameterTypeHint(?string $a)
+	public function withNullableParameterTypeHint(?string $a): void
 	{
 
 	}
@@ -25,7 +25,7 @@ abstract class FooClass
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.UselessDocComment
 	 * @param int|null $a
 	 */
-	public function withNullableParameterTypeHintAndSuppressedUselessDocComment(?int $a)
+	public function withNullableParameterTypeHintAndSuppressedUselessDocComment(?int $a): void
 	{
 	}
 
@@ -64,7 +64,7 @@ abstract class FooClass
 	/**
 	 * @param resource|null $a
 	 */
-	public function nullableResource($a)
+	public function nullableResource($a): void
 	{
 
 	}
@@ -72,7 +72,7 @@ abstract class FooClass
 	/**
 	 * @param mixed|null $a
 	 */
-	public function nullableMixed($a)
+	public function nullableMixed($a): void
 	{
 
 	}
@@ -80,7 +80,7 @@ abstract class FooClass
 	/**
 	 * @param static|null $a
 	 */
-	public function nullableStaticAsSelf(?self $a)
+	public function nullableStaticAsSelf(?self $a): void
 	{
 
 	}
@@ -96,7 +96,7 @@ abstract class FooClass
 	/**
 	 * @param \SomethingElse|null $a
 	 */
-	public function withMoreSpecificParameterAnnotation(?\Something $a)
+	public function withMoreSpecificParameterAnnotation(?\Something $a): void
 	{
 	}
 

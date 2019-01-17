@@ -10,7 +10,7 @@ abstract class FooClass
 	 */
 	abstract public function withNullableReturnTypeHint();
 
-	public function withParameterTypeHint(string $a = null)
+	public function withParameterTypeHint(string $a = null): void
 	{
 
 	}
@@ -18,7 +18,7 @@ abstract class FooClass
 	/**
 	 * @param static|null $a
 	 */
-	public function nullableStaticAsSelf(self $a = null)
+	public function nullableStaticAsSelf(self $a = null): void
 	{
 
 	}

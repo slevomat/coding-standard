@@ -13,7 +13,7 @@ abstract class FooClass
 	/**
 	 * @param null|object $a
 	 */
-	public function withNullableParameterTypeHint($a)
+	public function withNullableParameterTypeHint($a): void
 	{
 
 	}

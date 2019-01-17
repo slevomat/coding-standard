@@ -16,7 +16,7 @@ abstract class FooClass
 	/**
 	 * @param string|null $a
 	 */
-	public function withNullableParameterTypeHint($a)
+	public function withNullableParameterTypeHint($a): void
 	{
 
 	}
@@ -24,7 +24,7 @@ abstract class FooClass
 	/**
 	 * @param string|null $a
 	 */
-	public function withNullableParameterTypeHintAndUselessDocComment(string $a = null)
+	public function withNullableParameterTypeHintAndUselessDocComment(string $a = null): void
 	{
 
 	}

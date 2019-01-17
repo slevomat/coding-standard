@@ -36,14 +36,14 @@ abstract class FooClass
 	/**
 	 * @param string|null $a
 	 */
-	public function withNullableParameterTypeHint($a)
+	public function withNullableParameterTypeHint($a): void
 	{
 	}
 
 	/**
 	 * @param int|null $a
 	 */
-	public function withNullableParameterTypeHintAndUselessDocComment(?int $a)
+	public function withNullableParameterTypeHintAndUselessDocComment(?int $a): void
 	{
 	}
 
@@ -58,7 +58,7 @@ abstract class FooClass
 	/**
 	 * @param string[]|null $a
 	 */
-	public function parameterNullableArrayOfStrings($a)
+	public function parameterNullableArrayOfStrings($a): void
 	{
 
 	}
@@ -90,21 +90,21 @@ abstract class FooClass
 	/**
 	 * @param \Something|null $a
 	 */
-	public function parameterTypeHintEqualsAnnotationBothFullyQualified(?\Something $a)
+	public function parameterTypeHintEqualsAnnotationBothFullyQualified(?\Something $a): void
 	{
 	}
 
 	/**
 	 * @param null|\AnyNamespace\Anything $a
 	 */
-	public function parameterTypeHintEqualsAnnotationWithOnlyAnnotationFullyQualified(?Anything $a)
+	public function parameterTypeHintEqualsAnnotationWithOnlyAnnotationFullyQualified(?Anything $a): void
 	{
 	}
 
 	/**
 	 * @param Anything|null $a
 	 */
-	public function parameterTypeHintEqualsAnnotationWithOnlyTypeHintFullyQualified(?\AnyNamespace\Anything $a)
+	public function parameterTypeHintEqualsAnnotationWithOnlyTypeHintFullyQualified(?\AnyNamespace\Anything $a): void
 	{
 	}
 

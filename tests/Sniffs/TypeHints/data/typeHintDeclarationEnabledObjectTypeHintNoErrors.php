@@ -7,7 +7,7 @@ abstract class FooClass
 
 	abstract public function withNullableReturnTypeHint(): ?object;
 
-	public function withNullableParameterTypeHint(?object $a)
+	public function withNullableParameterTypeHint(?object $a): void
 	{
 
 	}
@@ -25,7 +25,7 @@ abstract class FooClass
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param object|null $a
 	 */
-	public function withParameterTypeHintSuppress($a)
+	public function withParameterTypeHintSuppress($a): void
 	{
 	}
 
@@ -33,7 +33,7 @@ abstract class FooClass
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.UselessDocComment
 	 * @param object|null $a
 	 */
-	public function withNullableParameterTypeHintAndSuppressedUselessDocComment(?object $a)
+	public function withNullableParameterTypeHintAndSuppressedUselessDocComment(?object $a): void
 	{
 	}
 
@@ -48,7 +48,7 @@ abstract class FooClass
 	/**
 	 * @param \DateTimeImmutable $object
 	 */
-	public function parameterObjectTypeVariance(object $object)
+	public function parameterObjectTypeVariance(object $object): void
 	{
 
 	}
@@ -56,7 +56,7 @@ abstract class FooClass
 	/**
 	 * @param \DateTimeImmutable|null $object
 	 */
-	public function parameterNullableObjectTypeVariance(?object $object)
+	public function parameterNullableObjectTypeVariance(?object $object): void
 	{
 
 	}

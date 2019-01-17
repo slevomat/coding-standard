@@ -19,7 +19,7 @@ abstract class FooClass
 	 * @param int $foo
 	 * @param int[] $bar
 	 */
-	public function withParameterSuppress(int $foo, array $bar)
+	public function withParameterSuppress(int $foo, array $bar): void
 	{
 	}
 

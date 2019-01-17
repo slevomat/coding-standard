@@ -76,12 +76,6 @@ class TypeHintDeclarationSniff implements Sniff
 	 */
 	public $enableNullableTypeHints = true;
 
-	/**
-	 * @deprecated
-	 * @var bool
-	 */
-	public $enableVoidTypeHint = true;
-
 	/** @var bool */
 	public $enableObjectTypeHint = PHP_VERSION_ID >= 70200;
 
@@ -412,7 +406,7 @@ class TypeHintDeclarationSniff implements Sniff
 					$functionPointer,
 					self::CODE_MISSING_RETURN_TYPE_HINT
 				);
-			} elseif ($this->enableVoidTypeHint && !array_key_exists(FunctionHelper::getName($phpcsFile, $functionPointer), $methodsWithoutVoidSupport)) {
+			} elseif (!array_key_exists(FunctionHelper::getName($phpcsFile, $functionPointer), $methodsWithoutVoidSupport)) {
 				$fix = $phpcsFile->addFixableError(
 					sprintf(
 						'%s %s() does not have void return type hint.',
@@ -432,7 +426,7 @@ class TypeHintDeclarationSniff implements Sniff
 			return;
 		}
 
-		if ($this->enableVoidTypeHint && $returnTypeHintDefinition === 'void' && !$returnsValue && !array_key_exists(FunctionHelper::getName($phpcsFile, $functionPointer), $methodsWithoutVoidSupport)) {
+		if ($returnTypeHintDefinition === 'void' && !$returnsValue && !array_key_exists(FunctionHelper::getName($phpcsFile, $functionPointer), $methodsWithoutVoidSupport)) {
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
 					'%s %s() does not have return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
@@ -448,10 +442,6 @@ class TypeHintDeclarationSniff implements Sniff
 				$phpcsFile->fixer->addContent($phpcsFile->getTokens()[$functionPointer]['parenthesis_closer'], ': void');
 				$phpcsFile->fixer->endChangeset();
 			}
-			return;
-		}
-
-		if (!$returnsValue) {
 			return;
 		}
 
@@ -567,14 +557,14 @@ class TypeHintDeclarationSniff implements Sniff
 				for ($i = $closeParenthesisPosition + 1; $i < $tokens[$closurePointer]['scope_opener']; $i++) {
 					$phpcsFile->fixer->replaceToken($i, '');
 				}
-				$phpcsFile->fixer->replaceToken($closeParenthesisPosition, $this->enableVoidTypeHint ? '): void ' : ') ');
+				$phpcsFile->fixer->replaceToken($closeParenthesisPosition, '): void ');
 				$phpcsFile->fixer->endChangeset();
 			}
 
 			return;
 		}
 
-		if (!$this->enableVoidTypeHint || $returnsValue || $returnTypeHint !== null) {
+		if ($returnsValue || $returnTypeHint !== null) {
 			return;
 		}
 

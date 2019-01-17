@@ -19,64 +19,64 @@ abstract class FooClass
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 */
-	public function parametersTypeHintsSuppressed($a, $b)
+	public function parametersTypeHintsSuppressed($a, $b): void
 	{
 	}
 
-	public function noParameters()
+	public function noParameters(): void
 	{
 	}
 
-	public function allParametersWithTypeHint(string $a, int $b)
+	public function allParametersWithTypeHint(string $a, int $b): void
 	{
 	}
 
 	/**
 	 * @param mixed $a
 	 */
-	public function mixedParameter($a)
+	public function mixedParameter($a): void
 	{
 	}
 
 	/**
 	 * @param mixed[]|array $a
 	 */
-	public function mixedTraversableParameter(array $a)
+	public function mixedTraversableParameter(array $a): void
 	{
 	}
 
 	/**
 	 * @param string|integer $a
 	 */
-	public function moreTypesParameter($a)
+	public function moreTypesParameter($a): void
 	{
 	}
 
 	/**
 	 * @param null $a
 	 */
-	public function nullParameter($a)
+	public function nullParameter($a): void
 	{
 	}
 
 	/**
 	 * @param string[] $a
 	 */
-	public function arrayParameter(array $a)
+	public function arrayParameter(array $a): void
 	{
 	}
 
 	/**
 	 * @param string[] $a
 	 */
-	public function traversableParameter(\Traversable $a)
+	public function traversableParameter(\Traversable $a): void
 	{
 	}
 
 	/**
 	 * @param \FooClass[]|\QueryResultSet $a
 	 */
-	public function moreTypeWithTraversableParameter(\QueryResultSet $a)
+	public function moreTypeWithTraversableParameter(\QueryResultSet $a): void
 	{
 	}
 
@@ -96,14 +96,14 @@ abstract class FooClass
 		return true;
 	}
 
-	abstract function abstractFunction();
+	abstract function abstractFunction(): void;
 
-	public function withoutReturn()
+	public function withoutReturn(): void
 	{
 		// Nothing
 	}
 
-	public function returnsVoid()
+	public function returnsVoid(): void
 	{
 		return;
 	}
@@ -173,7 +173,7 @@ abstract class FooClass
 	/**
 	 * @param static $a
 	 */
-	public function staticAsSelf(self $a)
+	public function staticAsSelf(self $a): void
 	{
 	}
 
@@ -200,11 +200,11 @@ abstract class FooClass
 	 * @param string $a
 	 * @param string $b
 	 */
-	public function uselessCommentSuppressed(string $a, string $b)
+	public function uselessCommentSuppressed(string $a, string $b): void
 	{
 	}
 
-	public function noDocComment()
+	public function noDocComment(): void
 	{
 	}
 
@@ -215,7 +215,7 @@ abstract class FooClass
 	 * @param string $a
 	 * @param string $b
 	 */
-	public function withDocCommentDescription(string $a, string $b)
+	public function withDocCommentDescription(string $a, string $b): void
 	{
 	}
 
@@ -224,7 +224,7 @@ abstract class FooClass
 	 * @param string $a
 	 * @param string $b
 	 */
-	public function withUsefulAnnotation(string $a, string $b)
+	public function withUsefulAnnotation(string $a, string $b): void
 	{
 	}
 
@@ -233,7 +233,7 @@ abstract class FooClass
 	 * @param string $a
 	 * @param string $b
 	 */
-	public function withUsefulComplexAnnotation(string $a, string $b)
+	public function withUsefulComplexAnnotation(string $a, string $b): void
 	{
 	}
 
@@ -242,7 +242,7 @@ abstract class FooClass
 	 * @param string $a
 	 * @param string $b
 	 */
-	public function withUsefulComplexAnnotationOnlyPrefixed(string $a, string $b)
+	public function withUsefulComplexAnnotationOnlyPrefixed(string $a, string $b): void
 	{
 	}
 
@@ -255,7 +255,7 @@ abstract class FooClass
 	 * @phpcsSuppress Whatever
 	 * @param string $s
 	 */
-	public function withAnySuppress(string $s)
+	public function withAnySuppress(string $s): void
 	{
 	}
 
@@ -324,7 +324,7 @@ abstract class FooClass
 	/**
 	 * @param resource $a
 	 */
-	public function parameterResource($a)
+	public function parameterResource($a): void
 	{
 
 	}
@@ -332,7 +332,7 @@ abstract class FooClass
 	/**
 	 * @param true $a
 	 */
-	public function parameterTrue($a)
+	public function parameterTrue($a): void
 	{
 
 	}
@@ -340,7 +340,7 @@ abstract class FooClass
 	/**
 	 * @param mixed|null $a
 	 */
-	public function nullableMixed($a)
+	public function nullableMixed($a): void
 	{
 
 	}
@@ -391,33 +391,33 @@ abstract class FooClass
 	/**
 	 * @param string[] $a
 	 */
-	public function traversableArrayParameter(array $a)
+	public function traversableArrayParameter(array $a): void
 	{
 	}
 
 	/**
 	 * @param iterable|string[] $a
 	 */
-	private function taversableIterableParameter(iterable $a)
+	private function taversableIterableParameter(iterable $a): void
 	{
 	}
 
 	/**
 	 * @param string[]|\Traversable $a
 	 */
-	abstract public function traversableTraversableParameter(\Traversable $a);
+	abstract public function traversableTraversableParameter(\Traversable $a): void;
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration
 	 * @param \Traversable $a
 	 */
-	abstract public function traversableTraversableParameterWithGlobalSuppress(\Traversable $a);
+	abstract public function traversableTraversableParameterWithGlobalSuppress(\Traversable $a): void;
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableParameterTypeHintSpecification
 	 * @param \Traversable $a
 	 */
-	abstract public function traversableTraversableParameterWithSuppress(\Traversable $a);
+	abstract public function traversableTraversableParameterWithSuppress(\Traversable $a): void;
 
 	/** @var string[] */
 	public $traversable = [];
@@ -441,7 +441,7 @@ abstract class FooClass
 	 * @param string|int Description
 	 * @param \Traversable|string[]
 	 */
-	public function parametersWithoutTypeHintAndWithAnnotationWithoutParameterName($a, \Traversable $b)
+	public function parametersWithoutTypeHintAndWithAnnotationWithoutParameterName($a, \Traversable $b): void
 	{
 	}
 
@@ -450,28 +450,28 @@ abstract class FooClass
 	 * @param \Traversable|string[]
 	 * @param float $c
 	 */
-	public function oneParameterWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, \Traversable $b, float $c)
+	public function oneParameterWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, \Traversable $b, float $c): void
 	{
 	}
 
 	/**
 	 * @param string $a A
 	 */
-	public function withParameterDescriptionWithParameterNameInAnnotation(string $a)
+	public function withParameterDescriptionWithParameterNameInAnnotation(string $a): void
 	{
 	}
 
 	/**
 	 * @param string ...$a A
 	 */
-	public function varadicWithParameterDescriptionWithParameterNameInAnnotation(string ...$a)
+	public function varadicWithParameterDescriptionWithParameterNameInAnnotation(string ...$a): void
 	{
 	}
 
 	/**
 	 * @param string A
 	 */
-	public function withParameterDescriptionWithoutParameterNameInAnnotation(string $a)
+	public function withParameterDescriptionWithoutParameterNameInAnnotation(string $a): void
 	{
 	}
 
@@ -494,7 +494,7 @@ abstract class FooClass
 	/**
 	 * @param \SomethingElse $a
 	 */
-	public function withMoreSpecificParameterAnnotation(\Something $a)
+	public function withMoreSpecificParameterAnnotation(\Something $a): void
 	{
 	}
 
@@ -517,14 +517,14 @@ abstract class FooClass
 	/**
 	 * @param bool[][]|array[] $a
 	 */
-	private function multidimensionalArrayParameter(array $a)
+	private function multidimensionalArrayParameter(array $a): void
 	{
 	}
 
 	/**
 	 * @param \Traversable[]|mixed[][] $a
 	 */
-	private function multidimensionalTraversable(array $a)
+	private function multidimensionalTraversable(array $a): void
 	{
 	}
 
@@ -546,7 +546,7 @@ abstract class FooClass
 	/**
 	 * @param int[][]|array[]|null $a
 	 */
-	private function nullableMultidimensionalArrayParameter($a)
+	private function nullableMultidimensionalArrayParameter($a): void
 	{
 	}
 
@@ -554,13 +554,13 @@ abstract class FooClass
 	 * @param
 	 * @return
 	 */
-	abstract public function invalidAnnotations();
+	abstract public function invalidAnnotations(): void;
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableParameterTypeHintSpecification
 	 * @param string|array $a
 	 */
-	public function mixedContainingTraversable($a)
+	public function mixedContainingTraversable($a): void
 	{
 	}
 
@@ -581,7 +581,7 @@ abstract class FooClass
 	/**
 	 * @param \Doctrine\Common\Collections\ArrayCollection|mixed[] $a
 	 */
-	private function partialUseTraversableParameter(Doctrine\Common\Collections\ArrayCollection $a)
+	private function partialUseTraversableParameter(Doctrine\Common\Collections\ArrayCollection $a): void
 	{
 
 	}
@@ -602,7 +602,7 @@ abstract class FooClass
 	/**
 	 * @param DoctrineCollections\ArrayCollection|mixed[] $a
 	 */
-	private function partialUseWithAliasTraversableParameter(DoctrineCollections\ArrayCollection $a)
+	private function partialUseWithAliasTraversableParameter(DoctrineCollections\ArrayCollection $a): void
 	{
 
 	}
@@ -657,7 +657,7 @@ abstract class FooClass
 	/**
 	 * @Security("is_granted('ROLE_ADMIN')")
 	 */
-	public function usefullSymfonySecurityAnnotation()
+	public function usefullSymfonySecurityAnnotation(): void
 	{
 
 	}

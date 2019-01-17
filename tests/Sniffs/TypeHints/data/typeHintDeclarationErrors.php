@@ -8,42 +8,42 @@ use Doctrine\Common\Collections as DoctrineCollections;
 abstract class FooClass
 {
 
-	public function parametersWithoutTypeHints($a)
+	public function parametersWithoutTypeHints($a): void
 	{
 	}
 
 	/**
 	 * @see https://www.slevomat.cz
 	 */
-	public function parametersWithoutTypeHintsAndWithDocComment($a)
+	public function parametersWithoutTypeHintsAndWithDocComment($a): void
 	{
 	}
 
 	/**
 	 * @param string $a
 	 */
-	public function parameterWithoutTypeHintAndWithSimpleParamAnnotation($a)
+	public function parameterWithoutTypeHintAndWithSimpleParamAnnotation($a): void
 	{
 	}
 
 	/**
 	 * @param string|null $a
 	 */
-	public function parameterWithoutTypeHintAndWithSimpleNullableParamAnnotation($a)
+	public function parameterWithoutTypeHintAndWithSimpleNullableParamAnnotation($a): void
 	{
 	}
 
 	/**
 	 * @param string[] $a
 	 */
-	public function parameterWithoutTypeHintAndWithArrayAnnotation($a)
+	public function parameterWithoutTypeHintAndWithArrayAnnotation($a): void
 	{
 	}
 
 	/**
 	 * @param \FooClass[]|\Traversable $a
 	 */
-	public function parameterWithoutTypeHintAndWithTraversableAnnotation($a)
+	public function parameterWithoutTypeHintAndWithTraversableAnnotation($a): void
 	{
 	}
 
@@ -95,7 +95,7 @@ abstract class FooClass
 	/**
 	 * @param string $a
 	 */
-	public function uselessDocCommentBecauseOfParameterHint(string $a)
+	public function uselessDocCommentBecauseOfParameterHint(string $a): void
 	{
 	}
 
@@ -119,13 +119,13 @@ abstract class FooClass
 	/**
 	 * @param mixed[] $a
 	 */
-	abstract public function traversableMixedParameterTypeHint($a);
+	abstract public function traversableMixedParameterTypeHint($a): void;
 
 	/**
 	 * @param string Description
 	 * @param bool|null
 	 */
-	public function parametersWithoutTypeHintAndWithAnnotationWithoutParameterName($a, $b)
+	public function parametersWithoutTypeHintAndWithAnnotationWithoutParameterName($a, $b): void
 	{
 	}
 
@@ -134,7 +134,7 @@ abstract class FooClass
 	 * @param bool
 	 * @param float $c
 	 */
-	public function oneParameterWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, $b, float $c)
+	public function oneParameterWithoutTypeHintAndWithAnnotationWithoutParameterName(string $a, $b, float $c): void
 	{
 	}
 
@@ -166,27 +166,27 @@ abstract class FooClass
 		return [];
 	}
 
-	public function traversableArrayParameterWithoutAnnotation(array $a)
+	public function traversableArrayParameterWithoutAnnotation(array $a): void
 	{
 	}
 
-	private function traversableIterableParameterWithoutAnnotation(iterable $a)
+	private function traversableIterableParameterWithoutAnnotation(iterable $a): void
 	{
 	}
 
-	abstract public function traversableTraversableParameterWithoutAnnotation(\Traversable $a);
+	abstract public function traversableTraversableParameterWithoutAnnotation(\Traversable $a): void;
 
 	/**
 	 * @param array $a
 	 */
-	public function traversableParameterWithUnsufficientSingleAnnotation(array $a)
+	public function traversableParameterWithUnsufficientSingleAnnotation(array $a): void
 	{
 	}
 
 	/**
 	 * @param array|iterable|\Traversable $a
 	 */
-	public function traversableParameterWithUnsufficientMultipleAnnotation(iterable $a)
+	public function traversableParameterWithUnsufficientMultipleAnnotation(iterable $a): void
 	{
 	}
 
@@ -207,7 +207,7 @@ abstract class FooClass
 	/**
 	 * @param array|null $a
 	 */
-	public function traversableNullableParameter($a)
+	public function traversableNullableParameter($a): void
 	{
 	}
 
@@ -238,28 +238,28 @@ abstract class FooClass
 	/**
 	 * @param \Something $a
 	 */
-	public function parameterTypeHintEqualsAnnotationBothFullyQualified(\Something $a)
+	public function parameterTypeHintEqualsAnnotationBothFullyQualified(\Something $a): void
 	{
 	}
 
 	/**
 	 * @param \AnyNamespace\Anything $a
 	 */
-	public function parameterTypeHintEqualsAnnotationWithOnlyAnnotationFullyQualified(Anything $a)
+	public function parameterTypeHintEqualsAnnotationWithOnlyAnnotationFullyQualified(Anything $a): void
 	{
 	}
 
 	/**
 	 * @param Anything $a
 	 */
-	public function parameterTypeHintEqualsAnnotationWithOnlyTypeHintFullyQualified(\AnyNamespace\Anything $a)
+	public function parameterTypeHintEqualsAnnotationWithOnlyTypeHintFullyQualified(\AnyNamespace\Anything $a): void
 	{
 	}
 
 	/**
 	 * @param \DateTime|\DateTimeImmutable $a
 	 */
-	public function multipleParameterTypeHints(\DateTimeInterface $a)
+	public function multipleParameterTypeHints(\DateTimeInterface $a): void
 	{
 	}
 
@@ -282,14 +282,14 @@ abstract class FooClass
 	/**
 	 * @param array[] $a
 	 */
-	private function multidimensionalArrayParameter(array $a)
+	private function multidimensionalArrayParameter(array $a): void
 	{
 	}
 
 	/**
 	 * @param \Traversable[] $a
 	 */
-	private function multidimensionalTraversable(array $a)
+	private function multidimensionalTraversable(array $a): void
 	{
 	}
 
@@ -320,7 +320,7 @@ abstract class FooClass
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param array[]|null $a
 	 */
-	private function nullableMultidimensionalArrayParameter($a)
+	private function nullableMultidimensionalArrayParameter($a): void
 	{
 	}
 
@@ -329,7 +329,7 @@ abstract class FooClass
 
 	}
 
-	public function usedTraversableParameter(Traversable $a)
+	public function usedTraversableParameter(Traversable $a): void
 	{
 
 	}
@@ -345,7 +345,7 @@ abstract class FooClass
 	/**
 	 * @param \Doctrine\Common\Collections\ArrayCollection $a
 	 */
-	private function partialUseTraversableParameter(Doctrine\Common\Collections\ArrayCollection $a)
+	private function partialUseTraversableParameter(Doctrine\Common\Collections\ArrayCollection $a): void
 	{
 
 	}
@@ -366,7 +366,7 @@ abstract class FooClass
 	/**
 	 * @param DoctrineCollections\ArrayCollection $a
 	 */
-	private function partialUseWithAliasTraversableParameter(DoctrineCollections\ArrayCollection $a)
+	private function partialUseWithAliasTraversableParameter(DoctrineCollections\ArrayCollection $a): void
 	{
 
 	}
@@ -383,9 +383,77 @@ abstract class FooClass
 	 * @param string $a
 	 * @param int    $b
 	 */
-	public function uselessAlignedParameters(string $a, int $b)
+	public function uselessAlignedParameters(string $a, int $b): void
 	{
 
 	}
 
 }
+
+function returnsVoid()
+{
+	return;
+}
+
+function returnsNothing()
+{
+}
+
+/**
+ * @return void
+ */
+function voidAnnotation()
+{
+
+}
+
+
+abstract class Foo
+{
+
+	public function __construct()
+	{
+
+	}
+
+	public function __destruct()
+	{
+
+	}
+
+	public function __clone()
+	{
+
+	}
+
+	public function returnsVoid()
+	{
+		return;
+	}
+
+	protected function returnsNothing()
+	{
+	}
+
+	/**
+	 * @return void
+	 */
+	public abstract function voidAnnotation();
+
+}
+
+function () {
+
+};
+
+function () {
+	return;
+};
+
+function (): bool {
+
+};
+
+function () use (& $foo): \Foo\Bar {
+
+};

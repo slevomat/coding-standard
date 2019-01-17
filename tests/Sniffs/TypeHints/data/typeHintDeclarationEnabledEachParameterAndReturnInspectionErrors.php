@@ -15,7 +15,7 @@ abstract class FooClass
 	/**
 	 * @param int $foo
 	 */
-	public function withUselessDocCommentHavingUselessParameter(int $foo)
+	public function withUselessDocCommentHavingUselessParameter(int $foo): void
 	{
 	}
 
@@ -50,7 +50,7 @@ abstract class FooClass
 	 * Test
 	 * @param int $foo
 	 */
-	public function withDescriptionAndUselessParameter(int $foo)
+	public function withDescriptionAndUselessParameter(int $foo): void
 	{
 	}
 
@@ -66,7 +66,7 @@ abstract class FooClass
 	 * @useful test
 	 * @param int $foo
 	 */
-	public function withUsefulAnnotationAndUselessParameter(int $foo)
+	public function withUsefulAnnotationAndUselessParameter(int $foo): void
 	{
 	}
 

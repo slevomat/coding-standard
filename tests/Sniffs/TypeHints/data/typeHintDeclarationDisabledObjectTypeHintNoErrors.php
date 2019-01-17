@@ -13,9 +13,8 @@ abstract class FooClass
 	/**
 	 * @param null|object $a
 	 */
-	public function withNullableParameterTypeHint($a)
+	public function withNullableParameterTypeHint($a): void
 	{
-
 	}
 
 	/**
@@ -31,7 +30,7 @@ abstract class FooClass
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param object|null $a
 	 */
-	public function withParameterTypeHintSuppress($a)
+	public function withParameterTypeHintSuppress($a): void
 	{
 	}
 
@@ -39,7 +38,7 @@ abstract class FooClass
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.UselessDocComment
 	 * @param object|null $a
 	 */
-	public function withNullableParameterTypeHintAndSuppressedUselessDocComment(?object $a)
+	public function withNullableParameterTypeHintAndSuppressedUselessDocComment(?object $a): void
 	{
 	}
 
