@@ -21,12 +21,7 @@ class TypeHintDeclarationSniffTest extends TestCase
 				'\UsedNamespace\UsedClass',
 				'\Doctrine\Common\Collections\ArrayCollection',
 			],
-			'usefulAnnotations' => [
-				'@see',
-				'@Assert\Callback',
-				'@Something\\',
-				'@Security',
-			],
+			'allAnnotationsAreUseful' => true,
 		]);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -188,7 +183,7 @@ class TypeHintDeclarationSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/typeHintDeclarationEnabledEachParameterAndReturnInspectionErrors.php', [
 			'enableObjectTypeHint' => false,
-			'usefulAnnotations' => ['@useful'],
+			'allAnnotationsAreUseful' => true,
 			'enableEachParameterAndReturnInspection' => true,
 		]);
 
@@ -252,7 +247,7 @@ class TypeHintDeclarationSniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/fixableEnableEachParameterAndReturnInspection.php', [
 			'enableObjectTypeHint' => false,
 			'enableEachParameterAndReturnInspection' => true,
-			'usefulAnnotations' => ['@useful'],
+			'allAnnotationsAreUseful' => true,
 		], [TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT, TypeHintDeclarationSniff::CODE_USELESS_PARAMETER_ANNOTATION, TypeHintDeclarationSniff::CODE_USELESS_RETURN_ANNOTATION]);
 
 		self::assertAllFixedInFile($report);

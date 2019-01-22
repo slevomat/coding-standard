@@ -43,7 +43,6 @@ use function sprintf;
 use function stripos;
 use function strpos;
 use function strtolower;
-use function substr;
 
 class TypeHintDeclarationSniff implements Sniff
 {
@@ -79,17 +78,11 @@ class TypeHintDeclarationSniff implements Sniff
 	/** @var string[] */
 	public $traversableTypeHints = [];
 
-	/** @var string[] */
-	public $usefulAnnotations = [];
-
 	/** @var bool */
 	public $allAnnotationsAreUseful = false;
 
 	/** @var int[]|null [string => int] */
 	private $normalizedTraversableTypeHints;
-
-	/** @var string[]|null */
-	private $normalizedUsefulAnnotations;
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
@@ -628,20 +621,6 @@ class TypeHintDeclarationSniff implements Sniff
 				$containsUsefulInformation = true;
 				break;
 			}
-
-			foreach ($this->getNormalizedUsefulAnnotations() as $usefulAnnotation) {
-				if ($annotation->getName() === $usefulAnnotation) {
-					$containsUsefulInformation = true;
-					break;
-				}
-
-				if (substr($usefulAnnotation, -1) !== '\\' || strpos($annotation->getName(), $usefulAnnotation) !== 0) {
-					continue;
-				}
-
-				$containsUsefulInformation = true;
-				break;
-			}
 		}
 
 		$isWholeDocCommentUseless = !$containsUsefulInformation
@@ -917,17 +896,6 @@ class TypeHintDeclarationSniff implements Sniff
 			}, SniffSettingsHelper::normalizeArray($this->traversableTypeHints)));
 		}
 		return $this->normalizedTraversableTypeHints;
-	}
-
-	/**
-	 * @return string[]
-	 */
-	private function getNormalizedUsefulAnnotations(): array
-	{
-		if ($this->normalizedUsefulAnnotations === null) {
-			$this->normalizedUsefulAnnotations = SniffSettingsHelper::normalizeArray($this->usefulAnnotations);
-		}
-		return $this->normalizedUsefulAnnotations;
 	}
 
 	private function getFunctionTypeLabel(File $phpcsFile, int $functionPointer): string
