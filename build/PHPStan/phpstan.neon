@@ -11,6 +11,8 @@ parameters:
 		- */tests/*/data/*
 	ignoreErrors:
 		- "#Call to function array_key_exists\\(\\) with '(scope_(opener|closer)|parenthesis_(owner|opener|closer)|nested_parenthesis)'#"
+		- '#Return type \(array\) of method SlevomatCodingStandard\\Sniffs\\.+::register\(\) should be covariant with return type#'
+		- '#Else branch is unreachable because ternary operator condition is always true#'
 
 services:
 	-

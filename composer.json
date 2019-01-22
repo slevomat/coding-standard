@@ -15,10 +15,10 @@
 	"require-dev": {
 		"jakub-onderka/php-parallel-lint": "1.0.0",
 		"phing/phing": "2.16.1",
-		"phpstan/phpstan": "0.10.7",
-		"phpstan/phpstan-phpunit": "0.10",
-		"phpstan/phpstan-strict-rules": "0.10.1",
-		"phpunit/phpunit": "7.5.1"
+		"phpstan/phpstan": "0.11.1",
+		"phpstan/phpstan-phpunit": "0.11",
+		"phpstan/phpstan-strict-rules": "0.11",
+		"phpunit/phpunit": "7.5.2"
 	},
 	"autoload": {
 		"psr-4": {

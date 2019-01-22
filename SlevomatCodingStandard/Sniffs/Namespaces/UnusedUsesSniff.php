@@ -146,6 +146,7 @@ class UnusedUsesSniff implements Sniff
 					$nameAsReferencedInFile = $useStatement->getNameAsReferencedInFile();
 					$uniqueId = UseStatement::getUniqueId($useStatement->getType(), $nameAsReferencedInFile);
 
+					/** @var string $annotationName */
 					foreach ($annotations as $annotationName => $annotationsByName) {
 						if (in_array($annotationName, $this->getIgnoredAnnotations(), true)) {
 							continue;
