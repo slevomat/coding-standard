@@ -133,3 +133,16 @@ function assigmentInCondition() {
 	}
 
 }
+
+class Foo
+{
+    protected static $bar = [];
+
+    public static function popBar() : array
+    {
+        $bar = self::$bar;
+        self::$bar = [];
+
+        return $bar;
+    }
+}
