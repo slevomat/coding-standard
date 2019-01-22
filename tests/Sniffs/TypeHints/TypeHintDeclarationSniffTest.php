@@ -13,7 +13,6 @@ class TypeHintDeclarationSniffTest extends TestCase
 	public function testNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/typeHintDeclarationNoErrors.php', [
-			'enableNullableTypeHints' => false,
 			'enableObjectTypeHint' => false,
 			'traversableTypeHints' => [
 				Traversable::class,
@@ -35,7 +34,6 @@ class TypeHintDeclarationSniffTest extends TestCase
 	public function testErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/typeHintDeclarationErrors.php', [
-			'enableNullableTypeHints' => false,
 			'enableObjectTypeHint' => false,
 			'traversableTypeHints' => [
 				Traversable::class,
@@ -44,7 +42,7 @@ class TypeHintDeclarationSniffTest extends TestCase
 			],
 		]);
 
-		self::assertSame(73, $report->getErrorCount());
+		self::assertSame(75, $report->getErrorCount());
 
 		self::assertSniffError($report, 11, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 		self::assertSniffError($report, 18, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
@@ -65,6 +63,8 @@ class TypeHintDeclarationSniffTest extends TestCase
 		self::assertSniffError($report, 82, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		self::assertSniffError($report, 90, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		self::assertSniffError($report, 114, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		self::assertSniffError($report, 202, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		self::assertSniffError($report, 314, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		self::assertSniffError($report, 393, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		self::assertSniffError($report, 398, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		self::assertSniffError($report, 405, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
@@ -131,7 +131,6 @@ class TypeHintDeclarationSniffTest extends TestCase
 	public function testVoidAndIterable(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/voidAndIterableTypeHintDeclaration.php', [
-			'enableNullableTypeHints' => false,
 			'enableObjectTypeHint' => false,
 			'traversableTypeHints' => [
 				Traversable::class,
@@ -145,19 +144,17 @@ class TypeHintDeclarationSniffTest extends TestCase
 		self::assertSniffError($report, 35, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
 	}
 
-	public function testEnabledNullableTypeHintsNoErrors(): void
+	public function testNullableTypeHintsNoErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/typeHintDeclarationEnabledNullableTypeHintsNoErrors.php', [
-			'enableNullableTypeHints' => true,
+		$report = self::checkFile(__DIR__ . '/data/typeHintDeclarationNullableTypeHintsNoErrors.php', [
 			'enableObjectTypeHint' => false,
 		]);
 		self::assertNoSniffErrorInFile($report);
 	}
 
-	public function testEnabledNullableTypeHintsErrors(): void
+	public function testNullableTypeHintsErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/typeHintDeclarationEnabledNullableTypeHintsErrors.php', [
-			'enableNullableTypeHints' => true,
+		$report = self::checkFile(__DIR__ . '/data/typeHintDeclarationNullableTypeHintsErrors.php', [
 			'enableObjectTypeHint' => false,
 		]);
 
@@ -179,32 +176,9 @@ class TypeHintDeclarationSniffTest extends TestCase
 		self::assertSniffError($report, 107, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
 	}
 
-	public function testDisabledNullableTypeHintsNoErrors(): void
-	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/typeHintDeclarationDisabledNullableTypeHintsNoErrors.php', [
-			'enableNullableTypeHints' => false,
-			'enableObjectTypeHint' => false,
-		]));
-	}
-
-	public function testDisabledNullableTypeHintsErrors(): void
-	{
-		$report = self::checkFile(__DIR__ . '/data/typeHintDeclarationDisabledNullableTypeHintsErrors.php', [
-			'enableNullableTypeHints' => false,
-			'enableObjectTypeHint' => false,
-		]);
-
-		self::assertSame(3, $report->getErrorCount());
-
-		self::assertSniffError($report, 11, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
-		self::assertSniffError($report, 19, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
-		self::assertSniffError($report, 27, TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT);
-	}
-
 	public function testEnabledEachParameterAndReturnInspectionNoErrors(): void
 	{
 		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/typeHintDeclarationEnabledEachParameterAndReturnInspectionNoErrors.php', [
-			'enableNullableTypeHints' => false,
 			'enableObjectTypeHint' => false,
 			'enableEachParameterAndReturnInspection' => true,
 		]));
@@ -213,7 +187,6 @@ class TypeHintDeclarationSniffTest extends TestCase
 	public function testEnabledEachParameterAndReturnInspectionErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/typeHintDeclarationEnabledEachParameterAndReturnInspectionErrors.php', [
-			'enableNullableTypeHints' => false,
 			'enableObjectTypeHint' => false,
 			'usefulAnnotations' => ['@useful'],
 			'enableEachParameterAndReturnInspection' => true,
@@ -242,7 +215,6 @@ class TypeHintDeclarationSniffTest extends TestCase
 	public function testFixableReturnTypeHints(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableReturnTypeHints.php', [
-			'enableNullableTypeHints' => true,
 			'enableObjectTypeHint' => false,
 			'traversableTypeHints' => [
 				ArrayIterator::class,
@@ -253,10 +225,9 @@ class TypeHintDeclarationSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
-	public function testFixableParameterTypeHintsWithEnabledNullableTypeHints(): void
+	public function testFixableParameterTypeHintsWithNullableTypeHints(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableParameterTypeHintsWithEnabledNullableTypeHints.php', [
-			'enableNullableTypeHints' => true,
+			$report = self::checkFile(__DIR__ . '/data/fixableParameterTypeHintsWithNullableTypeHints.php', [
 			'enableObjectTypeHint' => false,
 			'traversableTypeHints' => [
 				ArrayIterator::class,
@@ -267,20 +238,9 @@ class TypeHintDeclarationSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
-	public function testFixableParameterTypeHintsWithDisabledNullableTypeHints(): void
-	{
-		$report = self::checkFile(__DIR__ . '/data/fixableParameterTypeHintsWithDisabledNullableTypeHints.php', [
-			'enableNullableTypeHints' => false,
-			'enableObjectTypeHint' => false,
-		], [TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT]);
-
-		self::assertAllFixedInFile($report);
-	}
-
 	public function testFixableUselessDocComments(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableUselessDocComments.php', [
-			'enableNullableTypeHints' => true,
 			'enableObjectTypeHint' => false,
 		], [TypeHintDeclarationSniff::CODE_USELESS_DOC_COMMENT]);
 
@@ -290,7 +250,6 @@ class TypeHintDeclarationSniffTest extends TestCase
 	public function testFixableEnableEachParameterAndReturnInspection(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableEnableEachParameterAndReturnInspection.php', [
-			'enableNullableTypeHints' => false,
 			'enableObjectTypeHint' => false,
 			'enableEachParameterAndReturnInspection' => true,
 			'usefulAnnotations' => ['@useful'],
@@ -302,7 +261,6 @@ class TypeHintDeclarationSniffTest extends TestCase
 	public function testEnabledObjectTypeHintNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/typeHintDeclarationEnabledObjectTypeHintNoErrors.php', [
-			'enableNullableTypeHints' => true,
 			'enableObjectTypeHint' => true,
 		]);
 		self::assertNoSniffErrorInFile($report);
@@ -311,7 +269,6 @@ class TypeHintDeclarationSniffTest extends TestCase
 	public function testEnabledObjectTypeHintErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/typeHintDeclarationEnabledObjectTypeHintErrors.php', [
-			'enableNullableTypeHints' => true,
 			'enableObjectTypeHint' => true,
 		]);
 
@@ -324,7 +281,6 @@ class TypeHintDeclarationSniffTest extends TestCase
 	public function testDisabledObjectTypeHintNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/typeHintDeclarationDisabledObjectTypeHintNoErrors.php', [
-			'enableNullableTypeHints' => true,
 			'enableObjectTypeHint' => false,
 		]);
 		self::assertNoSniffErrorInFile($report);

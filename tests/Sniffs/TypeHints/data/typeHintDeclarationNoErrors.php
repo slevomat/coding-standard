@@ -300,7 +300,7 @@ abstract class FooClass
 	/**
 	 * @return string[]|null
 	 */
-	public function returnsNullableArrayOfStrings()
+	public function returnsNullableArrayOfStrings(): ?array
 	{
 		return [];
 	}

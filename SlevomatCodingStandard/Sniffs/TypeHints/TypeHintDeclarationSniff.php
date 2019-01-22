@@ -70,12 +70,6 @@ class TypeHintDeclarationSniff implements Sniff
 
 	public const CODE_USELESS_DOC_COMMENT = 'UselessDocComment';
 
-	/**
-	 * @deprecated
-	 * @var bool
-	 */
-	public $enableNullableTypeHints = true;
-
 	/** @var bool */
 	public $enableObjectTypeHint = PHP_VERSION_ID >= 70200;
 
@@ -312,14 +306,7 @@ class TypeHintDeclarationSniff implements Sniff
 				$beforeParameterPointer = $previousPointer;
 			} while (true);
 
-			if ($this->enableNullableTypeHints) {
-				$phpcsFile->fixer->addContentBefore($beforeParameterPointer, sprintf('%s%s ', ($nullableParameterTypeHint ? '?' : ''), $parameterTypeHint));
-			} else {
-				$phpcsFile->fixer->addContentBefore($beforeParameterPointer, sprintf('%s ', $parameterTypeHint));
-				if ($nullableParameterTypeHint && $tokens[TokenHelper::findNextEffective($phpcsFile, $parameterPointer + 1)]['code'] !== T_EQUAL) {
-					$phpcsFile->fixer->addContent($parameterPointer, ' = null');
-				}
-			}
+			$phpcsFile->fixer->addContentBefore($beforeParameterPointer, sprintf('%s%s ', ($nullableParameterTypeHint ? '?' : ''), $parameterTypeHint));
 
 			$phpcsFile->fixer->endChangeset();
 		}
@@ -466,10 +453,6 @@ class TypeHintDeclarationSniff implements Sniff
 			}
 		} elseif ($this->definitionContainsJustTwoTypeHints($returnTypeHintDefinition)) {
 			if ($this->definitionContainsNullTypeHint($returnTypeHintDefinition)) {
-				if (!$this->enableNullableTypeHints) {
-					return;
-				}
-
 				$returnTypeHintDefinitionParts = explode('|', $returnTypeHintDefinition);
 				$possibleReturnTypeHint = strtolower($returnTypeHintDefinitionParts[0]) === 'null' ? $returnTypeHintDefinitionParts[1] : $returnTypeHintDefinitionParts[0];
 				$nullableReturnTypeHint = true;
@@ -1005,7 +988,7 @@ class TypeHintDeclarationSniff implements Sniff
 			return false;
 		}
 
-		if ($this->enableNullableTypeHints && $this->isTypeHintDefinitionCompoundOfNull($returnTypeHintDefinition)) {
+		if ($this->isTypeHintDefinitionCompoundOfNull($returnTypeHintDefinition)) {
 			return $this->typeHintEqualsAnnotation($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint(), $this->getTypeFromNullableTypeHintDefinition($returnTypeHintDefinition));
 		}
 
