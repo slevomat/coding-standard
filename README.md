@@ -46,7 +46,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_
 
 Sniff provides the following settings:
 
-* `enableObjectTypeHint`: enforces to transform `@param object` or `@return object` into native `object` typehint. It's on by default if you're on PHP 7.2+
+* **DEPRECATED** `enableObjectTypeHint`: enforces to transform `@param object` or `@return object` into native `object` typehint. It's on by default if you're on PHP 7.2+
 * `traversableTypeHints`: enforces which typehints must have specified contained type. E. g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
 * `allAnnotationsAreUseful`: phpDoc is useful if it contain any annotation.
 * `enableEachParameterAndReturnInspection`: enables inspection and fixing of `@param` and `@return` annotations separately. Useful when you only want to document parameters or return values that could not be expressed natively (i.e. member types of `array` or `Traversable`).

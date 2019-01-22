@@ -222,7 +222,7 @@ class TypeHintDeclarationSniffTest extends TestCase
 
 	public function testFixableParameterTypeHintsWithNullableTypeHints(): void
 	{
-			$report = self::checkFile(__DIR__ . '/data/fixableParameterTypeHintsWithNullableTypeHints.php', [
+		$report = self::checkFile(__DIR__ . '/data/fixableParameterTypeHintsWithNullableTypeHints.php', [
 			'enableObjectTypeHint' => false,
 			'traversableTypeHints' => [
 				ArrayIterator::class,

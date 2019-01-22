@@ -25,7 +25,6 @@ use const T_DOC_COMMENT_STRING;
 use const T_DOC_COMMENT_TAG;
 use const T_DOC_COMMENT_WHITESPACE;
 use const T_ELLIPSIS;
-use const T_EQUAL;
 use const T_FUNCTION;
 use const T_VARIABLE;
 use function array_flip;
@@ -69,7 +68,10 @@ class TypeHintDeclarationSniff implements Sniff
 
 	public const CODE_USELESS_DOC_COMMENT = 'UselessDocComment';
 
-	/** @var bool */
+	/**
+	 * @deprecated
+	 * @var bool
+	 */
 	public $enableObjectTypeHint = PHP_VERSION_ID >= 70200;
 
 	/** @var bool */
