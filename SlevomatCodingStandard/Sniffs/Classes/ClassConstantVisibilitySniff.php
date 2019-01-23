@@ -23,12 +23,6 @@ class ClassConstantVisibilitySniff implements Sniff
 
 	public const CODE_MISSING_CONSTANT_VISIBILITY = 'MissingConstantVisibility';
 
-	/**
-	 * @deprecated
-	 * @var bool
-	 */
-	public $enabled = true;
-
 	/** @var bool */
 	public $fixable = false;
 
@@ -37,10 +31,6 @@ class ClassConstantVisibilitySniff implements Sniff
 	 */
 	public function register(): array
 	{
-		if (!$this->enabled) {
-			return [];
-		}
-
 		return [
 			T_CONST,
 		];

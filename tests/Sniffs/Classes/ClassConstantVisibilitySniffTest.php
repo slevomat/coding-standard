@@ -9,9 +9,7 @@ class ClassConstantVisibilitySniffTest extends TestCase
 
 	public function testErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/classWithConstants.php', [
-			'enabled' => true,
-		]);
+		$report = self::checkFile(__DIR__ . '/data/classWithConstants.php');
 
 		self::assertSame(2, $report->getErrorCount());
 
@@ -36,25 +34,13 @@ class ClassConstantVisibilitySniffTest extends TestCase
 
 	public function testNoClassConstants(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/noClassConstants.php', [
-			'enabled' => true,
-		]);
+		$report = self::checkFile(__DIR__ . '/data/noClassConstants.php');
 		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testNoClassConstantsWithNamespace(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/noClassConstantsWithNamespace.php', [
-			'enabled' => true,
-		]);
-		self::assertNoSniffErrorInFile($report);
-	}
-
-	public function testDisabledSniff(): void
-	{
-		$report = self::checkFile(__DIR__ . '/data/classWithConstants.php', [
-			'enabled' => false,
-		]);
+		$report = self::checkFile(__DIR__ . '/data/noClassConstantsWithNamespace.php');
 		self::assertNoSniffErrorInFile($report);
 	}
 
