@@ -23,20 +23,10 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 	public const CODE_NULLABILITY_SYMBOL_REQUIRED = 'NullabilitySymbolRequired';
 
 	/**
-	 * @deprecated
-	 * @var bool
-	 */
-	public $enabled = true;
-
-	/**
 	 * @return mixed[]
 	 */
 	public function register(): array
 	{
-		if (!$this->enabled) {
-			return [];
-		}
-
 		return [
 			T_FUNCTION,
 			T_CLOSURE,
