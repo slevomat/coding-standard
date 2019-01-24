@@ -71,10 +71,10 @@ class AlphabeticallySortedUsesSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
-	public function testFixablePsr12Compatible(): void
+	public function testFixableNotPsr12Compatible(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableAlphabeticalSortedUsesPsr12Compatible.php', [
-			'psr12Compatible' => true,
+		$report = self::checkFile(__DIR__ . '/data/fixableAlphabeticalSortedUsesNotPsr12Compatible.php', [
+			'psr12Compatible' => false,
 		], [AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER]);
 		self::assertAllFixedInFile($report);
 	}

@@ -28,7 +28,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 	public const CODE_INCORRECT_ORDER = 'IncorrectlyOrderedUses';
 
 	/** @var bool */
-	public $psr12Compatible = false;
+	public $psr12Compatible = true;
 
 	/** @var bool */
 	public $caseSensitive = false;
