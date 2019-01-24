@@ -19,6 +19,7 @@ use const T_CONCAT_EQUAL;
 use const T_DIV_EQUAL;
 use const T_DO;
 use const T_DOC_COMMENT_CLOSE_TAG;
+use const T_DOUBLE_COLON;
 use const T_ELSEIF;
 use const T_EQUAL;
 use const T_IF;
@@ -184,6 +185,11 @@ class UselessVariableSniff implements Sniff
 			}
 
 			if ($tokens[$i]['content'] !== $variableName) {
+				continue;
+			}
+
+			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $i - 1);
+			if ($tokens[$previousPointer]['code'] === T_DOUBLE_COLON) {
 				continue;
 			}
 
