@@ -3,13 +3,6 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
-use const T_DOUBLE_COLON;
-use const T_DOUBLE_QUOTED_STRING;
-use const T_HEREDOC;
-use const T_OPEN_PARENTHESIS;
-use const T_OPEN_TAG;
-use const T_STRING;
-use const T_VARIABLE;
 use function count;
 use function in_array;
 use function preg_match;
@@ -17,6 +10,13 @@ use function preg_quote;
 use function strlen;
 use function strtolower;
 use function substr;
+use const T_DOUBLE_COLON;
+use const T_DOUBLE_QUOTED_STRING;
+use const T_HEREDOC;
+use const T_OPEN_PARENTHESIS;
+use const T_OPEN_TAG;
+use const T_STRING;
+use const T_VARIABLE;
 
 /**
  * @internal

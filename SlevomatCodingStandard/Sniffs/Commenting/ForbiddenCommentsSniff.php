@@ -7,12 +7,12 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
-use const T_DOC_COMMENT_OPEN_TAG;
 use function array_key_exists;
 use function is_array;
 use function preg_match;
 use function preg_replace;
 use function sprintf;
+use const T_DOC_COMMENT_OPEN_TAG;
 
 class ForbiddenCommentsSniff implements Sniff
 {

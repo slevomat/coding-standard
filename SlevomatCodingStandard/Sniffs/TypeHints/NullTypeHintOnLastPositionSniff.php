@@ -6,7 +6,6 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use const T_DOC_COMMENT_OPEN_TAG;
 use function array_map;
 use function array_merge;
 use function array_search;
@@ -18,6 +17,7 @@ use function preg_match;
 use function preg_replace_callback;
 use function preg_split;
 use function strtolower;
+use const T_DOC_COMMENT_OPEN_TAG;
 
 class NullTypeHintOnLastPositionSniff implements Sniff
 {

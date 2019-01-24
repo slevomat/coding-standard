@@ -9,11 +9,6 @@ use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use const T_CLASS;
-use const T_INTERFACE;
-use const T_NAMESPACE;
-use const T_STRING;
-use const T_TRAIT;
 use function count;
 use function explode;
 use function min;
@@ -22,6 +17,11 @@ use function str_replace;
 use function strcasecmp;
 use function ucfirst;
 use function uksort;
+use const T_CLASS;
+use const T_INTERFACE;
+use const T_NAMESPACE;
+use const T_STRING;
+use const T_TRAIT;
 
 class TypeNameMatchesFileNameSniff implements Sniff
 {

@@ -4,6 +4,18 @@ namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use function array_fill_keys;
+use function array_filter;
+use function array_keys;
+use function array_map;
+use function array_reverse;
+use function array_values;
+use function count;
+use function current;
+use function end;
+use function implode;
+use function in_array;
+use function key;
 use const T_ARRAY;
 use const T_ARRAY_CAST;
 use const T_BOOL_CAST;
@@ -46,18 +58,6 @@ use const T_TRUE;
 use const T_UNSET_CAST;
 use const T_VARIABLE;
 use const T_WHITESPACE;
-use function array_fill_keys;
-use function array_filter;
-use function array_keys;
-use function array_map;
-use function array_reverse;
-use function array_values;
-use function count;
-use function current;
-use function end;
-use function implode;
-use function in_array;
-use function key;
 
 class YodaHelper
 {

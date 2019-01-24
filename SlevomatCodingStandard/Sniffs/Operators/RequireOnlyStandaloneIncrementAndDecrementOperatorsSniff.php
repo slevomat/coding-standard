@@ -6,6 +6,8 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_key_exists;
+use function in_array;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CLOSE_PARENTHESIS;
 use const T_COLON;
@@ -16,8 +18,6 @@ use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_TAG;
 use const T_SEMICOLON;
 use const T_WHILE;
-use function array_key_exists;
-use function in_array;
 
 class RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff implements Sniff
 {

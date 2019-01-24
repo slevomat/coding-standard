@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function sprintf;
 use const T_BREAK;
 use const T_CONTINUE;
 use const T_ECHO;
@@ -21,7 +22,6 @@ use const T_THROW;
 use const T_WHITESPACE;
 use const T_YIELD;
 use const T_YIELD_FROM;
-use function sprintf;
 
 class LanguageConstructWithParenthesesSniff implements Sniff
 {

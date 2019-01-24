@@ -5,11 +5,11 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_reverse;
+use function current;
 use const T_CONTINUE;
 use const T_LNUMBER;
 use const T_SWITCH;
-use function array_reverse;
-use function current;
 
 class DisallowContinueWithoutIntegerOperandInSwitchSniff implements Sniff
 {

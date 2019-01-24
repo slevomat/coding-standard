@@ -4,13 +4,13 @@ namespace SlevomatCodingStandard\Helpers;
 
 use Generator;
 use PHP_CodeSniffer\Files\File;
+use function array_map;
+use function iterator_to_array;
+use function sprintf;
 use const T_ANON_CLASS;
 use const T_FINAL;
 use const T_STRING;
 use const T_USE;
-use function array_map;
-use function iterator_to_array;
-use function sprintf;
 
 class ClassHelper
 {

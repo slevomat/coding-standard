@@ -3,16 +3,16 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
-use const T_DOC_COMMENT_CLOSE_TAG;
-use const T_DOC_COMMENT_STAR;
-use const T_DOC_COMMENT_STRING;
-use const T_DOC_COMMENT_TAG;
-use const T_DOC_COMMENT_WHITESPACE;
 use function array_key_exists;
 use function in_array;
 use function preg_match;
 use function substr_count;
 use function trim;
+use const T_DOC_COMMENT_CLOSE_TAG;
+use const T_DOC_COMMENT_STAR;
+use const T_DOC_COMMENT_STRING;
+use const T_DOC_COMMENT_TAG;
+use const T_DOC_COMMENT_WHITESPACE;
 
 class AnnotationHelper
 {

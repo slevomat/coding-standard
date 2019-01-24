@@ -6,6 +6,10 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_keys;
+use function count;
+use function in_array;
+use function sprintf;
 use const T_ANON_CLASS;
 use const T_CLASS;
 use const T_CONST;
@@ -13,10 +17,6 @@ use const T_INTERFACE;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
-use function array_keys;
-use function count;
-use function in_array;
-use function sprintf;
 
 class ClassConstantVisibilitySniff implements Sniff
 {

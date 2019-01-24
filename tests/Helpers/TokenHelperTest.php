@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use function sprintf;
 use const T_CLASS;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
@@ -15,7 +16,6 @@ use const T_SEMICOLON;
 use const T_STRING;
 use const T_VARIABLE;
 use const T_WHITESPACE;
-use function sprintf;
 
 class TokenHelperTest extends TestCase
 {

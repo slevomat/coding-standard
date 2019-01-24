@@ -4,6 +4,12 @@ namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use function array_key_exists;
+use function array_merge;
+use function count;
+use function preg_replace;
+use function sprintf;
+use function strtolower;
 use const T_BITWISE_AND;
 use const T_BOOLEAN_AND;
 use const T_BOOLEAN_NOT;
@@ -22,12 +28,6 @@ use const T_LOGICAL_AND;
 use const T_LOGICAL_OR;
 use const T_LOGICAL_XOR;
 use const T_OPEN_PARENTHESIS;
-use function array_key_exists;
-use function array_merge;
-use function count;
-use function preg_replace;
-use function sprintf;
-use function strtolower;
 
 class ConditionHelper
 {

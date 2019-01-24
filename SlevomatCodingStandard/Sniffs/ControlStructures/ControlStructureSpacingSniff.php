@@ -9,6 +9,16 @@ use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Sniffs\Namespaces\UndefinedKeywordTokenException;
+use function array_key_exists;
+use function array_map;
+use function constant;
+use function count;
+use function defined;
+use function in_array;
+use function sprintf;
+use function strlen;
+use function substr;
+use function substr_count;
 use const T_BREAK;
 use const T_CASE;
 use const T_CATCH;
@@ -37,16 +47,6 @@ use const T_WHILE;
 use const T_WHITESPACE;
 use const T_YIELD;
 use const T_YIELD_FROM;
-use function array_key_exists;
-use function array_map;
-use function constant;
-use function count;
-use function defined;
-use function in_array;
-use function sprintf;
-use function strlen;
-use function substr;
-use function substr_count;
 
 class ControlStructureSpacingSniff implements Sniff
 {

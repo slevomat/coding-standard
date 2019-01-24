@@ -7,6 +7,11 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_key_exists;
+use function array_map;
+use function array_unique;
+use function count;
+use function in_array;
 use const T_ANON_CLASS;
 use const T_BOOLEAN_NOT;
 use const T_CASE;
@@ -45,11 +50,6 @@ use const T_UNSET;
 use const T_USE;
 use const T_VARIABLE;
 use const T_WHITESPACE;
-use function array_key_exists;
-use function array_map;
-use function array_unique;
-use function count;
-use function in_array;
 
 class UselessParenthesesSniff implements Sniff
 {

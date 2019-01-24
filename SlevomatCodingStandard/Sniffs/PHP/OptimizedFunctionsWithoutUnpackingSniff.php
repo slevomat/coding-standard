@@ -7,6 +7,9 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use function in_array;
+use function sprintf;
+use function substr;
 use const T_COMMA;
 use const T_ELLIPSIS;
 use const T_FUNCTION;
@@ -16,9 +19,6 @@ use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_TAG;
 use const T_STRING;
-use function in_array;
-use function sprintf;
-use function substr;
 
 class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
 {

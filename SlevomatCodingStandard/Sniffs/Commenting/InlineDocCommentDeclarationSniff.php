@@ -5,17 +5,17 @@ namespace SlevomatCodingStandard\Sniffs\Commenting;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function in_array;
+use function preg_match;
+use function sprintf;
+use function substr;
+use function trim;
 use const T_COMMENT;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_FOREACH;
 use const T_VARIABLE;
 use const T_WHILE;
 use const T_WHITESPACE;
-use function in_array;
-use function preg_match;
-use function sprintf;
-use function substr;
-use function trim;
 
 class InlineDocCommentDeclarationSniff implements Sniff
 {

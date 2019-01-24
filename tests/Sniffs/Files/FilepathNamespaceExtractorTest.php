@@ -3,8 +3,8 @@
 namespace SlevomatCodingStandard\Sniffs\Files;
 
 use SlevomatCodingStandard\Sniffs\TestCase;
-use const DIRECTORY_SEPARATOR;
 use function str_replace;
+use const DIRECTORY_SEPARATOR;
 
 class FilepathNamespaceExtractorTest extends TestCase
 {

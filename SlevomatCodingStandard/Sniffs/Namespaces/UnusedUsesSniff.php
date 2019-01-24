@@ -12,9 +12,6 @@ use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
-use const T_DOC_COMMENT_OPEN_TAG;
-use const T_OPEN_TAG;
-use const T_SEMICOLON;
 use function array_diff_key;
 use function array_merge;
 use function count;
@@ -24,6 +21,9 @@ use function preg_match_all;
 use function preg_quote;
 use function preg_split;
 use function sprintf;
+use const T_DOC_COMMENT_OPEN_TAG;
+use const T_OPEN_TAG;
+use const T_SEMICOLON;
 
 class UnusedUsesSniff implements Sniff
 {

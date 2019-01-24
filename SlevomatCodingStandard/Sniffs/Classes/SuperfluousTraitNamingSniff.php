@@ -5,10 +5,10 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ClassHelper;
-use const T_TRAIT;
 use function sprintf;
 use function strtolower;
 use function substr;
+use const T_TRAIT;
 
 class SuperfluousTraitNamingSniff implements Sniff
 {

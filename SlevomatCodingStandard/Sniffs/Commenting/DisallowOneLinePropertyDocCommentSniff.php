@@ -7,10 +7,10 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use const T_VARIABLE;
-use const T_WHITESPACE;
 use function rtrim;
 use function sprintf;
+use const T_VARIABLE;
+use const T_WHITESPACE;
 
 class DisallowOneLinePropertyDocCommentSniff implements Sniff
 {

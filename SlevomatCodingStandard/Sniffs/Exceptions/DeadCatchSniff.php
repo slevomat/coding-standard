@@ -7,9 +7,9 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\CatchHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use function in_array;
 use const T_CATCH;
 use const T_OPEN_TAG;
-use function in_array;
 
 class DeadCatchSniff implements Sniff
 {

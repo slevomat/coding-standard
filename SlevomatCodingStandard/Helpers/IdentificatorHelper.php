@@ -3,6 +3,8 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use function array_key_exists;
+use function in_array;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CLOSE_SQUARE_BRACKET;
 use const T_DOLLAR;
@@ -16,8 +18,6 @@ use const T_SELF;
 use const T_STATIC;
 use const T_STRING;
 use const T_VARIABLE;
-use function array_key_exists;
-use function in_array;
 
 class IdentificatorHelper
 {

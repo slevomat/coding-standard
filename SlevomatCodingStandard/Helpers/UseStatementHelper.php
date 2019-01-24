@@ -3,6 +3,10 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use function array_key_exists;
+use function array_merge;
+use function in_array;
+use function sprintf;
 use const T_ANON_CLASS;
 use const T_AS;
 use const T_COMMA;
@@ -10,10 +14,6 @@ use const T_OPEN_PARENTHESIS;
 use const T_SEMICOLON;
 use const T_STRING;
 use const T_USE;
-use function array_key_exists;
-use function array_merge;
-use function in_array;
-use function sprintf;
 
 class UseStatementHelper
 {

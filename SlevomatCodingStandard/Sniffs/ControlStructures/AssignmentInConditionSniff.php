@@ -5,12 +5,12 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function sprintf;
 use const T_DO;
 use const T_ELSEIF;
 use const T_EQUAL;
 use const T_IF;
 use const T_WHILE;
-use function sprintf;
 
 class AssignmentInConditionSniff implements Sniff
 {

@@ -9,6 +9,12 @@ use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\VariableHelper;
+use function array_key_exists;
+use function array_keys;
+use function array_merge;
+use function array_reverse;
+use function in_array;
+use function sprintf;
 use const T_AND_EQUAL;
 use const T_AS;
 use const T_BITWISE_AND;
@@ -47,12 +53,6 @@ use const T_USE;
 use const T_VARIABLE;
 use const T_WHILE;
 use const T_XOR_EQUAL;
-use function array_key_exists;
-use function array_keys;
-use function array_merge;
-use function array_reverse;
-use function in_array;
-use function sprintf;
 
 class UnusedVariableSniff implements Sniff
 {

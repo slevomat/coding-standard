@@ -7,14 +7,14 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function in_array;
+use function sprintf;
+use function trim;
 use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_TAG;
 use const T_DOC_COMMENT_WHITESPACE;
-use function in_array;
-use function sprintf;
-use function trim;
 
 class ForbiddenAnnotationsSniff implements Sniff
 {

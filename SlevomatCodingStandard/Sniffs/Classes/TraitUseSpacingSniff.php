@@ -7,6 +7,9 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function count;
+use function sprintf;
+use function substr_count;
 use const T_ANON_CLASS;
 use const T_CLASS;
 use const T_CLOSE_CURLY_BRACKET;
@@ -14,9 +17,6 @@ use const T_OPEN_CURLY_BRACKET;
 use const T_SEMICOLON;
 use const T_TRAIT;
 use const T_WHITESPACE;
-use function count;
-use function sprintf;
-use function substr_count;
 
 class TraitUseSpacingSniff implements Sniff
 {

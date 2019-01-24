@@ -4,9 +4,9 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use function sprintf;
 use const T_IS_EQUAL;
 use const T_IS_NOT_EQUAL;
-use function sprintf;
 
 class DisallowEqualOperatorsSniff implements Sniff
 {

@@ -3,9 +3,9 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
-use const T_OPEN_TAG;
 use function array_key_exists;
 use function in_array;
+use const T_OPEN_TAG;
 
 class TypeHintHelper
 {

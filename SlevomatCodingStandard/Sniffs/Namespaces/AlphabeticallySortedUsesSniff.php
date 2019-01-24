@@ -8,8 +8,6 @@ use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
-use const T_OPEN_TAG;
-use const T_SEMICOLON;
 use function array_map;
 use function count;
 use function end;
@@ -21,6 +19,8 @@ use function sprintf;
 use function strcasecmp;
 use function strcmp;
 use function uasort;
+use const T_OPEN_TAG;
+use const T_SEMICOLON;
 
 class AlphabeticallySortedUsesSniff implements Sniff
 {

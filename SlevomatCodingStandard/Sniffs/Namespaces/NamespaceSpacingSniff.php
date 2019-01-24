@@ -7,11 +7,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use const T_COMMENT;
-use const T_NAMESPACE;
-use const T_OPEN_TAG;
-use const T_SEMICOLON;
-use const T_WHITESPACE;
 use function array_key_exists;
 use function array_merge;
 use function in_array;
@@ -20,6 +15,11 @@ use function sprintf;
 use function strlen;
 use function substr;
 use function substr_count;
+use const T_COMMENT;
+use const T_NAMESPACE;
+use const T_OPEN_TAG;
+use const T_SEMICOLON;
+use const T_WHITESPACE;
 
 class NamespaceSpacingSniff implements Sniff
 {

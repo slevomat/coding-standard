@@ -8,15 +8,15 @@ use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
-use const T_OPEN_TAG;
-use const T_SEMICOLON;
-use const T_WHITESPACE;
 use function array_values;
 use function count;
 use function sprintf;
 use function strlen;
 use function substr;
 use function substr_count;
+use const T_OPEN_TAG;
+use const T_SEMICOLON;
+use const T_WHITESPACE;
 
 class UseSpacingSniff implements Sniff
 {

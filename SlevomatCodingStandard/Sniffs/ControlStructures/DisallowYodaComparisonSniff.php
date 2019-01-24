@@ -6,13 +6,13 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\YodaHelper;
+use function array_keys;
+use function count;
 use const T_EQUAL;
 use const T_IS_EQUAL;
 use const T_IS_IDENTICAL;
 use const T_IS_NOT_EQUAL;
 use const T_IS_NOT_IDENTICAL;
-use function array_keys;
-use function count;
 
 /**
  * Bigger value must be on the left side:

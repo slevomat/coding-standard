@@ -3,17 +3,17 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use function array_keys;
+use function array_merge;
+use function array_reverse;
+use function in_array;
+use function sprintf;
 use const T_ANON_CLASS;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
 use const T_STATIC;
 use const T_VAR;
-use function array_keys;
-use function array_merge;
-use function array_reverse;
-use function in_array;
-use function sprintf;
 
 class PropertyHelper
 {

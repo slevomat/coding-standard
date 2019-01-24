@@ -5,12 +5,12 @@ namespace SlevomatCodingStandard\Sniffs\Variables;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function in_array;
+use function sprintf;
 use const T_DOUBLE_COLON;
 use const T_EQUAL;
 use const T_OBJECT_OPERATOR;
 use const T_VARIABLE;
-use function in_array;
-use function sprintf;
 
 class DuplicateAssignmentToVariableSniff implements Sniff
 {

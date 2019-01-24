@@ -6,6 +6,10 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function in_array;
+use function sprintf;
+use function strlen;
+use function trim;
 use const T_BOOLEAN_NOT;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSE_SHORT_ARRAY;
@@ -16,10 +20,6 @@ use const T_DOUBLE_ARROW;
 use const T_INLINE_ELSE;
 use const T_INLINE_THEN;
 use const T_SEMICOLON;
-use function in_array;
-use function sprintf;
-use function strlen;
-use function trim;
 
 class RequireShortTernaryOperatorSniff implements Sniff
 {

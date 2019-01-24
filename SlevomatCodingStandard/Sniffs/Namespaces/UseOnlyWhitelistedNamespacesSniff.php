@@ -7,8 +7,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
-use const T_USE;
 use function sprintf;
+use const T_USE;
 
 class UseOnlyWhitelistedNamespacesSniff implements Sniff
 {

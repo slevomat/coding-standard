@@ -6,14 +6,14 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_reverse;
+use function in_array;
 use const T_ANON_CLASS;
 use const T_CLASS;
 use const T_DOUBLE_COLON;
 use const T_INTERFACE;
 use const T_STATIC;
 use const T_TRAIT;
-use function array_reverse;
-use function in_array;
 
 class UselessLateStaticBindingSniff implements Sniff
 {

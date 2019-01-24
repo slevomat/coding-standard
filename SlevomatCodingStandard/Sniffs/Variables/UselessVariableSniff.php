@@ -6,6 +6,14 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_key_exists;
+use function array_keys;
+use function array_reverse;
+use function count;
+use function in_array;
+use function preg_match;
+use function preg_quote;
+use function sprintf;
 use const T_AND_EQUAL;
 use const T_CONCAT_EQUAL;
 use const T_DIV_EQUAL;
@@ -31,14 +39,6 @@ use const T_VARIABLE;
 use const T_WHILE;
 use const T_WHITESPACE;
 use const T_XOR_EQUAL;
-use function array_key_exists;
-use function array_keys;
-use function array_reverse;
-use function count;
-use function in_array;
-use function preg_match;
-use function preg_quote;
-use function sprintf;
 
 class UselessVariableSniff implements Sniff
 {

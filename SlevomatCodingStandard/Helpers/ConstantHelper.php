@@ -4,14 +4,14 @@ namespace SlevomatCodingStandard\Helpers;
 
 use Generator;
 use PHP_CodeSniffer\Files\File;
-use const T_CONST;
-use const T_NAMESPACE;
-use const T_STRING;
 use function array_filter;
 use function array_map;
 use function array_reverse;
 use function iterator_to_array;
 use function sprintf;
+use const T_CONST;
+use const T_NAMESPACE;
+use const T_STRING;
 
 class ConstantHelper
 {

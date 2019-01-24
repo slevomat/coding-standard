@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use function count;
 use const T_ARRAY_HINT;
 use const T_BREAK;
 use const T_CALLABLE;
@@ -35,7 +36,6 @@ use const T_TRAIT;
 use const T_WHITESPACE;
 use const T_YIELD;
 use const T_YIELD_FROM;
-use function count;
 
 class TokenHelper
 {

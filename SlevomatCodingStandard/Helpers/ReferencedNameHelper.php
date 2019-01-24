@@ -4,6 +4,11 @@ namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use function array_merge;
+use function array_reverse;
+use function array_values;
+use function count;
+use function in_array;
 use const T_ANON_CLASS;
 use const T_ARRAY;
 use const T_AS;
@@ -32,11 +37,6 @@ use const T_RETURN_TYPE;
 use const T_TRAIT;
 use const T_USE;
 use const T_VARIABLE;
-use function array_merge;
-use function array_reverse;
-use function array_values;
-use function count;
-use function in_array;
 
 /**
  * Following type name occurrences are considered as a referenced name:

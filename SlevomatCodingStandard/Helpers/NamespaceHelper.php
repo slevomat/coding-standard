@@ -3,7 +3,6 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
-use const T_NAMESPACE;
 use function array_slice;
 use function count;
 use function explode;
@@ -11,6 +10,7 @@ use function implode;
 use function ltrim;
 use function sprintf;
 use function strpos;
+use const T_NAMESPACE;
 
 /**
  * Terms "unqualified", "qualified" and "fully qualified" have the same meaning as described here:

@@ -5,6 +5,9 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_merge;
+use function in_array;
+use function sprintf;
 use const T_BITWISE_AND;
 use const T_CLOSURE;
 use const T_ELLIPSIS;
@@ -13,9 +16,6 @@ use const T_FUNCTION;
 use const T_NULL;
 use const T_NULLABLE;
 use const T_VARIABLE;
-use function array_merge;
-use function in_array;
-use function sprintf;
 
 class NullableTypeForNullDefaultValueSniff implements Sniff
 {

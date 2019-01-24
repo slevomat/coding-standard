@@ -7,12 +7,12 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function rtrim;
+use function sprintf;
 use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_WHITESPACE;
 use const T_VARIABLE;
-use function rtrim;
-use function sprintf;
 
 class RequireOneLinePropertyDocCommentSniff implements Sniff
 {

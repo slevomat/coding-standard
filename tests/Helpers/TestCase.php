@@ -6,6 +6,11 @@ use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Files\LocalFile;
 use PHP_CodeSniffer\Runner;
+use function count;
+use function get_defined_constants;
+use function is_int;
+use function sprintf;
+use function token_name;
 use const T_CLASS;
 use const T_CONST;
 use const T_FUNCTION;
@@ -17,11 +22,6 @@ use const T_STATIC;
 use const T_STRING;
 use const T_TRAIT;
 use const T_VARIABLE;
-use function count;
-use function get_defined_constants;
-use function is_int;
-use function sprintf;
-use function token_name;
 
 /**
  * @codeCoverageIgnore

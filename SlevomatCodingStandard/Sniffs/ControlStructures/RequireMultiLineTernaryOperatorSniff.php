@@ -6,6 +6,9 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function in_array;
+use function strlen;
+use function substr;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSE_SHORT_ARRAY;
 use const T_CLOSE_SQUARE_BRACKET;
@@ -25,9 +28,6 @@ use const T_PHPCS_IGNORE_FILE;
 use const T_PHPCS_SET;
 use const T_SEMICOLON;
 use const T_WHITESPACE;
-use function in_array;
-use function strlen;
-use function substr;
 
 class RequireMultiLineTernaryOperatorSniff implements Sniff
 {

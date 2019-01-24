@@ -3,6 +3,10 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use function count;
+use function in_array;
+use function strpos;
+use function trim;
 use const T_ABSTRACT;
 use const T_CLASS;
 use const T_COMMENT;
@@ -22,10 +26,6 @@ use const T_STATIC;
 use const T_TRAIT;
 use const T_VAR;
 use const T_WHITESPACE;
-use function count;
-use function in_array;
-use function strpos;
-use function trim;
 
 class DocCommentHelper
 {

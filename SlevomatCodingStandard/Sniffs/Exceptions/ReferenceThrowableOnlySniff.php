@@ -11,6 +11,9 @@ use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use Throwable;
+use function array_merge;
+use function in_array;
+use function sprintf;
 use const T_BITWISE_OR;
 use const T_CATCH;
 use const T_EXTENDS;
@@ -18,9 +21,6 @@ use const T_INSTANCEOF;
 use const T_NEW;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_TAG;
-use function array_merge;
-use function in_array;
-use function sprintf;
 
 class ReferenceThrowableOnlySniff implements Sniff
 {

@@ -7,6 +7,9 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function in_array;
+use function sprintf;
+use function strtolower;
 use const T_CLASS_C;
 use const T_DOUBLE_COLON;
 use const T_NS_SEPARATOR;
@@ -14,9 +17,6 @@ use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
 use const T_STRING;
 use const T_VARIABLE;
-use function in_array;
-use function sprintf;
-use function strtolower;
 
 class ModernClassNameReferenceSniff implements Sniff
 {

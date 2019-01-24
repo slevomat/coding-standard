@@ -13,6 +13,16 @@ use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use function array_keys;
+use function array_reverse;
+use function count;
+use function in_array;
+use function preg_match_all;
+use function preg_replace;
+use function sprintf;
+use function strpos;
+use function strtolower;
+use function substr;
 use const PREG_PATTERN_ORDER;
 use const T_ABSTRACT;
 use const T_AND_EQUAL;
@@ -45,16 +55,6 @@ use const T_STATIC;
 use const T_STRING;
 use const T_VARIABLE;
 use const T_XOR_EQUAL;
-use function array_keys;
-use function array_reverse;
-use function count;
-use function in_array;
-use function preg_match_all;
-use function preg_replace;
-use function sprintf;
-use function strpos;
-use function strtolower;
-use function substr;
 
 class UnusedPrivateElementsSniff implements Sniff
 {

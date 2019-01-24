@@ -4,6 +4,15 @@ namespace SlevomatCodingStandard\Helpers;
 
 use Generator;
 use PHP_CodeSniffer\Files\File;
+use function array_filter;
+use function array_keys;
+use function array_map;
+use function array_merge;
+use function array_reverse;
+use function count;
+use function in_array;
+use function iterator_to_array;
+use function sprintf;
 use const T_ANON_CLASS;
 use const T_BITWISE_AND;
 use const T_CLASS;
@@ -22,15 +31,6 @@ use const T_TRAIT;
 use const T_VARIABLE;
 use const T_YIELD;
 use const T_YIELD_FROM;
-use function array_filter;
-use function array_keys;
-use function array_map;
-use function array_merge;
-use function array_reverse;
-use function count;
-use function in_array;
-use function iterator_to_array;
-use function sprintf;
 
 class FunctionHelper
 {

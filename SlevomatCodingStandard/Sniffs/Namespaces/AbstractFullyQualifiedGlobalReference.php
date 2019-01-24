@@ -10,12 +10,12 @@ use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
-use const T_OPEN_TAG;
 use function array_flip;
 use function array_key_exists;
 use function array_map;
 use function sprintf;
 use function strtolower;
+use const T_OPEN_TAG;
 
 abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 {

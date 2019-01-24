@@ -7,13 +7,13 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
+use function array_merge;
+use function in_array;
+use function preg_match;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_WHITESPACE;
 use const T_WHITESPACE;
-use function array_merge;
-use function in_array;
-use function preg_match;
 
 class UselessInheritDocCommentSniff implements Sniff
 {

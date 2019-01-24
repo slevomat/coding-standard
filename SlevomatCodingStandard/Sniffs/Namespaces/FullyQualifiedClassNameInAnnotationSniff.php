@@ -8,7 +8,6 @@ use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
-use const T_DOC_COMMENT_OPEN_TAG;
 use function explode;
 use function in_array;
 use function preg_match;
@@ -18,6 +17,7 @@ use function preg_replace_callback;
 use function preg_split;
 use function sprintf;
 use function strtolower;
+use const T_DOC_COMMENT_OPEN_TAG;
 
 class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 {

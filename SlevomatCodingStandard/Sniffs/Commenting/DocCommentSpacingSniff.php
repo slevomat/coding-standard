@@ -9,11 +9,6 @@ use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use const T_DOC_COMMENT_OPEN_TAG;
-use const T_DOC_COMMENT_STAR;
-use const T_DOC_COMMENT_STRING;
-use const T_DOC_COMMENT_WHITESPACE;
-use const T_WHITESPACE;
 use function array_combine;
 use function array_diff;
 use function array_flip;
@@ -35,6 +30,11 @@ use function substr;
 use function substr_count;
 use function uasort;
 use function usort;
+use const T_DOC_COMMENT_OPEN_TAG;
+use const T_DOC_COMMENT_STAR;
+use const T_DOC_COMMENT_STRING;
+use const T_DOC_COMMENT_WHITESPACE;
+use const T_WHITESPACE;
 
 class DocCommentSpacingSniff implements Sniff
 {

@@ -2,8 +2,8 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-use const T_CLOSURE;
 use function array_map;
+use const T_CLOSURE;
 
 class FunctionHelperTest extends TestCase
 {

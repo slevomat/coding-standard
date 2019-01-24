@@ -11,9 +11,9 @@ use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use Throwable;
-use const T_OPEN_TAG;
 use function in_array;
 use function sprintf;
+use const T_OPEN_TAG;
 
 class FullyQualifiedExceptionsSniff implements Sniff
 {

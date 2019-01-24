@@ -8,12 +8,12 @@ use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
-use const T_AS;
-use const T_SEMICOLON;
-use const T_USE;
 use function sprintf;
 use function strlen;
 use function substr;
+use const T_AS;
+use const T_SEMICOLON;
+use const T_USE;
 
 class UseFromSameNamespaceSniff implements Sniff
 {

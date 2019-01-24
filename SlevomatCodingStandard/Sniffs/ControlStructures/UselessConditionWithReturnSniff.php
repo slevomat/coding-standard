@@ -7,6 +7,10 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ConditionHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_key_exists;
+use function in_array;
+use function sprintf;
+use function strtolower;
 use const T_ELSE;
 use const T_FALSE;
 use const T_IF;
@@ -15,10 +19,6 @@ use const T_INLINE_THEN;
 use const T_RETURN;
 use const T_SEMICOLON;
 use const T_TRUE;
-use function array_key_exists;
-use function in_array;
-use function sprintf;
-use function strtolower;
 
 class UselessConditionWithReturnSniff implements Sniff
 {

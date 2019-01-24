@@ -9,13 +9,6 @@ use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
-use const T_COMMA;
-use const T_IMPLEMENTS;
-use const T_NAMESPACE;
-use const T_NS_SEPARATOR;
-use const T_OPEN_TAG;
-use const T_USE;
-use const T_WHITESPACE;
 use function array_map;
 use function array_merge;
 use function array_values;
@@ -25,6 +18,13 @@ use function defined;
 use function in_array;
 use function sprintf;
 use function ucfirst;
+use const T_COMMA;
+use const T_IMPLEMENTS;
+use const T_NAMESPACE;
+use const T_NS_SEPARATOR;
+use const T_OPEN_TAG;
+use const T_USE;
+use const T_WHITESPACE;
 
 class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 {

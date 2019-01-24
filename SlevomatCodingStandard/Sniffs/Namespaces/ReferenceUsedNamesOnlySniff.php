@@ -19,14 +19,6 @@ use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use stdClass;
-use const T_COMMA;
-use const T_DECLARE;
-use const T_DOC_COMMENT_OPEN_TAG;
-use const T_NAMESPACE;
-use const T_OPEN_CURLY_BRACKET;
-use const T_OPEN_TAG;
-use const T_SEMICOLON;
-use const T_WHITESPACE;
 use function array_filter;
 use function array_flip;
 use function array_key_exists;
@@ -47,6 +39,14 @@ use function rtrim;
 use function sprintf;
 use function strtolower;
 use function substr;
+use const T_COMMA;
+use const T_DECLARE;
+use const T_DOC_COMMENT_OPEN_TAG;
+use const T_NAMESPACE;
+use const T_OPEN_CURLY_BRACKET;
+use const T_OPEN_TAG;
+use const T_SEMICOLON;
+use const T_WHITESPACE;
 
 class ReferenceUsedNamesOnlySniff implements Sniff
 {

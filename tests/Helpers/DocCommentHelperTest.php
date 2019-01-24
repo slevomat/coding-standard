@@ -3,8 +3,8 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
-use const T_DOC_COMMENT_OPEN_TAG;
 use function array_map;
+use const T_DOC_COMMENT_OPEN_TAG;
 
 class DocCommentHelperTest extends TestCase
 {

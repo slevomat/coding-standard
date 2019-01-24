@@ -8,7 +8,6 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Files\LocalFile;
 use PHP_CodeSniffer\Runner;
 use ReflectionClass;
-use const PHP_EOL;
 use function array_map;
 use function count;
 use function implode;
@@ -18,6 +17,7 @@ use function sprintf;
 use function strlen;
 use function strpos;
 use function substr;
+use const PHP_EOL;
 
 /**
  * @codeCoverageIgnore

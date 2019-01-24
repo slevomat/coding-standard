@@ -5,16 +5,16 @@ namespace SlevomatCodingStandard\Sniffs\PHP;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_key_exists;
+use function preg_match;
+use function sprintf;
+use function strtolower;
 use const T_BINARY_CAST;
 use const T_BOOL_CAST;
 use const T_DOUBLE_CAST;
 use const T_INT_CAST;
 use const T_STRING_CAST;
 use const T_UNSET_CAST;
-use function array_key_exists;
-use function preg_match;
-use function sprintf;
-use function strtolower;
 
 class TypeCastSniff implements Sniff
 {

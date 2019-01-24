@@ -9,8 +9,6 @@ use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use const T_FUNCTION;
-use const T_VARIABLE;
 use function explode;
 use function preg_quote;
 use function preg_replace_callback;
@@ -18,6 +16,8 @@ use function preg_split;
 use function sprintf;
 use function strtolower;
 use function trim;
+use const T_FUNCTION;
+use const T_VARIABLE;
 
 class LongTypeHintsSniff implements Sniff
 {

@@ -3,8 +3,8 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
-use const T_BITWISE_OR;
 use function array_merge;
+use const T_BITWISE_OR;
 
 class CatchHelper
 {

@@ -8,10 +8,10 @@ use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\VariableHelper;
+use function sprintf;
 use const T_CLOSURE;
 use const T_FUNCTION;
 use const T_VARIABLE;
-use function sprintf;
 
 class UnusedParameterSniff implements Sniff
 {

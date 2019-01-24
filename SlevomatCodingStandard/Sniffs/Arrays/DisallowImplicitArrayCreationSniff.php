@@ -6,6 +6,10 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_key_exists;
+use function array_reverse;
+use function count;
+use function in_array;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
 use const T_DOUBLE_COLON;
@@ -21,10 +25,6 @@ use const T_STATIC;
 use const T_STRING;
 use const T_USE;
 use const T_VARIABLE;
-use function array_key_exists;
-use function array_reverse;
-use function count;
-use function in_array;
 
 class DisallowImplicitArrayCreationSniff implements Sniff
 {

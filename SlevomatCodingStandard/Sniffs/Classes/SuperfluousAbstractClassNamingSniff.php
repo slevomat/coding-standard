@@ -6,11 +6,11 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use const T_ABSTRACT;
-use const T_CLASS;
 use function sprintf;
 use function strtolower;
 use function substr;
+use const T_ABSTRACT;
+use const T_CLASS;
 
 class SuperfluousAbstractClassNamingSniff implements Sniff
 {

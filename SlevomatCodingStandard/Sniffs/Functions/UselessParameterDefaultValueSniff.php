@@ -5,13 +5,13 @@ namespace SlevomatCodingStandard\Sniffs\Functions;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use const T_CLOSURE;
-use const T_COMMA;
-use const T_FUNCTION;
 use function array_key_exists;
 use function count;
 use function sprintf;
 use function strtolower;
+use const T_CLOSURE;
+use const T_COMMA;
+use const T_FUNCTION;
 
 class UselessParameterDefaultValueSniff implements Sniff
 {

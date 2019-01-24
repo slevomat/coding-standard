@@ -5,6 +5,8 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_keys;
+use function sprintf;
 use const T_BITWISE_AND;
 use const T_CLOSURE;
 use const T_COMMA;
@@ -13,8 +15,6 @@ use const T_FUNCTION;
 use const T_NULLABLE;
 use const T_VARIABLE;
 use const T_WHITESPACE;
-use function array_keys;
-use function sprintf;
 
 class ParameterTypeHintSpacingSniff implements Sniff
 {

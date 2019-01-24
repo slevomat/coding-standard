@@ -7,11 +7,11 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_key_exists;
+use function count;
 use const T_CONST;
 use const T_DOC_COMMENT_WHITESPACE;
 use const T_WHITESPACE;
-use function array_key_exists;
-use function count;
 
 class UselessConstantTypeHintSniff implements Sniff
 {

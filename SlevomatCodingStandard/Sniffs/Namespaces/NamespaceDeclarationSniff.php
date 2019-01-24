@@ -5,13 +5,13 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_key_exists;
+use function sprintf;
+use function strlen;
 use const T_NAMESPACE;
 use const T_NS_SEPARATOR;
 use const T_SEMICOLON;
 use const T_WHITESPACE;
-use function array_key_exists;
-use function sprintf;
-use function strlen;
 
 class NamespaceDeclarationSniff implements Sniff
 {

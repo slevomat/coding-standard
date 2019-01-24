@@ -7,6 +7,18 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ConditionHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_key_exists;
+use function array_map;
+use function count;
+use function explode;
+use function implode;
+use function in_array;
+use function ltrim;
+use function rtrim;
+use function sort;
+use function sprintf;
+use function substr;
+use function trim;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CLOSURE;
 use const T_COLON;
@@ -22,18 +34,6 @@ use const T_SEMICOLON;
 use const T_WHILE;
 use const T_WHITESPACE;
 use const T_YIELD;
-use function array_key_exists;
-use function array_map;
-use function count;
-use function explode;
-use function implode;
-use function in_array;
-use function ltrim;
-use function rtrim;
-use function sort;
-use function sprintf;
-use function substr;
-use function trim;
 
 class EarlyExitSniff implements Sniff
 {

@@ -2,9 +2,9 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use function count;
 use const T_NS_SEPARATOR;
 use const T_STRING;
-use function count;
 
 class ReferencedNameHelperTest extends TestCase
 {

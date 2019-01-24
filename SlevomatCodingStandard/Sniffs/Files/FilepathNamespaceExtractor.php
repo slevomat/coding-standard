@@ -3,7 +3,6 @@
 namespace SlevomatCodingStandard\Sniffs\Files;
 
 use SlevomatCodingStandard\Helpers\StringHelper;
-use const PATHINFO_EXTENSION;
 use function array_fill_keys;
 use function array_filter;
 use function array_map;
@@ -18,6 +17,7 @@ use function preg_split;
 use function strlen;
 use function strtolower;
 use function substr;
+use const PATHINFO_EXTENSION;
 
 class FilepathNamespaceExtractor
 {

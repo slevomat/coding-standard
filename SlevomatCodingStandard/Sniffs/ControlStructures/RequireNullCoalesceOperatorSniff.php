@@ -7,6 +7,9 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function in_array;
+use function sprintf;
+use function trim;
 use const T_BOOLEAN_NOT;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSE_SHORT_ARRAY;
@@ -21,9 +24,6 @@ use const T_IS_NOT_IDENTICAL;
 use const T_ISSET;
 use const T_NULL;
 use const T_SEMICOLON;
-use function in_array;
-use function sprintf;
-use function trim;
 
 class RequireNullCoalesceOperatorSniff implements Sniff
 {

@@ -5,15 +5,15 @@ namespace SlevomatCodingStandard\Sniffs\Commenting;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use const T_COMMENT;
-use const T_DOC_COMMENT_OPEN_TAG;
-use const T_WHITESPACE;
 use function array_key_exists;
 use function preg_match;
 use function preg_replace;
 use function strlen;
 use function strpos;
 use function substr;
+use const T_COMMENT;
+use const T_DOC_COMMENT_OPEN_TAG;
+use const T_WHITESPACE;
 
 class EmptyCommentSniff implements Sniff
 {

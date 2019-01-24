@@ -6,16 +6,16 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use const T_DECLARE;
-use const T_LNUMBER;
-use const T_OPEN_TAG;
-use const T_STRING;
-use const T_WHITESPACE;
 use function sprintf;
 use function str_repeat;
 use function strlen;
 use function substr;
 use function substr_count;
+use const T_DECLARE;
+use const T_LNUMBER;
+use const T_OPEN_TAG;
+use const T_STRING;
+use const T_WHITESPACE;
 
 class DeclareStrictTypesSniff implements Sniff
 {

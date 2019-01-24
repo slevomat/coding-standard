@@ -6,6 +6,8 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_key_exists;
+use function sprintf;
 use const T_BITWISE_AND;
 use const T_BITWISE_OR;
 use const T_BITWISE_XOR;
@@ -19,8 +21,6 @@ use const T_POW;
 use const T_SL;
 use const T_SR;
 use const T_STRING_CONCAT;
-use function array_key_exists;
-use function sprintf;
 
 class RequireCombinedAssignmentOperatorSniff implements Sniff
 {

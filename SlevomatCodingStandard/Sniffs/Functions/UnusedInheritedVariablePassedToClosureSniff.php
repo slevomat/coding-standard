@@ -6,6 +6,8 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\VariableHelper;
+use function in_array;
+use function sprintf;
 use const T_BITWISE_AND;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
@@ -13,8 +15,6 @@ use const T_COMMA;
 use const T_OPEN_PARENTHESIS;
 use const T_USE;
 use const T_VARIABLE;
-use function in_array;
-use function sprintf;
 
 class UnusedInheritedVariablePassedToClosureSniff implements Sniff
 {

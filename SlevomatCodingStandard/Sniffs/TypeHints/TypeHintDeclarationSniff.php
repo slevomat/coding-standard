@@ -15,18 +15,6 @@ use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
-use const PHP_VERSION_ID;
-use const T_BITWISE_AND;
-use const T_CLOSE_PARENTHESIS;
-use const T_CLOSURE;
-use const T_DOC_COMMENT_CLOSE_TAG;
-use const T_DOC_COMMENT_STAR;
-use const T_DOC_COMMENT_STRING;
-use const T_DOC_COMMENT_TAG;
-use const T_DOC_COMMENT_WHITESPACE;
-use const T_ELLIPSIS;
-use const T_FUNCTION;
-use const T_VARIABLE;
 use function array_flip;
 use function array_key_exists;
 use function array_map;
@@ -42,6 +30,18 @@ use function sprintf;
 use function stripos;
 use function strpos;
 use function strtolower;
+use const PHP_VERSION_ID;
+use const T_BITWISE_AND;
+use const T_CLOSE_PARENTHESIS;
+use const T_CLOSURE;
+use const T_DOC_COMMENT_CLOSE_TAG;
+use const T_DOC_COMMENT_STAR;
+use const T_DOC_COMMENT_STRING;
+use const T_DOC_COMMENT_TAG;
+use const T_DOC_COMMENT_WHITESPACE;
+use const T_ELLIPSIS;
+use const T_FUNCTION;
+use const T_VARIABLE;
 
 class TypeHintDeclarationSniff implements Sniff
 {

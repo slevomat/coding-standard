@@ -7,12 +7,12 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use function count;
+use function sprintf;
 use const T_AS;
 use const T_OPEN_TAG;
 use const T_SEMICOLON;
 use const T_STRING;
-use function count;
-use function sprintf;
 
 class UselessAliasSniff implements Sniff
 {

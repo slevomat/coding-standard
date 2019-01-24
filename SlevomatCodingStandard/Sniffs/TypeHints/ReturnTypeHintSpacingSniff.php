@@ -7,14 +7,14 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_merge;
+use function sprintf;
+use function str_repeat;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
 use const T_FUNCTION;
 use const T_NULLABLE;
 use const T_WHITESPACE;
-use function array_merge;
-use function sprintf;
-use function str_repeat;
 
 class ReturnTypeHintSpacingSniff implements Sniff
 {

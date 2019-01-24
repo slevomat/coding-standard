@@ -5,11 +5,11 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function strtolower;
 use const T_DOUBLE_COLON;
 use const T_OPEN_PARENTHESIS;
 use const T_STATIC;
 use const T_STRING;
-use function strtolower;
 
 class DisallowLateStaticBindingForConstantsSniff implements Sniff
 {
