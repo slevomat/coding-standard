@@ -101,3 +101,10 @@ function ($a) {
 function () {
 	return [true ? true : false];
 };
+
+function () {
+	return test(function () {
+		$test = $foo && $bar ? true : false;
+		return $test;
+	});
+};

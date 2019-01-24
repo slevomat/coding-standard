@@ -6,6 +6,7 @@ use Exception;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ConditionHelper;
+use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function in_array;
@@ -132,6 +133,10 @@ class UselessConditionWithReturnSniff implements Sniff
 
 		$returnPointer = TokenHelper::findPreviousLocal($phpcsFile, T_RETURN, $inlineThenPointer - 1);
 		if ($returnPointer === null) {
+			return;
+		}
+
+		if (!ScopeHelper::isInSameScope($phpcsFile, $returnPointer, $inlineThenPointer)) {
 			return;
 		}
 
