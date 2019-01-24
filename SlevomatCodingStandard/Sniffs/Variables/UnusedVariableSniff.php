@@ -209,8 +209,15 @@ class UnusedVariableSniff implements Sniff
 			return true;
 		}
 
-		$parenthesisOpenerPointer = $this->findOpenerOfNestedParentheses($phpcsFile, $variablePointer);
-		$parenthesisOwnerPointer = $this->findOwnerOfNestedParentheses($phpcsFile, $variablePointer);
+		$actualPointer = $variablePointer;
+		$parenthesisOpenerPointer = null;
+		$parenthesisOwnerPointer = null;
+		do {
+			$parenthesisOpenerPointer = $this->findOpenerOfNestedParentheses($phpcsFile, $actualPointer);
+			$parenthesisOwnerPointer = $this->findOwnerOfNestedParentheses($phpcsFile, $actualPointer);
+
+			$actualPointer = $parenthesisOpenerPointer;
+		} while ($parenthesisOwnerPointer === null && isset($tokens[$actualPointer]['nested_parenthesis']));
 
 		if (in_array($tokens[$nextPointer]['code'], [T_INC, T_DEC], true)) {
 			if ($parenthesisOwnerPointer === null) {

@@ -258,3 +258,10 @@ function () {
 		$x++;
 	}
 };
+
+function () {
+	$runaway = 6; // Max depth is 5
+	while(($runaway-- > 0)) {
+		echo ".";
+	}
+};
