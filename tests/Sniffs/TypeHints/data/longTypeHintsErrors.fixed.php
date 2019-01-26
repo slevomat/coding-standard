@@ -51,3 +51,16 @@ class Foo
 	}
 
 }
+
+/**
+ * @property bool $property
+ * @property-read int $propertyRead
+ * @property-write int[] $propertyWrite
+ * @method bool method(int $m, bool ...$m2)
+ * @method method(?int $m = null, ?bool $m2, $m3)
+ * @method bool[]|array method(bool $m)
+ */
+class Boo
+{
+
+}

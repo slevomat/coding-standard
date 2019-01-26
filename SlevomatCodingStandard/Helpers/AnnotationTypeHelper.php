@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
@@ -22,6 +23,10 @@ class AnnotationTypeHelper
 	public static function getTypeHintNode(TypeNode $typeNode): TypeNode
 	{
 		if ($typeNode instanceof ArrayTypeNode) {
+			return self::getTypeHintNode($typeNode->type);
+		}
+
+		if ($typeNode instanceof NullableTypeNode) {
 			return self::getTypeHintNode($typeNode->type);
 		}
 
@@ -73,6 +78,10 @@ class AnnotationTypeHelper
 
 		if ($masterTypeNode instanceof ArrayTypeNode) {
 			return new ArrayTypeNode(self::change($masterTypeNode->type, $typeNodeToChange, $changedTypeNode));
+		}
+
+		if ($masterTypeNode instanceof NullableTypeNode) {
+			return new NullableTypeNode(self::change($masterTypeNode->type, $typeNodeToChange, $changedTypeNode));
 		}
 
 		return clone $masterTypeNode;

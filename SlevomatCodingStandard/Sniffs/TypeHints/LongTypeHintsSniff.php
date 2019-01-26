@@ -5,9 +5,10 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
-use function in_array;
 use function sprintf;
 use function strtolower;
 use const T_DOC_COMMENT_OPEN_TAG;
@@ -37,12 +38,12 @@ class LongTypeHintsSniff implements Sniff
 		$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 
 		foreach ($annotations as $annotationName => $annotationByName) {
-			if (!in_array($annotationName, ['@var', '@param', '@return', '@throws'], true)) {
-				continue;
-			}
-
-			/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation $annotation */
+			/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation|\SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation|\SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation|\SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation $annotation */
 			foreach ($annotationByName as $annotation) {
+				if ($annotation instanceof GenericAnnotation) {
+					continue;
+				}
+
 				if ($annotation->getContent() === null) {
 					continue;
 				}
@@ -51,47 +52,65 @@ class LongTypeHintsSniff implements Sniff
 					continue;
 				}
 
-				$annotationType = $annotation->getType();
-				$typeNodes = $annotationType instanceof UnionTypeNode ? $annotationType->types : [$annotationType];
+				$annotationTypes = [];
 
-				foreach ($typeNodes as $typeNode) {
-					$typeHintNode = AnnotationTypeHelper::getTypeHintNode($typeNode);
-					$typeHint = AnnotationTypeHelper::getTypeHintFromNode($typeHintNode);
-
-					$lowercasedTypeHint = strtolower($typeHint);
-
-					$shortTypeHint = null;
-					if ($lowercasedTypeHint === 'integer') {
-						$shortTypeHint = 'int';
-					} elseif ($lowercasedTypeHint === 'boolean') {
-						$shortTypeHint = 'bool';
+				if ($annotation instanceof MethodAnnotation) {
+					if ($annotation->getMethodReturnType() !== null) {
+						$annotationTypes[] = $annotation->getMethodReturnType();
 					}
+					foreach ($annotation->getMethodParameters() as $methodParameterAnnotation) {
+						if ($methodParameterAnnotation->type === null) {
+							continue;
+						}
 
-					if ($shortTypeHint === null) {
-						continue;
+						$annotationTypes[] = $methodParameterAnnotation->type;
 					}
+				} else {
+					$annotationTypes[] = $annotation->getType();
+				}
 
-					$fix = $phpcsFile->addFixableError(sprintf(
-						'Expected "%s" but found "%s" in %s annotation.',
-						$shortTypeHint,
-						$typeHint,
-						$annotationName
-					), $annotation->getStartPointer(), self::CODE_USED_LONG_TYPE_HINT);
+				foreach ($annotationTypes as $annotationType) {
+					$typeNodes = $annotationType instanceof UnionTypeNode ? $annotationType->types : [$annotationType];
 
-					if (!$fix) {
-						continue;
+					foreach ($typeNodes as $typeNode) {
+						$typeHintNode = AnnotationTypeHelper::getTypeHintNode($typeNode);
+						$typeHint = AnnotationTypeHelper::getTypeHintFromNode($typeHintNode);
+
+						$lowercasedTypeHint = strtolower($typeHint);
+
+						$shortTypeHint = null;
+						if ($lowercasedTypeHint === 'integer') {
+							$shortTypeHint = 'int';
+						} elseif ($lowercasedTypeHint === 'boolean') {
+							$shortTypeHint = 'bool';
+						}
+
+						if ($shortTypeHint === null) {
+							continue;
+						}
+
+						$fix = $phpcsFile->addFixableError(sprintf(
+							'Expected "%s" but found "%s" in %s annotation.',
+							$shortTypeHint,
+							$typeHint,
+							$annotationName
+						), $annotation->getStartPointer(), self::CODE_USED_LONG_TYPE_HINT);
+
+						if (!$fix) {
+							continue;
+						}
+
+						$phpcsFile->fixer->beginChangeset();
+
+						$fixedAnnotationContent = AnnotationHelper::fixAnnotation($phpcsFile, $annotation, $typeHintNode, $shortTypeHint);
+
+						$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
+						for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {
+							$phpcsFile->fixer->replaceToken($i, '');
+						}
+
+						$phpcsFile->fixer->endChangeset();
 					}
-
-					$phpcsFile->fixer->beginChangeset();
-
-					$fixedAnnotationContent = AnnotationHelper::fixAnnotation($phpcsFile, $annotation, $typeHintNode, $shortTypeHint);
-
-					$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
-					for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {
-						$phpcsFile->fixer->replaceToken($i, '');
-					}
-
-					$phpcsFile->fixer->endChangeset();
 				}
 			}
 		}
