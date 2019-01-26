@@ -42,4 +42,12 @@ class Foo
 		return 0;
 	}
 
+	public function inlineDocComment($values)
+	{
+		/** @var boolean|integer|string $value */
+		foreach ($values as $value) {
+
+		}
+	}
+
 }

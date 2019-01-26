@@ -9,6 +9,9 @@ function ($a)
 
 };
 
+/**
+ * @see Whatever
+ */
 class Foo
 {
 

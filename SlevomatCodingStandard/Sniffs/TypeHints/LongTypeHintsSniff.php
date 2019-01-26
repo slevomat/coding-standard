@@ -7,12 +7,10 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
-use SlevomatCodingStandard\Helpers\FunctionHelper;
-use SlevomatCodingStandard\Helpers\PropertyHelper;
+use function in_array;
 use function sprintf;
 use function strtolower;
-use const T_FUNCTION;
-use const T_VARIABLE;
+use const T_DOC_COMMENT_OPEN_TAG;
 
 class LongTypeHintsSniff implements Sniff
 {
@@ -25,38 +23,26 @@ class LongTypeHintsSniff implements Sniff
 	public function register(): array
 	{
 		return [
-			T_FUNCTION,
-			T_VARIABLE,
+			T_DOC_COMMENT_OPEN_TAG,
 		];
 	}
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param int $pointer
+	 * @param int $docCommentOpenPointer
 	 */
-	public function process(File $phpcsFile, $pointer): void
+	public function process(File $phpcsFile, $docCommentOpenPointer): void
 	{
-		$tokens = $phpcsFile->getTokens();
+		$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 
-		if ($tokens[$pointer]['code'] === T_FUNCTION) {
-			$allAnnotations = ['@param' => FunctionHelper::getParametersAnnotations($phpcsFile, $pointer)];
-
-			$return = FunctionHelper::findReturnAnnotation($phpcsFile, $pointer);
-			if ($return !== null) {
-				$allAnnotations['@return'] = [$return];
-			}
-		} else {
-			if (!PropertyHelper::isProperty($phpcsFile, $pointer)) {
-				return;
+		foreach ($annotations as $annotationName => $annotationByName) {
+			if (!in_array($annotationName, ['@var', '@param', '@return', '@throws'], true)) {
+				continue;
 			}
 
-			$allAnnotations = ['@var' => AnnotationHelper::getAnnotationsByName($phpcsFile, $pointer, '@var')];
-		}
-
-		foreach ($allAnnotations as $annotationName => $annotations) {
-			/** @var \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation $annotation */
-			foreach ($annotations as $annotation) {
+			/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation $annotation */
+			foreach ($annotationByName as $annotation) {
 				if ($annotation->getContent() === null) {
 					continue;
 				}
