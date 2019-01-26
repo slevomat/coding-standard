@@ -63,3 +63,16 @@ class FooClass
 	}
 
 }
+
+/**
+ * @property DateTimeImmutable $property
+ * @property-read Iterator $propertyRead
+ * @property-write DateTimeImmutable[] $propertyWrite
+ * @method Iterator method(Traversable $m, Exception ...$m2)
+ * @method method(?DateTimeImmutable $m = null, ?DateTimeImmutable $m2, $m3)
+ * @method DateTimeImmutable[]|array method(Iterator $m)
+ */
+class BooClass
+{
+
+}
