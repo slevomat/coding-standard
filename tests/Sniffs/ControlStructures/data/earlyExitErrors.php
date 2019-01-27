@@ -389,3 +389,13 @@ function negativeInstanceOf($phpEditor, $jsonEditor) {
 		doSomething();
 	}
 }
+
+function uselessElse() {
+	if (true) {
+		return;
+	} elseif (false) {
+		return;
+	} else {
+		echo 'Please do not use else!';
+	}
+}

@@ -443,3 +443,15 @@ function negativeInstanceOf($phpEditor, $jsonEditor) {
 
 	doSomething();
 }
+
+function uselessElse() {
+	if (true) {
+		return;
+	}
+
+	if (false) {
+		return;
+	}
+
+	echo 'Please do not use else!';
+}
