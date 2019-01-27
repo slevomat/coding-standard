@@ -465,16 +465,16 @@ class TypeHintDeclarationSniff implements Sniff
 					self::CODE_MISSING_RETURN_TYPE_HINT
 				);
 				return;
-			} else {
-				/** @var \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $returnTypeNode */
-				$returnTypeNode = $returnTypeNode;
-				if (!$this->isValidTypeHint($returnTypeNode)) {
-					return;
-				}
-
-				$possibleReturnTypeHintNode = $returnTypeNode;
-				$nullableReturnTypeHint = false;
 			}
+
+			/** @var \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $returnTypeNode */
+			$returnTypeNode = $returnTypeNode;
+			if (!$this->isValidTypeHint($returnTypeNode)) {
+				return;
+			}
+
+			$possibleReturnTypeHintNode = $returnTypeNode;
+			$nullableReturnTypeHint = false;
 		} elseif ($this->annotationContainsJustTwoTypes($returnTypeNode)) {
 			/** @var \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $returnTypeNode */
 			$returnTypeNode = $returnTypeNode;

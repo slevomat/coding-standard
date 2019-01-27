@@ -74,9 +74,9 @@ class AlphabeticallySortedUsesSniff implements Sniff
 					}
 
 					return;
-				} else {
-					$this->lastUse = $useStatement;
 				}
+
+				$this->lastUse = $useStatement;
 			}
 		}
 	}
