@@ -29,30 +29,6 @@ function ($e, $number) {
 };
 
 function () {
-	return true;
-};
-
-function () {
-	return false;
-};
-
-function ($bool) {
-	return $bool;
-};
-
-function ($bool) {
-	return !$bool;
-};
-
-function ($array) {
-	return count($array) > 0;
-};
-
-function ($array) {
-	return count($array) <= 0;
-};
-
-function () {
 	if (doSomething()) {
 		return doSomethingElse();
 	}

@@ -728,9 +728,13 @@ Requires comments with single-line content to be written as multi-liners.
 
 Reports documentation comments containing only `{@inheritDoc}` annotation because inheritance is automatic and it's not needed to use a special annotation for it.
 
-#### SlevomatCodingStandard.ControlStructures.UselessConditionWithReturn 🔧
+#### SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn 🔧
 
 Reports useless conditions where both branches return `true` or `false`.
+
+#### SlevomatCodingStandard.ControlStructures.UselessTernaryOperator 🔧
+
+Reports useless ternary operator where both branches return `true` or `false`.
 
 ## Installation
 

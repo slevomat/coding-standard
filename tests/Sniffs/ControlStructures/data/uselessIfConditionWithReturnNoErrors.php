@@ -76,35 +76,3 @@ function () {
 
 	return true || false;
 };
-
-function ($boo) {
-	return $boo ?: true;
-};
-
-function () {
-	$a = [true ? true : false];
-	return $a;
-};
-
-function ($a, $b) {
-	return true ? $a : $b;
-};
-
-function () {
-	return true ? true && doSomething() : false;
-};
-
-function ($a) {
-	return true ? false : $a;
-};
-
-function () {
-	return [true ? true : false];
-};
-
-function () {
-	return test(function () {
-		$test = $foo && $bar ? true : false;
-		return $test;
-	});
-};

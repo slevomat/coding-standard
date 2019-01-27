@@ -57,30 +57,6 @@ function ($e, $number) {
 };
 
 function () {
-	return true ? true : false;
-};
-
-function () {
-	return false ? true : false;
-};
-
-function ($bool) {
-	return $bool ? true : false;
-};
-
-function ($bool) {
-	return $bool ? false : true;
-};
-
-function ($array) {
-	return count($array) > 0 ? true : false;
-};
-
-function ($array) {
-	return count($array) > 0 ? false : true;
-};
-
-function () {
 	if (doSomething()) {
 		if (doSomethingElse()) {
 			return true;
