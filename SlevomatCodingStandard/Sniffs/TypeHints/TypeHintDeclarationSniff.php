@@ -27,7 +27,6 @@ use function array_map;
 use function count;
 use function in_array;
 use function lcfirst;
-use function preg_match;
 use function sprintf;
 use function stripos;
 use function strtolower;
@@ -37,9 +36,6 @@ use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
 use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOC_COMMENT_STAR;
-use const T_DOC_COMMENT_STRING;
-use const T_DOC_COMMENT_TAG;
-use const T_DOC_COMMENT_WHITESPACE;
 use const T_ELLIPSIS;
 use const T_FUNCTION;
 use const T_VARIABLE;
@@ -667,93 +663,43 @@ class TypeHintDeclarationSniff implements Sniff
 					self::CODE_USELESS_RETURN_ANNOTATION
 				);
 				if ($fix) {
-					$tokens = $phpcsFile->getTokens();
-					$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $functionPointer);
-					$docCommentClosePointer = $tokens[$docCommentOpenPointer]['comment_closer'];
-
-					for ($i = $docCommentOpenPointer + 1; $i < $docCommentClosePointer; $i++) {
-						if ($tokens[$i]['code'] !== T_DOC_COMMENT_TAG) {
-							continue;
-						}
-
-						if ($tokens[$i]['content'] !== '@return') {
-							continue;
-						}
-
-						/** @var int $changeStart */
-						$changeStart = TokenHelper::findPrevious($phpcsFile, [T_DOC_COMMENT_STAR], $i - 1, $docCommentOpenPointer);
-						/** @var int $changeEnd */
-						$changeEnd = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR], $i - 1, $docCommentClosePointer + 1) - 1;
-						$phpcsFile->fixer->beginChangeset();
-						for ($j = $changeStart; $j <= $changeEnd; $j++) {
-							$phpcsFile->fixer->replaceToken($j, '');
-						}
-						$phpcsFile->fixer->endChangeset();
-
-						break;
+					/** @var int $changeStart */
+					$changeStart = TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_STAR, $returnAnnotation->getStartPointer() - 1);
+					/** @var int $changeEnd */
+					$changeEnd = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR], $returnAnnotation->getEndPointer() + 1) - 1;
+					$phpcsFile->fixer->beginChangeset();
+					for ($i = $changeStart; $i <= $changeEnd; $i++) {
+						$phpcsFile->fixer->replaceToken($i, '');
 					}
+					$phpcsFile->fixer->endChangeset();
 				}
 			}
 
 			if (!$parameterSniffSuppressed) {
-				$parameterNamesWithUselessAnnotation = array_map(function (array $uselessParameterAnnotation): string {
-					return $uselessParameterAnnotation['parameterName'];
-				}, $uselessParameterAnnotations);
-
 				foreach ($uselessParameterAnnotations as $uselessParameterAnnotation) {
 					$fix = $phpcsFile->addFixableError(
 						sprintf(
 							'%s %s() has useless @param annotation for parameter %s.',
 							$this->getFunctionTypeLabel($phpcsFile, $functionPointer),
 							FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-							$uselessParameterAnnotation['parameterName']
+							$uselessParameterAnnotation->getParameterName()
 						),
-						$uselessParameterAnnotation['pointer'],
+						$uselessParameterAnnotation->getStartPointer(),
 						self::CODE_USELESS_PARAMETER_ANNOTATION
 					);
 					if (!$fix) {
 						continue;
 					}
 
-					$tokens = $phpcsFile->getTokens();
-					$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $functionPointer);
-					$docCommentClosePointer = $tokens[$docCommentOpenPointer]['comment_closer'];
-
-					for ($i = $docCommentOpenPointer + 1; $i < $docCommentClosePointer; $i++) {
-						if ($tokens[$i]['code'] !== T_DOC_COMMENT_TAG) {
-							continue;
-						}
-
-						if ($tokens[$i]['content'] !== '@param') {
-							continue;
-						}
-
-						$parameterInformationPointer = TokenHelper::findNextExcluding($phpcsFile, [T_DOC_COMMENT_WHITESPACE], $i + 1, $docCommentClosePointer + 1);
-
-						if ($parameterInformationPointer === null || $tokens[$parameterInformationPointer]['code'] !== T_DOC_COMMENT_STRING) {
-							continue;
-						}
-
-						if (preg_match('~\S+\s+(\$\S+)~', $tokens[$parameterInformationPointer]['content'], $match) === 0) {
-							continue;
-						}
-
-						if (!in_array($match[1], $parameterNamesWithUselessAnnotation, true)) {
-							continue;
-						}
-
-						/** @var int $changeStart */
-						$changeStart = TokenHelper::findPrevious($phpcsFile, [T_DOC_COMMENT_STAR], $i - 1);
-						/** @var int $changeEnd */
-						$changeEnd = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR], $i - 1) - 1;
-						$phpcsFile->fixer->beginChangeset();
-						for ($j = $changeStart; $j <= $changeEnd; $j++) {
-							$phpcsFile->fixer->replaceToken($j, '');
-						}
-						$phpcsFile->fixer->endChangeset();
-
-						break;
+					/** @var int $changeStart */
+					$changeStart = TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_STAR, $uselessParameterAnnotation->getStartPointer() - 1);
+					/** @var int $changeEnd */
+					$changeEnd = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR], $uselessParameterAnnotation->getEndPointer() + 1) - 1;
+					$phpcsFile->fixer->beginChangeset();
+					for ($i = $changeStart; $i <= $changeEnd; $i++) {
+						$phpcsFile->fixer->replaceToken($i, '');
 					}
+					$phpcsFile->fixer->endChangeset();
 				}
 			}
 
@@ -1039,7 +985,7 @@ class TypeHintDeclarationSniff implements Sniff
 		return TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint) === TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHintInAnnotation);
 	}
 
-	private function isReturnAnnotationUseless(File $phpcsFile, int $functionPointer, ?ReturnTypeHint $returnTypeHint = null, ?ReturnAnnotation $returnAnnotation): bool
+	private function isReturnAnnotationUseless(File $phpcsFile, int $functionPointer, ?ReturnTypeHint $returnTypeHint, ?ReturnAnnotation $returnAnnotation): bool
 	{
 		if ($returnTypeHint === null || $returnAnnotation === null || $returnAnnotation->getContent() === null) {
 			return false;
@@ -1138,11 +1084,11 @@ class TypeHintDeclarationSniff implements Sniff
 	 * @param \SlevomatCodingStandard\Helpers\ParameterTypeHint[]|null[] $functionTypeHints
 	 * @param \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation[] $parametersAnnotations
 	 * @param bool[] $parametersAnnotationsUseful
-	 * @return mixed[][]
+	 * @return \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation[]
 	 */
 	private function getUselessParameterAnnotations(File $phpcsFile, int $functionPointer, array $functionTypeHints, array $parametersAnnotations, array $parametersAnnotationsUseful): array
 	{
-		$uselessParameterNames = [];
+		$uselessParameterAnnotations = [];
 
 		foreach ($functionTypeHints as $parameterName => $parameterTypeHint) {
 			if ($parameterTypeHint === null) {
@@ -1187,10 +1133,10 @@ class TypeHintDeclarationSniff implements Sniff
 				}
 			}
 
-			$uselessParameterNames[] = ['pointer' => $parametersAnnotations[$parameterName]->getStartPointer(), 'parameterName' => $parameterName];
+			$uselessParameterAnnotations[] = $parametersAnnotations[$parameterName];
 		}
 
-		return $uselessParameterNames;
+		return $uselessParameterAnnotations;
 	}
 
 	private function hasInheritdocAnnotation(File $phpcsFile, int $pointer): bool
