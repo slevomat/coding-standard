@@ -455,3 +455,15 @@ function uselessElse() {
 
 	echo 'Please do not use else!';
 }
+
+function uselessElseIf() {
+	if (true) {
+		return true;
+	}
+
+	if (false) {
+		doSomething();
+	} else {
+		doSomethingElse();
+	}
+}

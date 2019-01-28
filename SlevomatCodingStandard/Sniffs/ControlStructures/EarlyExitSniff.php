@@ -9,7 +9,6 @@ use SlevomatCodingStandard\Helpers\ConditionHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function array_map;
-use function count;
 use function explode;
 use function implode;
 use function in_array;
@@ -208,23 +207,17 @@ class EarlyExitSniff implements Sniff
 		$allConditionsPointers = $this->getAllConditionsPointers($phpcsFile, $elseIfPointer);
 
 		foreach ($allConditionsPointers as $conditionPointer) {
-			if (
-				!$this->isEarlyExitInScope($phpcsFile, $tokens[$conditionPointer]['scope_opener'], $tokens[$conditionPointer]['scope_closer'])
-				&& $tokens[$conditionPointer]['code'] !== T_ELSE
-			) {
+			if ($elseIfPointer === $conditionPointer) {
+				break;
+			}
+
+			if (!$this->isEarlyExitInScope($phpcsFile, $tokens[$conditionPointer]['scope_opener'], $tokens[$conditionPointer]['scope_closer'])) {
 				return;
 			}
 		}
 
-		$lastConditionPointer = $allConditionsPointers[count($allConditionsPointers) - 1];
-
-		$pointerAfterLastCondition = TokenHelper::findNextEffective($phpcsFile, $tokens[$lastConditionPointer]['scope_closer'] + 1);
-		if ($pointerAfterLastCondition === null || $tokens[$pointerAfterLastCondition]['code'] !== T_CLOSE_CURLY_BRACKET) {
-			return;
-		}
-
 		$fix = $phpcsFile->addFixableError(
-			'Remove useless elseif to reduce code nesting.',
+			'Use if instead of elseif.',
 			$elseIfPointer,
 			self::CODE_USELESS_ELSEIF
 		);

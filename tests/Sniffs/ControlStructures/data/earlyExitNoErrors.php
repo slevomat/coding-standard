@@ -147,25 +147,35 @@ if (!defined('PHPUNIT_COMPOSER_INSTALL')) {
 function oneConditionsWithoutEarlyExit($dateTime) {
 	if ($dateTime instanceof DateTimeImmutable) {
 		return true;
-	} elseif ($dateTime instanceof DateTime) {
+	}
+
+	if ($dateTime instanceof DateTime) {
 		return true;
-	} elseif (is_numeric($dateTime)) {
+	}
+
+	if (is_numeric($dateTime)) {
 		doSomething();
 	} elseif (is_string($dateTime)) {
 		throw new NotImplementedException();
-	} else {
-		throw new NotImplementedException();
 	}
+
+	throw new NotImplementedException();
 }
 
 function allConditionsWithEarlyExitButCodeAfter($dateTime) {
 	if ($dateTime instanceof DateTimeImmutable) {
 		return true;
-	} elseif ($dateTime instanceof DateTime) {
+	}
+
+	if ($dateTime instanceof DateTime) {
 		return true;
-	} elseif (is_numeric($dateTime)) {
+	}
+
+	if (is_numeric($dateTime)) {
 		return true;
-	} elseif (is_string($dateTime)) {
+	}
+
+	if (is_string($dateTime)) {
 		throw new NotImplementedException();
 	} else {
 		throw new NotImplementedException();

@@ -399,3 +399,13 @@ function uselessElse() {
 		echo 'Please do not use else!';
 	}
 }
+
+function uselessElseIf() {
+	if (true) {
+		return true;
+	} elseif (false) {
+		doSomething();
+	} else {
+		doSomethingElse();
+	}
+}
