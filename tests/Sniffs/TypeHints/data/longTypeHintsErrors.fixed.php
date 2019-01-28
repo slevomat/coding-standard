@@ -57,10 +57,42 @@ class Foo
  * @property-read int $propertyRead
  * @property-write int[] $propertyWrite
  * @method bool method(int $m, bool ...$m2)
- * @method method(?int $m = null, ?bool $m2, $m3)
- * @method bool[]|array method(bool $m)
+ * @method method2(?int $m = null, ?bool $m2, $m3)
+ * @method bool[]|array method3(?bool<int> $m)
  */
 class Boo
 {
+
+}
+
+/**
+ * @property int&bool $property
+ */
+class IntersectionAndGeneric
+{
+
+	/** @var (bool|null|int)[] */
+	public $a;
+
+	/** @var int&bool<bool, int> */
+	public $b;
+
+	/** @var string&(int|float) */
+	public $c;
+
+	/** @var string|(float&int) */
+	public $d;
+
+	/** @var bool[][][] */
+	public $e;
+
+	/** @var (int|bool)[][][] */
+	public $f;
+
+	/** @var int|(string<foo>&bool)[] */
+	public $g;
+
+	/** @var \Foo<\Boo<int, bool>> */
+	public $h;
 
 }

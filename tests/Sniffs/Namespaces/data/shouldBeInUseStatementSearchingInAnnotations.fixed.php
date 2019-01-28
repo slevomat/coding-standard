@@ -68,3 +68,35 @@ abstract class Bar
 	}
 
 }
+
+/**
+ * @property \DateTimeImmutable&DateTime $property
+ */
+class IntersectionAndGeneric
+{
+
+	/** @var (\DateTimeImmutable|null|DateTime)[] */
+	public $a;
+
+	/** @var ArrayObject&\Traversable<int, \DateTimeImmutable> */
+	public $b;
+
+	/** @var string&(\DateTimeImmutable|DateTime) */
+	public $c;
+
+	/** @var string|(\DateTimeImmutable&DateTime) */
+	public $d;
+
+	/** @var DateTime[][][] */
+	public $e;
+
+	/** @var (\DateTimeImmutable|DateTime)[][][] */
+	public $f;
+
+	/** @var int|(ArrayObject<string>&BlaBla\Foo)[] */
+	public $g;
+
+	/** @var ArrayObject<ArrayObject<DateTime>> */
+	public $h;
+
+}

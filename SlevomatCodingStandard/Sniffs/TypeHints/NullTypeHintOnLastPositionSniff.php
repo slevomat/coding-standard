@@ -4,12 +4,19 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
+use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
+use function array_merge;
 use function count;
+use function sprintf;
 use function strtolower;
 use const T_DOC_COMMENT_OPEN_TAG;
 
@@ -52,80 +59,105 @@ class NullTypeHintOnLastPositionSniff implements Sniff
 					continue;
 				}
 
-				$annotationTypes = [];
+				foreach (AnnotationHelper::getAnnotationTypes($annotation) as $annotationType) {
+					foreach ($this->getUnionTypeNodes($annotationType) as $unionTypeNode) {
+						$nullTypeNode = null;
+						$nullPosition = 0;
+						$position = 0;
+						foreach ($unionTypeNode->types as $typeNode) {
+							if ($typeNode instanceof IdentifierTypeNode && strtolower($typeNode->name) === 'null') {
+								$nullTypeNode = $typeNode;
+								$nullPosition = $position;
+								break;
+							}
 
-				if ($annotation instanceof MethodAnnotation) {
-					if ($annotation->getMethodReturnType() !== null) {
-						$annotationTypes[] = $annotation->getMethodReturnType();
-					}
-				} else {
-					$annotationTypes[] = $annotation->getType();
-				}
-
-				foreach ($annotationTypes as $annotationType) {
-					if (!$annotationType instanceof UnionTypeNode) {
-						continue;
-					}
-
-					$nullTypeNode = null;
-					$nullPosition = 0;
-					$position = 0;
-					foreach ($annotationType->types as $typeNode) {
-						if ($typeNode instanceof IdentifierTypeNode && strtolower($typeNode->name) === 'null') {
-							$nullTypeNode = $typeNode;
-							$nullPosition = $position;
-							break;
+							$position++;
 						}
 
-						$position++;
-					}
-
-					if ($nullTypeNode === null) {
-						continue;
-					}
-
-					if ($nullPosition === count($annotationType->types) - 1) {
-						continue;
-					}
-
-					$fix = $phpcsFile->addFixableError(
-						'Null type hint should be on last position.',
-						$annotation->getStartPointer(),
-						self::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION
-					);
-
-					if (!$fix) {
-						continue;
-					}
-
-					$phpcsFile->fixer->beginChangeset();
-
-					for ($i = $annotation->getStartPointer(); $i <= $annotation->getEndPointer(); $i++) {
-						$phpcsFile->fixer->replaceToken($i, '');
-					}
-
-					$fixedTypeNodes = [];
-					foreach ($annotationType->types as $typeNode) {
-						if ($typeNode === $nullTypeNode) {
+						if ($nullTypeNode === null) {
 							continue;
 						}
 
-						$fixedTypeNodes[] = $typeNode;
+						if ($nullPosition === count($unionTypeNode->types) - 1) {
+							continue;
+						}
+
+						$fix = $phpcsFile->addFixableError(
+							sprintf('Null type hint should be on last position in "%s".', AnnotationTypeHelper::export($unionTypeNode)),
+							$annotation->getStartPointer(),
+							self::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION
+						);
+
+						if (!$fix) {
+							continue;
+						}
+
+						$phpcsFile->fixer->beginChangeset();
+
+						for ($i = $annotation->getStartPointer(); $i <= $annotation->getEndPointer(); $i++) {
+							$phpcsFile->fixer->replaceToken($i, '');
+						}
+
+						$fixedTypeNodes = [];
+						foreach ($unionTypeNode->types as $typeNode) {
+							if ($typeNode === $nullTypeNode) {
+								continue;
+							}
+
+							$fixedTypeNodes[] = $typeNode;
+						}
+						$fixedTypeNodes[] = $nullTypeNode;
+						$fixedUnionTypeNode = new UnionTypeNode($fixedTypeNodes);
+
+						$fixedAnnotationContent = AnnotationHelper::fixAnnotation($phpcsFile, $annotation, $unionTypeNode, $fixedUnionTypeNode);
+
+						$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
+						for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {
+							$phpcsFile->fixer->replaceToken($i, '');
+						}
+
+						$phpcsFile->fixer->endChangeset();
 					}
-					$fixedTypeNodes[] = $nullTypeNode;
-					$fixedAnnotationType = new UnionTypeNode($fixedTypeNodes);
-
-					$fixedAnnotationContent = AnnotationHelper::fixAnnotation($phpcsFile, $annotation, $annotationType, $fixedAnnotationType);
-
-					$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
-					for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {
-						$phpcsFile->fixer->replaceToken($i, '');
-					}
-
-					$phpcsFile->fixer->endChangeset();
 				}
 			}
 		}
+	}
+
+	/**
+	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
+	 * @return \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode[]
+	 */
+	private function getUnionTypeNodes(TypeNode $typeNode): array
+	{
+		if ($typeNode instanceof UnionTypeNode) {
+			return [$typeNode];
+		}
+
+		if ($typeNode instanceof NullableTypeNode) {
+			return $this->getUnionTypeNodes($typeNode->type);
+		}
+
+		if ($typeNode instanceof ArrayTypeNode) {
+			return $this->getUnionTypeNodes($typeNode->type);
+		}
+
+		if ($typeNode instanceof IntersectionTypeNode) {
+			$unionTypeNodes = [];
+			foreach ($typeNode->types as $innerTypeNode) {
+				$unionTypeNodes = array_merge($unionTypeNodes, $this->getUnionTypeNodes($innerTypeNode));
+			}
+			return $unionTypeNodes;
+		}
+
+		if ($typeNode instanceof GenericTypeNode) {
+			$unionTypeNodes = [];
+			foreach ($typeNode->genericTypes as $innerTypeNode) {
+				$unionTypeNodes = array_merge($unionTypeNodes, $this->getUnionTypeNodes($innerTypeNode));
+			}
+			return $unionTypeNodes;
+		}
+
+		return [];
 	}
 
 }

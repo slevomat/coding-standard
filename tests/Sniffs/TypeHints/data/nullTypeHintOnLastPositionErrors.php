@@ -55,8 +55,32 @@ class Whatever
  * @property-write null|int $propertyWrite
  * @method null|bool method(int $m, bool ...$m2)
  * @method bool[]|null|array method2(bool $m)
+ * @method method3(?\Foo<(null|int)> $m)
  */
 class Boo
 {
+
+}
+
+class IntersectionAndGeneric
+{
+
+	/** @var (bool|null|int)[] */
+	public $a;
+
+	/** @var string&(null|int|float) */
+	public $b;
+
+	/** @var (int|null|bool)[][][] */
+	public $c;
+
+	/** @var int|null|(string<foo>&bool)[] */
+	public $d;
+
+	/** @var \Foo<(null|int), (null|bool)> */
+	public $e;
+
+	/** @var \Foo<\Foo<null|int>> */
+	public $f;
 
 }

@@ -120,7 +120,7 @@ function travesableUsedTypeHint(): ArrayIterator
 /**
  * @return string[]|null
  */
-function returnsNullableArrayOfStrings()
+function returnsNullableArrayOfStrings(): ?array
 {
 	return [];
 }
@@ -128,7 +128,7 @@ function returnsNullableArrayOfStrings()
 /**
  * @return mixed[]
  */
-function returnsTraversableMixed()
+function returnsTraversableMixed(): array
 {
 	return [];
 }
@@ -136,7 +136,7 @@ function returnsTraversableMixed()
 /**
  * @return string[]
  */
-function returnsTraversableStrings()
+function returnsTraversableStrings(): array
 {
 	return [];
 }
@@ -144,7 +144,7 @@ function returnsTraversableStrings()
 /**
  * @return \DateTimeImmutable[]
  */
-function returnsTraversableDateTimeImmutable()
+function returnsTraversableDateTimeImmutable(): array
 {
 	return [];
 }
@@ -297,7 +297,7 @@ abstract class Foo
 	/**
 	 * @return string[]|null
 	 */
-	public function returnsNullableArrayOfStrings()
+	public function returnsNullableArrayOfStrings(): ?array
 	{
 		return [];
 	}
@@ -305,7 +305,7 @@ abstract class Foo
 	/**
 	 * @return mixed[]
 	 */
-	private function returnsTraversableMixed()
+	private function returnsTraversableMixed(): array
 	{
 		return [];
 	}
@@ -313,7 +313,7 @@ abstract class Foo
 	/**
 	 * @return string[]
 	 */
-	public static function returnsTraversableStrings()
+	public static function returnsTraversableStrings(): array
 	{
 		return [];
 	}
@@ -321,7 +321,7 @@ abstract class Foo
 	/**
 	 * @return \DateTimeImmutable[]
 	 */
-	abstract function returnsTraversableDateTimeImmutable();
+	abstract function returnsTraversableDateTimeImmutable(): array;
 
 	public function __construct()
 	{
@@ -369,3 +369,48 @@ function (): void {
 function () use (& $foo): void {
 
 };
+
+class IntersectionAndGeneric
+{
+
+	/**
+	 * @return (float|int)[]
+	 */
+	public function a(): array
+	{
+		return [];
+	}
+
+	/**
+	 * @return \Boo<int, bool>|null
+	 */
+	public function b(): ?\Boo
+	{
+		return null;
+	}
+
+	/**
+	 * @return bool[]|int[]|iterable
+	 */
+	public function c()
+	{
+		return true;
+	}
+
+	/**
+	 * @return array<int, bool>
+	 */
+	public function d(): array
+	{
+		return [];
+	}
+
+	/**
+	 * @return bool[][][]|null
+	 */
+	public function e(): ?array
+	{
+		return [];
+	}
+
+}

@@ -369,3 +369,48 @@ function (): bool {
 function () use (& $foo): \Foo\Bar {
 
 };
+
+class IntersectionAndGeneric
+{
+
+	/**
+	 * @return (float|int)[]
+	 */
+	public function a()
+	{
+		return [];
+	}
+
+	/**
+	 * @return \Boo<int, bool>|null
+	 */
+	public function b()
+	{
+		return null;
+	}
+
+	/**
+	 * @return bool[]|int[]|iterable
+	 */
+	public function c()
+	{
+		return true;
+	}
+
+	/**
+	 * @return array<int, bool>
+	 */
+	public function d()
+	{
+		return [];
+	}
+
+	/**
+	 * @return bool[][][]|null
+	 */
+	public function e()
+	{
+		return [];
+	}
+
+}

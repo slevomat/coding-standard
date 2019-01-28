@@ -153,7 +153,7 @@ function oneWithoutTypeHintAndWithInvalidAnnotation(string $a, string $b, float 
 /**
  * @param mixed[] $a
  */
-function traversableMixed($a)
+function traversableMixed(array $a)
 {
 
 }
@@ -161,7 +161,7 @@ function traversableMixed($a)
 /**
  * @param string[] $a
  */
-function traversableStrings($a)
+function traversableStrings(array $a)
 {
 
 }
@@ -169,7 +169,7 @@ function traversableStrings($a)
 /**
  * @param \DateTimeImmutable[] $a
  */
-function traversableDateTimeImmutable($a)
+function traversableDateTimeImmutable(array $a)
 {
 
 }
@@ -346,7 +346,7 @@ abstract class Foo
 	/**
 	 * @param mixed[] $a
 	 */
-	public function traversableMixed($a)
+	public function traversableMixed(array $a)
 	{
 
 	}
@@ -354,12 +354,12 @@ abstract class Foo
 	/**
 	 * @param string[] $a
 	 */
-	abstract public function traversableStrings($a);
+	abstract public function traversableStrings(array $a);
 
 	/**
 	 * @param \DateTimeImmutable[] $a
 	 */
-	protected function traversableDateTimeImmutable($a)
+	protected function traversableDateTimeImmutable(array $a)
 	{
 
 	}
@@ -370,6 +370,46 @@ abstract class Foo
 	private function invalidAnnotation($a)
 	{
 
+	}
+
+}
+
+class IntersectionAndGeneric
+{
+
+	/**
+	 * @param (bool|int)[][] $a
+	 */
+	public function a(array $a): void
+	{
+	}
+
+	/**
+	 * @param \Foo<string>|null $b
+	 */
+	public function b(?\Foo $b): void
+	{
+	}
+
+	/**
+	 * @param null[]|\Traversable $c
+	 */
+	public function c(\Traversable $c): void
+	{
+	}
+
+	/**
+	 * @param array<int> $d
+	 */
+	public function d(array $d): void
+	{
+	}
+
+	/**
+	 * @param int[][]|null $e
+	 */
+	public function e(?array $e): void
+	{
 	}
 
 }

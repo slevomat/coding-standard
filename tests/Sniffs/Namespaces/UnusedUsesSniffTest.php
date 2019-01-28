@@ -111,7 +111,7 @@ class UnusedUsesSniffTest extends TestCase
 			'searchAnnotations' => false,
 		]);
 
-		self::assertSame(41, $report->getErrorCount());
+		self::assertSame(55, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Assert is not used in this file.');
 		self::assertSniffError($report, 6, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Doctrine\ORM\Mapping (as ORM) is not used in this file.');
@@ -153,6 +153,20 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertSniffError($report, 43, UnusedUsesSniff::CODE_UNUSED_USE, 'Type MethodReturn is not used in this file.');
 		self::assertSniffError($report, 44, UnusedUsesSniff::CODE_UNUSED_USE, 'Type MethodReturnCollection is not used in this file.');
 		self::assertSniffError($report, 45, UnusedUsesSniff::CODE_UNUSED_USE, 'Type MethodParameter5 is not used in this file.');
+		self::assertSniffError($report, 46, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Iag1 is not used in this file.');
+		self::assertSniffError($report, 47, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Iag2 is not used in this file.');
+		self::assertSniffError($report, 48, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Iag3 is not used in this file.');
+		self::assertSniffError($report, 49, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Iag4 is not used in this file.');
+		self::assertSniffError($report, 50, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Iag5 is not used in this file.');
+		self::assertSniffError($report, 51, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Iag6 is not used in this file.');
+		self::assertSniffError($report, 52, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Iag7 is not used in this file.');
+		self::assertSniffError($report, 53, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Iag8 is not used in this file.');
+		self::assertSniffError($report, 54, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Iag9 is not used in this file.');
+		self::assertSniffError($report, 55, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Iag10 is not used in this file.');
+		self::assertSniffError($report, 56, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Iag11 is not used in this file.');
+		self::assertSniffError($report, 57, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Iag12 is not used in this file.');
+		self::assertSniffError($report, 58, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Iag13 is not used in this file.');
+		self::assertSniffError($report, 59, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Iag14 is not used in this file.');
 	}
 
 	public function testUsedUseInAnnotationWithEnabledSearchAnnotations(): void

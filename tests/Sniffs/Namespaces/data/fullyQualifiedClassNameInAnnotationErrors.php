@@ -1,65 +1,89 @@
 <?php
 
-namespace FooNamespace;
+namespace XXX;
 
+use DateTime;
 use DateTimeImmutable;
 use Exception;
 use Iterator;
 use Traversable;
+use YYY\Partial;
+use YYY\PropertyUsed;
 
-class FooClass
+class Foo
 {
 
-	/** @var DateTimeImmutable */
-	const DATE = true;
+	/** @var PropertySameNamespace */
+	private $propertySameNamespace;
+
+	/** @var PropertyUsed */
+	private $propertyUsed;
+
+	/** @var Partial\PropertyPartiallyUsed */
+	private $propertyPartiallyUsed;
+
+	/** @var \YYY\PropertyFqnAlready */
+	private $propertyFqnAlready;
 
 	/**
-	 * @var DateTimeImmutable[]
+	 * @var Foo
 	 */
-	private $array = [];
+	private $propertyMultiLineBlock;
 
 	/**
-	 * @param Traversable $foo
+	 * @var Foo foo
 	 */
-	public function __construct(Traversable $foo)
+	private $propertyWithComment;
+
+	/** @var Foo|Bar */
+	private $propertyMultipleTypes;
+
+	/** @var Foo[] */
+	private $propertyCollection;
+
+	/** @var string */
+	private $propertyNativeType;
+
+	/** @var self */
+	private $propertySelf;
+
+	/** @var $this */
+	private $propertyThis;
+
+	/** @var Foo|Foo[]|\YYY\Foo|self|mixed|null|Foo */
+	private $propertyClusterfuck;
+
+	public function __construct()
 	{
-		/** @var FooClass $boo */
-		$boo = $this->get();
+		/** @var VariableSameNamespace $x */
+		$x = true;
+
+		/** @var $x InvalidAnnotation */
+		$x = true;
+
+		/** @var VariableWithCommentSameNamespace $x comment*/
+		$x = true;
+
+		/** @var $variableWithoutType */
+		$variableWithoutType = true;
 	}
 
 	/**
-	 * @return FooClass
-	 * @throws Exception
+	 * @param ParamSameNamespace $paramSameNamespace
+	 * @param $paramWithoutType
+	 * @return ReturnSameNamespace
 	 */
-	public function create(): self
-	{
-		return new self();
-	}
-
-	/**
-	 * @param string|int|DateTimeImmutable $date
-	 * @return DateTimeImmutable|null
-	 */
-	public function createDate($date)
+	public function baz()
 	{
 
 	}
 
 	/**
-	 * @return array|mixed[]|Traversable
+	 * @param Partial $partial Partial
 	 */
-	public function traversable()
+	public function classNameInDescription($partial)
 	{
 
-	}
-
-	/**
-	 * @return FooClass[]|Iterator
-	 */
-	public function resultSet()
-	{
-		/** @var $invalid Annotation */
-		$coo = $this->get();
 	}
 
 }
@@ -69,10 +93,42 @@ class FooClass
  * @property-read Iterator $propertyRead
  * @property-write DateTimeImmutable[] $propertyWrite
  * @method Iterator method(Traversable $m, Exception ...$m2)
- * @method method(?DateTimeImmutable $m = null, ?DateTimeImmutable $m2, $m3)
- * @method DateTimeImmutable[]|array method(Iterator $m)
+ * @method method2(?DateTimeImmutable $m = null, ?DateTimeImmutable $m2, $m3)
+ * @method DateTimeImmutable[]|array method3(?Iterator<DateTime> $m)
  */
-class BooClass
+class Boo
 {
+
+}
+
+/**
+ * @property DateTimeImmutable&Iterator $property
+ */
+class IntersectionAndGeneric
+{
+
+	/** @var (DateTimeImmutable|null|Iterator)[] */
+	public $a;
+
+	/** @var Iterator&Traversable<int, DateTimeImmutable> */
+	public $b;
+
+	/** @var string&(DateTimeImmutable|DateTime) */
+	public $c;
+
+	/** @var string|(DateTimeImmutable&DateTime) */
+	public $d;
+
+	/** @var DateTimeImmutable[][][] */
+	public $e;
+
+	/** @var (DateTimeImmutable|DateTime)[][][] */
+	public $f;
+
+	/** @var int|(Iterator<string>&bool)[] */
+	public $g;
+
+	/** @var Iterator<Traversable<DateTimeImmutable>> */
+	public $h;
 
 }

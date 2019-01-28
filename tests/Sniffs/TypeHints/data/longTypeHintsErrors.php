@@ -57,10 +57,42 @@ class Foo
  * @property-read integer $propertyRead
  * @property-write integer[] $propertyWrite
  * @method boolean method(integer $m, boolean ...$m2)
- * @method method(?integer $m = null, ?boolean $m2, $m3)
- * @method boolean[]|array method(Boolean $m)
+ * @method method2(?integer $m = null, ?boolean $m2, $m3)
+ * @method boolean[]|array method3(?Boolean<integer> $m)
  */
 class Boo
 {
+
+}
+
+/**
+ * @property integer&boolean $property
+ */
+class IntersectionAndGeneric
+{
+
+	/** @var (boolean|null|integer)[] */
+	public $a;
+
+	/** @var integer&boolean<boolean, integer> */
+	public $b;
+
+	/** @var string&(integer|float) */
+	public $c;
+
+	/** @var string|(float&integer) */
+	public $d;
+
+	/** @var boolean[][][] */
+	public $e;
+
+	/** @var (integer|boolean)[][][] */
+	public $f;
+
+	/** @var integer|(string<foo>&boolean)[] */
+	public $g;
+
+	/** @var \Foo<\Boo<integer, boolean>> */
+	public $h;
 
 }

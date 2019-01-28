@@ -103,9 +103,18 @@ class MethodAnnotation extends Annotation
 	{
 		$static = $this->contentNode->isStatic ? 'static ' : '';
 		$returnType = $this->getMethodReturnType() !== null ? sprintf('%s ', AnnotationTypeHelper::export($this->getMethodReturnType())) : '';
-		$parameters = implode(', ', $this->getMethodParameters());
 
-		$exported = sprintf('%s %s%s%s(%s)', $this->name, $static, $returnType, $this->getMethodName(), $parameters);
+		$parameters = [];
+		foreach ($this->getMethodParameters() as $parameter) {
+			$type = $parameter->type !== null ? AnnotationTypeHelper::export($parameter->type) . ' ' : '';
+			$isReference = $parameter->isReference ? '&' : '';
+			$isVariadic = $parameter->isVariadic ? '...' : '';
+			$default = $parameter->defaultValue !== null ? sprintf(' = %s', $parameter->defaultValue) : '';
+
+			$parameters[] = sprintf('%s%s%s%s%s', $type, $isReference, $isVariadic, $parameter->parameterName, $default);
+		}
+
+		$exported = sprintf('%s %s%s%s(%s)', $this->name, $static, $returnType, $this->getMethodName(), implode(', ', $parameters));
 
 		$description = $this->getDescription();
 		if ($description !== null) {

@@ -440,3 +440,68 @@ function (): bool {
 function () use (& $foo): \Foo\Bar {
 
 };
+
+class IntersectionAndGeneric
+{
+
+	/** @var array[] */
+	public $a;
+
+	/** @var array[]|null */
+	public $b;
+
+	/** @var array[]&\Traversable */
+	public $c;
+
+	/** @var bool|array[] */
+	public $d;
+
+	/** @var \Foo<array[]> */
+	public $e;
+
+	/**
+	 * @param (bool|int)[][] $a
+	 * @return (float|int)[]
+	 */
+	public function a($a)
+	{
+		return [];
+	}
+
+	/**
+	 * @param \Foo<string>|null $b
+	 * @return \Boo<int, bool>|null
+	 */
+	public function b($b)
+	{
+		return null;
+	}
+
+	/**
+	 * @param null[]|\Traversable $c
+	 * @return bool|int[]|iterable
+	 */
+	public function c($c)
+	{
+		return true;
+	}
+
+	/**
+	 * @param array<int> $d
+	 * @return array<int, bool>
+	 */
+	public function d($d)
+	{
+		return [];
+	}
+
+	/**
+	 * @param int[][]|null $e
+	 * @return bool[][][]|null
+	 */
+	public function e($e)
+	{
+		return [];
+	}
+
+}

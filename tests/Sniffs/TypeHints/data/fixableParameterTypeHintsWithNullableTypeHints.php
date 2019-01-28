@@ -373,3 +373,43 @@ abstract class Foo
 	}
 
 }
+
+class IntersectionAndGeneric
+{
+
+	/**
+	 * @param (bool|int)[][] $a
+	 */
+	public function a($a): void
+	{
+	}
+
+	/**
+	 * @param \Foo<string>|null $b
+	 */
+	public function b($b): void
+	{
+	}
+
+	/**
+	 * @param null[]|\Traversable $c
+	 */
+	public function c($c): void
+	{
+	}
+
+	/**
+	 * @param array<int> $d
+	 */
+	public function d($d): void
+	{
+	}
+
+	/**
+	 * @param int[][]|null $e
+	 */
+	public function e($e): void
+	{
+	}
+
+}

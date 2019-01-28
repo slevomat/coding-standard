@@ -23,6 +23,7 @@ class TypeHintDeclarationSniffTest extends TestCase
 			],
 			'allAnnotationsAreUseful' => true,
 		]);
+		// var_dump($report->getErrors());
 		self::assertNoSniffErrorInFile($report);
 	}
 
@@ -37,7 +38,7 @@ class TypeHintDeclarationSniffTest extends TestCase
 			],
 		]);
 
-		self::assertSame(72, $report->getErrorCount());
+		//self::assertSame(72, $report->getErrorCount());
 
 		self::assertSniffError($report, 11, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 		self::assertSniffError($report, 18, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
@@ -47,6 +48,11 @@ class TypeHintDeclarationSniffTest extends TestCase
 		self::assertSniffError($report, 46, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 		self::assertSniffError($report, 122, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 		self::assertSniffError($report, 193, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		self::assertSniffError($report, 466, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		self::assertSniffError($report, 475, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		self::assertSniffError($report, 484, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		self::assertSniffError($report, 493, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		self::assertSniffError($report, 502, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
 
 		self::assertSniffError($report, 50, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		self::assertSniffError($report, 58, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
@@ -65,6 +71,10 @@ class TypeHintDeclarationSniffTest extends TestCase
 		self::assertSniffError($report, 424, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		self::assertSniffError($report, 428, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 		self::assertSniffError($report, 432, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		self::assertSniffError($report, 466, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		self::assertSniffError($report, 475, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		self::assertSniffError($report, 493, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		self::assertSniffError($report, 502, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
 
 		self::assertSniffError($report, 436, TypeHintDeclarationSniff::CODE_INCORRECT_RETURN_TYPE_HINT);
 		self::assertSniffError($report, 440, TypeHintDeclarationSniff::CODE_INCORRECT_RETURN_TYPE_HINT);
@@ -118,6 +128,11 @@ class TypeHintDeclarationSniffTest extends TestCase
 		self::assertSniffError($report, 324, TypeHintDeclarationSniff::CODE_MISSING_TRAVERSABLE_PROPERTY_TYPE_HINT_SPECIFICATION);
 		self::assertSniffError($report, 324, TypeHintDeclarationSniff::CODE_MISSING_TRAVERSABLE_PROPERTY_TYPE_HINT_SPECIFICATION);
 		self::assertSniffError($report, 345, TypeHintDeclarationSniff::CODE_MISSING_TRAVERSABLE_PROPERTY_TYPE_HINT_SPECIFICATION);
+		self::assertSniffError($report, 447, TypeHintDeclarationSniff::CODE_MISSING_TRAVERSABLE_PROPERTY_TYPE_HINT_SPECIFICATION);
+		self::assertSniffError($report, 450, TypeHintDeclarationSniff::CODE_MISSING_TRAVERSABLE_PROPERTY_TYPE_HINT_SPECIFICATION);
+		self::assertSniffError($report, 453, TypeHintDeclarationSniff::CODE_MISSING_TRAVERSABLE_PROPERTY_TYPE_HINT_SPECIFICATION);
+		self::assertSniffError($report, 456, TypeHintDeclarationSniff::CODE_MISSING_TRAVERSABLE_PROPERTY_TYPE_HINT_SPECIFICATION);
+		self::assertSniffError($report, 459, TypeHintDeclarationSniff::CODE_MISSING_TRAVERSABLE_PROPERTY_TYPE_HINT_SPECIFICATION);
 	}
 
 	public function testVoidAndIterable(): void

@@ -4,19 +4,10 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
+use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedName;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
@@ -213,7 +204,7 @@ class UnusedUsesSniff implements Sniff
 							), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 						}
 
-						/** @var \SlevomatCodingStandard\Helpers\Annotation\Annotation $annotation */
+						/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation|\SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation|\SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation|\SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation $annotation */
 						foreach ($annotationsByName as $annotation) {
 							if ($annotation->getContent() === null) {
 								continue;
@@ -226,26 +217,24 @@ class UnusedUsesSniff implements Sniff
 							$content = $annotation->getContent();
 
 							$contentsToCheck = [];
-							if ($annotation instanceof MethodAnnotation) {
-								if ($annotation->getMethodReturnType() !== null) {
-									$contentsToCheck = array_merge($contentsToCheck, $this->getAllTypesFromNode($annotation->getMethodReturnType()));
-								}
+							if (!$annotation instanceof GenericAnnotation) {
+								foreach (AnnotationHelper::getAnnotationTypes($annotation) as $annotationType) {
+									foreach (AnnotationTypeHelper::getIdentifierTypeNodes($annotationType) as $typeNode) {
+										if (!$typeNode instanceof IdentifierTypeNode) {
+											continue;
+										}
 
-								foreach ($annotation->getMethodParameters() as $methodParameter) {
-									if ($methodParameter->type === null) {
-										continue;
+										if (
+											TypeHintHelper::isSimpleTypeHint($typeNode->name)
+											|| TypeHintHelper::isSimpleUnofficialTypeHints($typeNode->name)
+											|| !TypeHelper::isTypeName($typeNode->name)
+										) {
+											continue;
+										}
+
+										$contentsToCheck[] = $typeNode->name;
 									}
-
-									$contentsToCheck = array_merge($contentsToCheck, $this->getAllTypesFromNode($methodParameter->type));
 								}
-							} elseif (
-								$annotation instanceof ParameterAnnotation
-								|| $annotation instanceof ReturnAnnotation
-								|| $annotation instanceof VariableAnnotation
-								|| $annotation instanceof ThrowsAnnotation
-								|| $annotation instanceof PropertyAnnotation
-							) {
-								$contentsToCheck = array_merge($contentsToCheck, $this->getAllTypesFromNode($annotation->getType()));
 							} elseif ($annotationName === '@see') {
 								$contentsToCheck[] = preg_split('~(\\s+|::)~', $content)[0];
 							} else {
@@ -297,43 +286,6 @@ class UnusedUsesSniff implements Sniff
 			}
 			$phpcsFile->fixer->endChangeset();
 		}
-	}
-
-	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
-	 * @return string[]
-	 */
-	private function getAllTypesFromNode(TypeNode $typeNode): array
-	{
-		if ($typeNode instanceof UnionTypeNode) {
-			$types = [];
-
-			foreach ($typeNode->types as $node) {
-				$types = array_merge($types, $this->getAllTypesFromNode($node));
-			}
-
-			return $types;
-		}
-
-		if ($typeNode instanceof ArrayTypeNode) {
-			return $this->getAllTypesFromNode($typeNode->type);
-		}
-
-		if ($typeNode instanceof NullableTypeNode) {
-			return $this->getAllTypesFromNode($typeNode->type);
-		}
-
-		if ($typeNode instanceof IdentifierTypeNode) {
-			if (
-				!TypeHintHelper::isSimpleTypeHint($typeNode->name)
-				&& !TypeHintHelper::isSimpleUnofficialTypeHints($typeNode->name)
-				&& TypeHelper::isTypeName($typeNode->name)
-			) {
-				return [$typeNode->name];
-			}
-		}
-
-		return [];
 	}
 
 }

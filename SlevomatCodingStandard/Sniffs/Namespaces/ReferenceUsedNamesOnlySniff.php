@@ -5,11 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use SlevomatCodingStandard\Helpers\Annotation\Annotation;
 use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\ClassHelper;
@@ -517,38 +513,6 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 			return $references;
 		}
 
-		$addReferencesFromTypeNode = function (Annotation $annotation, TypeNode $annotationTypeNode) use (&$references): void {
-			$typeNodes = $annotationTypeNode instanceof UnionTypeNode ? $annotationTypeNode->types : [$annotationTypeNode];
-
-			foreach ($typeNodes as $typeNode) {
-				$typeHintNode = AnnotationTypeHelper::getTypeHintNode($typeNode);
-				$typeHint = AnnotationTypeHelper::getTypeHintFromNode($typeHintNode);
-
-				$lowercasedTypeHint = strtolower($typeHint);
-				if (
-					TypeHintHelper::isSimpleTypeHint($lowercasedTypeHint)
-					|| TypeHintHelper::isSimpleUnofficialTypeHints($lowercasedTypeHint)
-					|| !TypeHelper::isTypeName($typeHint)
-				) {
-					continue;
-				}
-
-				$reference = new stdClass();
-				$reference->fromDocComment = true;
-				$reference->annotation = $annotation;
-				$reference->nameNode = $typeHintNode;
-				$reference->name = $typeHint;
-				$reference->type = ReferencedName::TYPE_DEFAULT;
-				$reference->startPointer = $annotation->getStartPointer();
-				$reference->endPointer = $annotation->getEndPointer();
-				$reference->isClass = true;
-				$reference->isConstant = false;
-				$reference->isFunction = false;
-
-				$references[] = $reference;
-			}
-		};
-
 		$searchAnnotationsPointer = $openTagPointer + 1;
 		while (true) {
 			$docCommentOpenPointer = TokenHelper::findNext($phpcsFile, T_DOC_COMMENT_OPEN_TAG, $searchAnnotationsPointer);
@@ -573,19 +537,33 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 						continue;
 					}
 
-					if ($annotation instanceof MethodAnnotation) {
-						if ($annotation->getMethodReturnType() !== null) {
-							$addReferencesFromTypeNode($annotation, $annotation->getMethodReturnType());
-						}
-						foreach ($annotation->getMethodParameters() as $methodParameter) {
-							if ($methodParameter->type === null) {
+					foreach (AnnotationHelper::getAnnotationTypes($annotation) as $annotationType) {
+						foreach (AnnotationTypeHelper::getIdentifierTypeNodes($annotationType) as $typeHintNode) {
+							$typeHint = AnnotationTypeHelper::getTypeHintFromNode($typeHintNode);
+
+							$lowercasedTypeHint = strtolower($typeHint);
+							if (
+								TypeHintHelper::isSimpleTypeHint($lowercasedTypeHint)
+								|| TypeHintHelper::isSimpleUnofficialTypeHints($lowercasedTypeHint)
+								|| !TypeHelper::isTypeName($typeHint)
+							) {
 								continue;
 							}
 
-							$addReferencesFromTypeNode($annotation, $methodParameter->type);
+							$reference = new stdClass();
+							$reference->fromDocComment = true;
+							$reference->annotation = $annotation;
+							$reference->nameNode = $typeHintNode;
+							$reference->name = $typeHint;
+							$reference->type = ReferencedName::TYPE_DEFAULT;
+							$reference->startPointer = $annotation->getStartPointer();
+							$reference->endPointer = $annotation->getEndPointer();
+							$reference->isClass = true;
+							$reference->isConstant = false;
+							$reference->isFunction = false;
+
+							$references[] = $reference;
 						}
-					} else {
-						$addReferencesFromTypeNode($annotation, $annotation->getType());
 					}
 				}
 			}

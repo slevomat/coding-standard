@@ -5,9 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\TypeHelper;
@@ -55,28 +53,8 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 					continue;
 				}
 
-				$annotationTypes = [];
-
-				if ($annotation instanceof MethodAnnotation) {
-					if ($annotation->getMethodReturnType() !== null) {
-						$annotationTypes[] = $annotation->getMethodReturnType();
-					}
-					foreach ($annotation->getMethodParameters() as $methodParameterAnnotation) {
-						if ($methodParameterAnnotation->type === null) {
-							continue;
-						}
-
-						$annotationTypes[] = $methodParameterAnnotation->type;
-					}
-				} else {
-					$annotationTypes[] = $annotation->getType();
-				}
-
-				foreach ($annotationTypes as $annotationType) {
-					$typeNodes = $annotationType instanceof UnionTypeNode ? $annotationType->types : [$annotationType];
-
-					foreach ($typeNodes as $typeNode) {
-						$typeHintNode = AnnotationTypeHelper::getTypeHintNode($typeNode);
+				foreach (AnnotationHelper::getAnnotationTypes($annotation) as $annotationType) {
+					foreach (AnnotationTypeHelper::getIdentifierTypeNodes($annotationType) as $typeHintNode) {
 						$typeHint = AnnotationTypeHelper::getTypeHintFromNode($typeHintNode);
 
 						$lowercasedTypeHint = strtolower($typeHint);

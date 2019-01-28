@@ -36,6 +36,33 @@ class AnnotationHelper
 
 	/**
 	 * @internal
+	 * @param \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation|\SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation|\SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation $annotation
+	 * @return \PHPStan\PhpDocParser\Ast\Type\TypeNode[]
+	 */
+	public static function getAnnotationTypes(Annotation $annotation): array
+	{
+		$annotationTypes = [];
+
+		if ($annotation instanceof MethodAnnotation) {
+			if ($annotation->getMethodReturnType() !== null) {
+				$annotationTypes[] = $annotation->getMethodReturnType();
+			}
+			foreach ($annotation->getMethodParameters() as $methodParameterAnnotation) {
+				if ($methodParameterAnnotation->type === null) {
+					continue;
+				}
+
+				$annotationTypes[] = $methodParameterAnnotation->type;
+			}
+		} else {
+			$annotationTypes[] = $annotation->getType();
+		}
+
+		return $annotationTypes;
+	}
+
+	/**
+	 * @internal
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation|\SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation|\SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation $annotation
 	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode

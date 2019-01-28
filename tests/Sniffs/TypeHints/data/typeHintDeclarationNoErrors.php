@@ -667,4 +667,97 @@ abstract class FooClass
 		return true;
 	}
 
+	/** @var \Foo<string> */
+	private $generic;
+
+	/**
+	 * @return \Traversable<string>
+	 */
+	public function hasGenericReturnAnnotation(): \Traversable
+	{
+	}
+
+}
+
+class IntersectionAndGeneric
+{
+
+	/** @var (bool|int)[][] */
+	public $a;
+
+	/** @var \Foo<string>|null */
+	public $b;
+
+	/** @var \Foo<string>&\Traversable */
+	public $c;
+
+	/** @var null[] */
+	public $d;
+
+	/** @var array<int> */
+	public $e;
+
+	/**
+	 * @param (bool|int)[][] $a
+	 * @return (float|int)[]
+	 */
+	public function a(array $a): array
+	{
+		return [];
+	}
+
+	/**
+	 * @param \Foo<string>|null $b
+	 * @return \Boo<int, bool>|null
+	 */
+	public function b(?\Foo $b): ?\Boo
+	{
+		return null;
+	}
+
+	/**
+	 * @param \Foo<string>&\Traversable $c
+	 * @return \Boo<int, bool>|iterable
+	 */
+	public function c(\Foo $c): \Boo
+	{
+		return [];
+	}
+
+	/**
+	 * @param \Foo<string>&\Traversable $c2
+	 * @return \Boo<int, bool>|iterable
+	 */
+	public function c2($c2)
+	{
+		return [];
+	}
+
+	/**
+	 * @param null[]|\Traversable $d
+	 * @return bool|int[]|iterable
+	 */
+	public function d(\Traversable $d)
+	{
+		return true;
+	}
+
+	/**
+	 * @param array<int> $e
+	 * @return array<int, bool>
+	 */
+	public function e(array $e): array
+	{
+		return [];
+	}
+
+	/**
+	 * @param int[][]|null $f
+	 * @return bool[][][]|null
+	 */
+	public function f(?array $f): ?array
+	{
+		return [];
+	}
+
 }
