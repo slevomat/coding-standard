@@ -600,7 +600,7 @@ use Foo, Bar;
 
 Sniff provides the following settings:
 
-* `searchAnnotations` (defaults to `false`): enables searching for mentions in `@var`, `@param`, `@return` and `@throws` annotations.
+* `searchAnnotations` (defaults to `false`): enables searching for mentions in annotations.
 * `namespacesRequiredToUse`: if not set, all namespaces are required to be used. When set, only mentioned namespaces are required to be used. Useful in tandem with UseOnlyWhitelistedNamespaces sniff.
 * `fullyQualifiedKeywords`: allows fully qualified names after certain keywords. Useful in tandem with FullyQualifiedClassNameAfterKeyword sniff.
 * `allowFullyQualifiedExceptions`, `specialExceptionNames` & `ignoredNames`: allows fully qualified exceptions. Useful in tandem with FullyQualifiedExceptions sniff.
@@ -646,7 +646,7 @@ Sniff provides the following settings:
 
 #### SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation 🔧
 
-Enforces fully qualified names of classes and interfaces in phpDocs - in `@var`, `@param`, `@return`, `@throws`. This results in unambiguous phpDocs.
+Enforces fully qualified names of classes and interfaces in phpDocs - in annotations. This results in unambiguous phpDocs.
 
 #### SlevomatCodingStandard.Commenting.ForbiddenAnnotations 🔧
 
