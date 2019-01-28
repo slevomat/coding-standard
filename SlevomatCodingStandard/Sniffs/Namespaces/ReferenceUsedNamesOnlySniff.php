@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\Annotation;
@@ -311,7 +312,12 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 							$phpcsFile->fixer->beginChangeset();
 
 							if ($reference->fromDocComment) {
-								$fixedAnnotationContent = AnnotationHelper::fixAnnotation($phpcsFile, $reference->annotation, $reference->nameNode, substr($reference->name, 1));
+								$fixedAnnotationContent = AnnotationHelper::fixAnnotation(
+									$phpcsFile,
+									$reference->annotation,
+									$reference->nameNode,
+									new IdentifierTypeNode(substr($reference->name, 1))
+								);
 
 								$phpcsFile->fixer->replaceToken($startPointer, $fixedAnnotationContent);
 								for ($i = $startPointer + 1; $i <= $reference->endPointer; $i++) {
@@ -394,7 +400,12 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 							$phpcsFile->fixer->beginChangeset();
 
 							if ($reference->fromDocComment) {
-								$fixedAnnotationContent = AnnotationHelper::fixAnnotation($phpcsFile, $reference->annotation, $reference->nameNode, $nameToReference);
+								$fixedAnnotationContent = AnnotationHelper::fixAnnotation(
+									$phpcsFile,
+									$reference->annotation,
+									$reference->nameNode,
+									new IdentifierTypeNode($nameToReference)
+								);
 								$phpcsFile->fixer->replaceToken($startPointer, $fixedAnnotationContent);
 							} else {
 								$phpcsFile->fixer->replaceToken($startPointer, $nameToReference);

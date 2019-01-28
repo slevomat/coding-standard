@@ -7,11 +7,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
-use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
-use SlevomatCodingStandard\Helpers\TokenHelper;
 use function count;
 use function in_array;
-use function preg_replace_callback;
 use function strtolower;
 use const T_DOC_COMMENT_OPEN_TAG;
 
@@ -109,14 +106,12 @@ class NullTypeHintOnLastPositionSniff implements Sniff
 				$fixedTypeNodes[] = $nullTypeNode;
 				$fixedAnnotationType = new UnionTypeNode($fixedTypeNodes);
 
-				$fixedAnnotationContent = preg_replace_callback(
-					'~^(' . $annotationName . '\\s+)(\\S+)~',
-					function (array $matches) use ($fixedAnnotationType): string {
-						return $matches[1] . AnnotationTypeHelper::export($fixedAnnotationType);
-					},
-					TokenHelper::getContent($phpcsFile, $annotation->getStartPointer(), $annotation->getEndPointer())
-				);
-				$phpcsFile->fixer->addContent($annotation->getStartPointer(), $fixedAnnotationContent);
+				$fixedAnnotationContent = AnnotationHelper::fixAnnotation($phpcsFile, $annotation, $annotationType, $fixedAnnotationType);
+
+				$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
+				for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {
+					$phpcsFile->fixer->replaceToken($i, '');
+				}
 
 				$phpcsFile->fixer->endChangeset();
 			}

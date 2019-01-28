@@ -5,7 +5,6 @@ namespace SlevomatCodingStandard\Helpers;
 use PHP_CodeSniffer\Files\File;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
@@ -40,16 +39,16 @@ class AnnotationHelper
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation|\SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation|\SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation $annotation
 	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
-	 * @param string $type
+	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $fixedTypeNode
 	 * @return string
 	 */
-	public static function fixAnnotation(File $phpcsFile, Annotation $annotation, TypeNode $typeNode, string $type): string
+	public static function fixAnnotation(File $phpcsFile, Annotation $annotation, TypeNode $typeNode, TypeNode $fixedTypeNode): string
 	{
 		if ($annotation instanceof MethodAnnotation) {
 			$fixedContentNode = clone $annotation->getContentNode();
 
 			if ($fixedContentNode->returnType !== null) {
-				$fixedContentNode->returnType = AnnotationTypeHelper::change($fixedContentNode->returnType, $typeNode, new IdentifierTypeNode($type));
+				$fixedContentNode->returnType = AnnotationTypeHelper::change($fixedContentNode->returnType, $typeNode, $fixedTypeNode);
 			}
 			foreach ($fixedContentNode->parameters as $parameterNo => $parameterNode) {
 				if ($parameterNode->type === null) {
@@ -57,7 +56,7 @@ class AnnotationHelper
 				}
 
 				$fixedContentNode->parameters[$parameterNo] = clone $parameterNode;
-				$fixedContentNode->parameters[$parameterNo]->type = AnnotationTypeHelper::change($parameterNode->type, $typeNode, new IdentifierTypeNode($type));
+				$fixedContentNode->parameters[$parameterNo]->type = AnnotationTypeHelper::change($parameterNode->type, $typeNode, $fixedTypeNode);
 			}
 
 			$fixedAnnotation = new MethodAnnotation(
@@ -68,9 +67,8 @@ class AnnotationHelper
 				$fixedContentNode
 			);
 		} else {
-			$fixedTypeNode = AnnotationTypeHelper::change($annotation->getType(), $typeNode, new IdentifierTypeNode($type));
 			$fixedContentNode = clone $annotation->getContentNode();
-			$fixedContentNode->type = $fixedTypeNode;
+			$fixedContentNode->type = AnnotationTypeHelper::change($annotation->getType(), $typeNode, $fixedTypeNode);
 
 			$annotationClassName = get_class($annotation);
 			$fixedAnnotation = new $annotationClassName(
