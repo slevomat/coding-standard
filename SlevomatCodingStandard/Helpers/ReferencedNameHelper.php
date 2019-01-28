@@ -263,11 +263,17 @@ class ReferencedNameHelper
 			}
 
 			return false;
-		} elseif ($previousToken['code'] === T_OPEN_PARENTHESIS && isset($previousToken['parenthesis_owner']) && $tokens[$previousToken['parenthesis_owner']]['code'] === T_DECLARE) {
+		}
+
+		if ($previousToken['code'] === T_OPEN_PARENTHESIS && isset($previousToken['parenthesis_owner']) && $tokens[$previousToken['parenthesis_owner']]['code'] === T_DECLARE) {
 			return false;
-		} elseif ($previousToken['code'] === T_COMMA && TokenHelper::findPreviousLocal($phpcsFile, T_DECLARE, $previousPointer - 1) !== null) {
+		}
+
+		if ($previousToken['code'] === T_COMMA && TokenHelper::findPreviousLocal($phpcsFile, T_DECLARE, $previousPointer - 1) !== null) {
 			return false;
-		} elseif ($previousToken['code'] === T_COMMA) {
+		}
+
+		if ($previousToken['code'] === T_COMMA) {
 			$constPointer = TokenHelper::findPreviousLocal($phpcsFile, T_CONST, $previousPointer - 1);
 			if ($constPointer !== null && TokenHelper::findNext($phpcsFile, [T_OPEN_SHORT_ARRAY, T_ARRAY], $constPointer + 1, $startPointer) === null) {
 				return false;

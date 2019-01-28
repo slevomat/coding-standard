@@ -582,7 +582,9 @@ class UnusedPrivateElementsSniff implements Sniff
 		$visibilityModifiedToken = $tokens[$visibilityModifiedTokenPointer];
 		if (in_array($visibilityModifiedToken['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE], true)) {
 			return $visibilityModifiedTokenPointer;
-		} elseif (in_array($visibilityModifiedToken['code'], [T_ABSTRACT, T_STATIC], true)) {
+		}
+
+		if (in_array($visibilityModifiedToken['code'], [T_ABSTRACT, T_STATIC], true)) {
 			return $this->findVisibilityModifierTokenPointer($phpcsFile, $tokens, $visibilityModifiedTokenPointer);
 		}
 

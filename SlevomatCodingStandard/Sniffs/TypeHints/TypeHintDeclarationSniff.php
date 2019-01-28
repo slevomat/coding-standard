@@ -220,12 +220,14 @@ class TypeHintDeclarationSniff implements Sniff
 						self::CODE_MISSING_PARAMETER_TYPE_HINT
 					);
 					return;
-				} elseif ($this->isValidTypeHint($parameterTypeNode)) {
-					$possibleParameterTypeHintNode = $parameterTypeNode;
-					$nullableParameterTypeHint = false;
-				} else {
+				}
+
+				if (!$this->isValidTypeHint($parameterTypeNode)) {
 					return;
 				}
+
+				$possibleParameterTypeHintNode = $parameterTypeNode;
+				$nullableParameterTypeHint = false;
 			} elseif ($this->annotationContainsJustTwoTypes($parameterTypeNode)) {
 				/** @var \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $parameterTypeNode */
 				$parameterTypeNode = $parameterTypeNode;
@@ -1163,7 +1165,9 @@ class TypeHintDeclarationSniff implements Sniff
 
 			if ($this->annotationContainsStaticOrThisType($parameterAnnotationTypeNode)) {
 				continue;
-			} elseif ($this->isAnnotationCompoundOfNull($parameterAnnotationTypeNode)) {
+			}
+
+			if ($this->isAnnotationCompoundOfNull($parameterAnnotationTypeNode)) {
 				/** @var \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $parameterAnnotationTypeNode */
 				$parameterAnnotationTypeNode = $parameterAnnotationTypeNode;
 
