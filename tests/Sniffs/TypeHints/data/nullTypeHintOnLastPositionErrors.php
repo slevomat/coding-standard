@@ -49,3 +49,14 @@ class Whatever
 
 }
 
+/**
+ * @property null|bool $property
+ * @property-read null|int $propertyRead
+ * @property-write null|int $propertyWrite
+ * @method null|bool method(int $m, bool ...$m2)
+ * @method bool[]|null|array method2(bool $m)
+ */
+class Boo
+{
+
+}

@@ -426,7 +426,7 @@ Enforces using shorthand scalar typehint variants in phpDocs: `int` instead of `
 
 #### SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition 🔧
 
-Enforces `null` type hint on last position in `@var`, `@param` and `@return` annotations.
+Enforces `null` type hint on last position in annotations.
 
 
 #### SlevomatCodingStandard.PHP.ShortList 🔧

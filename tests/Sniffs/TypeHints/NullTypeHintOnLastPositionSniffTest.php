@@ -17,7 +17,7 @@ class NullTypeHintOnLastPositionSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/nullTypeHintOnLastPositionErrors.php');
 
-		self::assertSame(7, $report->getErrorCount());
+		self::assertSame(12, $report->getErrorCount());
 
 		self::assertSniffError($report, 7, NullTypeHintOnLastPositionSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
 		self::assertSniffError($report, 11, NullTypeHintOnLastPositionSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
@@ -26,6 +26,11 @@ class NullTypeHintOnLastPositionSniffTest extends TestCase
 		self::assertSniffError($report, 27, NullTypeHintOnLastPositionSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
 		self::assertSniffError($report, 35, NullTypeHintOnLastPositionSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
 		self::assertSniffError($report, 43, NullTypeHintOnLastPositionSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
+		self::assertSniffError($report, 53, NullTypeHintOnLastPositionSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
+		self::assertSniffError($report, 54, NullTypeHintOnLastPositionSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
+		self::assertSniffError($report, 55, NullTypeHintOnLastPositionSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
+		self::assertSniffError($report, 56, NullTypeHintOnLastPositionSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
+		self::assertSniffError($report, 57, NullTypeHintOnLastPositionSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
 
 		self::assertAllFixedInFile($report);
 	}
