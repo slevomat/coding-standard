@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace SlevomatCodingStandard\Sniffs\ControlStructures;
+namespace SlevomatCodingStandard\Sniffs\Operators;
 
 use SlevomatCodingStandard\Sniffs\TestCase;
 

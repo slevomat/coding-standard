@@ -105,10 +105,6 @@ Disallows use of `continue` without integer operand in `switch` because it emits
 
 Disallows use of `empty()`.
 
-#### SlevomatCodingStandard.ControlStructures.DisallowEqualOperators 🔧
-
-Disallows using loose `==` and `!=` comparison operators. Use `===` and `!==` instead, they are much more secure and predictable.
-
 #### SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator 🔧
 
 Requires use of null coalesce operator when possible.
@@ -132,6 +128,10 @@ foreach ($values as $value) {
 #### SlevomatCodingStandard.Functions.StaticClosure 🔧
 
 Reports closures not using `$this` that are not declared `static`.
+
+#### SlevomatCodingStandard.Operators.DisallowEqualOperators 🔧
+
+Disallows using loose `==` and `!=` comparison operators. Use `===` and `!==` instead, they are much more secure and predictable.
 
 #### SlevomatCodingStandard.Operators.DisallowIncrementAndDecrementOperators
 
