@@ -224,7 +224,7 @@ class FunctionHelperTest extends TestCase
 	/**
 	 * @dataProvider dataParametersTypeHints
 	 * @param string $functionName
-	 * @param \SlevomatCodingStandard\Helpers\ParameterTypeHint[]|null[] $expectedParametersTypeHints
+	 * @param (\SlevomatCodingStandard\Helpers\ParameterTypeHint|null)[] $expectedParametersTypeHints
 	 * @param string[] $expectedParametersWithoutTypeHints
 	 */
 	public function testParametersTypeHints(
@@ -255,7 +255,7 @@ class FunctionHelperTest extends TestCase
 	/**
 	 * @dataProvider dataParametersNullableTypeHints
 	 * @param string $functionName
-	 * @param \SlevomatCodingStandard\Helpers\ParameterTypeHint[]|null[] $expectedParametersTypeHints
+	 * @param (\SlevomatCodingStandard\Helpers\ParameterTypeHint|null)[] $expectedParametersTypeHints
 	 */
 	public function testParametersNullableTypeHints(
 		string $functionName,

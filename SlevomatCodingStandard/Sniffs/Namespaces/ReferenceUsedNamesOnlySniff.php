@@ -523,7 +523,6 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 			$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 
 			foreach ($annotations as $annotationsByName) {
-				/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation|\SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation|\SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation|\SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation $annotation */
 				foreach ($annotationsByName as $annotation) {
 					if ($annotation instanceof GenericAnnotation) {
 						continue;

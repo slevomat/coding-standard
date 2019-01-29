@@ -24,7 +24,7 @@ class ForbiddenAnnotationsSniff implements Sniff
 	/** @var string[] */
 	public $forbiddenAnnotations = [];
 
-	/** @var int[]|null [string => int] */
+	/** @var array<string, int>|null */
 	private $normalizedForbiddenAnnotations;
 
 	/**

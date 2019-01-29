@@ -138,7 +138,7 @@ class FunctionHelper
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $functionPointer
-	 * @return \SlevomatCodingStandard\Helpers\ParameterTypeHint[]|null[]
+	 * @return (\SlevomatCodingStandard\Helpers\ParameterTypeHint|null)[]
 	 */
 	public static function getParametersTypeHints(File $phpcsFile, int $functionPointer): array
 	{

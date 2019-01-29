@@ -28,10 +28,10 @@ class TypeNameMatchesFileNameSniff implements Sniff
 
 	public const CODE_NO_MATCH_BETWEEN_TYPE_NAME_AND_FILE_NAME = 'NoMatchBetweenTypeNameAndFileName';
 
-	/** @var string[] path(string) => namespace */
+	/** @var array<string, string> */
 	public $rootNamespaces = [];
 
-	/** @var string[]|null path(string) => namespace */
+	/** @var array<string, string>|null */
 	private $normalizedRootNamespaces;
 
 	/** @var string[] */

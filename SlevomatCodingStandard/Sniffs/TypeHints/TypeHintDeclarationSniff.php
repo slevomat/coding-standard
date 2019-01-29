@@ -82,7 +82,7 @@ class TypeHintDeclarationSniff implements Sniff
 	/** @var bool */
 	public $allAnnotationsAreUseful = false;
 
-	/** @var int[]|null [string => int] */
+	/** @var array<string, int>|null */
 	private $normalizedTraversableTypeHints;
 
 	/**
@@ -1084,7 +1084,7 @@ class TypeHintDeclarationSniff implements Sniff
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $functionPointer
-	 * @param \SlevomatCodingStandard\Helpers\ParameterTypeHint[]|null[] $functionTypeHints
+	 * @param (\SlevomatCodingStandard\Helpers\ParameterTypeHint|null)[] $functionTypeHints
 	 * @param \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation[] $parametersAnnotations
 	 * @param bool[] $parametersAnnotationsUseful
 	 * @return \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation[]
