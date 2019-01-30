@@ -23,6 +23,9 @@ class UselessIfConditionWithReturnSniff implements Sniff
 
 	public const CODE_USELESS_IF_CONDITION = 'UselessIfCondition';
 
+	/** @var bool */
+	public $assumeAllConditionExpressionsAreAlreadyBoolean = false;
+
 	/**
 	 * @return (int|string)[]
 	 */
@@ -57,7 +60,21 @@ class UselessIfConditionWithReturnSniff implements Sniff
 				: ConditionHelper::getNegativeCondition($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'] + 1, $tokens[$ifPointer]['parenthesis_closer'] - 1);
 		};
 
+		$isFixable = function (int $ifPointer) use ($phpcsFile, $tokens): bool {
+			if ($this->assumeAllConditionExpressionsAreAlreadyBoolean) {
+				return true;
+			}
+
+			return ConditionHelper::conditionReturnsBoolean($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'] + 1, $tokens[$ifPointer]['parenthesis_closer'] - 1);
+		};
+
 		$elsePointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$ifPointer]['scope_closer'] + 1);
+
+		$errorParameters = [
+			'Useless condition.',
+			$ifPointer,
+			self::CODE_USELESS_IF_CONDITION,
+		];
 
 		if (
 			$elsePointer !== null
@@ -72,7 +89,12 @@ class UselessIfConditionWithReturnSniff implements Sniff
 				return;
 			}
 
-			$fix = $phpcsFile->addFixableError('Useless condition.', $ifPointer, self::CODE_USELESS_IF_CONDITION);
+			if (!$isFixable($ifPointer)) {
+				$phpcsFile->addError(...$errorParameters);
+				return;
+			}
+
+			$fix = $phpcsFile->addFixableError(...$errorParameters);
 
 			if (!$fix) {
 				return;
@@ -96,7 +118,12 @@ class UselessIfConditionWithReturnSniff implements Sniff
 				return;
 			}
 
-			$fix = $phpcsFile->addFixableError('Useless condition.', $ifPointer, self::CODE_USELESS_IF_CONDITION);
+			if (!$isFixable($ifPointer)) {
+				$phpcsFile->addError(...$errorParameters);
+				return;
+			}
+
+			$fix = $phpcsFile->addFixableError(...$errorParameters);
 
 			if (!$fix) {
 				return;

@@ -32,6 +32,20 @@ class UselessIfConditionWithReturnSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testErrorsWithAssumeAllConditionExpressionsAreAlreadyBooleanEnabled(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/uselessIfConditionWithReturnErrorsWithAssumeAllConditionExpressionsAreAlreadyBooleanEnabled.php', [
+			'assumeAllConditionExpressionsAreAlreadyBoolean' => true,
+		]);
+
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 4, UselessIfConditionWithReturnSniff::CODE_USELESS_IF_CONDITION);
+		self::assertSniffError($report, 13, UselessIfConditionWithReturnSniff::CODE_USELESS_IF_CONDITION);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testIfWithoutCurlyBraces(): void
 	{
 		self::expectException(Throwable::class);

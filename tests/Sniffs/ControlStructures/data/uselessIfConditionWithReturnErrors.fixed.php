@@ -21,7 +21,11 @@ function () {
 };
 
 function ($bool) {
-	return $bool;
+	if ($bool) {
+		return true;
+	} else {
+		return false;
+	}
 };
 
 function ($e, $number) {
@@ -30,6 +34,10 @@ function ($e, $number) {
 
 function () {
 	if (doSomething()) {
-		return doSomethingElse();
+		if (doSomethingElse()) {
+			return true;
+		}
+
+		return false;
 	}
 };

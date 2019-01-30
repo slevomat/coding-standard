@@ -736,6 +736,10 @@ Reports documentation comments containing only `{@inheritDoc}` annotation becaus
 
 Reports useless conditions where both branches return `true` or `false`.
 
+Sniff provides the following settings:
+
+* `assumeAllConditionExpressionsAreAlreadyBoolean` (defaults to `false`).
+
 #### SlevomatCodingStandard.ControlStructures.UselessTernaryOperator 🔧
 
 Reports useless ternary operator where both branches return `true` or `false`.

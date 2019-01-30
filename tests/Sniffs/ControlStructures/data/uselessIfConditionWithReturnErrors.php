@@ -43,9 +43,9 @@ function () {
 function ($bool) {
 	if ($bool) {
 		return true;
+	} else {
+		return false;
 	}
-
-	return false;
 };
 
 function ($e, $number) {

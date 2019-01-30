@@ -10,6 +10,7 @@ use function count;
 use function preg_replace;
 use function sprintf;
 use function strtolower;
+use function trim;
 use const T_BITWISE_AND;
 use const T_BOOLEAN_AND;
 use const T_BOOLEAN_NOT;
@@ -31,6 +32,46 @@ use const T_OPEN_PARENTHESIS;
 
 class ConditionHelper
 {
+
+	public static function conditionReturnsBoolean(File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$conditionContent = strtolower(trim(TokenHelper::getContent($phpcsFile, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer)));
+
+		if ($conditionContent === 'false' || $conditionContent === 'true') {
+			return true;
+		}
+
+		$actualPointer = $conditionBoundaryStartPointer;
+
+		do {
+			$actualPointer = TokenHelper::findNext(
+				$phpcsFile,
+				array_merge(
+					[T_OPEN_PARENTHESIS, T_LESS_THAN, T_GREATER_THAN],
+					Tokens::$booleanOperators,
+					Tokens::$equalityTokens
+				),
+				$actualPointer,
+				$conditionBoundaryEndPointer + 1
+			);
+
+			if ($actualPointer === null) {
+				break;
+			}
+
+			if ($tokens[$actualPointer]['code'] === T_OPEN_PARENTHESIS) {
+				$actualPointer = $tokens[$actualPointer]['parenthesis_closer'];
+				continue;
+			}
+
+			return true;
+
+		} while (true);
+
+		return false;
+	}
 
 	public static function getNegativeCondition(File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer, bool $nested = false): string
 	{
