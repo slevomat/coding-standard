@@ -86,6 +86,11 @@
 			<property name="assumeAllConditionExpressionsAreAlreadyBoolean" value="true"/>
 		</properties>
 	</rule>
+	<rule ref="SlevomatCodingStandard.ControlStructures.UselessTernaryOperator">
+		<properties>
+			<property name="assumeAllConditionExpressionsAreAlreadyBoolean" value="true"/>
+		</properties>
+	</rule>
 	<rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly">
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Exceptions/ReferenceThrowableOnlySniff.php</exclude-pattern>
 	</rule>
