@@ -44,3 +44,35 @@ class Foo
 	}
 
 }
+
+class IntersectionAndGeneric
+{
+
+	public function anything()
+	{
+		/** @var $a (boolean | null | integer)[] */
+		$a = null;
+
+		/** @var $b integer & boolean<boolean, integer> */
+		$b = 0;
+
+		/** @var $c string & (integer | float) */
+		$c = 'string';
+
+		/** @var $d string|(float&integer) */
+		$d = 'string';
+
+		/** @var $e boolean[][][] */
+		$e = [];
+
+		/** @var $f (integer | boolean)[][][] */
+		$f = [];
+
+		/** @var $g integer|(string<foo> & boolean)[] */
+		$g = 0;
+
+		/** @var $h \Foo<\Boo<integer, boolean>> */
+		$h = [];
+	}
+
+}
