@@ -81,6 +81,11 @@
 	<rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.RequireShortTernaryOperator"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.RequireTernaryOperator"/>
+	<rule ref="SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn">
+		<properties>
+			<property name="assumeAllConditionExpressionsAreAlreadyBoolean" value="true"/>
+		</properties>
+	</rule>
 	<rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly">
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Exceptions/ReferenceThrowableOnlySniff.php</exclude-pattern>
 	</rule>

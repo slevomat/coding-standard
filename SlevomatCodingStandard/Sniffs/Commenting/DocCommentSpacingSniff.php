@@ -667,11 +667,7 @@ class DocCommentSpacingSniff implements Sniff
 			return true;
 		}
 
-		if (substr($annotationName, -1) === '\\' && strpos($annotation->getName(), $annotationName) === 0) {
-			return true;
-		}
-
-		return false;
+		return substr($annotationName, -1) === '\\' && strpos($annotation->getName(), $annotationName) === 0;
 	}
 
 	private function checkLinesAfterLastContent(

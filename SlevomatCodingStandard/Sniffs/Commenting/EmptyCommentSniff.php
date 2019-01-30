@@ -159,11 +159,7 @@ class EmptyCommentSniff implements Sniff
 			return false;
 		}
 
-		if (!$this->isNonEmptyLineCommentAfter($phpcsFile, $commentEndPointer)) {
-			return false;
-		}
-
-		return true;
+		return $this->isNonEmptyLineCommentAfter($phpcsFile, $commentEndPointer);
 	}
 
 	private function isNonEmptyLineCommentBefore(File $phpcsFile, int $commentStartPointer): bool

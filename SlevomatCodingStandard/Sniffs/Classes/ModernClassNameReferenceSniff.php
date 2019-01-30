@@ -104,11 +104,7 @@ class ModernClassNameReferenceSniff implements Sniff
 			}
 
 			$pointerAfterParameterPointer = TokenHelper::findNextEffective($phpcsFile, $parameterPointer + 1);
-			if ($pointerAfterParameterPointer !== $tokens[$openParenthesisPointer]['parenthesis_closer']) {
-				return false;
-			}
-
-			return true;
+			return $pointerAfterParameterPointer === $tokens[$openParenthesisPointer]['parenthesis_closer'];
 		};
 
 		if ($functionName === 'get_class') {

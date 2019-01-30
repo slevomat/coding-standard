@@ -46,11 +46,7 @@ class ConstantHelper
 				iterator_to_array(self::getAllConstantPointers($phpcsFile, $previousConstantPointer)),
 				function (int $constantPointer) use ($phpcsFile): bool {
 					foreach (array_reverse($phpcsFile->getTokens()[$constantPointer]['conditions']) as $conditionTokenCode) {
-						if ($conditionTokenCode === T_NAMESPACE) {
-							return true;
-						}
-
-						return false;
+						return $conditionTokenCode === T_NAMESPACE;
 					}
 
 					return true;

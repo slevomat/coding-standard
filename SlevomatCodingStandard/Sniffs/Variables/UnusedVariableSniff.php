@@ -428,11 +428,7 @@ class UnusedVariableSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$parenthesisOwnerPointer = $this->findNestedParenthesisWithOwner($phpcsFile, $variablePointer);
-		if ($parenthesisOwnerPointer !== null && $tokens[$parenthesisOwnerPointer]['code'] === T_FOREACH) {
-			return true;
-		}
-
-		return false;
+		return $parenthesisOwnerPointer !== null && $tokens[$parenthesisOwnerPointer]['code'] === T_FOREACH;
 	}
 
 	private function isStaticVariable(File $phpcsFile, int $functionPointer, string $variableName): bool

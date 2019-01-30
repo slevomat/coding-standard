@@ -91,11 +91,7 @@ class VariableHelper
 			return $tokens[$pointerAfterVariable]['code'] === T_OPEN_PARENTHESIS;
 		}
 
-		if (ParameterHelper::isParameter($phpcsFile, $variableToCheckPointer)) {
-			return false;
-		}
-
-		return true;
+		return !ParameterHelper::isParameter($phpcsFile, $variableToCheckPointer);
 	}
 
 	public static function isUsedInCompactFunction(File $phpcsFile, int $variablePointer, int $stringPointer): bool
@@ -140,11 +136,7 @@ class VariableHelper
 		}
 
 		$variableNameWithoutDollar = substr($variableName, 1);
-		if (preg_match('~\$\{' . preg_quote($variableNameWithoutDollar, '~') . '\}~', $stringContent) !== 0) {
-			return true;
-		}
-
-		return false;
+		return preg_match('~\$\{' . preg_quote($variableNameWithoutDollar, '~') . '\}~', $stringContent) !== 0;
 	}
 
 }

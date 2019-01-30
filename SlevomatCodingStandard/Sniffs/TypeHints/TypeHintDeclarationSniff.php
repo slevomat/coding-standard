@@ -838,11 +838,7 @@ class TypeHintDeclarationSniff implements Sniff
 			return true;
 		}
 
-		if ($typeNode instanceof ArrayTypeNode) {
-			return true;
-		}
-
-		return false;
+		return $typeNode instanceof ArrayTypeNode;
 	}
 
 	private function annotationContainsJustTwoTypes(TypeNode $typeNode): bool
