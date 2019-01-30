@@ -12,23 +12,28 @@ class CatchHelper
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
-	 * @param mixed[] $catchToken
+	 * @param array<string, array<int, int|string>|int|string> $catchToken
 	 * @return string[]
 	 */
 	public static function findCatchedTypesInCatch(File $phpcsFile, array $useStatements, array $catchToken): array
 	{
-		$nameEndPointer = $catchToken['parenthesis_opener'];
+		/** @var int $catchParenthesisOpenerPointer */
+		$catchParenthesisOpenerPointer = $catchToken['parenthesis_opener'];
+		/** @var int $catchParenthesisCloserPointer */
+		$catchParenthesisCloserPointer = $catchToken['parenthesis_closer'];
+
+		$nameEndPointer = $catchParenthesisOpenerPointer;
 		$tokens = $phpcsFile->getTokens();
 		$catchedTypes = [];
 		do {
-			$nameStartPointer = TokenHelper::findNext($phpcsFile, array_merge([T_BITWISE_OR], TokenHelper::$nameTokenCodes), $nameEndPointer + 1, $catchToken['parenthesis_closer']);
+			$nameStartPointer = TokenHelper::findNext($phpcsFile, array_merge([T_BITWISE_OR], TokenHelper::$nameTokenCodes), $nameEndPointer + 1, $catchParenthesisCloserPointer);
 			if ($nameStartPointer === null) {
 				break;
 			}
 
 			if ($tokens[$nameStartPointer]['code'] === T_BITWISE_OR) {
 				/** @var int $nameStartPointer */
-				$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $nameStartPointer + 1, $catchToken['parenthesis_closer']);
+				$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $nameStartPointer + 1, $catchParenthesisCloserPointer);
 			}
 
 			$pointerAfterNameEndPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $nameStartPointer + 1);
@@ -38,7 +43,7 @@ class CatchHelper
 				$phpcsFile,
 				TokenHelper::getContent($phpcsFile, $nameStartPointer, $nameEndPointer),
 				$useStatements,
-				$catchToken['parenthesis_opener']
+				$catchParenthesisOpenerPointer
 			);
 		} while (true);
 

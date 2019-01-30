@@ -27,7 +27,7 @@ class RequireShortTernaryOperatorSniff implements Sniff
 	public const CODE_REQUIRED_SHORT_TERNARY_OPERATOR = 'RequiredShortTernaryOperator';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

@@ -40,20 +40,20 @@ use const T_YIELD_FROM;
 class TokenHelper
 {
 
-	/** @var mixed[] */
+	/** @var (int|string)[] */
 	public static $nameTokenCodes = [
 		T_NS_SEPARATOR,
 		T_STRING,
 	];
 
-	/** @var mixed[] */
+	/** @var (int|string)[] */
 	public static $typeKeywordTokenCodes = [
 		T_CLASS,
 		T_TRAIT,
 		T_INTERFACE,
 	];
 
-	/** @var mixed[] */
+	/** @var (int|string)[] */
 	public static $ineffectiveTokenCodes = [
 		T_WHITESPACE,
 		T_COMMENT,
@@ -71,7 +71,7 @@ class TokenHelper
 		T_PHPCS_SET,
 	];
 
-	/** @var mixed[] */
+	/** @var (int|string)[] */
 	public static $typeHintTokenCodes = [
 		T_NS_SEPARATOR,
 		T_STRING,
@@ -81,7 +81,7 @@ class TokenHelper
 		T_CALLABLE,
 	];
 
-	/** @var mixed[] */
+	/** @var (int|string)[] */
 	public static $earlyExitTokenCodes = [
 		T_RETURN,
 		T_CONTINUE,
@@ -92,7 +92,7 @@ class TokenHelper
 		T_EXIT,
 	];
 
-	/** @var mixed[] */
+	/** @var (int|string)[] */
 	public static $functionTokenCodes = [
 		T_FUNCTION,
 		T_CLOSURE,
@@ -100,7 +100,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed|mixed[] $types
+	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer
 	 * @param int|null $endPointer
 	 * @return int|null
@@ -114,7 +114,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed|mixed[] $types
+	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer
 	 * @param int|null $endPointer
 	 * @return int[]
@@ -139,7 +139,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed|mixed[] $types
+	 * @param (int|string)|(int|string)[] $types
 	 * @param string $content
 	 * @param int $startPointer
 	 * @param int|null $endPointer
@@ -165,7 +165,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed|mixed[] $types
+	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer search starts at this token, inclusive
 	 * @param int|null $endPointer search ends at this token, exclusive
 	 * @return int|null
@@ -179,7 +179,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed|mixed[] $types
+	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer
 	 * @param int|null $endPointer
 	 * @return int|null
@@ -193,7 +193,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed|mixed[] $types
+	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer
 	 * @param int|null $endPointer
 	 * @return int|null
@@ -218,7 +218,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed|mixed[] $types
+	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer search starts at this token, inclusive
 	 * @param int|null $endPointer search ends at this token, exclusive
 	 * @return int|null
@@ -232,7 +232,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed|mixed[] $types
+	 * @param (int|string)|(int|string)[] $types
 	 * @param string $content
 	 * @param int $startPointer
 	 * @param int|null $endPointer
@@ -258,7 +258,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed|mixed[] $types
+	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer search starts at this token, inclusive
 	 * @param int|null $endPointer search ends at this token, exclusive
 	 * @return int|null
@@ -272,7 +272,7 @@ class TokenHelper
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed|mixed[] $types
+	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer
 	 * @param int|null $endPointer
 	 * @return int|null

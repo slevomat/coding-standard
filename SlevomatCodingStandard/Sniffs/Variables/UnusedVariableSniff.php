@@ -63,7 +63,7 @@ class UnusedVariableSniff implements Sniff
 	public $ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach = false;
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

@@ -12,7 +12,7 @@ class DisallowEmptySniff implements Sniff
 	public const CODE_DISALLOWED_EMPTY = 'DisallowedEmpty';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

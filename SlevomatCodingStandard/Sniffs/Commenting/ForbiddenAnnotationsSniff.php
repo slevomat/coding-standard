@@ -24,11 +24,11 @@ class ForbiddenAnnotationsSniff implements Sniff
 	/** @var string[] */
 	public $forbiddenAnnotations = [];
 
-	/** @var array<string, int>|null */
+	/** @var string[]|null */
 	private $normalizedForbiddenAnnotations;
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{
@@ -107,7 +107,7 @@ class ForbiddenAnnotationsSniff implements Sniff
 	}
 
 	/**
-	 * @return int[] [string => int]
+	 * @return string[]
 	 */
 	private function getNormalizedForbiddenAnnotations(): array
 	{

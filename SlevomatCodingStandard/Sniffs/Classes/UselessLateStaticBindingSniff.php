@@ -21,7 +21,7 @@ class UselessLateStaticBindingSniff implements Sniff
 	public const CODE_USELESS_LATE_STATIC_BINDING = 'UselessLateStaticBinding';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

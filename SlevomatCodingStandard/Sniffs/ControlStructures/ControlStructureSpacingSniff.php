@@ -65,14 +65,14 @@ class ControlStructureSpacingSniff implements Sniff
 	/** @var int */
 	public $linesCountAfterLastControlStructure = 0;
 
-	/** @var mixed[] */
+	/** @var string[] */
 	public $tokensToCheck = [];
 
-	/** @var mixed[]|null */
+	/** @var (string|int)[]|null */
 	private $normalizedTokensToCheck;
 
 	/**
-	 * @return string[]
+	 * @return (int|string)[]
 	 */
 	private function getTokensToCheck(): array
 	{
@@ -108,7 +108,7 @@ class ControlStructureSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

@@ -25,7 +25,7 @@ class UseOnlyWhitelistedNamespacesSniff implements Sniff
 	private $normalizedNamespacesRequiredToUse;
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

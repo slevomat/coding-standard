@@ -23,7 +23,7 @@ class UselessSemicolonSniff implements Sniff
 	public const CODE_USELESS_SEMICOLON = 'UselessSemicolon';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

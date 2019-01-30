@@ -23,7 +23,7 @@ class ForbiddenCommentsSniff implements Sniff
 	public $forbiddenCommentPatterns = [];
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{
@@ -85,7 +85,7 @@ class ForbiddenCommentsSniff implements Sniff
 
 				$docCommentContent = '';
 				for ($i = $docCommentOpenPointer + 1; $i < $tokens[$docCommentOpenPointer]['comment_closer']; $i++) {
-					/** @var string|mixed[] $token */
+					/** @var string|(string|int)[] $token */
 					$token = $phpcsFile->fixer->getTokenContent($i);
 					$docCommentContent .= is_array($token) ? $token['content'] : $token;
 				}

@@ -14,7 +14,7 @@ class ShortListSniff implements Sniff
 	public const CODE_LONG_LIST_USED = 'LongListUsed';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

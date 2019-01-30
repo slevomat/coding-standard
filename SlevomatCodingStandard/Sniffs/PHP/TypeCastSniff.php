@@ -32,7 +32,7 @@ class TypeCastSniff implements Sniff
 	];
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

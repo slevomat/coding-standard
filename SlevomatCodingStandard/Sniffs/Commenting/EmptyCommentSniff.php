@@ -21,7 +21,7 @@ class EmptyCommentSniff implements Sniff
 	public const CODE_EMPTY_COMMENT = 'EmptyComment';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

@@ -48,7 +48,7 @@ class EarlyExitSniff implements Sniff
 	public $ignoreStandaloneIfInScope = false;
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

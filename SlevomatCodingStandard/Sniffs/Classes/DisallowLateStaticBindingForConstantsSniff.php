@@ -17,7 +17,7 @@ class DisallowLateStaticBindingForConstantsSniff implements Sniff
 	public const CODE_DISALLOWED_LATE_STATIC_BINDING_FOR_CONSTANT = 'DisallowedLateStaticBindingForConstant';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

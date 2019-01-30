@@ -20,7 +20,7 @@ class UselessConstantTypeHintSniff implements Sniff
 	public const CODE_USELESS_VAR_ANNOTATION = 'UselessVarAnnotation';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

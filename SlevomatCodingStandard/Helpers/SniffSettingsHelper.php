@@ -22,8 +22,8 @@ class SniffSettingsHelper
 	}
 
 	/**
-	 * @param mixed[] $settings
-	 * @return mixed[]
+	 * @param string[] $settings
+	 * @return string[]
 	 */
 	public static function normalizeArray(array $settings): array
 	{
@@ -37,8 +37,8 @@ class SniffSettingsHelper
 	}
 
 	/**
-	 * @param mixed[] $settings
-	 * @return mixed[]
+	 * @param array<int|string, int|string> $settings
+	 * @return array<int|string, int|string>
 	 */
 	public static function normalizeAssociativeArray(array $settings): array
 	{

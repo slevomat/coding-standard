@@ -70,8 +70,8 @@ class YodaHelper
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed[] $leftSideTokens
-	 * @param mixed[] $rightSideTokens
+	 * @param array<int, array<string, array<int, int|string>|int|string>> $leftSideTokens
+	 * @param array<int, array<string, array<int, int|string>|int|string>> $rightSideTokens
 	 */
 	public static function fix(File $phpcsFile, array $leftSideTokens, array $rightSideTokens): void
 	{
@@ -83,8 +83,8 @@ class YodaHelper
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed[] $oldTokens
-	 * @param mixed[] $newTokens
+	 * @param array<int, array<string, array<int, int|string>|int|string>> $oldTokens
+	 * @param array<int, array<string, array<int, int|string>|int|string>> $newTokens
 	 */
 	private static function replace(File $phpcsFile, array $oldTokens, array $newTokens): void
 	{
@@ -105,9 +105,9 @@ class YodaHelper
 	}
 
 	/**
-	 * @param mixed[] $tokens
+	 * @param array<int, array<string, array<int, int|string>|int|string>> $tokens
 	 * @param int $comparisonTokenPointer
-	 * @return mixed[]
+	 * @return array<int, array<string, array<int, int|string>|int|string>>
 	 */
 	public static function getLeftSideTokens(array $tokens, int $comparisonTokenPointer): array
 	{
@@ -119,13 +119,15 @@ class YodaHelper
 		while (true) {
 			$examinedTokenPointer--;
 			$examinedToken = $tokens[$examinedTokenPointer];
-			if ($parenthesisDepth === 0 && $shortArrayDepth === 0 && isset($stopTokenCodes[$examinedToken['code']])) {
+			/** @var string|int $examinedTokenCode */
+			$examinedTokenCode = $examinedToken['code'];
+			if ($parenthesisDepth === 0 && $shortArrayDepth === 0 && isset($stopTokenCodes[$examinedTokenCode])) {
 				break;
 			}
 
-			if ($examinedToken['code'] === T_CLOSE_SHORT_ARRAY) {
+			if ($examinedTokenCode === T_CLOSE_SHORT_ARRAY) {
 				$shortArrayDepth++;
-			} elseif ($examinedToken['code'] === T_OPEN_SHORT_ARRAY) {
+			} elseif ($examinedTokenCode === T_OPEN_SHORT_ARRAY) {
 				if ($shortArrayDepth === 0) {
 					break;
 				}
@@ -133,9 +135,9 @@ class YodaHelper
 				$shortArrayDepth--;
 			}
 
-			if ($examinedToken['code'] === T_CLOSE_PARENTHESIS) {
+			if ($examinedTokenCode === T_CLOSE_PARENTHESIS) {
 				$parenthesisDepth++;
-			} elseif ($examinedToken['code'] === T_OPEN_PARENTHESIS) {
+			} elseif ($examinedTokenCode === T_OPEN_PARENTHESIS) {
 				if ($parenthesisDepth === 0) {
 					break;
 				}
@@ -150,9 +152,9 @@ class YodaHelper
 	}
 
 	/**
-	 * @param mixed[] $tokens
+	 * @param array<int, array<string, array<int, int|string>|int|string>> $tokens
 	 * @param int $comparisonTokenPointer
-	 * @return mixed[]
+	 * @return array<int, array<string, array<int, int|string>|int|string>>
 	 */
 	public static function getRightSideTokens(array $tokens, int $comparisonTokenPointer): array
 	{
@@ -164,13 +166,15 @@ class YodaHelper
 		while (true) {
 			$examinedTokenPointer++;
 			$examinedToken = $tokens[$examinedTokenPointer];
-			if ($parenthesisDepth === 0 && $shortArrayDepth === 0 && isset($stopTokenCodes[$examinedToken['code']])) {
+			/** @var string|int $examinedTokenCode */
+			$examinedTokenCode = $examinedToken['code'];
+			if ($parenthesisDepth === 0 && $shortArrayDepth === 0 && isset($stopTokenCodes[$examinedTokenCode])) {
 				break;
 			}
 
-			if ($examinedToken['code'] === T_OPEN_SHORT_ARRAY) {
+			if ($examinedTokenCode === T_OPEN_SHORT_ARRAY) {
 				$shortArrayDepth++;
-			} elseif ($examinedToken['code'] === T_CLOSE_SHORT_ARRAY) {
+			} elseif ($examinedTokenCode === T_CLOSE_SHORT_ARRAY) {
 				if ($shortArrayDepth === 0) {
 					break;
 				}
@@ -178,9 +182,9 @@ class YodaHelper
 				$shortArrayDepth--;
 			}
 
-			if ($examinedToken['code'] === T_OPEN_PARENTHESIS) {
+			if ($examinedTokenCode === T_OPEN_PARENTHESIS) {
 				$parenthesisDepth++;
-			} elseif ($examinedToken['code'] === T_CLOSE_PARENTHESIS) {
+			} elseif ($examinedTokenCode === T_CLOSE_PARENTHESIS) {
 				if ($parenthesisDepth === 0) {
 					break;
 				}
@@ -195,8 +199,8 @@ class YodaHelper
 	}
 
 	/**
-	 * @param mixed[] $tokens
-	 * @param mixed[] $sideTokens
+	 * @param array<int, array<string, array<int, int|string>|int|string>> $tokens
+	 * @param array<int, array<string, array<int, int|string>|int|string>> $sideTokens
 	 * @return int|null
 	 */
 	public static function getDynamismForTokens(array $tokens, array $sideTokens): ?int
@@ -251,8 +255,8 @@ class YodaHelper
 	}
 
 	/**
-	 * @param mixed[] $tokens
-	 * @return mixed[]
+	 * @param array<int, array<string, array<int, int|string>|int|string>> $tokens
+	 * @return array<int, array<string, array<int, int|string>|int|string>>
 	 */
 	public static function trimWhitespaceTokens(array $tokens): array
 	{
@@ -276,7 +280,7 @@ class YodaHelper
 	}
 
 	/**
-	 * @return int[]
+	 * @return array<int|string, int>
 	 */
 	private static function getTokenDynamism(): array
 	{
@@ -303,7 +307,7 @@ class YodaHelper
 	}
 
 	/**
-	 * @return bool[]
+	 * @return array<int|string, bool>
 	 */
 	private static function getStopTokenCodes(): array
 	{

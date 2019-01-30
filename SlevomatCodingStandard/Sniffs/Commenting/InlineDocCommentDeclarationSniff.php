@@ -24,7 +24,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 	public const CODE_INVALID_COMMENT_TYPE = 'InvalidCommentType';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

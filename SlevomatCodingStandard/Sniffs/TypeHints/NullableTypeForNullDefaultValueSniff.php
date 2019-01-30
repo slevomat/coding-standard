@@ -23,7 +23,7 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 	public const CODE_NULLABILITY_SYMBOL_REQUIRED = 'NullabilitySymbolRequired';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

@@ -28,7 +28,7 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 	public const CODE_REQUIRED_COMBINED_ASSIGMENT_OPERATOR = 'RequiredCombinedAssigmentOperator';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

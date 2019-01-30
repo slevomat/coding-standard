@@ -27,7 +27,7 @@ class UselessTernaryOperatorSniff implements Sniff
 	public const CODE_USELESS_TERNARY_OPERATOR = 'UselessTernaryOperator';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

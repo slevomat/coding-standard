@@ -18,7 +18,7 @@ class DuplicateAssignmentToVariableSniff implements Sniff
 	public const CODE_DUPLICATE_ASSIGNMENT = 'DuplicateAssignment';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

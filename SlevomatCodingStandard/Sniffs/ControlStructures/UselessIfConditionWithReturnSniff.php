@@ -24,7 +24,7 @@ class UselessIfConditionWithReturnSniff implements Sniff
 	public const CODE_USELESS_IF_CONDITION = 'UselessIfCondition';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

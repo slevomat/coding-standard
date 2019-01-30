@@ -18,7 +18,7 @@ class StaticClosureSniff implements Sniff
 	public const CODE_CLOSURE_NOT_STATIC = 'ClosureNotStatic';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

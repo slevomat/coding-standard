@@ -33,7 +33,7 @@ class FullyQualifiedExceptionsSniff implements Sniff
 	private $normalizedIgnoredNames;
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

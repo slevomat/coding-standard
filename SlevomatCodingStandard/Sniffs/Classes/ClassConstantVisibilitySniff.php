@@ -27,7 +27,7 @@ class ClassConstantVisibilitySniff implements Sniff
 	public $fixable = false;
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

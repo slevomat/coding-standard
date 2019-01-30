@@ -38,7 +38,7 @@ class DeclareStrictTypesSniff implements Sniff
 	public $spacesCountAroundEqualsSign = 1;
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

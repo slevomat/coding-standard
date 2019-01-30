@@ -31,7 +31,7 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 	public const CODE_NULL_COALESCE_OPERATOR_NOT_USED = 'NullCoalesceOperatorNotUsed';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

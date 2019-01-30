@@ -82,7 +82,7 @@ class UnusedPrivateElementsSniff implements Sniff
 	private $normalizedAlwaysUsedPropertiesSuffixes;
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{
@@ -571,7 +571,7 @@ class UnusedPrivateElementsSniff implements Sniff
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param mixed[] $tokens
+	 * @param array<int, array<string, array<int, int|string>|int|string>> $tokens
 	 * @param int $methodTokenPointer
 	 * @return int|null
 	 */

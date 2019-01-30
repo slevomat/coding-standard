@@ -11,8 +11,10 @@ parameters:
 		- */tests/*/data/*
 	ignoreErrors:
 		- "#Call to function array_key_exists\\(\\) with '(scope_(opener|closer)|parenthesis_(owner|opener|closer)|nested_parenthesis)'#"
-		- '#Return type \(array\) of method SlevomatCodingStandard\\Sniffs\\.+::register\(\) should be covariant with return type#'
+		- '#Return type \(array<int\|string>\) of method SlevomatCodingStandard\\Sniffs\\.+::register\(\) should be covariant with return type#'
+		- '#Parameter \#1 \$types of method PHP_CodeSniffer\\Files\\File::find(Next|Previous)\(\) expects array\|int#'
 		- '#Else branch is unreachable because ternary operator condition is always true#'
+		- '#Possibly invalid array key type array<int, int\|string>\|int\|string#'
 
 services:
 	-

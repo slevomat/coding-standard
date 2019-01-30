@@ -25,7 +25,7 @@ class ModernClassNameReferenceSniff implements Sniff
 	public const CODE_CLASS_NAME_REFERENCED_VIA_FUNCTION_CALL = 'ClassNameReferencedViaFunctionCall';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

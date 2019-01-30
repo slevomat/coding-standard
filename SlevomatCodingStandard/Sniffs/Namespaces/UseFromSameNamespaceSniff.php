@@ -21,7 +21,7 @@ class UseFromSameNamespaceSniff implements Sniff
 	public const CODE_USE_FROM_SAME_NAMESPACE = 'UseFromSameNamespace';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

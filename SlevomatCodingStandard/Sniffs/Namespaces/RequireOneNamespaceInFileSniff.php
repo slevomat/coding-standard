@@ -14,7 +14,7 @@ class RequireOneNamespaceInFileSniff implements Sniff
 	public const CODE_MORE_NAMESPACES_IN_FILE = 'MoreNamespacesInFile';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

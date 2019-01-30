@@ -27,7 +27,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
 	/**
 	 * @param string $filePath
-	 * @param mixed[] $sniffProperties
+	 * @param (string|int|bool|(string|int|bool)[])[] $sniffProperties
 	 * @param string[] $codesToCheck
 	 * @return \PHP_CodeSniffer\Files\File
 	 */
@@ -127,7 +127,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param mixed[][][] $errorsOnLine
+	 * @param (string|int)[][][] $errorsOnLine
 	 * @param string $sniffCode
 	 * @param string|null $message
 	 * @return bool
@@ -136,9 +136,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		foreach ($errorsOnLine as $errorsOnPosition) {
 			foreach ($errorsOnPosition as $error) {
+				/** @var string $errorSource */
+				$errorSource = $error['source'];
+				/** @var string $errorMessage */
+				$errorMessage = $error['message'];
+
 				if (!(
-					$error['source'] === $sniffCode
-					&& ($message === null || strpos($error['message'], $message) !== false)
+					$errorSource === $sniffCode
+					&& ($message === null || strpos($errorMessage, $message) !== false)
 				)) {
 					continue;
 				}
@@ -151,7 +156,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param mixed[][][] $errors
+	 * @param (string|int|bool)[][][] $errors
 	 */
 	private static function getFormattedErrors(array $errors): string
 	{

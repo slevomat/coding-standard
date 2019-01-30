@@ -12,7 +12,7 @@ class DisallowGroupUseSniff implements Sniff
 	public const CODE_DISALLOWED_GROUP_USE = 'DisallowedGroupUse';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

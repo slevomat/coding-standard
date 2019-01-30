@@ -51,7 +51,7 @@ class UnusedUsesSniff implements Sniff
 	private $normalizedIgnoredAnnotations;
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

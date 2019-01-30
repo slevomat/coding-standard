@@ -34,7 +34,7 @@ class NamespaceSpacingSniff implements Sniff
 	public $linesCountAfterNamespace = 1;
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

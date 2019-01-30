@@ -27,7 +27,7 @@ class DisallowYodaComparisonSniff implements Sniff
 	public const CODE_DISALLOWED_YODA_COMPARISON = 'DisallowedYodaComparison';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

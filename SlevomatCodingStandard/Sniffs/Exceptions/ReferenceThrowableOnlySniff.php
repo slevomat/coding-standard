@@ -28,7 +28,7 @@ class ReferenceThrowableOnlySniff implements Sniff
 	public const CODE_REFERENCED_GENERAL_EXCEPTION = 'ReferencedGeneralException';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

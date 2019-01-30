@@ -37,7 +37,7 @@ class ReturnTypeHintSpacingSniff implements Sniff
 	public $spacesCountBeforeColon = 0;
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

@@ -19,7 +19,7 @@ class UselessParameterDefaultValueSniff implements Sniff
 	public const CODE_USELESS_PARAMETER_DEFAULT_VALUE = 'UselessParameterDefaultValue';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

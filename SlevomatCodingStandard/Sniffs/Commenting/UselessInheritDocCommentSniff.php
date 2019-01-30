@@ -21,7 +21,7 @@ class UselessInheritDocCommentSniff implements Sniff
 	public const CODE_USELESS_INHERIT_DOC_COMMENT = 'UselessInheritDocComment';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

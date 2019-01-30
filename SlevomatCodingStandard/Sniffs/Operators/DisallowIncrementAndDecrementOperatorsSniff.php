@@ -18,7 +18,7 @@ class DisallowIncrementAndDecrementOperatorsSniff implements Sniff
 	public const CODE_DISALLOWED_POST_DECREMENT_OPERATOR = 'DisallowedPostDecrementOperator';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

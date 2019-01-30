@@ -20,7 +20,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 	public const CODE_NON_FULLY_QUALIFIED_CLASS_NAME = 'NonFullyQualifiedClassName';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

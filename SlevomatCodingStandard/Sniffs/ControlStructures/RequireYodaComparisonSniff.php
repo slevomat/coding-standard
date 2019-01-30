@@ -24,7 +24,7 @@ class RequireYodaComparisonSniff implements Sniff
 	public const CODE_REQUIRED_YODA_COMPARISON = 'RequiredYodaComparison';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

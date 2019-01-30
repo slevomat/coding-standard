@@ -18,7 +18,7 @@ class SuperfluousExceptionNamingSniff implements Sniff
 	public const CODE_SUPERFLUOUS_SUFFIX = 'SuperfluousSuffix';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

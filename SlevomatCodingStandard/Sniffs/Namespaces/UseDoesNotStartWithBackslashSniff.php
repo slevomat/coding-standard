@@ -16,7 +16,7 @@ class UseDoesNotStartWithBackslashSniff implements Sniff
 	public const CODE_STARTS_WITH_BACKSLASH = 'UseStartsWithBackslash';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

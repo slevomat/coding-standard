@@ -26,7 +26,7 @@ class RequireTernaryOperatorSniff implements Sniff
 	public $ignoreMultiLine = false;
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

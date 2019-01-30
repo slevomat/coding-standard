@@ -29,7 +29,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 	private $normalizedExclude;
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{

@@ -28,7 +28,7 @@ class RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff implements Sniff
 	public const CODE_POST_DECREMENT_OPERATOR_NOT_USED_STANDALONE = 'PostDecrementOperatorNotUsedStandalone';
 
 	/**
-	 * @return mixed[]
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{
