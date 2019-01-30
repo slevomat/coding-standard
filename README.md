@@ -420,6 +420,10 @@ Sniff provides the following settings:
 * `linesCountAfterLastUse`: allows to configure the number of lines after last `use`.
 
 
+#### SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
+
+Disallows usage of "mixed" type hint in phpDocs.
+
 #### SlevomatCodingStandard.TypeHints.LongTypeHints 🔧
 
 Enforces using shorthand scalar typehint variants in phpDocs: `int` instead of `integer` and `bool` instead of `boolean`. This is for consistency with native scalar typehints which also allow shorthand variants only.
