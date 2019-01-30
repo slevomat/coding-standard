@@ -163,7 +163,6 @@ class UnusedUsesSniff implements Sniff
 							$usedNames[$uniqueId] = true;
 
 							if ($matches[1] !== $nameAsReferencedInFile) {
-								/** @var \SlevomatCodingStandard\Helpers\Annotation\Annotation $annotation */
 								foreach ($annotationsByName as $annotation) {
 									$phpcsFile->addError(sprintf(
 										'Case of reference name "%s" and use statement "%s" does not match.',
@@ -174,7 +173,6 @@ class UnusedUsesSniff implements Sniff
 							}
 						}
 
-						/** @var \SlevomatCodingStandard\Helpers\Annotation\Annotation $annotation */
 						foreach ($annotationsByName as $annotation) {
 							if (!$annotation instanceof GenericAnnotation) {
 								continue;

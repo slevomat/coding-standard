@@ -44,10 +44,6 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 					continue;
 				}
 
-				if ($annotation->getContent() === null) {
-					continue;
-				}
-
 				if ($annotation->isInvalid()) {
 					continue;
 				}
