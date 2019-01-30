@@ -26,6 +26,9 @@ class UselessTernaryOperatorSniff implements Sniff
 
 	public const CODE_USELESS_TERNARY_OPERATOR = 'UselessTernaryOperator';
 
+	/** @var bool */
+	public $assumeAllConditionExpressionsAreAlreadyBoolean = false;
+
 	/**
 	 * @return (int|string)[]
 	 */
@@ -64,14 +67,6 @@ class UselessTernaryOperatorSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError('Useless ternary operator.', $inlineThenPointer, self::CODE_USELESS_TERNARY_OPERATOR);
-
-		if (!$fix) {
-			return;
-		}
-
-		$phpcsFile->fixer->beginChangeset();
-
 		/** @var int $pointerAfterInlineElseBranch */
 		$pointerAfterInlineElseBranch = TokenHelper::findNextEffective($phpcsFile, $pointerAfterInlineElse + 1);
 
@@ -85,17 +80,39 @@ class UselessTernaryOperatorSniff implements Sniff
 
 		/** @var int $conditionStartPointer */
 		$conditionStartPointer = TokenHelper::findNextEffective($phpcsFile, $pointerBeforeCondition + 1);
-		/** @var int $pointerBeforeInlineThen */
-		$pointerBeforeInlineThen = TokenHelper::findPreviousEffective($phpcsFile, $inlineThenPointer - 1);
+		/** @var int $conditionEndPointer */
+		$conditionEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $inlineThenPointer - 1);
+
+		$errorParameters = [
+			'Useless ternary operator.',
+			$inlineThenPointer,
+			self::CODE_USELESS_TERNARY_OPERATOR,
+		];
+
+		if (
+			!$this->assumeAllConditionExpressionsAreAlreadyBoolean
+			&& !ConditionHelper::conditionReturnsBoolean($phpcsFile, $conditionStartPointer, $conditionEndPointer)
+		) {
+			$phpcsFile->addError(...$errorParameters);
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError(...$errorParameters);
+
+		if (!$fix) {
+			return;
+		}
+
+		$phpcsFile->fixer->beginChangeset();
 
 		if ($tokens[$pointerAfterInlineThen]['code'] === T_FALSE) {
-			$phpcsFile->fixer->replaceToken($conditionStartPointer, ConditionHelper::getNegativeCondition($phpcsFile, $conditionStartPointer, $pointerBeforeInlineThen));
-			for ($i = $conditionStartPointer + 1; $i <= $pointerBeforeInlineThen; $i++) {
+			$phpcsFile->fixer->replaceToken($conditionStartPointer, ConditionHelper::getNegativeCondition($phpcsFile, $conditionStartPointer, $conditionEndPointer));
+			for ($i = $conditionStartPointer + 1; $i <= $conditionEndPointer; $i++) {
 				$phpcsFile->fixer->replaceToken($i, '');
 			}
 		}
 
-		for ($i = $pointerBeforeInlineThen + 1; $i < $pointerAfterInlineElseBranch; $i++) {
+		for ($i = $conditionEndPointer + 1; $i < $pointerAfterInlineElseBranch; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 

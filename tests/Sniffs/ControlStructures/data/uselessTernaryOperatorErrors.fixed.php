@@ -9,11 +9,11 @@ function () {
 };
 
 function ($bool) {
-	$b = $bool;
+	$b = $bool ? true : false;
 };
 
 function ($bool) {
-	$c = (!$bool);
+	$c = ($bool ? false : true);
 };
 
 function ($array) {

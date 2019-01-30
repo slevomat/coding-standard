@@ -33,4 +33,18 @@ class UselessTernaryOperatorSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testErrorsWithAssumeAllConditionExpressionsAreAlreadyBooleanEnabled(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/uselessTernaryOperatorErrorsWithAssumeAllConditionExpressionsAreAlreadyBooleanEnabled.php', [
+			'assumeAllConditionExpressionsAreAlreadyBoolean' => true,
+		]);
+
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 4, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 8, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }

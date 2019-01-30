@@ -744,6 +744,10 @@ Sniff provides the following settings:
 
 Reports useless ternary operator where both branches return `true` or `false`.
 
+Sniff provides the following settings:
+
+* `assumeAllConditionExpressionsAreAlreadyBoolean` (defaults to `false`).
+
 ## Installation
 
 The recommended way to install Slevomat Coding Standard is [through Composer](http://getcomposer.org).
