@@ -16,7 +16,7 @@ class FullyQualifiedClassNameAfterKeywordSniffTest extends TestCase
 			);
 			self::fail();
 		} catch (UndefinedKeywordTokenException $e) {
-			self::assertContains('T_FOO', $e->getMessage());
+			self::assertStringContainsString('T_FOO', $e->getMessage());
 			self::assertSame('T_FOO', $e->getKeyword());
 		}
 	}

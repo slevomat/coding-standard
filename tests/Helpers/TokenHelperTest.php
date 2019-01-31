@@ -297,8 +297,8 @@ class TokenHelperTest extends TestCase
 			TokenHelper::getLastTokenPointer($phpcsFile);
 			self::fail();
 		} catch (EmptyFileException $e) {
-			self::assertContains('emptyFile.php is empty', $e->getMessage());
-			self::assertContains('emptyFile.php', $e->getFilename());
+			self::assertStringContainsString('emptyFile.php is empty', $e->getMessage());
+			self::assertStringContainsString('emptyFile.php', $e->getFilename());
 		}
 	}
 
