@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\PHP;
 
+use function array_key_exists;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
@@ -17,7 +18,6 @@ use const T_NEW;
 use const T_NS_SEPARATOR;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
-use const T_OPEN_TAG;
 use const T_STRING;
 
 class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
@@ -91,12 +91,10 @@ class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
 		$invokedName = TokenHelper::getContent($phpcsFile, $tokenBeforeInvocationPointer + 1, $pointer);
 		$useName = sprintf('function %s', $invokedName);
 
-		/** @var int $openTagPointer */
-		$openTagPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $pointer);
-		$uses = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
+		$uses = UseStatementHelper::getUseStatementsForPointer($phpcsFile, $pointer);
 		if ($invokedName[0] === '\\') {
 			$invokedName = substr($invokedName, 1);
-		} elseif (isset($uses[$useName]) && $uses[$useName]->isFunction()) {
+		} elseif (array_key_exists($useName, $uses) && $uses[$useName]->isFunction()) {
 			$invokedName = $uses[$useName]->getFullyQualifiedTypeName();
 		} elseif (NamespaceHelper::findCurrentNamespaceName($phpcsFile, $pointer) !== null) {
 			return;

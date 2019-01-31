@@ -137,4 +137,20 @@ class UseSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testMoreNamespaces(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/useSpacingMoreNamespacesErrors.php');
+
+		self::assertSame(6, $report->getErrorCount());
+
+		self::assertSniffError($report, 4, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_USE);
+		self::assertSniffError($report, 6, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_USE);
+		self::assertSniffError($report, 15, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_USE);
+		self::assertSniffError($report, 17, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_DIFFERENT_TYPES_OF_USE);
+		self::assertSniffError($report, 19, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_DIFFERENT_TYPES_OF_USE);
+		self::assertSniffError($report, 19, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_USE);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }

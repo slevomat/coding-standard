@@ -5,7 +5,6 @@ namespace SlevomatCodingStandard\Helpers;
 use PHP_CodeSniffer\Files\File;
 use function array_key_exists;
 use function in_array;
-use const T_OPEN_TAG;
 
 class TypeHintHelper
 {
@@ -35,10 +34,7 @@ class TypeHintHelper
 			return self::convertLongSimpleTypeHintToShort($typeHint);
 		}
 
-		/** @var int $openTagPointer */
-		$openTagPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $pointer);
-		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
-		return NamespaceHelper::resolveClassName($phpcsFile, $typeHint, $useStatements, $pointer);
+		return NamespaceHelper::resolveClassName($phpcsFile, $typeHint, $pointer);
 	}
 
 	/**

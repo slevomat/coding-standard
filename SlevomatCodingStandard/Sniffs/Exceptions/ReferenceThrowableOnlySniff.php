@@ -9,7 +9,6 @@ use SlevomatCodingStandard\Helpers\CatchHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use Throwable;
 use function array_merge;
 use function in_array;
@@ -46,13 +45,11 @@ class ReferenceThrowableOnlySniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 		$message = sprintf('Referencing general \%s; use \%s instead.', Exception::class, Throwable::class);
-		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
 		foreach ($referencedNames as $referencedName) {
 			$resolvedName = NamespaceHelper::resolveClassName(
 				$phpcsFile,
 				$referencedName->getNameAsReferencedInFile(),
-				$useStatements,
 				$referencedName->getStartPointer()
 			);
 			if ($resolvedName !== '\\Exception') {
@@ -69,7 +66,7 @@ class ReferenceThrowableOnlySniff implements Sniff
 				/** @var int $catchPointer */
 				$catchPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
 				if ($tokens[$catchPointer]['code'] === T_CATCH) {
-					if ($this->searchForThrowableInNextCatches($phpcsFile, $useStatements, $catchPointer)) {
+					if ($this->searchForThrowableInNextCatches($phpcsFile, $catchPointer)) {
 						continue;
 					}
 				}
@@ -95,13 +92,7 @@ class ReferenceThrowableOnlySniff implements Sniff
 		}
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
-	 * @param int $catchPointer
-	 * @return bool
-	 */
-	private function searchForThrowableInNextCatches(File $phpcsFile, array $useStatements, int $catchPointer): bool
+	private function searchForThrowableInNextCatches(File $phpcsFile, int $catchPointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 		$nextCatchPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$catchPointer]['scope_closer'] + 1);
@@ -112,7 +103,7 @@ class ReferenceThrowableOnlySniff implements Sniff
 				break;
 			}
 
-			$catchedTypes = CatchHelper::findCatchedTypesInCatch($phpcsFile, $useStatements, $nextCatchToken);
+			$catchedTypes = CatchHelper::findCatchedTypesInCatch($phpcsFile, $nextCatchToken);
 			if (in_array('\\Throwable', $catchedTypes, true)) {
 				return true;
 			}

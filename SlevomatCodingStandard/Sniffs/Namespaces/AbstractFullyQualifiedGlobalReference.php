@@ -48,12 +48,12 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
-		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 		$exclude = array_flip($this->getNormalizedExclude());
 
 		foreach ($referencedNames as $referencedName) {
 			$name = $referencedName->getNameAsReferencedInFile();
 			$namePointer = $referencedName->getStartPointer();
+			$useStatements = UseStatementHelper::getUseStatementsForPointer($phpcsFile, $namePointer);
 
 			if (!$this->isValidType($referencedName)) {
 				continue;
@@ -70,7 +70,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 			$canonicalName = $this->isCaseSensitive() ? $name : strtolower($name);
 
 			if (array_key_exists(UseStatement::getUniqueId($referencedName->getType(), $canonicalName), $useStatements)) {
-				$fullyQualifiedName = NamespaceHelper::resolveName($phpcsFile, $name, $referencedName->getType(), $useStatements, $namePointer);
+				$fullyQualifiedName = NamespaceHelper::resolveName($phpcsFile, $name, $referencedName->getType(), $namePointer);
 				if (NamespaceHelper::hasNamespace($fullyQualifiedName)) {
 					continue;
 				}

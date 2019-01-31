@@ -33,9 +33,6 @@ class AlphabeticallySortedUsesSniff implements Sniff
 	/** @var bool */
 	public $caseSensitive = false;
 
-	/** @var \SlevomatCodingStandard\Helpers\UseStatement|null */
-	private $lastUse;
-
 	/**
 	 * @return (int|string)[]
 	 */
@@ -53,30 +50,32 @@ class AlphabeticallySortedUsesSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
-		$this->lastUse = null;
-		$useStatements = UseStatementHelper::getUseStatements(
+		$allUseStatements = UseStatementHelper::getUseStatements(
 			$phpcsFile,
 			$openTagPointer
 		);
-		foreach ($useStatements as $useStatement) {
-			if ($this->lastUse === null) {
-				$this->lastUse = $useStatement;
-			} else {
-				$order = $this->compareUseStatements($useStatement, $this->lastUse);
-				if ($order < 0) {
-					$fix = $phpcsFile->addFixableError(
-						sprintf('Use statements should be sorted alphabetically. The first wrong one is %s.', $useStatement->getFullyQualifiedTypeName()),
-						$useStatement->getPointer(),
-						self::CODE_INCORRECT_ORDER
-					);
-					if ($fix) {
-						$this->fixAlphabeticalOrder($phpcsFile, $useStatements);
+		foreach ($allUseStatements as $useStatements) {
+			$lastUse = null;
+			foreach ($useStatements as $useStatement) {
+				if ($lastUse === null) {
+					$lastUse = $useStatement;
+				} else {
+					$order = $this->compareUseStatements($useStatement, $lastUse);
+					if ($order < 0) {
+						$fix = $phpcsFile->addFixableError(
+							sprintf('Use statements should be sorted alphabetically. The first wrong one is %s.', $useStatement->getFullyQualifiedTypeName()),
+							$useStatement->getPointer(),
+							self::CODE_INCORRECT_ORDER
+						);
+						if ($fix) {
+							$this->fixAlphabeticalOrder($phpcsFile, $useStatements);
+						}
+
+						return;
 					}
 
-					return;
+					$lastUse = $useStatement;
 				}
-
-				$this->lastUse = $useStatement;
 			}
 		}
 	}

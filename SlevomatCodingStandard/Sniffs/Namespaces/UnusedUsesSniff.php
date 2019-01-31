@@ -18,6 +18,7 @@ use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use function array_diff_key;
+use function array_key_exists;
 use function array_merge;
 use function count;
 use function in_array;
@@ -26,6 +27,7 @@ use function preg_quote;
 use function preg_split;
 use function sprintf;
 use const T_DOC_COMMENT_OPEN_TAG;
+use const T_NAMESPACE;
 use const T_OPEN_TAG;
 use const T_SEMICOLON;
 
@@ -99,35 +101,40 @@ class UnusedUsesSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
-		$unusedNames = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
+		$allUnusedNames = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
 
-		$usedNames = [];
+		$allUsedNames = [];
 		foreach ($referencedNames as $referencedName) {
 			$name = $referencedName->getNameAsReferencedInFile();
 			$pointer = $referencedName->getStartPointer();
 			$nameParts = NamespaceHelper::getNameParts($name);
 			$nameAsReferencedInFile = $nameParts[0];
 			$nameReferencedWithoutSubNamespace = count($nameParts) === 1;
+
+			/** @var int $pointerBeforeUseStatements */
+			$pointerBeforeUseStatements = TokenHelper::findPrevious($phpcsFile, [T_OPEN_TAG, T_NAMESPACE], $pointer - 1);
+
 			$uniqueId = $nameReferencedWithoutSubNamespace
 				? UseStatement::getUniqueId($referencedName->getType(), $nameAsReferencedInFile)
 				: UseStatement::getUniqueId(ReferencedName::TYPE_DEFAULT, $nameAsReferencedInFile);
 			if (
 				NamespaceHelper::isFullyQualifiedName($name)
-				|| !isset($unusedNames[$uniqueId])
+				|| !array_key_exists($pointerBeforeUseStatements, $allUnusedNames)
+				|| !array_key_exists($uniqueId, $allUnusedNames[$pointerBeforeUseStatements])
 			) {
 				continue;
 			}
 
-			if ($unusedNames[$uniqueId]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
+			if ($allUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
 				$phpcsFile->addError(sprintf(
 					'Case of reference name "%s" and use statement "%s" does not match.',
 					$nameAsReferencedInFile,
-					$unusedNames[$uniqueId]->getNameAsReferencedInFile()
+					$allUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
 				), $pointer, self::CODE_MISMATCHING_CASE);
 			}
 
-			$usedNames[$uniqueId] = true;
+			$allUsedNames[$pointerBeforeUseStatements][$uniqueId] = true;
 		}
 
 		if ($this->searchAnnotations) {
@@ -146,7 +153,10 @@ class UnusedUsesSniff implements Sniff
 					continue;
 				}
 
-				foreach ($unusedNames as $useStatement) {
+				/** @var int $pointerBeforeUseStatements */
+				$pointerBeforeUseStatements = TokenHelper::findPrevious($phpcsFile, [T_OPEN_TAG, T_NAMESPACE], $docCommentOpenPointer - 1);
+
+				foreach ($allUnusedNames[$pointerBeforeUseStatements] as $useStatement) {
 					$nameAsReferencedInFile = $useStatement->getNameAsReferencedInFile();
 					$uniqueId = UseStatement::getUniqueId($useStatement->getType(), $nameAsReferencedInFile);
 
@@ -160,14 +170,14 @@ class UnusedUsesSniff implements Sniff
 							!in_array($annotationName, $this->getIgnoredAnnotationNames(), true)
 							&& preg_match('~^@(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=[^-a-z\\d]|$)~i', $annotationName, $matches) !== 0
 						) {
-							$usedNames[$uniqueId] = true;
+							$allUsedNames[$pointerBeforeUseStatements][$uniqueId] = true;
 
 							if ($matches[1] !== $nameAsReferencedInFile) {
 								foreach ($annotationsByName as $annotation) {
 									$phpcsFile->addError(sprintf(
 										'Case of reference name "%s" and use statement "%s" does not match.',
 										$matches[1],
-										$unusedNames[$uniqueId]->getNameAsReferencedInFile()
+										$allUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
 									), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 								}
 							}
@@ -189,7 +199,7 @@ class UnusedUsesSniff implements Sniff
 								continue;
 							}
 
-							$usedNames[$uniqueId] = true;
+							$allUsedNames[$pointerBeforeUseStatements][$uniqueId] = true;
 
 							if ($matches[1] === $nameAsReferencedInFile) {
 								continue;
@@ -198,7 +208,7 @@ class UnusedUsesSniff implements Sniff
 							$phpcsFile->addError(sprintf(
 								'Case of reference name "%s" and use statement "%s" does not match.',
 								$matches[1],
-								$unusedNames[$uniqueId]->getNameAsReferencedInFile()
+								$allUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
 							), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 						}
 
@@ -244,7 +254,7 @@ class UnusedUsesSniff implements Sniff
 									continue;
 								}
 
-								$usedNames[$uniqueId] = true;
+								$allUsedNames[$pointerBeforeUseStatements][$uniqueId] = true;
 
 								if ($matches[1] === $nameAsReferencedInFile) {
 									continue;
@@ -253,7 +263,7 @@ class UnusedUsesSniff implements Sniff
 								$phpcsFile->addError(sprintf(
 									'Case of reference name "%s" and use statement "%s" does not match.',
 									$matches[1],
-									$unusedNames[$uniqueId]->getNameAsReferencedInFile()
+									$allUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
 								), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 							}
 						}
@@ -264,25 +274,28 @@ class UnusedUsesSniff implements Sniff
 			}
 		}
 
-		foreach (array_diff_key($unusedNames, $usedNames) as $unusedUse) {
-			$fullName = $unusedUse->getFullyQualifiedTypeName();
-			if ($unusedUse->getNameAsReferencedInFile() !== $fullName && $unusedUse->getNameAsReferencedInFile() !== NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($fullName)) {
-				$fullName .= sprintf(' (as %s)', $unusedUse->getNameAsReferencedInFile());
-			}
-			$fix = $phpcsFile->addFixableError(sprintf(
-				'Type %s is not used in this file.',
-				$fullName
-			), $unusedUse->getPointer(), self::CODE_UNUSED_USE);
-			if (!$fix) {
-				continue;
-			}
+		foreach ($allUnusedNames as $pointerBeforeUnusedNames => $unusedNames) {
+			$usedNames = $allUsedNames[$pointerBeforeUnusedNames] ?? [];
+			foreach (array_diff_key($unusedNames, $usedNames) as $unusedUse) {
+				$fullName = $unusedUse->getFullyQualifiedTypeName();
+				if ($unusedUse->getNameAsReferencedInFile() !== $fullName && $unusedUse->getNameAsReferencedInFile() !== NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($fullName)) {
+					$fullName .= sprintf(' (as %s)', $unusedUse->getNameAsReferencedInFile());
+				}
+				$fix = $phpcsFile->addFixableError(sprintf(
+					'Type %s is not used in this file.',
+					$fullName
+				), $unusedUse->getPointer(), self::CODE_UNUSED_USE);
+				if (!$fix) {
+					continue;
+				}
 
-			$phpcsFile->fixer->beginChangeset();
-			$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $unusedUse->getPointer()) + 1;
-			for ($i = $unusedUse->getPointer(); $i <= $endPointer; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
+				$phpcsFile->fixer->beginChangeset();
+				$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $unusedUse->getPointer()) + 1;
+				for ($i = $unusedUse->getPointer(); $i <= $endPointer; $i++) {
+					$phpcsFile->fixer->replaceToken($i, '');
+				}
+				$phpcsFile->fixer->endChangeset();
 			}
-			$phpcsFile->fixer->endChangeset();
 		}
 	}
 

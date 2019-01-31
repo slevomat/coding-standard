@@ -8,7 +8,6 @@ use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use function array_map;
 use function array_merge;
 use function array_values;
@@ -22,7 +21,6 @@ use const T_COMMA;
 use const T_IMPLEMENTS;
 use const T_NAMESPACE;
 use const T_NS_SEPARATOR;
-use const T_OPEN_TAG;
 use const T_USE;
 use const T_WHITESPACE;
 
@@ -84,15 +82,8 @@ class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 			return;
 		}
 
-		/** @var int $openTagPointer */
-		$openTagPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $nameStartPointer);
-		$useStatements = UseStatementHelper::getUseStatements(
-			$phpcsFile,
-			$openTagPointer
-		);
 		$possibleCommaPointer = $this->checkReferencedName(
 			$phpcsFile,
-			$useStatements,
 			$keywordPointer,
 			$nameStartPointer
 		);
@@ -110,7 +101,6 @@ class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 					$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $possibleCommaPointer + 1);
 					$possibleCommaPointer = $this->checkReferencedName(
 						$phpcsFile,
-						$useStatements,
 						$keywordPointer,
 						$nameStartPointer
 					);
@@ -122,16 +112,8 @@ class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 		}
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements canonicalName(string) => useStatement(\SlevomatCodingStandard\Helpers\UseStatement)
-	 * @param int $keywordPointer
-	 * @param int $nameStartPointer
-	 * @return int
-	 */
 	private function checkReferencedName(
 		File $phpcsFile,
-		array $useStatements,
 		int $keywordPointer,
 		int $nameStartPointer
 	): int
@@ -168,7 +150,6 @@ class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 				$fullyQualifiedName = NamespaceHelper::resolveClassName(
 					$phpcsFile,
 					$name,
-					$useStatements,
 					$nameStartPointer
 				);
 

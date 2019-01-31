@@ -84,42 +84,27 @@ class NamespaceHelper
 		);
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param string $nameAsReferencedInFile
-	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
-	 * @param int $currentPointer
-	 * @return string
-	 */
 	public static function resolveClassName(
 		File $phpcsFile,
 		string $nameAsReferencedInFile,
-		array $useStatements,
 		int $currentPointer
 	): string
 	{
-		return self::resolveName($phpcsFile, $nameAsReferencedInFile, ReferencedName::TYPE_DEFAULT, $useStatements, $currentPointer);
+		return self::resolveName($phpcsFile, $nameAsReferencedInFile, ReferencedName::TYPE_DEFAULT, $currentPointer);
 	}
 
-	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param string $nameAsReferencedInFile
-	 * @param string $type
-	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
-	 * @param int $currentPointer
-	 * @return string
-	 */
 	public static function resolveName(
 		File $phpcsFile,
 		string $nameAsReferencedInFile,
 		string $type,
-		array $useStatements,
 		int $currentPointer
 	): string
 	{
 		if (self::isFullyQualifiedName($nameAsReferencedInFile)) {
 			return $nameAsReferencedInFile;
 		}
+
+		$useStatements = UseStatementHelper::getUseStatementsForPointer($phpcsFile, $currentPointer);
 
 		$uniqueId = UseStatement::getUniqueId($type, self::normalizeToCanonicalName($nameAsReferencedInFile));
 

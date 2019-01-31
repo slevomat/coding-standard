@@ -12,7 +12,6 @@ use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use function array_keys;
 use function array_reverse;
 use function count;
@@ -41,7 +40,6 @@ use const T_MUL_EQUAL;
 use const T_NEW;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
-use const T_OPEN_TAG;
 use const T_OR_EQUAL;
 use const T_PLUS_EQUAL;
 use const T_POW_EQUAL;
@@ -131,10 +129,6 @@ class UnusedPrivateElementsSniff implements Sniff
 		$classToken = $tokens[$classPointer];
 		$className = ClassHelper::getFullyQualifiedName($phpcsFile, $classPointer);
 
-		/** @var int $openTagPointer */
-		$openTagPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $classPointer - 1);
-		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
-
 		$reportedProperties = $this->getProperties($phpcsFile, $classPointer);
 		$reportedConstants = $this->getConstants($phpcsFile, $classPointer);
 
@@ -153,13 +147,13 @@ class UnusedPrivateElementsSniff implements Sniff
 		$writeOnlyProperties = [];
 		$findUsagesStartTokenPointer = $classToken['scope_opener'] + 1;
 
-		$isCurrentClass = function (int $referencedNamePointer) use ($phpcsFile, $tokens, $useStatements, $className): bool {
+		$isCurrentClass = function (int $referencedNamePointer) use ($phpcsFile, $tokens, $className): bool {
 			if (in_array($tokens[$referencedNamePointer]['code'], [T_SELF, T_STATIC], true)) {
 				return true;
 			}
 
 			if ($tokens[$referencedNamePointer]['code'] === T_STRING) {
-				$referencedClassName = NamespaceHelper::resolveClassName($phpcsFile, $tokens[$referencedNamePointer]['content'], $useStatements, $referencedNamePointer);
+				$referencedClassName = NamespaceHelper::resolveClassName($phpcsFile, $tokens[$referencedNamePointer]['content'], $referencedNamePointer);
 				if ($className === $referencedClassName) {
 					return true;
 				}

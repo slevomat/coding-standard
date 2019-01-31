@@ -6,10 +6,8 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\CatchHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use function in_array;
 use const T_CATCH;
-use const T_OPEN_TAG;
 
 class DeadCatchSniff implements Sniff
 {
@@ -35,12 +33,9 @@ class DeadCatchSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		/** @var int $openTagPointer */
-		$openTagPointer = TokenHelper::findNext($phpcsFile, T_OPEN_TAG, 0);
 		$catchToken = $tokens[$catchPointer];
 		$catchedTypes = CatchHelper::findCatchedTypesInCatch(
 			$phpcsFile,
-			UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer),
 			$catchToken
 		);
 

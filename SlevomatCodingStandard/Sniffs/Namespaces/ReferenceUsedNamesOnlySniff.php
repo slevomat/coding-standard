@@ -190,7 +190,6 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$references = $this->getReferences($phpcsFile, $openTagPointer);
-		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 
 		$definedClassesIndex = array_flip(array_map(function (string $className): string {
 			return strtolower($className);
@@ -207,7 +206,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 			$classReferencesIndex = [];
 			foreach ($classReferences as $classReference) {
-				$classReferencesIndex[strtolower($classReference->name)] = NamespaceHelper::resolveName($phpcsFile, $classReference->name, $classReference->type, $useStatements, $classReference->startPointer);
+				$classReferencesIndex[strtolower($classReference->name)] = NamespaceHelper::resolveName($phpcsFile, $classReference->name, $classReference->type, $classReference->startPointer);
 			}
 		}
 
@@ -218,7 +217,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 			$functionReferencesIndex = [];
 			foreach ($functionReferences as $functionReference) {
-				$functionReferencesIndex[strtolower($functionReference->name)] = NamespaceHelper::resolveName($phpcsFile, $functionReference->name, $functionReference->type, $useStatements, $functionReference->startPointer);
+				$functionReferencesIndex[strtolower($functionReference->name)] = NamespaceHelper::resolveName($phpcsFile, $functionReference->name, $functionReference->type, $functionReference->startPointer);
 			}
 		}
 
@@ -229,11 +228,13 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 			$constantReferencesIndex = [];
 			foreach ($constantReferences as $constantReference) {
-				$constantReferencesIndex[$constantReference->name] = NamespaceHelper::resolveName($phpcsFile, $constantReference->name, $constantReference->type, $useStatements, $constantReference->startPointer);
+				$constantReferencesIndex[$constantReference->name] = NamespaceHelper::resolveName($phpcsFile, $constantReference->name, $constantReference->type, $constantReference->startPointer);
 			}
 		}
 
 		foreach ($references as $reference) {
+			$useStatements = UseStatementHelper::getUseStatementsForPointer($phpcsFile, $reference->startPointer);
+
 			$name = $reference->name;
 			$startPointer = $reference->startPointer;
 			$canonicalName = NamespaceHelper::normalizeToCanonicalName($name);

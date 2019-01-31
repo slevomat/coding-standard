@@ -52,16 +52,20 @@ class UseSpacingSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
-		$useStatements = array_values(UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer));
+		$allUseStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 
-		if (count($useStatements) === 0) {
+		if (count($allUseStatements) === 0) {
 			return;
 		}
 
-		$this->checkLinesBeforeFirstUse($phpcsFile, $useStatements[0]);
-		$this->checkLinesAfterLastUse($phpcsFile, $useStatements[count($useStatements) - 1]);
-		$this->checkLinesBetweenSameTypesOfUse($phpcsFile, $useStatements);
-		$this->checkLinesBetweenDifferentTypesOfUse($phpcsFile, $useStatements);
+		foreach ($allUseStatements as $useStatementsByName) {
+			$useStatements = array_values($useStatementsByName);
+
+			$this->checkLinesBeforeFirstUse($phpcsFile, $useStatements[0]);
+			$this->checkLinesAfterLastUse($phpcsFile, $useStatements[count($useStatements) - 1]);
+			$this->checkLinesBetweenSameTypesOfUse($phpcsFile, $useStatements);
+			$this->checkLinesBetweenDifferentTypesOfUse($phpcsFile, $useStatements);
+		}
 	}
 
 	private function checkLinesBeforeFirstUse(File $phpcsFile, UseStatement $firstUse): void

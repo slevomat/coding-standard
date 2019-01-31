@@ -74,11 +74,12 @@ class FullyQualifiedExceptionsSniff implements Sniff
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
-		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
 		foreach ($referencedNames as $referencedName) {
 			$pointer = $referencedName->getStartPointer();
 			$name = $referencedName->getNameAsReferencedInFile();
 			$uniqueId = UseStatement::getUniqueId($referencedName->getType(), $name);
+			$useStatements = UseStatementHelper::getUseStatementsForPointer($phpcsFile, $pointer);
+
 			if (isset($useStatements[$uniqueId]) && $referencedName->hasSameUseStatementType($useStatements[$uniqueId])) {
 				$useStatement = $useStatements[$uniqueId];
 				if (
@@ -128,7 +129,6 @@ class FullyQualifiedExceptionsSniff implements Sniff
 			$fullyQualifiedName = NamespaceHelper::resolveClassName(
 				$phpcsFile,
 				$name,
-				$useStatements,
 				$pointer
 			);
 
