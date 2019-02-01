@@ -2,12 +2,12 @@
 
 namespace SlevomatCodingStandard\Sniffs\PHP;
 
-use function array_key_exists;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use function array_key_exists;
 use function in_array;
 use function sprintf;
 use function substr;
