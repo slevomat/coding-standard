@@ -31,3 +31,16 @@ class Whatever
 	public $h;
 
 }
+
+class CallableType
+{
+
+	/**
+	 * @return callable(mixed $bool): mixed
+	 */
+	public function returnsCallable()
+	{
+
+	}
+
+}

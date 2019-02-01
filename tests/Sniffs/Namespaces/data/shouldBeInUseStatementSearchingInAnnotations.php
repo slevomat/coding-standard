@@ -96,3 +96,16 @@ class IntersectionAndGeneric
 	public $h;
 
 }
+
+class CallableType
+{
+
+	/**
+	 * @return callable(\Foo\DateTime $bool): \Foo\ArrayObject
+	 */
+	public function returnsCallable()
+	{
+
+	}
+
+}

@@ -414,3 +414,24 @@ class IntersectionAndGeneric
 	}
 
 }
+
+class CallableType
+{
+
+	/**
+	 * @return callable(): void
+	 */
+	public function returnsCallable()
+	{
+
+	}
+
+	/**
+	 * @return (callable(): void)[]|\Traversable
+	 */
+	public function returnsTraversableCallable()
+	{
+
+	}
+
+}

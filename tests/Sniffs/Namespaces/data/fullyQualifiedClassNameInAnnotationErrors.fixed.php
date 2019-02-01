@@ -132,3 +132,16 @@ class IntersectionAndGeneric
 	public $h;
 
 }
+
+class CallableType
+{
+
+	/**
+	 * @return callable(\Iterator $bool): \Traversable
+	 */
+	public function returnsCallable()
+	{
+
+	}
+
+}

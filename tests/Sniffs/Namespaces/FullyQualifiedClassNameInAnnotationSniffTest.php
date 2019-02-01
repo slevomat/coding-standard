@@ -15,7 +15,8 @@ class FullyQualifiedClassNameInAnnotationSniffTest extends TestCase
 	public function testErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedClassNameInAnnotationErrors.php');
-		self::assertSame(45, $report->getErrorCount());
+
+		self::assertSame(47, $report->getErrorCount());
 
 		self::assertSniffError($report, 16, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \XXX\PropertySameNamespace in @var should be referenced via a fully qualified name');
 		self::assertSniffError($report, 19, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \YYY\PropertyUsed in @var should be referenced via a fully qualified name');
@@ -62,6 +63,9 @@ class FullyQualifiedClassNameInAnnotationSniffTest extends TestCase
 		self::assertSniffError($report, 131, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \Iterator in @var should be referenced via a fully qualified name');
 		self::assertSniffError($report, 131, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \Traversable in @var should be referenced via a fully qualified name');
 		self::assertSniffError($report, 131, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \DateTimeImmutable in @var should be referenced via a fully qualified name');
+
+		self::assertSniffError($report, 140, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \Iterator in @return should be referenced via a fully qualified name');
+		self::assertSniffError($report, 140, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \Traversable in @return should be referenced via a fully qualified name');
 
 		self::assertAllFixedInFile($report);
 	}

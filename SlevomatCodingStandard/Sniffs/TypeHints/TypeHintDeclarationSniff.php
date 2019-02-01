@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
@@ -808,7 +809,7 @@ class TypeHintDeclarationSniff implements Sniff
 	}
 
 	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $typeNode
+	 * @param \PHPStan\PhpDocParser\Ast\Type\CallableTypeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $typeNode
 	 * @return string
 	 */
 	private function getTypeHintFromOneType(TypeNode $typeNode): string
@@ -819,6 +820,10 @@ class TypeHintDeclarationSniff implements Sniff
 
 		if ($typeNode instanceof IdentifierTypeNode) {
 			return $typeNode->name;
+		}
+
+		if ($typeNode instanceof CallableTypeNode) {
+			return $typeNode->identifier->name;
 		}
 
 		return (string) $typeNode;
@@ -835,6 +840,10 @@ class TypeHintDeclarationSniff implements Sniff
 		}
 
 		if ($typeNode instanceof GenericTypeNode) {
+			return true;
+		}
+
+		if ($typeNode instanceof CallableTypeNode) {
 			return true;
 		}
 
@@ -1072,9 +1081,14 @@ class TypeHintDeclarationSniff implements Sniff
 			return false;
 		}
 
-		/** @var \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $returnAnnotationTypeNode */
+		if ($returnAnnotation->getType() instanceof CallableTypeNode) {
+			return false;
+		}
+
+		/** @var \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\CallableTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $returnAnnotationTypeNode */
 		$returnAnnotationTypeNode = $returnAnnotation->getType();
-		return $this->typeHintEqualsAnnotation($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint(), $returnAnnotationTypeNode->name);
+		$returnAnnotationTypeHint = $this->getTypeHintFromOneType($returnAnnotationTypeNode);
+		return $this->typeHintEqualsAnnotation($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint(), $returnAnnotationTypeHint);
 	}
 
 	/**
@@ -1122,12 +1136,19 @@ class TypeHintDeclarationSniff implements Sniff
 				if (!$this->typeHintEqualsAnnotation($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint(), $annotationTypeHint)) {
 					continue;
 				}
-			} elseif (!$this->annotationContainsOneType($parameterAnnotationTypeNode)) {
-				continue;
 			} else {
-				/** @var \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $parameterAnnotationTypeNode */
+				if (!$this->annotationContainsOneType($parameterAnnotationTypeNode)) {
+					continue;
+				}
+
+				if ($parameterAnnotationTypeNode instanceof CallableTypeNode) {
+					continue;
+				}
+
+				/** @var \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\CallableTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $parameterAnnotationTypeNode */
 				$parameterAnnotationTypeNode = $parameterAnnotationTypeNode;
-				if (!$this->typeHintEqualsAnnotation($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint(), $parameterAnnotationTypeNode->name)) {
+				$parameterAnnotationTypeHint = $this->getTypeHintFromOneType($parameterAnnotationTypeNode);
+				if (!$this->typeHintEqualsAnnotation($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint(), $parameterAnnotationTypeHint)) {
 					continue;
 				}
 			}

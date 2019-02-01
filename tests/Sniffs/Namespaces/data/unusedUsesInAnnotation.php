@@ -57,6 +57,8 @@ use Iag11;
 use Iag12;
 use Iag13;
 use Iag14;
+use Callable1;
+use Callable2;
 
 /**
  * @ORM\Entity()
@@ -201,5 +203,18 @@ class IntersectionAndGeneric
 
 	/** @var int|(Iag10<string>&Iag11)[] */
 	public $g;
+
+}
+
+class CallableType
+{
+
+	/**
+	 * @return callable(Callable1 $bool): Callable2
+	 */
+	public function returnsCallable()
+	{
+
+	}
 
 }

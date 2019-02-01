@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
@@ -148,6 +149,14 @@ class NullTypeHintOnLastPositionSniff implements Sniff
 			$unionTypeNodes = [];
 			foreach ($typeNode->genericTypes as $innerTypeNode) {
 				$unionTypeNodes = array_merge($unionTypeNodes, $this->getUnionTypeNodes($innerTypeNode));
+			}
+			return $unionTypeNodes;
+		}
+
+		if ($typeNode instanceof CallableTypeNode) {
+			$unionTypeNodes = $this->getUnionTypeNodes($typeNode->returnType);
+			foreach ($typeNode->parameters as $callableParameterNode) {
+				$unionTypeNodes = array_merge($unionTypeNodes, $this->getUnionTypeNodes($callableParameterNode->type));
 			}
 			return $unionTypeNodes;
 		}

@@ -16,7 +16,7 @@ class LongTypeHintsSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/longTypeHintsErrors.php');
 
-		self::assertSame(39, $report->getErrorCount());
+		self::assertSame(41, $report->getErrorCount());
 
 		self::assertSniffError($report, 4, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "int" but found "integer" in @param annotation.');
 		self::assertSniffError($report, 5, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "bool" but found "boolean" in @return annotation.');
@@ -59,6 +59,9 @@ class LongTypeHintsSniffTest extends TestCase
 		self::assertSniffError($report, 92, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "bool" but found "boolean" in @var annotation.');
 		self::assertSniffError($report, 95, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "int" but found "integer" in @var annotation.');
 		self::assertSniffError($report, 95, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "bool" but found "boolean" in @var annotation.');
+
+		self::assertSniffError($report, 104, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "bool" but found "boolean" in @return annotation.');
+		self::assertSniffError($report, 104, LongTypeHintsSniff::CODE_USED_LONG_TYPE_HINT, 'Expected "int" but found "integer" in @return annotation.');
 
 		self::assertAllFixedInFile($report);
 	}

@@ -3,6 +3,8 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\CallableTypeParameterNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
@@ -50,6 +52,14 @@ class AnnotationTypeHelper
 
 		if ($typeNode instanceof NullableTypeNode) {
 			return self::getIdentifierTypeNodes($typeNode->type);
+		}
+
+		if ($typeNode instanceof CallableTypeNode) {
+			$identifierTypeNodes = array_merge([$typeNode->identifier], self::getIdentifierTypeNodes($typeNode->returnType));
+			foreach ($typeNode->parameters as $callableParameterNode) {
+				$identifierTypeNodes = array_merge($identifierTypeNodes, self::getIdentifierTypeNodes($callableParameterNode->type));
+			}
+			return $identifierTypeNodes;
 		}
 
 		/** @var \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $typeNode */
@@ -123,6 +133,27 @@ class AnnotationTypeHelper
 
 		if ($masterTypeNode instanceof NullableTypeNode) {
 			return new NullableTypeNode(self::change($masterTypeNode->type, $typeNodeToChange, $changedTypeNode));
+		}
+
+		if ($masterTypeNode instanceof CallableTypeNode) {
+			$callableParameters = [];
+			foreach ($masterTypeNode->parameters as $parameterTypeNode) {
+				$callableParameters[] = new CallableTypeParameterNode(
+					self::change($parameterTypeNode->type, $typeNodeToChange, $changedTypeNode),
+					$parameterTypeNode->isReference,
+					$parameterTypeNode->isVariadic,
+					$parameterTypeNode->parameterName,
+					$parameterTypeNode->isOptional
+				);
+			}
+
+			/** @var \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identificatorTypeNode */
+			$identificatorTypeNode = self::change($masterTypeNode->identifier, $typeNodeToChange, $changedTypeNode);
+			return new CallableTypeNode(
+				$identificatorTypeNode,
+				$callableParameters,
+				self::change($masterTypeNode->returnType, $typeNodeToChange, $changedTypeNode)
+			);
 		}
 
 		return clone $masterTypeNode;

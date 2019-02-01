@@ -100,3 +100,16 @@ class IntersectionAndGeneric
 	public $h;
 
 }
+
+class CallableType
+{
+
+	/**
+	 * @return callable(DateTime $bool): ArrayObject
+	 */
+	public function returnsCallable()
+	{
+
+	}
+
+}

@@ -84,3 +84,16 @@ class IntersectionAndGeneric
 	public $f;
 
 }
+
+class CallableType
+{
+
+	/**
+	 * @return callable((null|bool) $bool): (null|int)
+	 */
+	public function returnsCallable()
+	{
+
+	}
+
+}

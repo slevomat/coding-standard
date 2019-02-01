@@ -761,3 +761,24 @@ class IntersectionAndGeneric
 	}
 
 }
+
+class CallableType
+{
+
+	/**
+	 * @return callable(): void
+	 */
+	public function returnsCallable(): callable
+	{
+
+	}
+
+	/**
+	 * @param \Closure(): array $parameter
+	 */
+	public function callableParameter(\Closure $parameter): void
+	{
+
+	}
+
+}

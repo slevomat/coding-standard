@@ -413,3 +413,24 @@ class IntersectionAndGeneric
 	}
 
 }
+
+class CallableType
+{
+
+	/**
+	 * @param \Closure():array|null $parameter
+	 */
+	public function callableParameter($parameter): void
+	{
+
+	}
+
+	/**
+	 * @param array<\Closure():array> $parameter
+	 */
+	public function traversableCallableParameter($parameter): void
+	{
+
+	}
+
+}
