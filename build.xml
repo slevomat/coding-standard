@@ -71,8 +71,6 @@
 			passthru="true"
 			checkreturn="true"
 		>
-			<arg value="--configuration"/>
-			<arg value="tests/phpunit.xml"/>
 			<arg path="tests"/>
 		</exec>
 	</target>

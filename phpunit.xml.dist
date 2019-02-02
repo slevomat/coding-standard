@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <phpunit
-	bootstrap="bootstrap.php"
+	bootstrap="tests/bootstrap.php"
 	colors="true"
 	backupGlobals="false"
 	backupStaticAttributes="false"
@@ -9,14 +9,14 @@
 	beStrictAboutTestsThatDoNotTestAnything="true"
 	beStrictAboutTodoAnnotatedTests="true"
 	cacheResult="true"
-	cacheResultFile="../.phpunit.result.cache"
+	cacheResultFile=".phpunit.result.cache"
 	stopOnDefect="true"
 	executionOrder="defects"
 >
 	<logging>
 		<log
 			type="coverage-html"
-			target="../temp/coverage"
+			target="temp/coverage"
 		/>
 		<log
 			type="coverage-text"
@@ -27,7 +27,7 @@
 	</logging>
 	<filter>
 		<whitelist processUncoveredFilesFromWhitelist="true">
-			<directory suffix=".php">../SlevomatCodingStandard</directory>
+			<directory suffix=".php">SlevomatCodingStandard</directory>
 		</whitelist>
 	</filter>
 </phpunit>
