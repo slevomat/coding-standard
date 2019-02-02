@@ -364,6 +364,12 @@ Sniff provides the following settings:
 
 However, if you prefer Yoda conditions, you can use `RequireYodaComparisonSniff`.
 
+#### SlevomatCodingStandard.Functions.TrailingCommaInCall 🔧
+
+Commas after the last parameter in function or method call make adding a new parameter easier and result in a cleaner versioning diff.
+
+This sniff enforces trailing commas in multi-line calls.
+
 #### SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses 🔧
 
 Checks whether uses at the top of a file are alphabetically sorted. Follows natural sorting and takes edge cases with special symbols into consideration. The following code snippet is an example of correctly sorted uses:
