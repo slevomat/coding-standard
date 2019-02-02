@@ -9,7 +9,7 @@
 	beStrictAboutTestsThatDoNotTestAnything="true"
 	beStrictAboutTodoAnnotatedTests="true"
 	cacheResult="true"
-	cacheResultFile=".phpunit.result.cache"
+	cacheResultFile="temp/.phpunit.result.cache"
 	stopOnDefect="true"
 	executionOrder="defects"
 >
