@@ -110,7 +110,9 @@ class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
 			return;
 		}
 
-		$startPointer = $closeBracketPointer;
+		$pointerBeforeCloseBracket = TokenHelper::findPreviousEffective($phpcsFile, $closeBracketPointer - 1);
+
+		$startPointer = $tokens[$pointerBeforeCloseBracket]['code'] === T_COMMA ? $pointerBeforeCloseBracket : $closeBracketPointer;
 		do {
 			$lastArgumentSeparatorPointer = TokenHelper::findPrevious($phpcsFile, [T_COMMA], $startPointer - 1, $openBracketPointer);
 			$startPointer = $lastArgumentSeparatorPointer;
