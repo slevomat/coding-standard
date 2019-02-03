@@ -87,6 +87,8 @@
 			<arg value="6"/>
 			<arg value="-c"/>
 			<arg path="build/PHPStan/phpstan.neon"/>
+			<arg value="--memory-limit"/>
+			<arg value="512M"/>
 			<arg path="SlevomatCodingStandard"/>
 		</exec>
 
