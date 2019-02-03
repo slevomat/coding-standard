@@ -156,6 +156,11 @@ class UnusedUsesSniff implements Sniff
 				/** @var int $pointerBeforeUseStatements */
 				$pointerBeforeUseStatements = TokenHelper::findPrevious($phpcsFile, [T_OPEN_TAG, T_NAMESPACE], $docCommentOpenPointer - 1);
 
+				if (!array_key_exists($pointerBeforeUseStatements, $allUnusedNames)) {
+					$searchAnnotationsPointer = $tokens[$docCommentOpenPointer]['comment_closer'] + 1;
+					continue;
+				}
+
 				foreach ($allUnusedNames[$pointerBeforeUseStatements] as $useStatement) {
 					$nameAsReferencedInFile = $useStatement->getNameAsReferencedInFile();
 					$uniqueId = UseStatement::getUniqueId($useStatement->getType(), $nameAsReferencedInFile);

@@ -279,4 +279,12 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testNoUsesWithSearchInAnnotationsEnabledNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/noUses.php', [
+			'searchAnnotations' => true,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
 }
