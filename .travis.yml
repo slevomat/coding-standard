@@ -19,7 +19,7 @@ before_script:
   - if [ "${DEPENDENCIES}" = "highest" ]; then composer update --prefer-dist --no-interaction --no-progress; fi;
 script:
   - bin/phing
-after_script:
-  - if [ "${TRAVIS_ALLOW_FAILURE}" = false ]; then wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.0/coveralls.phar && php coveralls.phar --verbose --config build/coveralls.yml; fi
+after_success:
+  - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar && php php-coveralls.phar --verbose --config build/coveralls.yml
 notifications:
   email: false
