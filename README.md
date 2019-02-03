@@ -425,6 +425,13 @@ Sniff provides the following settings:
 * `linesCountBetweenUseTypes`: allows to configure the number of lines between two different types of `use`.
 * `linesCountAfterLastUse`: allows to configure the number of lines after last `use`.
 
+#### SlevomatCodingStandard.Operators.SpreadOperatorSpacing 🔧
+
+Enforces configurable number of spaces after the `...` operator.
+
+Sniff provides the following settings:
+
+* `spacesCountAfterOperator`: the number of spaces after the `...` operator.
 
 #### SlevomatCodingStandard.TypeHints.DisallowArrayTypeHintSyntax 🔧
 
