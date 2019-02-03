@@ -18,6 +18,7 @@
 			type="coverage-html"
 			target="temp/coverage"
 		/>
+		<log type="coverage-clover" target="temp/coverage.xml"/>
 		<log
 			type="coverage-text"
 			target="php://stdout"
