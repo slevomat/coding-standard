@@ -240,6 +240,10 @@ class TypeHintDeclarationSniff implements Sniff
 
 					$possibleParameterTypeHint = $this->getTraversableTypeHintFromType($parameterTypeNode);
 					$nullableParameterTypeHint = false;
+
+					if (!$this->isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $possibleParameterTypeHint))) {
+						continue;
+					}
 				}
 			}
 
@@ -464,6 +468,10 @@ class TypeHintDeclarationSniff implements Sniff
 
 				$possibleReturnTypeHint = $this->getTraversableTypeHintFromType($returnTypeNode);
 				$nullableReturnTypeHint = false;
+
+				if (!$this->isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $possibleReturnTypeHint))) {
+					return;
+				}
 			}
 		}
 

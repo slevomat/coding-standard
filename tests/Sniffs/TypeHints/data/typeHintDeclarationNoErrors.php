@@ -677,6 +677,21 @@ abstract class FooClass
 	{
 	}
 
+	/**
+	 * @param mixed[]|string $parameter
+	 */
+	public function parameterArrayOrString($parameter): void
+	{
+	}
+
+	/**
+	 * @return mixed[]|string
+	 */
+	public function returnsArrayOrString()
+	{
+		return [];
+	}
+
 }
 
 class IntersectionAndGeneric
