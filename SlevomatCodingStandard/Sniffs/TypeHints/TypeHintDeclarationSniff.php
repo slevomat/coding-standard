@@ -1001,7 +1001,7 @@ class TypeHintDeclarationSniff implements Sniff
 	}
 
 	/**
-	 * @return int[] [string => int]
+	 * @return array<string, int>
 	 */
 	private function getNormalizedTraversableTypeHints(): array
 	{
