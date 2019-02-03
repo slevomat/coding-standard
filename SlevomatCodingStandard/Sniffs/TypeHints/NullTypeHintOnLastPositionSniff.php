@@ -4,18 +4,11 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
-use function array_merge;
 use function count;
 use function sprintf;
 use function strtolower;
@@ -56,7 +49,7 @@ class NullTypeHintOnLastPositionSniff implements Sniff
 				}
 
 				foreach (AnnotationHelper::getAnnotationTypes($annotation) as $annotationType) {
-					foreach ($this->getUnionTypeNodes($annotationType) as $unionTypeNode) {
+					foreach (AnnotationTypeHelper::getUnionTypeNodes($annotationType) as $unionTypeNode) {
 						$nullTypeNode = null;
 						$nullPosition = 0;
 						$position = 0;
@@ -117,51 +110,6 @@ class NullTypeHintOnLastPositionSniff implements Sniff
 				}
 			}
 		}
-	}
-
-	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
-	 * @return \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode[]
-	 */
-	private function getUnionTypeNodes(TypeNode $typeNode): array
-	{
-		if ($typeNode instanceof UnionTypeNode) {
-			return [$typeNode];
-		}
-
-		if ($typeNode instanceof NullableTypeNode) {
-			return $this->getUnionTypeNodes($typeNode->type);
-		}
-
-		if ($typeNode instanceof ArrayTypeNode) {
-			return $this->getUnionTypeNodes($typeNode->type);
-		}
-
-		if ($typeNode instanceof IntersectionTypeNode) {
-			$unionTypeNodes = [];
-			foreach ($typeNode->types as $innerTypeNode) {
-				$unionTypeNodes = array_merge($unionTypeNodes, $this->getUnionTypeNodes($innerTypeNode));
-			}
-			return $unionTypeNodes;
-		}
-
-		if ($typeNode instanceof GenericTypeNode) {
-			$unionTypeNodes = [];
-			foreach ($typeNode->genericTypes as $innerTypeNode) {
-				$unionTypeNodes = array_merge($unionTypeNodes, $this->getUnionTypeNodes($innerTypeNode));
-			}
-			return $unionTypeNodes;
-		}
-
-		if ($typeNode instanceof CallableTypeNode) {
-			$unionTypeNodes = $this->getUnionTypeNodes($typeNode->returnType);
-			foreach ($typeNode->parameters as $callableParameterNode) {
-				$unionTypeNodes = array_merge($unionTypeNodes, $this->getUnionTypeNodes($callableParameterNode->type));
-			}
-			return $unionTypeNodes;
-		}
-
-		return [];
 	}
 
 }

@@ -68,6 +68,95 @@ class AnnotationTypeHelper
 	}
 
 	/**
+	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
+	 * @return \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode[]
+	 */
+	public static function getUnionTypeNodes(TypeNode $typeNode): array
+	{
+		if ($typeNode instanceof UnionTypeNode) {
+			return [$typeNode];
+		}
+
+		if ($typeNode instanceof NullableTypeNode) {
+			return self::getUnionTypeNodes($typeNode->type);
+		}
+
+		if ($typeNode instanceof ArrayTypeNode) {
+			return self::getUnionTypeNodes($typeNode->type);
+		}
+
+		if ($typeNode instanceof IntersectionTypeNode) {
+			$unionTypeNodes = [];
+			foreach ($typeNode->types as $innerTypeNode) {
+				$unionTypeNodes = array_merge($unionTypeNodes, self::getUnionTypeNodes($innerTypeNode));
+			}
+			return $unionTypeNodes;
+		}
+
+		if ($typeNode instanceof GenericTypeNode) {
+			$unionTypeNodes = [];
+			foreach ($typeNode->genericTypes as $innerTypeNode) {
+				$unionTypeNodes = array_merge($unionTypeNodes, self::getUnionTypeNodes($innerTypeNode));
+			}
+			return $unionTypeNodes;
+		}
+
+		if ($typeNode instanceof CallableTypeNode) {
+			$unionTypeNodes = self::getUnionTypeNodes($typeNode->returnType);
+			foreach ($typeNode->parameters as $callableParameterNode) {
+				$unionTypeNodes = array_merge($unionTypeNodes, self::getUnionTypeNodes($callableParameterNode->type));
+			}
+			return $unionTypeNodes;
+		}
+
+		return [];
+	}
+
+	/**
+	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
+	 * @return \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode[]
+	 */
+	public static function getArrayTypeNodes(TypeNode $typeNode): array
+	{
+		if ($typeNode instanceof ArrayTypeNode) {
+			return array_merge([$typeNode], self::getArrayTypeNodes($typeNode->type));
+		}
+
+		if ($typeNode instanceof NullableTypeNode) {
+			return self::getArrayTypeNodes($typeNode->type);
+		}
+
+		if (
+			$typeNode instanceof UnionTypeNode
+			|| $typeNode instanceof IntersectionTypeNode
+		) {
+			$arrayTypeNodes = [];
+			foreach ($typeNode->types as $innerTypeNode) {
+				$arrayTypeNodes = array_merge($arrayTypeNodes, self::getArrayTypeNodes($innerTypeNode));
+			}
+			return $arrayTypeNodes;
+		}
+
+		if ($typeNode instanceof GenericTypeNode) {
+			$arrayTypeNodes = [];
+			foreach ($typeNode->genericTypes as $innerTypeNode) {
+				$arrayTypeNodes = array_merge($arrayTypeNodes, self::getArrayTypeNodes($innerTypeNode));
+			}
+			return $arrayTypeNodes;
+		}
+
+		if ($typeNode instanceof CallableTypeNode) {
+			$arrayTypeNodes = self::getArrayTypeNodes($typeNode->returnType);
+			foreach ($typeNode->parameters as $callableParameterNode) {
+				$arrayTypeNodes = array_merge($arrayTypeNodes, self::getArrayTypeNodes($callableParameterNode->type));
+			}
+			return $arrayTypeNodes;
+		}
+
+		return [];
+	}
+
+	/**
 	 * @param \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $typeNode
 	 * @return string
 	 */
