@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace SlevomatCodingStandard\Sniffs\Types;
+namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
@@ -13,7 +13,7 @@ use const T_INTERFACE;
 use const T_TRAIT;
 use const T_WHITESPACE;
 
-class EmptyLinesAroundTypeBracesSniff implements Sniff
+class EmptyLinesAroundClassBracesSniff implements Sniff
 {
 
 	public const CODE_NO_EMPTY_LINE_AFTER_OPENING_BRACE = 'NoEmptyLineAfterOpeningBrace';

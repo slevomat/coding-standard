@@ -80,6 +80,7 @@
 	<rule ref="PSR2.Namespaces.UseDeclaration"/>
 	<rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
 	<rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility"/>
+	<rule ref="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces"/>
 	<rule ref="SlevomatCodingStandard.Classes.UnusedPrivateElements"/>
 	<rule ref="SlevomatCodingStandard.Commenting.EmptyComment"/>
 	<rule ref="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration"/>
@@ -148,7 +149,6 @@
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
-	<rule ref="SlevomatCodingStandard.Types.EmptyLinesAroundTypeBraces"/>
 	<rule ref="Squiz.Arrays.ArrayBracketSpacing">
 		<exclude name="Squiz.Arrays.ArrayBracketSpacing.SpaceBeforeBracket"/><!-- does not handle nested array access across multiple lines -->
 	</rule>
