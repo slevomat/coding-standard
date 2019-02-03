@@ -39,4 +39,7 @@ class Whatever
 	/** @var \Anything|array<string> */
 	public $j;
 
+	/** @var array<int>|string */
+	public $k;
+
 }
