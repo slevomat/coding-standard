@@ -42,4 +42,20 @@ class Whatever
 	/** @var int[]|string */
 	public $k;
 
+	/** @return string[][] */
+	public function l() : iterable {
+	}
+
+	/** @param string[][] $n */
+	public function m(iterable $n) {
+	}
+
+	/** @return string[][]|\ArrayObject */
+	public function o() : ArrayObject {
+	}
+
+	/** @param string[][]|\ArrayObject $p */
+	public function p(ArrayObject $q) {
+	}
+
 }

@@ -42,4 +42,20 @@ class Whatever
 	/** @var array<int>|string */
 	public $k;
 
+	/** @return iterable<array<string>> */
+	public function l() : iterable {
+	}
+
+	/** @param iterable<array<string>> $n */
+	public function m(iterable $n) {
+	}
+
+	/** @return \ArrayObject<array<string>> */
+	public function o() : ArrayObject {
+	}
+
+	/** @param \ArrayObject<array<string>> $p */
+	public function p(ArrayObject $q) {
+	}
+
 }
