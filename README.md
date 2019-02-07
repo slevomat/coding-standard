@@ -660,7 +660,7 @@ Disallows leading backslash in use statement:
 use \Foo\Bar;
 ```
 
-#### SlevomatCodingStandard.Classes.EmptyLinesAroundTypeBraces 🔧
+#### SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces 🔧
 
 Enforces one configurable number of lines after opening class/interface/trait brace and one empty line before the closing brace.
 
