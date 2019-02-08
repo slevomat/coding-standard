@@ -17,20 +17,17 @@ use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
-use SlevomatCodingStandard\Helpers\ReturnTypeHint;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_flip;
 use function array_key_exists;
 use function array_map;
-use function array_merge;
 use function count;
 use function in_array;
 use function sprintf;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_FUNCTION;
-use const T_VARIABLE;
 
 class DisallowArrayTypeHintSyntaxSniff implements Sniff
 {
@@ -88,7 +85,7 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 						$unionTypeNode = $this->findUnionTypeThatContainsArrayType($arrayTypeNode, $unionTypeNodes);
 
 						if ($unionTypeNode !== null) {
-							$genericIdentifier = $this->findGenericIdentifier($phpcsFile, $annotation->getStartPointer(), $unionTypeNode, $annotation);
+							$genericIdentifier = $this->findGenericIdentifier($phpcsFile, $unionTypeNode, $annotation);
 							if ($genericIdentifier !== null) {
 								$genericTypeNode = new GenericTypeNode(new IdentifierTypeNode($genericIdentifier), [$this->fixArrayNode($arrayTypeNode->type)]);
 								$fixedAnnotationContent = AnnotationHelper::fixAnnotation($phpcsFile, $annotation, $unionTypeNode, $genericTypeNode);
@@ -97,7 +94,7 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 								$fixedAnnotationContent = AnnotationHelper::fixAnnotation($phpcsFile, $annotation, $arrayTypeNode, $genericTypeNode);
 							}
 						} else {
-							$genericIdentifier = $this->findGenericIdentifier($phpcsFile, $annotation->getStartPointer(), $arrayTypeNode, $annotation) ?? 'array';
+							$genericIdentifier = $this->findGenericIdentifier($phpcsFile, $arrayTypeNode, $annotation) ?? 'array';
 
 							$genericTypeNode = new GenericTypeNode(new IdentifierTypeNode($genericIdentifier), [$this->fixArrayNode($arrayTypeNode->type)]);
 							$fixedAnnotationContent = AnnotationHelper::fixAnnotation($phpcsFile, $annotation, $arrayTypeNode, $genericTypeNode);
@@ -140,31 +137,24 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 		return null;
 	}
 
-	private function findGenericIdentifier(File $phpcsFile, int $pointer, TypeNode $typeNode, Annotation $annotation): ?string
+	private function findGenericIdentifier(File $phpcsFile, TypeNode $typeNode, Annotation $annotation): ?string
 	{
 		if (!$typeNode instanceof UnionTypeNode) {
-			$docCommentOwnerPointer = TokenHelper::findNext($phpcsFile, array_merge(TokenHelper::$functionTokenCodes, TokenHelper::$typeKeywordTokenCodes, [T_VARIABLE]), $pointer);
-
-			if ($phpcsFile->getTokens()[$docCommentOwnerPointer]['code'] !== T_FUNCTION) {
+			if (!$annotation instanceof ParameterAnnotation && !$annotation instanceof ReturnAnnotation) {
 				return null;
 			}
 
-			switch (true) {
-				case $annotation instanceof ParameterAnnotation:
-					$typeHints = FunctionHelper::getParametersTypeHints($phpcsFile, $docCommentOwnerPointer);
-					if (isset($typeHints[$annotation->getContentNode()->parameterName])) {
-						return $typeHints[$annotation->getContentNode()->parameterName]->getTypeHint();
-					}
-					break;
-				case $annotation instanceof ReturnAnnotation:
-					$returnType = FunctionHelper::findReturnTypeHint($phpcsFile, $docCommentOwnerPointer);
-					if ($returnType instanceof ReturnTypeHint) {
-						return $returnType->getTypeHint();
-					}
-					break;
+			$functionPointer = TokenHelper::findNext($phpcsFile, T_FUNCTION, $annotation->getStartPointer() + 1);
+
+			if ($annotation instanceof ParameterAnnotation) {
+				$parameterTypeHints = FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer);
+				return array_key_exists($annotation->getParameterName(), $parameterTypeHints) && $parameterTypeHints[$annotation->getParameterName()] !== null
+					? $parameterTypeHints[$annotation->getParameterName()]->getTypeHint()
+					: null;
 			}
 
-			return null;
+			$returnType = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
+			return $returnType !== null ? $returnType->getTypeHint() : null;
 		}
 
 		if (count($typeNode->types) !== 2) {
@@ -174,7 +164,7 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 		if (
 			$typeNode->types[0] instanceof ArrayTypeNode
 			&& $typeNode->types[1] instanceof IdentifierTypeNode
-			&& $this->isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeNode->types[1]->name))
+			&& $this->isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $annotation->getStartPointer(), $typeNode->types[1]->name))
 		) {
 			return $typeNode->types[1]->name;
 		}
@@ -182,7 +172,7 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 		if (
 			$typeNode->types[1] instanceof ArrayTypeNode
 			&& $typeNode->types[0] instanceof IdentifierTypeNode
-			&& $this->isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeNode->types[0]->name))
+			&& $this->isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $annotation->getStartPointer(), $typeNode->types[0]->name))
 		) {
 			return $typeNode->types[0]->name;
 		}

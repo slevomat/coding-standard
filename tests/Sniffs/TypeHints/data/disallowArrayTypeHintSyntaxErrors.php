@@ -43,19 +43,28 @@ class Whatever
 	public $k;
 
 	/** @return string[][] */
-	public function l() : iterable {
+	public function l(): iterable
+	{
 	}
 
 	/** @param string[][] $n */
-	public function m(iterable $n) {
+	public function m(iterable $n)
+	{
 	}
 
 	/** @return string[][]|\ArrayObject */
-	public function o() : ArrayObject {
+	public function o(): ArrayObject
+	{
 	}
 
 	/** @param string[][]|\ArrayObject $p */
-	public function p(ArrayObject $q) {
+	public function p(ArrayObject $p)
+	{
+	}
+
+	/** @param string[][] $q */
+	public function q($q)
+	{
 	}
 
 }
