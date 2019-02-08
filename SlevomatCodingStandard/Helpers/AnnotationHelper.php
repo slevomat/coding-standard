@@ -23,6 +23,7 @@ use function array_key_exists;
 use function get_class;
 use function in_array;
 use function preg_match;
+use function preg_replace;
 use function substr_count;
 use function trim;
 use const T_DOC_COMMENT_CLOSE_TAG;
@@ -112,7 +113,9 @@ class AnnotationHelper
 			$spaceAfterContent = $matches[1];
 		}
 
-		return $fixedAnnotation->export() . $spaceAfterContent;
+		$fixedAnnotationContent = $fixedAnnotation->export() . $spaceAfterContent;
+
+		return preg_replace('~(\r\n|\n|\r)~', '\1 * ', $fixedAnnotationContent);
 	}
 
 	/**
@@ -241,7 +244,9 @@ class AnnotationHelper
 
 	private static function parseAnnotationContent(string $annotationName, string $annotationContent): PhpDocTagValueNode
 	{
-		$tokens = new TokenIterator(self::getPhpDocLexer()->tokenize($annotationContent));
+		$annotationContentWithoutNewLines = preg_replace('~[\r\n]~', ' ', $annotationContent);
+
+		$tokens = new TokenIterator(self::getPhpDocLexer()->tokenize($annotationContentWithoutNewLines));
 		return self::getPhpDocParser()->parseTagValue($tokens, $annotationName);
 	}
 

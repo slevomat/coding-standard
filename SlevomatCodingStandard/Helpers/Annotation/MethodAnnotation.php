@@ -118,7 +118,7 @@ class MethodAnnotation extends Annotation
 
 		$description = $this->getDescription();
 		if ($description !== null) {
-			$exported .= sprintf(' %s', $description);
+			$exported .= sprintf(' %s', $this->fixDescription($description));
 		}
 
 		return $exported;

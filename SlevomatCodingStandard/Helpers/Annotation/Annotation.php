@@ -2,6 +2,9 @@
 
 namespace SlevomatCodingStandard\Helpers\Annotation;
 
+use function strlen;
+use function substr;
+
 /**
  * @internal
  */
@@ -51,6 +54,11 @@ abstract class Annotation
 	public function getContent(): ?string
 	{
 		return $this->content;
+	}
+
+	protected function fixDescription(string $description): string
+	{
+		return substr($this->getContent(), -strlen($description));
 	}
 
 	abstract public function isInvalid(): bool;

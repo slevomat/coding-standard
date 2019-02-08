@@ -109,3 +109,11 @@ class CallableType
 	}
 
 }
+
+/**
+ * @return bool - true - if some cond
+ * false - if some other cond
+ */
+function multilineDescription() {
+
+}
