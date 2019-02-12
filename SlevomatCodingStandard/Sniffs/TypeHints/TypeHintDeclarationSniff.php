@@ -736,6 +736,10 @@ class TypeHintDeclarationSniff implements Sniff
 			return;
 		}
 
+		if ($varAnnotations[0]->isInvalid()) {
+			return;
+		}
+
 		$propertyTypeNode = $varAnnotations[0]->getType();
 
 		if (

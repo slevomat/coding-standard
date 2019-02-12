@@ -692,6 +692,11 @@ abstract class FooClass
 		return [];
 	}
 
+	/**
+	 * @var string|
+	 */
+	private $invalidAnnotation;
+
 }
 
 class IntersectionAndGeneric
