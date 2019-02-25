@@ -148,3 +148,9 @@ class Foo
 	}
 
 }
+
+function &returnsReference($result)
+{
+	$value = $result->getValue();
+	return $value;
+}

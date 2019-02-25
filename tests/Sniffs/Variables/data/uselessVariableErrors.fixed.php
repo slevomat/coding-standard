@@ -72,3 +72,5 @@ function assigmentAfterAssignment() {
 	doSomething($qq = $q = 0);
 	return $q;
 }
+
+return null;

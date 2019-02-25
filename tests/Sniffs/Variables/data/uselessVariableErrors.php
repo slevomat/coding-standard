@@ -89,3 +89,6 @@ function assigmentAfterAssignment() {
 	doSomething($qq = $q = 0);
 	return $q;
 }
+
+$z = null;
+return $z;

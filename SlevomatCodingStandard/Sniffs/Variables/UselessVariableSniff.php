@@ -15,6 +15,7 @@ use function preg_match;
 use function preg_quote;
 use function sprintf;
 use const T_AND_EQUAL;
+use const T_BITWISE_AND;
 use const T_CONCAT_EQUAL;
 use const T_DIV_EQUAL;
 use const T_DO;
@@ -78,7 +79,13 @@ class UselessVariableSniff implements Sniff
 
 		$variableName = $tokens[$variablePointer]['content'];
 
-		if ($this->isStaticVariable($phpcsFile, $variablePointer, $variableName)) {
+		$functionPointer = $this->findFunctionPointer($phpcsFile, $variablePointer);
+
+		if ($this->isReturnedByReference($phpcsFile, $functionPointer)) {
+			return;
+		}
+
+		if ($this->isStaticVariable($phpcsFile, $functionPointer, $variablePointer, $variableName)) {
 			return;
 		}
 
@@ -118,7 +125,10 @@ class UselessVariableSniff implements Sniff
 			return;
 		}
 
-		if (!in_array($tokens[$pointerBeforePreviousVariable]['code'], [T_SEMICOLON, T_OPEN_CURLY_BRACKET], true)) {
+		if (
+			!in_array($tokens[$pointerBeforePreviousVariable]['code'], [T_SEMICOLON, T_OPEN_CURLY_BRACKET], true)
+			&& TokenHelper::findNextEffective($phpcsFile, $returnSemicolonPointer + 1) !== null
+		) {
 			$phpcsFile->addError(...$errorParameters);
 			return;
 		}
@@ -223,21 +233,26 @@ class UselessVariableSniff implements Sniff
 		], true);
 	}
 
-	private function isStaticVariable(File $phpcsFile, int $variablePointer, string $variableName): bool
+	private function findFunctionPointer(File $phpcsFile, int $pointer): ?int
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$functionPointer = null;
-		foreach (array_reverse($tokens[$variablePointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
+		foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
 			if (in_array($conditionTokenCode, TokenHelper::$functionTokenCodes, true)) {
-				$functionPointer = $conditionPointer;
-				break;
+				return $conditionPointer;
 			}
 		}
 
+		return null;
+	}
+
+	private function isStaticVariable(File $phpcsFile, ?int $functionPointer, int $variablePointer, string $variableName): bool
+	{
 		if ($functionPointer === null) {
 			return false;
 		}
+
+		$tokens = $phpcsFile->getTokens();
 
 		for ($i = $tokens[$functionPointer]['scope_opener'] + 1; $i < $variablePointer; $i++) {
 			if ($tokens[$i]['code'] !== T_VARIABLE) {
@@ -254,6 +269,18 @@ class UselessVariableSniff implements Sniff
 		}
 
 		return false;
+	}
+
+	private function isReturnedByReference(File $phpcsFile, ?int $functionPointer): bool
+	{
+		if ($functionPointer === null) {
+			return false;
+		}
+
+		$tokens = $phpcsFile->getTokens();
+
+		$referencePointer = TokenHelper::findNextEffective($phpcsFile, $functionPointer + 1);
+		return $tokens[$referencePointer]['code'] === T_BITWISE_AND;
 	}
 
 	private function hasVariableVarAnnotation(File $phpcsFile, int $variablePointer): bool
