@@ -6,8 +6,9 @@ use PHP_CodeSniffer\Files\File;
 use function array_key_exists;
 use function array_merge;
 use function array_reverse;
+use function count;
+use function current;
 use function in_array;
-use function sprintf;
 use const T_ANON_CLASS;
 use const T_AS;
 use const T_COMMA;
@@ -22,7 +23,7 @@ class UseStatementHelper
 {
 
 	/** @var array<string, array<int, array<string, \SlevomatCodingStandard\Helpers\UseStatement>>> */
-	private static $allUseStatements = [];
+	private static $fileUseStatements = [];
 
 	public static function isAnonymousFunctionUse(File $phpcsFile, int $usePointer): bool
 	{
@@ -89,28 +90,71 @@ class UseStatementHelper
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
 	 * @return array<int, array<string, \SlevomatCodingStandard\Helpers\UseStatement>>
 	 */
 	public static function getUseStatements(File $phpcsFile, int $openTagPointer): array
 	{
-		$cacheKey = sprintf('%s-%s', $phpcsFile->getFilename(), $openTagPointer);
+		return self::getFileUseStatements($phpcsFile);
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $pointer
+	 * @return array<string, \SlevomatCodingStandard\Helpers\UseStatement>
+	 */
+	public static function getUseStatementsForPointer(File $phpcsFile, int $pointer): array
+	{
+		$allUseStatements = self::getFileUseStatements($phpcsFile);
+
+		if (count($allUseStatements) === 1) {
+			return current($allUseStatements);
+		}
+
+		foreach (array_reverse($allUseStatements, true) as $pointerBeforeUseStatements => $useStatements) {
+			if ($pointerBeforeUseStatements < $pointer) {
+				return $useStatements;
+			}
+		}
+
+		return [];
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @return array<int, array<string, \SlevomatCodingStandard\Helpers\UseStatement>>
+	 */
+	public static function getFileUseStatements(File $phpcsFile): array
+	{
+		$cacheKey = $phpcsFile->getFilename();
 
 		$fixerLoops = $phpcsFile->fixer !== null ? $phpcsFile->fixer->loops : null;
 		if ($fixerLoops !== null) {
 			$cacheKey .= '-loop' . $fixerLoops;
 			if ($fixerLoops > 0) {
-				unset(self::$allUseStatements[$cacheKey . '-loop' . ($fixerLoops - 1)]);
+				unset(self::$fileUseStatements[$cacheKey . '-loop' . ($fixerLoops - 1)]);
 			}
 		}
 
-		if (!array_key_exists($cacheKey, self::$allUseStatements)) {
+		if (!array_key_exists($cacheKey, self::$fileUseStatements)) {
 			$useStatements = [];
 			$tokens = $phpcsFile->getTokens();
+
+			$namespaceAndOpenTagPointers = TokenHelper::findNextAll($phpcsFile, [T_OPEN_TAG, T_NAMESPACE], 0);
+			$openTagPointer = $namespaceAndOpenTagPointers[0];
+
 			foreach (self::getUseStatementPointers($phpcsFile, $openTagPointer) as $usePointer) {
-				/** @var int $pointerBeforeUseStatements */
-				$pointerBeforeUseStatements = TokenHelper::findPrevious($phpcsFile, [T_OPEN_TAG, T_NAMESPACE], $usePointer - 1);
+				$pointerBeforeUseStatements = $openTagPointer;
+				if (count($namespaceAndOpenTagPointers) > 1) {
+					foreach (array_reverse($namespaceAndOpenTagPointers) as $namespaceAndOpenTagPointer) {
+						if ($namespaceAndOpenTagPointer < $usePointer) {
+							$pointerBeforeUseStatements = $namespaceAndOpenTagPointer;
+							break;
+						}
+					}
+				}
 
 				$nextTokenFromUsePointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
 				$type = UseStatement::TYPE_DEFAULT;
@@ -132,28 +176,10 @@ class UseStatementHelper
 				$useStatements[$pointerBeforeUseStatements][UseStatement::getUniqueId($type, $name)] = $useStatement;
 			}
 
-			self::$allUseStatements[$cacheKey] = $useStatements;
+			self::$fileUseStatements[$cacheKey] = $useStatements;
 		}
 
-		return self::$allUseStatements[$cacheKey];
-	}
-
-	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param int $pointer
-	 * @return array<string, \SlevomatCodingStandard\Helpers\UseStatement>
-	 */
-	public static function getUseStatementsForPointer(File $phpcsFile, int $pointer): array
-	{
-		$allUseStatements = self::getUseStatements($phpcsFile, TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $pointer - 1));
-
-		foreach (array_reverse($allUseStatements, true) as $pointerBeforeUseStatements => $useStatements) {
-			if ($pointerBeforeUseStatements < $pointer) {
-				return $useStatements;
-			}
-		}
-
-		return [];
+		return self::$fileUseStatements[$cacheKey];
 	}
 
 	/**
