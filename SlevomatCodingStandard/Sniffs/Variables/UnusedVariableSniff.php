@@ -41,6 +41,7 @@ use const T_MOD_EQUAL;
 use const T_MUL_EQUAL;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_SHORT_ARRAY;
+use const T_OPEN_SQUARE_BRACKET;
 use const T_OPEN_TAG;
 use const T_OR_EQUAL;
 use const T_PLUS_EQUAL;
@@ -399,6 +400,11 @@ class UnusedVariableSniff implements Sniff
 	private function isUsedAsKeyOrValueInArray(File $phpcsFile, int $variablePointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
+
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $variablePointer - 1);
+		if ($tokens[$previousPointer]['code'] === T_OPEN_SQUARE_BRACKET) {
+			return true;
+		}
 
 		$arrayOpenerPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_SHORT_ARRAY, $variablePointer - 1);
 		if ($arrayOpenerPointer === null) {

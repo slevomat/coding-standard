@@ -265,3 +265,14 @@ function () {
 		echo ".";
 	}
 };
+
+function () {
+	$a = [];
+	$i = 0;
+
+	foreach ([1, 2, 3] as $x) {
+	    $a[$i++] = $x;
+	}
+
+	return $a;
+};
