@@ -46,19 +46,20 @@ class UseSpacingSniff implements Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
-		$allUseStatements = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
+		$fileUseStatements = UseStatementHelper::getFileUseStatements($phpcsFile);
 
-		if (count($allUseStatements) === 0) {
+		if (count($fileUseStatements) === 0) {
 			return;
 		}
 
-		foreach ($allUseStatements as $useStatementsByName) {
+		foreach ($fileUseStatements as $useStatementsByName) {
 			$useStatements = array_values($useStatementsByName);
 
 			$this->checkLinesBeforeFirstUse($phpcsFile, $useStatements[0]);

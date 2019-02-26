@@ -101,7 +101,7 @@ class UnusedUsesSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
-		$allUnusedNames = UseStatementHelper::getUseStatements($phpcsFile, $openTagPointer);
+		$fileUnusedNames = UseStatementHelper::getFileUseStatements($phpcsFile);
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
 
 		$allUsedNames = [];
@@ -120,17 +120,17 @@ class UnusedUsesSniff implements Sniff
 				: UseStatement::getUniqueId(ReferencedName::TYPE_DEFAULT, $nameAsReferencedInFile);
 			if (
 				NamespaceHelper::isFullyQualifiedName($name)
-				|| !array_key_exists($pointerBeforeUseStatements, $allUnusedNames)
-				|| !array_key_exists($uniqueId, $allUnusedNames[$pointerBeforeUseStatements])
+				|| !array_key_exists($pointerBeforeUseStatements, $fileUnusedNames)
+				|| !array_key_exists($uniqueId, $fileUnusedNames[$pointerBeforeUseStatements])
 			) {
 				continue;
 			}
 
-			if ($allUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
+			if ($fileUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
 				$phpcsFile->addError(sprintf(
 					'Case of reference name "%s" and use statement "%s" does not match.',
 					$nameAsReferencedInFile,
-					$allUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
+					$fileUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
 				), $pointer, self::CODE_MISMATCHING_CASE);
 			}
 
@@ -156,12 +156,12 @@ class UnusedUsesSniff implements Sniff
 				/** @var int $pointerBeforeUseStatements */
 				$pointerBeforeUseStatements = TokenHelper::findPrevious($phpcsFile, [T_OPEN_TAG, T_NAMESPACE], $docCommentOpenPointer - 1);
 
-				if (!array_key_exists($pointerBeforeUseStatements, $allUnusedNames)) {
+				if (!array_key_exists($pointerBeforeUseStatements, $fileUnusedNames)) {
 					$searchAnnotationsPointer = $tokens[$docCommentOpenPointer]['comment_closer'] + 1;
 					continue;
 				}
 
-				foreach ($allUnusedNames[$pointerBeforeUseStatements] as $useStatement) {
+				foreach ($fileUnusedNames[$pointerBeforeUseStatements] as $useStatement) {
 					$nameAsReferencedInFile = $useStatement->getNameAsReferencedInFile();
 					$uniqueId = UseStatement::getUniqueId($useStatement->getType(), $nameAsReferencedInFile);
 
@@ -182,7 +182,7 @@ class UnusedUsesSniff implements Sniff
 									$phpcsFile->addError(sprintf(
 										'Case of reference name "%s" and use statement "%s" does not match.',
 										$matches[1],
-										$allUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
+										$fileUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
 									), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 								}
 							}
@@ -213,7 +213,7 @@ class UnusedUsesSniff implements Sniff
 							$phpcsFile->addError(sprintf(
 								'Case of reference name "%s" and use statement "%s" does not match.',
 								$matches[1],
-								$allUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
+								$fileUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
 							), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 						}
 
@@ -268,7 +268,7 @@ class UnusedUsesSniff implements Sniff
 								$phpcsFile->addError(sprintf(
 									'Case of reference name "%s" and use statement "%s" does not match.',
 									$matches[1],
-									$allUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
+									$fileUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
 								), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 							}
 						}
@@ -279,7 +279,7 @@ class UnusedUsesSniff implements Sniff
 			}
 		}
 
-		foreach ($allUnusedNames as $pointerBeforeUnusedNames => $unusedNames) {
+		foreach ($fileUnusedNames as $pointerBeforeUnusedNames => $unusedNames) {
 			$usedNames = $allUsedNames[$pointerBeforeUnusedNames] ?? [];
 			foreach (array_diff_key($unusedNames, $usedNames) as $unusedUse) {
 				$fullName = $unusedUse->getFullyQualifiedTypeName();

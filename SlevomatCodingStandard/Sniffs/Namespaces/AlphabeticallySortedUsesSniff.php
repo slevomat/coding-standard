@@ -44,17 +44,15 @@ class AlphabeticallySortedUsesSniff implements Sniff
 	}
 
 	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
-		$allUseStatements = UseStatementHelper::getUseStatements(
-			$phpcsFile,
-			$openTagPointer
-		);
-		foreach ($allUseStatements as $useStatements) {
+		$fileUseStatements = UseStatementHelper::getFileUseStatements($phpcsFile);
+		foreach ($fileUseStatements as $useStatements) {
 			$lastUse = null;
 			foreach ($useStatements as $useStatement) {
 				if ($lastUse === null) {
