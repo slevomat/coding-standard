@@ -74,6 +74,18 @@ class UseStatementHelper
 		return NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name);
 	}
 
+	/**
+	 * @deprecated
+	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $openTagPointer
+	 * @return array<int, array<string, \SlevomatCodingStandard\Helpers\UseStatement>>
+	 */
+	public static function getUseStatements(File $phpcsFile, int $openTagPointer): array
+	{
+		return self::getFileUseStatements($phpcsFile);
+	}
+
 	public static function getFullyQualifiedTypeNameFromUse(File $phpcsFile, int $usePointer): string
 	{
 		$tokens = $phpcsFile->getTokens();
@@ -87,17 +99,6 @@ class UseStatementHelper
 		$name = TokenHelper::getContent($phpcsFile, $nameStartPointer, $nameEndPointer);
 
 		return NamespaceHelper::normalizeToCanonicalName($name);
-	}
-
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param int $openTagPointer
-	 * @return array<int, array<string, \SlevomatCodingStandard\Helpers\UseStatement>>
-	 */
-	public static function getUseStatements(File $phpcsFile, int $openTagPointer): array
-	{
-		return self::getFileUseStatements($phpcsFile);
 	}
 
 	/**
