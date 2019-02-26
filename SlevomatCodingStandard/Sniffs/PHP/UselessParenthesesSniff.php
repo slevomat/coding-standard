@@ -132,7 +132,7 @@ class UselessParenthesesSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$operators = [T_PLUS, T_MINUS, T_MULTIPLY, T_DIVIDE, T_STRING_CONCAT];
+		$operators = [T_PLUS, T_MINUS, T_MULTIPLY, T_DIVIDE, T_STRING_CONCAT, T_MODULUS];
 
 		$operatorsPointers = TokenHelper::findNextAll($phpcsFile, $operators, $parenthesisOpenerPointer + 1, $tokens[$parenthesisOpenerPointer]['parenthesis_closer']);
 		if (count($operatorsPointers) === 0) {
@@ -141,12 +141,15 @@ class UselessParenthesesSniff implements Sniff
 
 		$containsPlusOrMinus = false;
 		$containsMultiplyOrDivide = false;
+		$containsModulus = false;
 		$containsStringConcat = false;
 		foreach ($operatorsPointers as $operatorsPointer) {
 			if (in_array($tokens[$operatorsPointer]['code'], [T_PLUS, T_MINUS], true)) {
 				$containsPlusOrMinus = true;
 			} elseif (in_array($tokens[$operatorsPointer]['code'], [T_MULTIPLY, T_DIVIDE], true)) {
 				$containsMultiplyOrDivide = true;
+			} elseif ($tokens[$operatorsPointer]['code'] === T_MODULUS) {
+				$containsModulus = true;
 			} else {
 				$containsStringConcat = true;
 			}
@@ -154,10 +157,13 @@ class UselessParenthesesSniff implements Sniff
 
 		$pointerAfterParenthesis = TokenHelper::findNextEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1);
 		if (in_array($tokens[$pointerAfterParenthesis]['code'], $operators, true)) {
-			if ($containsPlusOrMinus && in_array($tokens[$pointerAfterParenthesis]['code'], [T_MULTIPLY, T_DIVIDE], true)) {
+			if ($containsPlusOrMinus && in_array($tokens[$pointerAfterParenthesis]['code'], [T_MULTIPLY, T_DIVIDE, T_MODULUS], true)) {
 				return true;
 			}
-			if ($containsMultiplyOrDivide && in_array($tokens[$pointerAfterParenthesis]['code'], [T_PLUS, T_MINUS], true)) {
+			if ($containsMultiplyOrDivide && in_array($tokens[$pointerAfterParenthesis]['code'], [T_PLUS, T_MINUS, T_MODULUS], true)) {
+				return true;
+			}
+			if ($containsModulus && in_array($tokens[$pointerAfterParenthesis]['code'], [T_MULTIPLY, T_DIVIDE, T_PLUS, T_MINUS], true)) {
 				return true;
 			}
 			if ($containsStringConcat || $tokens[$pointerAfterParenthesis]['code'] === T_STRING_CONCAT) {
@@ -167,10 +173,13 @@ class UselessParenthesesSniff implements Sniff
 
 		$pointerBeforeParenthesis = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
 		if (in_array($tokens[$pointerBeforeParenthesis]['code'], $operators, true)) {
-			if ($containsPlusOrMinus && in_array($tokens[$pointerBeforeParenthesis]['code'], [T_MULTIPLY, T_DIVIDE], true)) {
+			if ($containsPlusOrMinus && in_array($tokens[$pointerBeforeParenthesis]['code'], [T_MULTIPLY, T_DIVIDE, T_MODULUS], true)) {
 				return true;
 			}
-			if ($containsMultiplyOrDivide && in_array($tokens[$pointerBeforeParenthesis]['code'], [T_PLUS, T_MINUS], true)) {
+			if ($containsMultiplyOrDivide && in_array($tokens[$pointerBeforeParenthesis]['code'], [T_PLUS, T_MINUS, T_MODULUS], true)) {
+				return true;
+			}
+			if ($containsModulus && in_array($tokens[$pointerBeforeParenthesis]['code'], [T_MULTIPLY, T_DIVIDE, T_PLUS, T_MINUS], true)) {
 				return true;
 			}
 			if ($containsStringConcat || $tokens[$pointerBeforeParenthesis]['code'] === T_STRING_CONCAT) {
