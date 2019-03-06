@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
-use Exception;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ConditionHelper;
@@ -46,7 +45,7 @@ class UselessIfConditionWithReturnSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		if (!array_key_exists('scope_closer', $tokens[$ifPointer])) {
-			throw new Exception('"if" without curly braces is not supported.');
+			return; // "if" without curly braces is not supported
 		}
 
 		$ifBooleanPointer = $this->findBooleanAfterReturnInScope($phpcsFile, $tokens[$ifPointer]['scope_opener']);
@@ -81,7 +80,7 @@ class UselessIfConditionWithReturnSniff implements Sniff
 			&& $tokens[$elsePointer]['code'] === T_ELSE
 		) {
 			if (!array_key_exists('scope_closer', $tokens[$elsePointer])) {
-				throw new Exception('"else" without curly braces is not supported.');
+				return; // "else" without curly braces is not supported
 			}
 
 			$elseBooleanPointer = $this->findBooleanAfterReturnInScope($phpcsFile, $tokens[$elsePointer]['scope_opener']);

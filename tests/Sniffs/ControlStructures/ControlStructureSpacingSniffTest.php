@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use SlevomatCodingStandard\Sniffs\Namespaces\UndefinedKeywordTokenException;
 use SlevomatCodingStandard\Sniffs\TestCase;
-use Throwable;
 
 class ControlStructureSpacingSniffTest extends TestCase
 {
@@ -164,16 +163,14 @@ class ControlStructureSpacingSniffTest extends TestCase
 
 	public function testIfWithoutCurlyBraces(): void
 	{
-		self::expectException(Throwable::class);
-		self::expectExceptionMessage('"if" without curly braces is not supported.');
-		self::checkFile(__DIR__ . '/data/controlStructureSpacingIfWithoutCurlyBraces.php');
+		$report = self::checkFile(__DIR__ . '/data/controlStructureSpacingIfWithoutCurlyBraces.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testElseWithoutCurlyBraces(): void
 	{
-		self::expectException(Throwable::class);
-		self::expectExceptionMessage('"else" without curly braces is not supported.');
-		self::checkFile(__DIR__ . '/data/controlStructureSpacingElseWithoutCurlyBraces.php');
+		$report = self::checkFile(__DIR__ . '/data/controlStructureSpacingElseWithoutCurlyBraces.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testAtTheEndOfFile(): void

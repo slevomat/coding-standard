@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
-use Exception;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
@@ -180,7 +179,7 @@ class ControlStructureSpacingSniff implements Sniff
 		$requiredLinesCountBefore = SniffSettingsHelper::normalizeInteger($isFirstControlStructure ? $this->linesCountBeforeFirstControlStructure : $this->linesCountAroundControlStructure);
 		$actualLinesCountBefore = substr_count($whitespaceBefore, $phpcsFile->eolChar) - 1;
 
-		if ($requiredLinesCountBefore === $actualLinesCountBefore) {
+		if ($requiredLinesCountBefore === $actualLinesCountBefore || $actualLinesCountBefore < 0) {
 			return;
 		}
 
@@ -219,6 +218,11 @@ class ControlStructureSpacingSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$controlStructureEndPointer = $this->findControlStructureEnd($phpcsFile, $controlStructurePointer);
+
+		if ($controlStructureEndPointer === null) {
+			return;
+		}
+
 		$notWhitespacePointerAfter = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $controlStructureEndPointer + 1);
 
 		if ($notWhitespacePointerAfter === null) {
@@ -290,13 +294,13 @@ class ControlStructureSpacingSniff implements Sniff
 		return $commentStartPointer;
 	}
 
-	private function findControlStructureEnd(File $phpcsFile, int $controlStructurePointer): int
+	private function findControlStructureEnd(File $phpcsFile, int $controlStructurePointer): ?int
 	{
 		$tokens = $phpcsFile->getTokens();
 
 		if ($tokens[$controlStructurePointer]['code'] === T_IF) {
 			if (!array_key_exists('scope_closer', $tokens[$controlStructurePointer])) {
-				throw new Exception('"if" without curly braces is not supported.');
+				return null; // "if" without curly braces is not supported
 			}
 
 			$controlStructureEndPointer = $tokens[$controlStructurePointer]['scope_closer'];
@@ -308,7 +312,7 @@ class ControlStructureSpacingSniff implements Sniff
 
 				if ($tokens[$nextPointer]['code'] === T_ELSE) {
 					if (!array_key_exists('scope_closer', $tokens[$nextPointer])) {
-						throw new Exception('"else" without curly braces is not supported.');
+						return null; // "else" without curly braces is not supported
 					}
 
 					return $tokens[$nextPointer]['scope_closer'];

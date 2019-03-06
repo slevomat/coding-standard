@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
-use Exception;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ConditionHelper;
@@ -82,10 +81,14 @@ class EarlyExitSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		if (!array_key_exists('scope_opener', $tokens[$elsePointer])) {
-			throw new Exception('"else" without curly braces is not supported.');
+			return; // "else" without curly braces is not supported
 		}
 
 		$allConditionsPointers = $this->getAllConditionsPointers($phpcsFile, $elsePointer);
+
+		if ($allConditionsPointers === null) {
+			return;
+		}
 
 		$ifPointer = $allConditionsPointers[0];
 		$ifEarlyExitPointer = null;
@@ -206,6 +209,10 @@ class EarlyExitSniff implements Sniff
 
 		$allConditionsPointers = $this->getAllConditionsPointers($phpcsFile, $elseIfPointer);
 
+		if ($allConditionsPointers === null) {
+			return;
+		}
+
 		foreach ($allConditionsPointers as $conditionPointer) {
 			if ($elseIfPointer === $conditionPointer) {
 				break;
@@ -248,7 +255,7 @@ class EarlyExitSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		if (!array_key_exists('scope_closer', $tokens[$ifPointer])) {
-			throw new Exception('"if" without curly braces is not supported.');
+			return; // "if" without curly braces is not supported
 		}
 
 		$nextPointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $tokens[$ifPointer]['scope_closer'] + 1);
@@ -391,7 +398,7 @@ class EarlyExitSniff implements Sniff
 	 * @param int $conditionPointer
 	 * @return int[]
 	 */
-	private function getAllConditionsPointers(File $phpcsFile, int $conditionPointer): array
+	private function getAllConditionsPointers(File $phpcsFile, int $conditionPointer): ?array
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -409,7 +416,7 @@ class EarlyExitSniff implements Sniff
 
 		if ($tokens[$conditionPointer]['code'] !== T_ELSE) {
 			if (!array_key_exists('scope_closer', $tokens[$conditionPointer])) {
-				throw new Exception(sprintf('"%s" without curly braces is not supported.', $tokens[$conditionPointer]['content']));
+				return null; // "%s" without curly braces is not supported
 			}
 
 			$currentConditionPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$conditionPointer]['scope_closer'] + 1);
