@@ -20,3 +20,7 @@ function () {
 function ($a) {
 	return true ? false : $a;
 };
+
+function ($a) {
+	return true ?: $a;
+};

@@ -50,3 +50,11 @@ function () {
 			break;
 	}
 };
+
+function () {
+	return true ?: false;
+};
+
+function () {
+	return false ?: true;
+};
