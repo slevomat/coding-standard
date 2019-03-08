@@ -50,16 +50,16 @@ class UselessTernaryOperatorSniff implements Sniff
 
 		$pointerAfterInlineThen = TokenHelper::findNextEffective($phpcsFile, $inlineThenPointer + 1);
 		if ($tokens[$pointerAfterInlineThen]['code'] === T_INLINE_ELSE) {
-			return;
-		}
+			$inlineElsePointer = $pointerAfterInlineThen;
+		} else {
+			if (!in_array($tokens[$pointerAfterInlineThen]['code'], [T_TRUE, T_FALSE], true)) {
+				return;
+			}
 
-		if (!in_array($tokens[$pointerAfterInlineThen]['code'], [T_TRUE, T_FALSE], true)) {
-			return;
-		}
-
-		$inlineElsePointer = TokenHelper::findNextEffective($phpcsFile, $pointerAfterInlineThen + 1);
-		if ($tokens[$inlineElsePointer]['code'] !== T_INLINE_ELSE) {
-			return;
+			$inlineElsePointer = TokenHelper::findNextEffective($phpcsFile, $pointerAfterInlineThen + 1);
+			if ($tokens[$inlineElsePointer]['code'] !== T_INLINE_ELSE) {
+				return;
+			}
 		}
 
 		$pointerAfterInlineElse = TokenHelper::findNextEffective($phpcsFile, $inlineElsePointer + 1);
@@ -93,7 +93,9 @@ class UselessTernaryOperatorSniff implements Sniff
 			!$this->assumeAllConditionExpressionsAreAlreadyBoolean
 			&& !ConditionHelper::conditionReturnsBoolean($phpcsFile, $conditionStartPointer, $conditionEndPointer)
 		) {
-			$phpcsFile->addError(...$errorParameters);
+			if ($tokens[$pointerAfterInlineThen]['code'] !== T_INLINE_ELSE) {
+				$phpcsFile->addError(...$errorParameters);
+			}
 			return;
 		}
 
