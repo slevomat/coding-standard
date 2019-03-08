@@ -327,4 +327,31 @@ class TypeHintDeclarationSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testOnlyStandalone(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/typeHintDeclarationOnlyStandalone.php', [
+			'onlyStandalone' => true,
+		]);
+
+		self::assertSame(17, $report->getErrorCount());
+
+		self::assertSniffError($report, 6, TypeHintDeclarationSniff::CODE_MISSING_PROPERTY_TYPE_HINT);
+		self::assertSniffError($report, 8, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		self::assertSniffError($report, 8, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		self::assertSniffError($report, 17, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		self::assertSniffError($report, 17, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		self::assertSniffError($report, 24, TypeHintDeclarationSniff::CODE_MISSING_PROPERTY_TYPE_HINT);
+		self::assertSniffError($report, 26, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		self::assertSniffError($report, 26, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		self::assertSniffError($report, 58, TypeHintDeclarationSniff::CODE_MISSING_PROPERTY_TYPE_HINT);
+		self::assertSniffError($report, 60, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		self::assertSniffError($report, 60, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		self::assertSniffError($report, 77, TypeHintDeclarationSniff::CODE_MISSING_PROPERTY_TYPE_HINT);
+		self::assertSniffError($report, 79, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		self::assertSniffError($report, 79, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		self::assertSniffError($report, 85, TypeHintDeclarationSniff::CODE_MISSING_PARAMETER_TYPE_HINT);
+		self::assertSniffError($report, 85, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+		self::assertSniffError($report, 89, TypeHintDeclarationSniff::CODE_MISSING_RETURN_TYPE_HINT);
+	}
+
 }

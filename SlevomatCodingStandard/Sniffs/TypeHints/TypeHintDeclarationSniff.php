@@ -29,6 +29,8 @@ use function array_key_exists;
 use function array_map;
 use function count;
 use function in_array;
+use function is_array;
+use function is_string;
 use function lcfirst;
 use function sprintf;
 use function stripos;
@@ -83,6 +85,9 @@ class TypeHintDeclarationSniff implements Sniff
 	/** @var bool */
 	public $allAnnotationsAreUseful = false;
 
+	/** @var bool */
+	public $onlyStandalone = false;
+
 	/** @var array<string, int>|null */
 	private $normalizedTraversableTypeHints;
 
@@ -94,6 +99,10 @@ class TypeHintDeclarationSniff implements Sniff
 	public function process(File $phpcsFile, $pointer): void
 	{
 		$token = $phpcsFile->getTokens()[$pointer];
+
+		if ($this->onlyStandalone && $this->classExtendsOrImplements($phpcsFile, $pointer)) {
+			return;
+		}
 
 		if ($token['code'] === T_FUNCTION) {
 			$this->checkParametersTypeHints($phpcsFile, $pointer);
@@ -1179,6 +1188,22 @@ class TypeHintDeclarationSniff implements Sniff
 		}
 
 		return stripos($docComment, '@inheritdoc') !== false;
+	}
+
+	private function classExtendsOrImplements(File $phpcsFile, int $pointer): ?bool
+	{
+		$classPointer = FunctionHelper::findClassPointer($phpcsFile, $pointer);
+
+		if ($classPointer === null) {
+			return null;
+		}
+
+		if (is_string($phpcsFile->findExtendedClassName($classPointer))) {
+			return true;
+		}
+
+		$interfaces = $phpcsFile->findImplementedInterfaceNames($classPointer);
+		return is_array($interfaces) && count($interfaces) > 0;
 	}
 
 }
