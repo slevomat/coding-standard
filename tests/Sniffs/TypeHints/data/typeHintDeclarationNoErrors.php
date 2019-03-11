@@ -780,6 +780,14 @@ class IntersectionAndGeneric
 		return [];
 	}
 
+	/**
+	 * @param iterable<string, bool|string|null>|null $g
+	 */
+	public function g(bool $whatever, ?iterable $g = null): void
+	{
+
+	}
+
 }
 
 class CallableType
