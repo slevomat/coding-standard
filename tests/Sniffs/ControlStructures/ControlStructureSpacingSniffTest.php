@@ -118,7 +118,6 @@ class ControlStructureSpacingSniffTest extends TestCase
 				'T_YIELD_FROM',
 			],
 		]);
-
 		self::assertSame(23, $report->getErrorCount());
 
 		self::assertSniffError($report, 21, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE, 'Expected 0 lines before "while", found 2.');
@@ -144,6 +143,26 @@ class ControlStructureSpacingSniffTest extends TestCase
 		self::assertSniffError($report, 114, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTROL_STRUCTURE, 'Expected 3 lines after "yield", found 1.');
 		self::assertSniffError($report, 121, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE, 'Expected 0 lines before "foreach", found 1.');
 		self::assertSniffError($report, 131, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTROL_STRUCTURE, 'Expected 3 lines after "foreach", found 0.');
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testSwitchErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/controlStructureSpacingSwitchErrors.php', [
+			'tokensToCheck' => [
+				'T_CASE',
+				'T_DEFAULT',
+			],
+		]);
+		self::assertSame(6, $report->getErrorCount());
+
+		self::assertSniffError($report, 6, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_CONTROL_STRUCTURE, 'Expected 0 lines before "case", found 1.');
+		self::assertSniffError($report, 6, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE, 'Expected 1 lines after "case", found 2.');
+		self::assertSniffError($report, 11, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE, 'Expected 1 lines before "case", found 2.');
+		self::assertSniffError($report, 11, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE, 'Expected 1 lines after "case", found 0.');
+		self::assertSniffError($report, 14, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE, 'Expected 1 lines before "default", found 0.');
+		self::assertSniffError($report, 14, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTROL_STRUCTURE, 'Expected 0 lines after "default", found 1.');
 
 		self::assertAllFixedInFile($report);
 	}

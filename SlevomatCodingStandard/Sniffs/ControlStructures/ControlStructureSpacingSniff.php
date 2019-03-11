@@ -228,7 +228,9 @@ class ControlStructureSpacingSniff implements Sniff
 		$hasCommentAfter = in_array($tokens[$notWhitespacePointerAfter]['code'], Tokens::$commentTokens, true) && $tokens[$notWhitespacePointerAfter]['line'] === $tokens[$controlStructureEndPointer]['line'];
 		$pointerAfter = $hasCommentAfter ? TokenHelper::findNextEffective($phpcsFile, $controlStructureEndPointer + 1) : $notWhitespacePointerAfter;
 
-		$isLastControlStructure = in_array($tokens[$pointerAfter]['code'], [T_CLOSE_CURLY_BRACKET, T_CASE, T_DEFAULT], true);
+		$isLastControlStructure = in_array($tokens[$controlStructurePointer]['code'], [T_CASE, T_DEFAULT], true)
+			? $tokens[$pointerAfter]['code'] === T_CLOSE_CURLY_BRACKET
+			: in_array($tokens[$pointerAfter]['code'], [T_CLOSE_CURLY_BRACKET, T_CASE, T_DEFAULT], true);
 
 		$requiredLinesCountAfter = SniffSettingsHelper::normalizeInteger($isLastControlStructure ? $this->linesCountAfterLastControlStructure : $this->linesCountAroundControlStructure);
 		$actualLinesCountAfter = $tokens[$pointerAfter]['line'] - $tokens[$controlStructureEndPointer]['line'] - 1;
@@ -346,6 +348,17 @@ class ControlStructureSpacingSniff implements Sniff
 
 		if (in_array($tokens[$controlStructurePointer]['code'], [T_WHILE, T_FOR, T_FOREACH, T_SWITCH], true)) {
 			return $tokens[$controlStructurePointer]['scope_closer'];
+		}
+
+		if (in_array($tokens[$controlStructurePointer]['code'], [T_CASE, T_DEFAULT], true)) {
+			$switchPointer = TokenHelper::findPrevious($phpcsFile, T_SWITCH, $controlStructurePointer - 1);
+			$pointerAfterControlStructureEnd = TokenHelper::findNext($phpcsFile, [T_CASE, T_DEFAULT], $controlStructurePointer + 1, $tokens[$switchPointer]['scope_closer']);
+
+			if ($pointerAfterControlStructureEnd === null) {
+				return TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $tokens[$switchPointer]['scope_closer'] - 1);
+			}
+
+			return TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $pointerAfterControlStructureEnd - 1);
 		}
 
 		return (int) TokenHelper::findNext($phpcsFile, T_SEMICOLON, $controlStructurePointer + 1);
