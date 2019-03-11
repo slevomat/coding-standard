@@ -65,3 +65,15 @@ function () {
 		return false;
 	}
 };
+
+function () {
+	if ((
+		empty($day['from']) && !empty($day['to'])
+	) || (
+		!empty($day['from']) && empty($day['to'])
+	)) {
+		return false;
+	}
+
+	return true;
+};

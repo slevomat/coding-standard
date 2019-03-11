@@ -18,7 +18,7 @@ class UselessIfConditionWithReturnSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/uselessIfConditionWithReturnErrors.php');
 
-		self::assertSame(8, $report->getErrorCount());
+		self::assertSame(9, $report->getErrorCount());
 
 		self::assertSniffError($report, 4, UselessIfConditionWithReturnSniff::CODE_USELESS_IF_CONDITION);
 		self::assertSniffError($report, 12, UselessIfConditionWithReturnSniff::CODE_USELESS_IF_CONDITION);
@@ -28,6 +28,7 @@ class UselessIfConditionWithReturnSniffTest extends TestCase
 		self::assertSniffError($report, 44, UselessIfConditionWithReturnSniff::CODE_USELESS_IF_CONDITION);
 		self::assertSniffError($report, 52, UselessIfConditionWithReturnSniff::CODE_USELESS_IF_CONDITION);
 		self::assertSniffError($report, 61, UselessIfConditionWithReturnSniff::CODE_USELESS_IF_CONDITION);
+		self::assertSniffError($report, 70, UselessIfConditionWithReturnSniff::CODE_USELESS_IF_CONDITION);
 
 		self::assertAllFixedInFile($report);
 	}

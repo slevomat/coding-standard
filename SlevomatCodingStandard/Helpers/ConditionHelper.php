@@ -113,12 +113,12 @@ class ConditionHelper
 		$booleanPointers = TokenHelper::findNextAll($phpcsFile, Tokens::$booleanOperators, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer + 1);
 
 		if ($tokens[$pointerAfterConditionStart]['code'] === T_BOOLEAN_NOT) {
-			if ($nested && count($booleanPointers) > 0) {
-				return self::removeBooleanNot($condition);
-			}
-
 			$pointerAfterBooleanNot = TokenHelper::findNextEffective($phpcsFile, $pointerAfterConditionStart + 1);
 			if ($tokens[$pointerAfterBooleanNot]['code'] === T_OPEN_PARENTHESIS) {
+				if ($nested && count($booleanPointers) > 0) {
+					return self::removeBooleanNot($condition);
+				}
+
 				$pointerAfterParenthesisCloser = TokenHelper::findNextEffective($phpcsFile, $tokens[$pointerAfterBooleanNot]['parenthesis_closer'] + 1, $conditionBoundaryEndPointer + 1);
 				if ($pointerAfterParenthesisCloser === null || $pointerAfterParenthesisCloser === $conditionBoundaryEndPointer) {
 					return TokenHelper::getContent($phpcsFile, $pointerAfterBooleanNot + 1, $tokens[$pointerAfterBooleanNot]['parenthesis_closer'] - 1);

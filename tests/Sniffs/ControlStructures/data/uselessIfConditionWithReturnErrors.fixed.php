@@ -41,3 +41,11 @@ function () {
 		return false;
 	}
 };
+
+function () {
+	return (
+		!empty($day['from']) || empty($day['to'])
+	) && (
+		empty($day['from']) || !empty($day['to'])
+	);
+};
