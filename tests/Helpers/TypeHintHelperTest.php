@@ -75,6 +75,8 @@ class TypeHintHelperTest extends TestCase
 		return [
 			['null', true],
 			['mixed', true],
+			['scalar', true],
+			['numeric', true],
 			['true', true],
 			['false', true],
 			['resource', true],

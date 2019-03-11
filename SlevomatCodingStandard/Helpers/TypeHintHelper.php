@@ -82,6 +82,8 @@ class TypeHintHelper
 			$simpleUnofficialTypeHints = [
 				'null',
 				'mixed',
+				'scalar',
+				'numeric',
 				'true',
 				'false',
 				'object',
