@@ -119,6 +119,8 @@ $x = (object) ([
     'a',
 ] + $defaults('b'));
 
+$y = (yield from whatever()) ?? $y;
+
 // Must be last
 return true
     ? 100

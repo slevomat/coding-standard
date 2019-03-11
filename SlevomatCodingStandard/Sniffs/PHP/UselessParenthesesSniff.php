@@ -57,6 +57,7 @@ use const T_UNSET_CAST;
 use const T_USE;
 use const T_VARIABLE;
 use const T_WHITESPACE;
+use const T_YIELD_FROM;
 
 class UselessParenthesesSniff implements Sniff
 {
@@ -123,7 +124,7 @@ class UselessParenthesesSniff implements Sniff
 
 		/** @var int $pointerAfterParenthesisOpener */
 		$pointerAfterParenthesisOpener = TokenHelper::findNextEffective($phpcsFile, $parenthesisOpenerPointer + 1);
-		if (in_array($tokens[$pointerAfterParenthesisOpener]['code'], [T_NEW, T_CLONE], true)) {
+		if (in_array($tokens[$pointerAfterParenthesisOpener]['code'], [T_NEW, T_CLONE, T_YIELD_FROM], true)) {
 			return;
 		}
 
