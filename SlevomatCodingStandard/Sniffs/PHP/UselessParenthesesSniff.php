@@ -13,6 +13,8 @@ use function array_unique;
 use function count;
 use function in_array;
 use const T_ANON_CLASS;
+use const T_ARRAY_CAST;
+use const T_BOOL_CAST;
 use const T_BOOLEAN_NOT;
 use const T_CASE;
 use const T_CLONE;
@@ -22,6 +24,7 @@ use const T_COLON;
 use const T_CONSTANT_ENCAPSED_STRING;
 use const T_DIVIDE;
 use const T_DOLLAR;
+use const T_DOUBLE_CAST;
 use const T_EMPTY;
 use const T_EQUAL;
 use const T_EVAL;
@@ -29,6 +32,7 @@ use const T_EXIT;
 use const T_INCLUDE;
 use const T_INCLUDE_ONCE;
 use const T_INLINE_THEN;
+use const T_INT_CAST;
 use const T_ISSET;
 use const T_LIST;
 use const T_MINUS;
@@ -36,6 +40,7 @@ use const T_MODULUS;
 use const T_MULTIPLY;
 use const T_NEW;
 use const T_NS_SEPARATOR;
+use const T_OBJECT_CAST;
 use const T_OPEN_PARENTHESIS;
 use const T_PARENT;
 use const T_PLUS;
@@ -45,8 +50,10 @@ use const T_REQUIRE_ONCE;
 use const T_SELF;
 use const T_STATIC;
 use const T_STRING;
+use const T_STRING_CAST;
 use const T_STRING_CONCAT;
 use const T_UNSET;
+use const T_UNSET_CAST;
 use const T_USE;
 use const T_VARIABLE;
 use const T_WHITESPACE;
@@ -103,6 +110,13 @@ class UselessParenthesesSniff implements Sniff
 			T_INCLUDE_ONCE,
 			T_REQUIRE,
 			T_REQUIRE_ONCE,
+			T_INT_CAST,
+			T_DOUBLE_CAST,
+			T_STRING_CAST,
+			T_ARRAY_CAST,
+			T_OBJECT_CAST,
+			T_BOOL_CAST,
+			T_UNSET_CAST,
 		], true)) {
 			return;
 		}

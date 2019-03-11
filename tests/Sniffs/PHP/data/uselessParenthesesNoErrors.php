@@ -115,6 +115,10 @@ $c = (clone $a->foo())->bar($b);
 $d = (10 - ($x % 10)) % 10;
 $e = (($x % 10) - 10) % 10;
 
+$x = (object) ([
+    'a',
+] + $defaults('b'));
+
 // Must be last
 return true
     ? 100
