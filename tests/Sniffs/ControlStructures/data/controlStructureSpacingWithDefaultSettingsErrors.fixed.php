@@ -151,3 +151,27 @@ function () {
 	// Multiline
 	return true;
 };
+
+function () {
+	return function () {
+		$a = 1;
+		$b = 2;
+
+		return $a * $b;
+	};
+};
+
+function () {
+	return new class implements Countable
+	{
+
+		public function count()
+		{
+			$a = 1;
+			$b = 2;
+
+			return $a * $b;
+		}
+
+	};
+};

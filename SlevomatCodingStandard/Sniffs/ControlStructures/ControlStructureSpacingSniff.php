@@ -19,10 +19,12 @@ use function sprintf;
 use function strlen;
 use function substr;
 use function substr_count;
+use const T_ANON_CLASS;
 use const T_BREAK;
 use const T_CASE;
 use const T_CATCH;
 use const T_CLOSE_CURLY_BRACKET;
+use const T_CLOSURE;
 use const T_COLON;
 use const T_COMMENT;
 use const T_CONTINUE;
@@ -361,7 +363,12 @@ class ControlStructureSpacingSniff implements Sniff
 			return TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $pointerAfterControlStructureEnd - 1);
 		}
 
-		return (int) TokenHelper::findNext($phpcsFile, T_SEMICOLON, $controlStructurePointer + 1);
+		$nextPointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_ANON_CLASS, T_CLOSURE], $controlStructurePointer + 1);
+		if ($tokens[$nextPointer]['code'] === T_SEMICOLON) {
+			return $nextPointer;
+		}
+
+		return (int) TokenHelper::findNext($phpcsFile, T_SEMICOLON, $tokens[$nextPointer]['scope_closer'] + 1);
 	}
 
 	private function isWhilePartOfDo(File $phpcsFile, int $controlStructurePointer): bool
