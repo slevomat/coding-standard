@@ -88,7 +88,18 @@ class UnusedVariableSniff implements Sniff
 
 		$variableName = $tokens[$variablePointer]['content'];
 
-		if ($variableName === '$this') {
+		if (in_array($variableName, [
+			'$this',
+			'$GLOBALS',
+			'$_SERVER',
+			'$_GET',
+			'$_POST',
+			'$_FILES',
+			'$_COOKIE',
+			'$_SESSION',
+			'$_REQUEST',
+			'$_ENV',
+		], true)) {
 			return;
 		}
 
