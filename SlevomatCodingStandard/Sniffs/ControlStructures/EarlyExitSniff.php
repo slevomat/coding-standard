@@ -206,14 +206,30 @@ class EarlyExitSniff implements Sniff
 
 		$allConditionsPointers = $this->getAllConditionsPointers($phpcsFile, $elseIfPointer);
 
+		$elseIfEarlyExitPointer = null;
+		$previousConditionEarlyExitPointer = null;
+
 		foreach ($allConditionsPointers as $conditionPointer) {
-			if ($elseIfPointer === $conditionPointer) {
+			$conditionEarlyExitPointer = $this->findEarlyExitInScope($phpcsFile, $tokens[$conditionPointer]['scope_opener'], $tokens[$conditionPointer]['scope_closer']);
+
+			if ($conditionPointer === $elseIfPointer) {
+				$elseIfEarlyExitPointer = $conditionEarlyExitPointer;
 				break;
 			}
 
-			if (!$this->isEarlyExitInScope($phpcsFile, $tokens[$conditionPointer]['scope_opener'], $tokens[$conditionPointer]['scope_closer'])) {
+			$previousConditionEarlyExitPointer = $conditionEarlyExitPointer;
+
+			if ($conditionEarlyExitPointer === null) {
 				return;
 			}
+		}
+
+		if (
+			$previousConditionEarlyExitPointer !== null
+			&& $tokens[$previousConditionEarlyExitPointer]['code'] === T_YIELD
+			&& $tokens[$elseIfEarlyExitPointer]['code'] === T_YIELD
+		) {
+			return;
 		}
 
 		$fix = $phpcsFile->addFixableError(
