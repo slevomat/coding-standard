@@ -19,7 +19,7 @@ class ControlStructureSpacingSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/controlStructureSpacingWithDefaultSettingsErrors.php');
 
-		self::assertSame(49, $report->getErrorCount());
+		self::assertSame(51, $report->getErrorCount());
 
 		self::assertSniffError($report, 4, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE, 'Expected 1 lines before "if", found 2.');
 		self::assertSniffError($report, 4, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE, 'Expected 1 lines after "if", found 0.');
@@ -69,6 +69,8 @@ class ControlStructureSpacingSniffTest extends TestCase
 		self::assertSniffError($report, 168, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_CONTROL_STRUCTURE, 'Expected 0 lines before "return", found 1.');
 		self::assertSniffError($report, 173, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_CONTROL_STRUCTURE, 'Expected 0 lines before "return", found 1.');
 		self::assertSniffError($report, 182, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTROL_STRUCTURE, 'Expected 0 lines after "return", found 1.');
+		self::assertSniffError($report, 199, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_CONTROL_STRUCTURE, 'Expected 0 lines before "return", found 1.');
+		self::assertSniffError($report, 199, ControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTROL_STRUCTURE, 'Expected 0 lines after "return", found 1.');
 
 		self::assertAllFixedInFile($report);
 	}

@@ -193,3 +193,22 @@ function () {
 	};
 
 };
+
+function () {
+
+	return [
+		function () {
+			$a = 1;
+			$b = 2;
+
+			return $a * $b;
+		},
+		function () {
+			$a = 1;
+			$b = 2;
+
+			return $a * $b;
+		},
+	];
+
+};
