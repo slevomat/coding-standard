@@ -33,5 +33,10 @@ class Whatever
 		[$a, $b, $c, $d, $e] = $array + range(0, 4);
 	}
 
+	public function moreOperators($a, $b, $c)
+	{
+		$a = $a / $b / $c;
+	}
+
 }
 

@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Operators;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
@@ -18,6 +19,7 @@ use const T_MODULUS;
 use const T_MULTIPLY;
 use const T_PLUS;
 use const T_POW;
+use const T_SEMICOLON;
 use const T_SL;
 use const T_SR;
 use const T_STRING_CONCAT;
@@ -87,6 +89,11 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 		$beforeEqualVariableContent = IdentificatorHelper::getContent($phpcsFile, $beforeEqualStartPointer, $beforeEqualEndPointer);
 
 		if ($beforeEqualVariableContent !== $variableContent) {
+			return;
+		}
+
+		$semicolonPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $equalPointer + 1);
+		if (TokenHelper::findNext($phpcsFile, Tokens::$operators, $operatorPointer + 1, $semicolonPointer) !== null) {
 			return;
 		}
 
