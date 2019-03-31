@@ -350,6 +350,14 @@ class FunctionHelperTest extends TestCase
 		self::assertSame($functionPointer + 7, $returnTypeHint->getStartPointer());
 		self::assertSame($functionPointer + 10, $returnTypeHint->getEndPointer());
 
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'withReturnTypeHintNoSpace');
+		self::assertTrue(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
+		self::assertSame('\FooNamespace\FooInterface', $returnTypeHint->getTypeHint());
+		self::assertFalse($returnTypeHint->isNullable());
+		self::assertSame($functionPointer + 7, $returnTypeHint->getStartPointer());
+		self::assertSame($functionPointer + 10, $returnTypeHint->getEndPointer());
+
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'withoutReturnTypeHint');
 		self::assertFalse(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
 		self::assertNull(FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer));
