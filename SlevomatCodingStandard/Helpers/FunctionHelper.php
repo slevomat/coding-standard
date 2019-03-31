@@ -244,7 +244,7 @@ class FunctionHelper
 		do {
 			$nextToken = $isAbstract
 				? TokenHelper::findNextLocalExcluding($phpcsFile, $abstractExcludeTokens, $nextToken + 1)
-				: TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$ineffectiveTokenCodes, $nextToken + 1, $tokens[$functionPointer]['scope_opener'] - 1);
+				: TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$ineffectiveTokenCodes, $nextToken + 1, $tokens[$functionPointer]['scope_opener']);
 
 			$isTypeHint = $nextToken !== null;
 			if (!$isTypeHint) {

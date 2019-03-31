@@ -8,6 +8,10 @@ abstract class FooClass
 
 	}
 
+	public function withReturnTypeHintNoSpace(): \FooNamespace\FooInterface{
+
+	}
+
 	final public function withoutReturnTypeHint()
 	{
 
