@@ -287,4 +287,12 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testUseAfterOpeningTag(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/unusedUsesUseAfterOpen.php', [
+			'searchAnnotations' => true,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
 }
