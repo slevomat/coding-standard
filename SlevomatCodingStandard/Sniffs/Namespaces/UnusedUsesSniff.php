@@ -101,8 +101,13 @@ class UnusedUsesSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
+		$startPointer = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $openTagPointer - 1);
+		if ($startPointer === null) {
+			$startPointer = TokenHelper::findNext($phpcsFile, T_OPEN_TAG, 0);
+		}
+
 		$fileUnusedNames = UseStatementHelper::getFileUseStatements($phpcsFile);
-		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
+		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $startPointer);
 
 		$allUsedNames = [];
 		foreach ($referencedNames as $referencedName) {
@@ -112,8 +117,10 @@ class UnusedUsesSniff implements Sniff
 			$nameAsReferencedInFile = $nameParts[0];
 			$nameReferencedWithoutSubNamespace = count($nameParts) === 1;
 
-			/** @var int $pointerBeforeUseStatements */
-			$pointerBeforeUseStatements = TokenHelper::findPrevious($phpcsFile, [T_OPEN_TAG, T_NAMESPACE], $pointer - 1);
+			$pointerBeforeUseStatements = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $pointer - 1);
+			if ($pointerBeforeUseStatements === null) {
+				$pointerBeforeUseStatements = $startPointer;
+			}
 
 			$uniqueId = $nameReferencedWithoutSubNamespace
 				? UseStatement::getUniqueId($referencedName->getType(), $nameAsReferencedInFile)
@@ -139,7 +146,7 @@ class UnusedUsesSniff implements Sniff
 
 		if ($this->searchAnnotations) {
 			$tokens = $phpcsFile->getTokens();
-			$searchAnnotationsPointer = $openTagPointer + 1;
+			$searchAnnotationsPointer = $startPointer + 1;
 			while (true) {
 				$docCommentOpenPointer = TokenHelper::findNext($phpcsFile, T_DOC_COMMENT_OPEN_TAG, $searchAnnotationsPointer);
 				if ($docCommentOpenPointer === null) {
@@ -153,8 +160,10 @@ class UnusedUsesSniff implements Sniff
 					continue;
 				}
 
-				/** @var int $pointerBeforeUseStatements */
-				$pointerBeforeUseStatements = TokenHelper::findPrevious($phpcsFile, [T_OPEN_TAG, T_NAMESPACE], $docCommentOpenPointer - 1);
+				$pointerBeforeUseStatements = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $docCommentOpenPointer - 1);
+				if ($pointerBeforeUseStatements === null) {
+					$pointerBeforeUseStatements = $startPointer;
+				}
 
 				if (!array_key_exists($pointerBeforeUseStatements, $fileUnusedNames)) {
 					$searchAnnotationsPointer = $tokens[$docCommentOpenPointer]['comment_closer'] + 1;
