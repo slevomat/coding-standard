@@ -297,7 +297,11 @@ class ReferencedNameHelper
 		$endPointer = self::getReferencedNameEndPointer($phpcsFile, $startPointer);
 		$referencedName = self::getReferenceName($phpcsFile, $startPointer, $endPointer);
 
-		return !TypeHintHelper::isSimpleTypeHint($referencedName) && $referencedName !== 'object';
+		if (TypeHintHelper::isSimpleTypeHint($referencedName)) {
+			return $tokens[$nextPointer]['code'] === T_OPEN_PARENTHESIS;
+		}
+
+		return $referencedName !== 'object';
 	}
 
 }

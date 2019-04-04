@@ -4,6 +4,7 @@ namespace FooNamespace;
 
 use Doctrine\ORM\Mapping as ORM;
 use UsedNamespace\UsedNameFooBar as UsedNameFooBarBaz;
+use function DI\string;
 
 class FooClass extends \ExtendedClass implements \ImplementedInterface, \SecondImplementedInterface, \ThirdImplementedInterface
 {
@@ -107,3 +108,5 @@ $class = new class ()
 {
 	use SomeTrait;
 };
+
+string();
