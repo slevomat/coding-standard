@@ -14,6 +14,7 @@ use const T_BOOLEAN_NOT;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSE_SHORT_ARRAY;
 use const T_CLOSE_SQUARE_BRACKET;
+use const T_CLOSE_TAG;
 use const T_COALESCE;
 use const T_COMMA;
 use const T_DOUBLE_ARROW;
@@ -55,7 +56,7 @@ class RequireShortTernaryOperatorSniff implements Sniff
 
 		$inlineElseEndPointer = $inlineElsePointer + 1;
 		while (true) {
-			if (in_array($tokens[$inlineElseEndPointer]['code'], [T_SEMICOLON, T_COMMA, T_DOUBLE_ARROW, T_CLOSE_SHORT_ARRAY, T_COALESCE], true)) {
+			if (in_array($tokens[$inlineElseEndPointer]['code'], [T_SEMICOLON, T_COMMA, T_DOUBLE_ARROW, T_CLOSE_SHORT_ARRAY, T_COALESCE, T_CLOSE_TAG], true)) {
 				break;
 			}
 
