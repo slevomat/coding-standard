@@ -171,7 +171,8 @@ class ControlStructureSpacingSniff implements Sniff
 			$whitespaceBefore .= substr($tokens[$pointerBefore]['content'], strlen('<?php'));
 		}
 
-		$hasCommentWithLineEndBefore = $tokens[$pointerBefore]['code'] === T_COMMENT && substr($tokens[$pointerBefore]['content'], -strlen($phpcsFile->eolChar)) === $phpcsFile->eolChar;
+		$hasCommentWithLineEndBefore = ($tokens[$pointerBefore]['code'] === T_COMMENT || in_array($tokens[$pointerBefore]['code'], Tokens::$phpcsCommentTokens, true))
+			&& substr($tokens[$pointerBefore]['content'], -strlen($phpcsFile->eolChar)) === $phpcsFile->eolChar;
 		if ($hasCommentWithLineEndBefore) {
 			$whitespaceBefore .= $phpcsFile->eolChar;
 		}

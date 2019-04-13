@@ -152,6 +152,15 @@ function () {
 	];
 };
 
+function () {
+	// phpcs:disable
+	$contents = [];
+	// phpcs:enable
+
+	foreach ($contents as $key => $value) {
+	}
+};
+
 if (true) {
 
 }
