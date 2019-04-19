@@ -128,11 +128,7 @@ class AnnotationHelper
 	{
 		$annotations = self::getAnnotations($phpcsFile, $pointer);
 
-		if (!array_key_exists($annotationName, $annotations)) {
-			return [];
-		}
-
-		return $annotations[$annotationName];
+		return $annotations[$annotationName] ?? [];
 	}
 
 	/**
