@@ -1,5 +1,9 @@
+os: linux
 dist: xenial
 language: php
+
+git:
+  depth: 1
 
 before_script:
   - if [ "${DEPENDENCIES}" = "lowest" ]; then travis_retry composer update --prefer-lowest --prefer-dist --no-interaction --no-progress; fi;
@@ -7,34 +11,78 @@ before_script:
 
 jobs:
   include:
-    - stage: Lint
-      php: 7.2
-      env: DEPENDENCIES=highest
-      script: bin/phing lint
-
-    - stage: Lint
-      php: 7.3
-      env: DEPENDENCIES=highest
-      script: bin/phing lint
+#    - stage: Lint
+#      php: 7.2
+#      env: DEPENDENCIES=highest
+#      script: bin/phing lint
+#
+#    - stage: Lint
+#      php: 7.3
+#      env: DEPENDENCIES=highest
+#      script: bin/phing lint
+#
+#    - stage: Tests
+#      php: 7.2
+#      env: DEPENDENCIES=lowest
+#      script: bin/phing tests-without-code-coverage
+#
+#    - stage: Tests
+#      php: 7.2
+#      env: DEPENDENCIES=highest
+#      script: bin/phing tests-without-code-coverage
 
     - stage: Tests
-      php: 7.2
+      os: windows
+      dist: 1803-containers
+      language: sh # No PHP currently
+      env: PHP_VERSION=7.2.17 DEPENDENCIES=lowest
+      install:
+        - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
+        - choco install composer --ia "/DEV=C:\tools\php"
+        - export PATH=/c/tools/php:$PATH
+      script: bin/phing tests-without-code-coverage
+
+    - stage: Tests
+      os: windows
+      dist: 1803-containers
+      language: sh # No PHP currently
+      env: PHP_VERSION=7.2.17 DEPENDENCIES=highest
+      install:
+        - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
+        - choco install composer --ia "/DEV=C:\tools\php"
+        - export PATH=/c/tools/php:$PATH
+      script: bin/phing tests-without-code-coverage
+
+    - stage: Tests
+      php: 7.3
       env: DEPENDENCIES=lowest
       script: bin/phing tests-without-code-coverage
 
     - stage: Tests
-      php: 7.2
+      php: 7.3
       env: DEPENDENCIES=highest
       script: bin/phing tests-without-code-coverage
 
     - stage: Tests
-      php: 7.3
-      env: DEPENDENCIES=lowest
+      os: windows
+      dist: 1803-containers
+      language: sh # No PHP currently
+      env: PHP_VERSION=7.3.4 DEPENDENCIES=lowest
+      install:
+        - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
+        - choco install composer --ia "/DEV=C:\tools\php"
+        - export PATH=/c/tools/php:$PATH
       script: bin/phing tests-without-code-coverage
 
     - stage: Tests
-      php: 7.3
-      env: DEPENDENCIES=highest
+      os: windows
+      dist: 1803-containers
+      language: sh # No PHP currently
+      env: PHP_VERSION=7.3.4 DEPENDENCIES=highest
+      install:
+        - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
+        - choco install composer --ia "/DEV=C:\tools\php"
+        - export PATH=/c/tools/php:$PATH
       script: bin/phing tests-without-code-coverage
 
     - stage: Coding standard
@@ -49,8 +97,8 @@ jobs:
 
     - stage: Code coverage
       php: 7.3
-      before_script:
-        - travis_retry composer update --prefer-dist --no-interaction --no-progress
+      env: DEPENDENCIES=highest
+      install:
         - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
       script:
         - bin/phing tests
