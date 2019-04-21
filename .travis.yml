@@ -1,25 +1,64 @@
 dist: xenial
 language: php
-matrix:
+
+before_script:
+  - if [ "${DEPENDENCIES}" = "lowest" ]; then travis_retry composer update --prefer-lowest --prefer-dist --no-interaction --no-progress; fi;
+  - if [ "${DEPENDENCIES}" = "highest" ]; then travis_retry composer update --prefer-dist --no-interaction --no-progress; fi;
+
+jobs:
   include:
-    - php: 7.2
-      env: DEPENDENCIES=lowest
-    - php: 7.2
+    - stage: Lint
+      php: 7.2
       env: DEPENDENCIES=highest
-    - php: 7.3
-      env: DEPENDENCIES=lowest
-    - php: 7.3
+      script: bin/phing lint
+
+    - stage: Lint
+      php: 7.3
       env: DEPENDENCIES=highest
+      script: bin/phing lint
+
+    - stage: Tests
+      php: 7.2
+      env: DEPENDENCIES=lowest
+      script: bin/phing tests-without-code-coverage
+
+    - stage: Tests
+      php: 7.2
+      env: DEPENDENCIES=highest
+      script: bin/phing tests-without-code-coverage
+
+    - stage: Tests
+      php: 7.3
+      env: DEPENDENCIES=lowest
+      script: bin/phing tests-without-code-coverage
+
+    - stage: Tests
+      php: 7.3
+      env: DEPENDENCIES=highest
+      script: bin/phing tests-without-code-coverage
+
+    - stage: Coding standard
+      php: 7.3
+      env: DEPENDENCIES=highest
+      script: bin/phing cs
+
+    - stage: Static analysis
+      php: 7.3
+      env: DEPENDENCIES=highest
+      script: bin/phing phpstan
+
+    - stage: Code coverage
+      php: 7.3
+      before_script:
+        - travis_retry composer update --prefer-dist --no-interaction --no-progress
+        - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
+      script:
+        - bin/phing tests
+        - php php-coveralls.phar --verbose --config build/coveralls.yml
+
 cache:
   directories:
     - $HOME/.composer/cache
-before_script:
-  - composer self-update
-  - if [ "${DEPENDENCIES}" = "lowest" ]; then composer update --prefer-lowest --prefer-dist --no-interaction --no-progress; fi;
-  - if [ "${DEPENDENCIES}" = "highest" ]; then composer update --prefer-dist --no-interaction --no-progress; fi;
-script:
-  - bin/phing
-after_success:
-  - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar && php php-coveralls.phar --verbose --config build/coveralls.yml
+
 notifications:
   email: false
