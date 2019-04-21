@@ -88,16 +88,16 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 							$genericIdentifier = $this->findGenericIdentifier($phpcsFile, $unionTypeNode, $annotation);
 							if ($genericIdentifier !== null) {
 								$genericTypeNode = new GenericTypeNode(new IdentifierTypeNode($genericIdentifier), [$this->fixArrayNode($arrayTypeNode->type)]);
-								$fixedAnnotationContent = AnnotationHelper::fixAnnotation($phpcsFile, $annotation, $unionTypeNode, $genericTypeNode);
+								$fixedAnnotationContent = AnnotationHelper::fixAnnotationType($phpcsFile, $annotation, $unionTypeNode, $genericTypeNode);
 							} else {
 								$genericTypeNode = new GenericTypeNode(new IdentifierTypeNode('array'), [$this->fixArrayNode($arrayTypeNode->type)]);
-								$fixedAnnotationContent = AnnotationHelper::fixAnnotation($phpcsFile, $annotation, $arrayTypeNode, $genericTypeNode);
+								$fixedAnnotationContent = AnnotationHelper::fixAnnotationType($phpcsFile, $annotation, $arrayTypeNode, $genericTypeNode);
 							}
 						} else {
 							$genericIdentifier = $this->findGenericIdentifier($phpcsFile, $arrayTypeNode, $annotation) ?? 'array';
 
 							$genericTypeNode = new GenericTypeNode(new IdentifierTypeNode($genericIdentifier), [$this->fixArrayNode($arrayTypeNode->type)]);
-							$fixedAnnotationContent = AnnotationHelper::fixAnnotation($phpcsFile, $annotation, $arrayTypeNode, $genericTypeNode);
+							$fixedAnnotationContent = AnnotationHelper::fixAnnotationType($phpcsFile, $annotation, $arrayTypeNode, $genericTypeNode);
 						}
 
 						$phpcsFile->fixer->beginChangeset();

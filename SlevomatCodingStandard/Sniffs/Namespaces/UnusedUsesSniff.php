@@ -4,8 +4,10 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
+use SlevomatCodingStandard\Helpers\AnnotationConstantExpressionHelper;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
@@ -19,6 +21,7 @@ use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use function array_diff_key;
 use function array_key_exists;
+use function array_map;
 use function array_merge;
 use function count;
 use function in_array;
@@ -256,6 +259,11 @@ class UnusedUsesSniff implements Sniff
 
 										$contentsToCheck[] = $typeNode->name;
 									}
+								}
+								foreach (AnnotationHelper::getAnnotationConstantExpressions($annotation) as $annotationConstantExpression) {
+									$contentsToCheck = array_merge($contentsToCheck, array_map(function (ConstFetchNode $constFetchNode): string {
+										return $constFetchNode->className;
+									}, AnnotationConstantExpressionHelper::getConstantFetchNodes($annotationConstantExpression)));
 								}
 							} elseif ($annotationName === '@see') {
 								$contentsToCheck[] = preg_split('~(\\s+|::)~', $content)[0];

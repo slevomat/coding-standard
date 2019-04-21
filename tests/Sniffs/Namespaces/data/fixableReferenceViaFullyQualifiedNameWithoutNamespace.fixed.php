@@ -38,3 +38,12 @@ function getLorem(): Lorem
 {
 
 }
+
+/**
+ * @method method1(string $parameter = Lorem::class)
+ * @method method2(array $parameter = [Lorem::class => Dolor::class], $parameter2)
+ */
+class ConstantExpression
+{
+
+}

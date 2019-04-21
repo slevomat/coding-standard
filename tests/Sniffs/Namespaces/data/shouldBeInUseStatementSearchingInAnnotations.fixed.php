@@ -119,3 +119,12 @@ $arrayShape1 = [];
 
 /** @var array{DateTime: int} $arrayShape2 */
 $arrayShape2 = [];
+
+/**
+ * @method method1(string $parameter = DateTime::class)
+ * @method method2(array $parameter = [DateTime::class => ArrayObject::class], $parameter2)
+ */
+class ConstantExpression
+{
+
+}

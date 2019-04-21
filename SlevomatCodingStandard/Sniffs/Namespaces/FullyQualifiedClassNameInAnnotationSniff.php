@@ -4,8 +4,10 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
+use SlevomatCodingStandard\Helpers\AnnotationConstantExpressionHelper;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\TypeHelper;
@@ -77,7 +79,41 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 
 						$phpcsFile->fixer->beginChangeset();
 
-						$fixedAnnotationContent = AnnotationHelper::fixAnnotation($phpcsFile, $annotation, $typeHintNode, new IdentifierTypeNode($fullyQualifiedTypeHint));
+						$fixedAnnotationContent = AnnotationHelper::fixAnnotationType($phpcsFile, $annotation, $typeHintNode, new IdentifierTypeNode($fullyQualifiedTypeHint));
+
+						$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
+						for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {
+							$phpcsFile->fixer->replaceToken($i, '');
+						}
+
+						$phpcsFile->fixer->endChangeset();
+					}
+				}
+
+				foreach (AnnotationHelper::getAnnotationConstantExpressions($annotation) as $constantExpression) {
+					foreach (AnnotationConstantExpressionHelper::getConstantFetchNodes($constantExpression) as $constantFetchNode) {
+						$typeHint = $constantFetchNode->className;
+
+						$fullyQualifiedTypeHint = TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $annotation->getStartPointer(), $typeHint);
+						if ($fullyQualifiedTypeHint === $typeHint) {
+							continue;
+						}
+
+						$fix = $phpcsFile->addFixableError(sprintf(
+							'Class name %s in %s should be referenced via a fully qualified name.',
+							$fullyQualifiedTypeHint,
+							$annotationName
+						), $annotation->getStartPointer(), self::CODE_NON_FULLY_QUALIFIED_CLASS_NAME);
+
+						if (!$fix) {
+							continue;
+						}
+
+						$phpcsFile->fixer->beginChangeset();
+
+						/** @var \SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation $annotation */
+						$annotation = $annotation;
+						$fixedAnnotationContent = AnnotationHelper::fixAnnotationConstantFetchNode($phpcsFile, $annotation, $constantFetchNode, new ConstFetchNode($fullyQualifiedTypeHint, $constantFetchNode->name));
 
 						$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
 						for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {

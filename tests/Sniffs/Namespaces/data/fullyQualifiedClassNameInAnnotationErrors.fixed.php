@@ -151,3 +151,12 @@ $arrayShape1 = [];
 
 /** @var array{\Iterator: int} $arrayShape2 */
 $arrayShape2 = [];
+
+/**
+ * @method method1(string $parameter = \Iterator::class)
+ * @method method2(array $parameter = [\Iterator::class => \Traversable::class], $parameter2)
+ */
+class ConstantExpression
+{
+
+}

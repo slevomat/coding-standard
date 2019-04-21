@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -64,13 +65,37 @@ class AnnotationHelper
 
 	/**
 	 * @internal
+	 * @param \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation|\SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation|\SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation $annotation
+	 * @return \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode[]
+	 */
+	public static function getAnnotationConstantExpressions(Annotation $annotation): array
+	{
+		if (!$annotation instanceof MethodAnnotation) {
+			return [];
+		}
+
+		$constantExpressions = [];
+
+		foreach ($annotation->getMethodParameters() as $methodParameterAnnotation) {
+			if ($methodParameterAnnotation->defaultValue === null) {
+				continue;
+			}
+
+			$constantExpressions[] = $methodParameterAnnotation->defaultValue;
+		}
+
+		return $constantExpressions;
+	}
+
+	/**
+	 * @internal
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation|\SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation|\SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation $annotation
 	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
 	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $fixedTypeNode
 	 * @return string
 	 */
-	public static function fixAnnotation(File $phpcsFile, Annotation $annotation, TypeNode $typeNode, TypeNode $fixedTypeNode): string
+	public static function fixAnnotationType(File $phpcsFile, Annotation $annotation, TypeNode $typeNode, TypeNode $fixedTypeNode): string
 	{
 		if ($annotation instanceof MethodAnnotation) {
 			$fixedContentNode = clone $annotation->getContentNode();
@@ -108,6 +133,43 @@ class AnnotationHelper
 			);
 		}
 
+		return self::fix($phpcsFile, $annotation, $fixedAnnotation);
+	}
+
+	/**
+	 * @internal
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param \SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation $annotation
+	 * @param \PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode $node
+	 * @param \PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode $fixedNode
+	 * @return string
+	 */
+	public static function fixAnnotationConstantFetchNode(File $phpcsFile, MethodAnnotation $annotation, ConstFetchNode $node, ConstFetchNode $fixedNode): string
+	{
+		$fixedContentNode = clone $annotation->getContentNode();
+
+		foreach ($fixedContentNode->parameters as $parameterNo => $parameterNode) {
+			if ($parameterNode->defaultValue === null) {
+				continue;
+			}
+
+			$fixedContentNode->parameters[$parameterNo] = clone $parameterNode;
+			$fixedContentNode->parameters[$parameterNo]->defaultValue = AnnotationConstantExpressionHelper::change($parameterNode->defaultValue, $node, $fixedNode);
+		}
+
+		$fixedAnnotation = new MethodAnnotation(
+			$annotation->getName(),
+			$annotation->getStartPointer(),
+			$annotation->getEndPointer(),
+			$annotation->getContent(),
+			$fixedContentNode
+		);
+
+		return self::fix($phpcsFile, $annotation, $fixedAnnotation);
+	}
+
+	private static function fix(File $phpcsFile, Annotation $annotation, Annotation $fixedAnnotation): string
+	{
 		$spaceAfterContent = '';
 		if (preg_match('~(\\s+)$~', TokenHelper::getContent($phpcsFile, $annotation->getStartPointer(), $annotation->getEndPointer()), $matches) > 0) {
 			$spaceAfterContent = $matches[1];

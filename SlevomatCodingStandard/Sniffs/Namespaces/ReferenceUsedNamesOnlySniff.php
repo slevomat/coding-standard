@@ -4,8 +4,10 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
+use SlevomatCodingStandard\Helpers\AnnotationConstantExpressionHelper;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\ClassHelper;
@@ -55,6 +57,10 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	public const CODE_REFERENCE_VIA_FALLBACK_GLOBAL_NAME = 'ReferenceViaFallbackGlobalName';
 
 	public const CODE_PARTIAL_USE = 'PartialUse';
+
+	private const SOURCE_CODE = 1;
+	private const SOURCE_ANNOTATION = 2;
+	private const SOURCE_ANNOTATION_CONSTANT_FETCH = 3;
 
 	/** @var bool */
 	public $searchAnnotations = false;
@@ -201,7 +207,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 		if ($this->allowFullyQualifiedNameForCollidingClasses) {
 			$classReferences = array_filter($references, function (stdClass $reference): bool {
-				return !$reference->fromDocComment && $reference->isClass;
+				return $reference->source === self::SOURCE_CODE && $reference->isClass;
 			});
 
 			$classReferencesIndex = [];
@@ -212,7 +218,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 		if ($this->allowFullyQualifiedNameForCollidingFunctions) {
 			$functionReferences = array_filter($references, function (stdClass $reference): bool {
-				return !$reference->fromDocComment && $reference->isFunction;
+				return $reference->source === self::SOURCE_CODE && $reference->isFunction;
 			});
 
 			$functionReferencesIndex = [];
@@ -223,7 +229,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 		if ($this->allowFullyQualifiedNameForCollidingConstants) {
 			$constantReferences = array_filter($references, function (stdClass $reference): bool {
-				return !$reference->fromDocComment && $reference->isConstant;
+				return $reference->source === self::SOURCE_CODE && $reference->isConstant;
 			});
 
 			$constantReferencesIndex = [];
@@ -308,8 +314,8 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 						if ($fix) {
 							$phpcsFile->fixer->beginChangeset();
 
-							if ($reference->fromDocComment) {
-								$fixedAnnotationContent = AnnotationHelper::fixAnnotation(
+							if ($reference->source === self::SOURCE_ANNOTATION) {
+								$fixedAnnotationContent = AnnotationHelper::fixAnnotationType(
 									$phpcsFile,
 									$reference->annotation,
 									$reference->nameNode,
@@ -320,6 +326,19 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 								for ($i = $startPointer + 1; $i <= $reference->endPointer; $i++) {
 									$phpcsFile->fixer->replaceToken($i, '');
 								}
+							} elseif ($reference->source === self::SOURCE_ANNOTATION_CONSTANT_FETCH) {
+								$fixedAnnotationContent = AnnotationHelper::fixAnnotationConstantFetchNode(
+									$phpcsFile,
+									$reference->annotation,
+									$reference->constantFetchNode,
+									new ConstFetchNode(substr($reference->name, 1), $reference->constantFetchNode->name)
+								);
+
+								$phpcsFile->fixer->replaceToken($startPointer, $fixedAnnotationContent);
+								for ($i = $startPointer + 1; $i <= $reference->endPointer; $i++) {
+									$phpcsFile->fixer->replaceToken($i, '');
+								}
+
 							} else {
 								$phpcsFile->fixer->replaceToken($startPointer, substr($tokens[$startPointer]['content'], 1));
 							}
@@ -396,12 +415,20 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 							$phpcsFile->fixer->beginChangeset();
 
-							if ($reference->fromDocComment) {
-								$fixedAnnotationContent = AnnotationHelper::fixAnnotation(
+							if ($reference->source === self::SOURCE_ANNOTATION) {
+								$fixedAnnotationContent = AnnotationHelper::fixAnnotationType(
 									$phpcsFile,
 									$reference->annotation,
 									$reference->nameNode,
 									new IdentifierTypeNode($nameToReference)
+								);
+								$phpcsFile->fixer->replaceToken($startPointer, $fixedAnnotationContent);
+							} elseif ($reference->source === self::SOURCE_ANNOTATION_CONSTANT_FETCH) {
+								$fixedAnnotationContent = AnnotationHelper::fixAnnotationConstantFetchNode(
+									$phpcsFile,
+									$reference->annotation,
+									$reference->constantFetchNode,
+									new ConstFetchNode($nameToReference, $reference->constantFetchNode->name)
 								);
 								$phpcsFile->fixer->replaceToken($startPointer, $fixedAnnotationContent);
 							} else {
@@ -498,7 +525,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 		$references = [];
 		foreach (ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer) as $referencedName) {
 			$reference = new stdClass();
-			$reference->fromDocComment = false;
+			$reference->source = self::SOURCE_CODE;
 			$reference->name = $referencedName->getNameAsReferencedInFile();
 			$reference->type = $referencedName->getType();
 			$reference->startPointer = $referencedName->getStartPointer();
@@ -547,10 +574,29 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 							}
 
 							$reference = new stdClass();
-							$reference->fromDocComment = true;
+							$reference->source = self::SOURCE_ANNOTATION;
 							$reference->annotation = $annotation;
 							$reference->nameNode = $typeHintNode;
 							$reference->name = $typeHint;
+							$reference->type = ReferencedName::TYPE_DEFAULT;
+							$reference->startPointer = $annotation->getStartPointer();
+							$reference->endPointer = $annotation->getEndPointer();
+							$reference->isClass = true;
+							$reference->isConstant = false;
+							$reference->isFunction = false;
+
+							$references[] = $reference;
+						}
+					}
+
+					foreach (AnnotationHelper::getAnnotationConstantExpressions($annotation) as $constantExpression) {
+						foreach (AnnotationConstantExpressionHelper::getConstantFetchNodes($constantExpression) as $constantFetchNode) {
+
+							$reference = new stdClass();
+							$reference->source = self::SOURCE_ANNOTATION_CONSTANT_FETCH;
+							$reference->annotation = $annotation;
+							$reference->constantFetchNode = $constantFetchNode;
+							$reference->name = $constantFetchNode->className;
 							$reference->type = ReferencedName::TYPE_DEFAULT;
 							$reference->startPointer = $annotation->getStartPointer();
 							$reference->endPointer = $annotation->getEndPointer();

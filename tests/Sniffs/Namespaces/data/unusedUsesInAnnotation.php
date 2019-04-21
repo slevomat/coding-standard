@@ -61,6 +61,9 @@ use Callable1;
 use Callable2;
 use ArrayShape1;
 use ArrayShape2;
+use ConstantExpression1;
+use ConstantExpression2;
+use ConstantExpression3;
 
 /**
  * @ORM\Entity()
@@ -226,3 +229,12 @@ $arrayShape1 = [];
 
 /** @var array{ArrayShape2: int} $arrayShape2 */
 $arrayShape2 = [];
+
+/**
+ * @method method1(string $parameter = ConstantExpression1::class)
+ * @method method2(array $parameter = [ConstantExpression2::class => ConstantExpression3::class])
+ */
+class ConstantExpression
+{
+
+}
