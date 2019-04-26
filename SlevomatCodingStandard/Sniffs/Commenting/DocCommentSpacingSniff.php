@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\Annotation\Annotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
+use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_combine;
@@ -34,7 +35,6 @@ use const T_DOC_COMMENT_OPEN_TAG;
 use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_STRING;
 use const T_DOC_COMMENT_WHITESPACE;
-use const T_WHITESPACE;
 
 class DocCommentSpacingSniff implements Sniff
 {
@@ -173,7 +173,7 @@ class DocCommentSpacingSniff implements Sniff
 			return;
 		}
 
-		$indentation = $this->getIndentation($phpcsFile, $docCommentOpenerPointer);
+		$indentation = IndentationHelper::getIndentation($phpcsFile, $docCommentOpenerPointer);
 
 		$phpcsFile->fixer->beginChangeset();
 
@@ -230,7 +230,7 @@ class DocCommentSpacingSniff implements Sniff
 			return;
 		}
 
-		$indentation = $this->getIndentation($phpcsFile, $docCommentOpenerPointer);
+		$indentation = IndentationHelper::getIndentation($phpcsFile, $docCommentOpenerPointer);
 
 		$phpcsFile->fixer->beginChangeset();
 
@@ -263,7 +263,7 @@ class DocCommentSpacingSniff implements Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
-		$indentation = $this->getIndentation($phpcsFile, $docCommentOpenerPointer);
+		$indentation = IndentationHelper::getIndentation($phpcsFile, $docCommentOpenerPointer);
 
 		$previousAnnotation = null;
 		foreach ($annotations as $annotation) {
@@ -407,7 +407,7 @@ class DocCommentSpacingSniff implements Sniff
 				continue;
 			}
 
-			$indentation = $this->getIndentation($phpcsFile, $docCommentOpenerPointer);
+			$indentation = IndentationHelper::getIndentation($phpcsFile, $docCommentOpenerPointer);
 
 			$phpcsFile->fixer->beginChangeset();
 
@@ -566,7 +566,7 @@ class DocCommentSpacingSniff implements Sniff
 		$lastAnnotationsGroup = $annotationsGroups[count($annotationsGroups) - 1];
 		$lastAnnotation = $lastAnnotationsGroup[count($lastAnnotationsGroup) - 1];
 
-		$indentation = $this->getIndentation($phpcsFile, $docCommentOpenerPointer);
+		$indentation = IndentationHelper::getIndentation($phpcsFile, $docCommentOpenerPointer);
 
 		$fixedAnnotations = '';
 		$firstGroup = true;
@@ -695,7 +695,7 @@ class DocCommentSpacingSniff implements Sniff
 			return;
 		}
 
-		$indentation = $this->getIndentation($phpcsFile, $docCommentOpenerPointer);
+		$indentation = IndentationHelper::getIndentation($phpcsFile, $docCommentOpenerPointer);
 
 		$phpcsFile->fixer->beginChangeset();
 
@@ -711,17 +711,6 @@ class DocCommentSpacingSniff implements Sniff
 		$phpcsFile->fixer->addContentBefore($docCommentCloserPointer, $indentation . ' ');
 
 		$phpcsFile->fixer->endChangeset();
-	}
-
-	private function getIndentation(File $phpcsFile, int $docCommentOpenerPointer): string
-	{
-		$endOfLinePointer = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $docCommentOpenerPointer - 1);
-
-		if ($endOfLinePointer === null) {
-			return '';
-		}
-
-		return TokenHelper::getContent($phpcsFile, $endOfLinePointer + 1, $docCommentOpenerPointer - 1);
 	}
 
 	/**

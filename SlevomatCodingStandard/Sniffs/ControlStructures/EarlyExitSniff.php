@@ -6,18 +6,12 @@ use Exception;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ConditionHelper;
+use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
-use function array_map;
-use function explode;
-use function implode;
 use function in_array;
-use function ltrim;
-use function rtrim;
 use function sort;
 use function sprintf;
-use function substr;
-use function trim;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CLOSURE;
 use const T_COLON;
@@ -40,9 +34,6 @@ class EarlyExitSniff implements Sniff
 	public const CODE_EARLY_EXIT_NOT_USED = 'EarlyExitNotUsed';
 	public const CODE_USELESS_ELSEIF = 'UselessElseIf';
 	public const CODE_USELESS_ELSE = 'UselessElse';
-
-	private const TAB_INDENT = "\t";
-	private const SPACES_INDENT = '    ';
 
 	/** @var bool */
 	public $ignoreStandaloneIfInScope = false;
@@ -138,7 +129,7 @@ class EarlyExitSniff implements Sniff
 			$ifCode = $this->getScopeCode($phpcsFile, $ifPointer);
 			$elseCode = $this->getScopeCode($phpcsFile, $elsePointer);
 			$negativeIfCondition = ConditionHelper::getNegativeCondition($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'], $tokens[$ifPointer]['parenthesis_closer']);
-			$afterIfCode = $this->fixIndentation($ifCode, $phpcsFile->eolChar, $this->getIndentation($phpcsFile, $ifPointer));
+			$afterIfCode = IndentationHelper::fixIndentation($ifCode, $phpcsFile->eolChar, IndentationHelper::getIndentation($phpcsFile, $ifPointer));
 
 			$phpcsFile->fixer->addContent(
 				$ifPointer,
@@ -186,7 +177,7 @@ class EarlyExitSniff implements Sniff
 		}
 
 		$elseCode = $this->getScopeCode($phpcsFile, $elsePointer);
-		$afterIfCode = $this->fixIndentation($elseCode, $phpcsFile->eolChar, $this->prepareIndentation($this->getIndentation($phpcsFile, $previousConditionPointer)));
+		$afterIfCode = IndentationHelper::fixIndentation($elseCode, $phpcsFile->eolChar, IndentationHelper::addIndentation(IndentationHelper::getIndentation($phpcsFile, $previousConditionPointer)));
 
 		$phpcsFile->fixer->addContent(
 			$tokens[$elsePointer]['scope_closer'],
@@ -254,7 +245,7 @@ class EarlyExitSniff implements Sniff
 		$phpcsFile->fixer->addNewline($pointerBeforeElseIfPointer);
 		$phpcsFile->fixer->addNewline($pointerBeforeElseIfPointer);
 
-		$phpcsFile->fixer->replaceToken($elseIfPointer, sprintf('%sif', $this->getIndentation($phpcsFile, $allConditionsPointers[0])));
+		$phpcsFile->fixer->replaceToken($elseIfPointer, sprintf('%sif', IndentationHelper::getIndentation($phpcsFile, $allConditionsPointers[0])));
 
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -297,9 +288,9 @@ class EarlyExitSniff implements Sniff
 		}
 
 		$ifCode = $this->getScopeCode($phpcsFile, $ifPointer);
-		$ifIndentation = $this->getIndentation($phpcsFile, $ifPointer);
+		$ifIndentation = IndentationHelper::getIndentation($phpcsFile, $ifPointer);
 		$earlyExitCode = $this->getEarlyExitCode($tokens[$scopePointer]['code']);
-		$earlyExitCodeIndentation = $this->prepareIndentation($ifIndentation);
+		$earlyExitCodeIndentation = IndentationHelper::addIndentation($ifIndentation);
 
 		$negativeIfCondition = ConditionHelper::getNegativeCondition($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'], $tokens[$ifPointer]['parenthesis_closer']);
 
@@ -309,7 +300,7 @@ class EarlyExitSniff implements Sniff
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 
-		$afterIfCode = $this->fixIndentation($ifCode, $phpcsFile->eolChar, $ifIndentation);
+		$afterIfCode = IndentationHelper::fixIndentation($ifCode, $phpcsFile->eolChar, $ifIndentation);
 
 		$phpcsFile->fixer->addContent(
 			$ifPointer,
@@ -329,25 +320,6 @@ class EarlyExitSniff implements Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
-	private function getIndentation(File $phpcsFile, int $pointer): string
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		$indentation = '';
-		$actualPointer = $pointer - 1;
-		while ($tokens[$actualPointer]['code'] === T_WHITESPACE) {
-			$indentation .= $tokens[$actualPointer]['content'];
-			$actualPointer--;
-		}
-
-		return trim($indentation, "\n\r");
-	}
-
-	private function prepareIndentation(string $identation): string
-	{
-		return $identation . ($identation[0] === self::TAB_INDENT ? self::TAB_INDENT : self::SPACES_INDENT);
-	}
-
 	private function getScopeCode(File $phpcsFile, int $scopePointer): string
 	{
 		$tokens = $phpcsFile->getTokens();
@@ -365,28 +337,6 @@ class EarlyExitSniff implements Sniff
 		}
 
 		return 'return';
-	}
-
-	private function fixIndentation(string $code, string $eolChar, string $defaultIndentation): string
-	{
-		/** @var string[] $lines */
-		$lines = explode($eolChar, rtrim($code));
-
-		return implode($eolChar, array_map(function (string $line) use ($defaultIndentation): string {
-			if ($line === '') {
-				return $line;
-			}
-
-			if ($line[0] === self::TAB_INDENT) {
-				return substr($line, 1);
-			}
-
-			if (substr($line, 0, 4) === self::SPACES_INDENT) {
-				return substr($line, 4);
-			}
-
-			return $defaultIndentation . ltrim($line);
-		}, $lines));
 	}
 
 	private function findEarlyExitInScope(File $phpcsFile, int $startPointer, int $endPointer): ?int
