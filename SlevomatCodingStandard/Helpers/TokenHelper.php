@@ -299,6 +299,55 @@ class TokenHelper
 		return isset($tokens[$newLinePointer + 1]) ? $newLinePointer + 1 : null;
 	}
 
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $pointer search starts at this token, inclusive
+	 * @return int|null
+	 */
+	public static function findFirstNonWhitespaceOnNextLine(File $phpcsFile, int $pointer): ?int
+	{
+		$newLinePointer = self::findNextContent($phpcsFile, [T_WHITESPACE, T_DOC_COMMENT_WHITESPACE], $phpcsFile->eolChar, $pointer);
+		if ($newLinePointer === null) {
+			return null;
+		}
+
+		$nextPointer = self::findNextExcluding($phpcsFile, [T_WHITESPACE, T_DOC_COMMENT_WHITESPACE], $newLinePointer + 1);
+
+		$tokens = $phpcsFile->getTokens();
+		if ($nextPointer !== null && $tokens[$pointer]['line'] === $tokens[$nextPointer]['line'] - 1) {
+			return $nextPointer;
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $pointer search starts at this token, inclusive
+	 * @return int|null
+	 */
+	public static function findFirstNonWhitespaceOnPreviousLine(File $phpcsFile, int $pointer): ?int
+	{
+		$newLinePointerOnPreviousLine = self::findPreviousContent($phpcsFile, [T_WHITESPACE, T_DOC_COMMENT_WHITESPACE], $phpcsFile->eolChar, $pointer);
+		if ($newLinePointerOnPreviousLine === null) {
+			return null;
+		}
+
+		$newLinePointerBeforePreviousLine = self::findPreviousContent($phpcsFile, [T_WHITESPACE, T_DOC_COMMENT_WHITESPACE], $phpcsFile->eolChar, $newLinePointerOnPreviousLine - 1);
+		if ($newLinePointerBeforePreviousLine === null) {
+			return null;
+		}
+
+		$nextPointer = self::findNextExcluding($phpcsFile, [T_WHITESPACE, T_DOC_COMMENT_WHITESPACE], $newLinePointerBeforePreviousLine + 1);
+
+		$tokens = $phpcsFile->getTokens();
+		if ($nextPointer !== null && $tokens[$pointer]['line'] === $tokens[$nextPointer]['line'] + 1) {
+			return $nextPointer;
+		}
+
+		return null;
+	}
+
 	public static function getContent(File $phpcsFile, int $startPointer, ?int $endPointer = null): string
 	{
 		$tokens = $phpcsFile->getTokens();

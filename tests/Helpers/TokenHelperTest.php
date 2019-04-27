@@ -263,6 +263,24 @@ class TokenHelperTest extends TestCase
 		self::assertNull(TokenHelper::findFirstTokenOnNextLine($phpcsFile, TokenHelper::getLastTokenPointer($phpcsFile) + 1));
 	}
 
+	public function testFindFirstNonWhitespaceOnNextLine(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/sampleTwo.php'
+		);
+
+		self::assertNull(TokenHelper::findFirstNonWhitespaceOnNextLine($phpcsFile, TokenHelper::getLastTokenPointer($phpcsFile) + 1));
+	}
+
+	public function testFindFirstNonWhitespaceOnPreviousLine(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/sampleTwo.php'
+		);
+
+		self::assertNull(TokenHelper::findFirstNonWhitespaceOnPreviousLine($phpcsFile, 0));
+	}
+
 	public function testGetContent(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(

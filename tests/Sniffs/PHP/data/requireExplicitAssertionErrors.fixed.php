@@ -69,3 +69,26 @@ list($q, $r) = [];
 
 $u = new ArrayObject();
 \assert($u instanceof \Traversable && $u instanceof \Countable);
+
+foreach ([] as $v) {
+	\assert(\is_int($v) || \is_float($v) || \is_bool($v));
+}
+
+while ($w = next($array)) {
+	\assert(\is_int($w));
+}
+
+function () {
+	list($x, $x2) = [];
+	\assert(\is_int($x));
+	\assert(\is_float($x2));
+};
+
+function () {
+	[$y, $y2] = [];
+	\assert($y === false);
+	\assert($y2 === true);
+};
+
+$z = new ArrayObject();
+\assert($z instanceof \Traversable && $z instanceof \Countable);

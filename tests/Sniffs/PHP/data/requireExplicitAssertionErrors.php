@@ -73,3 +73,30 @@ list($q, $r) = [];
 
 /** @var \Traversable&\Countable $u */
 $u = new ArrayObject();
+
+foreach ([] as $v) {
+	/** @var numeric|bool $v */
+}
+
+while ($w = next($array)) {
+	/** @var int $w */
+}
+
+function () {
+	list($x, $x2) = [];
+	/**
+	 * @var int $x
+	 * @var float $x2
+	 */
+};
+
+function () {
+	[$y, $y2] = [];
+	/**
+	 * @var false $y
+	 * @var true $y2
+	 */
+};
+
+$z = new ArrayObject();
+/** @var \Traversable&\Countable $z */
