@@ -8,6 +8,7 @@ use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function in_array;
+use const T_AS;
 use const T_BITWISE_AND;
 use const T_COMMA;
 use const T_DOUBLE_ARROW;
@@ -78,7 +79,7 @@ class DisallowReferenceSniff implements Sniff
 		}
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $referencePointer - 1);
-		if (!in_array($tokens[$previousPointer]['code'], [T_EQUAL, T_DOUBLE_ARROW, T_OPEN_SHORT_ARRAY, T_COMMA], true)) {
+		if (!in_array($tokens[$previousPointer]['code'], [T_EQUAL, T_DOUBLE_ARROW, T_OPEN_SHORT_ARRAY, T_COMMA, T_AS], true)) {
 			return;
 		}
 
