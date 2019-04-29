@@ -432,6 +432,14 @@ Sniff provides the following settings:
 * `linesCountBetweenUseTypes`: allows to configure the number of lines between two different types of `use`.
 * `linesCountAfterLastUse`: allows to configure the number of lines after last `use`.
 
+#### SlevomatCodingStandard.PHP.ReferenceSpacing 🔧
+
+Enforces configurable number of spaces after reference.
+
+Sniff provides the following settings:
+
+* `spacesCountAfterReference`: the number of spaces after `&`.
+
 #### SlevomatCodingStandard.Operators.SpreadOperatorSpacing 🔧
 
 Enforces configurable number of spaces after the `...` operator.
