@@ -788,6 +788,15 @@ class IntersectionAndGeneric
 
 	}
 
+	/**
+	 * @param \Boo<bool> $h
+	 * @return \Foo<int>
+	 */
+	public function h(\Boo $h): \Foo
+	{
+		return new \Foo();
+	}
+
 }
 
 class CallableType

@@ -1093,6 +1093,10 @@ class TypeHintDeclarationSniff implements Sniff
 			return false;
 		}
 
+		if ($returnAnnotation->getType() instanceof GenericTypeNode) {
+			return false;
+		}
+
 		if ($returnAnnotation->getType() instanceof CallableTypeNode) {
 			return false;
 		}
@@ -1150,6 +1154,10 @@ class TypeHintDeclarationSniff implements Sniff
 				}
 			} else {
 				if (!$this->annotationContainsOneType($parameterAnnotationTypeNode)) {
+					continue;
+				}
+
+				if ($parameterAnnotationTypeNode instanceof GenericTypeNode) {
 					continue;
 				}
 
