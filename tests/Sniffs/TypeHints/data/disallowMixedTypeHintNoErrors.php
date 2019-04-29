@@ -16,4 +16,10 @@ class Whatever
 	 */
 	private $noMixed;
 
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
+	 * @var mixed
+	 */
+	private $suppressed;
+
 }

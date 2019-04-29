@@ -7,11 +7,15 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
+use SlevomatCodingStandard\Helpers\SuppressHelper;
+use function sprintf;
 use function strtolower;
 use const T_DOC_COMMENT_OPEN_TAG;
 
 class DisallowMixedTypeHintSniff implements Sniff
 {
+
+	private const NAME = 'SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint';
 
 	public const CODE_DISALLOWED_MIXED_TYPE_HINT = 'DisallowedMixedTypeHint';
 
@@ -32,6 +36,10 @@ class DisallowMixedTypeHintSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $docCommentOpenPointer): void
 	{
+		if (SuppressHelper::isSniffSuppressed($phpcsFile, $docCommentOpenPointer, $this->getSniffName(self::CODE_DISALLOWED_MIXED_TYPE_HINT))) {
+			return;
+		}
+
 		$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 
 		foreach ($annotations as $annotationByName) {
@@ -61,6 +69,11 @@ class DisallowMixedTypeHintSniff implements Sniff
 				}
 			}
 		}
+	}
+
+	private function getSniffName(string $sniffName): string
+	{
+		return sprintf('%s.%s', self::NAME, $sniffName);
 	}
 
 }
