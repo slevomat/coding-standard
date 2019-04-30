@@ -17,7 +17,7 @@ class InlineDocCommentDeclarationSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/invalidInlineDocCommentDeclarations.php');
 
-		// self::assertSame(18, $report->getErrorCount());
+		self::assertSame(34, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
