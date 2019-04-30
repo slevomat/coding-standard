@@ -6,6 +6,12 @@ class Foo
 	/** @var string */
 	private $foo;
 
+	/** @var string */
+	static public $static1;
+
+	/** @var string */
+	public static $static2;
+
 	public function __construct()
 	{
 		/** @var string[] $a */

@@ -82,3 +82,57 @@ class IntersectionAndGeneric
 	}
 
 }
+
+/** @var string $unknown */
+
+/** @var string $unknownA */
+$a = 'a';
+
+/** @var int $unknownB */
+[$b] = [];
+
+/** @var int $unknownC */
+list($c) = [];
+
+/** @var int $unknownD */
+foreach ([] as $d) {
+}
+
+/** @var int $unknownE */
+while ($e = next($array)) {
+
+}
+
+$aa = 'aa';
+/** @var string $unknownAA */
+
+[$bb] = [];
+/** @var int $unknownBB */
+
+list($cc) = [];
+/** @var int $unknownCC */
+
+foreach ([] as $dd) {
+	/** @var int $unknownDD */
+}
+
+while ($ee = next($array)) {
+	/** @var int $unknownEE */
+}
+
+/** @var string */
+
+function () {
+};
+/** @var string $unknownX */
+
+/** @var string $noAssignmentX */
+$noAssignmentX .= 'string';
+
+/** @var string $noAssignmentY */
+[$noAssignmentY];
+
+/** @var string $noAssignmentZ */
+while ($foo = next($noAssignmentZ)) {
+
+}

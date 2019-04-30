@@ -754,7 +754,7 @@ Reports empty comments.
 
 #### SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration 🔧
 
-Reports invalid format of inline phpDocs with `@var`.
+Reports invalid inline phpDocs with `@var`.
 
 #### SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment 🔧
 
