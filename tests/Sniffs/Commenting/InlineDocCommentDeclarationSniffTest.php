@@ -17,7 +17,7 @@ class InlineDocCommentDeclarationSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/invalidInlineDocCommentDeclarations.php');
 
-		self::assertSame(16, $report->getErrorCount());
+		self::assertSame(18, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -70,14 +70,17 @@ class InlineDocCommentDeclarationSniffTest extends TestCase
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT
 		);
 
-		self::assertSniffError($report, 53, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
-		self::assertSniffError($report, 56, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
+		self::assertSniffError($report, 39, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
+		self::assertSniffError($report, 42, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
+
 		self::assertSniffError($report, 59, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
 		self::assertSniffError($report, 62, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
 		self::assertSniffError($report, 65, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
 		self::assertSniffError($report, 68, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
 		self::assertSniffError($report, 71, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
 		self::assertSniffError($report, 74, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
+		self::assertSniffError($report, 77, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
+		self::assertSniffError($report, 80, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
 
 		self::assertAllFixedInFile($report);
 	}

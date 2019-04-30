@@ -13,6 +13,8 @@ use function trim;
 use const T_COMMENT;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_FOREACH;
+use const T_LIST;
+use const T_OPEN_SHORT_ARRAY;
 use const T_VARIABLE;
 use const T_WHILE;
 use const T_WHITESPACE;
@@ -72,7 +74,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 		}
 
 		$pointerAfterComment = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $commentClosePointer + 1);
-		if ($pointerAfterComment === null || !in_array($tokens[$pointerAfterComment]['code'], [T_VARIABLE, T_FOREACH, T_WHILE], true)) {
+		if ($pointerAfterComment === null || !in_array($tokens[$pointerAfterComment]['code'], [T_VARIABLE, T_FOREACH, T_WHILE, T_LIST, T_OPEN_SHORT_ARRAY], true)) {
 			return;
 		}
 

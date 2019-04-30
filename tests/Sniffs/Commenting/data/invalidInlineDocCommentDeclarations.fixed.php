@@ -35,6 +35,12 @@ class Foo
 
 		/** @var */
 		$j = 10;
+
+		/** @var string $k */
+		list($k) = ['k'];
+
+		/** @var string $l */
+		[$l] = ['l'];
 	}
 
 	public function get()
