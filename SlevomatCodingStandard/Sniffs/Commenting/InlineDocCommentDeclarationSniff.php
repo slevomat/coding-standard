@@ -45,6 +45,13 @@ class InlineDocCommentDeclarationSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
+		$commentClosePointer = $tokens[$commentOpenPointer]['code'] === T_COMMENT ? $commentOpenPointer : $tokens[$commentOpenPointer]['comment_closer'];
+
+		$pointerAfterComment = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $commentClosePointer + 1);
+		if ($pointerAfterComment === null || !in_array($tokens[$pointerAfterComment]['code'], [T_VARIABLE, T_FOREACH, T_WHILE, T_LIST, T_OPEN_SHORT_ARRAY], true)) {
+			return;
+		}
+
 		if ($tokens[$commentOpenPointer]['code'] === T_COMMENT) {
 			if (preg_match('~^/\*\\s*@var\\s+~', $tokens[$commentOpenPointer]['content']) === 0) {
 				return;
@@ -62,19 +69,12 @@ class InlineDocCommentDeclarationSniff implements Sniff
 				$phpcsFile->fixer->endChangeset();
 			}
 
-			$commentClosePointer = $commentOpenPointer;
 			$commentContent = trim(substr($tokens[$commentOpenPointer]['content'], 2, -2));
 		} else {
-			$commentClosePointer = $tokens[$commentOpenPointer]['comment_closer'];
 			$commentContent = trim(TokenHelper::getContent($phpcsFile, $commentOpenPointer + 1, $commentClosePointer - 1));
 		}
 
 		if (preg_match('~^@var~', $commentContent) === 0) {
-			return;
-		}
-
-		$pointerAfterComment = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $commentClosePointer + 1);
-		if ($pointerAfterComment === null || !in_array($tokens[$pointerAfterComment]['code'], [T_VARIABLE, T_FOREACH, T_WHILE, T_LIST, T_OPEN_SHORT_ARRAY], true)) {
 			return;
 		}
 
