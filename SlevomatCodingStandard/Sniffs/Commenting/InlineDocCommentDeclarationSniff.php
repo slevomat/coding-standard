@@ -17,7 +17,6 @@ use const T_LIST;
 use const T_OPEN_SHORT_ARRAY;
 use const T_VARIABLE;
 use const T_WHILE;
-use const T_WHITESPACE;
 
 class InlineDocCommentDeclarationSniff implements Sniff
 {
@@ -45,12 +44,23 @@ class InlineDocCommentDeclarationSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
+		$tokenCodes = [T_VARIABLE, T_FOREACH, T_WHILE, T_LIST, T_OPEN_SHORT_ARRAY];
 		$commentClosePointer = $tokens[$commentOpenPointer]['code'] === T_COMMENT ? $commentOpenPointer : $tokens[$commentOpenPointer]['comment_closer'];
 
-		$pointerAfterComment = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $commentClosePointer + 1);
-		if ($pointerAfterComment === null || !in_array($tokens[$pointerAfterComment]['code'], [T_VARIABLE, T_FOREACH, T_WHILE, T_LIST, T_OPEN_SHORT_ARRAY], true)) {
-			return;
+		$codePointer = TokenHelper::findFirstNonWhitespaceOnNextLine($phpcsFile, $commentClosePointer);
+		if ($codePointer === null || !in_array($tokens[$codePointer]['code'], $tokenCodes, true)) {
+			$firstPointerOnPreviousLine = TokenHelper::findFirstNonWhitespaceOnPreviousLine($phpcsFile, $commentOpenPointer);
+			if ($firstPointerOnPreviousLine === null || !in_array($tokens[$firstPointerOnPreviousLine]['code'], $tokenCodes, true)) {
+				return;
+			}
 		}
+
+		$this->checkFormat($phpcsFile, $commentOpenPointer, $commentClosePointer);
+	}
+
+	private function checkFormat(File $phpcsFile, int $commentOpenPointer, int $commentClosePointer): void
+	{
+		$tokens = $phpcsFile->getTokens();
 
 		if ($tokens[$commentOpenPointer]['code'] === T_COMMENT) {
 			if (preg_match('~^/\*\\s*@var\\s+~', $tokens[$commentOpenPointer]['content']) === 0) {
