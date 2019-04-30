@@ -25,6 +25,7 @@ use function substr;
 use const PREG_PATTERN_ORDER;
 use const T_ABSTRACT;
 use const T_AND_EQUAL;
+use const T_BITWISE_AND;
 use const T_CLASS;
 use const T_CONCAT_EQUAL;
 use const T_CONST;
@@ -190,8 +191,11 @@ class UnusedPrivateElementsSniff implements Sniff
 					T_CONCAT_EQUAL,
 				], true)
 			) {
-				$writeOnlyProperties[$propertyName] = $propertyNameTokenPointer;
-				return;
+				$pointerAfterAssignToken = TokenHelper::findNextEffective($phpcsFile, $possibleAssignTokenPointer + 1);
+				if ($tokens[$pointerAfterAssignToken]['code'] !== T_BITWISE_AND) {
+					$writeOnlyProperties[$propertyName] = $propertyNameTokenPointer;
+					return;
+				}
 			}
 
 			unset($reportedProperties[$propertyName]);

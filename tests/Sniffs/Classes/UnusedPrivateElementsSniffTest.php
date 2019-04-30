@@ -125,6 +125,8 @@ class UnusedPrivateElementsSniffTest extends TestCase
 		self::assertNoSniffError($resultFile, 192);
 
 		self::assertNoSniffError($resultFile, 205);
+
+		self::assertNoSniffError($resultFile, 210);
 	}
 
 	public function testOnlyPublicElements(): void

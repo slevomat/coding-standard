@@ -207,4 +207,11 @@ CODE;
 
 	}
 
+	private $propertyByReference;
+
+	public function createReference(&$reference)
+	{
+		$this->propertyByReference = &$reference;
+	}
+
 }
