@@ -14,6 +14,11 @@
 	</rule>
 
 	<rule ref="Generic.Commenting.Todo"/>
+	<rule ref="Squiz.PHP.CommentedOutCode">
+		<properties>
+			<property name="maxPercentage" value="50"/>
+		</properties>
+	</rule>
 
 	<rule ref="SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation"/>
 	<rule ref="SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants"/>
