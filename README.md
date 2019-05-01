@@ -201,6 +201,10 @@ Disallows references.
 
 Requires assertion via `assert` instead of inline documentation comments.
 
+#### SlevomatCodingStandard.PHP.RequireNowdoc 🔧
+
+Requires nowdoc syntax instead of heredoc when possible.
+
 #### SlevomatCodingStandard.PHP.UselessParentheses 🔧
 
 Looks for useless parentheses.
