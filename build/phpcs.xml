@@ -137,6 +137,7 @@
 	<rule ref="SlevomatCodingStandard.Namespaces.UseSpacing"/>
 	<rule ref="SlevomatCodingStandard.PHP.OptimizedFunctionsWithoutUnpacking"/>
 	<rule ref="SlevomatCodingStandard.PHP.ReferenceSpacing"/>
+	<rule ref="SlevomatCodingStandard.PHP.RequireNowdoc"/>
 	<rule ref="SlevomatCodingStandard.PHP.UselessParentheses"/>
 	<rule ref="SlevomatCodingStandard.PHP.UselessSemicolon"/>
 	<rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators"/>
