@@ -13,3 +13,8 @@ function b(
 ) {
 
 }
+
+function c($c = true, $cc, ...$ccc)
+{
+
+}

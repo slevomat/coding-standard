@@ -24,3 +24,8 @@ function d($d = null, $dd)
 {
 
 }
+
+function e($e = true, ...$ee)
+{
+
+}

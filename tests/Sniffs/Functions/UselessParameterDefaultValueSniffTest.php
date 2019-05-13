@@ -17,11 +17,12 @@ class UselessParameterDefaultValueSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/uselessParameterDefaultValueErrors.php');
 
-		self::assertSame(3, $report->getErrorCount());
+		self::assertSame(4, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, UselessParameterDefaultValueSniff::CODE_USELESS_PARAMETER_DEFAULT_VALUE, 'Useless default value of parameter $a.');
 		self::assertSniffError($report, 10, UselessParameterDefaultValueSniff::CODE_USELESS_PARAMETER_DEFAULT_VALUE, 'Useless default value of parameter $bb.');
 		self::assertSniffError($report, 11, UselessParameterDefaultValueSniff::CODE_USELESS_PARAMETER_DEFAULT_VALUE, 'Useless default value of parameter $bbb.');
+		self::assertSniffError($report, 17, UselessParameterDefaultValueSniff::CODE_USELESS_PARAMETER_DEFAULT_VALUE, 'Useless default value of parameter $c.');
 
 		self::assertAllFixedInFile($report);
 	}
