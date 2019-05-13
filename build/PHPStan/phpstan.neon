@@ -13,6 +13,7 @@ parameters:
 		- "#Call to function array_key_exists\\(\\) with '(scope_(opener|closer)|parenthesis_(owner|opener|closer)|nested_parenthesis)'#"
 		- '#Else branch is unreachable because ternary operator condition is always true#'
 		- '#Possibly invalid array key type array<int, int\|string>\|int\|string#'
+		- '#Parameter \#5 \$contentNode of class SlevomatCodingStandard\\Helpers\\Annotation\\(Method|Parameter|Property|Return|Throws|Variable)Annotation constructor expects PHPStan\\PhpDocParser\\Ast\\PhpDoc\\#'
 
 services:
 	-
