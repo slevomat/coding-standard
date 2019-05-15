@@ -4,36 +4,22 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use function array_key_exists;
-use function array_merge;
+use function abs;
+use function in_array;
 use const T_BREAK;
-use const T_CASE;
-use const T_CLOSE_CURLY_BRACKET;
 use const T_CONTINUE;
-use const T_DEFAULT;
-use const T_DO;
 use const T_EQUAL;
-use const T_FOR;
-use const T_FOREACH;
 use const T_GOTO;
-use const T_IF;
 use const T_RETURN;
-use const T_SWITCH;
 use const T_THROW;
-use const T_TRY;
-use const T_WHILE;
 use const T_YIELD;
 use const T_YIELD_FROM;
 
-/**
- * @deprecated Use BlockControlStructureSpacingSniff and JumpStatementsSpacingSniff instead
- * @codeCoverageIgnore
- */
-class ControlStructureSpacingSniff extends AbstractControlStructureSpacingSniff
+class JumpStatementsSpacingSniff extends AbstractControlStructureSpacingSniff
 {
 
-	/** @var int */
-	public $linesCountAroundControlStructure = 1;
+	/** @var bool */
+	public $allowSingleLineYieldStacking = true;
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
@@ -42,10 +28,6 @@ class ControlStructureSpacingSniff extends AbstractControlStructureSpacingSniff
 	 */
 	public function process(File $phpcsFile, $controlStructurePointer): void
 	{
-		if ($this->isWhilePartOfDo($phpcsFile, $controlStructurePointer)) {
-			return;
-		}
-
 		if ($this->isYieldWithAssigment($phpcsFile, $controlStructurePointer)) {
 			return;
 		}
@@ -53,8 +35,6 @@ class ControlStructureSpacingSniff extends AbstractControlStructureSpacingSniff
 		if ($this->isYieldFromWithReturn($phpcsFile, $controlStructurePointer)) {
 			return;
 		}
-
-		$this->linesCountBeforeControlStructure = $this->linesCountAfterControlStructure = $this->linesCountAroundControlStructure;
 
 		parent::process($phpcsFile, $controlStructurePointer);
 	}
@@ -65,13 +45,6 @@ class ControlStructureSpacingSniff extends AbstractControlStructureSpacingSniff
 	protected function getDefaultTokensToCheck(): array
 	{
 		return [
-			T_IF,
-			T_DO,
-			T_WHILE,
-			T_FOR,
-			T_FOREACH,
-			T_SWITCH,
-			T_TRY,
 			T_GOTO,
 			T_BREAK,
 			T_CONTINUE,
@@ -87,19 +60,27 @@ class ControlStructureSpacingSniff extends AbstractControlStructureSpacingSniff
 	 */
 	protected function getSupportedTokens(): array
 	{
-		return array_merge($this->getDefaultTokensToCheck(), [T_CASE, T_DEFAULT]);
+		return $this->getDefaultTokensToCheck();
 	}
 
-	private function isWhilePartOfDo(File $phpcsFile, int $controlStructurePointer): bool
+	protected function checkLinesBefore(File $phpcsFile, int $controlStructurePointer): void
 	{
-		$tokens = $phpcsFile->getTokens();
-		$pointerBefore = TokenHelper::findPreviousEffective($phpcsFile, $controlStructurePointer - 1);
+		if ($this->allowSingleLineYieldStacking
+			&& $this->isStackedSingleLineYield($phpcsFile, $controlStructurePointer, true)) {
+			return;
+		}
 
-		return
-			$tokens[$controlStructurePointer]['code'] === T_WHILE
-			&& $tokens[$pointerBefore]['code'] === T_CLOSE_CURLY_BRACKET
-			&& array_key_exists('scope_condition', $tokens[$pointerBefore])
-			&& $tokens[$tokens[$pointerBefore]['scope_condition']]['code'] === T_DO;
+		parent::checkLinesBefore($phpcsFile, $controlStructurePointer);
+	}
+
+	protected function checkLinesAfter(File $phpcsFile, int $controlStructurePointer): void
+	{
+		if ($this->allowSingleLineYieldStacking
+			&& $this->isStackedSingleLineYield($phpcsFile, $controlStructurePointer, false)) {
+			return;
+		}
+
+		parent::checkLinesAfter($phpcsFile, $controlStructurePointer);
 	}
 
 	private function isYieldWithAssigment(File $phpcsFile, int $controlStructurePointer): bool
@@ -126,6 +107,23 @@ class ControlStructureSpacingSniff extends AbstractControlStructureSpacingSniff
 		$pointerBefore = TokenHelper::findPreviousEffective($phpcsFile, $controlStructurePointer - 1);
 
 		return $tokens[$pointerBefore]['code'] === T_RETURN;
+	}
+
+	private function isStackedSingleLineYield(File $phpcsFile, int $controlStructureStartPointer, bool $previous): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+		$yields = [T_YIELD, T_YIELD_FROM];
+
+		if (!in_array($tokens[$controlStructureStartPointer]['code'], $yields, true)) {
+			return false;
+		}
+
+		$adjoiningYieldPointer = $previous
+			? TokenHelper::findPrevious($phpcsFile, $yields, $controlStructureStartPointer - 1)
+			: TokenHelper::findNext($phpcsFile, $yields, $controlStructureStartPointer + 1);
+
+		return $adjoiningYieldPointer !== null
+			&& abs($tokens[$adjoiningYieldPointer]['line'] - $tokens[$controlStructureStartPointer]['line']) === 1;
 	}
 
 }

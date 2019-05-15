@@ -10,13 +10,11 @@ if (true) {
 
 }
 
-
 if (true) {
 
 } else {
 
 }
-
 
 while (true) {
 
@@ -41,8 +39,6 @@ function () {
 
 function ($values) {
 	foreach ($values as $value) {
-
-
 		/**
 		 * With doccomment
 		 */
@@ -58,77 +54,41 @@ function ($values) {
 		}
 
 		try {
-
 			switch ($value) {
-				case true:
-					doSomething();
-					break;
-
-				case false:
-
-					// With comment
-					continue 2;
-				case null:
-
-					return;
-
-				case 0:
-
-					throw new Exception();
-
-
-
 			}
-
-
-
 		} catch (Throwable $e) {
-			// Don't care
 		}
 	}
-};
-
-label:
-
-
-goto label;
-
-function () {
-	$array = [];
-	yield from $array;
-
-};
-
-function () {
-
-	if (true) {
-
-
-		yield [];
-
-
-		return;
-
-
-	}
-	yield [];
-
 };
 
 function () {
 	doSomething(); // Do something
 
-	foreach ([] as $value) {
+	if (true) {
 
 	}
-
-
-
 };
 
 function () {
-	doSomething();
-	foreach ([] as $value) {
+	doSomething(); // Do something
 
-	} // Foreach
+	if (true) {
+
+	}
+};
+
+function () {
+	if (true) {
+
+	} // If
+
+	doSomething();
+};
+
+function () {
+	if (true) {
+
+	} // If
+
+	doSomething();
 };

@@ -1,14 +1,16 @@
 <?php
 
+
 if (true) {
 
 } elseif (false) {
 
 }
-
 if (true) {
 
 }
+
+
 
 if (true) {
 
@@ -21,33 +23,29 @@ while (true) {
 do {
 
 } while (true);
+
 function () {
 
 	for ($i = 0; $i < 10; $i++) {
 
 
-
 		if (true) {
 
 		}
-
-
 		// With line comment
 		if (false) {
 
 		}
 
 
-
 	}
-
-
 
 };
 
 function ($values) {
 
 	foreach ($values as $value) {
+
 
 		/**
 		 * With doccomment
@@ -62,71 +60,41 @@ function ($values) {
 
 		}
 		try {
-
 			switch ($value) {
-				case true:
-					doSomething();
-					break;
-
-
-
-				case false:
-
-					// With comment
-					continue 2;
-
-
-
-				case null:
-
-					return;
-
-
-
-				case 0:
-
-					throw new Exception();
-
-
-
 			}
-
-
-
 		} catch (Throwable $e) {
-			// Don't care
 		}
+	}
+};
 
-
+function () {
+	doSomething(); // Do something
+	if (true) {
 
 	}
-
-
-
-};
-
-label:
-goto label;
-function () {
-	$array = [];
-	yield from $array;
-
-
-
 };
 
 function () {
+	doSomething(); // Do something
+
 
 	if (true) {
 
-		yield [];
-		return;
-
-
-
 	}
-	yield [];
+};
+
+function () {
+	if (true) {
+
+	} // If
+	doSomething();
+};
+
+function () {
+	if (true) {
+
+	} // If
 
 
-
+	doSomething();
 };

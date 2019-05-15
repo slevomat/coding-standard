@@ -1,64 +1,7 @@
 <?php
 
-
-if (true) {
-
-} elseif (false) {
-
-}
-if (true) {
-
-}
-
-
-
-if (true) {
-
-} else {
-
-}
-while (true) {
-
-}
-do {
-
-} while (true);
-
-function () {
-
-	for ($i = 0; $i < 10; $i++) {
-
-
-		if (true) {
-
-		}
-		// With line comment
-		if (false) {
-
-		}
-
-
-	}
-
-};
-
 function ($values) {
-
 	foreach ($values as $value) {
-
-
-		/**
-		 * With doccomment
-		 */
-		if (true) {
-
-		}
-		/*
-		 * With block comment
-		 */
-		if (false) {
-
-		}
 		try {
 			switch ($value) {
 				case true:
@@ -81,7 +24,6 @@ function ($values) {
 
 			}
 		} catch (Throwable $e) {
-			// Don't care
 		}
 	}
 };
@@ -97,7 +39,6 @@ function () {
 };
 
 function () {
-
 	if (true) {
 
 		yield [];
@@ -110,29 +51,13 @@ function () {
 };
 
 function (): Generator {
-    $a = yield a();
-    $b = yield b();
+	$a = yield a();
+	$b = yield b();
 };
 
 function () {
 	$array = [];
 	return yield from $array;
-};
-
-function () {
-	doSomething(); // Do something
-	if (true) {
-
-	}
-};
-
-function () {
-	doSomething(); // Do something
-
-
-	if (true) {
-
-	}
 };
 
 function () {
@@ -142,22 +67,6 @@ function () {
 		break; // Break
 
 	}
-};
-
-function () {
-	if (true) {
-
-	} // If
-	doSomething();
-};
-
-function () {
-	if (true) {
-
-	} // If
-
-
-	doSomething();
 };
 
 function () {
@@ -211,4 +120,10 @@ function () {
 		},
 	];
 
+};
+
+function () {
+    yield 1;
+    return 2;
+    yield 3;
 };
