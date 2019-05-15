@@ -1,58 +1,7 @@
 <?php
 
-if (true) {
-
-} elseif (false) {
-
-}
-
-if (true) {
-
-}
-
-if (true) {
-
-} else {
-
-}
-
-while (true) {
-
-}
-
-do {
-
-} while (true);
-
-function () {
-	for ($i = 0; $i < 10; $i++) {
-		if (true) {
-
-		}
-
-		// With line comment
-		if (false) {
-
-		}
-	}
-};
-
 function ($values) {
 	foreach ($values as $value) {
-		/**
-		 * With doccomment
-		 */
-		if (true) {
-
-		}
-
-		/*
-		 * With block comment
-		 */
-		if (false) {
-
-		}
-
 		try {
 			switch ($value) {
 				case true:
@@ -68,7 +17,6 @@ function ($values) {
 					throw new Exception();
 			}
 		} catch (Throwable $e) {
-			// Don't care
 		}
 	}
 };
@@ -153,14 +101,18 @@ function () {
 };
 
 function () {
-	// phpcs:disable
-	$contents = [];
-	// phpcs:enable
+    yield 1;
+    yield 2 => 3;
+    yield 4;
 
-	foreach ($contents as $key => $value) {
-	}
+    if (true) {
+
+    }
+
+    yield from [1, 2];
+    yield from [3 => 4, 5 => 6];
+    yield 7;
+    yield from [8, 9];
+
+    return 10;
 };
-
-if (true) {
-
-}
