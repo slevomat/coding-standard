@@ -222,6 +222,14 @@ class TokenHelperTest extends TestCase
 		self::assertTokenPointer(T_STRING, 4, $phpcsFile, TokenHelper::findFirstTokenOnNextLine($phpcsFile, $variableTokenPointer));
 	}
 
+	public function testFindFirstTokenOnNextLineEndingWithAComment(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/sampleFour.php');
+		$variableTokenPointer = TokenHelper::findNext($phpcsFile, T_VARIABLE, 0);
+		self::assertTokenPointer(T_VARIABLE, 3, $phpcsFile, $variableTokenPointer);
+		self::assertTokenPointer(T_STRING, 4, $phpcsFile, TokenHelper::findFirstTokenOnNextLine($phpcsFile, $variableTokenPointer));
+	}
+
 	public function testFindFirstTokenOnNextLineInDocComment(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(

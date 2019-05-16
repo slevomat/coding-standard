@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use function array_key_exists;
 use function count;
 use const T_ARRAY_HINT;
 use const T_BREAK;
@@ -291,12 +292,21 @@ class TokenHelper
 	 */
 	public static function findFirstTokenOnNextLine(File $phpcsFile, int $pointer): ?int
 	{
-		$newLinePointer = self::findNextContent($phpcsFile, [T_WHITESPACE, T_DOC_COMMENT_WHITESPACE], $phpcsFile->eolChar, $pointer);
-		if ($newLinePointer === null) {
+		$tokens = $phpcsFile->getTokens();
+		if ($pointer >= count($tokens)) {
 			return null;
 		}
-		$tokens = $phpcsFile->getTokens();
-		return isset($tokens[$newLinePointer + 1]) ? $newLinePointer + 1 : null;
+
+		$line = $tokens[$pointer]['line'];
+
+		do {
+			$pointer++;
+			if (!array_key_exists($pointer, $tokens)) {
+				return null;
+			}
+		} while ($tokens[$pointer]['line'] === $line);
+
+		return $pointer;
 	}
 
 	/**
