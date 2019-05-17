@@ -73,6 +73,16 @@ class TokenHelper
 	];
 
 	/** @var (int|string)[] */
+	public static $inlineCommentTokenCodes = [
+		T_COMMENT,
+		T_PHPCS_DISABLE,
+		T_PHPCS_ENABLE,
+		T_PHPCS_IGNORE,
+		T_PHPCS_IGNORE_FILE,
+		T_PHPCS_SET,
+	];
+
+	/** @var (int|string)[] */
 	public static $typeHintTokenCodes = [
 		T_NS_SEPARATOR,
 		T_STRING,
