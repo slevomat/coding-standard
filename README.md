@@ -303,25 +303,52 @@ Sniff provides the following settings:
 * `linesCountAfterLastUse`: allows to configure the number of lines after last `use`.
 * `linesCountAfterLastUseWhenLastInClass`: allows to configure the number of lines after last `use` when the `use` is the last statement in the class.
 
-#### SlevomatCodingStandard.ControlStructures.ControlStructureSpacing 🔧
+#### SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing 🔧
 
-Enforces configurable number of lines around control structures.
+Enforces configurable number of lines around block control structures (if, foreach, ...).
 
 Sniff provides the following settings:
 
-* `linesCountAroundControlStructure`: allows to configure the number of lines around control structure.
+* `linesCountBeforeControlStructure`: allows to configure the number of lines before control structure.
 * `linesCountBeforeFirstControlStructure`: allows to configure the number of lines before first control structure.
+* `linesCountAfterControlStructure`: allows to configure the number of lines after control structure.
 * `linesCountAfterLastControlStructure`: allows to configure the number of lines after last control structure.
 * `tokensToCheck`: allows to narrow the list of checked tokens.
 
 For example, with the following setting, only `if` and `switch` tokens are checked.
 
 ```xml
-<rule ref="SlevomatCodingStandard.ControlStructures.ControlStructureSpacing">
+<rule ref="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing">
 	<properties>
 		<property name="tokensToCheck" type="array">
 			<element value="T_IF"/>
 			<element value="T_SWITCH"/>
+		</property>
+	</properties>
+</rule>
+```
+
+#### SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing 🔧
+
+Enforces configurable number of lines around jump statements (continue, return, ...).
+
+Sniff provides the following settings:
+
+* `allowSingleLineYieldStacking`: whether or not to allow multiple yield/yield from statements in a row without blank lines.
+* `linesCountBeforeControlStructure`: allows to configure the number of lines before jump statement.
+* `linesCountBeforeFirstControlStructure`: allows to configure the number of lines before first jump statement.
+* `linesCountAfterControlStructure`: allows to configure the number of lines after jump statement.
+* `linesCountAfterLastControlStructure`: allows to configure the number of lines after last jump statement.
+* `tokensToCheck`: allows to narrow the list of checked tokens.
+
+For example, with the following setting, only `continue` and `break` tokens are checked.
+
+```xml
+<rule ref="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing">
+	<properties>
+		<property name="tokensToCheck" type="array">
+			<element value="T_CONTINUE"/>
+			<element value="T_BREAK"/>
 		</property>
 	</properties>
 </rule>

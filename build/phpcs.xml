@@ -24,6 +24,7 @@
 	<rule ref="SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants"/>
 	<rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference"/>
 	<rule ref="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming">
+		<exclude-pattern>SlevomatCodingStandard/Sniffs/ControlStructures/AbstractControlStructureSpacingSniff.php</exclude-pattern>
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Namespaces/AbstractFullyQualifiedGlobalReference.php</exclude-pattern>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming"/>
