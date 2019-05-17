@@ -293,7 +293,7 @@ class UselessVariableSniff implements Sniff
 		}
 
 		$docCommentContent = TokenHelper::getContent($phpcsFile, $tokens[$pointerBeforeVariable]['comment_opener'], $pointerBeforeVariable);
-		return preg_match('~@var\\s+\\S+\\s+' . preg_quote($tokens[$variablePointer]['content'], '~') . '~', $docCommentContent) !== 0;
+		return preg_match('~@var\\s+.+\\s+' . preg_quote($tokens[$variablePointer]['content'], '~') . '(?:\\s|$)~', $docCommentContent) !== 0;
 	}
 
 	private function hasAnotherAssigmentBefore(File $phpcsFile, int $variablePointer, string $variableName): bool

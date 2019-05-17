@@ -60,6 +60,12 @@ function withDocComment() {
 	return $h;
 }
 
+function withGenericDocComment() {
+	/** @var array<int, string> $hh */
+	$hh = [];
+	return $hh;
+}
+
 function moreAssigments() {
 	$i = 'i';
 	$i .= 'ii';
