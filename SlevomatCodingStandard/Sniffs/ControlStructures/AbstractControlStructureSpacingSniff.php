@@ -91,11 +91,6 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 	/**
 	 * @return int[]
 	 */
-	abstract protected function getDefaultTokensToCheck(): array;
-
-	/**
-	 * @return int[]
-	 */
 	abstract protected function getSupportedTokens(): array;
 
 	/**
@@ -123,7 +118,7 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 			);
 
 			if (count($this->normalizedTokensToCheck) === 0) {
-				$this->normalizedTokensToCheck = $this->getDefaultTokensToCheck();
+				$this->normalizedTokensToCheck = $supportedTokens;
 			}
 		}
 

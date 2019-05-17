@@ -5,7 +5,6 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 use PHP_CodeSniffer\Files\File;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
-use function array_merge;
 use const T_CASE;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_DEFAULT;
@@ -37,7 +36,7 @@ class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacingS
 	/**
 	 * @return int[]
 	 */
-	protected function getDefaultTokensToCheck(): array
+	protected function getSupportedTokens(): array
 	{
 		return [
 			T_IF,
@@ -47,15 +46,9 @@ class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacingS
 			T_FOREACH,
 			T_SWITCH,
 			T_TRY,
+			T_CASE,
+			T_DEFAULT,
 		];
-	}
-
-	/**
-	 * @return int[]
-	 */
-	protected function getSupportedTokens(): array
-	{
-		return array_merge($this->getDefaultTokensToCheck(), [T_CASE, T_DEFAULT]);
 	}
 
 	private function isWhilePartOfDo(File $phpcsFile, int $controlStructurePointer): bool

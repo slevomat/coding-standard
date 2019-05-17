@@ -42,7 +42,7 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacingSniff
 	/**
 	 * @return int[]
 	 */
-	protected function getDefaultTokensToCheck(): array
+	protected function getSupportedTokens(): array
 	{
 		return [
 			T_GOTO,
@@ -53,14 +53,6 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacingSniff
 			T_YIELD,
 			T_YIELD_FROM,
 		];
-	}
-
-	/**
-	 * @return int[]
-	 */
-	protected function getSupportedTokens(): array
-	{
-		return $this->getDefaultTokensToCheck();
 	}
 
 	protected function checkLinesBefore(File $phpcsFile, int $controlStructurePointer): void
