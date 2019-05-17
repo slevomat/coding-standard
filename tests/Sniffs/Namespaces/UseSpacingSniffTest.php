@@ -25,6 +25,46 @@ class UseSpacingSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testDefaultSettingsWithCommentsNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/useSpacingWithDefaultSettingsWithCommentsNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testDefaultSettingsWithCommentsErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/useSpacingWithDefaultSettingsWithCommentsErrors.php');
+
+		self::assertSame(4, $report->getErrorCount());
+
+		self::assertSniffError($report, 7, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_USE);
+		self::assertSniffError($report, 12, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_DIFFERENT_TYPES_OF_USE);
+		self::assertSniffError($report, 18, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_SAME_TYPES_OF_USE);
+		self::assertSniffError($report, 18, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_USE);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testDefaultSettingsWithInlineCommentsNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/useSpacingWithDefaultSettingsWithInlineCommentsNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testDefaultSettingsWithInlineCommentsErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/useSpacingWithDefaultSettingsWithInlineCommentsErrors.php');
+
+		self::assertSame(4, $report->getErrorCount());
+
+		self::assertSniffError($report, 5, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_USE);
+		self::assertSniffError($report, 8, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_DIFFERENT_TYPES_OF_USE);
+		self::assertSniffError($report, 12, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_SAME_TYPES_OF_USE);
+		self::assertSniffError($report, 12, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_USE);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testDefaultSettingsErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/useSpacingWithDefaultSettingsErrors.php');
