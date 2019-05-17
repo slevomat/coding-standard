@@ -6,6 +6,7 @@ use Exception;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use SlevomatCodingStandard\Helpers\CommentHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Sniffs\Namespaces\UndefinedKeywordTokenException;
@@ -141,7 +142,7 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 			if ($tokens[$pointerBeforeComment]['line'] !== $tokens[$pointerBefore]['line']) {
 				$controlStructureStartPointer = array_key_exists('comment_opener', $tokens[$pointerBefore])
 					? $tokens[$pointerBefore]['comment_opener']
-					: $this->getMultilineCommentStartPointer($phpcsFile, $pointerBefore);
+					: CommentHelper::getMultilineCommentStartPointer($phpcsFile, $pointerBefore);
 				/** @var int $pointerBefore */
 				$pointerBefore = TokenHelper::findPreviousEffective($phpcsFile, $pointerBefore - 1);
 			}
@@ -257,27 +258,6 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->endChangeset();
-	}
-
-	private function getMultilineCommentStartPointer(File $phpcsFile, int $commentEndPointer): int
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		$commentStartPointer = $commentEndPointer;
-		do {
-			$commentBefore = TokenHelper::findPrevious($phpcsFile, T_COMMENT, $commentStartPointer - 1);
-			if ($commentBefore === null) {
-				break;
-			}
-			if ($tokens[$commentBefore]['line'] + 1 !== $tokens[$commentStartPointer]['line']) {
-				break;
-			}
-
-			/** @var int $commentStartPointer */
-			$commentStartPointer = $commentBefore;
-		} while (true);
-
-		return $commentStartPointer;
 	}
 
 	private function findControlStructureEnd(File $phpcsFile, int $controlStructurePointer): int
