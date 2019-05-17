@@ -150,7 +150,7 @@ class EmptyCommentSniff implements Sniff
 			return $matches[1];
 		}
 
-		return substr(TokenHelper::getContent($phpcsFile, $commentStartPointer, $commentEndPointer), 2, -2);
+		return (string) substr(TokenHelper::getContent($phpcsFile, $commentStartPointer, $commentEndPointer), 2, -2);
 	}
 
 	private function isPartOfMultiLineInlineComments(File $phpcsFile, int $commentStartPointer, int $commentEndPointer): bool
