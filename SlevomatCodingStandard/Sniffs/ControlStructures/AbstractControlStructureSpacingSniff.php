@@ -144,7 +144,7 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 					? $tokens[$pointerBefore]['comment_opener']
 					: CommentHelper::getMultilineCommentStartPointer($phpcsFile, $pointerBefore);
 				/** @var int $pointerBefore */
-				$pointerBefore = TokenHelper::findPreviousEffective($phpcsFile, $pointerBefore - 1);
+				$pointerBefore = $pointerBeforeComment;
 			}
 		}
 
