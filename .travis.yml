@@ -9,6 +9,10 @@ before_script:
   - if [ "${DEPENDENCIES}" = "lowest" ]; then travis_retry composer update --prefer-lowest --prefer-dist --no-interaction --no-progress; fi;
   - if [ "${DEPENDENCIES}" = "highest" ]; then travis_retry composer update --prefer-dist --no-interaction --no-progress; fi;
 
+matrix:
+  allow_failures:
+    - php: 7.4snapshot
+
 jobs:
   include:
     - stage: Lint
@@ -18,6 +22,11 @@ jobs:
 
     - stage: Lint
       php: 7.3
+      env: DEPENDENCIES=highest
+      script: bin/phing lint
+
+    - stage: Lint
+      php: 7.4snapshot
       env: DEPENDENCIES=highest
       script: bin/phing lint
 
@@ -83,6 +92,16 @@ jobs:
         - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
         - choco install composer --ia "/DEV=C:\tools\php"
         - export PATH=/c/tools/php:$PATH
+      script: bin/phing tests-without-code-coverage
+
+    - stage: Tests
+      php: 7.4snapshot
+      env: DEPENDENCIES=lowest
+      script: bin/phing tests-without-code-coverage
+
+    - stage: Tests
+      php: 7.4snapshot
+      env: DEPENDENCIES=highest
       script: bin/phing tests-without-code-coverage
 
     - stage: Coding standard
