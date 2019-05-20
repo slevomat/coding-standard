@@ -24,6 +24,14 @@ class TypeNameMatchesFileNameSniffTest extends TestCase
 
 		self::assertSame(1, $report->getErrorCount());
 		self::assertSniffError($report, 5, TypeNameMatchesFileNameSniff::CODE_NO_MATCH_BETWEEN_TYPE_NAME_AND_FILE_NAME);
+
+		$report = self::checkFile(__DIR__ . '/data/rootNamespace/MissingNamespace.php', [
+			'rootNamespaces' => ['tests/Sniffs/Files/data/rootNamespace' => 'RootNamespace'],
+			'ignoredNamespaces' => ['IgnoredNamespace'],
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+		self::assertSniffError($report, 3, TypeNameMatchesFileNameSniff::CODE_NO_MATCH_BETWEEN_TYPE_NAME_AND_FILE_NAME);
 	}
 
 	public function testNoError(): void
