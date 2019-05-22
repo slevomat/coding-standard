@@ -1,5 +1,5 @@
-phpnit.xml
 /bin
 /composer.lock
+/phpunit.xml
 /temp
 /vendor
