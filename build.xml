@@ -70,9 +70,7 @@
 			logoutput="true"
 			passthru="true"
 			checkreturn="true"
-		>
-			<arg path="tests"/>
-		</exec>
+		/>
 	</target>
 
 	<target name="tests-without-code-coverage">
@@ -83,7 +81,6 @@
 			checkreturn="true"
 		>
 			<arg line="--no-coverage"/>
-			<arg path="tests"/>
 		</exec>
 	</target>
 
