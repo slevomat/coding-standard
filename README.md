@@ -822,7 +822,7 @@ The recommended way to install Slevomat Coding Standard is [through Composer](ht
 ```JSON
 {
 	"require-dev": {
-		"slevomat/coding-standard": "~4.0"
+		"slevomat/coding-standard": "~5.0"
 	}
 }
 ```
