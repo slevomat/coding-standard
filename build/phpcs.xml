@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="Slevomat Coding Standard">
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Slevomat Coding Standard" xsi:noNamespaceSchemaLocation="../vendor/squizlabs/php_codesniffer/phpcs.xsd">
 	<arg name="extensions" value="php"/>
 	<arg name="tab-width" value="4"/>
 	<arg name="cache" value="./../temp/phpcs"/>
