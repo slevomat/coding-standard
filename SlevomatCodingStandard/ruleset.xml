@@ -1,2 +1,4 @@
 <?xml version="1.0"?>
-<ruleset name="Slevomat Coding Standard"/>
+<ruleset name="Slevomat Coding Standard">
+	<autoload>./../autoload-bootstrap.php</autoload>
+</ruleset>

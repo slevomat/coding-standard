@@ -18,6 +18,10 @@
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword"/>
 	</rule>
 
+	<rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
+		<exclude-pattern>autoload-bootstrap.php</exclude-pattern>
+	</rule>
+
 	<rule ref="Generic.Commenting.Todo"/>
 	<rule ref="Squiz.PHP.CommentedOutCode">
 		<properties>
