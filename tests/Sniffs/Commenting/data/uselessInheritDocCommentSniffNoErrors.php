@@ -59,4 +59,8 @@ class NoErrors
 	{
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
+	protected $propertiesAreNotSupported;
 }
