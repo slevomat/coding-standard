@@ -3,8 +3,6 @@
 
 	<!-- copy of https://github.com/consistence/coding-standard/blob/master/Consistence/ruleset.xml for local checking usage -->
 
-	<config name="installed_paths" value="../../../SlevomatCodingStandard"/><!-- relative path from PHPCS source location -->
-
 	<rule ref="Generic.Arrays.ArrayIndent">
 		<exclude name="Generic.Arrays.ArrayIndent.CloseBraceNotNewLine"/><!-- multiLine items causes evaluation as multiLine array https://github.com/squizlabs/PHP_CodeSniffer/issues/1791 -->
 	</rule>

@@ -2,8 +2,13 @@
 <ruleset name="Slevomat Coding Standard">
 	<arg name="extensions" value="php"/>
 	<arg name="tab-width" value="4"/>
+	<arg name="cache" value="./../temp/phpcs"/>
 	<arg value="s"/>
 	<arg value="p"/>
+
+	<file>./../</file>
+	<exclude-pattern>*/tests/*/data/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
 
 	<rule ref="./phpcs-consistence.xml">
 		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedIf"/><!-- Allow empty if statements - usually with a comment -->

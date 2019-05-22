@@ -41,11 +41,6 @@
 			checkreturn="true"
 		>
 			<arg value="--standard=build/phpcs.xml"/>
-			<arg value="--ignore=*/data/*"/>
-			<arg value="--cache=temp/phpcs"/>
-			<arg path="SlevomatCodingStandard"/>
-			<arg path="build/PHPStan"/>
-			<arg path="tests"/>
 		</exec>
 	</target>
 
@@ -57,10 +52,6 @@
 			checkreturn="true"
 		>
 			<arg value="--standard=build/phpcs.xml"/>
-			<arg value="--ignore=*/data/*"/>
-			<arg path="SlevomatCodingStandard"/>
-			<arg path="build/PHPStan"/>
-			<arg path="tests"/>
 		</exec>
 	</target>
 
