@@ -19,7 +19,6 @@ use function ucfirst;
 use function uksort;
 use const T_CLASS;
 use const T_INTERFACE;
-use const T_NAMESPACE;
 use const T_STRING;
 use const T_TRAIT;
 
@@ -157,12 +156,6 @@ class TypeNameMatchesFileNameSniff implements Sniff
 
 		/** @var int $namePointer */
 		$namePointer = TokenHelper::findNext($phpcsFile, T_STRING, $typePointer + 1);
-
-		$namespacePointer = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $typePointer - 1);
-		if ($namespacePointer === null) {
-			// Skip types without a namespace
-			return;
-		}
 
 		$typeName = NamespaceHelper::normalizeToCanonicalName(ClassHelper::getFullyQualifiedName($phpcsFile, $typePointer));
 

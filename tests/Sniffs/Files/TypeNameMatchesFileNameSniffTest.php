@@ -52,7 +52,12 @@ class TypeNameMatchesFileNameSniffTest extends TestCase
 
 	public function testNoNamespace(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/noNamespace.php'));
+		$report = self::checkFile(__DIR__ . '/data/rootNamespace/noNamespace.php', [
+			'rootNamespaces' => ['tests/Sniffs/Files/data/rootNamespace' => 'RootNamespace'],
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+		self::assertSniffError($report, 3, TypeNameMatchesFileNameSniff::CODE_NO_MATCH_BETWEEN_TYPE_NAME_AND_FILE_NAME);
 	}
 
 	public function testRootNamespacesNormalization(): void
