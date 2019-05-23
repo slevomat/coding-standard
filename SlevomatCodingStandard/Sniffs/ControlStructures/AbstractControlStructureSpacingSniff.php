@@ -36,6 +36,7 @@ use const T_FOR;
 use const T_FOREACH;
 use const T_IF;
 use const T_OPEN_CURLY_BRACKET;
+use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_OPEN_TAG;
 use const T_SEMICOLON;
@@ -329,13 +330,17 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 			return TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $pointerAfterControlStructureEnd - 1);
 		}
 
-		$nextPointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_ANON_CLASS, T_CLOSURE, T_OPEN_SHORT_ARRAY], $controlStructurePointer + 1);
+		$nextPointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_ANON_CLASS, T_CLOSURE, T_OPEN_SHORT_ARRAY, T_OPEN_PARENTHESIS], $controlStructurePointer + 1);
 		if ($tokens[$nextPointer]['code'] === T_SEMICOLON) {
 			return $nextPointer;
 		}
 
 		if ($tokens[$nextPointer]['code'] === T_OPEN_SHORT_ARRAY) {
 			return (int) TokenHelper::findNext($phpcsFile, T_SEMICOLON, $tokens[$nextPointer]['bracket_closer'] + 1);
+		}
+
+		if ($tokens[$nextPointer]['code'] === T_OPEN_PARENTHESIS) {
+			return (int) TokenHelper::findNext($phpcsFile, T_SEMICOLON, $tokens[$nextPointer]['parenthesis_closer'] + 1);
 		}
 
 		return (int) TokenHelper::findNext($phpcsFile, T_SEMICOLON, $tokens[$nextPointer]['scope_closer'] + 1);

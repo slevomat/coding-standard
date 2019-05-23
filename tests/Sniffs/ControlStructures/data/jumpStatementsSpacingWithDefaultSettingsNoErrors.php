@@ -116,3 +116,15 @@ function () {
 
     return 10;
 };
+
+function () {
+    return Something::something(
+        ['foo' => 'bar'],
+        function () {
+            $a = 1;
+            $b = 2;
+
+            return $a + $b;
+        }
+    );
+};
