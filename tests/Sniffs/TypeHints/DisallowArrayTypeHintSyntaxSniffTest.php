@@ -21,7 +21,7 @@ class DisallowArrayTypeHintSyntaxSniffTest extends TestCase
 			],
 		]);
 
-		self::assertSame(22, $report->getErrorCount());
+		self::assertSame(23, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, DisallowArrayTypeHintSyntaxSniff::CODE_DISALLOWED_ARRAY_TYPE_HINT_SYNTAX, 'Usage of array type hint syntax in "\DateTimeImmutable[]" is disallowed, use generic type hint syntax instead.');
 		self::assertSniffError($report, 7, DisallowArrayTypeHintSyntaxSniff::CODE_DISALLOWED_ARRAY_TYPE_HINT_SYNTAX, 'Usage of array type hint syntax in "bool[]" is disallowed, use generic type hint syntax instead.');
@@ -45,6 +45,7 @@ class DisallowArrayTypeHintSyntaxSniffTest extends TestCase
 		self::assertSniffError($report, 55, DisallowArrayTypeHintSyntaxSniff::CODE_DISALLOWED_ARRAY_TYPE_HINT_SYNTAX, 'Usage of array type hint syntax in "string[][]" is disallowed, use generic type hint syntax instead.');
 		self::assertSniffError($report, 60, DisallowArrayTypeHintSyntaxSniff::CODE_DISALLOWED_ARRAY_TYPE_HINT_SYNTAX, 'Usage of array type hint syntax in "string[][]" is disallowed, use generic type hint syntax instead.');
 		self::assertSniffError($report, 65, DisallowArrayTypeHintSyntaxSniff::CODE_DISALLOWED_ARRAY_TYPE_HINT_SYNTAX, 'Usage of array type hint syntax in "string[][]" is disallowed, use generic type hint syntax instead.');
+		self::assertSniffError($report, 70, DisallowArrayTypeHintSyntaxSniff::CODE_DISALLOWED_ARRAY_TYPE_HINT_SYNTAX, 'Usage of array type hint syntax in "int[]" is disallowed, use generic type hint syntax instead.');
 
 		self::assertAllFixedInFile($report);
 	}

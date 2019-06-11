@@ -526,3 +526,24 @@ class CallableType
 	}
 
 }
+
+class ArrayShapes
+{
+
+	/**
+	 * @return array{array}
+	 */
+	public function returnArrayShape(): array
+	{
+
+	}
+
+	/**
+	 * @param array{foo: iterable} $parameter
+	 */
+	public function arrayShapeParameter(array $parameter): void
+	{
+
+	}
+
+}

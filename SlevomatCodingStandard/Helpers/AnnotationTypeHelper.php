@@ -2,10 +2,13 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeParameterNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
@@ -29,6 +32,18 @@ class AnnotationTypeHelper
 	{
 		if ($typeNode instanceof ArrayTypeNode) {
 			return self::getIdentifierTypeNodes($typeNode->type);
+		}
+
+		if ($typeNode instanceof ArrayShapeNode) {
+			$identifierTypeNodes = [];
+			foreach ($typeNode->items as $arrayShapeItemNode) {
+				if ($arrayShapeItemNode->keyName instanceof IdentifierTypeNode) {
+					$identifierTypeNodes[] = $arrayShapeItemNode->keyName;
+				}
+
+				$identifierTypeNodes = array_merge($identifierTypeNodes, self::getIdentifierTypeNodes($arrayShapeItemNode->valueType));
+			}
+			return $identifierTypeNodes;
 		}
 
 		if (
@@ -85,6 +100,14 @@ class AnnotationTypeHelper
 			return self::getUnionTypeNodes($typeNode->type);
 		}
 
+		if ($typeNode instanceof ArrayShapeNode) {
+			$unionTypeNodes = [];
+			foreach ($typeNode->items as $arrayShapeItemNode) {
+				$unionTypeNodes = array_merge($unionTypeNodes, self::getUnionTypeNodes($arrayShapeItemNode->valueType));
+			}
+			return $unionTypeNodes;
+		}
+
 		if ($typeNode instanceof IntersectionTypeNode) {
 			$unionTypeNodes = [];
 			foreach ($typeNode->types as $innerTypeNode) {
@@ -120,6 +143,14 @@ class AnnotationTypeHelper
 	{
 		if ($typeNode instanceof ArrayTypeNode) {
 			return array_merge([$typeNode], self::getArrayTypeNodes($typeNode->type));
+		}
+
+		if ($typeNode instanceof ArrayShapeNode) {
+			$arrayTypeNodes = [];
+			foreach ($typeNode->items as $arrayShapeItemNode) {
+				$arrayTypeNodes = array_merge($arrayTypeNodes, self::getArrayTypeNodes($arrayShapeItemNode->valueType));
+			}
+			return $arrayTypeNodes;
 		}
 
 		if ($typeNode instanceof NullableTypeNode) {
@@ -218,6 +249,24 @@ class AnnotationTypeHelper
 
 		if ($masterTypeNode instanceof ArrayTypeNode) {
 			return new ArrayTypeNode(self::change($masterTypeNode->type, $typeNodeToChange, $changedTypeNode));
+		}
+
+		if ($masterTypeNode instanceof ArrayShapeNode) {
+			$arrayShapeItemNodes = [];
+			foreach ($masterTypeNode->items as $arrayShapeItemNode) {
+				$arrayShapeItemNodes[] = self::change($arrayShapeItemNode, $typeNodeToChange, $changedTypeNode);
+			}
+
+			return new ArrayShapeNode($arrayShapeItemNodes);
+		}
+
+		if ($masterTypeNode instanceof ArrayShapeItemNode) {
+			/** @var \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|null $keyName */
+			$keyName = $masterTypeNode->keyName instanceof IdentifierTypeNode
+				? self::change($masterTypeNode->keyName, $typeNodeToChange, $changedTypeNode)
+				: $masterTypeNode->keyName;
+
+			return new ArrayShapeItemNode($keyName, $masterTypeNode->optional, self::change($masterTypeNode->valueType, $typeNodeToChange, $changedTypeNode));
 		}
 
 		if ($masterTypeNode instanceof NullableTypeNode) {

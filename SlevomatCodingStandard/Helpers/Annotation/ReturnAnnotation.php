@@ -64,7 +64,7 @@ class ReturnAnnotation extends Annotation
 	}
 
 	/**
-	 * @return \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\CallableTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode|\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode
+	 * @return \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\CallableTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode|\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode
 	 */
 	public function getType(): TypeNode
 	{
@@ -72,7 +72,7 @@ class ReturnAnnotation extends Annotation
 			throw new LogicException(sprintf('Invalid %s annotation.', $this->name));
 		}
 
-		/** @var \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\CallableTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode|\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $type */
+		/** @var \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\CallableTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode|\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $type */
 		$type = $this->contentNode->type;
 		return $type;
 	}

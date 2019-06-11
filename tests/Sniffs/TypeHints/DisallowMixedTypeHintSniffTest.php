@@ -16,7 +16,7 @@ class DisallowMixedTypeHintSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/disallowMixedTypeHintErrors.php');
 
-		self::assertSame(12, $report->getErrorCount());
+		self::assertSame(14, $report->getErrorCount());
 
 		self::assertSniffError($report, 4, DisallowMixedTypeHintSniff::CODE_DISALLOWED_MIXED_TYPE_HINT);
 		self::assertSniffError($report, 9, DisallowMixedTypeHintSniff::CODE_DISALLOWED_MIXED_TYPE_HINT);
@@ -28,6 +28,8 @@ class DisallowMixedTypeHintSniffTest extends TestCase
 		self::assertSniffError($report, 27, DisallowMixedTypeHintSniff::CODE_DISALLOWED_MIXED_TYPE_HINT);
 		self::assertSniffError($report, 30, DisallowMixedTypeHintSniff::CODE_DISALLOWED_MIXED_TYPE_HINT);
 		self::assertSniffError($report, 39, DisallowMixedTypeHintSniff::CODE_DISALLOWED_MIXED_TYPE_HINT);
+		self::assertSniffError($report, 48, DisallowMixedTypeHintSniff::CODE_DISALLOWED_MIXED_TYPE_HINT);
+		self::assertSniffError($report, 51, DisallowMixedTypeHintSniff::CODE_DISALLOWED_MIXED_TYPE_HINT);
 	}
 
 }

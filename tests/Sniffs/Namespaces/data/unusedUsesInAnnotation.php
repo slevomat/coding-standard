@@ -59,6 +59,8 @@ use Iag13;
 use Iag14;
 use Callable1;
 use Callable2;
+use ArrayShape1;
+use ArrayShape2;
 
 /**
  * @ORM\Entity()
@@ -218,3 +220,9 @@ class CallableType
 	}
 
 }
+
+/** @var array{int, ArrayShape1} $arrayShape1 */
+$arrayShape1 = [];
+
+/** @var array{ArrayShape2: int} $arrayShape2 */
+$arrayShape2 = [];

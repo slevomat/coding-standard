@@ -67,4 +67,9 @@ class Whatever
 	{
 	}
 
+	/** @param array{int, int[]} $r */
+	public function r($r)
+	{
+	}
+
 }

@@ -435,3 +435,24 @@ class CallableType
 	}
 
 }
+
+class ArrayShapes
+{
+
+	/**
+	 * @return array{int, int}: void
+	 */
+	public function returnsArrayShape(): array
+	{
+
+	}
+
+	/**
+	 * @return (array{int, int})[]|\Traversable
+	 */
+	public function returnsTraversableArrayShape(): \Traversable
+	{
+
+	}
+
+}

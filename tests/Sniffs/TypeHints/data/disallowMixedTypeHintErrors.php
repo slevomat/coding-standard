@@ -44,3 +44,9 @@ class CallableType
 	}
 
 }
+
+/** @var array{int, mixed} $arrayShape1 */
+$arrayShape1 = [];
+
+/** @var array{foo: mixed} $arrayShape2 */
+$arrayShape2 = [];

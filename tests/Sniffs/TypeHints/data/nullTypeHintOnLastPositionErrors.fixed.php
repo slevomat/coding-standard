@@ -97,3 +97,9 @@ class CallableType
 	}
 
 }
+
+/** @var array{int, (int|null), (bool|null)} $arrayShape1 */
+$arrayShape1 = [];
+
+/** @var array{foo: (int|null)} $arrayShape2 */
+$arrayShape2 = [];

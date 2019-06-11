@@ -145,3 +145,9 @@ class CallableType
 	}
 
 }
+
+/** @var array{int, Iterator} $arrayShape1 */
+$arrayShape1 = [];
+
+/** @var array{Iterator: int} $arrayShape2 */
+$arrayShape2 = [];

@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
@@ -210,9 +211,11 @@ class TypeHintDeclarationSniff implements Sniff
 			}
 
 			if ($annotationContainsOneType) {
-				/** @var \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode $parameterTypeNode */
+				/** @var \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode $parameterTypeNode */
 				$parameterTypeNode = $parameterTypeNode;
-				$possibleParameterTypeHint = $parameterTypeNode instanceof ArrayTypeNode ? 'array' : $this->getTypeHintFromOneType($parameterTypeNode);
+				$possibleParameterTypeHint = $parameterTypeNode instanceof ArrayTypeNode || $parameterTypeNode instanceof ArrayShapeNode
+					? 'array'
+					: $this->getTypeHintFromOneType($parameterTypeNode);
 				$nullableParameterTypeHint = false;
 
 			} else {
@@ -227,9 +230,11 @@ class TypeHintDeclarationSniff implements Sniff
 				}
 
 				if ($this->annotationTypeContainsNullType($parameterTypeNode)) {
-					/** @var \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode $notNullTypeHintNode */
+					/** @var \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode $notNullTypeHintNode */
 					$notNullTypeHintNode = $this->getTypeFromNullableType($parameterTypeNode);
-					$possibleParameterTypeHint = $notNullTypeHintNode instanceof ArrayTypeNode ? 'array' : $this->getTypeHintFromOneType($notNullTypeHintNode);
+					$possibleParameterTypeHint = $notNullTypeHintNode instanceof ArrayTypeNode || $notNullTypeHintNode instanceof ArrayShapeNode
+						? 'array'
+						: $this->getTypeHintFromOneType($notNullTypeHintNode);
 					$nullableParameterTypeHint = true;
 				} else {
 
@@ -439,9 +444,11 @@ class TypeHintDeclarationSniff implements Sniff
 		}
 
 		if ($annotationContainsOneType) {
-			/** @var \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $returnTypeNode */
+			/** @var \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $returnTypeNode */
 			$returnTypeNode = $returnTypeNode;
-			$possibleReturnTypeHint = $returnTypeNode instanceof ArrayTypeNode ? 'array' : $this->getTypeHintFromOneType($returnTypeNode);
+			$possibleReturnTypeHint = $returnTypeNode instanceof ArrayTypeNode || $returnTypeNode instanceof ArrayShapeNode
+				? 'array'
+				: $this->getTypeHintFromOneType($returnTypeNode);
 			$nullableReturnTypeHint = false;
 
 		} else {
@@ -456,9 +463,11 @@ class TypeHintDeclarationSniff implements Sniff
 			}
 
 			if ($this->annotationTypeContainsNullType($returnTypeNode)) {
-				/** @var \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode $notNullTypeHintNode */
+				/** @var \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode $notNullTypeHintNode */
 				$notNullTypeHintNode = $this->getTypeFromNullableType($returnTypeNode);
-				$possibleReturnTypeHint = $notNullTypeHintNode instanceof ArrayTypeNode ? 'array' : $this->getTypeHintFromOneType($notNullTypeHintNode);
+				$possibleReturnTypeHint = $notNullTypeHintNode instanceof ArrayTypeNode || $notNullTypeHintNode instanceof ArrayShapeNode
+					? 'array'
+					: $this->getTypeHintFromOneType($notNullTypeHintNode);
 				$nullableReturnTypeHint = true;
 			} else {
 				$itemsSpecificationTypeHint = $this->getItemsSpecificationTypeFromType($returnTypeNode);
@@ -859,6 +868,10 @@ class TypeHintDeclarationSniff implements Sniff
 			return true;
 		}
 
+		if ($typeNode instanceof ArrayShapeNode) {
+			return true;
+		}
+
 		return $typeNode instanceof ArrayTypeNode;
 	}
 
@@ -891,6 +904,10 @@ class TypeHintDeclarationSniff implements Sniff
 			return true;
 		}
 
+		if ($typeNode instanceof ArrayShapeNode) {
+			return true;
+		}
+
 		if ($typeNode instanceof ArrayTypeNode) {
 			return true;
 		}
@@ -919,6 +936,16 @@ class TypeHintDeclarationSniff implements Sniff
 		if ($typeNode instanceof GenericTypeNode) {
 			foreach ($typeNode->genericTypes as $genericType) {
 				if (!$this->annotationContainsItemsSpecificationForTraversable($phpcsFile, $pointer, $genericType, true)) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		if ($typeNode instanceof ArrayShapeNode) {
+			foreach ($typeNode->items as $arrayShapeItemNode) {
+				if (!$this->annotationContainsItemsSpecificationForTraversable($phpcsFile, $pointer, $arrayShapeItemNode->valueType, true)) {
 					return false;
 				}
 			}

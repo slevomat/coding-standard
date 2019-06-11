@@ -117,3 +117,9 @@ class CallableType
 function multilineDescription() {
 
 }
+
+/** @var array{int, bool} $arrayShape1 */
+$arrayShape1 = [];
+
+/** @var array{foo: int, bar: bool} $arrayShape2 */
+$arrayShape2 = [];

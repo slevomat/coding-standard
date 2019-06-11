@@ -819,3 +819,24 @@ class CallableType
 	}
 
 }
+
+class ArrayShapes
+{
+
+	/**
+	 * @return array{int, int}
+	 */
+	public function returnArrayShape(): array
+	{
+
+	}
+
+	/**
+	 * @param array{foo: int} $parameter
+	 */
+	public function arrayShapeParameter(array $parameter): void
+	{
+
+	}
+
+}

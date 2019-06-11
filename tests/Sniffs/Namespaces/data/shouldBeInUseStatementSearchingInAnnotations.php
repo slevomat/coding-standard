@@ -109,3 +109,9 @@ class CallableType
 	}
 
 }
+
+/** @var array{int, \Foo\DateTime} $arrayShape1 */
+$arrayShape1 = [];
+
+/** @var array{\Foo\DateTime: int} $arrayShape2 */
+$arrayShape2 = [];

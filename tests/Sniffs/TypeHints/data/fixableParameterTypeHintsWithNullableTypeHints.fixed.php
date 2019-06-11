@@ -434,3 +434,24 @@ class CallableType
 	}
 
 }
+
+class ArrayShapes
+{
+
+	/**
+	 * @param array{foo: iterable}|null $parameter
+	 */
+	public function arrayShapeParameter(?array $parameter): void
+	{
+
+	}
+
+	/**
+	 * @param array<array{foo: iterable}> $parameter
+	 */
+	public function traversableArrayShapeParameter(array $parameter): void
+	{
+
+	}
+
+}

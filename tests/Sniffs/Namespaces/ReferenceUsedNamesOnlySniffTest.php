@@ -882,7 +882,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			]
 		);
 
-		self::assertSame(25, $report->getErrorCount());
+		self::assertSame(27, $report->getErrorCount());
 
 		self::assertSniffError($report, 8, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.');
 		self::assertSniffError($report, 9, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.');
@@ -911,6 +911,9 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 		self::assertSniffError($report, 104, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\ArrayObject should not be referenced via a fully qualified name, but via a use statement.');
 		self::assertSniffError($report, 104, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.');
+
+		self::assertSniffError($report, 113, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.');
+		self::assertSniffError($report, 116, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.');
 
 		self::assertAllFixedInFile($report);
 	}
