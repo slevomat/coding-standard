@@ -57,6 +57,7 @@ class UselessSemicolonSniff implements Sniff
 		if (
 			$possibleEndScopePointer !== null
 			&& $tokens[$possibleEndScopePointer]['parenthesis_opener'] < $semicolonPointer
+			&& array_key_exists('parenthesis_owner', $tokens[$possibleEndScopePointer])
 			&& $tokens[$tokens[$possibleEndScopePointer]['parenthesis_owner']]['code'] === T_FOR
 		) {
 			return;
