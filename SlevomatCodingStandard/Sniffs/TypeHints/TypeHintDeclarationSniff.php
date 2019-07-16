@@ -961,6 +961,10 @@ class TypeHintDeclarationSniff implements Sniff
 			return !$this->isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeNode->name));
 		}
 
+		if ($typeNode instanceof CallableTypeNode) {
+			return $inTraversable;
+		}
+
 		if ($typeNode instanceof ArrayTypeNode) {
 			return $this->annotationContainsItemsSpecificationForTraversable($phpcsFile, $pointer, $typeNode->type, true);
 		}

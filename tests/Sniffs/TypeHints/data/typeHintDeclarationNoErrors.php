@@ -818,6 +818,22 @@ class CallableType
 
 	}
 
+	/**
+	 * @return array<string, callable(mixed $value) : string>
+	 */
+	public function returnsCallableArray(): array
+	{
+
+	}
+
+	/**
+	 * @param array<string, callable(mixed $value) : string> $parameter
+	 */
+	public function callableArrayParameter(array $parameter): void
+	{
+
+	}
+
 }
 
 class ArrayShapes
