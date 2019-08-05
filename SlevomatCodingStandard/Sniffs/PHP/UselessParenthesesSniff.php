@@ -48,6 +48,7 @@ use const T_POW;
 use const T_REQUIRE;
 use const T_REQUIRE_ONCE;
 use const T_SELF;
+use const T_SEMICOLON;
 use const T_STATIC;
 use const T_STRING;
 use const T_STRING_CAST;
@@ -430,6 +431,11 @@ class UselessParenthesesSniff implements Sniff
 
 		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
 		if ($tokens[$pointerBeforeParenthesisOpener]['code'] !== T_EQUAL) {
+			return;
+		}
+
+		$pointerAfterParenthesisCloser = TokenHelper::findNextEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1);
+		if ($tokens[$pointerAfterParenthesisCloser]['code'] !== T_SEMICOLON) {
 			return;
 		}
 

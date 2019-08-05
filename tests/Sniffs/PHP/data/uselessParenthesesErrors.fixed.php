@@ -52,5 +52,6 @@ function () {
 
 $x = $x + 1;
 
-$x = $y + $yy - $z;
-$x = $y * $yy / $z;
+$x = ($y + $yy) - $z;
+$x = ($y * $yy) / $z;
+$x = ($y - $yy) ** $z;
