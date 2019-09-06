@@ -18,3 +18,8 @@ function c($c = true, $cc, ...$ccc)
 {
 
 }
+
+function d($c = true, $cc = TRUE, ...$ccc)
+{
+
+}

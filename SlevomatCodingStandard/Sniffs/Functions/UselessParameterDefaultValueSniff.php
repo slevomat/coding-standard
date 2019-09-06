@@ -9,6 +9,7 @@ use function array_key_exists;
 use function count;
 use function sprintf;
 use function strtolower;
+use function substr;
 use const T_CLOSURE;
 use const T_COMMA;
 use const T_FUNCTION;
@@ -58,7 +59,7 @@ class UselessParameterDefaultValueSniff implements Sniff
 			for ($j = $i + 1; $j < $parametersCount; $j++) {
 				$nextParameter = $parameters[$j];
 
-				if (array_key_exists('default', $nextParameter)) {
+				if (array_key_exists('default', $nextParameter) || substr($nextParameter['content'], 0, 3) === '...') {
 					continue;
 				}
 
