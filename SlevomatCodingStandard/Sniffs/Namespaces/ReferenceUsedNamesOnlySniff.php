@@ -216,28 +216,6 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 			}
 		}
 
-		if ($this->allowFullyQualifiedNameForCollidingFunctions) {
-			$functionReferences = array_filter($references, function (stdClass $reference): bool {
-				return $reference->source === self::SOURCE_CODE && $reference->isFunction;
-			});
-
-			$functionReferencesIndex = [];
-			foreach ($functionReferences as $functionReference) {
-				$functionReferencesIndex[strtolower($functionReference->name)] = NamespaceHelper::resolveName($phpcsFile, $functionReference->name, $functionReference->type, $functionReference->startPointer);
-			}
-		}
-
-		if ($this->allowFullyQualifiedNameForCollidingConstants) {
-			$constantReferences = array_filter($references, function (stdClass $reference): bool {
-				return $reference->source === self::SOURCE_CODE && $reference->isConstant;
-			});
-
-			$constantReferencesIndex = [];
-			foreach ($constantReferences as $constantReference) {
-				$constantReferencesIndex[$constantReference->name] = NamespaceHelper::resolveName($phpcsFile, $constantReference->name, $constantReference->type, $constantReference->startPointer);
-			}
-		}
-
 		foreach ($references as $reference) {
 			$useStatements = UseStatementHelper::getUseStatementsForPointer($phpcsFile, $reference->startPointer);
 
