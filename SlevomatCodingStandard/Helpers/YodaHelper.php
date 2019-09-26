@@ -11,11 +11,11 @@ use function array_map;
 use function array_reverse;
 use function array_values;
 use function count;
-use function current;
 use function end;
 use function implode;
 use function in_array;
 use function key;
+use function reset;
 use const T_ARRAY;
 use const T_ARRAY_CAST;
 use const T_BOOL_CAST;
@@ -88,7 +88,7 @@ class YodaHelper
 	 */
 	private static function replace(File $phpcsFile, array $oldTokens, array $newTokens): void
 	{
-		current($oldTokens);
+		reset($oldTokens);
 		/** @var int $firstOldPointer */
 		$firstOldPointer = key($oldTokens);
 		end($oldTokens);
