@@ -77,9 +77,11 @@ class AnnotationTypeHelper
 			return $identifierTypeNodes;
 		}
 
-		/** @var \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $typeNode */
-		$typeNode = $typeNode;
-		return [$typeNode];
+		if ($typeNode instanceof IdentifierTypeNode || $typeNode instanceof ThisTypeNode) {
+			return [$typeNode];
+		}
+
+		return [];
 	}
 
 	/**
