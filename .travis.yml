@@ -9,10 +9,6 @@ before_script:
   - if [ "${DEPENDENCIES}" = "lowest" ]; then travis_retry composer update --prefer-lowest --prefer-dist --no-interaction --no-progress; fi;
   - if [ "${DEPENDENCIES}" = "highest" ]; then travis_retry composer update --prefer-dist --no-interaction --no-progress; fi;
 
-matrix:
-  allow_failures:
-    - php: 7.4snapshot
-
 jobs:
   include:
     - stage: Lint
