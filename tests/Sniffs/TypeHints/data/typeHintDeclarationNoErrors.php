@@ -699,6 +699,11 @@ abstract class FooClass
 
 }
 
+
+function (): bool {
+	throw new \Exception();
+};
+
 class IntersectionAndGeneric
 {
 

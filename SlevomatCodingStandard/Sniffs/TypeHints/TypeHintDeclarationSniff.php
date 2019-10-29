@@ -516,7 +516,12 @@ class TypeHintDeclarationSniff implements Sniff
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $closurePointer);
 		$returnsValue = FunctionHelper::returnsValue($phpcsFile, $closurePointer);
 
-		if (!$returnsValue && $returnTypeHint !== null && $returnTypeHint->getTypeHint() !== 'void') {
+		if (
+			!$returnsValue
+			&& $returnTypeHint !== null
+			&& $returnTypeHint->getTypeHint() !== 'void'
+			&& !FunctionHelper::throwsOnlyException($phpcsFile, $closurePointer)
+		) {
 			$fix = $phpcsFile->addFixableError(
 				'Closure has incorrect return type hint.',
 				$closurePointer,

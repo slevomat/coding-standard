@@ -28,6 +28,7 @@ use const T_NULLABLE;
 use const T_RETURN;
 use const T_SEMICOLON;
 use const T_STRING;
+use const T_THROW;
 use const T_TRAIT;
 use const T_VARIABLE;
 use const T_YIELD;
@@ -213,6 +214,15 @@ class FunctionHelper
 		}
 
 		return false;
+	}
+
+	public static function throwsOnlyException(File $phpcsFile, int $functionPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$firstPointerInScope = TokenHelper::findNextEffective($phpcsFile, $tokens[$functionPointer]['scope_opener'] + 1);
+
+		return $tokens[$firstPointerInScope]['code'] === T_THROW;
 	}
 
 	public static function findReturnTypeHint(File $phpcsFile, int $functionPointer): ?ReturnTypeHint
