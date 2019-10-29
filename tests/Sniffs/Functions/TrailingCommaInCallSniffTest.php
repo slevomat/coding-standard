@@ -17,7 +17,7 @@ class TrailingCommaInCallSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/trailingCommaInCallErrors.php');
 
-		self::assertSame(11, $report->getErrorCount());
+		self::assertSame(14, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, TrailingCommaInCallSniff::CODE_MISSING_TRAILING_COMMA);
 		self::assertSniffError($report, 12, TrailingCommaInCallSniff::CODE_MISSING_TRAILING_COMMA);
@@ -30,6 +30,9 @@ class TrailingCommaInCallSniffTest extends TestCase
 		self::assertSniffError($report, 57, TrailingCommaInCallSniff::CODE_MISSING_TRAILING_COMMA);
 		self::assertSniffError($report, 62, TrailingCommaInCallSniff::CODE_MISSING_TRAILING_COMMA);
 		self::assertSniffError($report, 65, TrailingCommaInCallSniff::CODE_MISSING_TRAILING_COMMA);
+		self::assertSniffError($report, 75, TrailingCommaInCallSniff::CODE_MISSING_TRAILING_COMMA);
+		self::assertSniffError($report, 83, TrailingCommaInCallSniff::CODE_MISSING_TRAILING_COMMA);
+		self::assertSniffError($report, 91, TrailingCommaInCallSniff::CODE_MISSING_TRAILING_COMMA);
 
 		self::assertAllFixedInFile($report);
 	}

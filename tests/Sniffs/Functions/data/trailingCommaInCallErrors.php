@@ -64,3 +64,32 @@ doSomething(
 	3,
 	4
 );
+
+class SelfStaticParent extends Whatever
+{
+
+	public static function createSelf($a, $b)
+	{
+		return new self(
+			$a,
+			$b
+		);
+	}
+
+	public static function createStatic($a, $b)
+	{
+		return new static(
+			$a,
+			$b
+		);
+	}
+
+	public static function createParent($a, $b)
+	{
+		return new parent(
+			$a,
+			$b
+		);
+	}
+
+}
