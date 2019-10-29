@@ -143,6 +143,15 @@ class NamespaceSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testInvalidFileCommentBeforeNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/namespaceSpacingInvalidFileCommentBeforeNoErrors.php', [
+			'linesCountBeforeNamespace' => 1,
+		]);
+
+		self::assertNoSniffErrorInFile($report);
+	}
+
 	public function testInvalidFileCommentBefore(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/namespaceSpacingInvalidFileCommentBefore.php', [
