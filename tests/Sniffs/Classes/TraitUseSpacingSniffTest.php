@@ -120,4 +120,20 @@ class TraitUseSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testModifiedSettingWhenUseIsLastInClass2Errors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/traitUseSpacingModifiedSettingsWhenUseIsLastInClass2Errors.php', [
+			'linesCountBeforeFirstUse' => 0,
+			'linesCountBetweenUses' => 0,
+			'linesCountAfterLastUse' => 1,
+			'linesCountAfterLastUseWhenLastInClass' => 0,
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 11, TraitUseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_USE);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
