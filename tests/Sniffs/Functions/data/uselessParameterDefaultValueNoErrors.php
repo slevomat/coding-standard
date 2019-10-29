@@ -29,3 +29,8 @@ function e($e = true, ...$ee)
 {
 
 }
+
+function f($f = true, $ff = true, ...$fff)
+{
+
+}
