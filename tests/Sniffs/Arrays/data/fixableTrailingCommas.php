@@ -37,3 +37,21 @@
 	//
 	3
 ];
+
+[
+    <<<'EOF'
+anything
+EOF
+];
+
+[
+    <<<"EOF"
+anything
+EOF
+];
+
+[
+    <<<'EOF'
+anything
+EOF
+];
