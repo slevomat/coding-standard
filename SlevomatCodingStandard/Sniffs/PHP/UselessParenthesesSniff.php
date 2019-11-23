@@ -24,6 +24,7 @@ use const T_COALESCE;
 use const T_COLON;
 use const T_CONSTANT_ENCAPSED_STRING;
 use const T_DIVIDE;
+use const T_DNUMBER;
 use const T_DOLLAR;
 use const T_DOUBLE_CAST;
 use const T_EMPTY;
@@ -36,6 +37,7 @@ use const T_INLINE_THEN;
 use const T_INT_CAST;
 use const T_ISSET;
 use const T_LIST;
+use const T_LNUMBER;
 use const T_MINUS;
 use const T_MODULUS;
 use const T_MULTIPLY;
@@ -379,7 +381,17 @@ class UselessParenthesesSniff implements Sniff
 		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
 		$pointerAfterParenthesisCloser = TokenHelper::findNextEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1);
 
-		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], Tokens::$booleanOperators, true)) {
+		if ($tokens[$pointerBeforeParenthesisOpener]['code'] === T_MINUS) {
+			$pointerBeforeMinus = TokenHelper::findPreviousEffective($phpcsFile, $pointerBeforeParenthesisOpener - 1);
+			if (!in_array($tokens[$pointerBeforeMinus]['code'], [T_DNUMBER, T_LNUMBER], true)) {
+				return;
+			}
+		}
+
+		if (
+			in_array($tokens[$pointerBeforeParenthesisOpener]['code'], Tokens::$booleanOperators, true)
+			|| in_array($tokens[$pointerAfterParenthesisCloser]['code'], Tokens::$booleanOperators, true)
+		) {
 			return;
 		}
 
@@ -388,7 +400,7 @@ class UselessParenthesesSniff implements Sniff
 		while (true) {
 			$pointer = TokenHelper::findNext(
 				$phpcsFile,
-				array_merge(self::OPERATORS, [T_OPEN_PARENTHESIS, T_INLINE_THEN, T_COALESCE]),
+				array_merge(self::OPERATORS, [T_OPEN_PARENTHESIS, T_INLINE_THEN, T_COALESCE], Tokens::$comparisonTokens),
 				$actualStartPointer,
 				$tokens[$parenthesisOpenerPointer]['parenthesis_closer']
 			);
@@ -398,6 +410,10 @@ class UselessParenthesesSniff implements Sniff
 			}
 
 			if (in_array($tokens[$pointer]['code'], [T_INLINE_THEN, T_COALESCE], true)) {
+				return;
+			}
+
+			if (in_array($tokens[$pointer]['code'], Tokens::$comparisonTokens, true)) {
 				return;
 			}
 

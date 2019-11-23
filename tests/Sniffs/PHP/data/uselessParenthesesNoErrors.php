@@ -123,6 +123,11 @@ if ($hit === true || (is_array($hit) && count(array_filter($hit)) >= count($keys
 
 $hitRatio = (int) round($hitCount / ($loadCount / 100 ?: 1), 1);
 
+pow(10, -($x + 1));
+
+if (! ($i === $j - 1)) {
+}
+
 // Must be last
 return true
     ? 100
