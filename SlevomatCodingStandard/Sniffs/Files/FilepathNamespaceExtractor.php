@@ -44,7 +44,7 @@ class FilepathNamespaceExtractor
 	{
 		$this->rootNamespaces = $rootNamespaces;
 		$this->skipDirs = array_fill_keys($skipDirs, true);
-		$this->extensions = array_map(function (string $extension): string {
+		$this->extensions = array_map(static function (string $extension): string {
 			return strtolower($extension);
 		}, $extensions);
 	}

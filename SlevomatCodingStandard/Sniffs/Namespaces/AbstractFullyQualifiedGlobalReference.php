@@ -100,7 +100,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 			$exclude = SniffSettingsHelper::normalizeArray($this->exclude);
 
 			if (!$this->isCaseSensitive()) {
-				$exclude = array_map(function (string $name): string {
+				$exclude = array_map(static function (string $name): string {
 					return strtolower($name);
 				}, $exclude);
 			}

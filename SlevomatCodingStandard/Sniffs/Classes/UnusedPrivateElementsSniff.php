@@ -148,7 +148,7 @@ class UnusedPrivateElementsSniff implements Sniff
 		$writeOnlyProperties = [];
 		$findUsagesStartTokenPointer = $classToken['scope_opener'] + 1;
 
-		$isCurrentClass = function (int $referencedNamePointer) use ($phpcsFile, $tokens, $className): bool {
+		$isCurrentClass = static function (int $referencedNamePointer) use ($phpcsFile, $tokens, $className): bool {
 			if (in_array($tokens[$referencedNamePointer]['code'], [T_SELF, T_STATIC], true)) {
 				return true;
 			}

@@ -204,7 +204,7 @@ class TypeHintDeclarationSniffTest extends TestCase
 
 		self::assertSame(12, $report->getErrorCount());
 
-		$parameterMessage = function (string $method, string $parameter): string {
+		$parameterMessage = static function (string $method, string $parameter): string {
 			return sprintf('Method \FooNamespace\FooClass::%s() has useless @param annotation for parameter $%s.', $method, $parameter);
 		};
 

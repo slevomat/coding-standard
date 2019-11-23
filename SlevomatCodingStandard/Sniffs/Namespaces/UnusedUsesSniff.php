@@ -261,7 +261,7 @@ class UnusedUsesSniff implements Sniff
 									}
 								}
 								foreach (AnnotationHelper::getAnnotationConstantExpressions($annotation) as $annotationConstantExpression) {
-									$contentsToCheck = array_merge($contentsToCheck, array_map(function (ConstFetchNode $constFetchNode): string {
+									$contentsToCheck = array_merge($contentsToCheck, array_map(static function (ConstFetchNode $constFetchNode): string {
 										return $constFetchNode->className;
 									}, AnnotationConstantExpressionHelper::getConstantFetchNodes($annotationConstantExpression)));
 								}

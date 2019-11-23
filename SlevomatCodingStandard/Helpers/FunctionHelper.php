@@ -131,7 +131,7 @@ class FunctionHelper
 	 */
 	public static function getParametersWithoutTypeHint(File $phpcsFile, int $functionPointer): array
 	{
-		return array_keys(array_filter(self::getParametersTypeHints($phpcsFile, $functionPointer), function (?ParameterTypeHint $parameterTypeHint = null): bool {
+		return array_keys(array_filter(self::getParametersTypeHints($phpcsFile, $functionPointer), static function (?ParameterTypeHint $parameterTypeHint = null): bool {
 			return $parameterTypeHint === null;
 		}));
 	}
@@ -311,12 +311,12 @@ class FunctionHelper
 		$previousFunctionPointer = 0;
 
 		return array_map(
-			function (int $functionPointer) use ($phpcsFile): string {
+			static function (int $functionPointer) use ($phpcsFile): string {
 				return self::getName($phpcsFile, $functionPointer);
 			},
 			array_filter(
 				iterator_to_array(self::getAllFunctionOrMethodPointers($phpcsFile, $previousFunctionPointer)),
-				function (int $functionOrMethodPointer) use ($phpcsFile): bool {
+				static function (int $functionOrMethodPointer) use ($phpcsFile): bool {
 					return !self::isMethod($phpcsFile, $functionOrMethodPointer);
 				}
 			)

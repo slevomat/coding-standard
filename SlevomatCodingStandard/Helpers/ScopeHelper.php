@@ -16,7 +16,7 @@ class ScopeHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$getScope = function (int $pointer) use ($tokens): int {
+		$getScope = static function (int $pointer) use ($tokens): int {
 			$scope = 0;
 
 			foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {

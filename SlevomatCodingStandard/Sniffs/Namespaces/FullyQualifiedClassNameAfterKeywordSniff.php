@@ -59,7 +59,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 		if (count($this->getKeywordsToCheck()) === 0) {
 			return [];
 		}
-		return array_map(function (string $keyword) {
+		return array_map(static function (string $keyword) {
 			if (!defined($keyword)) {
 				throw new UndefinedKeywordTokenException($keyword);
 			}

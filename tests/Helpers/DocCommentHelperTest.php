@@ -186,7 +186,7 @@ class DocCommentHelperTest extends TestCase
 	 */
 	private function stringifyComments(array $comments): array
 	{
-		return array_map(function (Comment $comment): string {
+		return array_map(static function (Comment $comment): string {
 			return $comment->getContent();
 		}, $comments);
 	}

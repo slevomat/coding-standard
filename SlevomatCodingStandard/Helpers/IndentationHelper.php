@@ -45,7 +45,7 @@ class IndentationHelper
 		/** @var string[] $lines */
 		$lines = explode($eolChar, rtrim($code));
 
-		return implode($eolChar, array_map(function (string $line) use ($defaultIndentation): string {
+		return implode($eolChar, array_map(static function (string $line) use ($defaultIndentation): string {
 			if ($line === '') {
 				return $line;
 			}

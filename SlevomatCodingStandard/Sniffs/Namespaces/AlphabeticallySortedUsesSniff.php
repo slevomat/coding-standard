@@ -101,7 +101,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 			return $this->compareUseStatements($a, $b);
 		});
 
-		$phpcsFile->fixer->addContent($firstUseStatement->getPointer(), implode($phpcsFile->eolChar, array_map(function (UseStatement $useStatement): string {
+		$phpcsFile->fixer->addContent($firstUseStatement->getPointer(), implode($phpcsFile->eolChar, array_map(static function (UseStatement $useStatement): string {
 			$unqualifiedName = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($useStatement->getFullyQualifiedTypeName());
 
 			$useTypeName = UseStatement::getTypeName($useStatement->getType());

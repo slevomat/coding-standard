@@ -103,7 +103,7 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 			$supportedTokens = $this->getSupportedTokens();
 
 			$this->normalizedTokensToCheck = array_map(
-				function (string $tokenCode) use ($supportedTokens) {
+				static function (string $tokenCode) use ($supportedTokens) {
 					if (!defined($tokenCode)) {
 						throw new UndefinedKeywordTokenException($tokenCode);
 					}

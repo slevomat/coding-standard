@@ -75,7 +75,7 @@ class TypeNameMatchesFileNameSniff implements Sniff
 			/** @var array<string, string> $normalizedRootNamespaces */
 			$normalizedRootNamespaces = SniffSettingsHelper::normalizeAssociativeArray($this->rootNamespaces);
 			$this->normalizedRootNamespaces = $normalizedRootNamespaces;
-			uksort($this->normalizedRootNamespaces, function (string $a, string $b): int {
+			uksort($this->normalizedRootNamespaces, static function (string $a, string $b): int {
 				$aParts = explode('/', str_replace('\\', '/', $a));
 				$bParts = explode('/', str_replace('\\', '/', $b));
 

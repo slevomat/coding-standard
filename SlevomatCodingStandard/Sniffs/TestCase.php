@@ -160,8 +160,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 */
 	private static function getFormattedErrors(array $errors): string
 	{
-		return implode(PHP_EOL, array_map(function (array $errors): string {
-			return implode(PHP_EOL, array_map(function (array $error): string {
+		return implode(PHP_EOL, array_map(static function (array $errors): string {
+			return implode(PHP_EOL, array_map(static function (array $error): string {
 				return sprintf("\t%s: %s", $error['source'], $error['message']);
 			}, $errors));
 		}, $errors));

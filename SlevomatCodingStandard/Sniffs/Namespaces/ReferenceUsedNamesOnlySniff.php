@@ -175,7 +175,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	private function getFullyQualifiedKeywords(): array
 	{
 		if ($this->normalizedFullyQualifiedKeywords === null) {
-			$this->normalizedFullyQualifiedKeywords = array_map(function (string $keyword) {
+			$this->normalizedFullyQualifiedKeywords = array_map(static function (string $keyword) {
 				if (!defined($keyword)) {
 					throw new UndefinedKeywordTokenException($keyword);
 				}
@@ -197,16 +197,16 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 		$references = $this->getReferences($phpcsFile, $openTagPointer);
 
-		$definedClassesIndex = array_flip(array_map(function (string $className): string {
+		$definedClassesIndex = array_flip(array_map(static function (string $className): string {
 			return strtolower($className);
 		}, ClassHelper::getAllNames($phpcsFile)));
-		$definedFunctionsIndex = array_flip(array_map(function (string $functionName): string {
+		$definedFunctionsIndex = array_flip(array_map(static function (string $functionName): string {
 			return strtolower($functionName);
 		}, FunctionHelper::getAllFunctionNames($phpcsFile)));
 		$definedConstantsIndex = array_flip(ConstantHelper::getAllNames($phpcsFile));
 
 		if ($this->allowFullyQualifiedNameForCollidingClasses) {
-			$classReferences = array_filter($references, function (stdClass $reference): bool {
+			$classReferences = array_filter($references, static function (stdClass $reference): bool {
 				return $reference->source === self::SOURCE_CODE && $reference->isClass;
 			});
 

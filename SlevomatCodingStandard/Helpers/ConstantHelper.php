@@ -39,12 +39,12 @@ class ConstantHelper
 		$previousConstantPointer = 0;
 
 		return array_map(
-			function (int $constantPointer) use ($phpcsFile): string {
+			static function (int $constantPointer) use ($phpcsFile): string {
 				return self::getName($phpcsFile, $constantPointer);
 			},
 			array_filter(
 				iterator_to_array(self::getAllConstantPointers($phpcsFile, $previousConstantPointer)),
-				function (int $constantPointer) use ($phpcsFile): bool {
+				static function (int $constantPointer) use ($phpcsFile): bool {
 					foreach (array_reverse($phpcsFile->getTokens()[$constantPointer]['conditions']) as $conditionTokenCode) {
 						return $conditionTokenCode === T_NAMESPACE;
 					}

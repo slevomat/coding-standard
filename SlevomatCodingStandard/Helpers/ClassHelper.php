@@ -54,7 +54,7 @@ class ClassHelper
 		$previousClassPointer = 0;
 
 		return array_map(
-			function (int $classPointer) use ($phpcsFile): string {
+			static function (int $classPointer) use ($phpcsFile): string {
 				return self::getName($phpcsFile, $classPointer);
 			},
 			iterator_to_array(self::getAllClassPointers($phpcsFile, $previousClassPointer))

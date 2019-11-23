@@ -77,7 +77,7 @@ class RequireShortTernaryOperatorSniff implements Sniff
 			$inlineElseEndPointer++;
 		}
 
-		$findConditionStartPointer = function (int $conditionEndPointer, string $contentToFind) use ($tokens): int {
+		$findConditionStartPointer = static function (int $conditionEndPointer, string $contentToFind) use ($tokens): int {
 			$content = $tokens[$conditionEndPointer]['content'];
 
 			$conditionStartPointer = $conditionEndPointer;

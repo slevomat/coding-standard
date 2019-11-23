@@ -122,7 +122,7 @@ class DocCommentSpacingSniff implements Sniff
 		} while (true);
 
 		$annotations = array_merge([], ...array_values(AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenerPointer)));
-		uasort($annotations, function (Annotation $a, Annotation $b): int {
+		uasort($annotations, static function (Annotation $a, Annotation $b): int {
 			return $a->getStartPointer() <=> $b->getEndPointer();
 		});
 		$annotations = array_values($annotations);
@@ -445,8 +445,8 @@ class DocCommentSpacingSniff implements Sniff
 		array $annotations
 	): void
 	{
-		$equals = function (array $firstAnnotationsGroup, array $secondAnnotationsGroup): bool {
-			$getAnnotationsPointers = function (Annotation $annotation): int {
+		$equals = static function (array $firstAnnotationsGroup, array $secondAnnotationsGroup): bool {
+			$getAnnotationsPointers = static function (Annotation $annotation): int {
 				return $annotation->getStartPointer();
 			};
 
@@ -634,8 +634,8 @@ class DocCommentSpacingSniff implements Sniff
 
 		foreach (array_keys($sortedAnnotationsGroups) as $annotationsGroupPosition) {
 			$expectedAnnotationsGroupOrder = array_flip($expectedAnnotationsGroups[$annotationsGroupPosition]);
-			usort($sortedAnnotationsGroups[$annotationsGroupPosition], function (Annotation $firstAnnotation, Annotation $secondAnnotation) use ($expectedAnnotationsGroupOrder): int {
-				$getExpectedOrder = function (string $annotationName) use ($expectedAnnotationsGroupOrder): int {
+			usort($sortedAnnotationsGroups[$annotationsGroupPosition], static function (Annotation $firstAnnotation, Annotation $secondAnnotation) use ($expectedAnnotationsGroupOrder): int {
+				$getExpectedOrder = static function (string $annotationName) use ($expectedAnnotationsGroupOrder): int {
 					if (array_key_exists($annotationName, $expectedAnnotationsGroupOrder)) {
 						return $expectedAnnotationsGroupOrder[$annotationName];
 					}
