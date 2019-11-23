@@ -47,7 +47,6 @@ new static($b);
 new parent($c);
 
 $z = ($a ? '0' : '1') ? '2' : '3';
-$zz = ($a + $b * 3);
 $zzz = !($a) ? true : false;
 $zzzz = null !== ($a = 'a') ? true : false;
 
@@ -82,17 +81,9 @@ class ClassWithClosure
 
 $response = (new Response())->withStatus(200);
 
-function () {
-	return [
-		'a' => ('aa' . 'bb'),
-	];
-};
-
 $a = $b / (100 + $c);
 $a = (100 - $b) * $c;
 $a = ('100' . '000') * $c;
-
-$a = $b + (100 - $c);
 
 $a = 'a' . '/' . (32 - ($b * 8));
 
@@ -123,7 +114,10 @@ function () {
 	$y = (yield from whatever()) ?? $y;
 };
 
+$x = ($y - $yy) ** $z;
+
 // Must be last
 return true
     ? 100
-    : (int) ((100 / 50) * 100);
+    : (int) ((100 <=> 50) * 100);
+
