@@ -116,6 +116,13 @@ function () {
 
 $x = ($y - $yy) ** $z;
 
+$hue = 60 * (($blueFraction - $redFraction) / $delta + 2);
+
+if ($hit === true || (is_array($hit) && count(array_filter($hit)) >= count($keys) * 0.5)) {
+}
+
+$hitRatio = (int) round($hitCount / ($loadCount / 100 ?: 1), 1);
+
 // Must be last
 return true
     ? 100
