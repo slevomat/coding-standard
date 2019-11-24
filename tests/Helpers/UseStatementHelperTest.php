@@ -116,12 +116,12 @@ class UseStatementHelperTest extends TestCase
 		self::assertSame('Rasmus\foo', UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $rasmusFooFunctionUsePointer));
 	}
 
-	public function testGetUseStatements(): void
+	public function testGetFileUseStatements(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(
 			__DIR__ . '/data/useStatements.php'
 		);
-		$useStatements = UseStatementHelper::getUseStatements($phpcsFile, 0)[0];
+		$useStatements = UseStatementHelper::getFileUseStatements($phpcsFile)[0];
 		self::assertCount(8, $useStatements);
 		self::assertSame(2, $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Baz')]->getPointer());
 		self::assertUseStatement('Bar\Baz', 'Baz', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Baz')], false, false, null);
