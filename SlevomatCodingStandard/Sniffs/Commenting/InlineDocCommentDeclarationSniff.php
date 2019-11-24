@@ -164,13 +164,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
-		$tokenCodes = [T_VARIABLE, T_FOREACH, T_WHILE, T_LIST, T_OPEN_SHORT_ARRAY];
-		if ($codePointer === null || !in_array($tokens[$codePointer]['code'], $tokenCodes, true)) {
-			$firstPointerOnPreviousLine = TokenHelper::findFirstNonWhitespaceOnPreviousLine($phpcsFile, $docCommentOpenPointer);
-			$codePointer = $firstPointerOnPreviousLine !== null && !in_array($tokens[$firstPointerOnPreviousLine]['code'], $tokenCodes, true)
-				? null
-				: $firstPointerOnPreviousLine;
-		}
+		$variableNames = [];
 
 		/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation $variableAnnotation */
 		foreach ($variableAnnotations as $variableAnnotation) {
@@ -183,6 +177,22 @@ class InlineDocCommentDeclarationSniff implements Sniff
 				continue;
 			}
 
+			$variableNames[] = $variableName;
+		}
+
+		$tokenCodes = [T_VARIABLE, T_FOREACH, T_WHILE, T_LIST, T_OPEN_SHORT_ARRAY];
+		if (
+			$codePointer === null
+			|| !in_array($tokens[$codePointer]['code'], $tokenCodes, true)
+			|| ($tokens[$codePointer]['code'] === T_VARIABLE && !in_array($tokens[$codePointer]['content'], $variableNames, true))
+		) {
+			$firstPointerOnPreviousLine = TokenHelper::findFirstNonWhitespaceOnPreviousLine($phpcsFile, $docCommentOpenPointer);
+			$codePointer = $firstPointerOnPreviousLine !== null && !in_array($tokens[$firstPointerOnPreviousLine]['code'], $tokenCodes, true)
+				? null
+				: $firstPointerOnPreviousLine;
+		}
+
+		foreach ($variableNames as $variableName) {
 			$missingVariableErrorParameters = [
 				sprintf('Missing variable %s before or after the documentation comment.', $variableName),
 				$docCommentOpenPointer,

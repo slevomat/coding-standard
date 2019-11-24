@@ -28,6 +28,11 @@ class Foo
 
 		}
 
+		foreach ($ee->iterate() as $ff) {
+			/** @var \DateTimeImmutable $ff */
+			$fff = $ff->format('Ymd');
+		}
+
 		/** @var \DateTimeImmutable $h */
 		while ($h = current($g)) {
 
