@@ -74,20 +74,26 @@
 	<rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments"/>
 	<rule ref="SlevomatCodingStandard.Commenting.UselessInheritDocComment"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
-	<rule ref="SlevomatCodingStandard.ControlStructures.ControlStructureSpacing">
+	<rule ref="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing">
 		<properties>
 			<property name="tokensToCheck" type="array">
-			    <element value="T_GOTO"/>
 			    <element value="T_SWITCH"/>
-			    <element value="T_THROW"/>
 			    <element value="T_TRY"/>
-			    <element value="T_YIELD"/>
-			    <element value="T_YIELD_FROM"/>
 			</property>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowContinueWithoutIntegerOperandInSwitch"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit"/>
+	<rule ref="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing">
+		<properties>
+			<property name="tokensToCheck" type="array">
+			    <element value="T_GOTO"/>
+			    <element value="T_THROW"/>
+			    <element value="T_YIELD"/>
+			    <element value="T_YIELD_FROM"/>
+			</property>
+		</properties>
+	</rule>
 	<rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator">
 		<properties>
 			<property name="lineLengthLimit" value="180"/>
