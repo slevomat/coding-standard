@@ -155,7 +155,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 		}
 	}
 
-	private function checkVariable(File $phpcsFile, int $docCommentOpenPointer, ?int $codePointer): void
+	private function checkVariable(File $phpcsFile, int $docCommentOpenPointer, ?int $codePointerAfter): void
 	{
 		$variableAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $docCommentOpenPointer, '@var');
 		if (count($variableAnnotations) === 0) {
@@ -164,7 +164,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
-		$variableNames = [];
+		$codePointerBefore = TokenHelper::findFirstNonWhitespaceOnPreviousLine($phpcsFile, $docCommentOpenPointer);
 
 		/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation $variableAnnotation */
 		foreach ($variableAnnotations as $variableAnnotation) {
@@ -177,22 +177,6 @@ class InlineDocCommentDeclarationSniff implements Sniff
 				continue;
 			}
 
-			$variableNames[] = $variableName;
-		}
-
-		$tokenCodes = [T_VARIABLE, T_FOREACH, T_WHILE, T_LIST, T_OPEN_SHORT_ARRAY];
-		if (
-			$codePointer === null
-			|| !in_array($tokens[$codePointer]['code'], $tokenCodes, true)
-			|| ($tokens[$codePointer]['code'] === T_VARIABLE && !in_array($tokens[$codePointer]['content'], $variableNames, true))
-		) {
-			$firstPointerOnPreviousLine = TokenHelper::findFirstNonWhitespaceOnPreviousLine($phpcsFile, $docCommentOpenPointer);
-			$codePointer = $firstPointerOnPreviousLine !== null && !in_array($tokens[$firstPointerOnPreviousLine]['code'], $tokenCodes, true)
-				? null
-				: $firstPointerOnPreviousLine;
-		}
-
-		foreach ($variableNames as $variableName) {
 			$missingVariableErrorParameters = [
 				sprintf('Missing variable %s before or after the documentation comment.', $variableName),
 				$docCommentOpenPointer,
@@ -205,61 +189,97 @@ class InlineDocCommentDeclarationSniff implements Sniff
 				self::CODE_NO_ASSIGNMENT,
 			];
 
-			if ($codePointer === null) {
-				$phpcsFile->addError(...$missingVariableErrorParameters);
-				continue;
-			}
-
-			if ($tokens[$codePointer]['code'] === T_VARIABLE) {
-				$pointerAfterVariable = TokenHelper::findNextEffective($phpcsFile, $codePointer + 1);
-				if ($tokens[$pointerAfterVariable]['code'] !== T_EQUAL) {
-					$phpcsFile->addError(...$noAssignmentErrorParameters);
-					continue;
-				}
-
-				if ($variableName !== $tokens[$codePointer]['content']) {
-					$phpcsFile->addError(...$missingVariableErrorParameters);
-				}
-
-			} elseif ($tokens[$codePointer]['code'] === T_LIST) {
-				$listParenthesisOpener = TokenHelper::findNextEffective($phpcsFile, $codePointer + 1);
-
-				$variablePointerInList = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $listParenthesisOpener + 1, $tokens[$listParenthesisOpener]['parenthesis_closer']);
-				if ($variablePointerInList === null) {
-					$phpcsFile->addError(...$missingVariableErrorParameters);
-				}
-
-			} elseif ($tokens[$codePointer]['code'] === T_OPEN_SHORT_ARRAY) {
-				$pointerAfterList = TokenHelper::findNextEffective($phpcsFile, $tokens[$codePointer]['bracket_closer'] + 1);
-				if ($tokens[$pointerAfterList]['code'] !== T_EQUAL) {
-					$phpcsFile->addError(...$noAssignmentErrorParameters);
-					continue;
-				}
-
-				$variablePointerInList = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $codePointer + 1, $tokens[$codePointer]['bracket_closer']);
-				if ($variablePointerInList === null) {
-					$phpcsFile->addError(...$missingVariableErrorParameters);
-				}
-
-			} else {
-				if ($tokens[$codePointer]['code'] === T_WHILE) {
-					$variablePointerInWhile = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $tokens[$codePointer]['parenthesis_opener'] + 1, $tokens[$codePointer]['parenthesis_closer']);
-					if ($variablePointerInWhile === null) {
+			foreach ([1 => $codePointerBefore, 2 => $codePointerAfter] as $tryNo => $codePointer) {
+				if ($codePointer === null || !in_array($tokens[$codePointer]['code'], [T_VARIABLE, T_FOREACH, T_WHILE, T_LIST, T_OPEN_SHORT_ARRAY], true)) {
+					if ($tryNo === 2) {
 						$phpcsFile->addError(...$missingVariableErrorParameters);
+					}
+
+					continue;
+				}
+
+				if ($tokens[$codePointer]['code'] === T_VARIABLE) {
+					$pointerAfterVariable = TokenHelper::findNextEffective($phpcsFile, $codePointer + 1);
+					if ($tokens[$pointerAfterVariable]['code'] !== T_EQUAL) {
+						if ($tryNo === 2) {
+							$phpcsFile->addError(...$noAssignmentErrorParameters);
+						}
+
 						continue;
 					}
 
-					$pointerAfterVariableInWhile = TokenHelper::findNextEffective($phpcsFile, $variablePointerInWhile + 1);
-					if ($tokens[$pointerAfterVariableInWhile]['code'] !== T_EQUAL) {
-						$phpcsFile->addError(...$noAssignmentErrorParameters);
+					if ($variableName !== $tokens[$codePointer]['content']) {
+						if ($tryNo === 2) {
+							$phpcsFile->addError(...$missingVariableErrorParameters);
+						}
+
+						continue;
 					}
+				} elseif ($tokens[$codePointer]['code'] === T_LIST) {
+					$listParenthesisOpener = TokenHelper::findNextEffective($phpcsFile, $codePointer + 1);
+
+					$variablePointerInList = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $listParenthesisOpener + 1, $tokens[$listParenthesisOpener]['parenthesis_closer']);
+					if ($variablePointerInList === null) {
+						if ($tryNo === 2) {
+							$phpcsFile->addError(...$missingVariableErrorParameters);
+						}
+
+						continue;
+					}
+
+				} elseif ($tokens[$codePointer]['code'] === T_OPEN_SHORT_ARRAY) {
+					$pointerAfterList = TokenHelper::findNextEffective($phpcsFile, $tokens[$codePointer]['bracket_closer'] + 1);
+					if ($tokens[$pointerAfterList]['code'] !== T_EQUAL) {
+						if ($tryNo === 2) {
+							$phpcsFile->addError(...$noAssignmentErrorParameters);
+						}
+
+						continue;
+					}
+
+					$variablePointerInList = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $codePointer + 1, $tokens[$codePointer]['bracket_closer']);
+					if ($variablePointerInList === null) {
+						if ($tryNo === 2) {
+							$phpcsFile->addError(...$missingVariableErrorParameters);
+						}
+
+						continue;
+					}
+
 				} else {
-					$asPointer = TokenHelper::findNext($phpcsFile, T_AS, $tokens[$codePointer]['parenthesis_opener'] + 1, $tokens[$codePointer]['parenthesis_closer']);
-					$variablePointerInForeach = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $asPointer + 1, $tokens[$codePointer]['parenthesis_closer']);
-					if ($variablePointerInForeach === null) {
-						$phpcsFile->addError(...$missingVariableErrorParameters);
+					if ($tokens[$codePointer]['code'] === T_WHILE) {
+						$variablePointerInWhile = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $tokens[$codePointer]['parenthesis_opener'] + 1, $tokens[$codePointer]['parenthesis_closer']);
+						if ($variablePointerInWhile === null) {
+							if ($tryNo === 2) {
+								$phpcsFile->addError(...$missingVariableErrorParameters);
+							}
+
+							continue;
+						}
+
+						$pointerAfterVariableInWhile = TokenHelper::findNextEffective($phpcsFile, $variablePointerInWhile + 1);
+						if ($tokens[$pointerAfterVariableInWhile]['code'] !== T_EQUAL) {
+							if ($tryNo === 2) {
+								$phpcsFile->addError(...$noAssignmentErrorParameters);
+							}
+
+							continue;
+						}
+					} else {
+						$asPointer = TokenHelper::findNext($phpcsFile, T_AS, $tokens[$codePointer]['parenthesis_opener'] + 1, $tokens[$codePointer]['parenthesis_closer']);
+						$variablePointerInForeach = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $asPointer + 1, $tokens[$codePointer]['parenthesis_closer']);
+						if ($variablePointerInForeach === null) {
+							if ($tryNo === 2) {
+								$phpcsFile->addError(...$missingVariableErrorParameters);
+							}
+
+							continue;
+						}
 					}
 				}
+
+				// No error, don't check second $codePointer
+				continue 2;
 			}
 		}
 	}

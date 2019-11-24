@@ -33,9 +33,24 @@ class Foo
 			$fff = $ff->format('Ymd');
 		}
 
+		foreach ($eee as $fff) {
+			/** @var \DateTimeImmutable $fff */
+			[$ffff] = $fff->format('Ymd');
+		}
+
+		foreach ($eeee as $ffff) {
+			/** @var \DateTimeImmutable $ffff */
+			list($fffff) = $ffff->format('Ymd');
+		}
+
 		/** @var \DateTimeImmutable $h */
 		while ($h = current($g)) {
 
+		}
+
+		while ($hh = current($gg)) {
+			/** @var \DateTimeImmutable $hh */
+			$hhh = 'anything';
 		}
 
 		/* TODO */
