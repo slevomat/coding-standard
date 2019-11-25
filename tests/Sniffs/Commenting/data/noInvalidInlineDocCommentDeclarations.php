@@ -40,7 +40,7 @@ class Foo
 
 		foreach ($eeee as $ffff) {
 			/** @var \DateTimeImmutable $ffff */
-			list($fffff) = $ffff->format('Ymd');
+			[$fffff] = $ffff->format('Ymd');
 		}
 
 		/** @var \DateTimeImmutable $h */
@@ -60,10 +60,30 @@ class Foo
 		$j = 'j';
 
 		/** @var string $k */
-		list($k) = ['k'];
+		[$k] = ['k'];
 
 		/** @var string $l */
 		[$l] = ['l'];
+
+		/**
+		 * @var string $mm
+		 * @var int $mmm
+		 */
+		foreach ($m as [$mm, $mmm]) {
+
+		}
+
+		/** @var int $nn */
+		/** @var float $nnn */
+		foreach ($n as $nn => $nnn) {
+
+		}
+
+		foreach ($o as $oo => $ooo) {
+			/** @var int $oo */
+			/** @var float $ooo */
+		}
+
 	}
 
 	public function get()

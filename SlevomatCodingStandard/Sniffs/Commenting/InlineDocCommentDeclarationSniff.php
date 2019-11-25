@@ -57,6 +57,10 @@ class InlineDocCommentDeclarationSniff implements Sniff
 		$commentClosePointer = $tokens[$commentOpenPointer]['code'] === T_COMMENT ? $commentOpenPointer : $tokens[$commentOpenPointer]['comment_closer'];
 
 		$codePointer = TokenHelper::findFirstNonWhitespaceOnNextLine($phpcsFile, $commentClosePointer);
+		while ($codePointer !== null && $tokens[$codePointer]['code'] === T_DOC_COMMENT_OPEN_TAG) {
+			$codePointer = TokenHelper::findFirstNonWhitespaceOnNextLine($phpcsFile, $codePointer + 1);
+		}
+
 		if ($codePointer !== null) {
 			if (in_array($tokens[$codePointer]['code'], [T_PRIVATE, T_PROTECTED, T_PUBLIC], true)) {
 				return;
@@ -165,6 +169,9 @@ class InlineDocCommentDeclarationSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$codePointerBefore = TokenHelper::findFirstNonWhitespaceOnPreviousLine($phpcsFile, $docCommentOpenPointer);
+		while ($codePointerBefore !== null && $tokens[$codePointerBefore]['code'] === T_DOC_COMMENT_OPEN_TAG) {
+			$codePointerBefore = TokenHelper::findFirstNonWhitespaceOnPreviousLine($phpcsFile, $codePointerBefore - 1);
+		}
 
 		/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation $variableAnnotation */
 		foreach ($variableAnnotations as $variableAnnotation) {
