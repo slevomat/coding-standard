@@ -17,7 +17,7 @@ class InlineDocCommentDeclarationSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/invalidInlineDocCommentDeclarations.php');
 
-		self::assertSame(34, $report->getErrorCount());
+		self::assertSame(35, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -102,6 +102,8 @@ class InlineDocCommentDeclarationSniffTest extends TestCase
 		self::assertSniffError($report, 129, InlineDocCommentDeclarationSniff::CODE_NO_ASSIGNMENT, 'No assignment to $noAssignmentX variable before or after the documentation comment.');
 		self::assertSniffError($report, 132, InlineDocCommentDeclarationSniff::CODE_NO_ASSIGNMENT, 'No assignment to $noAssignmentY variable before or after the documentation comment.');
 		self::assertSniffError($report, 135, InlineDocCommentDeclarationSniff::CODE_NO_ASSIGNMENT, 'No assignment to $noAssignmentZ variable before or after the documentation comment.');
+
+		self::assertSniffError($report, 140, InlineDocCommentDeclarationSniff::CODE_MISSING_VARIABLE, 'Missing variable $unknownParameter before or after the documentation comment.');
 
 		self::assertAllFixedInFile($report);
 	}

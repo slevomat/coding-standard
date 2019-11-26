@@ -84,6 +84,16 @@ class Foo
 			/** @var float $ooo */
 		}
 
+		array_map(static function ($p): int {
+			/** @var string $p */
+		}, []);
+
+		/** @var string $q */
+		array_map(static function ($q): int {
+		}, []);
+
+		/** @var string[]|null $r */
+		static $r;
 	}
 
 	public function get()

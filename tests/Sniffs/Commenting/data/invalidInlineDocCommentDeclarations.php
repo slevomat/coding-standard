@@ -136,3 +136,7 @@ $noAssignmentX .= 'string';
 while ($foo = next($noAssignmentZ)) {
 
 }
+
+/** @var string $unknownParameter */
+function ($whatever) {
+};
