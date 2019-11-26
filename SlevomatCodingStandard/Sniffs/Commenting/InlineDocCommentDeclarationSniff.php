@@ -168,6 +168,43 @@ class InlineDocCommentDeclarationSniff implements Sniff
 
 		$checkedTokens = [T_VARIABLE, T_FOREACH, T_WHILE, T_LIST, T_OPEN_SHORT_ARRAY, T_CLOSURE];
 
+		$variableNames = [];
+
+		/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation $variableAnnotation */
+		foreach ($variableAnnotations as $variableAnnotation) {
+			if ($variableAnnotation->isInvalid()) {
+				continue;
+			}
+
+			$variableName = $variableAnnotation->getVariableName();
+			if ($variableName === null) {
+				continue;
+			}
+
+			$variableNames[] = $variableName;
+		}
+
+		$improveCodePointer = static function (int $codePointer) use ($phpcsFile, $tokens, $checkedTokens, $variableNames): int {
+			$shouldSearchClosure = false;
+
+			if (!in_array($tokens[$codePointer]['code'], $checkedTokens, true)) {
+				$shouldSearchClosure = true;
+			} elseif ($tokens[$codePointer]['code'] === T_VARIABLE && !in_array($tokens[$codePointer]['content'], $variableNames, true)) {
+				$shouldSearchClosure = true;
+			}
+
+			if (!$shouldSearchClosure) {
+				return $codePointer;
+			}
+
+			$closurePointer = TokenHelper::findNext($phpcsFile, T_CLOSURE, $codePointer + 1);
+			if ($closurePointer !== null && $tokens[$codePointer]['line'] === $tokens[$closurePointer]['line']) {
+				return $closurePointer;
+			}
+
+			return $codePointer;
+		};
+
 		$codePointerAfter = TokenHelper::findFirstNonWhitespaceOnNextLine($phpcsFile, $commentClosePointer);
 		while ($codePointerAfter !== null && $tokens[$codePointerAfter]['code'] === T_DOC_COMMENT_OPEN_TAG) {
 			$codePointerAfter = TokenHelper::findFirstNonWhitespaceOnNextLine($phpcsFile, $codePointerAfter + 1);
@@ -176,12 +213,9 @@ class InlineDocCommentDeclarationSniff implements Sniff
 		if ($codePointerAfter !== null) {
 			if ($tokens[$codePointerAfter]['code'] === T_STATIC) {
 				$codePointerAfter = TokenHelper::findNextEffective($phpcsFile, $codePointerAfter + 1);
-			} elseif (!in_array($tokens[$codePointerAfter]['code'], $checkedTokens, true)) {
-				$closurePointer = TokenHelper::findNext($phpcsFile, T_CLOSURE, $codePointerAfter + 1);
-				if ($closurePointer !== null && $tokens[$codePointerAfter]['line'] === $tokens[$closurePointer]['line']) {
-					$codePointerAfter = $closurePointer;
-				}
 			}
+
+			$codePointerAfter = $improveCodePointer($codePointerAfter);
 		}
 
 		$codePointerBefore = TokenHelper::findFirstNonWhitespaceOnPreviousLine($phpcsFile, $docCommentOpenPointer);
@@ -189,11 +223,8 @@ class InlineDocCommentDeclarationSniff implements Sniff
 			$codePointerBefore = TokenHelper::findFirstNonWhitespaceOnPreviousLine($phpcsFile, $codePointerBefore - 1);
 		}
 
-		if ($codePointerBefore !== null && !in_array($tokens[$codePointerBefore]['code'], $checkedTokens, true)) {
-			$closurePointer = TokenHelper::findNext($phpcsFile, T_CLOSURE, $codePointerBefore + 1);
-			if ($closurePointer !== null && $tokens[$codePointerBefore]['line'] === $tokens[$closurePointer]['line']) {
-				$codePointerBefore = $closurePointer;
-			}
+		if ($codePointerBefore !== null) {
+			$codePointerBefore = $improveCodePointer($codePointerBefore);
 		}
 
 		/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation $variableAnnotation */

@@ -94,6 +94,10 @@ class Foo
 
 		/** @var string[]|null $r */
 		static $r;
+
+		/** @var string $s */
+		$ss = function ($s) {
+		};
 	}
 
 	public function get()
