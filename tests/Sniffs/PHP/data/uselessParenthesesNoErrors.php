@@ -128,6 +128,10 @@ pow(10, -($x + 1));
 if (! ($i === $j - 1)) {
 }
 
+function ($value) {
+	return ($value & $value - 1) === 0;
+};
+
 // Must be last
 return true
     ? 100

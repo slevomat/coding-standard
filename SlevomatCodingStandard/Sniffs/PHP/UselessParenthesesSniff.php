@@ -14,6 +14,9 @@ use function count;
 use function in_array;
 use const T_ANON_CLASS;
 use const T_ARRAY_CAST;
+use const T_BITWISE_AND;
+use const T_BITWISE_OR;
+use const T_BITWISE_XOR;
 use const T_BOOL_CAST;
 use const T_BOOLEAN_NOT;
 use const T_CASE;
@@ -400,7 +403,7 @@ class UselessParenthesesSniff implements Sniff
 		while (true) {
 			$pointer = TokenHelper::findNext(
 				$phpcsFile,
-				array_merge(self::OPERATORS, [T_OPEN_PARENTHESIS, T_INLINE_THEN, T_COALESCE], Tokens::$comparisonTokens),
+				array_merge(self::OPERATORS, [T_OPEN_PARENTHESIS, T_INLINE_THEN, T_COALESCE, T_BITWISE_AND, T_BITWISE_OR, T_BITWISE_XOR], Tokens::$comparisonTokens),
 				$actualStartPointer,
 				$tokens[$parenthesisOpenerPointer]['parenthesis_closer']
 			);
@@ -409,7 +412,7 @@ class UselessParenthesesSniff implements Sniff
 				break;
 			}
 
-			if (in_array($tokens[$pointer]['code'], [T_INLINE_THEN, T_COALESCE], true)) {
+			if (in_array($tokens[$pointer]['code'], [T_INLINE_THEN, T_COALESCE, T_BITWISE_AND, T_BITWISE_OR, T_BITWISE_XOR], true)) {
 				return;
 			}
 
