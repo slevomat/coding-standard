@@ -16,9 +16,18 @@ if (true) {
 
 }
 
+if (false) {
+
+} else {
+
+};
+
 while (true) {
 
 }
+
+while (!true) {
+};
 
 do {
 
