@@ -2,4 +2,5 @@ includes:
 	- phpstan.neon
 
 parameters:
-	ignoreErrors!: []
+	ignoreErrors!:
+		- "#Offset '(bracket|scope|parenthesis|comment)_(opener|closer)' does not exist#"

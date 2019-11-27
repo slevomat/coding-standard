@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use function array_fill_keys;
 use function array_filter;
+use function array_key_exists;
 use function array_keys;
 use function array_map;
 use function array_reverse;
@@ -220,7 +221,7 @@ class YodaHelper
 			}
 
 			if ($sideTokens[$sideTokensCount - 1]['code'] === T_CLOSE_PARENTHESIS) {
-				if (isset($sideTokens[$sideTokensCount - 1]['parenthesis_owner']) && $tokens[$sideTokens[$sideTokensCount - 1]['parenthesis_owner']]['code'] === T_ARRAY) {
+				if (array_key_exists('parenthesis_owner', $sideTokens[$sideTokensCount - 1]) && $tokens[$sideTokens[$sideTokensCount - 1]['parenthesis_owner']]['code'] === T_ARRAY) {
 					// Array
 					return $dynamism[T_ARRAY];
 				}

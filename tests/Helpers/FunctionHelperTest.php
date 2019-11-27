@@ -400,7 +400,7 @@ class FunctionHelperTest extends TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'withAnnotations');
 
-		$parametersAnnotations = array_map(static function (Annotation $annotation) {
+		$parametersAnnotations = array_map(static function (Annotation $annotation): ?string {
 			return $annotation->getContent();
 		}, FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer));
 		self::assertSame([

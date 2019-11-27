@@ -193,6 +193,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		static $reflections = [];
 
+		/** @phpstan-var class-string $className */
 		$className = static::getSniffClassName();
 
 		return $reflections[$className] ?? $reflections[$className] = new ReflectionClass($className);

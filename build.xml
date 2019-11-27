@@ -84,7 +84,7 @@
 		>
 			<arg value="analyse"/>
 			<arg value="-l"/>
-			<arg value="6"/>
+			<arg value="7"/>
 			<arg value="-c"/>
 			<arg path="build/PHPStan/phpstan.neon"/>
 			<arg value="--memory-limit"/>
@@ -100,7 +100,7 @@
 		>
 			<arg value="analyse"/>
 			<arg value="-l"/>
-			<arg value="6"/>
+			<arg value="7"/>
 			<arg value="-c"/>
 			<arg path="build/PHPStan/phpstan.tests.neon"/>
 			<arg path="tests"/>

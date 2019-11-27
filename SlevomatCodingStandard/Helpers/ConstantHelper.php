@@ -55,6 +55,11 @@ class ConstantHelper
 		);
 	}
 
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $previousConstantPointer
+	 * @return \Generator<int>
+	 */
 	private static function getAllConstantPointers(File $phpcsFile, int &$previousConstantPointer): Generator
 	{
 		do {

@@ -13,6 +13,7 @@ use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 
 class GetTokenDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
@@ -37,6 +38,16 @@ class GetTokenDynamicReturnTypeExtension implements DynamicMethodReturnTypeExten
 			$stringType = new StringType();
 			$integerType = new IntegerType();
 			$stringIntegerUnion = new UnionType([$stringType, $integerType]);
+
+			$baseArrayBuilder = ConstantArrayTypeBuilder::createEmpty();
+			$baseArrayBuilder->setOffsetValueType(new ConstantStringType('content'), $stringType);
+			$baseArrayBuilder->setOffsetValueType(new ConstantStringType('code'), $stringIntegerUnion);
+			$baseArrayBuilder->setOffsetValueType(new ConstantStringType('type'), $stringType);
+			$baseArrayBuilder->setOffsetValueType(new ConstantStringType('line'), $integerType);
+			$baseArrayBuilder->setOffsetValueType(new ConstantStringType('column'), $integerType);
+			$baseArrayBuilder->setOffsetValueType(new ConstantStringType('length'), $integerType);
+			$baseArrayBuilder->setOffsetValueType(new ConstantStringType('level'), $integerType);
+
 			$arrayBuilder = ConstantArrayTypeBuilder::createEmpty();
 			$arrayBuilder->setOffsetValueType(new ConstantStringType('content'), $stringType);
 			$arrayBuilder->setOffsetValueType(new ConstantStringType('code'), $stringIntegerUnion);
@@ -58,7 +69,7 @@ class GetTokenDynamicReturnTypeExtension implements DynamicMethodReturnTypeExten
 			$arrayBuilder->setOffsetValueType(new ConstantStringType('comment_opener'), $integerType);
 			$arrayBuilder->setOffsetValueType(new ConstantStringType('comment_closer'), $integerType);
 
-			$this->arrayType = new ArrayType($integerType, $arrayBuilder->getArray());
+			$this->arrayType = new ArrayType($integerType, TypeCombinator::union($baseArrayBuilder->getArray(), $arrayBuilder->getArray()));
 		}
 
 		return $this->arrayType;

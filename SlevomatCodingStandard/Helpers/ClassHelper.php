@@ -61,6 +61,11 @@ class ClassHelper
 		);
 	}
 
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $previousClassPointer
+	 * @return \Generator<int>
+	 */
 	private static function getAllClassPointers(File $phpcsFile, int &$previousClassPointer): Generator
 	{
 		do {

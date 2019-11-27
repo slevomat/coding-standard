@@ -97,7 +97,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 
-		uasort($useStatements, function (UseStatement $a, UseStatement $b) {
+		uasort($useStatements, function (UseStatement $a, UseStatement $b): int {
 			return $this->compareUseStatements($a, $b);
 		});
 

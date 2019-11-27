@@ -323,6 +323,11 @@ class FunctionHelper
 		);
 	}
 
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $previousFunctionPointer
+	 * @return \Generator<int>
+	 */
 	private static function getAllFunctionOrMethodPointers(File $phpcsFile, int &$previousFunctionPointer): Generator
 	{
 		do {

@@ -151,7 +151,9 @@ class TypeHintHelperTest extends TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithParameterAnnotation');
 		$parameterAnnotation = FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer)[0];
-		$parameterTypeHint = preg_split('~\\s+~', $parameterAnnotation->getContent())[0];
+		$parts = preg_split('~\\s+~', $parameterAnnotation->getContent());
+		self::assertIsArray($parts);
+		$parameterTypeHint = $parts[0];
 		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint));
 	}
 
@@ -188,7 +190,9 @@ class TypeHintHelperTest extends TestCase
 
 		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithParameterAnnotation');
 		$parameterAnnotation = FunctionHelper::getParametersAnnotations($phpcsFile, $methodPointer)[0];
-		$parameterTypeHint = preg_split('~\\s+~', $parameterAnnotation->getContent())[0];
+		$parts = preg_split('~\\s+~', $parameterAnnotation->getContent());
+		self::assertIsArray($parts);
+		$parameterTypeHint = $parts[0];
 		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint));
 	}
 
@@ -225,7 +229,9 @@ class TypeHintHelperTest extends TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithParameterAnnotation');
 		$parameterAnnotation = FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer)[0];
-		$parameterTypeHint = preg_split('~\\s+~', $parameterAnnotation->getContent())[0];
+		$parts = preg_split('~\\s+~', $parameterAnnotation->getContent());
+		self::assertIsArray($parts);
+		$parameterTypeHint = $parts[0];
 		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint));
 	}
 
@@ -262,7 +268,9 @@ class TypeHintHelperTest extends TestCase
 
 		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithParameterAnnotation');
 		$parameterAnnotation = FunctionHelper::getParametersAnnotations($phpcsFile, $methodPointer)[0];
-		$parameterTypeHint = preg_split('~\\s+~', $parameterAnnotation->getContent())[0];
+		$parts = preg_split('~\\s+~', $parameterAnnotation->getContent());
+		self::assertIsArray($parts);
+		$parameterTypeHint = $parts[0];
 		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint));
 	}
 

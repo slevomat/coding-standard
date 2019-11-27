@@ -4,16 +4,26 @@ includes:
 	- ../../vendor/phpstan/phpstan-strict-rules/rules.neon
 
 parameters:
+	checkGenericClassInNonGenericObjectType: false
+
 	autoload_files:
 		- %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/autoload.php
 		- %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/src/Util/Tokens.php
 	excludes_analyse:
-		- */tests/*/data/*
+		- %currentWorkingDirectory%/tests/*/data/*
 	ignoreErrors:
-		- "#Call to function array_key_exists\\(\\) with '(scope_(opener|closer)|parenthesis_(owner|opener|closer)|nested_parenthesis)'#"
-		- '#Else branch is unreachable because ternary operator condition is always true#'
-		- '#Possibly invalid array key type array<int, int\|string>\|int\|string#'
+		- "#Offset '(bracket|scope|parenthesis|comment)_(opener|closer)' does not exist#"
+		- "#Offset '(conditions|scope_condition)' does not exist#"
 		- '#Parameter \#5 \$contentNode of class SlevomatCodingStandard\\Helpers\\Annotation\\(Method|Parameter|Property|Return|Throws|Variable)Annotation constructor expects PHPStan\\PhpDocParser\\Ast\\PhpDoc\\#'
+		-
+			message: '#Unreachable statement - code above always terminates#'
+			path: %currentWorkingDirectory%/SlevomatCodingStandard/Helpers/FunctionHelper.php
+		-
+			message: '#Possibly invalid array key type array<int, int|string>|int|string#'
+			path: %currentWorkingDirectory%/SlevomatCodingStandard/Helpers/YodaHelper.php
+		-
+			message: '#Anonymous function should return int but return statement is missing#'
+			path: %currentWorkingDirectory%/SlevomatCodingStandard/Sniffs/Commenting/DocCommentSpacingSniff.php
 
 services:
 	-
