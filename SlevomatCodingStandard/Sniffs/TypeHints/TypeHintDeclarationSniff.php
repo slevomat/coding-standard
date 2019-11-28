@@ -81,9 +81,6 @@ class TypeHintDeclarationSniff implements Sniff
 	/** @var string[] */
 	public $traversableTypeHints = [];
 
-	/** @var bool */
-	public $allAnnotationsAreUseful = false;
-
 	/** @var array<string, int>|null */
 	private $normalizedTraversableTypeHints;
 
@@ -619,7 +616,7 @@ class TypeHintDeclarationSniff implements Sniff
 				break;
 			}
 
-			if ($this->allAnnotationsAreUseful && !in_array($annotation->getName(), ['@param', '@return'], true)) {
+			if (!in_array($annotation->getName(), ['@param', '@return'], true)) {
 				$containsUsefulInformation = true;
 				break;
 			}

@@ -140,7 +140,6 @@
 	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
 		<properties>
-			<property name="allAnnotationsAreUseful" value="true"/>
 			<property name="traversableTypeHints" type="array">
 			    <element value="Traversable"/>
 			</property>
