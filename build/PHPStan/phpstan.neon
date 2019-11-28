@@ -19,9 +19,6 @@ parameters:
 			message: '#Unreachable statement - code above always terminates#'
 			path: %currentWorkingDirectory%/SlevomatCodingStandard/Helpers/FunctionHelper.php
 		-
-			message: '#Possibly invalid array key type array<int, int|string>|int|string#'
-			path: %currentWorkingDirectory%/SlevomatCodingStandard/Helpers/YodaHelper.php
-		-
 			message: '#Anonymous function should return int but return statement is missing#'
 			path: %currentWorkingDirectory%/SlevomatCodingStandard/Sniffs/Commenting/DocCommentSpacingSniff.php
 

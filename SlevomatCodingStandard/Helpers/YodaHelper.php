@@ -221,9 +221,13 @@ class YodaHelper
 			}
 
 			if ($sideTokens[$sideTokensCount - 1]['code'] === T_CLOSE_PARENTHESIS) {
-				if (array_key_exists('parenthesis_owner', $sideTokens[$sideTokensCount - 1]) && $tokens[$sideTokens[$sideTokensCount - 1]['parenthesis_owner']]['code'] === T_ARRAY) {
-					// Array
-					return $dynamism[T_ARRAY];
+				if (array_key_exists('parenthesis_owner', $sideTokens[$sideTokensCount - 1])) {
+					/** @var int $parenthesisOwner */
+					$parenthesisOwner = $sideTokens[$sideTokensCount - 1]['parenthesis_owner'];
+					if ($tokens[$parenthesisOwner]['code'] === T_ARRAY) {
+						// Array
+						return $dynamism[T_ARRAY];
+					}
 				}
 
 				// Function or method call
@@ -248,8 +252,12 @@ class YodaHelper
 			}
 		}
 
-		if (isset($sideTokens[0]) && isset($dynamism[$sideTokens[0]['code']])) {
-			return $dynamism[$sideTokens[0]['code']];
+		if (array_key_exists(0, $sideTokens)) {
+			/** @var int $sideTokenCode */
+			$sideTokenCode = $sideTokens[0]['code'];
+			if (array_key_exists($sideTokenCode, $dynamism)) {
+				return $dynamism[$sideTokenCode];
+			}
 		}
 
 		return null;
