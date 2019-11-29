@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 function doSomething($parameter) {
 
@@ -131,6 +131,8 @@ if (! ($i === $j - 1)) {
 function ($value) {
 	return ($value & $value - 1) === 0;
 };
+
+$x = fn ($a, $b) => $a . $b;
 
 // Must be last
 return true
