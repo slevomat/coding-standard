@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 function foo(\DateTimeImmutable & $dateTime = null)
 {
@@ -8,6 +8,8 @@ function foo(\DateTimeImmutable & $dateTime = null)
 $callback = function (string $string = null) {
 
 };
+
+fn (int $int = null) => $int;
 
 interface Foo
 {

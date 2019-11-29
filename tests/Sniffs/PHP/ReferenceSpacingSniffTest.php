@@ -17,7 +17,7 @@ class ReferenceSpacingSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/referenceSpacingDefaultSettingsErrors.php');
 
-		self::assertSame(10, $report->getErrorCount());
+		self::assertSame(12, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, ReferenceSpacingSniff::CODE_INCORRECT_SPACES_AFTER_REFERENCE);
 		self::assertSniffError($report, 8, ReferenceSpacingSniff::CODE_INCORRECT_SPACES_AFTER_REFERENCE);
@@ -29,6 +29,8 @@ class ReferenceSpacingSniffTest extends TestCase
 		self::assertSniffError($report, 29, ReferenceSpacingSniff::CODE_INCORRECT_SPACES_AFTER_REFERENCE);
 		self::assertSniffError($report, 30, ReferenceSpacingSniff::CODE_INCORRECT_SPACES_AFTER_REFERENCE);
 		self::assertSniffError($report, 33, ReferenceSpacingSniff::CODE_INCORRECT_SPACES_AFTER_REFERENCE);
+		self::assertSniffError($report, 36, ReferenceSpacingSniff::CODE_INCORRECT_SPACES_AFTER_REFERENCE);
+		self::assertSniffError($report, 36, ReferenceSpacingSniff::CODE_INCORRECT_SPACES_AFTER_REFERENCE);
 
 		self::assertAllFixedInFile($report);
 	}

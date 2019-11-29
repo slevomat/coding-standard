@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_CLOSURE;
+use const T_FN;
 use const T_OPEN_PARENTHESIS;
 use const T_PARENT;
 use const T_STATIC;
@@ -24,6 +25,7 @@ class StaticClosureSniff implements Sniff
 	{
 		return [
 			T_CLOSURE,
+			T_FN,
 		];
 	}
 

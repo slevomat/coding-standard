@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 function foo(): Foo
 {
@@ -13,6 +13,10 @@ function ()
 {
 
 };
+
+fn ($a) => $a;
+
+fn ($a): int => $a;
 
 interface Foo
 {

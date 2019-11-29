@@ -16,21 +16,22 @@ class NullableTypeForNullDefaultValueSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/nullableTypeForNullDefaultValueErrors.php');
 
-		self::assertSame(12, $report->getErrorCount());
+		self::assertSame(13, $report->getErrorCount());
 
 		$code = NullableTypeForNullDefaultValueSniff::CODE_NULLABILITY_SYMBOL_REQUIRED;
 		self::assertSniffError($report, 3, $code);
 		self::assertSniffError($report, 8, $code);
-		self::assertSniffError($report, 15, $code);
-		self::assertSniffError($report, 22, $code);
-		self::assertSniffError($report, 27, $code);
-		self::assertSniffError($report, 32, $code);
-		self::assertSniffError($report, 37, $code);
-		self::assertSniffError($report, 42, $code);
-		self::assertSniffError($report, 47, $code);
-		self::assertSniffError($report, 52, $code);
-		self::assertSniffError($report, 57, $code);
-		self::assertSniffError($report, 62, $code);
+		self::assertSniffError($report, 12, $code);
+		self::assertSniffError($report, 17, $code);
+		self::assertSniffError($report, 24, $code);
+		self::assertSniffError($report, 29, $code);
+		self::assertSniffError($report, 34, $code);
+		self::assertSniffError($report, 39, $code);
+		self::assertSniffError($report, 44, $code);
+		self::assertSniffError($report, 49, $code);
+		self::assertSniffError($report, 54, $code);
+		self::assertSniffError($report, 59, $code);
+		self::assertSniffError($report, 64, $code);
 	}
 
 	public function testFixable(): void

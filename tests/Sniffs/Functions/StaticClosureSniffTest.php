@@ -17,11 +17,12 @@ class StaticClosureSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/staticClosureErrors.php');
 
-		self::assertSame(3, $report->getErrorCount());
+		self::assertSame(4, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, StaticClosureSniff::CODE_CLOSURE_NOT_STATIC);
-		self::assertSniffError($report, 13, StaticClosureSniff::CODE_CLOSURE_NOT_STATIC);
-		self::assertSniffError($report, 14, StaticClosureSniff::CODE_CLOSURE_NOT_STATIC);
+		self::assertSniffError($report, 8, StaticClosureSniff::CODE_CLOSURE_NOT_STATIC);
+		self::assertSniffError($report, 15, StaticClosureSniff::CODE_CLOSURE_NOT_STATIC);
+		self::assertSniffError($report, 16, StaticClosureSniff::CODE_CLOSURE_NOT_STATIC);
 
 		self::assertAllFixedInFile($report);
 	}

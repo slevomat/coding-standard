@@ -1,9 +1,11 @@
-<?php
+<?php // lint >= 7.4
 
 static function ()
 {
 
 };
+
+static fn ($a) => $a;
 
 class Whatever extends Something
 {

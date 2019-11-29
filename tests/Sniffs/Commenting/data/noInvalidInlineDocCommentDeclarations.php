@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 class Foo
 {
@@ -98,6 +98,12 @@ class Foo
 		/** @var string $s */
 		$ss = function ($s) {
 		};
+
+		/** @var int $t */
+		fn &(array &$t) => $t;
+
+		/** @var int $tt */
+		array_map(fn ($tt): int => $tt, []);
 	}
 
 	public function get()

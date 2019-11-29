@@ -9,8 +9,6 @@ use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\VariableHelper;
 use function sprintf;
-use const T_CLOSURE;
-use const T_FUNCTION;
 use const T_VARIABLE;
 
 class UnusedParameterSniff implements Sniff
@@ -25,10 +23,7 @@ class UnusedParameterSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return [
-			T_FUNCTION,
-			T_CLOSURE,
-		];
+		return TokenHelper::$functionTokenCodes;
 	}
 
 	/**

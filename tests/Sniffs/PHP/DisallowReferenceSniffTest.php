@@ -17,7 +17,7 @@ class DisallowReferenceSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/disallowReferenceErrors.php');
 
-		self::assertSame(10, $report->getErrorCount());
+		self::assertSame(12, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, DisallowReferenceSniff::CODE_DISALLOWED_RETURNING_REFERENCE);
 		self::assertSniffError($report, 8, DisallowReferenceSniff::CODE_DISALLOWED_RETURNING_REFERENCE);
@@ -29,6 +29,8 @@ class DisallowReferenceSniffTest extends TestCase
 		self::assertSniffError($report, 29, DisallowReferenceSniff::CODE_DISALLOWED_ASSIGNING_BY_REFERENCE);
 		self::assertSniffError($report, 30, DisallowReferenceSniff::CODE_DISALLOWED_ASSIGNING_BY_REFERENCE);
 		self::assertSniffError($report, 33, DisallowReferenceSniff::CODE_DISALLOWED_ASSIGNING_BY_REFERENCE);
+		self::assertSniffError($report, 37, DisallowReferenceSniff::CODE_DISALLOWED_RETURNING_REFERENCE);
+		self::assertSniffError($report, 37, DisallowReferenceSniff::CODE_DISALLOWED_PASSING_BY_REFERENCE);
 	}
 
 }

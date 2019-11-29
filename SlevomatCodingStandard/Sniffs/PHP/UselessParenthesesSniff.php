@@ -34,6 +34,7 @@ use const T_EMPTY;
 use const T_EQUAL;
 use const T_EVAL;
 use const T_EXIT;
+use const T_FN;
 use const T_INCLUDE;
 use const T_INCLUDE_ONCE;
 use const T_INLINE_THEN;
@@ -126,6 +127,7 @@ class UselessParenthesesSniff implements Sniff
 			T_UNSET,
 			T_EMPTY,
 			T_CLOSURE,
+			T_FN,
 			T_USE,
 			T_ANON_CLASS,
 			T_SELF,

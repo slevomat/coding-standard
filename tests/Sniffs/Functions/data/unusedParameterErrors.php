@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 function unusedParameters($a, $b)
 {
@@ -47,6 +47,8 @@ class Whatever
 function ($a) {
 
 };
+
+fn ($a) => $b;
 
 function sameNameParameterInAnotherScope($a)
 {

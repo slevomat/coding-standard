@@ -20,6 +20,7 @@ use const T_DOC_COMMENT_STRING;
 use const T_DOC_COMMENT_TAG;
 use const T_DOC_COMMENT_WHITESPACE;
 use const T_EXIT;
+use const T_FN;
 use const T_FUNCTION;
 use const T_INTERFACE;
 use const T_NS_SEPARATOR;
@@ -107,6 +108,7 @@ class TokenHelper
 	public static $functionTokenCodes = [
 		T_FUNCTION,
 		T_CLOSURE,
+		T_FN,
 	];
 
 	/**

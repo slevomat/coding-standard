@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 use Foo\{ Boo, Doo };
 
@@ -16,6 +16,7 @@ $anonymous = function () {
 	return null;
 };
 
+fn ($a) => $a;
 
 for (;;) {
 

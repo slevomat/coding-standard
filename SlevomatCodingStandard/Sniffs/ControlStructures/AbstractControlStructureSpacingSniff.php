@@ -32,6 +32,7 @@ use const T_DO;
 use const T_ELSE;
 use const T_ELSEIF;
 use const T_FINALLY;
+use const T_FN;
 use const T_FOR;
 use const T_FOREACH;
 use const T_IF;
@@ -334,7 +335,7 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 			return TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $pointerAfterControlStructureEnd - 1);
 		}
 
-		$nextPointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_ANON_CLASS, T_CLOSURE, T_OPEN_SHORT_ARRAY], $controlStructurePointer + 1);
+		$nextPointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_ANON_CLASS, T_CLOSURE, T_FN, T_OPEN_SHORT_ARRAY], $controlStructurePointer + 1);
 		if ($tokens[$nextPointer]['code'] === T_SEMICOLON) {
 			return $nextPointer;
 		}

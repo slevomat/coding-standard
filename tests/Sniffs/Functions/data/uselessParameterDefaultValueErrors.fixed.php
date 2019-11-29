@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 function a(?int $a, $aa)
 {
@@ -18,3 +18,5 @@ function c($c, $cc, ...$ccc)
 {
 
 }
+
+fn ($d, $dd, ...$ddd) => $d;

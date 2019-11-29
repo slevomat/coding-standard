@@ -155,6 +155,22 @@ class ReturnTypeHintSpacingSniffTest extends TestCase
 			130,
 			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT
 		);
+
+		self::assertSniffError(
+			$report,
+			137,
+			ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT
+		);
+		self::assertSniffError(
+			$report,
+			138,
+			ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT
+		);
+		self::assertSniffError(
+			$report,
+			139,
+			ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON
+		);
 	}
 
 	public function testIncorrectSpacingInInterface(): void
@@ -261,7 +277,7 @@ class ReturnTypeHintSpacingSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/returnNullableTypeHintsIncorrect.php');
 
-		self::assertSame(53, $report->getErrorCount());
+		self::assertSame(61, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_NULLABILITY_SYMBOL);
 		self::assertSniffError($report, 8, ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_NULLABILITY_SYMBOL);
@@ -318,6 +334,15 @@ class ReturnTypeHintSpacingSniffTest extends TestCase
 		self::assertSniffError($report, 130, ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON);
 		self::assertSniffError($report, 130, ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_NULLABILITY_SYMBOL);
 		self::assertSniffError($report, 130, ReturnTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL);
+
+		self::assertSniffError($report, 137, ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_NULLABILITY_SYMBOL);
+		self::assertSniffError($report, 138, ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON);
+		self::assertSniffError($report, 138, ReturnTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL);
+		self::assertSniffError($report, 139, ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON);
+		self::assertSniffError($report, 139, ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_NULLABILITY_SYMBOL);
+		self::assertSniffError($report, 140, ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON);
+		self::assertSniffError($report, 140, ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_NULLABILITY_SYMBOL);
+		self::assertSniffError($report, 140, ReturnTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL);
 	}
 
 	public function testReturnTypeHintsArrayIncorrect(): void
@@ -343,7 +368,7 @@ class ReturnTypeHintSpacingSniffTest extends TestCase
 			'spacesCountBeforeColon' => 1,
 		]);
 
-		self::assertSame(24, $report->getErrorCount());
+		self::assertSame(26, $report->getErrorCount());
 
 		$message = 'There must be exactly 1 whitespace between closing parenthesis and return type colon.';
 
@@ -371,6 +396,8 @@ class ReturnTypeHintSpacingSniffTest extends TestCase
 		self::assertSniffError($report, 80, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
 		self::assertSniffError($report, 85, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
 		self::assertSniffError($report, 90, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		self::assertSniffError($report, 97, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
+		self::assertSniffError($report, 98, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON, $message);
 	}
 
 	public function testFixableReturnTypeHintNoSpaceBetweenColonAndType(): void

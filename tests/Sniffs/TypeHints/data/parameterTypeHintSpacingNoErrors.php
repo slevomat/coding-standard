@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 $a = function (?bool $a, ?string &$b, ?int ...$c)
 {
@@ -12,3 +12,5 @@ function b(
 ) {
 
 }
+
+fn (?bool $a, ?string &$b, ?int ...$c) => $a;

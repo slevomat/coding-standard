@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 class FooBar
 {
@@ -8,6 +8,8 @@ class FooBar
 		function (string $string = null) {
 
 		};
+
+		fn (int $int = null) => $int;
 	}
 
 	public function invalid(bool $bool = null)

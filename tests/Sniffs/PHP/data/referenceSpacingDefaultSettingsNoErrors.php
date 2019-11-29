@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 $a = 1 & 0;
 $b = $a & $a;
@@ -35,3 +35,5 @@ $d = [
 
 foreach ([] as &$e) {
 }
+
+fn &(array &$f) => $f;

@@ -9,9 +9,7 @@ use function array_key_exists;
 use function count;
 use function sprintf;
 use function strtolower;
-use const T_CLOSURE;
 use const T_COMMA;
-use const T_FUNCTION;
 
 class UselessParameterDefaultValueSniff implements Sniff
 {
@@ -23,10 +21,7 @@ class UselessParameterDefaultValueSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return [
-			T_FUNCTION,
-			T_CLOSURE,
-		];
+		return TokenHelper::$functionTokenCodes;
 	}
 
 	/**

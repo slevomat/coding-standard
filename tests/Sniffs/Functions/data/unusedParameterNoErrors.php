@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 function noParameter()
 {
@@ -70,6 +70,8 @@ function compactIsNotFunction($a, $b) {
 
 	return compact('a');
 }
+
+fn ($a, $b) => $a + $b;
 
 abstract class Whatever
 {

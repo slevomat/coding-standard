@@ -11,6 +11,7 @@ use const T_ANON_CLASS;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
+use const T_FN;
 use const T_FOR;
 use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_TAG;
@@ -112,7 +113,7 @@ class UselessSemicolonSniff implements Sniff
 		}
 
 		$scopeOpenerPointer = $tokens[$previousPointer]['scope_condition'];
-		if (in_array($tokens[$scopeOpenerPointer]['code'], [T_CLOSURE, T_ANON_CLASS], true)) {
+		if (in_array($tokens[$scopeOpenerPointer]['code'], [T_CLOSURE, T_FN, T_ANON_CLASS], true)) {
 			return;
 		}
 

@@ -1,9 +1,11 @@
-<?php
+<?php // lint >= 7.4
 
 function ()
 {
 
 };
+
+fn ($a) => $a;
 
 class Whatever
 {

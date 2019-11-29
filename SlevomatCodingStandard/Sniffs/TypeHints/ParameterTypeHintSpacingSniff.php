@@ -8,10 +8,8 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_keys;
 use function sprintf;
 use const T_BITWISE_AND;
-use const T_CLOSURE;
 use const T_COMMA;
 use const T_ELLIPSIS;
-use const T_FUNCTION;
 use const T_NULLABLE;
 use const T_VARIABLE;
 use const T_WHITESPACE;
@@ -30,10 +28,7 @@ class ParameterTypeHintSpacingSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return [
-			T_FUNCTION,
-			T_CLOSURE,
-		];
+		return TokenHelper::$functionTokenCodes;
 	}
 
 	/**

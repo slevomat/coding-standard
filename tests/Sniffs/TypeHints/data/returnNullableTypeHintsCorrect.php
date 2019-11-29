@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 function foo(): Foo
 {
@@ -8,6 +8,8 @@ function foo(): Foo
 $callback = function () use ($x, $y): ?Foo {
 
 };
+
+$callback = fn ($a): ?Foo => $a;
 
 interface Foo
 {

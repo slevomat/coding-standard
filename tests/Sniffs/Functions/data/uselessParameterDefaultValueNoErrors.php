@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 function ()
 {
@@ -34,3 +34,5 @@ function f($f = true, $ff = true, ...$fff)
 {
 
 }
+
+fn ($g = true, $gg = false) => $g && $gg;

@@ -17,6 +17,7 @@ use const T_CLOSURE;
 use const T_COMMENT;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_EQUAL;
+use const T_FN;
 use const T_FOREACH;
 use const T_LIST;
 use const T_OPEN_SHORT_ARRAY;
@@ -166,7 +167,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
-		$checkedTokens = [T_VARIABLE, T_FOREACH, T_WHILE, T_LIST, T_OPEN_SHORT_ARRAY, T_CLOSURE];
+		$checkedTokens = [T_VARIABLE, T_FOREACH, T_WHILE, T_LIST, T_OPEN_SHORT_ARRAY, T_CLOSURE, T_FN];
 
 		$variableNames = [];
 
@@ -197,7 +198,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 				return $codePointer;
 			}
 
-			$closurePointer = TokenHelper::findNext($phpcsFile, T_CLOSURE, $codePointer + 1);
+			$closurePointer = TokenHelper::findNext($phpcsFile, [T_CLOSURE, T_FN], $codePointer + 1);
 			if ($closurePointer !== null && $tokens[$codePointer]['line'] === $tokens[$closurePointer]['line']) {
 				return $closurePointer;
 			}
@@ -318,7 +319,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 						continue;
 					}
 
-				} elseif ($tokens[$codePointer]['code'] === T_CLOSURE) {
+				} elseif (in_array($tokens[$codePointer]['code'], [T_CLOSURE, T_FN], true)) {
 					$parameterPointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $tokens[$codePointer]['parenthesis_opener'] + 1, $tokens[$codePointer]['parenthesis_closer']);
 					if ($parameterPointer === null) {
 						if ($tryNo === 2) {
