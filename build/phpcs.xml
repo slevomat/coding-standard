@@ -124,6 +124,7 @@
 			</property>
 		</properties>
 	</rule>
+	<rule ref="SlevomatCodingStandard.Functions.DisallowArrowFunction"/>
 	<rule ref="SlevomatCodingStandard.Functions.StaticClosure"/>
 	<rule ref="SlevomatCodingStandard.Functions.UselessParameterDefaultValue"/>
 	<rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure"/>
