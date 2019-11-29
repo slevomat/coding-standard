@@ -13,7 +13,6 @@ use const T_BITWISE_AND;
 use const T_COMMA;
 use const T_DOUBLE_ARROW;
 use const T_EQUAL;
-use const T_FN;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_USE;
@@ -66,10 +65,8 @@ class DisallowReferenceSniff implements Sniff
 
 			$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $previousParenthesisOpenerPointer - 1);
 			if ($pointerBeforeParenthesisOpener !== null && $tokens[$pointerBeforeParenthesisOpener]['code'] === T_USE) {
-				if ($tokens[$pointerBeforeParenthesisOpener]['code'] === T_USE) {
-					$phpcsFile->addError('Inheriting variable by reference is disallowed.', $referencePointer, self::CODE_DISALLOWED_INHERITING_VARIABLE_BY_REFERENCE);
-					return;
-				}
+				$phpcsFile->addError('Inheriting variable by reference is disallowed.', $referencePointer, self::CODE_DISALLOWED_INHERITING_VARIABLE_BY_REFERENCE);
+				return;
 			}
 		}
 
