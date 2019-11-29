@@ -474,6 +474,10 @@ Sniff provides the following settings:
 
 Disallows numeric literal separators.
 
+#### SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator
+
+Requires use of numeric literal separators.
+
 #### SlevomatCodingStandard.PHP.ReferenceSpacing 🔧
 
 Enforces configurable number of spaces after reference.
