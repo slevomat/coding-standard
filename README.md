@@ -405,6 +405,10 @@ Sniff provides the following settings:
 
 However, if you prefer Yoda conditions, you can use `RequireYodaComparisonSniff`.
 
+#### SlevomatCodingStandard.Functions.DisallowArrowFunction
+
+Disallows arrow functions.
+
 #### SlevomatCodingStandard.Functions.TrailingCommaInCall 🔧
 
 Commas after the last parameter in function or method call make adding a new parameter easier and result in a cleaner versioning diff.
