@@ -12,6 +12,11 @@ before_script:
 jobs:
   include:
     - stage: Lint
+      php: 7.1
+      env: DEPENDENCIES=highest
+      script: bin/phing lint
+
+    - stage: Lint
       php: 7.2
       env: DEPENDENCIES=highest
       script: bin/phing lint
@@ -25,6 +30,38 @@ jobs:
       php: 7.4snapshot
       env: DEPENDENCIES=highest
       script: bin/phing lint
+
+    - stage: Tests
+      php: 7.1
+      env: DEPENDENCIES=lowest
+      script: bin/phing tests-without-code-coverage
+
+    - stage: Tests
+      php: 7.1
+      env: DEPENDENCIES=highest
+      script: bin/phing tests-without-code-coverage
+
+    - stage: Tests
+      os: windows
+      dist: 1803-containers
+      language: sh # No PHP currently
+      env: PHP_VERSION=7.1.33 DEPENDENCIES=lowest
+      install:
+        - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
+        - choco install composer --ia "/DEV=C:\tools\php"
+        - export PATH=/c/tools/php:$PATH
+      script: bin/phing tests-without-code-coverage
+
+    - stage: Tests
+      os: windows
+      dist: 1803-containers
+      language: sh # No PHP currently
+      env: PHP_VERSION=7.1.33 DEPENDENCIES=highest
+      install:
+        - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
+        - choco install composer --ia "/DEV=C:\tools\php"
+        - export PATH=/c/tools/php:$PATH
+      script: bin/phing tests-without-code-coverage
 
     - stage: Tests
       php: 7.2
