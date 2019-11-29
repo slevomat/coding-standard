@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -21,6 +22,7 @@ use SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use function array_key_exists;
+use function array_merge;
 use function get_class;
 use function in_array;
 use function preg_match;
@@ -207,10 +209,12 @@ class AnnotationHelper
 			return $annotations;
 		}
 
+		$annotationNameCodes = array_merge([T_DOC_COMMENT_TAG], Tokens::$phpcsCommentTokens);
+
 		$tokens = $phpcsFile->getTokens();
 		$i = $docCommentOpenToken + 1;
 		while ($i < $tokens[$docCommentOpenToken]['comment_closer']) {
-			if ($tokens[$i]['code'] !== T_DOC_COMMENT_TAG) {
+			if (!in_array($tokens[$i]['code'], $annotationNameCodes, true)) {
 				$i++;
 				continue;
 			}
@@ -228,7 +232,7 @@ class AnnotationHelper
 					break;
 				}
 
-				if ($tokens[$j]['code'] === T_DOC_COMMENT_TAG && $parenthesesLevel === 0) {
+				if (in_array($tokens[$j]['code'], $annotationNameCodes, true) && $parenthesesLevel === 0) {
 					$i = $j;
 					break;
 				}
@@ -237,7 +241,7 @@ class AnnotationHelper
 					continue;
 				}
 
-				if (in_array($tokens[$j]['code'], [T_DOC_COMMENT_TAG, T_DOC_COMMENT_STRING], true)) {
+				if (in_array($tokens[$j]['code'], array_merge([T_DOC_COMMENT_STRING], $annotationNameCodes), true)) {
 					$annotationEndPointer = $j;
 				} elseif ($tokens[$j]['code'] === T_DOC_COMMENT_WHITESPACE) {
 					if (array_key_exists($j - 1, $tokens) && $tokens[$j - 1]['code'] === T_DOC_COMMENT_STAR) {
@@ -255,7 +259,7 @@ class AnnotationHelper
 			$annotationName = $tokens[$annotationStartPointer]['content'];
 			$annotationParameters = null;
 			$annotationContent = null;
-			if (preg_match('~^(@[-a-zA-Z\\\\]+)(?:\((.*)\))?(?:\\s+(.+))?($)~s', trim($annotationCode), $matches) !== 0) {
+			if (preg_match('~^(@[-a-zA-Z\\\\:]+)(?:\((.*)\))?(?:\\s+(.+))?($)~s', trim($annotationCode), $matches) !== 0) {
 				$annotationName = $matches[1];
 				$annotationParameters = trim($matches[2]);
 				if ($annotationParameters === '') {

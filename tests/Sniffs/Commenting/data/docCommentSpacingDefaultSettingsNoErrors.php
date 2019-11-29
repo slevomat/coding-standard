@@ -24,6 +24,7 @@ class Whatever
 	 * @param bool $a
 	 * @return void
 	 * @throws \Exception
+	 * @phpcs:disable Whatever
 	 */
 	public function method()
 	{
