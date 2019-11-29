@@ -72,6 +72,11 @@
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments"/>
+	<rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment">
+		<properties>
+			<property name="enableObjectTypeHint" value="false"/>
+		</properties>
+	</rule>
 	<rule ref="SlevomatCodingStandard.Commenting.UselessInheritDocComment"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing">
@@ -163,7 +168,19 @@
 	<rule ref="SlevomatCodingStandard.Operators.RequireCombinedAssignmentOperator"/>
 	<rule ref="SlevomatCodingStandard.Operators.RequireOnlyStandaloneIncrementAndDecrementOperators"/>
 	<rule ref="SlevomatCodingStandard.Operators.SpreadOperatorSpacing"/>
-	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
+	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint">
+		<exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint.UselessAnnotation"/>
+		<properties>
+			<property name="enableObjectTypeHint" value="false"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
+		<properties>
+			<property name="enableObjectTypeHint" value="false"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint">
+		<exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation"/>
 		<properties>
 			<property name="enableObjectTypeHint" value="false"/>
 		</properties>

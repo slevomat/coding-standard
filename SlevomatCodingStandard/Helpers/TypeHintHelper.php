@@ -9,6 +9,19 @@ use function in_array;
 class TypeHintHelper
 {
 
+	public static function isValidTypeHint(string $typeHint, bool $enableObjectTypeHint): bool
+	{
+		if (self::isSimpleTypeHint($typeHint)) {
+			return true;
+		}
+
+		if ($typeHint === 'object') {
+			return $enableObjectTypeHint;
+		}
+
+		return !self::isSimpleUnofficialTypeHints($typeHint);
+	}
+
 	public static function isSimpleTypeHint(string $typeHint): bool
 	{
 		return in_array($typeHint, self::getSimpleTypeHints(), true);
@@ -94,6 +107,21 @@ class TypeHintHelper
 		}
 
 		return in_array($typeHint, $simpleUnofficialTypeHints, true);
+	}
+
+	/**
+	 * @param string $type
+	 * @param string[] $traversableTypeHints
+	 * @return bool
+	 */
+	public static function isTraversableType(string $type, array $traversableTypeHints): bool
+	{
+		return self::isSimpleIterableTypeHint($type) || in_array($type, $traversableTypeHints, true);
+	}
+
+	public static function typeHintEqualsAnnotation(File $phpcsFile, int $functionPointer, string $typeHint, string $typeHintInAnnotation): bool
+	{
+		return self::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint) === self::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHintInAnnotation);
 	}
 
 }

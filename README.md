@@ -34,22 +34,42 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_
 
 ### Functional - improving the safety and behaviour of code
 
-#### SlevomatCodingStandard.TypeHints.TypeHintDeclaration 🔧🚧
+#### SlevomatCodingStandard.TypeHints.ParameterTypeHint 🔧🚧
 
-* Checks for missing property types in phpDoc `@var`.
-* Checks for missing typehints in case they can be declared natively. If the phpDoc contains something that can be written as a native PHP 7.0, 7.1 or 7.2 typehint, this sniff reports that.
-* Checks for missing `@return` and/or native return typehint in case the method body contains `return` with a value.
-* Checks for useless doc comments. If the native method declaration contains everything and the phpDoc does not add anything useful, it's reported as useless and can optionally be automatically removed with `phpcbf`.
-* Some phpDocs might still be useful even if they do not add any typehint information. They can contain textual descriptions of code elements and also some meaningful annotations like `@expectException` or `@dataProvider`.
+* Checks for missing parameter typehints in case they can be declared natively. If the phpDoc contains something that can be written as a native PHP 7.0+ typehint, this sniff reports that.
+* Checks for useless `@param` annotations. If the native method declaration contains everything and the phpDoc does not add anything useful, it's reported as useless and can optionally be automatically removed with `phpcbf`.
 * Forces to specify what's in traversable types like `array`, `iterable` and `\Traversable`.
 
 Sniff provides the following settings:
 
-* **DEPRECATED** `enableObjectTypeHint`: enforces to transform `@param object` or `@return object` into native `object` typehint. It's on by default if you're on PHP 7.2+
+* `enableObjectTypeHint`: enforces to transform `@param object` into native `object` typehint. It's on by default if you're on PHP 7.2+
 * `traversableTypeHints`: enforces which typehints must have specified contained type. E. g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
-* `enableEachParameterAndReturnInspection`: enables inspection and fixing of `@param` and `@return` annotations separately. Useful when you only want to document parameters or return values that could not be expressed natively (i.e. member types of `array` or `Traversable`).
 
-This sniff can cause an error if you're overriding or implementing a parent method which does not have typehints. In such cases add `@phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint` annotation to the method to have this sniff skip it.
+This sniff can cause an error if you're overriding or implementing a parent method which does not have typehints. In such cases add `@phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint` annotation to the method to have this sniff skip it.
+
+#### SlevomatCodingStandard.TypeHints.PropertyTypeHint 🚧
+
+* Checks for missing property types in phpDoc `@var`.
+* Forces to specify what's in traversable types like `array`, `iterable` and `\Traversable`.
+
+Sniff provides the following settings:
+
+* `traversableTypeHints`: enforces which typehints must have specified contained type. E. g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
+
+This sniff can cause an error if you're overriding or implementing a parent method which does not have typehints. In such cases add `@phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint` annotation to the method to have this sniff skip it.
+
+#### SlevomatCodingStandard.TypeHints.ReturnTypeHint 🔧🚧
+
+* Checks for missing return typehints in case they can be declared natively. If the phpDoc contains something that can be written as a native PHP 7.0+ typehint, this sniff reports that.
+* Checks for useless `@return` annotations. If the native method declaration contains everything and the phpDoc does not add anything useful, it's reported as useless and can optionally be automatically removed with `phpcbf`.
+* Forces to specify what's in traversable types like `array`, `iterable` and `\Traversable`.
+
+Sniff provides the following settings:
+
+* `enableObjectTypeHint`: enforces to transform `@param object` into native `object` typehint. It's on by default if you're on PHP 7.2+
+* `traversableTypeHints`: enforces which typehints must have specified contained type. E. g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
+
+This sniff can cause an error if you're overriding or implementing a parent method which does not have typehints. In such cases add `@phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint` annotation to the method to have this sniff skip it.
 
 #### SlevomatCodingStandard.TypeHints.UselessConstantTypeHint 🔧
 
@@ -810,6 +830,17 @@ Requires comments with single-line content to be written as one-liners.
 
 Requires comments with single-line content to be written as multi-liners.
 
+#### SlevomatCodingStandard.TypeHints.UselessFunctionDocComment 🔧🚧
+
+* Checks for useless doc comments. If the native method declaration contains everything and the phpDoc does not add anything useful, it's reported as useless and can optionally be automatically removed with `phpcbf`.
+* Some phpDocs might still be useful even if they do not add any typehint information. They can contain textual descriptions of code elements and also some meaningful annotations like `@expectException` or `@dataProvider`.
+
+Sniff provides the following settings:
+
+* `traversableTypeHints`: enforces which typehints must have specified contained type. E. g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
+
+This sniff can cause an error if you're overriding or implementing a parent method which does not have typehints. In such cases add `@phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint` annotation to the method to have this sniff skip it.
+
 #### SlevomatCodingStandard.Commenting.UselessInheritDocComment 🔧
 
 Reports documentation comments containing only `{@inheritDoc}` annotation because inheritance is automatic and it's not needed to use a special annotation for it.
@@ -949,17 +980,17 @@ The parameter `$max` could have a native `int` scalar typehint. But because the 
 FOUND 1 ERROR AFFECTING 1 LINE
 ----------------------------------------------------------------------
  67 | ERROR | [x] Method ErrorsConsoleStyle::createProgressBar()
-    |       |     does not have parameter type hint for its parameter $max
+    |       |     does not have native type hint for its parameter $max
     |       |     but it should be possible to add it based on @param
     |       |     annotation "int".
-    |       |     (SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint)
+    |       |     (SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint)
 ```
 
-If we want to suppress this error instead of fixing it, we can take the error code (`SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint`) and use it with a `@phpcsSuppress` annotation like this:
+If we want to suppress this error instead of fixing it, we can take the error code (`SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint`) and use it with a `@phpcsSuppress` annotation like this:
 
 ```php
 /**
- * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+ * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
  * @param int $max
  */
 public function createProgressBar($max = 0): ProgressBar

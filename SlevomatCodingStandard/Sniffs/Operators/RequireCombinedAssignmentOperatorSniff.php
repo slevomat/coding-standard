@@ -40,7 +40,7 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $equalPointer
 	 */

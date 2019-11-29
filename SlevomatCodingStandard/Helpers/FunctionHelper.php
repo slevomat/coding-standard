@@ -6,7 +6,6 @@ use Generator;
 use PHP_CodeSniffer\Files\File;
 use SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation;
 use function array_filter;
-use function array_keys;
 use function array_map;
 use function array_merge;
 use function array_reverse;
@@ -28,7 +27,6 @@ use const T_NULLABLE;
 use const T_RETURN;
 use const T_SEMICOLON;
 use const T_STRING;
-use const T_THROW;
 use const T_TRAIT;
 use const T_VARIABLE;
 use const T_YIELD;
@@ -36,6 +34,11 @@ use const T_YIELD_FROM;
 
 class FunctionHelper
 {
+
+	public static function getTypeLabel(File $phpcsFile, int $functionPointer): string
+	{
+		return self::isMethod($phpcsFile, $functionPointer) ? 'Method' : 'Function';
+	}
 
 	public static function getName(File $phpcsFile, int $functionPointer): string
 	{
@@ -127,18 +130,6 @@ class FunctionHelper
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $functionPointer
-	 * @return string[]
-	 */
-	public static function getParametersWithoutTypeHint(File $phpcsFile, int $functionPointer): array
-	{
-		return array_keys(array_filter(self::getParametersTypeHints($phpcsFile, $functionPointer), static function (?ParameterTypeHint $parameterTypeHint = null): bool {
-			return $parameterTypeHint === null;
-		}));
-	}
-
-	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param int $functionPointer
 	 * @return (\SlevomatCodingStandard\Helpers\ParameterTypeHint|null)[]
 	 */
 	public static function getParametersTypeHints(File $phpcsFile, int $functionPointer): array
@@ -216,15 +207,6 @@ class FunctionHelper
 		return false;
 	}
 
-	public static function throwsOnlyException(File $phpcsFile, int $functionPointer): bool
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		$firstPointerInScope = TokenHelper::findNextEffective($phpcsFile, $tokens[$functionPointer]['scope_opener'] + 1);
-
-		return $tokens[$firstPointerInScope]['code'] === T_THROW;
-	}
-
 	public static function findReturnTypeHint(File $phpcsFile, int $functionPointer): ?ReturnTypeHint
 	{
 		$tokens = $phpcsFile->getTokens();
@@ -287,6 +269,29 @@ class FunctionHelper
 	{
 		/** @var \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation[] $parametersAnnotations */
 		$parametersAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $functionPointer, '@param');
+		return $parametersAnnotations;
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $functionPointer
+	 * @return array<string, \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation>
+	 */
+	public static function getValidParametersAnnotations(File $phpcsFile, int $functionPointer): array
+	{
+		$parametersAnnotations = [];
+		foreach (self::getParametersAnnotations($phpcsFile, $functionPointer) as $parameterAnnotation) {
+			if ($parameterAnnotation->getContent() === null) {
+				continue;
+			}
+
+			if ($parameterAnnotation->isInvalid()) {
+				continue;
+			}
+
+			$parametersAnnotations[$parameterAnnotation->getParameterName()] = $parameterAnnotation;
+		}
+
 		return $parametersAnnotations;
 	}
 

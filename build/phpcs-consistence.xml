@@ -138,13 +138,6 @@
 	<rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
-	<rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
-		<properties>
-			<property name="traversableTypeHints" type="array">
-			    <element value="Traversable"/>
-			</property>
-		</properties>
-	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
 	<rule ref="Squiz.Arrays.ArrayBracketSpacing">
 		<exclude name="Squiz.Arrays.ArrayBracketSpacing.SpaceBeforeBracket"/><!-- does not handle nested array access across multiple lines -->

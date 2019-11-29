@@ -7,6 +7,9 @@ use PHP_CodeSniffer\Util\Tokens;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
@@ -303,6 +306,60 @@ class AnnotationHelper
 
 		return $annotations;
 	}
+
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $functionPointer
+	 * @param \SlevomatCodingStandard\Helpers\ReturnTypeHint|\SlevomatCodingStandard\Helpers\ParameterTypeHint|null $typeHint
+	 * @param \SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation $annotation
+	 * @param array<int, string> $traversableTypeHints
+	 * @return bool
+	 */
+	public static function isAnnotationUseless(File $phpcsFile, int $functionPointer, $typeHint, Annotation $annotation, array $traversableTypeHints): bool
+	{
+		if ($typeHint === null || $annotation->getContent() === null) {
+			return false;
+		}
+
+		if ($annotation->hasDescription()) {
+			return false;
+		}
+
+		if (TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint->getTypeHint()), $traversableTypeHints)) {
+			return false;
+		}
+
+		if (AnnotationTypeHelper::containsStaticOrThisType($annotation->getType())) {
+			return false;
+		}
+
+		if (AnnotationTypeHelper::isCompoundOfNull($annotation->getType())) {
+			/** @var \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $annotationTypeNode */
+			$annotationTypeNode = $annotation->getType();
+
+			$annotationTypeHintNode = AnnotationTypeHelper::getTypeFromNullableType($annotationTypeNode);
+			$annotationTypeHint = $annotationTypeHintNode instanceof IdentifierTypeNode ? $annotationTypeHintNode->name : (string) $annotationTypeHintNode;
+			return TypeHintHelper::typeHintEqualsAnnotation($phpcsFile, $functionPointer, $typeHint->getTypeHint(), $annotationTypeHint);
+		}
+
+		if (!AnnotationTypeHelper::containsOneType($annotation->getType())) {
+			return false;
+		}
+
+		if ($annotation->getType() instanceof GenericTypeNode) {
+			return false;
+		}
+
+		if ($annotation->getType() instanceof CallableTypeNode) {
+			return false;
+		}
+
+		/** @var \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\CallableTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $annotationTypeNode */
+		$annotationTypeNode = $annotation->getType();
+		$annotationTypeHint = AnnotationTypeHelper::getTypeHintFromOneType($annotationTypeNode);
+		return TypeHintHelper::typeHintEqualsAnnotation($phpcsFile, $functionPointer, $typeHint->getTypeHint(), $annotationTypeHint);
+	}
+
 
 	private static function parseAnnotationContent(string $annotationName, string $annotationContent): PhpDocTagValueNode
 	{

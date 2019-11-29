@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Helpers;
 use PHP_CodeSniffer\Files\File;
 use function count;
 use function in_array;
+use function stripos;
 use function strpos;
 use function trim;
 use const T_ABSTRACT;
@@ -92,6 +93,16 @@ class DocCommentHelper
 		}
 
 		return count($comments) > 0 ? $comments : null;
+	}
+
+	public static function hasInheritdocAnnotation(File $phpcsFile, int $pointer): bool
+	{
+		$docComment = self::getDocComment($phpcsFile, $pointer);
+		if ($docComment === null) {
+			return false;
+		}
+
+		return stripos($docComment, '@inheritdoc') !== false;
 	}
 
 	public static function hasDocCommentDescription(File $phpcsFile, int $pointer): bool

@@ -116,7 +116,6 @@ class FunctionHelperTest extends TestCase
 					'$array' => new ParameterTypeHint('array', false, false),
 					'$object' => new ParameterTypeHint('\FooNamespace\FooClass', false, true),
 				],
-				[],
 			],
 			[
 				'allParametersWithoutTypeHints',
@@ -128,15 +127,6 @@ class FunctionHelperTest extends TestCase
 					'$callable' => null,
 					'$array' => null,
 					'$object' => null,
-				],
-				[
-					'$string',
-					'$int',
-					'$bool',
-					'$float',
-					'$callable',
-					'$array',
-					'$object',
 				],
 			],
 			[
@@ -150,11 +140,6 @@ class FunctionHelperTest extends TestCase
 					'$array' => null,
 					'$object' => new ParameterTypeHint('\FooNamespace\FooClass', false, false),
 				],
-				[
-					'$int',
-					'$float',
-					'$array',
-				],
 			],
 			[
 				'parametersWithWeirdDefinition',
@@ -166,11 +151,6 @@ class FunctionHelperTest extends TestCase
 					'$callable' => new ParameterTypeHint('callable', false, false),
 					'$array' => null,
 					'$object' => new ParameterTypeHint('\FooNamespace\FooClass', false, false),
-				],
-				[
-					'$int',
-					'$float',
-					'$array',
 				],
 			],
 		];
@@ -225,12 +205,10 @@ class FunctionHelperTest extends TestCase
 	 * @dataProvider dataParametersTypeHints
 	 * @param string $functionName
 	 * @param (\SlevomatCodingStandard\Helpers\ParameterTypeHint|null)[] $expectedParametersTypeHints
-	 * @param string[] $expectedParametersWithoutTypeHints
 	 */
 	public function testParametersTypeHints(
 		string $functionName,
-		array $expectedParametersTypeHints,
-		array $expectedParametersWithoutTypeHints
+		array $expectedParametersTypeHints
 	): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersTypeHints.php');
@@ -249,7 +227,6 @@ class FunctionHelperTest extends TestCase
 				self::assertSame($expectedParameterTypeHint->isOptional(), $parameterTypeHint->isOptional());
 			}
 		}
-		self::assertSame($expectedParametersWithoutTypeHints, FunctionHelper::getParametersWithoutTypeHint($phpcsFile, $functionPointer));
 	}
 
 	/**
