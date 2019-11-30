@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 class Foo
 {
@@ -16,5 +16,9 @@ class Foo
 	}
 
 	private$weirdDefinition;
+
+	private ?\Whatever\Anything $withTypeHint;
+
+	private int $withSimpleTypeHint;
 
 }

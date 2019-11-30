@@ -37,6 +37,14 @@ class PropertyHelperTest extends TestCase
 				'$weirdDefinition',
 				true,
 			],
+			[
+				'$withTypeHint',
+				true,
+			],
+			[
+				'$withSimpleTypeHint',
+				true,
+			],
 		];
 	}
 
