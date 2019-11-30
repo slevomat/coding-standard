@@ -358,7 +358,7 @@ class ReturnTypeHintSniff implements Sniff
 	 */
 	private function getReturnTypeNode(?ReturnAnnotation $returnAnnotation): ?TypeNode
 	{
-		if ($returnAnnotation !== null && $returnAnnotation->getContent() !== null && !$returnAnnotation->isInvalid()) {
+		if ($this->hasReturnAnnotation($returnAnnotation)) {
 			return $returnAnnotation->getType();
 		}
 
