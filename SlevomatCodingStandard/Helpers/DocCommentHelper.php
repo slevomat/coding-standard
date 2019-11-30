@@ -10,7 +10,7 @@ use function strpos;
 use function trim;
 use const T_ABSTRACT;
 use const T_CLASS;
-use const T_COMMENT;
+use const T_CLOSE_CURLY_BRACKET;
 use const T_CONST;
 use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOC_COMMENT_OPEN_TAG;
@@ -23,9 +23,9 @@ use const T_INTERFACE;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
+use const T_SEMICOLON;
 use const T_STATIC;
 use const T_TRAIT;
-use const T_VAR;
 use const T_WHITESPACE;
 
 class DocCommentHelper
@@ -118,7 +118,11 @@ class DocCommentHelper
 			return $pointer;
 		}
 
-		$found = TokenHelper::findPreviousExcluding($phpcsFile, [T_WHITESPACE, T_COMMENT, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_VAR, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT], $pointer - 1);
+		$found = TokenHelper::findPrevious(
+			$phpcsFile,
+			[T_DOC_COMMENT_CLOSE_TAG, T_SEMICOLON, T_CLOSE_CURLY_BRACKET],
+			$pointer - 1
+		);
 		if ($found !== null && $tokens[$found]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
 			return $tokens[$found]['comment_opener'];
 		}
