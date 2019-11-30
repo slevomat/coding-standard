@@ -8,6 +8,7 @@ use function array_reverse;
 use function in_array;
 use function sprintf;
 use const T_ANON_CLASS;
+use const T_NULLABLE;
 use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_PARENTHESIS;
 use const T_PRIVATE;
@@ -24,6 +25,30 @@ class PropertyHelper
 		$previousPointer = TokenHelper::findPrevious($phpcsFile, [T_OPEN_PARENTHESIS, T_OPEN_CURLY_BRACKET, T_SEMICOLON, T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR], $variablePointer - 1);
 
 		return $previousPointer !== null && in_array($phpcsFile->getTokens()[$previousPointer]['code'], [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR], true);
+	}
+
+	public static function findTypeHint(File $phpcsFile, int $propertyPointer): ?PropertyTypeHint
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$propertyStartPointer = TokenHelper::findPrevious($phpcsFile, [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR], $propertyPointer - 1);
+
+		$typeHintEndPointer = TokenHelper::findPrevious($phpcsFile, TokenHelper::$typeHintTokenCodes, $propertyPointer - 1, $propertyStartPointer);
+		if ($typeHintEndPointer === null) {
+			return null;
+		}
+
+		$typeHintStartPointer = TokenHelper::findPreviousExcluding($phpcsFile, TokenHelper::$typeHintTokenCodes, $typeHintEndPointer, $propertyStartPointer) + 1;
+
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $typeHintStartPointer - 1, $propertyStartPointer);
+		$nullabilitySymbolPointer = $previousPointer !== null && $tokens[$previousPointer]['code'] === T_NULLABLE ? $previousPointer : null;
+
+		return new PropertyTypeHint(
+			TokenHelper::getContent($phpcsFile, $typeHintStartPointer, $typeHintEndPointer),
+			$nullabilitySymbolPointer !== null,
+			$nullabilitySymbolPointer ?? $typeHintStartPointer,
+			$typeHintEndPointer,
+		);
 	}
 
 	public static function getFullyQualifiedName(File $phpcsFile, int $propertyPointer): string

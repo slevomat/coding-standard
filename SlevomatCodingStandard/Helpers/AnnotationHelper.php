@@ -310,8 +310,8 @@ class AnnotationHelper
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $functionPointer
-	 * @param \SlevomatCodingStandard\Helpers\ReturnTypeHint|\SlevomatCodingStandard\Helpers\ParameterTypeHint|null $typeHint
-	 * @param \SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation $annotation
+	 * @param \SlevomatCodingStandard\Helpers\ReturnTypeHint|\SlevomatCodingStandard\Helpers\ParameterTypeHint|\SlevomatCodingStandard\Helpers\PropertyTypeHint|null $typeHint
+	 * @param \SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation $annotation
 	 * @param array<int, string> $traversableTypeHints
 	 * @return bool
 	 */

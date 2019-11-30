@@ -16,4 +16,10 @@ class Whatever
 
 	/** @var \Traversable */
 	private $specificTraversableWithMissingTraversableTypeHintSpecification;
+
+	/**
+	 * @var
+	 */
+	private $invalidVarAnnotation;
+
 }

@@ -27,11 +27,6 @@ class Whatever
 	private $isSniffCodeMissingTravesableTypeHintSpecificationSuppressed;
 
 	/**
-	 * @var
-	 */
-	private $invalidVarAnnotation;
-
-	/**
 	 * @var int
 	 */
 	private $noTraversableType;
