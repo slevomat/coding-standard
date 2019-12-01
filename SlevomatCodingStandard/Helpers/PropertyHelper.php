@@ -47,7 +47,7 @@ class PropertyHelper
 			TokenHelper::getContent($phpcsFile, $typeHintStartPointer, $typeHintEndPointer),
 			$nullabilitySymbolPointer !== null,
 			$nullabilitySymbolPointer ?? $typeHintStartPointer,
-			$typeHintEndPointer,
+			$typeHintEndPointer
 		);
 	}
 
