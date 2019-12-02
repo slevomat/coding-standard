@@ -431,6 +431,14 @@ However, if you prefer Yoda conditions, you can use `RequireYodaComparisonSniff`
 
 Disallows arrow functions.
 
+#### SlevomatCodingStandard.Functions.RequireArrowFunction 🔧
+
+Requires arrow functions.
+
+Sniff provides the following settings:
+
+* `allowNested` (defaults to `true`)
+
 #### SlevomatCodingStandard.Functions.TrailingCommaInCall 🔧
 
 Commas after the last parameter in function or method call make adding a new parameter easier and result in a cleaner versioning diff.
