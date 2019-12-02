@@ -19,13 +19,16 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_map;
 use function count;
+use function in_array;
 use function sprintf;
 use const PHP_VERSION_ID;
+use const T_COMMA;
 use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOC_COMMENT_STAR;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
+use const T_SEMICOLON;
 use const T_STATIC;
 use const T_VAR;
 use const T_VARIABLE;
@@ -201,6 +204,15 @@ class PropertyTypeHintSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 		$phpcsFile->fixer->addContent($propertyStartPointer, sprintf(' %s%s', ($nullableTypeHint ? '?' : ''), $propertyTypeHint));
+
+		if ($nullableTypeHint) {
+			$pointerAfterProperty = TokenHelper::findNextEffective($phpcsFile, $propertyPointer + 1);
+			$tokens = $phpcsFile->getTokens();
+			if (in_array($tokens[$pointerAfterProperty]['code'], [T_SEMICOLON, T_COMMA], true)) {
+				$phpcsFile->fixer->addContent($propertyPointer, ' = null');
+			}
+		}
+
 		$phpcsFile->fixer->endChangeset();
 	}
 

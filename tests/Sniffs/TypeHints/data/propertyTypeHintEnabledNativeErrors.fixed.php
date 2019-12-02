@@ -13,14 +13,14 @@ class Whatever
 	/**
 	 * @var int[]|null
 	 */
-	public ?array $arrayTypeHintWithNull;
+	public ?array $arrayTypeHintWithNull = null;
 
 	/**
 	 * @var array{foo: int}
 	 */
 	public array $arrayShapeTypeHint;
 
-	public ?string $twoTypeWithNull;
+	public ?string $twoTypeWithNull = null;
 
 	/**
 	 * @var int[]|\Traversable
@@ -69,7 +69,7 @@ class Whatever
 	/**
 	 * @var null|\Traversable
 	 */
-	public ?\Traversable $traversableNull;
+	public ?\Traversable $traversableNull = null;
 
 	public object $object;
 
