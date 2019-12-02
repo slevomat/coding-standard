@@ -84,4 +84,8 @@ class Whatever
 	 */
 	public string $uselessAnnotationWithOtherAnnotation;
 
+	static public int $staticFirst;
+
+	public static int $staticSecond;
+
 }

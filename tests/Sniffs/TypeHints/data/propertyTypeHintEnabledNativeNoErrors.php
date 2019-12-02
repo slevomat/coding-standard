@@ -98,4 +98,9 @@ class Whatever
 	 */
 	public array $callableArray;
 
+	/**
+	 * @var callable
+	 */
+	public $callable;
+
 }

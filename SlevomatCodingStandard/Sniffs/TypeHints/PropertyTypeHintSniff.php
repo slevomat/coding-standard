@@ -26,6 +26,7 @@ use const T_DOC_COMMENT_STAR;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
+use const T_STATIC;
 use const T_VAR;
 use const T_VARIABLE;
 
@@ -171,6 +172,10 @@ class PropertyTypeHintSniff implements Sniff
 			}
 		}
 
+		if ($possibleTypeHint === 'callable') {
+			return;
+		}
+
 		if (!TypeHintHelper::isValidTypeHint($possibleTypeHint, true)) {
 			return;
 		}
@@ -192,7 +197,7 @@ class PropertyTypeHintSniff implements Sniff
 			? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleTypeHint)
 			: $possibleTypeHint;
 
-		$propertyStartPointer = TokenHelper::findPrevious($phpcsFile, [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR], $propertyPointer - 1);
+		$propertyStartPointer = TokenHelper::findPrevious($phpcsFile, [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR, T_STATIC], $propertyPointer - 1);
 
 		$phpcsFile->fixer->beginChangeset();
 		$phpcsFile->fixer->addContent($propertyStartPointer, sprintf(' %s%s', ($nullableTypeHint ? '?' : ''), $propertyTypeHint));
