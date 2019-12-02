@@ -15,6 +15,7 @@ use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
 use const T_SEMICOLON;
+use const T_STATIC;
 use const T_VAR;
 
 class PropertyHelper
@@ -31,7 +32,7 @@ class PropertyHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$propertyStartPointer = TokenHelper::findPrevious($phpcsFile, [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR], $propertyPointer - 1);
+		$propertyStartPointer = TokenHelper::findPrevious($phpcsFile, [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR, T_STATIC], $propertyPointer - 1);
 
 		$typeHintEndPointer = TokenHelper::findPrevious($phpcsFile, TokenHelper::$typeHintTokenCodes, $propertyPointer - 1, $propertyStartPointer);
 		if ($typeHintEndPointer === null) {
