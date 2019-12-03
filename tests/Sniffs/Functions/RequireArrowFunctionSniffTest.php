@@ -17,7 +17,9 @@ class RequireArrowFunctionSniffTest extends TestCase
 
 	public function testDisallowNestedErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/requireArrowFunctionDisallowNestedErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/requireArrowFunctionDisallowNestedErrors.php', [
+			'allowNested' => false,
+		]);
 
 		self::assertSame(3, $report->getErrorCount());
 
