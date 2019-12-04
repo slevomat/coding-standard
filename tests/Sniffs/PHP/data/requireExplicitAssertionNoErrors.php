@@ -48,3 +48,6 @@ list($j) = [];
 
 /** @var bool $l */
 [$l];
+
+/** @var $m invalid annotation */
+$m = 0;

@@ -78,6 +78,10 @@ class RequireExplicitAssertionSniff implements Sniff
 
 		/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation $variableAnnotation */
 		foreach (array_reverse($variableAnnotations) as $variableAnnotation) {
+			if ($variableAnnotation->isInvalid()) {
+				continue;
+			}
+
 			if ($variableAnnotation->getVariableName() === null) {
 				continue;
 			}
