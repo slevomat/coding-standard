@@ -95,4 +95,10 @@ class Whatever
 	 */
 	public string $uselessAnnotationWithOtherAnnotation;
 
+	/** @var int */
+	static public $staticFirst;
+
+	/** @var int */
+	public static $staticSecond;
+
 }
