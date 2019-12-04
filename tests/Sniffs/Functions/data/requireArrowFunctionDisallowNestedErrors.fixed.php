@@ -4,6 +4,6 @@ $a = fn ($aa) => $aa + 1;
 
 $b = fn ($bb) => $bb + $a;
 
-$c = function ($cc) {
-	return fn () => $cc + 1;
+$c = function ($cc): int {
+	return fn (): int => $cc + 1;
 };

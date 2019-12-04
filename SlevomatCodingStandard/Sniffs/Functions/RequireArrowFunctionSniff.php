@@ -8,6 +8,7 @@ use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function count;
 use const T_BITWISE_AND;
+use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
 use const T_FN;
 use const T_RETURN;
@@ -73,15 +74,25 @@ class RequireArrowFunctionSniff implements Sniff
 
 		$pointerAfterReturn = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $returnPointer + 1);
 		$semicolonAfterReturn = $this->findSemicolon($phpcsFile, $returnPointer);
+		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, $tokens[$closurePointer]['parenthesis_closer'] + 1, $tokens[$closurePointer]['scope_opener']);
+		$nonWhitespacePointerBeforeScopeOpener = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $tokens[$closurePointer]['scope_opener'] - 1);
 
 		$phpcsFile->fixer->beginChangeset();
 		$phpcsFile->fixer->replaceToken($closurePointer, 'fn');
 
-		for ($i = $tokens[$closurePointer]['parenthesis_closer'] + 1; $i < $pointerAfterReturn; $i++) {
+		if ($usePointer !== null) {
+			$useParenthesiCloserPointer = TokenHelper::findNext($phpcsFile, T_CLOSE_PARENTHESIS, $usePointer + 1);
+			$nonWhitespacePointerAfterUseParanthesisCloser = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $useParenthesiCloserPointer + 1);
+			for ($i = $tokens[$closurePointer]['parenthesis_closer'] + 1; $i < $nonWhitespacePointerAfterUseParanthesisCloser; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
+		}
+
+		for ($i = $nonWhitespacePointerBeforeScopeOpener + 1; $i < $pointerAfterReturn; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 
-		$phpcsFile->fixer->addContent($tokens[$closurePointer]['parenthesis_closer'], ' => ');
+		$phpcsFile->fixer->addContent($nonWhitespacePointerBeforeScopeOpener, ' => ');
 
 		for ($i = $semicolonAfterReturn; $i <= $tokens[$closurePointer]['scope_closer']; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');

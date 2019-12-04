@@ -8,8 +8,8 @@ $b = function ($bb) use ($a) {
 	return $bb + $a;
 };
 
-$c = function ($cc) {
-	return function () use ($cc) {
+$c = function ($cc): int {
+	return function () use ($cc): int {
 		return $cc + 1;
 	};
 };
