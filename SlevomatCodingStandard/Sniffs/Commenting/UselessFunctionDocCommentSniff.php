@@ -11,6 +11,7 @@ use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_key_exists;
 use function array_map;
 use function in_array;
 use function sprintf;
@@ -73,6 +74,10 @@ class UselessFunctionDocCommentSniff implements Sniff
 		$parametersAnnotations = FunctionHelper::getValidParametersAnnotations($phpcsFile, $functionPointer);
 
 		foreach ($parametersAnnotations as $parameterName => $parameterAnnotation) {
+			if (!array_key_exists($parameterName, $parameterTypeHints)) {
+				return;
+			}
+
 			if (!AnnotationHelper::isAnnotationUseless($phpcsFile, $functionPointer, $parameterTypeHints[$parameterName], $parameterAnnotation, $this->getTraversableTypeHints())) {
 				return;
 			}

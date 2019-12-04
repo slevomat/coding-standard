@@ -167,4 +167,13 @@ class Whatever
 		return true;
 	}
 
+	/**
+	 * @param int $aaaaa
+	 * @return bool
+	 */
+	public function wrongParameterNameInAnnotation(int $a): bool
+	{
+		return true;
+	}
+
 }
