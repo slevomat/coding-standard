@@ -66,6 +66,18 @@ function withGenericDocComment() {
 	return $hh;
 }
 
+function withPhpsanDocComment() {
+	/** @phpstan-var string $hhh */
+	$hhh = [];
+	return $hhh;
+}
+
+function withPsalmDocComment() {
+	/** @psalm-var string $hhhh */
+	$hhhh = [];
+	return $hhhh;
+}
+
 function moreAssigments() {
 	$i = 'i';
 	$i .= 'ii';
