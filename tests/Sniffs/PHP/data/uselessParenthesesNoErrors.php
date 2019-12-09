@@ -94,6 +94,8 @@ include_once($file);
 require($file);
 require_once($file);
 
+(require 'file.php')();
+
 if ($a
 	&& (null === $b || null === $c)) {
 }
