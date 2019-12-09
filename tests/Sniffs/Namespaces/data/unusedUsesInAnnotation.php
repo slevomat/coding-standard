@@ -227,7 +227,7 @@ class CallableType
 /** @var array{int, ArrayShape1} $arrayShape1 */
 $arrayShape1 = [];
 
-/** @var array{ArrayShape2: int} $arrayShape2 */
+/** @var array{int: ArrayShape2} $arrayShape2 */
 $arrayShape2 = [];
 
 /**

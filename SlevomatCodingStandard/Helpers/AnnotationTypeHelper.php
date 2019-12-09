@@ -40,10 +40,6 @@ class AnnotationTypeHelper
 		if ($typeNode instanceof ArrayShapeNode) {
 			$identifierTypeNodes = [];
 			foreach ($typeNode->items as $arrayShapeItemNode) {
-				if ($arrayShapeItemNode->keyName instanceof IdentifierTypeNode) {
-					$identifierTypeNodes[] = $arrayShapeItemNode->keyName;
-				}
-
 				$identifierTypeNodes = array_merge($identifierTypeNodes, self::getIdentifierTypeNodes($arrayShapeItemNode->valueType));
 			}
 			return $identifierTypeNodes;
