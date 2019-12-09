@@ -449,11 +449,14 @@ class UselessParenthesesSniff implements Sniff
 		}
 
 		$firstOperatorPointer = $operatorsPointers[0];
-		if (
-			in_array($tokens[$pointerBeforeParenthesisOpener]['code'], self::OPERATORS, true)
-			&& self::OPERATOR_GROUPS[$tokens[$firstOperatorPointer]['code']] !== self::OPERATOR_GROUPS[$tokens[$pointerBeforeParenthesisOpener]['code']]
-		) {
-			return;
+		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], self::OPERATORS, true)) {
+			if (self::OPERATOR_GROUPS[$tokens[$firstOperatorPointer]['code']] !== self::OPERATOR_GROUPS[$tokens[$pointerBeforeParenthesisOpener]['code']]) {
+				return;
+			}
+
+			if ($tokens[$pointerBeforeParenthesisOpener]['code'] === T_MINUS && $tokens[$firstOperatorPointer]['code'] === T_PLUS) {
+				return;
+			}
 		}
 
 		$lastOperatorPointer = $operatorsPointers[count($operatorsPointers) - 1];
