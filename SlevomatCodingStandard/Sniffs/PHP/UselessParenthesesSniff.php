@@ -454,15 +454,11 @@ class UselessParenthesesSniff implements Sniff
 				return;
 			}
 
-			if ($tokens[$pointerBeforeParenthesisOpener]['code'] === T_MINUS && $tokens[$firstOperatorPointer]['code'] === T_PLUS) {
+			if ($tokens[$pointerBeforeParenthesisOpener]['code'] === T_MINUS && in_array($tokens[$firstOperatorPointer]['code'], [T_PLUS, T_MINUS], true)) {
 				return;
 			}
 
-			if ($tokens[$pointerBeforeParenthesisOpener]['code'] === T_DIVIDE && $tokens[$firstOperatorPointer]['code'] === T_DIVIDE) {
-				return;
-			}
-
-			if ($tokens[$pointerBeforeParenthesisOpener]['code'] === T_DIVIDE && $tokens[$firstOperatorPointer]['code'] === T_MULTIPLY) {
+			if ($tokens[$pointerBeforeParenthesisOpener]['code'] === T_DIVIDE && in_array($tokens[$firstOperatorPointer]['code'], [T_DIVIDE, T_MULTIPLY], true)) {
 				return;
 			}
 		}
