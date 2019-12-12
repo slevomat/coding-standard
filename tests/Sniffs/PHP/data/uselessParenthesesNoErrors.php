@@ -127,6 +127,8 @@ $hitRatio = (int) round($hitCount / ($loadCount / 100 ?: 1), 1);
 
 $a = 10 + 1 - (5 + 4);
 
+$a = 10 / (5 / 2);
+
 pow(10, -($x + 1));
 
 if (! ($i === $j - 1)) {
