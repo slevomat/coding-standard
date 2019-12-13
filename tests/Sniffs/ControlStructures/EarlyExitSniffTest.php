@@ -53,6 +53,13 @@ class EarlyExitSniffTest extends TestCase
 		self::checkFile(__DIR__ . '/data/earlyExitElseifWithoutCurlyBraces.php', [], [EarlyExitSniff::CODE_USELESS_ELSEIF]);
 	}
 
+	public function testElseifWithSpace(): void
+	{
+		self::expectException(Throwable::class);
+		self::expectExceptionMessage('"else" without curly braces is not supported.');
+		self::checkFile(__DIR__ . '/data/earlyExitElseifWithSpace.php', [], [EarlyExitSniff::CODE_USELESS_ELSEIF]);
+	}
+
 	public function testElseWithoutCurlyBraces(): void
 	{
 		self::expectException(Throwable::class);

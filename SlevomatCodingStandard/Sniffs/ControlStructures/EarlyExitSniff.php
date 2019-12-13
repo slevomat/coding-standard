@@ -382,6 +382,11 @@ class EarlyExitSniff implements Sniff
 			if ($currentConditionPointer !== null) {
 				while (in_array($tokens[$currentConditionPointer]['code'], [T_ELSEIF, T_ELSE], true)) {
 					$conditionsPointers[] = $currentConditionPointer;
+
+					if (!array_key_exists('scope_closer', $tokens[$currentConditionPointer])) {
+						throw new Exception(sprintf('"%s" without curly braces is not supported.', $tokens[$currentConditionPointer]['content']));
+					}
+
 					$currentConditionPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$currentConditionPointer]['scope_closer'] + 1);
 				}
 			}
