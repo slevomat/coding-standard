@@ -461,6 +461,10 @@ class UselessParenthesesSniff implements Sniff
 			if ($tokens[$pointerBeforeParenthesisOpener]['code'] === T_DIVIDE && in_array($tokens[$firstOperatorPointer]['code'], [T_DIVIDE, T_MULTIPLY], true)) {
 				return;
 			}
+
+			if ($tokens[$pointerBeforeParenthesisOpener]['code'] === T_MODULUS && $tokens[$firstOperatorPointer]['code'] === T_MODULUS) {
+				return;
+			}
 		}
 
 		$lastOperatorPointer = $operatorsPointers[count($operatorsPointers) - 1];
