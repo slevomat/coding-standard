@@ -79,6 +79,12 @@ class DocCommentHelperTest extends TestCase
 		self::assertFalse(DocCommentHelper::hasDocComment($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withoutDocComment')));
 	}
 
+	public function testPropertyHasNoDocCommentButClassHas(): void
+	{
+		self::assertFalse(DocCommentHelper::hasDocComment($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'propertyWithoutDocCommentInClassWithDocComment')));
+		self::assertTrue(DocCommentHelper::hasDocComment($this->getTestedCodeSnifferFile(), $this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'PropertyDoesNotHaveDocCommentButClassHas')));
+	}
+
 	public function testPropertyHasDocCommentDescription(): void
 	{
 		self::assertTrue(DocCommentHelper::hasDocCommentDescription($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withDocCommentAndDescription')));

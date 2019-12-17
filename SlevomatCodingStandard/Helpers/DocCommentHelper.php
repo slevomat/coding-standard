@@ -20,6 +20,7 @@ use const T_DOC_COMMENT_TAG;
 use const T_DOC_COMMENT_WHITESPACE;
 use const T_FINAL;
 use const T_INTERFACE;
+use const T_OPEN_CURLY_BRACKET;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
@@ -120,7 +121,7 @@ class DocCommentHelper
 
 		$found = TokenHelper::findPrevious(
 			$phpcsFile,
-			[T_DOC_COMMENT_CLOSE_TAG, T_SEMICOLON, T_CLOSE_CURLY_BRACKET],
+			[T_DOC_COMMENT_CLOSE_TAG, T_SEMICOLON, T_CLOSE_CURLY_BRACKET, T_OPEN_CURLY_BRACKET],
 			$pointer - 1
 		);
 		if ($found !== null && $tokens[$found]['code'] === T_DOC_COMMENT_CLOSE_TAG) {

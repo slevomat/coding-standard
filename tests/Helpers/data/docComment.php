@@ -97,3 +97,13 @@ class EmptyDocComment
 $inlineDocComment = new InlineDocComment();
 
 /** Invalid inline doccomment */
+
+/**
+ *
+ */
+class PropertyDoesNotHaveDocCommentButClassHas
+{
+
+	private $propertyWithoutDocCommentInClassWithDocComment;
+
+}
