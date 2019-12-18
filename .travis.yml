@@ -27,7 +27,7 @@ jobs:
       script: bin/phing lint
 
     - stage: Lint
-      php: 7.4snapshot
+      php: 7.4
       env: DEPENDENCIES=highest
       script: bin/phing lint
 
@@ -128,12 +128,12 @@ jobs:
       script: bin/phing tests-without-code-coverage
 
     - stage: Tests
-      php: 7.4snapshot
+      php: 7.4
       env: DEPENDENCIES=lowest
       script: bin/phing tests-without-code-coverage
 
     - stage: Tests
-      php: 7.4snapshot
+      php: 7.4
       env: DEPENDENCIES=highest
       script: bin/phing tests-without-code-coverage
 
@@ -160,17 +160,17 @@ jobs:
       script: bin/phing tests-without-code-coverage
 
     - stage: Coding standard
-      php: 7.3
+      php: 7.4
       env: DEPENDENCIES=highest
       script: bin/phing cs
 
     - stage: Static analysis
-      php: 7.3
+      php: 7.4
       env: DEPENDENCIES=highest
       script: bin/phing phpstan
 
     - stage: Code coverage
-      php: 7.3
+      php: 7.4
       env: DEPENDENCIES=highest
       install:
         - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar

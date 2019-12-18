@@ -175,6 +175,7 @@
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
+		<exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint"/>
 		<properties>
 			<property name="enableObjectTypeHint" value="false"/>
 		</properties>
