@@ -218,6 +218,7 @@ class EarlyExitSniff implements Sniff
 		if (
 			$previousConditionEarlyExitPointer !== null
 			&& $tokens[$previousConditionEarlyExitPointer]['code'] === T_YIELD
+			&& $elseIfEarlyExitPointer !== null
 			&& $tokens[$elseIfEarlyExitPointer]['code'] === T_YIELD
 		) {
 			return;
