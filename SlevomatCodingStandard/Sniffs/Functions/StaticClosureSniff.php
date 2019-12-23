@@ -5,7 +5,9 @@ namespace SlevomatCodingStandard\Sniffs\Functions;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\VariableHelper;
 use const T_CLOSURE;
+use const T_DOUBLE_QUOTED_STRING;
 use const T_FN;
 use const T_OPEN_PARENTHESIS;
 use const T_PARENT;
@@ -56,6 +58,13 @@ class StaticClosureSniff implements Sniff
 		$thisPointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, '$this', $tokens[$closurePointer]['scope_opener'] + 1, $tokens[$closurePointer]['scope_closer']);
 		if ($thisPointer !== null) {
 			return;
+		}
+
+		$stringPointers = TokenHelper::findNextAll($phpcsFile, T_DOUBLE_QUOTED_STRING, $tokens[$closurePointer]['scope_opener'] + 1, $tokens[$closurePointer]['scope_closer']);
+		foreach ($stringPointers as $stringPointer) {
+			if (VariableHelper::isUsedInScopeInString($phpcsFile, '$this', $stringPointer)) {
+				return;
+			}
 		}
 
 		$parentPointer = TokenHelper::findNext($phpcsFile, T_PARENT, $tokens[$closurePointer]['scope_opener'] + 1, $tokens[$closurePointer]['scope_closer']);

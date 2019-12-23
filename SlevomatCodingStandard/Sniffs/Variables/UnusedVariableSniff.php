@@ -362,7 +362,7 @@ class UnusedVariableSniff implements Sniff
 		for ($i = $tokens[$loopPointer]['scope_opener'] + 1; $i < $tokens[$loopPointer]['scope_closer']; $i++) {
 			if (
 				in_array($tokens[$i]['code'], [T_DOUBLE_QUOTED_STRING, T_HEREDOC], true)
-				&& VariableHelper::isUsedInScopeInString($phpcsFile, $variablePointer, $i)
+				&& VariableHelper::isUsedInScopeInString($phpcsFile, $variableName, $i)
 			) {
 				return true;
 			}

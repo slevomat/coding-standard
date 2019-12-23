@@ -30,6 +30,13 @@ class Whatever extends Something
 		}, []);
 	}
 
+	public function withThisInString()
+	{
+		return array_map(function ($i) {
+			return "{$this->anything}{$i}";
+		}, []);
+
+	}
 }
 
 Closure::bind(function ($instance, $value) {

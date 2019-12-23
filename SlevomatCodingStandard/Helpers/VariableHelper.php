@@ -69,7 +69,7 @@ class VariableHelper
 
 			if (
 				in_array($tokens[$i]['code'], [T_DOUBLE_QUOTED_STRING, T_HEREDOC], true)
-				&& self::isUsedInScopeInString($phpcsFile, $variablePointer, $i)
+				&& self::isUsedInScopeInString($phpcsFile, $tokens[$variablePointer]['content'], $i)
 			) {
 				return true;
 			}
@@ -118,13 +118,12 @@ class VariableHelper
 		return false;
 	}
 
-	public static function isUsedInScopeInString(File $phpcsFile, int $variablePointer, int $stringPointer): bool
+	public static function isUsedInScopeInString(File $phpcsFile, string $variableName, int $stringPointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 
 		$stringContent = $tokens[$stringPointer]['content'];
 
-		$variableName = $tokens[$variablePointer]['content'];
 		if (preg_match('~(\\\\)?(' . preg_quote($variableName, '~') . ')\b~', $stringContent, $matches) !== 0) {
 			if ($matches[1] === '') {
 				return true;
