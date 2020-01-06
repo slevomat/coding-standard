@@ -15,11 +15,11 @@
 	},
 	"require-dev": {
 		"jakub-onderka/php-parallel-lint": "1.0.0",
-		"phing/phing": "2.16.1",
-		"phpstan/phpstan": "0.11.19|0.12",
-		"phpstan/phpstan-phpunit": "0.11.2|0.12",
-		"phpstan/phpstan-strict-rules": "0.11.1|0.12",
-		"phpunit/phpunit": "7.5.18|8.5.0",
+		"phing/phing": "2.16.2",
+		"phpstan/phpstan": "0.11.19|0.12.4",
+		"phpstan/phpstan-phpunit": "0.11.2|0.12.5",
+		"phpstan/phpstan-strict-rules": "0.11.1|0.12.1",
+		"phpunit/phpunit": "7.5.18|8.5.1",
 		"dealerdirect/phpcodesniffer-composer-installer": "0.5.0"
 	},
 	"autoload": {
