@@ -142,3 +142,16 @@ function () {
 		)
 		->andDone();
 };
+
+function () {
+    $x += yield 1;
+
+    run(
+        yield 1
+    );
+
+    run(yield 1);
+
+    while (yield 1) {
+    }
+};
