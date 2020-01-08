@@ -59,35 +59,24 @@ class Foo
 	/** @var @var int @deprecated @internal */
 	public $withMultipleInlineAnnotations;
 
-
-	/**
-	 * @internal
-	 */
-	public const FOO = 1;
-
-	/**
-	 * @internal
-	 */
-	public function a()
-	{
-		/** Foo */
-		$foo = true;
-
-		/**
-		 * Bar
-		 */
-		$bar = false;
-	}
-
 }
 
-/**
- * @internal
- */
-class X
-{
-    /** @var int */
-    public $test = 1;
 
-    /** @whatever */
+/** @example foo */
+class Bar
+{
+    /** @example foo */
+    const FOO = 1;
+
+    /** @example foo */
+    public function test()
+    {
+        /** @var string $lorem */
+        $lorem = 'lorem';
+
+        /** @return int[] */
+        $x = function () : array {
+            return [1, 2, 3];
+        };
+    }
 }

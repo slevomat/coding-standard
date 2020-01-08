@@ -840,6 +840,10 @@ Reports invalid inline phpDocs with `@var`.
 
 #### SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment 🔧
 
+Requires property comments with single-line content to be written as one-liners.
+
+#### SlevomatCodingStandard.Commenting.RequireOneLineDocComment 🔧
+
 Requires comments with single-line content to be written as one-liners.
 
 #### SlevomatCodingStandard.Commenting.DisallowOneLinePropertyDocComment 🔧
