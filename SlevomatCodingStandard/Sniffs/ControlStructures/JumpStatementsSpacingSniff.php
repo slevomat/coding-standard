@@ -3,13 +3,14 @@
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function abs;
 use function in_array;
 use const T_BREAK;
 use const T_CONTINUE;
-use const T_EQUAL;
 use const T_GOTO;
+use const T_OPEN_PARENTHESIS;
 use const T_RETURN;
 use const T_THROW;
 use const T_YIELD;
@@ -28,11 +29,7 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacingSniff
 	 */
 	public function process(File $phpcsFile, $controlStructurePointer): void
 	{
-		if ($this->isYieldWithAssigment($phpcsFile, $controlStructurePointer)) {
-			return;
-		}
-
-		if ($this->isYieldFromWithReturn($phpcsFile, $controlStructurePointer)) {
+		if ($this->isOneOfYieldSpecialCases($phpcsFile, $controlStructurePointer)) {
 			return;
 		}
 
@@ -75,30 +72,29 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacingSniff
 		parent::checkLinesAfter($phpcsFile, $controlStructurePointer);
 	}
 
-	private function isYieldWithAssigment(File $phpcsFile, int $controlStructurePointer): bool
+	private function isOneOfYieldSpecialCases(File $phpcsFile, int $controlStructurePointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		if ($tokens[$controlStructurePointer]['code'] !== T_YIELD) {
+		$controlStructure = $tokens[$controlStructurePointer];
+		if ($controlStructure['code'] !== T_YIELD && $controlStructure['code'] !== T_YIELD_FROM) {
 			return false;
 		}
 
 		$pointerBefore = TokenHelper::findPreviousEffective($phpcsFile, $controlStructurePointer - 1);
 
-		return $tokens[$pointerBefore]['code'] === T_EQUAL;
-	}
-
-	private function isYieldFromWithReturn(File $phpcsFile, int $controlStructurePointer): bool
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		if ($tokens[$controlStructurePointer]['code'] !== T_YIELD_FROM) {
-			return false;
+		// check if yield is used in assignment
+		if (in_array($tokens[$pointerBefore]['code'], Tokens::$assignmentTokens, true)) {
+			return true;
 		}
 
-		$pointerBefore = TokenHelper::findPreviousEffective($phpcsFile, $controlStructurePointer - 1);
+		// check if yield is used in a return statement
+		if ($tokens[$pointerBefore]['code'] === T_RETURN) {
+			return true;
+		}
 
-		return $tokens[$pointerBefore]['code'] === T_RETURN;
+		// check if yield is used inside parentheses (function call, while, ...)
+		return $tokens[$pointerBefore]['code'] === T_OPEN_PARENTHESIS;
 	}
 
 	private function isStackedSingleLineYield(File $phpcsFile, int $controlStructureStartPointer, bool $previous): bool
