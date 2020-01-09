@@ -98,4 +98,19 @@ class Whatever
 
 	}
 
+	/**
+	 * @param int $a
+	 *
+	 * @phpstan-param int $a
+	 * @phpstan-return bool
+	 * @phpstan-whatever X
+	 *
+	 * @phpcs:disable
+	 * @phpcs:enable
+	 */
+	public function phpstanAndPhpcsAnnotations($a)
+	{
+		return false;
+	}
+
 }

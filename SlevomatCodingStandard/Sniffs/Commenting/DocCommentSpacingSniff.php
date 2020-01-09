@@ -21,6 +21,7 @@ use function array_values;
 use function asort;
 use function count;
 use function explode;
+use function in_array;
 use function ksort;
 use function max;
 use function preg_match;
@@ -634,17 +635,14 @@ class DocCommentSpacingSniff implements Sniff
 
 		foreach (array_keys($sortedAnnotationsGroups) as $annotationsGroupPosition) {
 			$expectedAnnotationsGroupOrder = array_flip($expectedAnnotationsGroups[$annotationsGroupPosition]);
-			usort($sortedAnnotationsGroups[$annotationsGroupPosition], static function (Annotation $firstAnnotation, Annotation $secondAnnotation) use ($expectedAnnotationsGroupOrder): int {
-				$getExpectedOrder = static function (string $annotationName) use ($expectedAnnotationsGroupOrder): int {
+			usort($sortedAnnotationsGroups[$annotationsGroupPosition], function (Annotation $firstAnnotation, Annotation $secondAnnotation) use ($expectedAnnotationsGroupOrder): int {
+				$getExpectedOrder = function (string $annotationName) use ($expectedAnnotationsGroupOrder): int {
 					if (array_key_exists($annotationName, $expectedAnnotationsGroupOrder)) {
 						return $expectedAnnotationsGroupOrder[$annotationName];
 					}
 
 					foreach ($expectedAnnotationsGroupOrder as $expectedAnnotationName => $expectedAnnotationOrder) {
-						if (
-							substr($expectedAnnotationName, -1) === '\\'
-							&& strpos($annotationName, $expectedAnnotationName) === 0
-						) {
+						if ($this->isAnnotationNameInAnnotationNamespace($expectedAnnotationName, $annotationName)) {
 							return $expectedAnnotationOrder;
 						}
 					}
@@ -665,13 +663,18 @@ class DocCommentSpacingSniff implements Sniff
 		return $sortedAnnotationsGroups;
 	}
 
+	private function isAnnotationNameInAnnotationNamespace(string $annotationNamespace, string $annotationName): bool
+	{
+		return in_array(substr($annotationNamespace, -1), ['\\', '-', ':'], true) && strpos($annotationName, $annotationNamespace) === 0;
+	}
+
 	private function isAnnotationMatched(Annotation $annotation, string $annotationName): bool
 	{
 		if ($annotation->getName() === $annotationName) {
 			return true;
 		}
 
-		return substr($annotationName, -1) === '\\' && strpos($annotation->getName(), $annotationName) === 0;
+		return $this->isAnnotationNameInAnnotationNamespace($annotationName, $annotation->getName());
 	}
 
 	private function checkLinesAfterLastContent(
