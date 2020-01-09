@@ -113,6 +113,7 @@ $x = (object) ([
 ] + $defaults('b'));
 
 function () {
+	$y = (yield whatever()) ?? $y;
 	$y = (yield from whatever()) ?? $y;
 };
 
