@@ -173,6 +173,7 @@ jobs:
       php: 7.4
       env: DEPENDENCIES=highest
       install:
+        - pecl install pcov
         - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
       script:
         - bin/phing tests
