@@ -177,6 +177,7 @@ Sniff provides the following settings:
 
 * `alwaysUsedPropertiesAnnotations`: mark certain properties as always used, for example the ones with `@ORM\Column`
 * `alwaysUsedPropertiesSuffixes`: mark properties with name ending with a certain string to be always marked as used
+* `alwaysUsedMethodsAnnotations`: mark certain methods as always used, for example the ones with `@Serializer\PostDeserialize`
 
 #### SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure 🔧
 

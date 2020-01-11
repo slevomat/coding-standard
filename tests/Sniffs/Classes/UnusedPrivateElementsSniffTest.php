@@ -21,6 +21,10 @@ class UnusedPrivateElementsSniffTest extends TestCase
 				'Value',
 				'Timestamp',
 			],
+			'alwaysUsedMethodsAnnotations' => [
+				'@Serializer\\PostDeserialize',
+				'@JMS\\Serializer\\Annotation\\',
+			],
 		]);
 		self::assertNoSniffError($resultFile, 6);
 		self::assertNoSniffError($resultFile, 8);
