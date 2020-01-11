@@ -80,6 +80,12 @@ class UnusedPrivateElementsSniff implements Sniff
 	/** @var string[]|null */
 	private $normalizedAlwaysUsedPropertiesSuffixes;
 
+	/** @var string[] */
+	public $alwaysUsedMethodsAnnotations = [];
+
+	/** @var string[]|null */
+	private $normalizedAlwaysUsedMethodsAnnotations;
+
 	/**
 	 * @return (int|string)[]
 	 */
@@ -112,6 +118,18 @@ class UnusedPrivateElementsSniff implements Sniff
 		}
 
 		return $this->normalizedAlwaysUsedPropertiesSuffixes;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getAlwaysUsedMethodsAnnotations(): array
+	{
+		if ($this->normalizedAlwaysUsedMethodsAnnotations === null) {
+			$this->normalizedAlwaysUsedMethodsAnnotations = SniffSettingsHelper::normalizeArray($this->alwaysUsedMethodsAnnotations);
+		}
+
+		return $this->normalizedAlwaysUsedMethodsAnnotations;
 	}
 
 	private function getSniffName(string $sniffName): string
@@ -513,12 +531,34 @@ class UnusedPrivateElementsSniff implements Sniff
 				continue;
 			}
 
-			$methodName = FunctionHelper::getName($phpcsFile, $methodTokenPointer);
-
-			if (!in_array($methodName, ['__construct', '__clone'], true)) {
-				$reportedMethods[$methodName] = $methodTokenPointer;
-			}
 			$findMethodsStartTokenPointer = $methodTokenPointer + 1;
+
+			$annotationNames = $this->getAnnotationNames($phpcsFile, $visibilityModifierTokenPointer);
+			$alwaysUsedMethod = false;
+			foreach ($annotationNames as $annotationName) {
+				foreach ($this->getAlwaysUsedMethodsAnnotations() as $alwaysUsedMethodAnnotationName) {
+					if ($annotationName === $alwaysUsedMethodAnnotationName) {
+						$alwaysUsedMethod = true;
+						break 2;
+					}
+
+					if (substr($alwaysUsedMethodAnnotationName, -1) === '\\' && strpos($annotationName, $alwaysUsedMethodAnnotationName) === 0) {
+						$alwaysUsedMethod = true;
+						break 2;
+					}
+				}
+			}
+
+			if ($alwaysUsedMethod) {
+				continue;
+			}
+
+			$methodName = FunctionHelper::getName($phpcsFile, $methodTokenPointer);
+			if (in_array($methodName, ['__construct', '__clone'], true)) {
+				continue;
+			}
+
+			$reportedMethods[$methodName] = $methodTokenPointer;
 		}
 
 		return $reportedMethods;

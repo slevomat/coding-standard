@@ -214,4 +214,17 @@ CODE;
 		$this->propertyByReference = &$reference;
 	}
 
+	/**
+	 * @Serializer\PostDeserialize()
+	 */
+	private function methodWithAnnotationInAlwaysUsed()
+	{
+	}
+
+	/**
+	 * @JMS\Serializer\Annotation\PostSerialize()
+	 */
+	private function methodWithAnnotationGroupInAlwaysUsed()
+	{
+	}
 }
