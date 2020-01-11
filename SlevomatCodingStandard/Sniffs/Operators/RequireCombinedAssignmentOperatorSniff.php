@@ -46,8 +46,10 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $equalPointer): void
 	{
-		/** @var int $variableStartPointer */
 		$variableStartPointer = TokenHelper::findNextEffective($phpcsFile, $equalPointer + 1);
+		if ($variableStartPointer === null) {
+			return;
+		}
 		$variableEndPointer = IdentificatorHelper::findEndPointer($phpcsFile, $variableStartPointer);
 
 		if ($variableEndPointer === null) {
