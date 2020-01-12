@@ -112,13 +112,13 @@ class InlineDocCommentDeclarationSniff implements Sniff
 			return;
 		}
 
-		if (preg_match('~^@var\\s+(?:(?:\\S+(?:\\s*[,&\|]\\s*\\S+)+)|\\S+)\\s+\$\\S+(?:\\s+.+)?$~', $commentContent) !== 0) {
+		if (preg_match('~^@var\\s+(?:\\S+(?:<.+>|\{.+\})?)(?:\\s*[|&]\\s*(?:\\S+(?:<.+>|\{.+\})?))*\\s+\$\\S+(?:\\s+.+)?$~', $commentContent) !== 0) {
 			return;
 		}
 
 		if (
-			preg_match('~^@var\\s+(\$\\S+)\\s+((?:\\S+(?:\\s*[,&\|]\\s*\\S+)+)|\\S+)(\\s+.+)?$~', $commentContent, $matches) !== 0
-			&& preg_match('~\\s+~', $matches[2]) === 0
+			preg_match('~^@var\\s+(\$\\S+)\\s+((?:\\S+(?:\\s*[&\|]\\s*\\S+)+)|\\S+)(\\s+.+)?$~', $commentContent, $matches) !== 0
+			&& preg_match('~[<>\{\}\\s]~', $matches[2]) === 0
 		) {
 			$fix = $phpcsFile->addFixableError(
 				sprintf(

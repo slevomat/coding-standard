@@ -142,6 +142,9 @@ class IntersectionAndGeneric
 
 		/** @var \Foo<\Boo<integer, boolean>> $h */
 		$h = [];
+
+		/** @var list<array{name: string, autoload: array{classmap: array<int, string>, files: array<int, string>, psr-4: array<string, array<int, string>>, psr-0: array<string, array<int, string>>}}>|null $i */
+		$i = [];
 	}
 
 }

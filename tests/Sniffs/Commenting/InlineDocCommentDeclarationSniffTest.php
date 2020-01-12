@@ -17,7 +17,7 @@ class InlineDocCommentDeclarationSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/invalidInlineDocCommentDeclarations.php');
 
-		self::assertSame(35, $report->getErrorCount());
+		self::assertSame(36, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -44,13 +44,6 @@ class InlineDocCommentDeclarationSniffTest extends TestCase
 			23,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
 			'Invalid inline documentation comment format "@var $f string", expected "@var string $f".'
-		);
-
-		self::assertSniffError(
-			$report,
-			28,
-			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
-			'Invalid inline documentation comment format "@var $h \DateTimeImmutable", expected "@var \DateTimeImmutable $h".'
 		);
 
 		self::assertSniffError(
@@ -82,6 +75,7 @@ class InlineDocCommentDeclarationSniffTest extends TestCase
 		self::assertSniffError($report, 77, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
 		self::assertSniffError($report, 80, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
 		self::assertSniffError($report, 123, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
+		self::assertSniffError($report, 144, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
 
 		self::assertSniffError($report, 86, InlineDocCommentDeclarationSniff::CODE_MISSING_VARIABLE, 'Missing variable $unknown before or after the documentation comment.');
 
