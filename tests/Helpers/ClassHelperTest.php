@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use function array_values;
 use const T_ANON_CLASS;
 
 class ClassHelperTest extends TestCase
@@ -36,13 +37,13 @@ class ClassHelperTest extends TestCase
 	public function testGetAllNamesWithNamespace(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithNamespace.php');
-		self::assertSame(['FooClass', 'FooInterface', 'FooTrait'], ClassHelper::getAllNames($phpcsFile));
+		self::assertSame(['FooClass', 'FooInterface', 'FooTrait'], array_values(ClassHelper::getAllNames($phpcsFile)));
 	}
 
 	public function testGetAllNamesWithoutNamespace(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithoutNamespace.php');
-		self::assertSame(['FooClass', 'FooInterface', 'FooTrait'], ClassHelper::getAllNames($phpcsFile));
+		self::assertSame(['FooClass', 'FooInterface', 'FooTrait'], array_values(ClassHelper::getAllNames($phpcsFile)));
 	}
 
 	public function testGetAllNamesWithNoClass(): void

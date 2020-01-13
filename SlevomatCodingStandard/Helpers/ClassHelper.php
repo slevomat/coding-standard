@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Helpers;
 
 use Generator;
 use PHP_CodeSniffer\Files\File;
-use function array_map;
 use function iterator_to_array;
 use function sprintf;
 use const T_ANON_CLASS;
@@ -47,18 +46,19 @@ class ClassHelper
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @return string[]
+	 * @return array<int, string>
 	 */
 	public static function getAllNames(File $phpcsFile): array
 	{
 		$previousClassPointer = 0;
 
-		return array_map(
-			static function (int $classPointer) use ($phpcsFile): string {
-				return self::getName($phpcsFile, $classPointer);
-			},
-			iterator_to_array(self::getAllClassPointers($phpcsFile, $previousClassPointer))
-		);
+		$names = [];
+		/** @var int $classPointer */
+		foreach (iterator_to_array(self::getAllClassPointers($phpcsFile, $previousClassPointer)) as $classPointer) {
+			$names[$classPointer] = self::getName($phpcsFile, $classPointer);
+		}
+
+		return $names;
 	}
 
 	/**
