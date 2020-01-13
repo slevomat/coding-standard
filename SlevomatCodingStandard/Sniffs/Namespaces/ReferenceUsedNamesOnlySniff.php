@@ -246,7 +246,10 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 						continue;
 					}
 
-					if (isset($classReferencesIndex[$lowerCasedUnqualifiedClassName]) && $name !== $classReferencesIndex[$lowerCasedUnqualifiedClassName]) {
+					if (
+						array_key_exists($lowerCasedUnqualifiedClassName, $classReferencesIndex)
+						&& $name !== $classReferencesIndex[$lowerCasedUnqualifiedClassName]
+					) {
 						continue;
 					}
 				} elseif ($reference->isFunction && $this->allowFullyQualifiedNameForCollidingFunctions) {
