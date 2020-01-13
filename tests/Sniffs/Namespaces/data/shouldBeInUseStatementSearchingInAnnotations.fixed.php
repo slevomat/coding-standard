@@ -128,3 +128,11 @@ class ConstantExpression
 {
 
 }
+
+class Whatever
+{
+
+	/** @var Whatever */
+	private $whatever;
+
+}

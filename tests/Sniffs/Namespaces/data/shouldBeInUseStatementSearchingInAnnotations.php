@@ -124,3 +124,11 @@ class ConstantExpression
 {
 
 }
+
+class Whatever
+{
+
+	/** @var \Foo\Test\Bla\Whatever */
+	private $whatever;
+
+}
