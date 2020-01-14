@@ -2,6 +2,7 @@
 
 namespace Foo\Test\Bla;
 
+use Foo\Anything;
 use Foo\Something;
 use Foo\DateTime;
 use Foo\ArrayObject;
@@ -134,5 +135,11 @@ class Whatever
 
 	/** @var Whatever */
 	private $whatever;
+
+	/** @var Anything */
+	private $anything;
+
+	/** @var \Foo\Different\Anything */
+	private $anythingDifferent;
 
 }

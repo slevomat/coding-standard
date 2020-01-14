@@ -256,6 +256,13 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 					) {
 						continue;
 					}
+
+					if (
+						array_key_exists($lowerCasedUnqualifiedClassName, $useStatements)
+						&& $canonicalName !== NamespaceHelper::normalizeToCanonicalName($useStatements[$lowerCasedUnqualifiedClassName]->getFullyQualifiedTypeName())
+					) {
+						continue;
+					}
 				} elseif ($reference->isFunction && $this->allowFullyQualifiedNameForCollidingFunctions) {
 					$lowerCasedUnqualifiedFunctionName = strtolower($unqualifiedName);
 					if (array_key_exists($lowerCasedUnqualifiedFunctionName, $definedFunctionsIndex)) {

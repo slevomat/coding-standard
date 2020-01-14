@@ -2,6 +2,7 @@
 
 namespace Foo\Test\Bla;
 
+use Foo\Anything;
 use Foo\Something;
 
 /**
@@ -130,5 +131,11 @@ class Whatever
 
 	/** @var \Foo\Test\Bla\Whatever */
 	private $whatever;
+
+	/** @var Anything */
+	private $anything;
+
+	/** @var \Foo\Different\Anything */
+	private $anythingDifferent;
 
 }
