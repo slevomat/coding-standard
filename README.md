@@ -451,6 +451,16 @@ Sniff provides the following settings:
 
 However, if you prefer Yoda conditions, you can use `RequireYodaComparisonSniff`.
 
+#### SlevomatCodingStandard.Files.LineLength
+
+Enforces maximum length of a single line of code.
+
+Sniff provides the following settings:
+
+* `lineLengthLimit`: actual limit of the line length
+* `ignoreComments`: whether or not to ignore line length of comments
+* `ignoreImports`: whether or not to ignore line length of import (use) statements
+
 #### SlevomatCodingStandard.Functions.DisallowEmptyFunction
 
 Reports empty functions body and require at least a comment inside.
