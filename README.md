@@ -291,6 +291,10 @@ try {
 
 ### Formatting - rules for consistent code looks
 
+#### SlevomatCodingStandard.Arrays.MultiLineArrayEndBracketPlacement 🔧
+
+Enforces reasonable end bracket placement for multiline arrays.
+
 #### SlevomatCodingStandard.Arrays.TrailingArrayComma 🔧
 
 Commas after last element in an array make adding a new element easier and result in a cleaner versioning diff.
