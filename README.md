@@ -554,6 +554,14 @@ Sniff provides the following settings:
 
 * `spacesCountAfterReference`: the number of spaces after `&`.
 
+#### SlevomatCodingStandard.Operators.NegationOperatorSpacing 🔧
+
+Checks if there is the same number of spaces after negation operator as expected.
+
+Sniff provides the following settings:
+
+* `spacesCount`: the number of spaces expected after the negation operator
+
 #### SlevomatCodingStandard.Operators.SpreadOperatorSpacing 🔧
 
 Enforces configurable number of spaces after the `...` operator.
