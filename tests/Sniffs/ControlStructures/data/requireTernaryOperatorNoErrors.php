@@ -78,3 +78,23 @@ if (true) {
 if (true) {
 	echo 'true';
 }
+
+$foo = 1;
+$bar = 2;
+if (true) {
+	$ref = &$foo;
+} else {
+	$ref = &$bar;
+}
+
+if (true) {
+	$ref = $foo;
+} else {
+	$ref = &$bar;
+}
+
+if (true) {
+	$ref = &$foo;
+} else {
+	$ref = $bar;
+}
