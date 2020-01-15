@@ -6,11 +6,11 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function abs;
+use function array_key_exists;
 use function in_array;
 use const T_BREAK;
 use const T_CONTINUE;
 use const T_GOTO;
-use const T_OPEN_PARENTHESIS;
 use const T_RETURN;
 use const T_THROW;
 use const T_YIELD;
@@ -81,6 +81,11 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacingSniff
 			return false;
 		}
 
+		// check if yield is used inside parentheses (function call, while, ...)
+		if (array_key_exists('nested_parenthesis', $controlStructure)) {
+			return true;
+		}
+
 		$pointerBefore = TokenHelper::findPreviousEffective($phpcsFile, $controlStructurePointer - 1);
 
 		// check if yield is used in assignment
@@ -89,12 +94,7 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacingSniff
 		}
 
 		// check if yield is used in a return statement
-		if ($tokens[$pointerBefore]['code'] === T_RETURN) {
-			return true;
-		}
-
-		// check if yield is used inside parentheses (function call, while, ...)
-		return $tokens[$pointerBefore]['code'] === T_OPEN_PARENTHESIS;
+		return $tokens[$pointerBefore]['code'] === T_RETURN;
 	}
 
 	private function isStackedSingleLineYield(File $phpcsFile, int $controlStructureStartPointer, bool $previous): bool

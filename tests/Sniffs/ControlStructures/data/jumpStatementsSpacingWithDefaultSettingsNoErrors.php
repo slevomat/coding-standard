@@ -154,4 +154,9 @@ function () {
 
     while (yield 1) {
     }
+
+    return new Response(
+        1,
+        $this->decodePayload($endpoint, $httpResponse, yield $httpResponse->getBody())
+    );
 };
