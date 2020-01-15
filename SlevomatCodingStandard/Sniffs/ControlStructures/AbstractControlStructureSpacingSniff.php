@@ -65,9 +65,6 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 	/** @var int */
 	public $linesCountAfterLastControlStructure = 0;
 
-	/** @var string[] */
-	public $tokensToCheck = [];
-
 	/** @var (string|int)[]|null */
 	private $normalizedTokensToCheck;
 
@@ -76,7 +73,7 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return $this->getTokensToCheck();
+		return $this->getNormalizedTokensToCheck();
 	}
 
 	/**
@@ -91,20 +88,21 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @return int[]
+	 * @return array<int|string>
 	 */
 	abstract protected function getSupportedTokens(): array;
 
-	/**
-	 * @return (int|string)[]
-	 */
-	private function getTokensToCheck(): array
+	/** @return string[] */
+	abstract protected function getTokensToCheck(): array;
+
+	/** @return (int|string)[] */
+	private function getNormalizedTokensToCheck(): array
 	{
 		if ($this->normalizedTokensToCheck === null) {
 			$supportedTokens = $this->getSupportedTokens();
 
 			$this->normalizedTokensToCheck = array_map(
-				static function (string $tokenCode) use ($supportedTokens): int {
+				static function (string $tokenCode) use ($supportedTokens) {
 					if (!defined($tokenCode)) {
 						throw new UndefinedKeywordTokenException($tokenCode);
 					}
@@ -116,7 +114,7 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 
 					return $const;
 				},
-				SniffSettingsHelper::normalizeArray($this->tokensToCheck)
+				SniffSettingsHelper::normalizeArray($this->getTokensToCheck())
 			);
 
 			if (count($this->normalizedTokensToCheck) === 0) {

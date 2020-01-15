@@ -298,6 +298,17 @@ Sniff provides the following settings:
 Reports use of `__CLASS__`, `get_parent_class()`, `get_called_class()`, `get_class()` and `get_class($this)`.
 Class names should be referenced via `::class` constant when possible. 
 
+#### SlevomatCodingStandard.Classes.ParentCallSpacing 🔧
+
+Enforces configurable number of lines around parent method call.
+
+Sniff provides the following settings:
+
+* `linesCountBeforeControlStructure`: allows to configure the number of lines before parent call.
+* `linesCountBeforeFirstControlStructure`: allows to configure the number of lines before first parent call.
+* `linesCountAfterControlStructure`: allows to configure the number of lines after parent call.
+* `linesCountAfterLastControlStructure`: allows to configure the number of lines after last parent call.
+
 #### SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
 
 Reports use of superfluous prefix or suffix "Abstract" for abstract classes.

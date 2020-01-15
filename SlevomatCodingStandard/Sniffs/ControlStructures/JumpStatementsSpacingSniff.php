@@ -22,6 +22,9 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacingSniff
 	/** @var bool */
 	public $allowSingleLineYieldStacking = true;
 
+	/** @var string[] */
+	public $tokensToCheck = [];
+
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
@@ -50,6 +53,12 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacingSniff
 			T_YIELD,
 			T_YIELD_FROM,
 		];
+	}
+
+	/** @return string[] */
+	protected function getTokensToCheck(): array
+	{
+		return $this->tokensToCheck;
 	}
 
 	protected function checkLinesBefore(File $phpcsFile, int $controlStructurePointer): void

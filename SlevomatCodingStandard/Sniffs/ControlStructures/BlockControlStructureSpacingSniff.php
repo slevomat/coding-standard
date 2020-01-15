@@ -19,6 +19,9 @@ use const T_WHILE;
 class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacingSniff
 {
 
+	/** @var string[] */
+	public $tokensToCheck = [];
+
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
@@ -49,6 +52,12 @@ class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacingS
 			T_CASE,
 			T_DEFAULT,
 		];
+	}
+
+	/** @return string[] */
+	protected function getTokensToCheck(): array
+	{
+		return $this->tokensToCheck;
 	}
 
 	private function isWhilePartOfDo(File $phpcsFile, int $controlStructurePointer): bool
