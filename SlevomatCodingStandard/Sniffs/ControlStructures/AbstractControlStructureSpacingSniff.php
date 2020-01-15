@@ -91,7 +91,7 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @return int[]
+	 * @return array<int|string>
 	 */
 	abstract protected function getSupportedTokens(): array;
 
@@ -104,7 +104,7 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 			$supportedTokens = $this->getSupportedTokens();
 
 			$this->normalizedTokensToCheck = array_map(
-				static function (string $tokenCode) use ($supportedTokens): int {
+				static function (string $tokenCode) use ($supportedTokens) {
 					if (!defined($tokenCode)) {
 						throw new UndefinedKeywordTokenException($tokenCode);
 					}
