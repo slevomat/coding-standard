@@ -181,7 +181,7 @@ Sniff provides the following settings:
 
 #### SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure 🔧
 
-Looks for unused inherited variables passed to closure via `use`.  
+Looks for unused inherited variables passed to closure via `use`.
 
 #### SlevomatCodingStandard.Functions.UnusedParameter 🚧
 
@@ -296,7 +296,7 @@ Sniff provides the following settings:
 #### SlevomatCodingStandard.Classes.ModernClassNameReference 🔧
 
 Reports use of `__CLASS__`, `get_parent_class()`, `get_called_class()`, `get_class()` and `get_class($this)`.
-Class names should be referenced via `::class` constant when possible. 
+Class names should be referenced via `::class` constant when possible.
 
 #### SlevomatCodingStandard.Classes.ParentCallSpacing 🔧
 
