@@ -295,6 +295,14 @@ try {
 
 Enforces reasonable end bracket placement for multiline arrays.
 
+#### SlevomatCodingStandard.Arrays.SingleLineArrayWhitespace 🔧
+
+Checks whitespace in single line array declarations (whitespace between brackets, around commas, ...).
+
+Sniff provides the following settings:
+
+* `$spacesAroundBrackets`: number of spaces you require to have around array brackets
+
 #### SlevomatCodingStandard.Arrays.TrailingArrayComma 🔧
 
 Commas after last element in an array make adding a new element easier and result in a cleaner versioning diff.
