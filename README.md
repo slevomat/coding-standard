@@ -95,6 +95,14 @@ Sniff provides the following settings:
 
 Disallows implicit array creation.
 
+#### SlevomatCodingStandard.Classes.ClassStructure 🔧
+
+Checks that class/trait/interface members are in the correct order.
+
+Sniff provides the following settings:
+
+* `$requiredOrder`: map of member types to stage priority (order). Set multiple member types to same number to not differentiate between them.
+
 #### SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants 🔧
 
 Disallows late static binding for constants.
