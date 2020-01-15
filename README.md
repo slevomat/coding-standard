@@ -313,6 +313,17 @@ Sniff provides the following settings:
 
 * `enableAfterHeredoc`: enables/disables trailing commas after HEREDOC/NOWDOC, default based on PHP version.
 
+#### SlevomatCodingStandard.Classes.ConstantSpacing 🔧
+
+Checks that there is a certain number of blank lines between constants.
+
+Sniff provides the following settings:
+
+* `$minLinesCountBeforeWithComment`: minimum number of lines before constant with a doc comment
+* `$maxLinesCountBeforeWithComment`: maximum number of lines before constant with a doc comment
+* `$minLinesCountBeforeWithoutComment`: minimum number of lines before constant without a doc comment
+* `$maxLinesCountBeforeWithoutComment`: maximum number of lines before constant without a doc comment
+
 #### SlevomatCodingStandard.Classes.ModernClassNameReference 🔧
 
 Reports use of `__CLASS__`, `get_parent_class()`, `get_called_class()`, `get_class()` and `get_class($this)`.
@@ -328,6 +339,17 @@ Sniff provides the following settings:
 * `linesCountBeforeFirstControlStructure`: allows to configure the number of lines before first parent call.
 * `linesCountAfterControlStructure`: allows to configure the number of lines after parent call.
 * `linesCountAfterLastControlStructure`: allows to configure the number of lines after last parent call.
+
+#### SlevomatCodingStandard.Classes.PropertySpacing 🔧
+
+Checks that there is a certain number of blank lines between properties.
+
+Sniff provides the following settings:
+
+* `$minLinesCountBeforeWithComment`: minimum number of lines before property with a doc comment
+* `$maxLinesCountBeforeWithComment`: maximum number of lines before property with a doc comment
+* `$minLinesCountBeforeWithoutComment`: minimum number of lines before property without a doc comment
+* `$maxLinesCountBeforeWithoutComment`: maximum number of lines before property without a doc comment
 
 #### SlevomatCodingStandard.Classes.RequireSingleLineMethodDeclaration 🔧
 
