@@ -9,6 +9,7 @@ use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function sprintf;
+use const T_BITWISE_AND;
 use const T_ELSE;
 use const T_EQUAL;
 use const T_IF;
@@ -139,16 +140,24 @@ class RequireTernaryOperatorSniff implements Sniff
 			return;
 		}
 
+		$pointerAfterAssignmentInIf = TokenHelper::findNextEffective($phpcsFile, $assignmentPointerInIf + 1);
+		$pointerAfterAssignmentInElse = TokenHelper::findNextEffective($phpcsFile, $assignmentPointerInElse + 1);
+
+		if (
+			$tokens[$pointerAfterAssignmentInIf]['code'] === T_BITWISE_AND ||
+			$tokens[$pointerAfterAssignmentInElse]['code'] === T_BITWISE_AND
+		) {
+			return;
+		}
+
 		$fix = $phpcsFile->addFixableError('Use ternary operator.', $ifPointer, self::CODE_TERNARY_OPERATOR_NOT_USED);
 
 		if (!$fix) {
 			return;
 		}
 
-		$pointerAfterAssignmentInIf = TokenHelper::findNextEffective($phpcsFile, $assignmentPointerInIf + 1);
 		/** @var int $semicolonAfterAssignmentInIf */
 		$semicolonAfterAssignmentInIf = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $pointerAfterAssignmentInIf + 1);
-		$pointerAfterAssignmentInElse = TokenHelper::findNextEffective($phpcsFile, $assignmentPointerInElse + 1);
 		$semicolonAfterAssignmentInElse = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $pointerAfterAssignmentInElse + 1);
 
 		$phpcsFile->fixer->beginChangeset();
