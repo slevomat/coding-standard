@@ -309,6 +309,14 @@ Sniff provides the following settings:
 * `linesCountAfterControlStructure`: allows to configure the number of lines after parent call.
 * `linesCountAfterLastControlStructure`: allows to configure the number of lines after last parent call.
 
+#### SlevomatCodingStandard.Classes.RequireSingleLineMethodDeclaration 🔧
+
+Enforces method declaration to be on a single line if it fits on it (or all the time; depends on settings).
+
+Sniff provides the following settings:
+
+* `maxLineLength`: specifies max allowed line length; if declaration would fit on it, it's enforced. Use 0 value to enforce for all methods, regardless of length.
+
 #### SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
 
 Reports use of superfluous prefix or suffix "Abstract" for abstract classes.
