@@ -29,7 +29,7 @@ final class NegationOperatorSpacingSniff implements Sniff
 	public $spacesCount = 0;
 
 	/**
-	 * {@inheritdoc}
+	 * @return (int|string)[]
 	 */
 	public function register(): array
 	{
