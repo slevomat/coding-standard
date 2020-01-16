@@ -3,7 +3,6 @@
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use SlevomatCodingStandard\Sniffs\TestCase;
-use Throwable;
 
 class UselessIfConditionWithReturnSniffTest extends TestCase
 {
@@ -49,16 +48,16 @@ class UselessIfConditionWithReturnSniffTest extends TestCase
 
 	public function testIfWithoutCurlyBraces(): void
 	{
-		self::expectException(Throwable::class);
-		self::expectExceptionMessage('"if" without curly braces is not supported.');
-		self::checkFile(__DIR__ . '/data/uselessIfConditionWithReturnIfWithoutCurlyBraces.php');
+		$report = self::checkFile(__DIR__ . '/data/uselessIfConditionWithReturnIfWithoutCurlyBraces.php');
+
+		self::assertSame(0, $report->getErrorCount());
 	}
 
 	public function testElseWithoutCurlyBraces(): void
 	{
-		self::expectException(Throwable::class);
-		self::expectExceptionMessage('"else" without curly braces is not supported.');
-		self::checkFile(__DIR__ . '/data/uselessIfConditionWithReturnElseWithoutCurlyBraces.php');
+		$report = self::checkFile(__DIR__ . '/data/uselessIfConditionWithReturnElseWithoutCurlyBraces.php');
+
+		self::assertSame(0, $report->getErrorCount());
 	}
 
 }
