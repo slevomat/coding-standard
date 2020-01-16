@@ -10,6 +10,7 @@ use SlevomatCodingStandard\Helpers\CommentHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Sniffs\Namespaces\UndefinedKeywordTokenException;
+use Throwable;
 use function array_key_exists;
 use function array_map;
 use function constant;
@@ -84,7 +85,13 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 	public function process(File $phpcsFile, $controlStructurePointer): void
 	{
 		$this->checkLinesBefore($phpcsFile, $controlStructurePointer);
-		$this->checkLinesAfter($phpcsFile, $controlStructurePointer);
+
+		try {
+			$this->checkLinesAfter($phpcsFile, $controlStructurePointer);
+		} catch (Throwable $e) {
+			// Unsupported syntax without curly braces.
+			return;
+		}
 	}
 
 	/**
@@ -206,7 +213,12 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$controlStructureEndPointer = $this->findControlStructureEnd($phpcsFile, $controlStructurePointer);
+		try {
+			$controlStructureEndPointer = $this->findControlStructureEnd($phpcsFile, $controlStructurePointer);
+		} catch (Throwable $e) {
+			throw new Exception($e->getMessage());
+		}
+
 		$pointerAfterControlStructureEnd = TokenHelper::findNextEffective($phpcsFile, $controlStructureEndPointer + 1);
 		if ($pointerAfterControlStructureEnd !== null && $tokens[$pointerAfterControlStructureEnd]['code'] === T_SEMICOLON) {
 			$controlStructureEndPointer = $pointerAfterControlStructureEnd;
