@@ -16,7 +16,7 @@ use const T_THROW;
 use const T_YIELD;
 use const T_YIELD_FROM;
 
-class JumpStatementsSpacingSniff extends AbstractControlStructureSpacingSniff
+class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 {
 
 	/** @var bool */
