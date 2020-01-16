@@ -9,7 +9,7 @@ use const T_PROTECTED;
 use const T_PUBLIC;
 use const T_VAR;
 
-class PropertySpacingSniff extends AbstractPropertyAndConstantSpacingSniff
+class PropertySpacingSniff extends AbstractPropertyAndConstantSpacing
 {
 
 	public const CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY = 'IncorrectCountOfBlankLinesAfterProperty';

@@ -6,7 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use function sprintf;
 use const T_CONST;
 
-class ConstantSpacingSniff extends AbstractPropertyAndConstantSpacingSniff
+class ConstantSpacingSniff extends AbstractPropertyAndConstantSpacing
 {
 
 	public const CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_CONSTANT = 'IncorrectCountOfBlankLinesAfterConstant';
