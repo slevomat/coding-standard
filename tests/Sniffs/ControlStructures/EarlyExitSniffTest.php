@@ -3,7 +3,6 @@
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use SlevomatCodingStandard\Sniffs\TestCase;
-use Throwable;
 
 class EarlyExitSniffTest extends TestCase
 {
@@ -41,37 +40,44 @@ class EarlyExitSniffTest extends TestCase
 
 	public function testIfWithoutCurlyBraces(): void
 	{
-		self::expectException(Throwable::class);
-		self::expectExceptionMessage('"if" without curly braces is not supported.');
-		self::checkFile(__DIR__ . '/data/earlyExitIfWithoutCurlyBraces.php', [], [EarlyExitSniff::CODE_EARLY_EXIT_NOT_USED]);
+		$report = self::checkFile(__DIR__ . '/data/earlyExitIfWithoutCurlyBraces.php', [], [EarlyExitSniff::CODE_EARLY_EXIT_NOT_USED]);
+
+		self::assertSame(0, $report->getErrorCount());
 	}
 
 	public function testElseifWithoutCurlyBraces(): void
 	{
-		self::expectException(Throwable::class);
-		self::expectExceptionMessage('"elseif" without curly braces is not supported.');
-		self::checkFile(__DIR__ . '/data/earlyExitElseifWithoutCurlyBraces.php', [], [EarlyExitSniff::CODE_USELESS_ELSEIF]);
+		$report = self::checkFile(__DIR__ . '/data/earlyExitElseifWithoutCurlyBraces.php', [], [EarlyExitSniff::CODE_USELESS_ELSEIF]);
+
+		self::assertSame(0, $report->getErrorCount());
 	}
 
 	public function testElseifWithSpace(): void
 	{
-		self::expectException(Throwable::class);
-		self::expectExceptionMessage('"else" without curly braces is not supported.');
-		self::checkFile(__DIR__ . '/data/earlyExitElseifWithSpace.php', [], [EarlyExitSniff::CODE_USELESS_ELSEIF]);
+		$report = self::checkFile(__DIR__ . '/data/earlyExitElseifWithSpace.php', [], [EarlyExitSniff::CODE_USELESS_ELSEIF]);
+
+		self::assertSame(0, $report->getErrorCount());
 	}
 
 	public function testElseWithoutCurlyBraces(): void
 	{
-		self::expectException(Throwable::class);
-		self::expectExceptionMessage('"else" without curly braces is not supported.');
-		self::checkFile(__DIR__ . '/data/earlyExitElseWithoutCurlyBraces.php', [], [EarlyExitSniff::CODE_USELESS_ELSE]);
+		$report = self::checkFile(__DIR__ . '/data/earlyExitElseWithoutCurlyBraces.php', [], [EarlyExitSniff::CODE_USELESS_ELSE]);
+
+		self::assertSame(0, $report->getErrorCount());
 	}
 
 	public function testInvalidElseif(): void
 	{
-		self::expectException(Throwable::class);
-		self::expectExceptionMessage('"else" without curly braces is not supported.');
-		self::checkFile(__DIR__ . '/data/earlyExitInvalidElseif.php', [], [EarlyExitSniff::CODE_USELESS_ELSEIF]);
+		$report = self::checkFile(__DIR__ . '/data/earlyExitInvalidElseif.php', [], [EarlyExitSniff::CODE_USELESS_ELSEIF]);
+
+		self::assertSame(0, $report->getErrorCount());
+	}
+
+	public function testAlternativeSyntax(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/earlyExitAlternativeSyntax.php', [], [EarlyExitSniff::CODE_USELESS_ELSEIF]);
+
+		self::assertSame(0, $report->getErrorCount());
 	}
 
 	public function testIgnoredStandaloneIfInScopeNoErrors(): void
