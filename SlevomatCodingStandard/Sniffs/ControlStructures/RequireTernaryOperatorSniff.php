@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
-use Exception;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
@@ -46,7 +45,8 @@ class RequireTernaryOperatorSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		if (!array_key_exists('scope_closer', $tokens[$ifPointer])) {
-			throw new Exception('"if" without curly braces is not supported.');
+			// If without curly braces is not supported.
+			return;
 		}
 
 		$elsePointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$ifPointer]['scope_closer'] + 1);
@@ -55,7 +55,8 @@ class RequireTernaryOperatorSniff implements Sniff
 		}
 
 		if (!array_key_exists('scope_closer', $tokens[$elsePointer])) {
-			throw new Exception('"else" without curly braces is not supported.');
+			// Else without curly braces is not supported.
+			return;
 		}
 
 		if (
