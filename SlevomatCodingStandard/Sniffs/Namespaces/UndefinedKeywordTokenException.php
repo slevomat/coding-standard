@@ -18,6 +18,7 @@ class UndefinedKeywordTokenException extends Exception
 			'Value for keyword token not found, constant "%s" is not defined',
 			$keyword
 		), 0, $previous);
+
 		$this->keyword = $keyword;
 	}
 
