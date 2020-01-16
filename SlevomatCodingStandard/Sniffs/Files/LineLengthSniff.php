@@ -123,7 +123,7 @@ class LineLengthSniff implements Sniff
 			$usePointer = $file->findPrevious(T_USE, $pointer - 1);
 			if (is_int($usePointer)
 				&& $tokens[$usePointer]['line'] === $tokens[$pointer]['line']
-				&& ! UseStatementHelper::isTraitUse($file, $usePointer)) {
+				&& !UseStatementHelper::isTraitUse($file, $usePointer)) {
 				return;
 			}
 		}

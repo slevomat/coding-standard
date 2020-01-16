@@ -170,7 +170,7 @@ class ClassStructureSniff implements Sniff
 				$stageFirstMemberPointer,
 				self::CODE_INVALID_STAGE_PLACEMENT
 			);
-			if (! $fix) {
+			if (!$fix) {
 				continue;
 			}
 
@@ -226,7 +226,7 @@ class ClassStructureSniff implements Sniff
 				continue;
 			}
 
-			if (! isset($currentStage)) {
+			if (!isset($currentStage)) {
 				$currentStage = $stage;
 				$stageFirstMemberPointer = $currentTokenPointer;
 			}
@@ -238,7 +238,7 @@ class ClassStructureSniff implements Sniff
 			$stageLastMemberPointer = $currentTokenPointer;
 		}
 
-		if (! isset($currentStage)) {
+		if (!isset($currentStage)) {
 			return null;
 		}
 
@@ -291,7 +291,7 @@ class ClassStructureSniff implements Sniff
 
 				$previousPointer = TokenHelper::findPreviousEffective($file, $pointer - 1);
 				$visibility = $tokens[$previousPointer]['code'];
-				if (! in_array($visibility, Tokens::$scopeModifiers, true)) {
+				if (!in_array($visibility, Tokens::$scopeModifiers, true)) {
 					$visibility = T_PUBLIC;
 				}
 
@@ -334,7 +334,7 @@ class ClassStructureSniff implements Sniff
 
 	private function isStaticConstructor(File $file, int $pointer, bool $isStatic): bool
 	{
-		if (! $isStatic) {
+		if (!$isStatic) {
 			return false;
 		}
 
@@ -427,7 +427,7 @@ class ClassStructureSniff implements Sniff
 	{
 		$tokens = $file->getTokens();
 
-		if ($tokens[$memberPointer]['code'] === T_FUNCTION && ! FunctionHelper::isAbstract($file, $memberPointer)) {
+		if ($tokens[$memberPointer]['code'] === T_FUNCTION && !FunctionHelper::isAbstract($file, $memberPointer)) {
 			$endPointer = $tokens[$memberPointer]['scope_closer'];
 		} else {
 			$endPointer = TokenHelper::findNext($file, T_SEMICOLON, $memberPointer + 1);

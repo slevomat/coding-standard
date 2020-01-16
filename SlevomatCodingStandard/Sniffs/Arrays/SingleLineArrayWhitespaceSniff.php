@@ -97,7 +97,7 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 		$error = 'Expected %d spaces after array opening bracket; %d found';
 		$data = [$this->spacesAroundBrackets, $spaceLength];
 		$fix = $phpcsFile->addFixableError($error, $arrayStart, self::CODE_SPACE_AFTER_ARRAY_OPEN, $data);
-		if (! $fix) {
+		if (!$fix) {
 			return;
 		}
 
@@ -126,7 +126,7 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 		$error = 'Expected %d spaces before array closing bracket; %d found';
 		$data = [$this->spacesAroundBrackets, $spaceLength];
 		$fix = $phpcsFile->addFixableError($error, $arrayEnd, self::CODE_SPACE_BEFORE_ARRAY_CLOSE, $data);
-		if (! $fix) {
+		if (!$fix) {
 			return;
 		}
 
@@ -149,7 +149,7 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 		$content = $tokens[$comma - 2]['content'];
 		$spaceLength = $tokens[$comma - 1]['length'];
 		$fix = $phpcsFile->addFixableError($error, $comma, self::CODE_SPACE_BEFORE_COMMA, [$content, $spaceLength]);
-		if (! $fix) {
+		if (!$fix) {
 			return;
 		}
 
@@ -179,7 +179,7 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 		$error = 'Expected 1 space between comma and "%s"; %s found';
 		$content = $tokens[$comma + 2]['content'];
 		$fix = $phpcsFile->addFixableError($error, $comma, self::CODE_SPACE_AFTER_COMMA, [$content, $spaceLength]);
-		if (! $fix) {
+		if (!$fix) {
 			return;
 		}
 

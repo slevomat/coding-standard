@@ -81,7 +81,7 @@ class RequireOneLineDocCommentSniff implements Sniff
 		}
 
 		$fix = $this->addError($phpcsFile, $docCommentStartPointer);
-		if (! $fix) {
+		if (!$fix) {
 			return;
 		}
 

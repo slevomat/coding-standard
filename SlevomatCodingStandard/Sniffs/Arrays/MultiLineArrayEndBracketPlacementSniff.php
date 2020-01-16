@@ -41,13 +41,13 @@ class MultiLineArrayEndBracketPlacementSniff implements Sniff
 		$nextArrayEnd = $tokens[$nextArrayStart]['bracket_closer'];
 		$arraysStartAtSameLine = $tokens[$arrayStart]['line'] === $tokens[$nextArrayStart]['line'];
 		$arraysEndAtSameLine = $tokens[$arrayEnd]['line'] === $tokens[$nextArrayEnd]['line'];
-		if (! $arraysStartAtSameLine || $arraysEndAtSameLine) {
+		if (!$arraysStartAtSameLine || $arraysEndAtSameLine) {
 			return;
 		}
 
 		$error = "Expected nested array to end at the same line as it's parent. Either put the nested array's end at the same line as the parent's end, or put the nested array start on it's own line.";
 		$fix = $phpcsFile->addFixableError($error, $arrayStart, self::CODE_ARRAY_END_WRONG_PLACEMENT);
-		if (! $fix) {
+		if (!$fix) {
 			return;
 		}
 

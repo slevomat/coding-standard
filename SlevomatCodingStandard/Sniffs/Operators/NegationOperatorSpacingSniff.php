@@ -78,7 +78,7 @@ final class NegationOperatorSpacingSniff implements Sniff
 			[$this->spacesCount, $tokens[$pointer]['content'], $numberOfSpaces]
 		);
 
-		if (! $fix) {
+		if (!$fix) {
 			return;
 		}
 
