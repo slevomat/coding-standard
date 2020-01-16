@@ -30,6 +30,7 @@
 	</rule>
 
 	<rule ref="SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation"/>
+	<rule ref="SlevomatCodingStandard.Arrays.SingleLineArrayWhitespace"/>
 	<rule ref="SlevomatCodingStandard.Classes.ConstantSpacing"/>
 	<rule ref="SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants"/>
 	<rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference"/>
