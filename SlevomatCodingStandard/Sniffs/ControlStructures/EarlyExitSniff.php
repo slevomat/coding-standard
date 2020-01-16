@@ -8,6 +8,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ConditionHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use Throwable;
 use function array_key_exists;
 use function in_array;
 use function sort;
@@ -73,10 +74,16 @@ class EarlyExitSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		if (!array_key_exists('scope_opener', $tokens[$elsePointer])) {
-			throw new Exception('"else" without curly braces is not supported.');
+			// Else without curly braces is not supported.
+			return;
 		}
 
-		$allConditionsPointers = $this->getAllConditionsPointers($phpcsFile, $elsePointer);
+		try {
+			$allConditionsPointers = $this->getAllConditionsPointers($phpcsFile, $elsePointer);
+		} catch (Throwable $e) {
+			// Else without curly braces is not supported.
+			return;
+		}
 
 		$ifPointer = $allConditionsPointers[0];
 		$ifEarlyExitPointer = null;
@@ -195,7 +202,12 @@ class EarlyExitSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$allConditionsPointers = $this->getAllConditionsPointers($phpcsFile, $elseIfPointer);
+		try {
+			$allConditionsPointers = $this->getAllConditionsPointers($phpcsFile, $elseIfPointer);
+		} catch (Throwable $e) {
+			// Elseif without curly braces is not supported.
+			return;
+		}
 
 		$elseIfEarlyExitPointer = null;
 		$previousConditionEarlyExitPointer = null;
@@ -256,7 +268,8 @@ class EarlyExitSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		if (!array_key_exists('scope_closer', $tokens[$ifPointer])) {
-			throw new Exception('"if" without curly braces is not supported.');
+			// If without curly braces is not supported.
+			return;
 		}
 
 		$nextPointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $tokens[$ifPointer]['scope_closer'] + 1);
@@ -363,6 +376,11 @@ class EarlyExitSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$conditionsPointers = [$conditionPointer];
+
+		if (isset($tokens[$conditionPointer]['scope_opener']) && $tokens[$tokens[$conditionPointer]['scope_opener']]['code'] === T_COLON) {
+			// Alternative control structure syntax.
+			throw new Exception(sprintf('"%s" without curly braces is not supported.', $tokens[$conditionPointer]['content']));
+		}
 
 		if ($tokens[$conditionPointer]['code'] !== T_IF) {
 			$currentConditionPointer = $conditionPointer;
