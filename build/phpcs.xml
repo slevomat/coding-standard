@@ -168,6 +168,7 @@
 	<rule ref="SlevomatCodingStandard.PHP.UselessParentheses"/>
 	<rule ref="SlevomatCodingStandard.PHP.UselessSemicolon"/>
 	<rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators"/>
+	<rule ref="SlevomatCodingStandard.Operators.NegationOperatorSpacing"/>
 	<rule ref="SlevomatCodingStandard.Operators.RequireCombinedAssignmentOperator"/>
 	<rule ref="SlevomatCodingStandard.Operators.RequireOnlyStandaloneIncrementAndDecrementOperators"/>
 	<rule ref="SlevomatCodingStandard.Operators.SpreadOperatorSpacing"/>
