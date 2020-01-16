@@ -172,3 +172,8 @@ function &returnsReference($result)
 	$value = $result->getValue();
 	return $value;
 }
+
+function foo( $bar ) {
+	$bar .= ' more bar';
+	return $bar;
+}

@@ -89,6 +89,10 @@ class UselessVariableSniff implements Sniff
 			return;
 		}
 
+		if ($this->isFunctionParameter($phpcsFile, $functionPointer, $variableName)) {
+			return;
+		}
+
 		$previousVariablePointer = $this->findPreviousVariablePointer($phpcsFile, $returnPointer, $variableName);
 		if ($previousVariablePointer === null) {
 			return;
@@ -266,6 +270,28 @@ class UselessVariableSniff implements Sniff
 			if ($tokens[$pointerBeforeParameter]['code'] === T_STATIC) {
 				return true;
 			}
+		}
+
+		return false;
+	}
+
+	private function isFunctionParameter(File $phpcsFile, ?int $functionPointer, string $variableName): bool
+	{
+		if ($functionPointer === null) {
+			return false;
+		}
+
+		$tokens = $phpcsFile->getTokens();
+
+		for ($i = $tokens[$functionPointer]['parenthesis_opener'] + 1; $i < $tokens[$functionPointer]['parenthesis_closer']; $i++) {
+			if ($tokens[$i]['code'] !== T_VARIABLE) {
+				continue;
+			}
+			if ($tokens[$i]['content'] !== $variableName) {
+				continue;
+			}
+
+			return true;
 		}
 
 		return false;
