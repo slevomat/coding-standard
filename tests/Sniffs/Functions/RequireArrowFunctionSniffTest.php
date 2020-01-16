@@ -21,11 +21,12 @@ class RequireArrowFunctionSniffTest extends TestCase
 			'allowNested' => false,
 		]);
 
-		self::assertSame(3, $report->getErrorCount());
+		self::assertSame(4, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, RequireArrowFunctionSniff::CODE_REQUIRED_ARROW_FUNCTION);
 		self::assertSniffError($report, 7, RequireArrowFunctionSniff::CODE_REQUIRED_ARROW_FUNCTION);
 		self::assertSniffError($report, 12, RequireArrowFunctionSniff::CODE_REQUIRED_ARROW_FUNCTION);
+		self::assertSniffError($report, 18, RequireArrowFunctionSniff::CODE_REQUIRED_ARROW_FUNCTION);
 
 		self::assertAllFixedInFile($report);
 	}

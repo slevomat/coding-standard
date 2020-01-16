@@ -13,3 +13,10 @@ $c = function ($cc): int {
 		return $cc + 1;
 	};
 };
+
+array_map(
+    static function (array $value): array {
+        return array_filter($value);
+    },
+    []
+);
