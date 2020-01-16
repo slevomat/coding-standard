@@ -213,11 +213,7 @@ abstract class AbstractControlStructureSpacingSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		try {
-			$controlStructureEndPointer = $this->findControlStructureEnd($phpcsFile, $controlStructurePointer);
-		} catch (Throwable $e) {
-			throw new Exception($e->getMessage());
-		}
+		$controlStructureEndPointer = $this->findControlStructureEnd($phpcsFile, $controlStructurePointer);
 
 		$pointerAfterControlStructureEnd = TokenHelper::findNextEffective($phpcsFile, $controlStructureEndPointer + 1);
 		if ($pointerAfterControlStructureEnd !== null && $tokens[$pointerAfterControlStructureEnd]['code'] === T_SEMICOLON) {
