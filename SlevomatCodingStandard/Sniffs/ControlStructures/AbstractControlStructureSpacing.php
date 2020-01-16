@@ -46,7 +46,7 @@ use const T_TRY;
 use const T_WHILE;
 use const T_WHITESPACE;
 
-abstract class AbstractControlStructureSpacingSniff implements Sniff
+abstract class AbstractControlStructureSpacing implements Sniff
 {
 
 	public const CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE = 'IncorrectLinesCountBeforeControlStructure';

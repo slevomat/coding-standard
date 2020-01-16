@@ -5,13 +5,13 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use SlevomatCodingStandard\Sniffs\ControlStructures\AbstractControlStructureSpacingSniff;
+use SlevomatCodingStandard\Sniffs\ControlStructures\AbstractControlStructureSpacing;
 use function array_key_exists;
 use function array_merge;
 use function in_array;
 use const T_PARENT;
 
-class ParentCallSpacingSniff extends AbstractControlStructureSpacingSniff
+class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 {
 
 	/**

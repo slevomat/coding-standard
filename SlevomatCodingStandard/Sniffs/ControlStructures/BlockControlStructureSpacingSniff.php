@@ -16,7 +16,7 @@ use const T_SWITCH;
 use const T_TRY;
 use const T_WHILE;
 
-class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacingSniff
+class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacing
 {
 
 	/** @var string[] */
