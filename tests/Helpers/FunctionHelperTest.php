@@ -88,10 +88,7 @@ class FunctionHelperTest extends TestCase
 	 * @param string $functionName
 	 * @param string[] $expectedParametersNames
 	 */
-	public function testParametersNames(
-		string $functionName,
-		array $expectedParametersNames
-	): void
+	public function testParametersNames(string $functionName, array $expectedParametersNames): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersNames.php');
 
@@ -206,10 +203,7 @@ class FunctionHelperTest extends TestCase
 	 * @param string $functionName
 	 * @param (\SlevomatCodingStandard\Helpers\ParameterTypeHint|null)[] $expectedParametersTypeHints
 	 */
-	public function testParametersTypeHints(
-		string $functionName,
-		array $expectedParametersTypeHints
-	): void
+	public function testParametersTypeHints(string $functionName, array $expectedParametersTypeHints): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersTypeHints.php');
 
@@ -234,10 +228,7 @@ class FunctionHelperTest extends TestCase
 	 * @param string $functionName
 	 * @param (\SlevomatCodingStandard\Helpers\ParameterTypeHint|null)[] $expectedParametersTypeHints
 	 */
-	public function testParametersNullableTypeHints(
-		string $functionName,
-		array $expectedParametersTypeHints
-	): void
+	public function testParametersNullableTypeHints(string $functionName, array $expectedParametersTypeHints): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersNullableTypeHints.php');
 
@@ -279,10 +270,7 @@ class FunctionHelperTest extends TestCase
 	 * @param string $functionName
 	 * @param bool $returnsValue
 	 */
-	public function testFunctionReturnsValueOrNot(
-		string $functionName,
-		bool $returnsValue
-	): void
+	public function testFunctionReturnsValueOrNot(string $functionName, bool $returnsValue): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionReturnsValueOrNot.php');
 		self::assertSame($returnsValue, FunctionHelper::returnsValue($phpcsFile, $this->findFunctionPointerByName($phpcsFile, $functionName)));
@@ -306,10 +294,7 @@ class FunctionHelperTest extends TestCase
 	 * @param int $line
 	 * @param bool $returnsValue
 	 */
-	public function testClosureReturnsValueOrNot(
-		int $line,
-		bool $returnsValue
-	): void
+	public function testClosureReturnsValueOrNot(int $line, bool $returnsValue): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/closureReturnsValueOrNot.php');
 		self::assertSame($returnsValue, FunctionHelper::returnsValue($phpcsFile, $this->findPointerByLineAndType($phpcsFile, $line, T_CLOSURE)));

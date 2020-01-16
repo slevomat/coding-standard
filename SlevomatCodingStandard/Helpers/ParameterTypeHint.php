@@ -17,11 +17,7 @@ class ParameterTypeHint
 	/** @var bool */
 	private $optional;
 
-	public function __construct(
-		string $typeHint,
-		bool $nullable,
-		bool $optional
-	)
+	public function __construct(string $typeHint, bool $nullable, bool $optional)
 	{
 		$this->typeHint = $typeHint;
 		$this->nullable = $nullable;

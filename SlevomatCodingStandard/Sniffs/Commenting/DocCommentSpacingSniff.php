@@ -327,11 +327,7 @@ class DocCommentSpacingSniff implements Sniff
 	 * @param int $docCommentOpenerPointer
 	 * @param \SlevomatCodingStandard\Helpers\Annotation\Annotation[] $annotations
 	 */
-	private function checkAnnotationsGroups(
-		File $phpcsFile,
-		int $docCommentOpenerPointer,
-		array $annotations
-	): void
+	private function checkAnnotationsGroups(File $phpcsFile, int $docCommentOpenerPointer, array $annotations): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

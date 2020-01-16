@@ -23,12 +23,7 @@ abstract class Annotation
 	/** @var string|null */
 	protected $content;
 
-	public function __construct(
-		string $name,
-		int $startPointer,
-		int $endPointer,
-		?string $content
-	)
+	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content)
 	{
 		$this->name = $name;
 		$this->startPointer = $startPointer;

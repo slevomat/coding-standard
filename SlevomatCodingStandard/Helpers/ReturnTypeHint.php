@@ -20,12 +20,7 @@ class ReturnTypeHint
 	/** @var int */
 	private $endPointer;
 
-	public function __construct(
-		string $typeHint,
-		bool $nullable,
-		int $startPointer,
-		int $endPointer
-	)
+	public function __construct(string $typeHint, bool $nullable, int $startPointer, int $endPointer)
 	{
 		$this->typeHint = $typeHint;
 		$this->nullable = $nullable;

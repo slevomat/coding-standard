@@ -112,11 +112,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 		}
 	}
 
-	private function checkReferencedName(
-		File $phpcsFile,
-		int $keywordPointer,
-		int $nameStartPointer
-	): int
+	private function checkReferencedName(File $phpcsFile, int $keywordPointer, int $nameStartPointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
 

@@ -36,11 +36,7 @@ class FilepathNamespaceExtractor
 	 * @param string[] $skipDirs
 	 * @param string[] $extensions index(integer) => extension
 	 */
-	public function __construct(
-		array $rootNamespaces,
-		array $skipDirs,
-		array $extensions
-	)
+	public function __construct(array $rootNamespaces, array $skipDirs, array $extensions)
 	{
 		$this->rootNamespaces = $rootNamespaces;
 		$this->skipDirs = array_fill_keys($skipDirs, true);

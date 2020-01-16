@@ -179,10 +179,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 * @param int|null $tokenPointer
 	 * @return mixed[]
 	 */
-	private function getTokenFromPointer(
-		File $phpcsFile,
-		?int $tokenPointer = null
-	): array
+	private function getTokenFromPointer(File $phpcsFile, ?int $tokenPointer = null): array
 	{
 		if ($tokenPointer === null) {
 			throw new NullTokenPointerException();

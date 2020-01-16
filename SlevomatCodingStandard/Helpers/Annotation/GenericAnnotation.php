@@ -13,13 +13,7 @@ class GenericAnnotation extends Annotation
 	/** @var string|null */
 	private $parameters;
 
-	public function __construct(
-		string $name,
-		int $startPointer,
-		int $endPointer,
-		?string $parameters,
-		?string $content
-	)
+	public function __construct(string $name, int $startPointer, int $endPointer, ?string $parameters, ?string $content)
 	{
 		parent::__construct($name, $startPointer, $endPointer, $content);
 

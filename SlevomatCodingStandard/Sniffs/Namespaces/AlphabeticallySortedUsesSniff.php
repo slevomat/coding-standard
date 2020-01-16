@@ -82,10 +82,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
 	 */
-	private function fixAlphabeticalOrder(
-		File $phpcsFile,
-		array $useStatements
-	): void
+	private function fixAlphabeticalOrder(File $phpcsFile, array $useStatements): void
 	{
 		/** @var \SlevomatCodingStandard\Helpers\UseStatement $firstUseStatement */
 		$firstUseStatement = reset($useStatements);
