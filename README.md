@@ -439,6 +439,10 @@ Sniff provides the following settings:
 
 However, if you prefer Yoda conditions, you can use `RequireYodaComparisonSniff`.
 
+#### SlevomatCodingStandard.Functions.DisallowEmptyFunction
+
+Reports empty functions body and require at least a comment inside.
+
 #### SlevomatCodingStandard.Functions.DisallowArrowFunction
 
 Disallows arrow functions.
