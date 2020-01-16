@@ -16,7 +16,7 @@ class SuperfluousTraitNamingSniff implements Sniff
 	public const CODE_SUPERFLUOUS_SUFFIX = 'SuperfluousSuffix';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

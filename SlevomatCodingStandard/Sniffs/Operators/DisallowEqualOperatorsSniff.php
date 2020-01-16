@@ -15,7 +15,7 @@ class DisallowEqualOperatorsSniff implements Sniff
 	public const CODE_DISALLOWED_NOT_EQUAL_OPERATOR = 'DisallowedNotEqualOperator';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

@@ -41,7 +41,9 @@ class LineLengthSniff implements Sniff
 	 */
 	public $ignoreImports = true;
 
-	/** @return int[] */
+	/**
+	 * @return array<int, (int|string)>
+	 */
 	public function register(): array
 	{
 		return [T_OPEN_TAG];

@@ -17,7 +17,7 @@ class RequireNowdocSniff implements Sniff
 	public const CODE_REQUIRED_NOWDOC = 'RequiredNowdoc';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

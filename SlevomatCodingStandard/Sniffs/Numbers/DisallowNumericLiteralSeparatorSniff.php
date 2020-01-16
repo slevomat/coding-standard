@@ -15,7 +15,7 @@ class DisallowNumericLiteralSeparatorSniff implements Sniff
 	public const CODE_DISALLOWED_NUMERIC_LITERAL_SEPARATOR = 'DisallowedNumericLiteralSeparator';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

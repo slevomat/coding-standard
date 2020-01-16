@@ -20,7 +20,7 @@ class DisallowMixedTypeHintSniff implements Sniff
 	public const CODE_DISALLOWED_MIXED_TYPE_HINT = 'DisallowedMixedTypeHint';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

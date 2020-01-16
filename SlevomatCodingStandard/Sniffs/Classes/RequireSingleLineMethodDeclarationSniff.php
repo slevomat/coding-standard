@@ -29,7 +29,9 @@ class RequireSingleLineMethodDeclarationSniff implements Sniff
 	/** @var int */
 	public $maxLineLength = 120;
 
-	/** @return int[] */
+	/**
+	 * @return array<int, (int|string)>
+	 */
 	public function register(): array
 	{
 		return [T_FUNCTION];

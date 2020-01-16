@@ -71,7 +71,7 @@ class DocCommentSpacingSniff implements Sniff
 	private $normalizedAnnotationsGroups = null;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

@@ -26,7 +26,7 @@ class UselessIfConditionWithReturnSniff implements Sniff
 	public $assumeAllConditionExpressionsAreAlreadyBoolean = false;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

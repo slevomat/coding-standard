@@ -14,7 +14,9 @@ class PropertySpacingSniff extends AbstractPropertyAndConstantSpacing
 
 	public const CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY = 'IncorrectCountOfBlankLinesAfterProperty';
 
-	/** @return int[] */
+	/**
+	 * @return array<int, (int|string)>
+	 */
 	public function register(): array
 	{
 		return [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE];

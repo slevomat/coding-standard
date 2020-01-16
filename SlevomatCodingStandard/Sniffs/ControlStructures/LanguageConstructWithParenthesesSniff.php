@@ -29,7 +29,7 @@ class LanguageConstructWithParenthesesSniff implements Sniff
 	public const CODE_USED_WITH_PARENTHESES = 'UsedWithParentheses';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

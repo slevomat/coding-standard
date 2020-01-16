@@ -32,7 +32,7 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 	public const CODE_IMPLICIT_ARRAY_CREATION_USED = 'ImplicitArrayCreationUsed';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

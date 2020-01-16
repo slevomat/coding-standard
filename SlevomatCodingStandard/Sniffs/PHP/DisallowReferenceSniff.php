@@ -26,7 +26,7 @@ class DisallowReferenceSniff implements Sniff
 	public const CODE_DISALLOWED_ASSIGNING_BY_REFERENCE = 'DisallowedAssigningByReference';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

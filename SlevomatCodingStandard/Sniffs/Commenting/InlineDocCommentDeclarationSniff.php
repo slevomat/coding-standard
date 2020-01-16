@@ -38,7 +38,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 	public const CODE_NO_ASSIGNMENT = 'NoAssignment';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

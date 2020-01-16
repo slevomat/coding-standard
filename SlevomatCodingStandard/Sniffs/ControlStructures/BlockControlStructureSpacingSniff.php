@@ -54,7 +54,9 @@ class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacing
 		];
 	}
 
-	/** @return string[] */
+	/**
+	 * @return string[]
+	 */
 	protected function getTokensToCheck(): array
 	{
 		return $this->tokensToCheck;

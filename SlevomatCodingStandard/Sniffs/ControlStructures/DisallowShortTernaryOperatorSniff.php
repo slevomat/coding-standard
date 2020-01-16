@@ -19,7 +19,7 @@ class DisallowShortTernaryOperatorSniff implements Sniff
 	public $fixable = true;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

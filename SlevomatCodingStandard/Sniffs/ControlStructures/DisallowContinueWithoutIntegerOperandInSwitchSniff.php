@@ -17,7 +17,7 @@ class DisallowContinueWithoutIntegerOperandInSwitchSniff implements Sniff
 	public const CODE_DISALLOWED_CONTINUE_WITHOUT_INTEGER_OPERAND_IN_SWITCH = 'DisallowedContinueWithoutIntegerOperandInSwitch';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

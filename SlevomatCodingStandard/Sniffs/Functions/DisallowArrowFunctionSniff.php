@@ -12,7 +12,7 @@ class DisallowArrowFunctionSniff implements Sniff
 	public const CODE_DISALLOWED_ARROW_FUNCTION = 'DisallowedArrowFunction';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

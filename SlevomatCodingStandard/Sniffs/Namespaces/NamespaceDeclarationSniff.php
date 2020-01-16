@@ -21,7 +21,7 @@ class NamespaceDeclarationSniff implements Sniff
 	public const CODE_DISALLOWED_BRACKETED_SYNTAX = 'DisallowedBracketedSyntax';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

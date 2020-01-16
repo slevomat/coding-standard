@@ -97,7 +97,7 @@ class UselessParenthesesSniff implements Sniff
 	public $ignoreComplexTernaryConditions = false;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

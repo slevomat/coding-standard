@@ -19,7 +19,7 @@ class UnusedParameterSniff implements Sniff
 	public const CODE_UNUSED_PARAMETER = 'UnusedParameter';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

@@ -21,7 +21,9 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 	/** @var int */
 	public $spacesAroundBrackets = 0;
 
-	/** @return string[] */
+	/**
+	 * @return array<int, (int|string)>
+	 */
 	public function register(): array
 	{
 		return [T_OPEN_SHORT_ARRAY];

@@ -35,7 +35,7 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 	public $linesCountBeforeClosingBrace = 1;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

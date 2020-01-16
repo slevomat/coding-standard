@@ -12,7 +12,9 @@ class MultiLineArrayEndBracketPlacementSniff implements Sniff
 
 	public const CODE_ARRAY_END_WRONG_PLACEMENT = 'ArrayEndWrongPlacement';
 
-	/** @return string[] */
+	/**
+	 * @return array<int, (int|string)>
+	 */
 	public function register(): array
 	{
 		return [T_OPEN_SHORT_ARRAY];

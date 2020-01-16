@@ -37,7 +37,7 @@ class UseSpacingSniff implements Sniff
 	public $linesCountAfterLastUse = 1;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

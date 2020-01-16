@@ -55,7 +55,7 @@ class TypeNameMatchesFileNameSniff implements Sniff
 	private $namespaceExtractor;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

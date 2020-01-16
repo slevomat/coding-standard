@@ -16,7 +16,7 @@ class MultipleUsesPerLineSniff implements Sniff
 	public const CODE_MULTIPLE_USES_PER_LINE = 'MultipleUsesPerLine';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

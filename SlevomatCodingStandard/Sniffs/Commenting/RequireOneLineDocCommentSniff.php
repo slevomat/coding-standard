@@ -17,7 +17,9 @@ class RequireOneLineDocCommentSniff implements Sniff
 
 	public const CODE_MULTI_LINE_DOC_COMMENT = 'MultiLineDocComment';
 
-	/** @return string[] */
+	/**
+	 * @return array<int, (int|string)>
+	 */
 	public function register(): array
 	{
 		return [T_DOC_COMMENT_OPEN_TAG];

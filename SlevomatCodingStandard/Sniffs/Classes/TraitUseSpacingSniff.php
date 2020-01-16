@@ -38,7 +38,7 @@ class TraitUseSpacingSniff implements Sniff
 	public $linesCountAfterLastUseWhenLastInClass = 1;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

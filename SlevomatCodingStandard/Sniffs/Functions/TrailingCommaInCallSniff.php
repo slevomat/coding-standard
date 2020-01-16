@@ -24,7 +24,7 @@ class TrailingCommaInCallSniff implements Sniff
 	public const CODE_MISSING_TRAILING_COMMA = 'MissingTrailingComma';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

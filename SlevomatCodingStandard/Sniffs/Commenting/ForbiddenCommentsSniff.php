@@ -23,7 +23,7 @@ class ForbiddenCommentsSniff implements Sniff
 	public $forbiddenCommentPatterns = [];
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

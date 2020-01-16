@@ -18,7 +18,7 @@ class LongTypeHintsSniff implements Sniff
 	public const CODE_USED_LONG_TYPE_HINT = 'UsedLongTypeHint';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

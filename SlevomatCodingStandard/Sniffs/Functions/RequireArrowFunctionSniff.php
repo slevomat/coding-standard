@@ -25,7 +25,7 @@ class RequireArrowFunctionSniff implements Sniff
 	public $allowNested = true;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

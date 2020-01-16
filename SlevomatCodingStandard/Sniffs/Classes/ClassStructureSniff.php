@@ -11,6 +11,7 @@ use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function array_merge;
+use function array_values;
 use function assert;
 use function in_array;
 use function sprintf;
@@ -130,10 +131,12 @@ class ClassStructureSniff implements Sniff
 		self::STAGE_PRIVATE_METHODS => 200,
 	];
 
-	/** @return array<int|string, int|string> */
+	/**
+	 * @return array<int, (int|string)>
+	 */
 	public function register(): array
 	{
-		return Tokens::$ooScopeTokens;
+		return array_values(Tokens::$ooScopeTokens);
 	}
 
 	/**

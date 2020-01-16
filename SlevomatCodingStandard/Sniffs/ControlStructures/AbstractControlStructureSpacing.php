@@ -13,6 +13,7 @@ use SlevomatCodingStandard\Sniffs\Namespaces\UndefinedKeywordTokenException;
 use Throwable;
 use function array_key_exists;
 use function array_map;
+use function array_values;
 use function constant;
 use function count;
 use function defined;
@@ -99,16 +100,20 @@ abstract class AbstractControlStructureSpacing implements Sniff
 	 */
 	abstract protected function getSupportedTokens(): array;
 
-	/** @return string[] */
+	/**
+	 * @return string[]
+	 */
 	abstract protected function getTokensToCheck(): array;
 
-	/** @return (int|string)[] */
+	/**
+	 * @return (int|string)[]
+	 */
 	private function getNormalizedTokensToCheck(): array
 	{
 		if ($this->normalizedTokensToCheck === null) {
 			$supportedTokens = $this->getSupportedTokens();
 
-			$this->normalizedTokensToCheck = array_map(
+			$this->normalizedTokensToCheck = array_values(array_map(
 				static function (string $tokenCode) use ($supportedTokens) {
 					if (!defined($tokenCode)) {
 						throw new UndefinedKeywordTokenException($tokenCode);
@@ -122,7 +127,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 					return $const;
 				},
 				SniffSettingsHelper::normalizeArray($this->getTokensToCheck())
-			);
+			));
 
 			if (count($this->normalizedTokensToCheck) === 0) {
 				$this->normalizedTokensToCheck = $supportedTokens;

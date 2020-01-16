@@ -48,7 +48,7 @@ class UselessVariableSniff implements Sniff
 	public const CODE_USELESS_VARIABLE = 'UselessVariable';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

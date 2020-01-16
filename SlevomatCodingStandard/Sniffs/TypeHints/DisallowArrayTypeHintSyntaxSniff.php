@@ -41,7 +41,7 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 	private $normalizedTraversableTypeHints;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

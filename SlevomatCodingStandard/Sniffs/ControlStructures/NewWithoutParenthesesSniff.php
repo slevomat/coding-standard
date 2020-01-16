@@ -25,7 +25,7 @@ class NewWithoutParenthesesSniff implements Sniff
 	public const CODE_USELESS_PARENTHESES = 'UselessParentheses';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

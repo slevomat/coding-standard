@@ -18,7 +18,7 @@ class AssignmentInConditionSniff implements Sniff
 	public const CODE_ASSIGNMENT_IN_CONDITION = 'AssignmentInCondition';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

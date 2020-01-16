@@ -52,19 +52,19 @@ class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 	}
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{
 		if (count($this->getKeywordsToCheck()) === 0) {
 			return [];
 		}
-		return array_map(static function (string $keyword) {
+		return array_values(array_map(static function (string $keyword) {
 			if (!defined($keyword)) {
 				throw new UndefinedKeywordTokenException($keyword);
 			}
 			return constant($keyword);
-		}, $this->getKeywordsToCheck());
+		}, $this->getKeywordsToCheck()));
 	}
 
 	/**

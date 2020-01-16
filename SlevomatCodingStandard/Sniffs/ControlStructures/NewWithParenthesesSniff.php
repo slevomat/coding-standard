@@ -24,7 +24,7 @@ class NewWithParenthesesSniff implements Sniff
 	public const CODE_MISSING_PARENTHESES = 'MissingParentheses';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

@@ -22,7 +22,7 @@ class UnusedInheritedVariablePassedToClosureSniff implements Sniff
 	public const CODE_UNUSED_INHERITED_VARIABLE = 'UnusedInheritedVariable';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

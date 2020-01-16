@@ -21,7 +21,7 @@ class TrailingArrayCommaSniff implements Sniff
 	public $enableAfterHeredoc = PHP_VERSION_ID >= 70300;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

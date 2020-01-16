@@ -39,7 +39,7 @@ class RequireExplicitAssertionSniff implements Sniff
 	public const CODE_REQUIRED_EXPLICIT_ASSERTION = 'RequiredExplicitAssertion';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

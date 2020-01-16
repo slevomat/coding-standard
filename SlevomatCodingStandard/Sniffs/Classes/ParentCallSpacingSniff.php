@@ -44,7 +44,9 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 		return [T_PARENT];
 	}
 
-	/** @return string[] */
+	/**
+	 * @return string[]
+	 */
 	protected function getTokensToCheck(): array
 	{
 		return ['T_PARENT'];

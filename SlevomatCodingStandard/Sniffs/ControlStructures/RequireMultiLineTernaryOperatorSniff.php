@@ -36,7 +36,7 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 	public $lineLengthLimit = 0;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

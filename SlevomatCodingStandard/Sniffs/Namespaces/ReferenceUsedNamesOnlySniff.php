@@ -124,7 +124,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	public $allowFullyQualifiedNameForCollidingConstants = false;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

@@ -28,7 +28,7 @@ class ForbiddenAnnotationsSniff implements Sniff
 	private $normalizedForbiddenAnnotations;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

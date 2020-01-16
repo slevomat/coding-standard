@@ -87,7 +87,7 @@ class UnusedPrivateElementsSniff implements Sniff
 	private $normalizedAlwaysUsedMethodsAnnotations;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

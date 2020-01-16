@@ -15,7 +15,7 @@ class DisallowEmptyFunctionSniff implements Sniff
 	public const CODE_EMPTY_FUNCTION = 'EmptyFunction';
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{
