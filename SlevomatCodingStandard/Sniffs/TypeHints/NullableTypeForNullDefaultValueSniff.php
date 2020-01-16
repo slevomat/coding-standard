@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_key_exists;
 use function array_merge;
 use function in_array;
 use function sprintf;
@@ -13,6 +14,7 @@ use const T_ELLIPSIS;
 use const T_EQUAL;
 use const T_NULL;
 use const T_NULLABLE;
+use const T_OPEN_PARENTHESIS;
 use const T_VARIABLE;
 
 class NullableTypeForNullDefaultValueSniff implements Sniff
@@ -36,8 +38,13 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 	public function process(File $phpcsFile, $functionPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
-		$startPointer = $tokens[$functionPointer]['parenthesis_opener'] + 1;
-		$endPointer = $tokens[$functionPointer]['parenthesis_closer'];
+
+		$parenthesisOpener = array_key_exists('parenthesis_opener', $tokens[$functionPointer])
+			? $tokens[$functionPointer]['parenthesis_opener']
+			: TokenHelper::findNext($phpcsFile, T_OPEN_PARENTHESIS, $functionPointer + 1);
+
+		$startPointer = $parenthesisOpener + 1;
+		$endPointer = $tokens[$parenthesisOpener]['parenthesis_closer'];
 
 		for ($i = $startPointer; $i < $endPointer; $i++) {
 			if ($tokens[$i]['code'] !== T_VARIABLE) {

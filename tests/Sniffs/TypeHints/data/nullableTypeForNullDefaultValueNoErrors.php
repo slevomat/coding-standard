@@ -65,3 +65,8 @@ class FooBar extends \stdClass
 	}
 
 }
+
+array_map(
+    static fn (array $value): array => array_filter($value),
+    []
+);
