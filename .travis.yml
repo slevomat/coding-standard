@@ -36,6 +36,11 @@ jobs:
       env: DEPENDENCIES=highest
       script: bin/phing cs
 
+    - stage: Static analysis
+      php: 7.4
+      env: DEPENDENCIES=highest
+      script: bin/phing phpstan
+
     - stage: Tests
       php: 7.1
       env: DEPENDENCIES=lowest
@@ -163,11 +168,6 @@ jobs:
         - choco install composer --ia "/DEV=C:\tools\php"
         - export PATH=/c/tools/php:$PATH
       script: bin/phing tests-without-code-coverage
-
-    - stage: Static analysis
-      php: 7.4
-      env: DEPENDENCIES=highest
-      script: bin/phing phpstan
 
     - stage: Code coverage
       php: 7.4
