@@ -19,6 +19,9 @@ use const T_STRING;
 use const T_VAR;
 use const T_VARIABLE;
 
+/**
+ * @internal
+ */
 abstract class AbstractPropertyAndConstantSpacing implements Sniff
 {
 

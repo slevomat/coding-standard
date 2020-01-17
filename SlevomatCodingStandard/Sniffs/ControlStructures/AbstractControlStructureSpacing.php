@@ -47,6 +47,9 @@ use const T_TRY;
 use const T_WHILE;
 use const T_WHITESPACE;
 
+/**
+ * @internal
+ */
 abstract class AbstractControlStructureSpacing implements Sniff
 {
 

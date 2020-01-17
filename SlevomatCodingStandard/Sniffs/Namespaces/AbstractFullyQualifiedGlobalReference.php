@@ -17,6 +17,9 @@ use function sprintf;
 use function strtolower;
 use const T_OPEN_TAG;
 
+/**
+ * @internal
+ */
 abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 {
 
