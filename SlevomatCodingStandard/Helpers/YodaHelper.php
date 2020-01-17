@@ -83,29 +83,6 @@ class YodaHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param array<int, array<string, array<int, int|string>|int|string>> $oldTokens
-	 * @param array<int, array<string, array<int, int|string>|int|string>> $newTokens
-	 */
-	private static function replace(File $phpcsFile, array $oldTokens, array $newTokens): void
-	{
-		reset($oldTokens);
-		/** @var int $firstOldPointer */
-		$firstOldPointer = key($oldTokens);
-		end($oldTokens);
-		/** @var int $lastOldPointer */
-		$lastOldPointer = key($oldTokens);
-
-		for ($i = $firstOldPointer; $i <= $lastOldPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
-
-		$phpcsFile->fixer->addContent($firstOldPointer, implode('', array_map(static function (array $token): string {
-			return $token['content'];
-		}, $newTokens)));
-	}
-
-	/**
 	 * @param array<int, array<string, array<int, int|string>|int|string>> $tokens
 	 * @param int $comparisonTokenPointer
 	 * @return array<int, array<string, array<int, int|string>|int|string>>
@@ -286,6 +263,29 @@ class YodaHelper
 		}
 
 		return $tokens;
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param array<int, array<string, array<int, int|string>|int|string>> $oldTokens
+	 * @param array<int, array<string, array<int, int|string>|int|string>> $newTokens
+	 */
+	private static function replace(File $phpcsFile, array $oldTokens, array $newTokens): void
+	{
+		reset($oldTokens);
+		/** @var int $firstOldPointer */
+		$firstOldPointer = key($oldTokens);
+		end($oldTokens);
+		/** @var int $lastOldPointer */
+		$lastOldPointer = key($oldTokens);
+
+		for ($i = $firstOldPointer; $i <= $lastOldPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+
+		$phpcsFile->fixer->addContent($firstOldPointer, implode('', array_map(static function (array $token): string {
+			return $token['content'];
+		}, $newTokens)));
 	}
 
 	/**

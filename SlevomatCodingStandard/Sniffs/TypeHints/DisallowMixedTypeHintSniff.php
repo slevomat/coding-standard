@@ -15,9 +15,9 @@ use const T_DOC_COMMENT_OPEN_TAG;
 class DisallowMixedTypeHintSniff implements Sniff
 {
 
-	private const NAME = 'SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint';
-
 	public const CODE_DISALLOWED_MIXED_TYPE_HINT = 'DisallowedMixedTypeHint';
+
+	private const NAME = 'SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint';
 
 	/**
 	 * @return array<int, (int|string)>

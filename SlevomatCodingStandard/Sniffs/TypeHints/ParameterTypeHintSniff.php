@@ -36,8 +36,6 @@ use const T_VARIABLE;
 class ParameterTypeHintSniff implements Sniff
 {
 
-	private const NAME = 'SlevomatCodingStandard.TypeHints.ParameterTypeHint';
-
 	public const CODE_MISSING_ANY_TYPE_HINT = 'MissingAnyTypeHint';
 
 	public const CODE_MISSING_NATIVE_TYPE_HINT = 'MissingNativeTypeHint';
@@ -45,6 +43,8 @@ class ParameterTypeHintSniff implements Sniff
 	public const CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION = 'MissingTraversableTypeHintSpecification';
 
 	public const CODE_USELESS_ANNOTATION = 'UselessAnnotation';
+
+	private const NAME = 'SlevomatCodingStandard.TypeHints.ParameterTypeHint';
 
 	/** @var bool */
 	public $enableObjectTypeHint = PHP_VERSION_ID >= 70200;

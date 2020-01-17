@@ -68,9 +68,6 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	/** @var string[] */
 	public $fullyQualifiedKeywords = [];
 
-	/** @var string[]|null */
-	private $normalizedFullyQualifiedKeywords;
-
 	/** @var bool */
 	public $allowFullyQualifiedExceptions = false;
 
@@ -92,14 +89,8 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	/** @var string[] */
 	public $specialExceptionNames = [];
 
-	/** @var string[]|null */
-	private $normalizedSpecialExceptionNames;
-
 	/** @var string[] */
 	public $ignoredNames = [];
-
-	/** @var string[]|null */
-	private $normalizedIgnoredNames;
 
 	/** @var bool */
 	public $allowPartialUses = true;
@@ -111,9 +102,6 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	 */
 	public $namespacesRequiredToUse = [];
 
-	/** @var string[]|null */
-	private $normalizedNamespacesRequiredToUse;
-
 	/** @var bool */
 	public $allowFullyQualifiedNameForCollidingClasses = false;
 
@@ -123,6 +111,18 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	/** @var bool */
 	public $allowFullyQualifiedNameForCollidingConstants = false;
 
+	/** @var string[]|null */
+	private $normalizedFullyQualifiedKeywords;
+
+	/** @var string[]|null */
+	private $normalizedSpecialExceptionNames;
+
+	/** @var string[]|null */
+	private $normalizedIgnoredNames;
+
+	/** @var string[]|null */
+	private $normalizedNamespacesRequiredToUse;
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
@@ -131,59 +131,6 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 		return [
 			T_OPEN_TAG,
 		];
-	}
-
-	/**
-	 * @return string[]
-	 */
-	private function getSpecialExceptionNames(): array
-	{
-		if ($this->normalizedSpecialExceptionNames === null) {
-			$this->normalizedSpecialExceptionNames = SniffSettingsHelper::normalizeArray($this->specialExceptionNames);
-		}
-
-		return $this->normalizedSpecialExceptionNames;
-	}
-
-	/**
-	 * @return string[]
-	 */
-	private function getIgnoredNames(): array
-	{
-		if ($this->normalizedIgnoredNames === null) {
-			$this->normalizedIgnoredNames = SniffSettingsHelper::normalizeArray($this->ignoredNames);
-		}
-
-		return $this->normalizedIgnoredNames;
-	}
-
-	/**
-	 * @return string[]
-	 */
-	private function getNamespacesRequiredToUse(): array
-	{
-		if ($this->normalizedNamespacesRequiredToUse === null) {
-			$this->normalizedNamespacesRequiredToUse = SniffSettingsHelper::normalizeArray($this->namespacesRequiredToUse);
-		}
-
-		return $this->normalizedNamespacesRequiredToUse;
-	}
-
-	/**
-	 * @return string[]
-	 */
-	private function getFullyQualifiedKeywords(): array
-	{
-		if ($this->normalizedFullyQualifiedKeywords === null) {
-			$this->normalizedFullyQualifiedKeywords = array_map(static function (string $keyword) {
-				if (!defined($keyword)) {
-					throw new UndefinedKeywordTokenException($keyword);
-				}
-				return constant($keyword);
-			}, SniffSettingsHelper::normalizeArray($this->fullyQualifiedKeywords));
-		}
-
-		return $this->normalizedFullyQualifiedKeywords;
 	}
 
 	/**
@@ -463,6 +410,59 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 				}
 			}
 		}
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getSpecialExceptionNames(): array
+	{
+		if ($this->normalizedSpecialExceptionNames === null) {
+			$this->normalizedSpecialExceptionNames = SniffSettingsHelper::normalizeArray($this->specialExceptionNames);
+		}
+
+		return $this->normalizedSpecialExceptionNames;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getIgnoredNames(): array
+	{
+		if ($this->normalizedIgnoredNames === null) {
+			$this->normalizedIgnoredNames = SniffSettingsHelper::normalizeArray($this->ignoredNames);
+		}
+
+		return $this->normalizedIgnoredNames;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getNamespacesRequiredToUse(): array
+	{
+		if ($this->normalizedNamespacesRequiredToUse === null) {
+			$this->normalizedNamespacesRequiredToUse = SniffSettingsHelper::normalizeArray($this->namespacesRequiredToUse);
+		}
+
+		return $this->normalizedNamespacesRequiredToUse;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getFullyQualifiedKeywords(): array
+	{
+		if ($this->normalizedFullyQualifiedKeywords === null) {
+			$this->normalizedFullyQualifiedKeywords = array_map(static function (string $keyword) {
+				if (!defined($keyword)) {
+					throw new UndefinedKeywordTokenException($keyword);
+				}
+				return constant($keyword);
+			}, SniffSettingsHelper::normalizeArray($this->fullyQualifiedKeywords));
+		}
+
+		return $this->normalizedFullyQualifiedKeywords;
 	}
 
 	/**

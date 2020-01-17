@@ -66,38 +66,6 @@ class UnusedUsesSniff implements Sniff
 	}
 
 	/**
-	 * @return string[]
-	 */
-	private function getIgnoredAnnotationNames(): array
-	{
-		if ($this->normalizedIgnoredAnnotationNames === null) {
-			$this->normalizedIgnoredAnnotationNames = array_merge(
-				SniffSettingsHelper::normalizeArray($this->ignoredAnnotationNames),
-				[
-					'@param',
-					'@throws',
-					'@property',
-					'@method',
-				]
-			);
-		}
-
-		return $this->normalizedIgnoredAnnotationNames;
-	}
-
-	/**
-	 * @return string[]
-	 */
-	private function getIgnoredAnnotations(): array
-	{
-		if ($this->normalizedIgnoredAnnotations === null) {
-			$this->normalizedIgnoredAnnotations = SniffSettingsHelper::normalizeArray($this->ignoredAnnotations);
-		}
-
-		return $this->normalizedIgnoredAnnotations;
-	}
-
-	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
@@ -322,6 +290,38 @@ class UnusedUsesSniff implements Sniff
 				$phpcsFile->fixer->endChangeset();
 			}
 		}
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getIgnoredAnnotationNames(): array
+	{
+		if ($this->normalizedIgnoredAnnotationNames === null) {
+			$this->normalizedIgnoredAnnotationNames = array_merge(
+				SniffSettingsHelper::normalizeArray($this->ignoredAnnotationNames),
+				[
+					'@param',
+					'@throws',
+					'@property',
+					'@method',
+				]
+			);
+		}
+
+		return $this->normalizedIgnoredAnnotationNames;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getIgnoredAnnotations(): array
+	{
+		if ($this->normalizedIgnoredAnnotations === null) {
+			$this->normalizedIgnoredAnnotations = SniffSettingsHelper::normalizeArray($this->ignoredAnnotations);
+		}
+
+		return $this->normalizedIgnoredAnnotations;
 	}
 
 }

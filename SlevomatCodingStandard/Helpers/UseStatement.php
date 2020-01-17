@@ -49,26 +49,6 @@ class UseStatement
 		$this->alias = $alias;
 	}
 
-	public static function getUniqueId(string $type, string $name): string
-	{
-		$normalizedName = self::normalizedNameAsReferencedInFile($type, $name);
-
-		if ($type === self::TYPE_DEFAULT) {
-			return $normalizedName;
-		}
-
-		return sprintf('%s %s', $type, $normalizedName);
-	}
-
-	public static function normalizedNameAsReferencedInFile(string $type, string $name): string
-	{
-		if ($type === self::TYPE_CONSTANT) {
-			return $name;
-		}
-
-		return strtolower($name);
-	}
-
 	public function getNameAsReferencedInFile(): string
 	{
 		return $this->nameAsReferencedInFile;
@@ -112,6 +92,26 @@ class UseStatement
 	public function hasSameType(self $that): bool
 	{
 		return $this->type === $that->type;
+	}
+
+	public static function getUniqueId(string $type, string $name): string
+	{
+		$normalizedName = self::normalizedNameAsReferencedInFile($type, $name);
+
+		if ($type === self::TYPE_DEFAULT) {
+			return $normalizedName;
+		}
+
+		return sprintf('%s %s', $type, $normalizedName);
+	}
+
+	public static function normalizedNameAsReferencedInFile(string $type, string $name): string
+	{
+		if ($type === self::TYPE_CONSTANT) {
+			return $name;
+		}
+
+		return strtolower($name);
 	}
 
 	public static function getTypeName(string $type): ?string

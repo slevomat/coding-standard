@@ -8,19 +8,6 @@ use SlevomatCodingStandard\Sniffs\TestCase;
 class FullyQualifiedClassNameAfterKeywordSniffUseTest extends TestCase
 {
 
-	protected static function getSniffClassName(): string
-	{
-		return FullyQualifiedClassNameAfterKeywordSniff::class;
-	}
-
-	private function getFileReport(): File
-	{
-		return self::checkFile(
-			__DIR__ . '/data/fullyQualifiedUse.php',
-			['keywordsToCheck' => ['T_USE']]
-		);
-	}
-
 	public function testIgnoreUseInClosure(): void
 	{
 		self::assertNoSniffError($this->getFileReport(), 34);
@@ -83,6 +70,19 @@ class FullyQualifiedClassNameAfterKeywordSniffUseTest extends TestCase
 			29,
 			FullyQualifiedClassNameAfterKeywordSniff::getErrorCode('use'),
 			'Omega in use'
+		);
+	}
+
+	protected static function getSniffClassName(): string
+	{
+		return FullyQualifiedClassNameAfterKeywordSniff::class;
+	}
+
+	private function getFileReport(): File
+	{
+		return self::checkFile(
+			__DIR__ . '/data/fullyQualifiedUse.php',
+			['keywordsToCheck' => ['T_USE']]
 		);
 	}
 

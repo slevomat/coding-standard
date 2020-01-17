@@ -63,25 +63,6 @@ class ClassHelper
 
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param int $previousClassPointer
-	 * @return \Generator<int>
-	 */
-	private static function getAllClassPointers(File $phpcsFile, int &$previousClassPointer): Generator
-	{
-		do {
-			$nextClassPointer = TokenHelper::findNext($phpcsFile, TokenHelper::$typeKeywordTokenCodes, $previousClassPointer + 1);
-			if ($nextClassPointer === null) {
-				break;
-			}
-
-			$previousClassPointer = $nextClassPointer;
-
-			yield $nextClassPointer;
-		} while (true);
-	}
-
-	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $classPointer
 	 * @return int[]
 	 */
@@ -105,6 +86,25 @@ class ClassHelper
 		}
 
 		return $useStatements;
+	}
+
+	/**
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $previousClassPointer
+	 * @return \Generator<int>
+	 */
+	private static function getAllClassPointers(File $phpcsFile, int &$previousClassPointer): Generator
+	{
+		do {
+			$nextClassPointer = TokenHelper::findNext($phpcsFile, TokenHelper::$typeKeywordTokenCodes, $previousClassPointer + 1);
+			if ($nextClassPointer === null) {
+				break;
+			}
+
+			$previousClassPointer = $nextClassPointer;
+
+			yield $nextClassPointer;
+		} while (true);
 	}
 
 }

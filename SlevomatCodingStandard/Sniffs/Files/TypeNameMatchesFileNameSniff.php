@@ -30,23 +30,23 @@ class TypeNameMatchesFileNameSniff implements Sniff
 	/** @var array<string, string> */
 	public $rootNamespaces = [];
 
-	/** @var array<string, string>|null */
-	private $normalizedRootNamespaces;
-
 	/** @var string[] */
 	public $skipDirs = [];
-
-	/** @var string[]|null */
-	private $normalizedSkipDirs;
 
 	/** @var string[] */
 	public $ignoredNamespaces = [];
 
-	/** @var string[]|null */
-	private $normalizedIgnoredNamespaces;
-
 	/** @var string[] */
 	public $extensions = ['php'];
+
+	/** @var array<string, string>|null */
+	private $normalizedRootNamespaces;
+
+	/** @var string[]|null */
+	private $normalizedSkipDirs;
+
+	/** @var string[]|null */
+	private $normalizedIgnoredNamespaces;
 
 	/** @var string[]|null */
 	private $normalizedExtensions;
@@ -64,6 +64,47 @@ class TypeNameMatchesFileNameSniff implements Sniff
 			T_INTERFACE,
 			T_TRAIT,
 		];
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param int $typePointer
+	 */
+	public function process(File $phpcsFile, $typePointer): void
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		/** @var int $namePointer */
+		$namePointer = TokenHelper::findNext($phpcsFile, T_STRING, $typePointer + 1);
+
+		$typeName = NamespaceHelper::normalizeToCanonicalName(ClassHelper::getFullyQualifiedName($phpcsFile, $typePointer));
+
+		foreach ($this->getIgnoredNamespaces() as $ignoredNamespace) {
+			if (!StringHelper::startsWith($typeName, $ignoredNamespace . '\\')) {
+				continue;
+			}
+
+			return;
+		}
+
+		$expectedTypeName = $this->getNamespaceExtractor()->getTypeNameFromProjectPath(
+			$phpcsFile->getFilename()
+		);
+		if ($typeName === $expectedTypeName) {
+			return;
+		}
+
+		$phpcsFile->addError(
+			sprintf(
+				'%s name %s does not match filepath %s.',
+				ucfirst($tokens[$typePointer]['content']),
+				$typeName,
+				$phpcsFile->getFilename()
+			),
+			$namePointer,
+			self::CODE_NO_MATCH_BETWEEN_TYPE_NAME_AND_FILE_NAME
+		);
 	}
 
 	/**
@@ -143,47 +184,6 @@ class TypeNameMatchesFileNameSniff implements Sniff
 		}
 
 		return $this->namespaceExtractor;
-	}
-
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param int $typePointer
-	 */
-	public function process(File $phpcsFile, $typePointer): void
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		/** @var int $namePointer */
-		$namePointer = TokenHelper::findNext($phpcsFile, T_STRING, $typePointer + 1);
-
-		$typeName = NamespaceHelper::normalizeToCanonicalName(ClassHelper::getFullyQualifiedName($phpcsFile, $typePointer));
-
-		foreach ($this->getIgnoredNamespaces() as $ignoredNamespace) {
-			if (!StringHelper::startsWith($typeName, $ignoredNamespace . '\\')) {
-				continue;
-			}
-
-			return;
-		}
-
-		$expectedTypeName = $this->getNamespaceExtractor()->getTypeNameFromProjectPath(
-			$phpcsFile->getFilename()
-		);
-		if ($typeName === $expectedTypeName) {
-			return;
-		}
-
-		$phpcsFile->addError(
-			sprintf(
-				'%s name %s does not match filepath %s.',
-				ucfirst($tokens[$typePointer]['content']),
-				$typeName,
-				$phpcsFile->getFilename()
-			),
-			$namePointer,
-			self::CODE_NO_MATCH_BETWEEN_TYPE_NAME_AND_FILE_NAME
-		);
 	}
 
 }

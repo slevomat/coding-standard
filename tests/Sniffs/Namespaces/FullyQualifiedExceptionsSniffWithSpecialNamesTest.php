@@ -8,22 +8,6 @@ use SlevomatCodingStandard\Sniffs\TestCase;
 class FullyQualifiedExceptionsSniffWithSpecialNamesTest extends TestCase
 {
 
-	protected static function getSniffClassName(): string
-	{
-		return FullyQualifiedExceptionsSniff::class;
-	}
-
-	private function getFileReport(): File
-	{
-		return self::checkFile(
-			__DIR__ . '/data/fullyQualifiedSpecialExceptionNames.php',
-			['specialExceptionNames' => [
-				'Foo\SomeError',
-				'Lorem\Ipsum\SomeOtherError',
-			]]
-		);
-	}
-
 	public function testThrowingUsedException(): void
 	{
 		self::assertSniffError(
@@ -63,6 +47,22 @@ class FullyQualifiedExceptionsSniffWithSpecialNamesTest extends TestCase
 	public function testCatchingFullyQualifiedExceptionFromSameNamespace(): void
 	{
 		self::assertNoSniffError($this->getFileReport(), 17);
+	}
+
+	protected static function getSniffClassName(): string
+	{
+		return FullyQualifiedExceptionsSniff::class;
+	}
+
+	private function getFileReport(): File
+	{
+		return self::checkFile(
+			__DIR__ . '/data/fullyQualifiedSpecialExceptionNames.php',
+			['specialExceptionNames' => [
+				'Foo\SomeError',
+				'Lorem\Ipsum\SomeOtherError',
+			]]
+		);
 	}
 
 }

@@ -7,11 +7,6 @@ use SlevomatCodingStandard\Sniffs\TestCase;
 class UseFromSameNamespaceSniffRootNamespaceTest extends TestCase
 {
 
-	protected static function getSniffClassName(): string
-	{
-		return UseFromSameNamespaceSniff::class;
-	}
-
 	public function testUseFromRootNamespaceInFileWithoutNamespace(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/useFromRootNamespaceWithoutNamespace.php');
@@ -22,6 +17,11 @@ class UseFromSameNamespaceSniffRootNamespaceTest extends TestCase
 			'Foo'
 		);
 		self::assertNoSniffError($report, 4);
+	}
+
+	protected static function getSniffClassName(): string
+	{
+		return UseFromSameNamespaceSniff::class;
 	}
 
 }

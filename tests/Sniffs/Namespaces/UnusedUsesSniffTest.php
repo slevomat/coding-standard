@@ -8,11 +8,6 @@ use SlevomatCodingStandard\Sniffs\TestCase;
 class UnusedUsesSniffTest extends TestCase
 {
 
-	private function getFileReport(): File
-	{
-		return self::checkFile(__DIR__ . '/data/unusedUses.php');
-	}
-
 	public function testUnusedUse(): void
 	{
 		self::assertSniffError(
@@ -298,6 +293,11 @@ class UnusedUsesSniffTest extends TestCase
 			'searchAnnotations' => true,
 		]);
 		self::assertNoSniffErrorInFile($report);
+	}
+
+	private function getFileReport(): File
+	{
+		return self::checkFile(__DIR__ . '/data/unusedUses.php');
 	}
 
 }

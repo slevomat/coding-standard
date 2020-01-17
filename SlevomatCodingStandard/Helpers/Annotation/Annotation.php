@@ -51,13 +51,13 @@ abstract class Annotation
 		return $this->content;
 	}
 
+	abstract public function isInvalid(): bool;
+
+	abstract public function export(): string;
+
 	protected function fixDescription(string $description): string
 	{
 		return substr($this->getContent(), -strlen($description));
 	}
-
-	abstract public function isInvalid(): bool;
-
-	abstract public function export(): string;
 
 }

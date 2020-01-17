@@ -58,8 +58,6 @@ use const T_XOR_EQUAL;
 class UnusedPrivateElementsSniff implements Sniff
 {
 
-	private const NAME = 'SlevomatCodingStandard.Classes.UnusedPrivateElements';
-
 	public const CODE_UNUSED_PROPERTY = 'UnusedProperty';
 
 	public const CODE_WRITE_ONLY_PROPERTY = 'WriteOnlyProperty';
@@ -68,20 +66,22 @@ class UnusedPrivateElementsSniff implements Sniff
 
 	public const CODE_UNUSED_CONSTANT = 'UnusedConstant';
 
+	private const NAME = 'SlevomatCodingStandard.Classes.UnusedPrivateElements';
+
 	/** @var string[] */
 	public $alwaysUsedPropertiesAnnotations = [];
-
-	/** @var string[]|null */
-	private $normalizedAlwaysUsedPropertiesAnnotations;
 
 	/** @var string[] */
 	public $alwaysUsedPropertiesSuffixes = [];
 
-	/** @var string[]|null */
-	private $normalizedAlwaysUsedPropertiesSuffixes;
-
 	/** @var string[] */
 	public $alwaysUsedMethodsAnnotations = [];
+
+	/** @var string[]|null */
+	private $normalizedAlwaysUsedPropertiesAnnotations;
+
+	/** @var string[]|null */
+	private $normalizedAlwaysUsedPropertiesSuffixes;
 
 	/** @var string[]|null */
 	private $normalizedAlwaysUsedMethodsAnnotations;
@@ -94,47 +94,6 @@ class UnusedPrivateElementsSniff implements Sniff
 		return [
 			T_CLASS,
 		];
-	}
-
-	/**
-	 * @return string[]
-	 */
-	private function getAlwaysUsedPropertiesAnnotations(): array
-	{
-		if ($this->normalizedAlwaysUsedPropertiesAnnotations === null) {
-			$this->normalizedAlwaysUsedPropertiesAnnotations = SniffSettingsHelper::normalizeArray($this->alwaysUsedPropertiesAnnotations);
-		}
-
-		return $this->normalizedAlwaysUsedPropertiesAnnotations;
-	}
-
-	/**
-	 * @return string[]
-	 */
-	private function getAlwaysUsedPropertiesSuffixes(): array
-	{
-		if ($this->normalizedAlwaysUsedPropertiesSuffixes === null) {
-			$this->normalizedAlwaysUsedPropertiesSuffixes = SniffSettingsHelper::normalizeArray($this->alwaysUsedPropertiesSuffixes);
-		}
-
-		return $this->normalizedAlwaysUsedPropertiesSuffixes;
-	}
-
-	/**
-	 * @return string[]
-	 */
-	private function getAlwaysUsedMethodsAnnotations(): array
-	{
-		if ($this->normalizedAlwaysUsedMethodsAnnotations === null) {
-			$this->normalizedAlwaysUsedMethodsAnnotations = SniffSettingsHelper::normalizeArray($this->alwaysUsedMethodsAnnotations);
-		}
-
-		return $this->normalizedAlwaysUsedMethodsAnnotations;
-	}
-
-	private function getSniffName(string $sniffName): string
-	{
-		return sprintf('%s.%s', self::NAME, $sniffName);
 	}
 
 	/**
@@ -435,6 +394,47 @@ class UnusedPrivateElementsSniff implements Sniff
 				$name
 			), $constantTokenPointer, self::CODE_UNUSED_CONSTANT);
 		}
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getAlwaysUsedPropertiesAnnotations(): array
+	{
+		if ($this->normalizedAlwaysUsedPropertiesAnnotations === null) {
+			$this->normalizedAlwaysUsedPropertiesAnnotations = SniffSettingsHelper::normalizeArray($this->alwaysUsedPropertiesAnnotations);
+		}
+
+		return $this->normalizedAlwaysUsedPropertiesAnnotations;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getAlwaysUsedPropertiesSuffixes(): array
+	{
+		if ($this->normalizedAlwaysUsedPropertiesSuffixes === null) {
+			$this->normalizedAlwaysUsedPropertiesSuffixes = SniffSettingsHelper::normalizeArray($this->alwaysUsedPropertiesSuffixes);
+		}
+
+		return $this->normalizedAlwaysUsedPropertiesSuffixes;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getAlwaysUsedMethodsAnnotations(): array
+	{
+		if ($this->normalizedAlwaysUsedMethodsAnnotations === null) {
+			$this->normalizedAlwaysUsedMethodsAnnotations = SniffSettingsHelper::normalizeArray($this->alwaysUsedMethodsAnnotations);
+		}
+
+		return $this->normalizedAlwaysUsedMethodsAnnotations;
+	}
+
+	private function getSniffName(string $sniffName): string
+	{
+		return sprintf('%s.%s', self::NAME, $sniffName);
 	}
 
 	/**

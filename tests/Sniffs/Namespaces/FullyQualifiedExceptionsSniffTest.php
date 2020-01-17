@@ -10,11 +10,6 @@ use TypeError;
 class FullyQualifiedExceptionsSniffTest extends TestCase
 {
 
-	private function getFileReport(): File
-	{
-		return self::checkFile(__DIR__ . '/data/fullyQualifiedExceptionNames.php');
-	}
-
 	public function testNonFullyQualifiedExceptionInTypeHint(): void
 	{
 		self::assertSniffError(
@@ -117,6 +112,11 @@ class FullyQualifiedExceptionsSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableFullyQualifiedExceptions.php');
 		self::assertAllFixedInFile($report);
+	}
+
+	private function getFileReport(): File
+	{
+		return self::checkFile(__DIR__ . '/data/fullyQualifiedExceptionNames.php');
 	}
 
 }

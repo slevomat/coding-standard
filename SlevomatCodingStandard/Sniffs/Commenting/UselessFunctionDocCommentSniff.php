@@ -20,9 +20,9 @@ use const T_FUNCTION;
 class UselessFunctionDocCommentSniff implements Sniff
 {
 
-	private const NAME = 'SlevomatCodingStandard.Commenting.UselessFunctionDocComment';
-
 	public const CODE_USELESS_DOC_COMMENT = 'UselessDocComment';
+
+	private const NAME = 'SlevomatCodingStandard.Commenting.UselessFunctionDocComment';
 
 	/** @var string[] */
 	public $traversableTypeHints = [];

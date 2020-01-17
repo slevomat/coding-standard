@@ -14,9 +14,9 @@ use const T_VARIABLE;
 class UnusedParameterSniff implements Sniff
 {
 
-	private const NAME = 'SlevomatCodingStandard.Functions.UnusedParameter';
-
 	public const CODE_UNUSED_PARAMETER = 'UnusedParameter';
+
+	private const NAME = 'SlevomatCodingStandard.Functions.UnusedParameter';
 
 	/**
 	 * @return array<int, (int|string)>

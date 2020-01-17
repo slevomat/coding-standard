@@ -32,6 +32,30 @@
 	<rule ref="SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation"/>
 	<rule ref="SlevomatCodingStandard.Arrays.MultiLineArrayEndBracketPlacement"/>
 	<rule ref="SlevomatCodingStandard.Arrays.SingleLineArrayWhitespace"/>
+	<rule ref="SlevomatCodingStandard.Classes.ClassStructure">
+		<properties>
+			<property name="sections" type="array">
+				<element value="uses"/>
+				<element value="public constants"/>
+				<element value="protected constants"/>
+				<element value="private constants"/>
+				<element value="public properties"/>
+				<element value="public static properties"/>
+				<element value="protected properties"/>
+				<element value="protected static properties"/>
+				<element value="private properties"/>
+				<element value="private static properties"/>
+				<element value="constructor"/>
+				<element value="public methods"/>
+				<element value="public static methods"/>
+				<element value="protected methods"/>
+				<element value="protected static methods"/>
+				<element value="private methods"/>
+				<element value="private static methods"/>
+				<element value="magic methods"/>
+			</property>
+		</properties>
+	</rule>
 	<rule ref="SlevomatCodingStandard.Classes.ConstantSpacing"/>
 	<rule ref="SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants"/>
 	<rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference"/>

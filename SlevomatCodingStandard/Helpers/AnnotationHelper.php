@@ -173,18 +173,6 @@ class AnnotationHelper
 		return self::fix($phpcsFile, $annotation, $fixedAnnotation);
 	}
 
-	private static function fix(File $phpcsFile, Annotation $annotation, Annotation $fixedAnnotation): string
-	{
-		$spaceAfterContent = '';
-		if (preg_match('~(\\s+)$~', TokenHelper::getContent($phpcsFile, $annotation->getStartPointer(), $annotation->getEndPointer()), $matches) > 0) {
-			$spaceAfterContent = $matches[1];
-		}
-
-		$fixedAnnotationContent = $fixedAnnotation->export() . $spaceAfterContent;
-
-		return preg_replace('~(\r\n|\n|\r)~', '\1 * ', $fixedAnnotationContent);
-	}
-
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $pointer
@@ -358,6 +346,18 @@ class AnnotationHelper
 		$annotationTypeNode = $annotation->getType();
 		$annotationTypeHint = AnnotationTypeHelper::getTypeHintFromOneType($annotationTypeNode);
 		return TypeHintHelper::typeHintEqualsAnnotation($phpcsFile, $functionPointer, $typeHint->getTypeHint(), $annotationTypeHint);
+	}
+
+	private static function fix(File $phpcsFile, Annotation $annotation, Annotation $fixedAnnotation): string
+	{
+		$spaceAfterContent = '';
+		if (preg_match('~(\\s+)$~', TokenHelper::getContent($phpcsFile, $annotation->getStartPointer(), $annotation->getEndPointer()), $matches) > 0) {
+			$spaceAfterContent = $matches[1];
+		}
+
+		$fixedAnnotationContent = $fixedAnnotation->export() . $spaceAfterContent;
+
+		return preg_replace('~(\r\n|\n|\r)~', '\1 * ', $fixedAnnotationContent);
 	}
 
 

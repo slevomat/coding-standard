@@ -36,8 +36,6 @@ use const T_VARIABLE;
 class PropertyTypeHintSniff implements Sniff
 {
 
-	private const NAME = 'SlevomatCodingStandard.TypeHints.PropertyTypeHint';
-
 	public const CODE_MISSING_ANY_TYPE_HINT = 'MissingAnyTypeHint';
 
 	public const CODE_MISSING_NATIVE_TYPE_HINT = 'MissingNativeTypeHint';
@@ -45,6 +43,8 @@ class PropertyTypeHintSniff implements Sniff
 	public const CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION = 'MissingTraversableTypeHintSpecification';
 
 	public const CODE_USELESS_ANNOTATION = 'UselessAnnotation';
+
+	private const NAME = 'SlevomatCodingStandard.TypeHints.PropertyTypeHint';
 
 	/** @var bool */
 	public $enableNativeTypeHint = PHP_VERSION_ID >= 70400;

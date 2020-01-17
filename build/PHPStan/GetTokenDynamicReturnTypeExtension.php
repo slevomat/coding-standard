@@ -32,6 +32,18 @@ class GetTokenDynamicReturnTypeExtension implements DynamicMethodReturnTypeExten
 		return $methodReflection->getName() === 'getTokens';
 	}
 
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+	 * @param \PHPStan\Reflection\MethodReflection $methodReflection
+	 * @param \PhpParser\Node\Expr\MethodCall $methodCall
+	 * @param \PHPStan\Analyser\Scope $scope
+	 * @return \PHPStan\Type\Type
+	 */
+	public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): Type
+	{
+		return $this->getTokensArrayType();
+	}
+
 	private function getTokensArrayType(): ArrayType
 	{
 		if ($this->arrayType === null) {
@@ -73,18 +85,6 @@ class GetTokenDynamicReturnTypeExtension implements DynamicMethodReturnTypeExten
 		}
 
 		return $this->arrayType;
-	}
-
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
-	 * @param \PHPStan\Reflection\MethodReflection $methodReflection
-	 * @param \PhpParser\Node\Expr\MethodCall $methodCall
-	 * @param \PHPStan\Analyser\Scope $scope
-	 * @return \PHPStan\Type\Type
-	 */
-	public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): Type
-	{
-		return $this->getTokensArrayType();
 	}
 
 }

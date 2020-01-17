@@ -84,6 +84,45 @@ class ReferencedNameHelper
 		return self::$allReferencedTypesCache[$cacheKey];
 	}
 
+	public static function getReferenceName(File $phpcsFile, int $nameStartPointer, int $nameEndPointer): string
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$referencedName = '';
+		for ($i = $nameStartPointer; $i <= $nameEndPointer; $i++) {
+			if (in_array($tokens[$i]['code'], Tokens::$emptyTokens, true)) {
+				continue;
+			}
+
+			$referencedName .= $tokens[$i]['content'];
+		}
+
+		return $referencedName;
+	}
+
+	public static function getReferencedNameEndPointer(File $phpcsFile, int $startPointer): int
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$nameTokenCodes = array_merge([T_RETURN_TYPE], TokenHelper::$nameTokenCodes);
+		$nameTokenCodesWithWhitespace = array_merge($nameTokenCodes, Tokens::$emptyTokens);
+
+		$lastNamePointer = $startPointer;
+		for ($i = $startPointer + 1; $i < count($tokens); $i++) {
+			if (!in_array($tokens[$i]['code'], $nameTokenCodesWithWhitespace, true)) {
+				break;
+			}
+
+			if (!in_array($tokens[$i]['code'], $nameTokenCodes, true)) {
+				continue;
+			}
+
+			$lastNamePointer = $i;
+		}
+
+		return $lastNamePointer;
+	}
+
 	/**
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $openTagPointer
@@ -187,45 +226,6 @@ class ReferencedNameHelper
 			$beginSearchAtPointer = $nameEndPointer + 1;
 		}
 		return $types;
-	}
-
-	public static function getReferenceName(File $phpcsFile, int $nameStartPointer, int $nameEndPointer): string
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		$referencedName = '';
-		for ($i = $nameStartPointer; $i <= $nameEndPointer; $i++) {
-			if (in_array($tokens[$i]['code'], Tokens::$emptyTokens, true)) {
-				continue;
-			}
-
-			$referencedName .= $tokens[$i]['content'];
-		}
-
-		return $referencedName;
-	}
-
-	public static function getReferencedNameEndPointer(File $phpcsFile, int $startPointer): int
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		$nameTokenCodes = array_merge([T_RETURN_TYPE], TokenHelper::$nameTokenCodes);
-		$nameTokenCodesWithWhitespace = array_merge($nameTokenCodes, Tokens::$emptyTokens);
-
-		$lastNamePointer = $startPointer;
-		for ($i = $startPointer + 1; $i < count($tokens); $i++) {
-			if (!in_array($tokens[$i]['code'], $nameTokenCodesWithWhitespace, true)) {
-				break;
-			}
-
-			if (!in_array($tokens[$i]['code'], $nameTokenCodes, true)) {
-				continue;
-			}
-
-			$lastNamePointer = $i;
-		}
-
-		return $lastNamePointer;
 	}
 
 	private static function isReferencedName(File $phpcsFile, int $startPointer): bool

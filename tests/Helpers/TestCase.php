@@ -148,6 +148,25 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		return null;
 	}
 
+	protected function getCodeSnifferFile(string $filename): File
+	{
+		$codeSniffer = new Runner();
+		$codeSniffer->config = new Config([
+			'-s',
+		]);
+		$codeSniffer->init();
+
+		$phpcsFile = new LocalFile(
+			$filename,
+			$codeSniffer->ruleset,
+			$codeSniffer->config
+		);
+
+		$phpcsFile->process();
+
+		return $phpcsFile;
+	}
+
 	/**
 	 * @param int|string $code
 	 * @return string|null
@@ -194,25 +213,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		}
 
 		return $tokens[$tokenPointer];
-	}
-
-	protected function getCodeSnifferFile(string $filename): File
-	{
-		$codeSniffer = new Runner();
-		$codeSniffer->config = new Config([
-			'-s',
-		]);
-		$codeSniffer->init();
-
-		$phpcsFile = new LocalFile(
-			$filename,
-			$codeSniffer->ruleset,
-			$codeSniffer->config
-		);
-
-		$phpcsFile->process();
-
-		return $phpcsFile;
 	}
 
 }

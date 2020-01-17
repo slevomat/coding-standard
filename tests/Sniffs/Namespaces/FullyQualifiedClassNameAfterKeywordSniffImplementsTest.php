@@ -8,19 +8,6 @@ use SlevomatCodingStandard\Sniffs\TestCase;
 class FullyQualifiedClassNameAfterKeywordSniffImplementsTest extends TestCase
 {
 
-	protected static function getSniffClassName(): string
-	{
-		return FullyQualifiedClassNameAfterKeywordSniff::class;
-	}
-
-	private function getFileReport(): File
-	{
-		return self::checkFile(
-			__DIR__ . '/data/fullyQualifiedImplements.php',
-			['keywordsToCheck' => ['T_IMPLEMENTS']]
-		);
-	}
-
 	public function testNonFullyQualifiedImplements(): void
 	{
 		self::assertSniffError(
@@ -65,6 +52,19 @@ class FullyQualifiedClassNameAfterKeywordSniffImplementsTest extends TestCase
 			23,
 			FullyQualifiedClassNameAfterKeywordSniff::getErrorCode('implements'),
 			'Omega in implements'
+		);
+	}
+
+	protected static function getSniffClassName(): string
+	{
+		return FullyQualifiedClassNameAfterKeywordSniff::class;
+	}
+
+	private function getFileReport(): File
+	{
+		return self::checkFile(
+			__DIR__ . '/data/fullyQualifiedImplements.php',
+			['keywordsToCheck' => ['T_IMPLEMENTS']]
 		);
 	}
 

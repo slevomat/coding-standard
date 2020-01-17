@@ -33,8 +33,6 @@ use const T_FUNCTION;
 class ReturnTypeHintSniff implements Sniff
 {
 
-	private const NAME = 'SlevomatCodingStandard.TypeHints.ReturnTypeHint';
-
 	public const CODE_MISSING_ANY_TYPE_HINT = 'MissingAnyTypeHint';
 
 	public const CODE_MISSING_NATIVE_TYPE_HINT = 'MissingNativeTypeHint';
@@ -42,6 +40,8 @@ class ReturnTypeHintSniff implements Sniff
 	public const CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION = 'MissingTraversableTypeHintSpecification';
 
 	public const CODE_USELESS_ANNOTATION = 'UselessAnnotation';
+
+	private const NAME = 'SlevomatCodingStandard.TypeHints.ReturnTypeHint';
 
 	/** @var bool */
 	public $enableObjectTypeHint = PHP_VERSION_ID >= 70200;

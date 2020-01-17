@@ -8,11 +8,6 @@ use SlevomatCodingStandard\Sniffs\TestCase;
 class UseFromSameNamespaceSniffTest extends TestCase
 {
 
-	private function getFileReport(): File
-	{
-		return self::checkFile(__DIR__ . '/data/useFromSameNamespace.php');
-	}
-
 	public function testUnrelatedNamespaces(): void
 	{
 		$report = $this->getFileReport();
@@ -62,6 +57,11 @@ class UseFromSameNamespaceSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableUseFromSameNamespace.php', [], [UseFromSameNamespaceSniff::CODE_USE_FROM_SAME_NAMESPACE]);
 		self::assertAllFixedInFile($report);
+	}
+
+	private function getFileReport(): File
+	{
+		return self::checkFile(__DIR__ . '/data/useFromSameNamespace.php');
 	}
 
 }

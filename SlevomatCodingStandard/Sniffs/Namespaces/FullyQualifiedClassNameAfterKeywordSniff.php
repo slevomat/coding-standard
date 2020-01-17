@@ -40,18 +40,6 @@ class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 	private $normalizedKeywordsToCheck;
 
 	/**
-	 * @return string[]
-	 */
-	private function getKeywordsToCheck(): array
-	{
-		if ($this->normalizedKeywordsToCheck === null) {
-			$this->normalizedKeywordsToCheck = SniffSettingsHelper::normalizeArray($this->keywordsToCheck);
-		}
-
-		return $this->normalizedKeywordsToCheck;
-	}
-
-	/**
 	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
@@ -112,6 +100,23 @@ class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 		}
 	}
 
+	public static function getErrorCode(string $keyword): string
+	{
+		return sprintf(self::CODE_NON_FULLY_QUALIFIED, ucfirst($keyword));
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getKeywordsToCheck(): array
+	{
+		if ($this->normalizedKeywordsToCheck === null) {
+			$this->normalizedKeywordsToCheck = SniffSettingsHelper::normalizeArray($this->keywordsToCheck);
+		}
+
+		return $this->normalizedKeywordsToCheck;
+	}
+
 	private function checkReferencedName(File $phpcsFile, int $keywordPointer, int $nameStartPointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
@@ -159,11 +164,6 @@ class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 		}
 
 		return $endPointer;
-	}
-
-	public static function getErrorCode(string $keyword): string
-	{
-		return sprintf(self::CODE_NON_FULLY_QUALIFIED, ucfirst($keyword));
 	}
 
 }

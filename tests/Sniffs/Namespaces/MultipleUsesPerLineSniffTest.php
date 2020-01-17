@@ -8,11 +8,6 @@ use SlevomatCodingStandard\Sniffs\TestCase;
 class MultipleUsesPerLineSniffTest extends TestCase
 {
 
-	private function getFileReport(): File
-	{
-		return self::checkFile(__DIR__ . '/data/multipleUsesPerLine.php');
-	}
-
 	public function testMultipleUsesPerLine(): void
 	{
 		self::assertSniffError(
@@ -25,6 +20,11 @@ class MultipleUsesPerLineSniffTest extends TestCase
 	public function testIgnoreCommasInClosureUse(): void
 	{
 		self::assertNoSniffError($this->getFileReport(), 7);
+	}
+
+	private function getFileReport(): File
+	{
+		return self::checkFile(__DIR__ . '/data/multipleUsesPerLine.php');
 	}
 
 }

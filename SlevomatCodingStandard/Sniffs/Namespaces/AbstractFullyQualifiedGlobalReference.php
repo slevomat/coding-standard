@@ -96,6 +96,12 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 		}
 	}
 
+	abstract protected function getNotFullyQualifiedMessage(): string;
+
+	abstract protected function isCaseSensitive(): bool;
+
+	abstract protected function isValidType(ReferencedName $name): bool;
+
 	/**
 	 * @return string[]
 	 */
@@ -114,11 +120,5 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 		}
 		return $this->normalizedExclude;
 	}
-
-	abstract protected function getNotFullyQualifiedMessage(): string;
-
-	abstract protected function isCaseSensitive(): bool;
-
-	abstract protected function isValidType(ReferencedName $name): bool;
 
 }

@@ -112,6 +112,34 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 		}
 	}
 
+	/**
+	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
+	 * @return \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode[]
+	 */
+	public function getArrayTypeNodes(TypeNode $typeNode): array
+	{
+		$arrayTypeNodes = AnnotationTypeHelper::getArrayTypeNodes($typeNode);
+
+		$arrayTypeNodesToIgnore = [];
+		foreach ($arrayTypeNodes as $arrayTypeNode) {
+			if (!($arrayTypeNode->type instanceof ArrayTypeNode)) {
+				continue;
+			}
+
+			$arrayTypeNodesToIgnore[] = $arrayTypeNode->type;
+		}
+
+		foreach ($arrayTypeNodes as $no => $arrayTypeNode) {
+			if (!in_array($arrayTypeNode, $arrayTypeNodesToIgnore, true)) {
+				continue;
+			}
+
+			unset($arrayTypeNodes[$no]);
+		}
+
+		return $arrayTypeNodes;
+	}
+
 	private function fixArrayNode(TypeNode $node): TypeNode
 	{
 		if (!$node instanceof ArrayTypeNode) {
@@ -178,34 +206,6 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 		}
 
 		return null;
-	}
-
-	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
-	 * @return \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode[]
-	 */
-	public function getArrayTypeNodes(TypeNode $typeNode): array
-	{
-		$arrayTypeNodes = AnnotationTypeHelper::getArrayTypeNodes($typeNode);
-
-		$arrayTypeNodesToIgnore = [];
-		foreach ($arrayTypeNodes as $arrayTypeNode) {
-			if (!($arrayTypeNode->type instanceof ArrayTypeNode)) {
-				continue;
-			}
-
-			$arrayTypeNodesToIgnore[] = $arrayTypeNode->type;
-		}
-
-		foreach ($arrayTypeNodes as $no => $arrayTypeNode) {
-			if (!in_array($arrayTypeNode, $arrayTypeNodesToIgnore, true)) {
-				continue;
-			}
-
-			unset($arrayTypeNodes[$no]);
-		}
-
-		return $arrayTypeNodes;
 	}
 
 	private function isTraversableType(string $type): bool

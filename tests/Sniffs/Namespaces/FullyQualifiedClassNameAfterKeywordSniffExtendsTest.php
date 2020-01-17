@@ -8,19 +8,6 @@ use SlevomatCodingStandard\Sniffs\TestCase;
 class FullyQualifiedClassNameAfterKeywordSniffExtendsTest extends TestCase
 {
 
-	protected static function getSniffClassName(): string
-	{
-		return FullyQualifiedClassNameAfterKeywordSniff::class;
-	}
-
-	private function getFileReport(): File
-	{
-		return self::checkFile(
-			__DIR__ . '/data/fullyQualifiedExtends.php',
-			['keywordsToCheck' => ['T_EXTENDS']]
-		);
-	}
-
 	public function testNonFullyQualifiedExtends(): void
 	{
 		self::assertSniffError(
@@ -34,6 +21,19 @@ class FullyQualifiedClassNameAfterKeywordSniffExtendsTest extends TestCase
 	public function testFullyQualifiedExtends(): void
 	{
 		self::assertNoSniffError($this->getFileReport(), 3);
+	}
+
+	protected static function getSniffClassName(): string
+	{
+		return FullyQualifiedClassNameAfterKeywordSniff::class;
+	}
+
+	private function getFileReport(): File
+	{
+		return self::checkFile(
+			__DIR__ . '/data/fullyQualifiedExtends.php',
+			['keywordsToCheck' => ['T_EXTENDS']]
+		);
 	}
 
 }

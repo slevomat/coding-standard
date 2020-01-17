@@ -23,11 +23,11 @@ class FullyQualifiedExceptionsSniff implements Sniff
 	/** @var string[] */
 	public $specialExceptionNames = [];
 
-	/** @var string[]|null */
-	private $normalizedSpecialExceptionNames;
-
 	/** @var string[] */
 	public $ignoredNames = [];
+
+	/** @var string[]|null */
+	private $normalizedSpecialExceptionNames;
 
 	/** @var string[]|null */
 	private $normalizedIgnoredNames;
@@ -40,30 +40,6 @@ class FullyQualifiedExceptionsSniff implements Sniff
 		return [
 			T_OPEN_TAG,
 		];
-	}
-
-	/**
-	 * @return string[]
-	 */
-	private function getSpecialExceptionNames(): array
-	{
-		if ($this->normalizedSpecialExceptionNames === null) {
-			$this->normalizedSpecialExceptionNames = SniffSettingsHelper::normalizeArray($this->specialExceptionNames);
-		}
-
-		return $this->normalizedSpecialExceptionNames;
-	}
-
-	/**
-	 * @return string[]
-	 */
-	private function getIgnoredNames(): array
-	{
-		if ($this->normalizedIgnoredNames === null) {
-			$this->normalizedIgnoredNames = SniffSettingsHelper::normalizeArray($this->ignoredNames);
-		}
-
-		return $this->normalizedIgnoredNames;
 	}
 
 	/**
@@ -139,6 +115,30 @@ class FullyQualifiedExceptionsSniff implements Sniff
 
 			$phpcsFile->fixer->endChangeset();
 		}
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getSpecialExceptionNames(): array
+	{
+		if ($this->normalizedSpecialExceptionNames === null) {
+			$this->normalizedSpecialExceptionNames = SniffSettingsHelper::normalizeArray($this->specialExceptionNames);
+		}
+
+		return $this->normalizedSpecialExceptionNames;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getIgnoredNames(): array
+	{
+		if ($this->normalizedIgnoredNames === null) {
+			$this->normalizedIgnoredNames = SniffSettingsHelper::normalizeArray($this->ignoredNames);
+		}
+
+		return $this->normalizedIgnoredNames;
 	}
 
 }

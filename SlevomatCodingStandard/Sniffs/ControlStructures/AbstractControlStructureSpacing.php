@@ -105,38 +105,6 @@ abstract class AbstractControlStructureSpacing implements Sniff
 	 */
 	abstract protected function getTokensToCheck(): array;
 
-	/**
-	 * @return (int|string)[]
-	 */
-	private function getNormalizedTokensToCheck(): array
-	{
-		if ($this->normalizedTokensToCheck === null) {
-			$supportedTokens = $this->getSupportedTokens();
-
-			$this->normalizedTokensToCheck = array_values(array_map(
-				static function (string $tokenCode) use ($supportedTokens) {
-					if (!defined($tokenCode)) {
-						throw new UndefinedKeywordTokenException($tokenCode);
-					}
-
-					$const = constant($tokenCode);
-					if (!in_array($const, $supportedTokens, true)) {
-						throw new UnsupportedTokenException($tokenCode);
-					}
-
-					return $const;
-				},
-				SniffSettingsHelper::normalizeArray($this->getTokensToCheck())
-			));
-
-			if (count($this->normalizedTokensToCheck) === 0) {
-				$this->normalizedTokensToCheck = $supportedTokens;
-			}
-		}
-
-		return $this->normalizedTokensToCheck;
-	}
-
 	protected function checkLinesBefore(File $phpcsFile, int $controlStructurePointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
@@ -275,6 +243,38 @@ abstract class AbstractControlStructureSpacing implements Sniff
 		}
 
 		$phpcsFile->fixer->endChangeset();
+	}
+
+	/**
+	 * @return (int|string)[]
+	 */
+	private function getNormalizedTokensToCheck(): array
+	{
+		if ($this->normalizedTokensToCheck === null) {
+			$supportedTokens = $this->getSupportedTokens();
+
+			$this->normalizedTokensToCheck = array_values(array_map(
+				static function (string $tokenCode) use ($supportedTokens) {
+					if (!defined($tokenCode)) {
+						throw new UndefinedKeywordTokenException($tokenCode);
+					}
+
+					$const = constant($tokenCode);
+					if (!in_array($const, $supportedTokens, true)) {
+						throw new UnsupportedTokenException($tokenCode);
+					}
+
+					return $const;
+				},
+				SniffSettingsHelper::normalizeArray($this->getTokensToCheck())
+			));
+
+			if (count($this->normalizedTokensToCheck) === 0) {
+				$this->normalizedTokensToCheck = $supportedTokens;
+			}
+		}
+
+		return $this->normalizedTokensToCheck;
 	}
 
 	private function findControlStructureEnd(File $phpcsFile, int $controlStructurePointer): int

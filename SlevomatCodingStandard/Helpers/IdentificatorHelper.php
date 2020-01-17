@@ -63,6 +63,41 @@ class IdentificatorHelper
 		return null;
 	}
 
+	public static function findEndPointer(File $phpcsFile, int $startPointer): ?int
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		if (in_array($tokens[$startPointer]['code'], TokenHelper::$nameTokenCodes, true)) {
+			$startPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $startPointer + 1) - 1;
+		} elseif ($tokens[$startPointer]['code'] === T_DOLLAR) {
+			$startPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer + 1);
+		}
+
+		/** @var int $nextPointer */
+		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer + 1);
+
+		if (
+			in_array($tokens[$startPointer]['code'], [T_STRING, T_SELF, T_STATIC, T_PARENT], true)
+			&& $tokens[$nextPointer]['code'] === T_DOUBLE_COLON
+		) {
+			return self::getEndPointerAfterOperator($phpcsFile, $nextPointer);
+		}
+
+		if ($tokens[$startPointer]['code'] === T_VARIABLE) {
+			if (in_array($tokens[$nextPointer]['code'], [T_DOUBLE_COLON, T_OBJECT_OPERATOR], true)) {
+				return self::getEndPointerAfterOperator($phpcsFile, $nextPointer);
+			}
+
+			if ($tokens[$nextPointer]['code'] === T_OPEN_SQUARE_BRACKET) {
+				return self::getEndPointerAfterVariablePart($phpcsFile, $startPointer);
+			}
+
+			return $startPointer;
+		}
+
+		return null;
+	}
+
 	private static function getStartPointerBeforeOperator(File $phpcsFile, int $operatorPointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
@@ -125,41 +160,6 @@ class IdentificatorHelper
 		}
 
 		return $variablePartPointer;
-	}
-
-	public static function findEndPointer(File $phpcsFile, int $startPointer): ?int
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		if (in_array($tokens[$startPointer]['code'], TokenHelper::$nameTokenCodes, true)) {
-			$startPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $startPointer + 1) - 1;
-		} elseif ($tokens[$startPointer]['code'] === T_DOLLAR) {
-			$startPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer + 1);
-		}
-
-		/** @var int $nextPointer */
-		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer + 1);
-
-		if (
-			in_array($tokens[$startPointer]['code'], [T_STRING, T_SELF, T_STATIC, T_PARENT], true)
-			&& $tokens[$nextPointer]['code'] === T_DOUBLE_COLON
-		) {
-			return self::getEndPointerAfterOperator($phpcsFile, $nextPointer);
-		}
-
-		if ($tokens[$startPointer]['code'] === T_VARIABLE) {
-			if (in_array($tokens[$nextPointer]['code'], [T_DOUBLE_COLON, T_OBJECT_OPERATOR], true)) {
-				return self::getEndPointerAfterOperator($phpcsFile, $nextPointer);
-			}
-
-			if ($tokens[$nextPointer]['code'] === T_OPEN_SQUARE_BRACKET) {
-				return self::getEndPointerAfterVariablePart($phpcsFile, $startPointer);
-			}
-
-			return $startPointer;
-		}
-
-		return null;
 	}
 
 	private static function getEndPointerAfterOperator(File $phpcsFile, int $operatorPointer): int
