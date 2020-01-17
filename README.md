@@ -101,7 +101,26 @@ Checks that class/trait/interface members are in the correct order.
 
 Sniff provides the following settings:
 
-* `$requiredOrder`: map of member types to group priority (order). Set multiple member types to same number to not differentiate between them.
+* `groups`: order of groups. Use multiple groups in one `<element value="">` to not differentiate among them.
+
+List of supported groups: uses, public constants, protected constants, private constants, public properties, public static properties, protected properties, protected static properties, private properties, private static properties, constructor, static constructors, destructor, public methods, public static methods, protected methods, protected static methods, private methods, private static methods, magic methods 
+
+```xml
+<rule ref="SlevomatCodingStandard.Classes.ClassStructure">
+	<properties>
+		<property name="groups" type="array">
+			<element value="uses"/>
+			<element value="public constants"/>
+			<element value="protected constants"/>
+			<element value="private constants"/>
+			<element value="public properties, protected properties, private properties"/>
+			<element value="constructor"/>
+			<element value="public methods, protected methods, private methods"/>
+			<element value="magic methods"/>
+		</property>
+	</properties>
+</rule>
+```
 
 #### SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants 🔧
 

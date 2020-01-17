@@ -8,12 +8,17 @@ use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_flip;
 use function array_key_exists;
 use function array_merge;
 use function array_values;
 use function assert;
+use function count;
 use function in_array;
+use function preg_replace;
+use function preg_split;
 use function sprintf;
 use function str_repeat;
 use function strtolower;
@@ -34,36 +39,31 @@ use const T_VAR;
 use const T_VARIABLE;
 use const T_WHITESPACE;
 
-/**
- * This sniff ensures that the class/interface/trait has consistent order of its members.
- * You can adjust required order via $requiredOrder property. Set the same values to ignore certain groups order.
- */
 class ClassStructureSniff implements Sniff
 {
 
-	public const CODE_INVALID_GROUP_ORDER = 'InvalidGroupOrder';
+	public const CODE_INCORRECT_GROUP_ORDER = 'IncorrectGroupOrder';
 
-	public const GROUP_NONE = 0;
-	public const GROUP_USES = 10;
-	public const GROUP_PUBLIC_CONSTANTS = 20;
-	public const GROUP_PROTECTED_CONSTANTS = 30;
-	public const GROUP_PRIVATE_CONSTANTS = 40;
-	public const GROUP_PUBLIC_STATIC_PROPERTIES = 50;
-	public const GROUP_PROTECTED_STATIC_PROPERTIES = 60;
-	public const GROUP_PRIVATE_STATIC_PROPERTIES = 70;
-	public const GROUP_PUBLIC_PROPERTIES = 80;
-	public const GROUP_PROTECTED_PROPERTIES = 90;
-	public const GROUP_PRIVATE_PROPERTIES = 100;
-	public const GROUP_PUBLIC_STATIC_METHODS = 110;
-	public const GROUP_PROTECTED_STATIC_METHODS = 120;
-	public const GROUP_PRIVATE_STATIC_METHODS = 130;
-	public const GROUP_CONSTRUCTOR = 140;
-	public const GROUP_STATIC_CONSTRUCTORS = 150;
-	public const GROUP_DESTRUCTOR = 160;
-	public const GROUP_MAGIC_METHODS = 170;
-	public const GROUP_PUBLIC_METHODS = 180;
-	public const GROUP_PROTECTED_METHODS = 190;
-	public const GROUP_PRIVATE_METHODS = 200;
+	private const GROUP_USES = 'uses';
+	private const GROUP_PUBLIC_CONSTANTS = 'public constants';
+	private const GROUP_PROTECTED_CONSTANTS = 'protected constants';
+	private const GROUP_PRIVATE_CONSTANTS = 'private constants';
+	private const GROUP_PUBLIC_PROPERTIES = 'public properties';
+	private const GROUP_PUBLIC_STATIC_PROPERTIES = 'public static properties';
+	private const GROUP_PROTECTED_PROPERTIES = 'protected properties';
+	private const GROUP_PROTECTED_STATIC_PROPERTIES = 'protected static properties';
+	private const GROUP_PRIVATE_PROPERTIES = 'private properties';
+	private const GROUP_PRIVATE_STATIC_PROPERTIES = 'private static properties';
+	private const GROUP_CONSTRUCTOR = 'constructor';
+	private const GROUP_STATIC_CONSTRUCTORS = 'static constructors';
+	private const GROUP_DESTRUCTOR = 'destructor';
+	private const GROUP_MAGIC_METHODS = 'magic methods';
+	private const GROUP_PUBLIC_METHODS = 'public methods';
+	private const GROUP_PUBLIC_STATIC_METHODS = 'public static methods';
+	private const GROUP_PROTECTED_METHODS = 'protected methods';
+	private const GROUP_PROTECTED_STATIC_METHODS = 'protected static methods';
+	private const GROUP_PRIVATE_METHODS = 'private methods';
+	private const GROUP_PRIVATE_STATIC_METHODS = 'private static methods';
 
 	private const SPECIAL_METHODS = [
 		'__construct' => self::GROUP_CONSTRUCTOR,
@@ -83,53 +83,11 @@ class ClassStructureSniff implements Sniff
 		'__debugInfo' => self::GROUP_MAGIC_METHODS,
 	];
 
-	private const GROUP_TOKEN_NAMES = [
-		self::GROUP_USES => 'use',
-		self::GROUP_PUBLIC_CONSTANTS => 'public constant',
-		self::GROUP_PROTECTED_CONSTANTS => 'protected constant',
-		self::GROUP_PRIVATE_CONSTANTS => 'private constant',
-		self::GROUP_PUBLIC_STATIC_PROPERTIES => 'public static property',
-		self::GROUP_PROTECTED_STATIC_PROPERTIES => 'protected static property',
-		self::GROUP_PRIVATE_STATIC_PROPERTIES => 'private static property',
-		self::GROUP_PUBLIC_PROPERTIES => 'public property',
-		self::GROUP_PROTECTED_PROPERTIES => 'protected property',
-		self::GROUP_PRIVATE_PROPERTIES => 'private property',
-		self::GROUP_PUBLIC_STATIC_METHODS => 'public static method',
-		self::GROUP_PROTECTED_STATIC_METHODS => 'protected static method',
-		self::GROUP_PRIVATE_STATIC_METHODS => 'private static method',
-		self::GROUP_CONSTRUCTOR => 'constructor',
-		self::GROUP_STATIC_CONSTRUCTORS => 'static constructor',
-		self::GROUP_DESTRUCTOR => 'destructor',
-		self::GROUP_MAGIC_METHODS => 'magic method',
-		self::GROUP_PUBLIC_METHODS => 'public method',
-		self::GROUP_PROTECTED_METHODS => 'protected method',
-		self::GROUP_PRIVATE_METHODS => 'private method',
-	];
+	/** @var string[] */
+	public $groups = [];
 
-	/** @var int[] */
-	public $requiredOrder = [
-		self::GROUP_NONE => 0,
-		self::GROUP_USES => 10,
-		self::GROUP_PUBLIC_CONSTANTS => 20,
-		self::GROUP_PROTECTED_CONSTANTS => 30,
-		self::GROUP_PRIVATE_CONSTANTS => 40,
-		self::GROUP_PUBLIC_STATIC_PROPERTIES => 50,
-		self::GROUP_PROTECTED_STATIC_PROPERTIES => 60,
-		self::GROUP_PRIVATE_STATIC_PROPERTIES => 70,
-		self::GROUP_PUBLIC_PROPERTIES => 80,
-		self::GROUP_PROTECTED_PROPERTIES => 90,
-		self::GROUP_PRIVATE_PROPERTIES => 100,
-		self::GROUP_PUBLIC_STATIC_METHODS => 110,
-		self::GROUP_PROTECTED_STATIC_METHODS => 120,
-		self::GROUP_PRIVATE_STATIC_METHODS => 130,
-		self::GROUP_CONSTRUCTOR => 140,
-		self::GROUP_STATIC_CONSTRUCTORS => 150,
-		self::GROUP_DESTRUCTOR => 160,
-		self::GROUP_MAGIC_METHODS => 170,
-		self::GROUP_PUBLIC_METHODS => 180,
-		self::GROUP_PROTECTED_METHODS => 190,
-		self::GROUP_PRIVATE_METHODS => 200,
-	];
+	/** @var array<string, int>|null */
+	private $normalizedGroups = null;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -143,6 +101,7 @@ class ClassStructureSniff implements Sniff
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 * @param \PHP_CodeSniffer\Files\File $file
 	 * @param int $pointer
+	 * @return int
 	 */
 	public function process(File $file, $pointer): int
 	{
@@ -150,8 +109,10 @@ class ClassStructureSniff implements Sniff
 		/** @var array{scope_closer: int, level: int} $rootScopeToken */
 		$rootScopeToken = $tokens[$pointer];
 
+		$groupsOrder = $this->getNormalizedGroups();
+
 		$groupLastMemberPointer = $rootScopeToken['scope_opener'];
-		$expectedGroup = self::GROUP_NONE;
+		$expectedGroup = null;
 		$groupsFirstMembers = [];
 		while (true) {
 			$nextGroup = $this->findNextGroup($file, $groupLastMemberPointer, $rootScopeToken);
@@ -161,7 +122,7 @@ class ClassStructureSniff implements Sniff
 
 			[$groupFirstMemberPointer, $groupLastMemberPointer, $group] = $nextGroup;
 
-			if ($this->requiredOrder[$group] >= $this->requiredOrder[$expectedGroup]) {
+			if ($groupsOrder[$group] >= ($groupsOrder[$expectedGroup] ?? 0)) {
 				$groupsFirstMembers[$group] = $groupFirstMemberPointer;
 				$expectedGroup = $group;
 
@@ -169,20 +130,20 @@ class ClassStructureSniff implements Sniff
 			}
 
 			$fix = $file->addFixableError(
-				sprintf('The placement of "%s" group is invalid.', self::GROUP_TOKEN_NAMES[$group]),
+				sprintf('The placement of "%s" group is invalid.', $group),
 				$groupFirstMemberPointer,
-				self::CODE_INVALID_GROUP_ORDER
+				self::CODE_INCORRECT_GROUP_ORDER
 			);
 			if (!$fix) {
 				continue;
 			}
 
 			foreach ($groupsFirstMembers as $memberGroup => $firstMemberPointer) {
-				if ($this->requiredOrder[$memberGroup] <= $this->requiredOrder[$group]) {
+				if ($groupsOrder[$memberGroup] <= $groupsOrder[$group]) {
 					continue;
 				}
 
-				$this->fixInvalidGroupPlacement(
+				$this->fixIncorrectGroupOrder(
 					$file,
 					$groupFirstMemberPointer,
 					$groupLastMemberPointer,
@@ -200,7 +161,7 @@ class ClassStructureSniff implements Sniff
 	 * @param \PHP_CodeSniffer\Files\File $file
 	 * @param int $pointer
 	 * @param array{scope_closer: int, level: int} $rootScopeToken
-	 * @return array{int, int, int}|null
+	 * @return array{int, int, string}|null
 	 */
 	private function findNextGroup(File $file, int $pointer, array $rootScopeToken): ?array
 	{
@@ -251,7 +212,7 @@ class ClassStructureSniff implements Sniff
 		return [$groupFirstMemberPointer, $groupLastMemberPointer, $currentGroup];
 	}
 
-	private function getGroupForToken(File $file, int $pointer): ?int
+	private function getGroupForToken(File $file, int $pointer): ?string
 	{
 		$tokens = $file->getTokens();
 
@@ -368,7 +329,7 @@ class ClassStructureSniff implements Sniff
 		return ClassHelper::getName($file, $classPointer);
 	}
 
-	private function fixInvalidGroupPlacement(
+	private function fixIncorrectGroupOrder(
 		File $file,
 		int $groupFirstMemberPointer,
 		int $groupLastMemberPointer,
@@ -457,6 +418,63 @@ class ClassStructureSniff implements Sniff
 		}
 
 		return $linesToRemove;
+	}
+
+	/**
+	 * @return array<string, int>
+	 */
+	private function getNormalizedGroups(): array
+	{
+		if ($this->normalizedGroups === null) {
+			$supportedGroups = [
+				self::GROUP_USES,
+				self::GROUP_PUBLIC_CONSTANTS,
+				self::GROUP_PROTECTED_CONSTANTS,
+				self::GROUP_PRIVATE_CONSTANTS,
+				self::GROUP_PUBLIC_STATIC_PROPERTIES,
+				self::GROUP_PROTECTED_STATIC_PROPERTIES,
+				self::GROUP_PRIVATE_STATIC_PROPERTIES,
+				self::GROUP_PUBLIC_PROPERTIES,
+				self::GROUP_PROTECTED_PROPERTIES,
+				self::GROUP_PRIVATE_PROPERTIES,
+				self::GROUP_PUBLIC_STATIC_METHODS,
+				self::GROUP_PROTECTED_STATIC_METHODS,
+				self::GROUP_PRIVATE_STATIC_METHODS,
+				self::GROUP_CONSTRUCTOR,
+				self::GROUP_STATIC_CONSTRUCTORS,
+				self::GROUP_DESTRUCTOR,
+				self::GROUP_MAGIC_METHODS,
+				self::GROUP_PUBLIC_METHODS,
+				self::GROUP_PROTECTED_METHODS,
+				self::GROUP_PRIVATE_METHODS,
+			];
+
+			$normalizedGroups = [];
+			$order = 1;
+			foreach (SniffSettingsHelper::normalizeArray($this->groups) as $groupsString) {
+				/** @var string[] $groups */
+				$groups = preg_split('~\\s*,\\s*~', $groupsString);
+				foreach ($groups as $group) {
+					$group = preg_replace('~\\s+~', ' ', $group);
+
+					if (!in_array($group, $supportedGroups, true)) {
+						throw new UnsupportedClassGroupException($group);
+					}
+
+					$normalizedGroups[$group] = $order;
+				}
+
+				$order++;
+			}
+
+			$this->normalizedGroups = $normalizedGroups;
+
+			if (count($this->normalizedGroups) === 0) {
+				$this->normalizedGroups = array_flip($supportedGroups);
+			}
+		}
+
+		return $this->normalizedGroups;
 	}
 
 }
