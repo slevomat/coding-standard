@@ -53,7 +53,6 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 		foreach ($referencedNames as $referencedName) {
 			$name = $referencedName->getNameAsReferencedInFile();
 			$namePointer = $referencedName->getStartPointer();
-			$useStatements = UseStatementHelper::getUseStatementsForPointer($phpcsFile, $namePointer);
 
 			if (!$this->isValidType($referencedName)) {
 				continue;
@@ -72,6 +71,8 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 			}
 
 			$canonicalName = $this->isCaseSensitive() ? $name : strtolower($name);
+
+			$useStatements = UseStatementHelper::getUseStatementsForPointer($phpcsFile, $namePointer);
 
 			if (array_key_exists(UseStatement::getUniqueId($referencedName->getType(), $canonicalName), $useStatements)) {
 				$fullyQualifiedName = NamespaceHelper::resolveName($phpcsFile, $name, $referencedName->getType(), $namePointer);
