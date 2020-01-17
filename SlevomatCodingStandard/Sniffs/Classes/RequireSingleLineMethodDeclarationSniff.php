@@ -12,8 +12,10 @@ use function is_bool;
 use function is_int;
 use function is_string;
 use function preg_replace;
+use function preg_replace_callback;
 use function rtrim;
 use function sprintf;
+use function str_repeat;
 use function str_replace;
 use function strlen;
 use const T_FUNCTION;
@@ -73,7 +75,11 @@ class RequireSingleLineMethodDeclarationSniff implements Sniff
 		$methodDeclaration = str_replace(['( ', ' )'], ['(', ')'], $methodDeclaration);
 		$methodDeclaration = rtrim($methodDeclaration);
 
-		if ($this->maxLineLength !== 0 && strlen($methodDeclaration) > $this->maxLineLength) {
+		$methodDeclarationWithoutTabIndetation = preg_replace_callback('~^(\t+)~', static function (array $matches): string {
+			return str_repeat('    ', strlen($matches[1]));
+		}, $methodDeclaration);
+
+		if ($this->maxLineLength !== 0 && strlen($methodDeclarationWithoutTabIndetation) > $this->maxLineLength) {
 			return;
 		}
 
