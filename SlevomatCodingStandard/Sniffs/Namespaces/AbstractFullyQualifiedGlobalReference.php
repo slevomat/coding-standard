@@ -67,6 +67,10 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 				continue;
 			}
 
+			if (NamespaceHelper::findCurrentNamespaceName($phpcsFile, $namePointer) === null) {
+				continue;
+			}
+
 			$canonicalName = $this->isCaseSensitive() ? $name : strtolower($name);
 
 			if (array_key_exists(UseStatement::getUniqueId($referencedName->getType(), $canonicalName), $useStatements)) {

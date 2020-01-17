@@ -13,6 +13,12 @@ class FullyQualifiedGlobalFunctionsSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testFileWithoutNamespaceNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsFileWithoutNamespaceNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
 	public function testErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsErrors.php');
