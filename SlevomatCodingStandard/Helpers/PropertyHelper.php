@@ -3,18 +3,19 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
+use function array_key_exists;
 use function array_keys;
 use function array_reverse;
+use function array_values;
+use function count;
 use function in_array;
 use function sprintf;
 use const T_ANON_CLASS;
 use const T_NULLABLE;
-use const T_OPEN_CURLY_BRACKET;
-use const T_OPEN_PARENTHESIS;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
-use const T_SEMICOLON;
 use const T_STATIC;
 use const T_VAR;
 
@@ -23,9 +24,29 @@ class PropertyHelper
 
 	public static function isProperty(File $phpcsFile, int $variablePointer): bool
 	{
-		$previousPointer = TokenHelper::findPrevious($phpcsFile, [T_OPEN_PARENTHESIS, T_OPEN_CURLY_BRACKET, T_SEMICOLON, T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR], $variablePointer - 1);
+		$tokens = $phpcsFile->getTokens();
 
-		return $previousPointer !== null && in_array($phpcsFile->getTokens()[$previousPointer]['code'], [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR], true);
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $variablePointer - 1);
+
+		if ($tokens[$previousPointer]['code'] === T_STATIC) {
+			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
+		}
+
+		if (in_array($tokens[$previousPointer]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_VAR], true)) {
+			return true;
+		}
+
+		if (!array_key_exists('conditions', $tokens[$variablePointer]) || count($tokens[$variablePointer]['conditions']) === 0) {
+			return false;
+		}
+
+		if (TokenHelper::findPreviousLocal($phpcsFile, TokenHelper::$functionTokenCodes, $variablePointer - 1) !== null) {
+			return false;
+		}
+
+		$conditionCode = array_values($tokens[$variablePointer]['conditions'])[count($tokens[$variablePointer]['conditions']) - 1];
+
+		return in_array($conditionCode, Tokens::$ooScopeTokens, true);
 	}
 
 	public static function findTypeHint(File $phpcsFile, int $propertyPointer): ?PropertyTypeHint
