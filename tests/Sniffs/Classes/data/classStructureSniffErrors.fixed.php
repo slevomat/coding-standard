@@ -20,17 +20,17 @@ class C
 
 class D
 {
-	private static $ipsum;
 	protected $lorem;
+	private static $ipsum;
 }
 
 class E
 {
-	static function staticLorem()
+	public function __construct()
 	{
 	}
 
-	public function __construct()
+	static function staticLorem()
 	{
 	}
 }
@@ -59,11 +59,11 @@ class G
 
 class H
 {
-	private function __call($name, $arguments)
+	private function sit()
 	{
 	}
 
-	private function sit()
+	private function __call($name, $arguments)
 	{
 	}
 }
@@ -125,11 +125,11 @@ interface Intf
 {
 	const LOREM = 1;
 
+	function dolor();
+
 	static function staticLorem();
 
 	public static function staticIpsum();
-
-	function dolor();
 }
 
 trait Tr
@@ -137,34 +137,38 @@ trait Tr
 	use SomeTrait;
 
 	static $staticLorem;
-	private static $staticSit;
-
 	private $sit;
 
-	protected static function staticDolor() {
-	}
-
-	private static function staticSit() {
-	}
+	private static $staticSit;
 
 	public function __construct()
-	{
-	}
-
-	private function __call($name, $arguments)
 	{
 	}
 
 	function lorem() {
 	}
 
+	protected static function staticDolor() {
+	}
+
 	private function sit() {
+	}
+
+	private static function staticSit() {
+	}
+
+	private function __call($name, $arguments)
+	{
 	}
 }
 
 class M
 {
-	public static function notAStaticConstructorPlacedCorrectly() : D
+	private function __construct()
+	{
+	}
+
+	public static function notAStaticConstructor() : D
 	{
 	}
 
@@ -180,10 +184,6 @@ class M
 	 * @return D
 	 */
 	public static function notAStaticConstructorC()
-	{
-	}
-
-	private function __construct()
 	{
 	}
 }

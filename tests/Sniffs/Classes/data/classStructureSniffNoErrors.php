@@ -24,27 +24,16 @@ class D
 	protected const DOLOR = 1;
 	private const SIT = 1;
 
-	static $staticLorem;
-	public static $staticIpsum;
-	protected static $staticDolor;
-	private static $staticSit;
-
 	var $lorem;
 	public $ipsum;
+	static $staticLorem;
+	public static $staticIpsum;
+
 	protected $dolor;
+	protected static $staticDolor;
+
 	private $sit;
-
-	static function staticLorem() {
-	}
-
-	public static function staticIpsum() {
-	}
-
-	protected static function staticDolor() {
-	}
-
-	private static function staticSit() {
-	}
+	private static $staticSit;
 
 	private function __construct()
 	{
@@ -76,27 +65,16 @@ class D
 			protected const DOLOR = 1;
 			private const SIT = 1;
 
-			static $staticLorem;
-			public static $staticIpsum;
-			protected static $staticDolor;
-			private static $staticSit;
-
 			var $lorem;
 			public $ipsum;
+			static $staticLorem;
+			public static $staticIpsum;
+
 			protected $dolor;
+			protected static $staticDolor;
+
 			private $sit;
-
-			static function staticLorem() {
-			}
-
-			public static function staticIpsum() {
-			}
-
-			protected static function staticDolor() {
-			}
-
-			private static function staticSit() {
-			}
+			private static $staticSit;
 
 			private function __construct()
 			{
@@ -118,6 +96,30 @@ class D
 
 			}
 
+			function lorem() {
+			}
+
+			public function ipsum() {
+			}
+
+			static function staticLorem() {
+			}
+
+			public static function staticIpsum() {
+			}
+
+			protected function dolor() {
+			}
+
+			protected static function staticDolor() {
+			}
+
+			private function sit() {
+			}
+
+			private static function staticSit() {
+			}
+
 			private function __call($name, $arguments)
 			{
 			}
@@ -125,19 +127,31 @@ class D
 			public function __get($name)
 			{
 			}
-
-			function lorem() {
-			}
-
-			public function ipsum() {
-			}
-
-			protected function dolor() {
-			}
-
-			private function sit() {
-			}
 		};
+	}
+
+	function lorem() {
+	}
+
+	public function ipsum() {
+	}
+
+	static function staticLorem() {
+	}
+
+	public static function staticIpsum() {
+	}
+
+	protected function dolor() {
+	}
+
+	protected static function staticDolor() {
+	}
+
+	private function sit() {
+	}
+
+	private static function staticSit() {
 	}
 
 	private function __call($name, $arguments)
@@ -148,28 +162,17 @@ class D
 	{
 	}
 
-	function lorem() {
-	}
-
-	public function ipsum() {
-	}
-
-	protected function dolor() {
-	}
-
-	private function sit() {
-	}
 }
 
 interface Intf
 {
 	const LOREM = 1;
 
+	function dolor();
+
 	static function staticLorem();
 
 	public static function staticIpsum();
-
-	function dolor();
 }
 
 trait Tr
@@ -177,27 +180,28 @@ trait Tr
 	use SomeTrait;
 
 	static $staticLorem;
-	private static $staticSit;
 
 	private $sit;
-
-	protected static function staticDolor() {
-	}
-
-	private static function staticSit() {
-	}
+	private static $staticSit;
 
 	public function __construct()
-	{
-	}
-
-	private function __call($name, $arguments)
 	{
 	}
 
 	function lorem() {
 	}
 
+	protected static function staticDolor() {
+	}
+
 	private function sit() {
 	}
+
+	private static function staticSit() {
+	}
+
+	private function __call($name, $arguments)
+	{
+	}
+
 }

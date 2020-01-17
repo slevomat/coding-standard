@@ -8,6 +8,7 @@ use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
+use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_flip;
@@ -22,20 +23,15 @@ use function preg_split;
 use function sprintf;
 use function str_repeat;
 use function strtolower;
-use const T_ABSTRACT;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CONST;
-use const T_FINAL;
 use const T_FUNCTION;
 use const T_OPEN_CURLY_BRACKET;
-use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
 use const T_SEMICOLON;
 use const T_STATIC;
-use const T_STRING;
 use const T_USE;
-use const T_VAR;
 use const T_VARIABLE;
 use const T_WHITESPACE;
 
@@ -166,7 +162,7 @@ class ClassStructureSniff implements Sniff
 	private function findNextGroup(File $file, int $pointer, array $rootScopeToken): ?array
 	{
 		$tokens = $file->getTokens();
-		$groupTokenTypes = [T_USE, T_CONST, T_VAR, T_STATIC, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FUNCTION];
+		$groupTokenTypes = [T_USE, T_CONST, T_VARIABLE, T_FUNCTION];
 
 		$currentTokenPointer = $pointer;
 		while (true) {
@@ -181,14 +177,16 @@ class ClassStructureSniff implements Sniff
 			}
 
 			$currentToken = $tokens[$currentTokenPointer];
+
+			if ($currentToken['code'] === T_VARIABLE && !PropertyHelper::isProperty($file, $currentTokenPointer)) {
+				continue;
+			}
+
 			if ($currentToken['level'] - $rootScopeToken['level'] !== 1) {
 				continue;
 			}
 
 			$group = $this->getGroupForToken($file, $currentTokenPointer);
-			if ($group === null) {
-				continue;
-			}
 
 			if (!isset($currentGroup)) {
 				$currentGroup = $group;
@@ -212,7 +210,7 @@ class ClassStructureSniff implements Sniff
 		return [$groupFirstMemberPointer, $groupLastMemberPointer, $currentGroup];
 	}
 
-	private function getGroupForToken(File $file, int $pointer): ?string
+	private function getGroupForToken(File $file, int $pointer): string
 	{
 		$tokens = $file->getTokens();
 
@@ -229,13 +227,14 @@ class ClassStructureSniff implements Sniff
 
 				return self::GROUP_PRIVATE_CONSTANTS;
 			case T_FUNCTION:
-				$name = strtolower($tokens[$file->findNext(T_STRING, $pointer + 1)]['content']);
+				$name = strtolower(FunctionHelper::getName($file, $pointer));
 				if (array_key_exists($name, self::SPECIAL_METHODS)) {
 					return self::SPECIAL_METHODS[$name];
 				}
 
 				$isStatic = $this->isMemberStatic($file, $pointer);
-				if ($this->isStaticConstructor($file, $pointer, $isStatic)) {
+
+				if ($isStatic && $this->isStaticConstructor($file, $pointer)) {
 					return self::GROUP_STATIC_CONSTRUCTORS;
 				}
 
@@ -248,17 +247,7 @@ class ClassStructureSniff implements Sniff
 
 				return $isStatic ? self::GROUP_PRIVATE_STATIC_METHODS : self::GROUP_PRIVATE_METHODS;
 			default:
-				$nextPointer = TokenHelper::findNextEffective($file, $pointer + 1);
-				if ($tokens[$nextPointer]['code'] !== T_VARIABLE) {
-					return null;
-				}
-
-				$previousPointer = TokenHelper::findPreviousEffective($file, $pointer - 1);
-				$visibility = $tokens[$previousPointer]['code'];
-				if (!in_array($visibility, Tokens::$scopeModifiers, true)) {
-					$visibility = T_PUBLIC;
-				}
-
+				$visibility = $this->getVisibilityForToken($file, $pointer);
 				$isStatic = $this->isMemberStatic($file, $pointer);
 
 				switch ($visibility) {
@@ -278,30 +267,23 @@ class ClassStructureSniff implements Sniff
 	{
 		$tokens = $file->getTokens();
 
-		$tokensToIgnore = array_merge(Tokens::$emptyTokens, [T_ABSTRACT, T_STATIC, T_FINAL]);
-		$prevPointer = $file->findPrevious($tokensToIgnore, $pointer - 1, null, true, null, true);
-		if ($prevPointer !== false && in_array($tokens[$prevPointer]['code'], Tokens::$scopeModifiers, true)) {
-			$visibility = $tokens[$prevPointer]['code'];
-		}
+		$previousPointer = TokenHelper::findPrevious(
+			$file,
+			array_merge(Tokens::$scopeModifiers, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON]),
+			$pointer - 1,
+		);
 
-		return $visibility ?? T_PUBLIC;
+		return in_array($tokens[$previousPointer]['code'], Tokens::$scopeModifiers, true) ? $tokens[$previousPointer]['code'] : T_PUBLIC;
 	}
 
 	private function isMemberStatic(File $file, int $pointer): bool
 	{
-		$tokens = $file->getTokens();
-		$tokenTypes = [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_STATIC];
-		$previousPointer = $file->findPrevious($tokenTypes, $pointer, null, false, null, true);
-
-		return $tokens[$previousPointer]['code'] === T_STATIC;
+		$previousPointer = TokenHelper::findPrevious($file, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_STATIC], $pointer - 1);
+		return $file->getTokens()[$previousPointer]['code'] === T_STATIC;
 	}
 
-	private function isStaticConstructor(File $file, int $pointer, bool $isStatic): bool
+	private function isStaticConstructor(File $file, int $pointer): bool
 	{
-		if (!$isStatic) {
-			return false;
-		}
-
 		if ($this->getVisibilityForToken($file, $pointer) !== T_PUBLIC) {
 			return false;
 		}
@@ -431,22 +413,22 @@ class ClassStructureSniff implements Sniff
 				self::GROUP_PUBLIC_CONSTANTS,
 				self::GROUP_PROTECTED_CONSTANTS,
 				self::GROUP_PRIVATE_CONSTANTS,
-				self::GROUP_PUBLIC_STATIC_PROPERTIES,
-				self::GROUP_PROTECTED_STATIC_PROPERTIES,
-				self::GROUP_PRIVATE_STATIC_PROPERTIES,
 				self::GROUP_PUBLIC_PROPERTIES,
+				self::GROUP_PUBLIC_STATIC_PROPERTIES,
 				self::GROUP_PROTECTED_PROPERTIES,
+				self::GROUP_PROTECTED_STATIC_PROPERTIES,
 				self::GROUP_PRIVATE_PROPERTIES,
-				self::GROUP_PUBLIC_STATIC_METHODS,
-				self::GROUP_PROTECTED_STATIC_METHODS,
-				self::GROUP_PRIVATE_STATIC_METHODS,
+				self::GROUP_PRIVATE_STATIC_PROPERTIES,
 				self::GROUP_CONSTRUCTOR,
 				self::GROUP_STATIC_CONSTRUCTORS,
 				self::GROUP_DESTRUCTOR,
-				self::GROUP_MAGIC_METHODS,
 				self::GROUP_PUBLIC_METHODS,
+				self::GROUP_PUBLIC_STATIC_METHODS,
 				self::GROUP_PROTECTED_METHODS,
+				self::GROUP_PROTECTED_STATIC_METHODS,
 				self::GROUP_PRIVATE_METHODS,
+				self::GROUP_PRIVATE_STATIC_METHODS,
+				self::GROUP_MAGIC_METHODS,
 			];
 
 			$normalizedGroups = [];
