@@ -106,6 +106,11 @@ function () {
 };
 
 function () {
+    global $bar;
+    $bar = new FooBar();
+};
+
+function () {
 	$a = 'a';
 	$b = 'b';
 
