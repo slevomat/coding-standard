@@ -1,19 +1,19 @@
 <?php
 
 $a = [
-    <<<'EOF'
+	<<<'EOF'
 anything
 EOF
 ];
 
 $b = [
-    <<<"EOF"
+	<<<"EOF"
 anything
 EOF
 ];
 
 $c = [
-    <<<EOF
+	<<<EOF
 anything
 EOF
 ];

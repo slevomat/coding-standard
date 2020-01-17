@@ -15,8 +15,8 @@ $c = function ($cc): int {
 };
 
 array_map(
-    static function (array $value): array {
-        return array_filter($value);
-    },
-    []
+	static function (array $value): array {
+		return array_filter($value);
+	},
+	[]
 );

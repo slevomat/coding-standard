@@ -36,5 +36,5 @@ function ($arrays) use ($boo) {
 };
 
 (function ($type, $buffer) use (&$output, &$successful) : void {
-    $successful = false;
+	$successful = false;
 })();

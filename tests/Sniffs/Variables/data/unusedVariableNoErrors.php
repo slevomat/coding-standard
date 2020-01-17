@@ -106,8 +106,8 @@ function () {
 };
 
 function () {
-    global $bar;
-    $bar = new FooBar();
+	global $bar;
+	$bar = new FooBar();
 };
 
 function () {
@@ -276,7 +276,7 @@ function () {
 	$i = 0;
 
 	foreach ([1, 2, 3] as $x) {
-	    $a[$i++] = $x;
+		$a[$i++] = $x;
 	}
 
 	return $a;

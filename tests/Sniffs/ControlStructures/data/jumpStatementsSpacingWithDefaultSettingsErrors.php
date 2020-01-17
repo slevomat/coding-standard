@@ -123,7 +123,7 @@ function () {
 };
 
 function () {
-    yield 1;
-    return 2;
-    yield 3;
+	yield 1;
+	return 2;
+	yield 3;
 };

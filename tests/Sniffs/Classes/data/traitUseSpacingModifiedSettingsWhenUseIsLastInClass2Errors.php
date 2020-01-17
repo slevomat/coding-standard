@@ -4,11 +4,11 @@ namespace A;
 
 class TestClass
 {
-    public function __construct()
-    {
-    }
+	public function __construct()
+	{
+	}
 
-    use SomeTrait {
-        methodName as overridenName;
-    }
+	use SomeTrait {
+		methodName as overridenName;
+	}
 }

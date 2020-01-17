@@ -23,23 +23,23 @@ do {
 } while (true);
 function () {
 
-    for ($i = 0; $i < 10; $i++) {
+	for ($i = 0; $i < 10; $i++) {
 
 
 
-        if (true) {
+		if (true) {
 
-        }
-
-
-        // With line comment
-        if (false) {
-
-        }
+		}
 
 
+		// With line comment
+		if (false) {
 
-    }
+		}
+
+
+
+	}
 
 
 
@@ -47,34 +47,34 @@ function () {
 
 function ($values) {
 
-    foreach ($values as $value) {
+	foreach ($values as $value) {
 
-        /**
-         * With doccomment
-         */
-        if (true) {
+		/**
+		 * With doccomment
+		 */
+		if (true) {
 
-        }
-        /*
-         * With block comment
-         */
-        if (false) {
+		}
+		/*
+		 * With block comment
+		 */
+		if (false) {
 
-        }
-        try {
+		}
+		try {
 
-            switch ($value) {
-            }
-
-
-
-        } catch (Throwable $e) {
-            // Don't care
-        }
+			switch ($value) {
+			}
 
 
 
-    }
+		} catch (Throwable $e) {
+			// Don't care
+		}
+
+
+
+	}
 
 
 

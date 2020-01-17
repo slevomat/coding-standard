@@ -19,7 +19,7 @@ return - 1;
 print - 1;
 $a &= - 1;
 switch ($a) {
-    case - 1:
+	case - 1:
 }
 $a = $a ?? - 1;
 $a .= - 1;
@@ -68,7 +68,7 @@ return - $b;
 print - $b;
 $a &= - $b;
 switch ($a) {
-    case - $b:
+	case - $b:
 }
 $a = $a ?? - $b;
 $a .= - $b;

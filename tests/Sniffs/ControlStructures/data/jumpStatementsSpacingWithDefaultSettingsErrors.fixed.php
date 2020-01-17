@@ -110,9 +110,9 @@ function () {
 };
 
 function () {
-    yield 1;
+	yield 1;
 
-    return 2;
+	return 2;
 
-    yield 3;
+	yield 3;
 };

@@ -86,8 +86,8 @@ class Foo
  */
 class X
 {
-    /** @var int */
-    public $test = 1;
+	/** @var int */
+	public $test = 1;
 
-    /** @whatever */
+	/** @whatever */
 }

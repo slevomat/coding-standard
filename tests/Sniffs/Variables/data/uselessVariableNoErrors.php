@@ -146,8 +146,8 @@ function differentScope() {
 
 function assigmentInCondition() {
 	if ($l = 'l') {
-	    $this->doSomething();
-	    return $l;
+		$this->doSomething();
+		return $l;
 	}
 
 }

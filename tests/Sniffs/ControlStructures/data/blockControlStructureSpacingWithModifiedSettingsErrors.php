@@ -27,63 +27,63 @@ do {
 } while (true);
 
 function () {
-    for ($i = 0; $i < 10; $i++) {
-        if (true) {
+	for ($i = 0; $i < 10; $i++) {
+		if (true) {
 
-        }
+		}
 
-        // With line comment
-        if (false) {
+		// With line comment
+		if (false) {
 
-        }
-    }
+		}
+	}
 };
 
 function ($values) {
-    foreach ($values as $value) {
+	foreach ($values as $value) {
 
 
-        /**
-         * With doccomment
-         */
-        if (true) {
+		/**
+		 * With doccomment
+		 */
+		if (true) {
 
-        }
+		}
 
-        /*
-         * With block comment
-         */
-        if (false) {
+		/*
+		 * With block comment
+		 */
+		if (false) {
 
-        }
+		}
 
-        try {
+		try {
 
-            switch ($value) {
-            }
+			switch ($value) {
+			}
 
 
 
-        } catch (Throwable $e) {
-            // Don't care
-        }
-    }
+		} catch (Throwable $e) {
+			// Don't care
+		}
+	}
 };
 
 function () {
-    doSomething(); // Do something
+	doSomething(); // Do something
 
-    foreach ([] as $value) {
+	foreach ([] as $value) {
 
-    }
+	}
 
 
 
 };
 
 function () {
-    doSomething();
-    foreach ([] as $value) {
+	doSomething();
+	foreach ([] as $value) {
 
-    } // Foreach
+	} // Foreach
 };

@@ -3,7 +3,7 @@
 class A
 {
 	public function someMethod(
-        string $abcdefghijklmnopqrstuvwxyza,
+		string $abcdefghijklmnopqrstuvwxyza,
 		string $abcdefghijklmnopqrstuvwxyzb,
 		string $abcdefghijklmnopqrstuvwxyzc,
 		string $abcdefghijklmnopqrstuvwxyzd,

@@ -2,188 +2,188 @@
 
 class A
 {
-    use SomeTrait;
-    const LOREM = 1;
+	use SomeTrait;
+	const LOREM = 1;
 }
 
 class B
 {
-    const IPSUM = 1;
-    private const LOREM = 1;
+	const IPSUM = 1;
+	private const LOREM = 1;
 }
 
 class C
 {
-    private const LOREM = 1;
-    private static $lorem;
+	private const LOREM = 1;
+	private static $lorem;
 }
 
 class D
 {
-    private static $ipsum;
-    protected $lorem;
+	private static $ipsum;
+	protected $lorem;
 }
 
 class E
 {
-    static function staticLorem()
-    {
-    }
+	static function staticLorem()
+	{
+	}
 
-    public function __construct()
-    {
-    }
+	public function __construct()
+	{
+	}
 }
 
 class F
 {
-    protected static function staticDolor()
-    {
-    }
+	protected static function staticDolor()
+	{
+	}
 
-    private function __call($name, $arguments)
-    {
-    }
+	private function __call($name, $arguments)
+	{
+	}
 }
 
 class G
 {
-    public function __construct()
-    {
-    }
+	public function __construct()
+	{
+	}
 
-    public function __get($name)
-    {
-    }
+	public function __get($name)
+	{
+	}
 }
 
 class H
 {
-    private function __call($name, $arguments)
-    {
-    }
+	private function __call($name, $arguments)
+	{
+	}
 
-    private function sit()
-    {
-    }
+	private function sit()
+	{
+	}
 }
 
 class I
 {
-    protected static function staticDolor()
-    {
-    }
+	protected static function staticDolor()
+	{
+	}
 
-    private function sit()
-    {
-    }
+	private function sit()
+	{
+	}
 }
 
 class J
 {
-    protected static function staticDolor()
-    {
-    }
+	protected static function staticDolor()
+	{
+	}
 
-    private static function staticSit()
-    {
-    }
+	private static function staticSit()
+	{
+	}
 }
 
 class K
 {
-    function lorem()
-    {
-    }
+	function lorem()
+	{
+	}
 
-    private function sit()
-    {
-    }
+	private function sit()
+	{
+	}
 }
 
 class L
 {
-    function lorem()
-    {
-        new class()
-        {
-            const IPSUM = 1;
-            private const LOREM = 1;
+	function lorem()
+	{
+		new class()
+		{
+			const IPSUM = 1;
+			private const LOREM = 1;
 
-            function ipsum()
-            {
-            }
+			function ipsum()
+			{
+			}
 
-            private function lorem()
-            {
-            }
-        };
-    }
+			private function lorem()
+			{
+			}
+		};
+	}
 }
 
 interface Intf
 {
-    const LOREM = 1;
+	const LOREM = 1;
 
-    static function staticLorem();
+	static function staticLorem();
 
-    public static function staticIpsum();
+	public static function staticIpsum();
 
-    function dolor();
+	function dolor();
 }
 
 trait Tr
 {
-    use SomeTrait;
+	use SomeTrait;
 
-    static $staticLorem;
-    private static $staticSit;
+	static $staticLorem;
+	private static $staticSit;
 
-    private $sit;
+	private $sit;
 
-    protected static function staticDolor() {
-    }
+	protected static function staticDolor() {
+	}
 
-    private static function staticSit() {
-    }
+	private static function staticSit() {
+	}
 
-    public function __construct()
-    {
-    }
+	public function __construct()
+	{
+	}
 
-    private function __call($name, $arguments)
-    {
-    }
+	private function __call($name, $arguments)
+	{
+	}
 
-    function lorem() {
-    }
+	function lorem() {
+	}
 
-    private function sit() {
-    }
+	private function sit() {
+	}
 }
 
 class M
 {
-    public static function notAStaticConstructorPlacedCorrectly() : D
-    {
-    }
+	public static function notAStaticConstructorPlacedCorrectly() : D
+	{
+	}
 
-    public static function notAStaticConstructorA()
-    {
-    }
+	public static function notAStaticConstructorA()
+	{
+	}
 
-    public static function notAStaticConstructorB() : D
-    {
-    }
+	public static function notAStaticConstructorB() : D
+	{
+	}
 
-    /**
-     * @return D
-     */
-    public static function notAStaticConstructorC()
-    {
-    }
+	/**
+	 * @return D
+	 */
+	public static function notAStaticConstructorC()
+	{
+	}
 
-    private function __construct()
-    {
-    }
+	private function __construct()
+	{
+	}
 }

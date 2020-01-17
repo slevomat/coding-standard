@@ -141,7 +141,7 @@ foreach (['foo', 'bar'] as $identity) {
 }
 
 if (!defined('PHPUNIT_COMPOSER_INSTALL')) {
-    define('PHPUNIT_COMPOSER_INSTALL', __DIR__ . '/autoload.php');
+	define('PHPUNIT_COMPOSER_INSTALL', __DIR__ . '/autoload.php');
 }
 
 function oneConditionsWithoutEarlyExit($dateTime) {

@@ -2,108 +2,108 @@
 
 class A
 {
-    use SomeTrait;
-    const LOREM = 1;
+	use SomeTrait;
+	const LOREM = 1;
 }
 
 class B
 {
-    private const LOREM = 1;
-    private static $lorem;
+	private const LOREM = 1;
+	private static $lorem;
 }
 
 class C
 {
-    private static $ipsum;
-    protected $lorem;
+	private static $ipsum;
+	protected $lorem;
 }
 
 class D
 {
-    static function staticLorem()
-    {
-    }
+	static function staticLorem()
+	{
+	}
 
-    public function __construct()
-    {
-    }
+	public function __construct()
+	{
+	}
 }
 
 class E
 {
-    protected static function staticDolor()
-    {
-    }
+	protected static function staticDolor()
+	{
+	}
 
-    private function __call($name, $arguments)
-    {
-    }
+	private function __call($name, $arguments)
+	{
+	}
 }
 
 class F
 {
-    private function __call($name, $arguments)
-    {
-    }
+	private function __call($name, $arguments)
+	{
+	}
 
-    private function sit()
-    {
-    }
+	private function sit()
+	{
+	}
 }
 
 class G
 {
-    protected static function staticDolor()
-    {
-    }
+	protected static function staticDolor()
+	{
+	}
 
-    private function sit()
-    {
-    }
+	private function sit()
+	{
+	}
 }
 
 interface Intf
 {
-    const LOREM = 1;
+	const LOREM = 1;
 
-    static function staticLorem();
+	static function staticLorem();
 
-    public static function staticIpsum();
+	public static function staticIpsum();
 
-    function dolor();
+	function dolor();
 }
 
 trait Tr
 {
-    use SomeTrait;
+	use SomeTrait;
 
-    static $staticLorem;
+	static $staticLorem;
 
-    private static $staticSit;
+	private static $staticSit;
 
-    protected static function staticDolor() {
-    }
+	protected static function staticDolor() {
+	}
 
-    private static function staticSit() {
-    }
+	private static function staticSit() {
+	}
 
-    private $sit;
+	private $sit;
 
-    private function __call($name, $arguments)
-    {
-    }
+	private function __call($name, $arguments)
+	{
+	}
 
-    private function sit() {
-    }
+	private function sit() {
+	}
 
-    function lorem() {
-    }
+	function lorem() {
+	}
 
-    public function __construct()
-    {
-    }
+	public function __construct()
+	{
+	}
 
-    public static function staticConstructor() : self
-    {
-    }
+	public static function staticConstructor() : self
+	{
+	}
 }

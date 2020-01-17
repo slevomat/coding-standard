@@ -39,19 +39,19 @@
 ];
 
 [
-    <<<'EOF'
+	<<<'EOF'
 anything
 EOF,
 ];
 
 [
-    <<<"EOF"
+	<<<"EOF"
 anything
 EOF,
 ];
 
 [
-    <<<'EOF'
+	<<<'EOF'
 anything
 EOF,
 ];

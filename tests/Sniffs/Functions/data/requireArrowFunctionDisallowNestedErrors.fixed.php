@@ -9,6 +9,6 @@ $c = function ($cc): int {
 };
 
 array_map(
-    static fn (array $value): array => array_filter($value),
-    []
+	static fn (array $value): array => array_filter($value),
+	[]
 );

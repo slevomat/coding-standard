@@ -1,9 +1,9 @@
 <?php
 
 if (0) {
-    function strlen(...$foo)
-    {
-    }
+	function strlen(...$foo)
+	{
+	}
 }
 
 strlen($foo);

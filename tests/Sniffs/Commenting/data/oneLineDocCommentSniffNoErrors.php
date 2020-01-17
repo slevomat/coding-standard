@@ -65,18 +65,18 @@ class Foo
 /** @example foo */
 class Bar
 {
-    /** @example foo */
-    const FOO = 1;
+	/** @example foo */
+	const FOO = 1;
 
-    /** @example foo */
-    public function test()
-    {
-        /** @var string $lorem */
-        $lorem = 'lorem';
+	/** @example foo */
+	public function test()
+	{
+		/** @var string $lorem */
+		$lorem = 'lorem';
 
-        /** @return int[] */
-        $x = function () : array {
-            return [1, 2, 3];
-        };
-    }
+		/** @return int[] */
+		$x = function () : array {
+			return [1, 2, 3];
+		};
+	}
 }

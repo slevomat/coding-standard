@@ -42,8 +42,8 @@ function () {
 };
 
 function (): Generator {
-    $a = yield a();
-    $b = yield b();
+	$a = yield a();
+	$b = yield b();
 };
 
 function () {
@@ -101,20 +101,20 @@ function () {
 };
 
 function () {
-    yield 1;
-    yield 2 => 3;
-    yield 4;
+	yield 1;
+	yield 2 => 3;
+	yield 4;
 
-    if (true) {
+	if (true) {
 
-    }
+	}
 
-    yield from [1, 2];
-    yield from [3 => 4, 5 => 6];
-    yield 7;
-    yield from [8, 9];
+	yield from [1, 2];
+	yield from [3 => 4, 5 => 6];
+	yield 7;
+	yield from [8, 9];
 
-    return 10;
+	return 10;
 };
 
 function () {
@@ -144,19 +144,19 @@ function () {
 };
 
 function () {
-    $x += yield 1;
+	$x += yield 1;
 
-    run(
-        yield 1
-    );
+	run(
+		yield 1
+	);
 
-    run(yield 1);
+	run(yield 1);
 
-    while (yield 1) {
-    }
+	while (yield 1) {
+	}
 
-    return new Response(
-        1,
-        $this->decodePayload($endpoint, $httpResponse, yield $httpResponse->getBody())
-    );
+	return new Response(
+		1,
+		$this->decodePayload($endpoint, $httpResponse, yield $httpResponse->getBody())
+	);
 };

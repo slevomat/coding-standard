@@ -24,16 +24,16 @@ do {
 } while (true);
 function () {
 
-    for ($i = 0; $i < 10; $i++) {
-        if (true) {
+	for ($i = 0; $i < 10; $i++) {
+		if (true) {
 
-        }
+		}
 
-        // With line comment
-        if (false) {
+		// With line comment
+		if (false) {
 
-        }
-    }
+		}
+	}
 
 
 
@@ -41,56 +41,56 @@ function () {
 
 function ($values) {
 
-    foreach ($values as $value) {
+	foreach ($values as $value) {
 
 
-        /**
-         * With doccomment
-         */
-        if (true) {
+		/**
+		 * With doccomment
+		 */
+		if (true) {
 
-        }
+		}
 
-        /*
-         * With block comment
-         */
-        if (false) {
+		/*
+		 * With block comment
+		 */
+		if (false) {
 
-        }
-        try {
+		}
+		try {
 
-            switch ($value) {
-            }
-
-
-
-        } catch (Throwable $e) {
-            // Don't care
-        }
+			switch ($value) {
+			}
 
 
 
-    }
+		} catch (Throwable $e) {
+			// Don't care
+		}
 
 
 
-};
-
-function () {
-    doSomething(); // Do something
-    foreach ([] as $value) {
-
-    }
+	}
 
 
 
 };
 
 function () {
-    doSomething();
-    foreach ([] as $value) {
+	doSomething(); // Do something
+	foreach ([] as $value) {
 
-    } // Foreach
+	}
+
+
+
+};
+
+function () {
+	doSomething();
+	foreach ([] as $value) {
+
+	} // Foreach
 
 
 

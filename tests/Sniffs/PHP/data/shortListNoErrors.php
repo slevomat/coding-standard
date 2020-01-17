@@ -5,7 +5,7 @@
 class Bar
 {
 
-    public const LIST = 123;
+	public const LIST = 123;
 
 	public function list()
 	{

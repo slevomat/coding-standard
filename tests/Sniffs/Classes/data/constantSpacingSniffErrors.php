@@ -1,44 +1,44 @@
 <?php
 
 abstract class Foo {
-    /** @var string */
-    public const Foo = 'bar';
-    /** @var string */
-    const Bar = 'foo';
-    /**
-     * whatever
-     */
-    public static abstract function wow();
-    /**
-     * who cares
-     */
-    private function such()
-    {
-    }
+	/** @var string */
+	public const Foo = 'bar';
+	/** @var string */
+	const Bar = 'foo';
+	/**
+	 * whatever
+	 */
+	public static abstract function wow();
+	/**
+	 * who cares
+	 */
+	private function such()
+	{
+	}
 }
 
 abstract class Bar {
-    /** @var string */
-    public const Foo = 'bar';
+	/** @var string */
+	public const Foo = 'bar';
 
 
-    /** @var string */
-    const Bar = 'foo';
-
-
-
+	/** @var string */
+	const Bar = 'foo';
 
 
 
 
-    /**
-     * whatever
-     */
-    public static abstract function wow();
-    /**
-     * who cares
-     */
-    private function such()
-    {
-    }
+
+
+
+	/**
+	 * whatever
+	 */
+	public static abstract function wow();
+	/**
+	 * who cares
+	 */
+	private function such()
+	{
+	}
 }
