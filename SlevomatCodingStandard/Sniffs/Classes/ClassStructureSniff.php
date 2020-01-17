@@ -36,99 +36,99 @@ use const T_WHITESPACE;
 
 /**
  * This sniff ensures that the class/interface/trait has consistent order of its members.
- * You can adjust required order via $requiredOrder property. Set the same values to ignore certain stages order.
+ * You can adjust required order via $requiredOrder property. Set the same values to ignore certain groups order.
  */
 class ClassStructureSniff implements Sniff
 {
 
-	public const CODE_INVALID_STAGE_PLACEMENT = 'InvalidStagePlacement';
+	public const CODE_INVALID_GROUP_ORDER = 'InvalidGroupOrder';
 
-	public const STAGE_NONE = 0;
-	public const STAGE_USES = 10;
-	public const STAGE_PUBLIC_CONSTANTS = 20;
-	public const STAGE_PROTECTED_CONSTANTS = 30;
-	public const STAGE_PRIVATE_CONSTANTS = 40;
-	public const STAGE_PUBLIC_STATIC_PROPERTIES = 50;
-	public const STAGE_PROTECTED_STATIC_PROPERTIES = 60;
-	public const STAGE_PRIVATE_STATIC_PROPERTIES = 70;
-	public const STAGE_PUBLIC_PROPERTIES = 80;
-	public const STAGE_PROTECTED_PROPERTIES = 90;
-	public const STAGE_PRIVATE_PROPERTIES = 100;
-	public const STAGE_PUBLIC_STATIC_METHODS = 110;
-	public const STAGE_PROTECTED_STATIC_METHODS = 120;
-	public const STAGE_PRIVATE_STATIC_METHODS = 130;
-	public const STAGE_CONSTRUCTOR = 140;
-	public const STAGE_STATIC_CONSTRUCTORS = 150;
-	public const STAGE_DESTRUCTOR = 160;
-	public const STAGE_MAGIC_METHODS = 170;
-	public const STAGE_PUBLIC_METHODS = 180;
-	public const STAGE_PROTECTED_METHODS = 190;
-	public const STAGE_PRIVATE_METHODS = 200;
+	public const GROUP_NONE = 0;
+	public const GROUP_USES = 10;
+	public const GROUP_PUBLIC_CONSTANTS = 20;
+	public const GROUP_PROTECTED_CONSTANTS = 30;
+	public const GROUP_PRIVATE_CONSTANTS = 40;
+	public const GROUP_PUBLIC_STATIC_PROPERTIES = 50;
+	public const GROUP_PROTECTED_STATIC_PROPERTIES = 60;
+	public const GROUP_PRIVATE_STATIC_PROPERTIES = 70;
+	public const GROUP_PUBLIC_PROPERTIES = 80;
+	public const GROUP_PROTECTED_PROPERTIES = 90;
+	public const GROUP_PRIVATE_PROPERTIES = 100;
+	public const GROUP_PUBLIC_STATIC_METHODS = 110;
+	public const GROUP_PROTECTED_STATIC_METHODS = 120;
+	public const GROUP_PRIVATE_STATIC_METHODS = 130;
+	public const GROUP_CONSTRUCTOR = 140;
+	public const GROUP_STATIC_CONSTRUCTORS = 150;
+	public const GROUP_DESTRUCTOR = 160;
+	public const GROUP_MAGIC_METHODS = 170;
+	public const GROUP_PUBLIC_METHODS = 180;
+	public const GROUP_PROTECTED_METHODS = 190;
+	public const GROUP_PRIVATE_METHODS = 200;
 
 	private const SPECIAL_METHODS = [
-		'__construct' => self::STAGE_CONSTRUCTOR,
-		'__destruct' => self::STAGE_DESTRUCTOR,
-		'__call' => self::STAGE_MAGIC_METHODS,
-		'__callStatic' => self::STAGE_MAGIC_METHODS,
-		'__get' => self::STAGE_MAGIC_METHODS,
-		'__set' => self::STAGE_MAGIC_METHODS,
-		'__isset' => self::STAGE_MAGIC_METHODS,
-		'__unset' => self::STAGE_MAGIC_METHODS,
-		'__sleep' => self::STAGE_MAGIC_METHODS,
-		'__wakeup' => self::STAGE_MAGIC_METHODS,
-		'__toString' => self::STAGE_MAGIC_METHODS,
-		'__invoke' => self::STAGE_MAGIC_METHODS,
-		'__set_state' => self::STAGE_MAGIC_METHODS,
-		'__clone' => self::STAGE_MAGIC_METHODS,
-		'__debugInfo' => self::STAGE_MAGIC_METHODS,
+		'__construct' => self::GROUP_CONSTRUCTOR,
+		'__destruct' => self::GROUP_DESTRUCTOR,
+		'__call' => self::GROUP_MAGIC_METHODS,
+		'__callStatic' => self::GROUP_MAGIC_METHODS,
+		'__get' => self::GROUP_MAGIC_METHODS,
+		'__set' => self::GROUP_MAGIC_METHODS,
+		'__isset' => self::GROUP_MAGIC_METHODS,
+		'__unset' => self::GROUP_MAGIC_METHODS,
+		'__sleep' => self::GROUP_MAGIC_METHODS,
+		'__wakeup' => self::GROUP_MAGIC_METHODS,
+		'__toString' => self::GROUP_MAGIC_METHODS,
+		'__invoke' => self::GROUP_MAGIC_METHODS,
+		'__set_state' => self::GROUP_MAGIC_METHODS,
+		'__clone' => self::GROUP_MAGIC_METHODS,
+		'__debugInfo' => self::GROUP_MAGIC_METHODS,
 	];
 
-	private const STAGE_TOKEN_NAMES = [
-		self::STAGE_USES => 'use',
-		self::STAGE_PUBLIC_CONSTANTS => 'public constant',
-		self::STAGE_PROTECTED_CONSTANTS => 'protected constant',
-		self::STAGE_PRIVATE_CONSTANTS => 'private constant',
-		self::STAGE_PUBLIC_STATIC_PROPERTIES => 'public static property',
-		self::STAGE_PROTECTED_STATIC_PROPERTIES => 'protected static property',
-		self::STAGE_PRIVATE_STATIC_PROPERTIES => 'private static property',
-		self::STAGE_PUBLIC_PROPERTIES => 'public property',
-		self::STAGE_PROTECTED_PROPERTIES => 'protected property',
-		self::STAGE_PRIVATE_PROPERTIES => 'private property',
-		self::STAGE_PUBLIC_STATIC_METHODS => 'public static method',
-		self::STAGE_PROTECTED_STATIC_METHODS => 'protected static method',
-		self::STAGE_PRIVATE_STATIC_METHODS => 'private static method',
-		self::STAGE_CONSTRUCTOR => 'constructor',
-		self::STAGE_STATIC_CONSTRUCTORS => 'static constructor',
-		self::STAGE_DESTRUCTOR => 'destructor',
-		self::STAGE_MAGIC_METHODS => 'magic method',
-		self::STAGE_PUBLIC_METHODS => 'public method',
-		self::STAGE_PROTECTED_METHODS => 'protected method',
-		self::STAGE_PRIVATE_METHODS => 'private method',
+	private const GROUP_TOKEN_NAMES = [
+		self::GROUP_USES => 'use',
+		self::GROUP_PUBLIC_CONSTANTS => 'public constant',
+		self::GROUP_PROTECTED_CONSTANTS => 'protected constant',
+		self::GROUP_PRIVATE_CONSTANTS => 'private constant',
+		self::GROUP_PUBLIC_STATIC_PROPERTIES => 'public static property',
+		self::GROUP_PROTECTED_STATIC_PROPERTIES => 'protected static property',
+		self::GROUP_PRIVATE_STATIC_PROPERTIES => 'private static property',
+		self::GROUP_PUBLIC_PROPERTIES => 'public property',
+		self::GROUP_PROTECTED_PROPERTIES => 'protected property',
+		self::GROUP_PRIVATE_PROPERTIES => 'private property',
+		self::GROUP_PUBLIC_STATIC_METHODS => 'public static method',
+		self::GROUP_PROTECTED_STATIC_METHODS => 'protected static method',
+		self::GROUP_PRIVATE_STATIC_METHODS => 'private static method',
+		self::GROUP_CONSTRUCTOR => 'constructor',
+		self::GROUP_STATIC_CONSTRUCTORS => 'static constructor',
+		self::GROUP_DESTRUCTOR => 'destructor',
+		self::GROUP_MAGIC_METHODS => 'magic method',
+		self::GROUP_PUBLIC_METHODS => 'public method',
+		self::GROUP_PROTECTED_METHODS => 'protected method',
+		self::GROUP_PRIVATE_METHODS => 'private method',
 	];
 
 	/** @var int[] */
 	public $requiredOrder = [
-		self::STAGE_NONE => 0,
-		self::STAGE_USES => 10,
-		self::STAGE_PUBLIC_CONSTANTS => 20,
-		self::STAGE_PROTECTED_CONSTANTS => 30,
-		self::STAGE_PRIVATE_CONSTANTS => 40,
-		self::STAGE_PUBLIC_STATIC_PROPERTIES => 50,
-		self::STAGE_PROTECTED_STATIC_PROPERTIES => 60,
-		self::STAGE_PRIVATE_STATIC_PROPERTIES => 70,
-		self::STAGE_PUBLIC_PROPERTIES => 80,
-		self::STAGE_PROTECTED_PROPERTIES => 90,
-		self::STAGE_PRIVATE_PROPERTIES => 100,
-		self::STAGE_PUBLIC_STATIC_METHODS => 110,
-		self::STAGE_PROTECTED_STATIC_METHODS => 120,
-		self::STAGE_PRIVATE_STATIC_METHODS => 130,
-		self::STAGE_CONSTRUCTOR => 140,
-		self::STAGE_STATIC_CONSTRUCTORS => 150,
-		self::STAGE_DESTRUCTOR => 160,
-		self::STAGE_MAGIC_METHODS => 170,
-		self::STAGE_PUBLIC_METHODS => 180,
-		self::STAGE_PROTECTED_METHODS => 190,
-		self::STAGE_PRIVATE_METHODS => 200,
+		self::GROUP_NONE => 0,
+		self::GROUP_USES => 10,
+		self::GROUP_PUBLIC_CONSTANTS => 20,
+		self::GROUP_PROTECTED_CONSTANTS => 30,
+		self::GROUP_PRIVATE_CONSTANTS => 40,
+		self::GROUP_PUBLIC_STATIC_PROPERTIES => 50,
+		self::GROUP_PROTECTED_STATIC_PROPERTIES => 60,
+		self::GROUP_PRIVATE_STATIC_PROPERTIES => 70,
+		self::GROUP_PUBLIC_PROPERTIES => 80,
+		self::GROUP_PROTECTED_PROPERTIES => 90,
+		self::GROUP_PRIVATE_PROPERTIES => 100,
+		self::GROUP_PUBLIC_STATIC_METHODS => 110,
+		self::GROUP_PROTECTED_STATIC_METHODS => 120,
+		self::GROUP_PRIVATE_STATIC_METHODS => 130,
+		self::GROUP_CONSTRUCTOR => 140,
+		self::GROUP_STATIC_CONSTRUCTORS => 150,
+		self::GROUP_DESTRUCTOR => 160,
+		self::GROUP_MAGIC_METHODS => 170,
+		self::GROUP_PUBLIC_METHODS => 180,
+		self::GROUP_PROTECTED_METHODS => 190,
+		self::GROUP_PRIVATE_METHODS => 200,
 	];
 
 	/**
@@ -150,46 +150,46 @@ class ClassStructureSniff implements Sniff
 		/** @var array{scope_closer: int, level: int} $rootScopeToken */
 		$rootScopeToken = $tokens[$pointer];
 
-		$stageLastMemberPointer = $rootScopeToken['scope_opener'];
-		$expectedStage = self::STAGE_NONE;
-		$stagesFirstMembers = [];
+		$groupLastMemberPointer = $rootScopeToken['scope_opener'];
+		$expectedGroup = self::GROUP_NONE;
+		$groupsFirstMembers = [];
 		while (true) {
-			$nextStage = $this->findNextStage($file, $stageLastMemberPointer, $rootScopeToken);
-			if ($nextStage === null) {
+			$nextGroup = $this->findNextGroup($file, $groupLastMemberPointer, $rootScopeToken);
+			if ($nextGroup === null) {
 				break;
 			}
 
-			[$stageFirstMemberPointer, $stageLastMemberPointer, $stage] = $nextStage;
+			[$groupFirstMemberPointer, $groupLastMemberPointer, $group] = $nextGroup;
 
-			if ($this->requiredOrder[$stage] >= $this->requiredOrder[$expectedStage]) {
-				$stagesFirstMembers[$stage] = $stageFirstMemberPointer;
-				$expectedStage = $stage;
+			if ($this->requiredOrder[$group] >= $this->requiredOrder[$expectedGroup]) {
+				$groupsFirstMembers[$group] = $groupFirstMemberPointer;
+				$expectedGroup = $group;
 
 				continue;
 			}
 
 			$fix = $file->addFixableError(
-				sprintf('The placement of %s stage is invalid.', self::STAGE_TOKEN_NAMES[$stage]),
-				$stageFirstMemberPointer,
-				self::CODE_INVALID_STAGE_PLACEMENT
+				sprintf('The placement of "%s" group is invalid.', self::GROUP_TOKEN_NAMES[$group]),
+				$groupFirstMemberPointer,
+				self::CODE_INVALID_GROUP_ORDER
 			);
 			if (!$fix) {
 				continue;
 			}
 
-			foreach ($stagesFirstMembers as $memberStage => $firstMemberPointer) {
-				if ($this->requiredOrder[$memberStage] <= $this->requiredOrder[$stage]) {
+			foreach ($groupsFirstMembers as $memberGroup => $firstMemberPointer) {
+				if ($this->requiredOrder[$memberGroup] <= $this->requiredOrder[$group]) {
 					continue;
 				}
 
-				$this->fixInvalidStagePlacement(
+				$this->fixInvalidGroupPlacement(
 					$file,
-					$stageFirstMemberPointer,
-					$stageLastMemberPointer,
+					$groupFirstMemberPointer,
+					$groupLastMemberPointer,
 					$firstMemberPointer
 				);
 
-				return $pointer - 1; // run the sniff again to fix the rest of the stages
+				return $pointer - 1; // run the sniff again to fix the rest of the groups
 			}
 		}
 
@@ -202,16 +202,16 @@ class ClassStructureSniff implements Sniff
 	 * @param array{scope_closer: int, level: int} $rootScopeToken
 	 * @return array{int, int, int}|null
 	 */
-	private function findNextStage(File $file, int $pointer, array $rootScopeToken): ?array
+	private function findNextGroup(File $file, int $pointer, array $rootScopeToken): ?array
 	{
 		$tokens = $file->getTokens();
-		$stageTokenTypes = [T_USE, T_CONST, T_VAR, T_STATIC, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FUNCTION];
+		$groupTokenTypes = [T_USE, T_CONST, T_VAR, T_STATIC, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FUNCTION];
 
 		$currentTokenPointer = $pointer;
 		while (true) {
 			$currentTokenPointer = TokenHelper::findNext(
 				$file,
-				$stageTokenTypes,
+				$groupTokenTypes,
 				$currentToken['scope_closer'] ?? $currentTokenPointer + 1,
 				$rootScopeToken['scope_closer']
 			);
@@ -224,49 +224,49 @@ class ClassStructureSniff implements Sniff
 				continue;
 			}
 
-			$stage = $this->getStageForToken($file, $currentTokenPointer);
-			if ($stage === null) {
+			$group = $this->getGroupForToken($file, $currentTokenPointer);
+			if ($group === null) {
 				continue;
 			}
 
-			if (!isset($currentStage)) {
-				$currentStage = $stage;
-				$stageFirstMemberPointer = $currentTokenPointer;
+			if (!isset($currentGroup)) {
+				$currentGroup = $group;
+				$groupFirstMemberPointer = $currentTokenPointer;
 			}
 
-			if ($stage !== $currentStage) {
+			if ($group !== $currentGroup) {
 				break;
 			}
 
-			$stageLastMemberPointer = $currentTokenPointer;
+			$groupLastMemberPointer = $currentTokenPointer;
 		}
 
-		if (!isset($currentStage)) {
+		if (!isset($currentGroup)) {
 			return null;
 		}
 
-		assert(isset($stageFirstMemberPointer) === true);
-		assert(isset($stageLastMemberPointer) === true);
+		assert(isset($groupFirstMemberPointer) === true);
+		assert(isset($groupLastMemberPointer) === true);
 
-		return [$stageFirstMemberPointer, $stageLastMemberPointer, $currentStage];
+		return [$groupFirstMemberPointer, $groupLastMemberPointer, $currentGroup];
 	}
 
-	private function getStageForToken(File $file, int $pointer): ?int
+	private function getGroupForToken(File $file, int $pointer): ?int
 	{
 		$tokens = $file->getTokens();
 
 		switch ($tokens[$pointer]['code']) {
 			case T_USE:
-				return self::STAGE_USES;
+				return self::GROUP_USES;
 			case T_CONST:
 				switch ($this->getVisibilityForToken($file, $pointer)) {
 					case T_PUBLIC:
-						return self::STAGE_PUBLIC_CONSTANTS;
+						return self::GROUP_PUBLIC_CONSTANTS;
 					case T_PROTECTED:
-						return self::STAGE_PROTECTED_CONSTANTS;
+						return self::GROUP_PROTECTED_CONSTANTS;
 				}
 
-				return self::STAGE_PRIVATE_CONSTANTS;
+				return self::GROUP_PRIVATE_CONSTANTS;
 			case T_FUNCTION:
 				$name = strtolower($tokens[$file->findNext(T_STRING, $pointer + 1)]['content']);
 				if (array_key_exists($name, self::SPECIAL_METHODS)) {
@@ -275,17 +275,17 @@ class ClassStructureSniff implements Sniff
 
 				$isStatic = $this->isMemberStatic($file, $pointer);
 				if ($this->isStaticConstructor($file, $pointer, $isStatic)) {
-					return self::STAGE_STATIC_CONSTRUCTORS;
+					return self::GROUP_STATIC_CONSTRUCTORS;
 				}
 
 				switch ($this->getVisibilityForToken($file, $pointer)) {
 					case T_PUBLIC:
-						return $isStatic ? self::STAGE_PUBLIC_STATIC_METHODS : self::STAGE_PUBLIC_METHODS;
+						return $isStatic ? self::GROUP_PUBLIC_STATIC_METHODS : self::GROUP_PUBLIC_METHODS;
 					case T_PROTECTED:
-						return $isStatic ? self::STAGE_PROTECTED_STATIC_METHODS : self::STAGE_PROTECTED_METHODS;
+						return $isStatic ? self::GROUP_PROTECTED_STATIC_METHODS : self::GROUP_PROTECTED_METHODS;
 				}
 
-				return $isStatic ? self::STAGE_PRIVATE_STATIC_METHODS : self::STAGE_PRIVATE_METHODS;
+				return $isStatic ? self::GROUP_PRIVATE_STATIC_METHODS : self::GROUP_PRIVATE_METHODS;
 			default:
 				$nextPointer = TokenHelper::findNextEffective($file, $pointer + 1);
 				if ($tokens[$nextPointer]['code'] !== T_VARIABLE) {
@@ -302,13 +302,13 @@ class ClassStructureSniff implements Sniff
 
 				switch ($visibility) {
 					case T_PUBLIC:
-						return $isStatic ? self::STAGE_PUBLIC_STATIC_PROPERTIES : self::STAGE_PUBLIC_PROPERTIES;
+						return $isStatic ? self::GROUP_PUBLIC_STATIC_PROPERTIES : self::GROUP_PUBLIC_PROPERTIES;
 					case T_PROTECTED:
 						return $isStatic
-							? self::STAGE_PROTECTED_STATIC_PROPERTIES
-							: self::STAGE_PROTECTED_PROPERTIES;
+							? self::GROUP_PROTECTED_STATIC_PROPERTIES
+							: self::GROUP_PROTECTED_PROPERTIES;
 					default:
-						return $isStatic ? self::STAGE_PRIVATE_STATIC_PROPERTIES : self::STAGE_PRIVATE_PROPERTIES;
+						return $isStatic ? self::GROUP_PRIVATE_STATIC_PROPERTIES : self::GROUP_PRIVATE_PROPERTIES;
 				}
 		}
 	}
@@ -368,34 +368,34 @@ class ClassStructureSniff implements Sniff
 		return ClassHelper::getName($file, $classPointer);
 	}
 
-	private function fixInvalidStagePlacement(
+	private function fixInvalidGroupPlacement(
 		File $file,
-		int $stageFirstMemberPointer,
-		int $stageLastMemberPointer,
-		int $nextStageMemberPointer
+		int $groupFirstMemberPointer,
+		int $groupLastMemberPointer,
+		int $nextGroupMemberPointer
 	): void
 	{
 		$tokens = $file->getTokens();
 
-		$previousMemberEndPointer = $this->findPreviousMemberEndPointer($file, $stageFirstMemberPointer);
+		$previousMemberEndPointer = $this->findPreviousMemberEndPointer($file, $groupFirstMemberPointer);
 
-		$stageStartPointer = $this->findStageStartPointer($file, $stageFirstMemberPointer, $previousMemberEndPointer);
-		$stageEndPointer = $this->findStageEndPointer($file, $stageLastMemberPointer);
+		$groupStartPointer = $this->findGroupStartPointer($file, $groupFirstMemberPointer, $previousMemberEndPointer);
+		$groupEndPointer = $this->findGroupEndPointer($file, $groupLastMemberPointer);
 
-		$nextStageMemberStartPointer = $this->findStageStartPointer($file, $nextStageMemberPointer);
+		$nextGroupMemberStartPointer = $this->findGroupStartPointer($file, $nextGroupMemberPointer);
 
 		$file->fixer->beginChangeset();
 
 		$content = '';
-		for ($i = $stageStartPointer; $i <= $stageEndPointer; $i++) {
+		for ($i = $groupStartPointer; $i <= $groupEndPointer; $i++) {
 			$content .= $tokens[$i]['content'];
 			$file->fixer->replaceToken($i, '');
 		}
 
-		$linesBetween = $this->removeBlankLinesAfterMember($file, $previousMemberEndPointer, $stageStartPointer);
+		$linesBetween = $this->removeBlankLinesAfterMember($file, $previousMemberEndPointer, $groupStartPointer);
 
 		$newLines = str_repeat($file->eolChar, $linesBetween);
-		$file->fixer->addContentBefore($nextStageMemberStartPointer, $content . $newLines);
+		$file->fixer->addContentBefore($nextGroupMemberStartPointer, $content . $newLines);
 
 		$file->fixer->endChangeset();
 	}
@@ -409,7 +409,7 @@ class ClassStructureSniff implements Sniff
 		return $previousMemberEndPointer;
 	}
 
-	private function findStageStartPointer(File $file, int $memberPointer, ?int $previousMemberEndPointer = null): int
+	private function findGroupStartPointer(File $file, int $memberPointer, ?int $previousMemberEndPointer = null): int
 	{
 		$startPointer = DocCommentHelper::findDocCommentOpenToken($file, $memberPointer - 1);
 		if ($startPointer === null) {
@@ -426,7 +426,7 @@ class ClassStructureSniff implements Sniff
 		return (int) $file->findFirstOnLine($types, $startPointer, true);
 	}
 
-	private function findStageEndPointer(File $file, int $memberPointer): int
+	private function findGroupEndPointer(File $file, int $memberPointer): int
 	{
 		$tokens = $file->getTokens();
 

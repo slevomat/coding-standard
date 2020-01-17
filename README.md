@@ -101,7 +101,7 @@ Checks that class/trait/interface members are in the correct order.
 
 Sniff provides the following settings:
 
-* `$requiredOrder`: map of member types to stage priority (order). Set multiple member types to same number to not differentiate between them.
+* `$requiredOrder`: map of member types to group priority (order). Set multiple member types to same number to not differentiate between them.
 
 #### SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants 🔧
 
