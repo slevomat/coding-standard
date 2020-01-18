@@ -374,13 +374,13 @@ Sniff provides the following settings:
 * `$minLinesCountBeforeWithoutComment`: minimum number of lines before property without a doc comment
 * `$maxLinesCountBeforeWithoutComment`: maximum number of lines before property without a doc comment
 
-#### SlevomatCodingStandard.Classes.RequireSingleLineMethodDeclaration 🔧
+#### SlevomatCodingStandard.Classes.RequireSingleLineMethodSignature 🔧
 
-Enforces method declaration to be on a single line if it fits on it (or all the time; depends on settings).
+Enforces method signature to be on a single line.
 
 Sniff provides the following settings:
 
-* `maxLineLength`: specifies max allowed line length; if declaration would fit on it, it's enforced. Use 0 value to enforce for all methods, regardless of length.
+* `maxLineLength`: specifies max allowed line length. If signature would fit on it, it's enforced. Use 0 value to enforce for all methods, regardless of length.
 
 #### SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming
 

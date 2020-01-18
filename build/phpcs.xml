@@ -63,7 +63,7 @@
 	<rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference"/>
 	<rule ref="SlevomatCodingStandard.Classes.ParentCallSpacing"/>
 	<rule ref="SlevomatCodingStandard.Classes.PropertySpacing"/>
-	<rule ref="SlevomatCodingStandard.Classes.RequireSingleLineMethodDeclaration"/>
+	<rule ref="SlevomatCodingStandard.Classes.RequireSingleLineMethodSignature"/>
 	<rule ref="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming">
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Classes/AbstractPropertyAndConstantSpacing.php</exclude-pattern>
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/ControlStructures/AbstractControlStructureSpacing.php</exclude-pattern>
