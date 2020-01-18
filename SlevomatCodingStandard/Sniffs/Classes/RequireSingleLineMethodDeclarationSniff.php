@@ -41,21 +41,21 @@ class RequireSingleLineMethodDeclarationSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $file
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $pointer
 	 */
-	public function process(File $file, $pointer): void
+	public function process(File $phpcsFile, $pointer): void
 	{
-		if (!FunctionHelper::isMethod($file, $pointer)) {
+		if (!FunctionHelper::isMethod($phpcsFile, $pointer)) {
 			return;
 		}
 
-		$tokens = $file->getTokens();
+		$tokens = $phpcsFile->getTokens();
 
-		$lineStartPointer = $file->findFirstOnLine(T_OPEN_TAG, $pointer, true);
+		$lineStartPointer = $phpcsFile->findFirstOnLine(T_OPEN_TAG, $pointer, true);
 		assert(!is_bool($lineStartPointer));
 
-		$methodDeclarationEndPointer = $file->findNext([T_OPEN_CURLY_BRACKET, T_SEMICOLON], $pointer);
+		$methodDeclarationEndPointer = $phpcsFile->findNext([T_OPEN_CURLY_BRACKET, T_SEMICOLON], $pointer);
 		assert(is_int($methodDeclarationEndPointer));
 
 		$declarationEndLine = $tokens[$methodDeclarationEndPointer]['line'];
@@ -68,8 +68,8 @@ class RequireSingleLineMethodDeclarationSniff implements Sniff
 			$singleLineMethodDeclarationEndPointer--;
 		}
 
-		$methodDeclaration = TokenHelper::getContent($file, $lineStartPointer, $singleLineMethodDeclarationEndPointer);
-		$methodDeclaration = preg_replace(sprintf('~%s[ \t]*~', $file->eolChar), ' ', $methodDeclaration);
+		$methodDeclaration = TokenHelper::getContent($phpcsFile, $lineStartPointer, $singleLineMethodDeclarationEndPointer);
+		$methodDeclaration = preg_replace(sprintf('~%s[ \t]*~', $phpcsFile->eolChar), ' ', $methodDeclaration);
 		assert(is_string($methodDeclaration));
 
 		$methodDeclaration = str_replace(['( ', ' )'], ['(', ')'], $methodDeclaration);
@@ -83,18 +83,18 @@ class RequireSingleLineMethodDeclarationSniff implements Sniff
 			return;
 		}
 
-		$error = sprintf('Method "%s" can be placed on a single line.', FunctionHelper::getName($file, $pointer));
-		$fix = $file->addFixableError($error, $pointer, self::CODE_UNNECESSARY_MULTI_LINE_METHOD);
+		$error = sprintf('Method "%s" can be placed on a single line.', FunctionHelper::getName($phpcsFile, $pointer));
+		$fix = $phpcsFile->addFixableError($error, $pointer, self::CODE_UNNECESSARY_MULTI_LINE_METHOD);
 		if (!$fix) {
 			return;
 		}
 
 		$whitespaceBeforeMethod = $tokens[$lineStartPointer]['content'];
 
-		$file->fixer->beginChangeset();
+		$phpcsFile->fixer->beginChangeset();
 
 		for ($i = $lineStartPointer; $i <= $methodDeclarationEndPointer; $i++) {
-			$file->fixer->replaceToken($i, '');
+			$phpcsFile->fixer->replaceToken($i, '');
 		}
 
 		$replacement = $methodDeclaration;
@@ -102,9 +102,9 @@ class RequireSingleLineMethodDeclarationSniff implements Sniff
 			$replacement = sprintf("%s\n%s{", $methodDeclaration, $whitespaceBeforeMethod);
 		}
 
-		$file->fixer->replaceToken($lineStartPointer, $replacement);
+		$phpcsFile->fixer->replaceToken($lineStartPointer, $replacement);
 
-		$file->fixer->endChangeset();
+		$phpcsFile->fixer->endChangeset();
 	}
 
 }

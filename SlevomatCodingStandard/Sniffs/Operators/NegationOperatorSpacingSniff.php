@@ -39,14 +39,14 @@ class NegationOperatorSpacingSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $file
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $pointer
 	 */
-	public function process(File $file, $pointer): void
+	public function process(File $phpcsFile, $pointer): void
 	{
-		$tokens = $file->getTokens();
+		$tokens = $phpcsFile->getTokens();
 
-		$previousEffective = TokenHelper::findPreviousEffective($file, $pointer - 1);
+		$previousEffective = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
 
 		$possibleOperandTypes = [
 			T_CONSTANT_ENCAPSED_STRING,
@@ -72,7 +72,7 @@ class NegationOperatorSpacingSniff implements Sniff
 			return;
 		}
 
-		$fix = $file->addFixableError(
+		$fix = $phpcsFile->addFixableError(
 			sprintf('Expected exactly %d space after "%s", %d found.', $this->spacesCount, $tokens[$pointer]['content'], $numberOfSpaces),
 			$pointer,
 			self::CODE_INVALID_SPACE_AFTER_MINUS
@@ -83,12 +83,12 @@ class NegationOperatorSpacingSniff implements Sniff
 		}
 
 		if ($this->spacesCount > $numberOfSpaces) {
-			$file->fixer->addContent($pointer, ' ');
+			$phpcsFile->fixer->addContent($pointer, ' ');
 
 			return;
 		}
 
-		$file->fixer->replaceToken($whitespacePointer, '');
+		$phpcsFile->fixer->replaceToken($whitespacePointer, '');
 	}
 
 }

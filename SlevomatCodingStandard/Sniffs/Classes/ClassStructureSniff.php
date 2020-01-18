@@ -98,13 +98,13 @@ class ClassStructureSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $file
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $pointer
 	 * @return int
 	 */
-	public function process(File $file, $pointer): int
+	public function process(File $phpcsFile, $pointer): int
 	{
-		$tokens = $file->getTokens();
+		$tokens = $phpcsFile->getTokens();
 		/** @var array{scope_closer: int, level: int} $rootScopeToken */
 		$rootScopeToken = $tokens[$pointer];
 
@@ -114,7 +114,7 @@ class ClassStructureSniff implements Sniff
 		$expectedGroup = null;
 		$groupsFirstMembers = [];
 		while (true) {
-			$nextGroup = $this->findNextGroup($file, $groupLastMemberPointer, $rootScopeToken);
+			$nextGroup = $this->findNextGroup($phpcsFile, $groupLastMemberPointer, $rootScopeToken);
 			if ($nextGroup === null) {
 				break;
 			}
@@ -128,7 +128,7 @@ class ClassStructureSniff implements Sniff
 				continue;
 			}
 
-			$fix = $file->addFixableError(
+			$fix = $phpcsFile->addFixableError(
 				sprintf('The placement of "%s" group is invalid.', $group),
 				$groupFirstMemberPointer,
 				self::CODE_INCORRECT_GROUP_ORDER
@@ -143,7 +143,7 @@ class ClassStructureSniff implements Sniff
 				}
 
 				$this->fixIncorrectGroupOrder(
-					$file,
+					$phpcsFile,
 					$groupFirstMemberPointer,
 					$groupLastMemberPointer,
 					$firstMemberPointer
@@ -157,20 +157,20 @@ class ClassStructureSniff implements Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $file
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $pointer
 	 * @param array{scope_closer: int, level: int} $rootScopeToken
 	 * @return array{int, int, string}|null
 	 */
-	private function findNextGroup(File $file, int $pointer, array $rootScopeToken): ?array
+	private function findNextGroup(File $phpcsFile, int $pointer, array $rootScopeToken): ?array
 	{
-		$tokens = $file->getTokens();
+		$tokens = $phpcsFile->getTokens();
 		$groupTokenTypes = [T_USE, T_CONST, T_VARIABLE, T_FUNCTION];
 
 		$currentTokenPointer = $pointer;
 		while (true) {
 			$currentTokenPointer = TokenHelper::findNext(
-				$file,
+				$phpcsFile,
 				$groupTokenTypes,
 				$currentToken['scope_closer'] ?? $currentTokenPointer + 1,
 				$rootScopeToken['scope_closer']
@@ -181,7 +181,7 @@ class ClassStructureSniff implements Sniff
 
 			$currentToken = $tokens[$currentTokenPointer];
 
-			if ($currentToken['code'] === T_VARIABLE && !PropertyHelper::isProperty($file, $currentTokenPointer)) {
+			if ($currentToken['code'] === T_VARIABLE && !PropertyHelper::isProperty($phpcsFile, $currentTokenPointer)) {
 				continue;
 			}
 
@@ -189,7 +189,7 @@ class ClassStructureSniff implements Sniff
 				continue;
 			}
 
-			$group = $this->getGroupForToken($file, $currentTokenPointer);
+			$group = $this->getGroupForToken($phpcsFile, $currentTokenPointer);
 
 			if (!isset($currentGroup)) {
 				$currentGroup = $group;
@@ -213,15 +213,15 @@ class ClassStructureSniff implements Sniff
 		return [$groupFirstMemberPointer, $groupLastMemberPointer, $currentGroup];
 	}
 
-	private function getGroupForToken(File $file, int $pointer): string
+	private function getGroupForToken(File $phpcsFile, int $pointer): string
 	{
-		$tokens = $file->getTokens();
+		$tokens = $phpcsFile->getTokens();
 
 		switch ($tokens[$pointer]['code']) {
 			case T_USE:
 				return self::GROUP_USES;
 			case T_CONST:
-				switch ($this->getVisibilityForToken($file, $pointer)) {
+				switch ($this->getVisibilityForToken($phpcsFile, $pointer)) {
 					case T_PUBLIC:
 						return self::GROUP_PUBLIC_CONSTANTS;
 					case T_PROTECTED:
@@ -230,20 +230,20 @@ class ClassStructureSniff implements Sniff
 
 				return self::GROUP_PRIVATE_CONSTANTS;
 			case T_FUNCTION:
-				$name = strtolower(FunctionHelper::getName($file, $pointer));
+				$name = strtolower(FunctionHelper::getName($phpcsFile, $pointer));
 				if (array_key_exists($name, self::SPECIAL_METHODS)) {
 					return self::SPECIAL_METHODS[$name];
 				}
 
-				$visibility = $this->getVisibilityForToken($file, $pointer);
+				$visibility = $this->getVisibilityForToken($phpcsFile, $pointer);
 
-				if ($this->isFunctionAbstract($file, $pointer)) {
+				if ($this->isFunctionAbstract($phpcsFile, $pointer)) {
 					return $visibility === T_PUBLIC ? self::GROUP_PUBLIC_ABSTRACT_METHODS : self::GROUP_PROTECTED_ABSTRACT_METHODS;
 				}
 
-				$isStatic = $this->isMemberStatic($file, $pointer);
+				$isStatic = $this->isMemberStatic($phpcsFile, $pointer);
 
-				if ($isStatic && $this->isStaticConstructor($file, $pointer)) {
+				if ($isStatic && $this->isStaticConstructor($phpcsFile, $pointer)) {
 					return self::GROUP_STATIC_CONSTRUCTORS;
 				}
 
@@ -256,8 +256,8 @@ class ClassStructureSniff implements Sniff
 
 				return $isStatic ? self::GROUP_PRIVATE_STATIC_METHODS : self::GROUP_PRIVATE_METHODS;
 			default:
-				$isStatic = $this->isMemberStatic($file, $pointer);
-				$visibility = $this->getVisibilityForToken($file, $pointer);
+				$isStatic = $this->isMemberStatic($phpcsFile, $pointer);
+				$visibility = $this->getVisibilityForToken($phpcsFile, $pointer);
 
 				switch ($visibility) {
 					case T_PUBLIC:
@@ -272,12 +272,12 @@ class ClassStructureSniff implements Sniff
 		}
 	}
 
-	private function getVisibilityForToken(File $file, int $pointer): int
+	private function getVisibilityForToken(File $phpcsFile, int $pointer): int
 	{
-		$tokens = $file->getTokens();
+		$tokens = $phpcsFile->getTokens();
 
 		$previousPointer = TokenHelper::findPrevious(
-			$file,
+			$phpcsFile,
 			array_merge(Tokens::$scopeModifiers, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON]),
 			$pointer - 1
 		);
@@ -285,32 +285,32 @@ class ClassStructureSniff implements Sniff
 		return in_array($tokens[$previousPointer]['code'], Tokens::$scopeModifiers, true) ? $tokens[$previousPointer]['code'] : T_PUBLIC;
 	}
 
-	private function isMemberStatic(File $file, int $pointer): bool
+	private function isMemberStatic(File $phpcsFile, int $pointer): bool
 	{
-		$previousPointer = TokenHelper::findPrevious($file, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_STATIC], $pointer - 1);
-		return $file->getTokens()[$previousPointer]['code'] === T_STATIC;
+		$previousPointer = TokenHelper::findPrevious($phpcsFile, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_STATIC], $pointer - 1);
+		return $phpcsFile->getTokens()[$previousPointer]['code'] === T_STATIC;
 	}
 
-	private function isFunctionAbstract(File $file, int $pointer): bool
+	private function isFunctionAbstract(File $phpcsFile, int $pointer): bool
 	{
-		$previousPointer = TokenHelper::findPrevious($file, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_ABSTRACT], $pointer - 1);
-		return $file->getTokens()[$previousPointer]['code'] === T_ABSTRACT;
+		$previousPointer = TokenHelper::findPrevious($phpcsFile, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_ABSTRACT], $pointer - 1);
+		return $phpcsFile->getTokens()[$previousPointer]['code'] === T_ABSTRACT;
 	}
 
-	private function isStaticConstructor(File $file, int $pointer): bool
+	private function isStaticConstructor(File $phpcsFile, int $pointer): bool
 	{
-		if ($this->getVisibilityForToken($file, $pointer) !== T_PUBLIC) {
+		if ($this->getVisibilityForToken($phpcsFile, $pointer) !== T_PUBLIC) {
 			return false;
 		}
 
-		$parentClassName = $this->getParentClassName($file, $pointer);
+		$parentClassName = $this->getParentClassName($phpcsFile, $pointer);
 
-		$returnTypeHint = FunctionHelper::findReturnTypeHint($file, $pointer);
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $pointer);
 		if ($returnTypeHint !== null) {
 			return in_array($returnTypeHint->getTypeHint(), ['self', $parentClassName], true);
 		}
 
-		$returnAnnotation = FunctionHelper::findReturnAnnotation($file, $pointer);
+		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $pointer);
 		if ($returnAnnotation === null) {
 			return false;
 		}
@@ -318,12 +318,12 @@ class ClassStructureSniff implements Sniff
 		return in_array($returnAnnotation->getContent(), ['static', 'self', $parentClassName], true);
 	}
 
-	private function getParentClassName(File $file, int $pointer): string
+	private function getParentClassName(File $phpcsFile, int $pointer): string
 	{
-		$classPointer = TokenHelper::findPrevious($file, Tokens::$ooScopeTokens, $pointer - 1);
+		$classPointer = TokenHelper::findPrevious($phpcsFile, Tokens::$ooScopeTokens, $pointer - 1);
 		assert($classPointer !== null);
 
-		return ClassHelper::getName($file, $classPointer);
+		return ClassHelper::getName($phpcsFile, $classPointer);
 	}
 
 	private function fixIncorrectGroupOrder(
@@ -358,59 +358,59 @@ class ClassStructureSniff implements Sniff
 		$file->fixer->endChangeset();
 	}
 
-	private function findPreviousMemberEndPointer(File $file, int $memberPointer): int
+	private function findPreviousMemberEndPointer(File $phpcsFile, int $memberPointer): int
 	{
 		$endTypes = [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON];
-		$previousMemberEndPointer = TokenHelper::findPrevious($file, $endTypes, $memberPointer - 1);
+		$previousMemberEndPointer = TokenHelper::findPrevious($phpcsFile, $endTypes, $memberPointer - 1);
 		assert($previousMemberEndPointer !== null);
 
 		return $previousMemberEndPointer;
 	}
 
-	private function findGroupStartPointer(File $file, int $memberPointer, ?int $previousMemberEndPointer = null): int
+	private function findGroupStartPointer(File $phpcsFile, int $memberPointer, ?int $previousMemberEndPointer = null): int
 	{
-		$startPointer = DocCommentHelper::findDocCommentOpenToken($file, $memberPointer - 1);
+		$startPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $memberPointer - 1);
 		if ($startPointer === null) {
 			if ($previousMemberEndPointer === null) {
-				$previousMemberEndPointer = $this->findPreviousMemberEndPointer($file, $memberPointer);
+				$previousMemberEndPointer = $this->findPreviousMemberEndPointer($phpcsFile, $memberPointer);
 			}
 
-			$startPointer = TokenHelper::findNextEffective($file, $previousMemberEndPointer + 1);
+			$startPointer = TokenHelper::findNextEffective($phpcsFile, $previousMemberEndPointer + 1);
 			assert($startPointer !== null);
 		}
 
 		$types = [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON];
 
-		return (int) $file->findFirstOnLine($types, $startPointer, true);
+		return (int) $phpcsFile->findFirstOnLine($types, $startPointer, true);
 	}
 
-	private function findGroupEndPointer(File $file, int $memberPointer): int
+	private function findGroupEndPointer(File $phpcsFile, int $memberPointer): int
 	{
-		$tokens = $file->getTokens();
+		$tokens = $phpcsFile->getTokens();
 
-		if ($tokens[$memberPointer]['code'] === T_FUNCTION && !FunctionHelper::isAbstract($file, $memberPointer)) {
+		if ($tokens[$memberPointer]['code'] === T_FUNCTION && !FunctionHelper::isAbstract($phpcsFile, $memberPointer)) {
 			$endPointer = $tokens[$memberPointer]['scope_closer'];
 		} else {
-			$endPointer = TokenHelper::findNext($file, T_SEMICOLON, $memberPointer + 1);
+			$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $memberPointer + 1);
 			assert($endPointer !== null);
 		}
 
 		return $endPointer;
 	}
 
-	private function removeBlankLinesAfterMember(File $file, int $memberEndPointer, int $endPointer): int
+	private function removeBlankLinesAfterMember(File $phpcsFile, int $memberEndPointer, int $endPointer): int
 	{
 		$whitespacePointer = $memberEndPointer;
 
 		$linesToRemove = 0;
 		while (true) {
-			$whitespacePointer = TokenHelper::findNext($file, T_WHITESPACE, $whitespacePointer, $endPointer);
+			$whitespacePointer = TokenHelper::findNext($phpcsFile, T_WHITESPACE, $whitespacePointer, $endPointer);
 			if ($whitespacePointer === null) {
 				break;
 			}
 
 			$linesToRemove++;
-			$file->fixer->replaceToken($whitespacePointer, '');
+			$phpcsFile->fixer->replaceToken($whitespacePointer, '');
 			$whitespacePointer++;
 		}
 

@@ -53,26 +53,26 @@ class LineLengthSniff implements Sniff
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
-	 * @param \PHP_CodeSniffer\Files\File $file
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $pointer
 	 */
-	public function process(File $file, $pointer): int
+	public function process(File $phpcsFile, $pointer): int
 	{
-		$tokens = $file->getTokens();
-		for ($i = 0; $i < $file->numTokens; $i++) {
+		$tokens = $phpcsFile->getTokens();
+		for ($i = 0; $i < $phpcsFile->numTokens; $i++) {
 			if ($tokens[$i]['column'] !== 1) {
 				continue;
 			}
 
-			$this->checkLineLength($file, $i);
+			$this->checkLineLength($phpcsFile, $i);
 		}
 
-		return $file->numTokens + 1;
+		return $phpcsFile->numTokens + 1;
 	}
 
-	private function checkLineLength(File $file, int $pointer): void
+	private function checkLineLength(File $phpcsFile, int $pointer): void
 	{
-		$tokens = $file->getTokens();
+		$tokens = $phpcsFile->getTokens();
 
 		if ($tokens[$pointer]['column'] === 1 && $tokens[$pointer]['length'] === 0) {
 			// Blank line.
@@ -86,7 +86,7 @@ class LineLengthSniff implements Sniff
 			$nextLineStartPtr++;
 		}
 
-		if ($tokens[$pointer]['content'] === $file->eolChar) {
+		if ($tokens[$pointer]['content'] === $phpcsFile->eolChar) {
 			$pointer--;
 		}
 
@@ -123,16 +123,16 @@ class LineLengthSniff implements Sniff
 		}
 
 		if ($this->ignoreImports) {
-			$usePointer = $file->findPrevious(T_USE, $pointer - 1);
+			$usePointer = $phpcsFile->findPrevious(T_USE, $pointer - 1);
 			if (is_int($usePointer)
 				&& $tokens[$usePointer]['line'] === $tokens[$pointer]['line']
-				&& !UseStatementHelper::isTraitUse($file, $usePointer)) {
+				&& !UseStatementHelper::isTraitUse($phpcsFile, $usePointer)) {
 				return;
 			}
 		}
 
 		$error = sprintf('Line exceeds maximum limit of %s characters, contains %s characters.', $this->lineLengthLimit, $lineLength);
-		$file->addError(
+		$phpcsFile->addError(
 			$error,
 			$pointer,
 			self::CODE_LINE_TOO_LONG

@@ -37,35 +37,35 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 	/** @var int */
 	public $maxLinesCountBeforeWithoutComment = 1;
 
-	abstract protected function addError(File $file, int $pointer, int $min, int $max, int $found): bool;
+	abstract protected function addError(File $phpcsFile, int $pointer, int $min, int $max, int $found): bool;
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $file
+	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
 	 * @param int $pointer
 	 */
-	public function process(File $file, $pointer): int
+	public function process(File $phpcsFile, $pointer): int
 	{
-		$tokens = $file->getTokens();
+		$tokens = $phpcsFile->getTokens();
 
-		$nextFunctionPointer = TokenHelper::findNext($file, [T_FUNCTION, T_STRING, T_VARIABLE], $pointer + 1);
+		$nextFunctionPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_STRING, T_VARIABLE], $pointer + 1);
 		if ($nextFunctionPointer === null || $tokens[$nextFunctionPointer]['code'] === T_FUNCTION) {
 			return $nextFunctionPointer ?? $pointer;
 		}
 
-		$nextSemicolon = TokenHelper::findNext($file, [T_SEMICOLON], $pointer);
+		$nextSemicolon = TokenHelper::findNext($phpcsFile, [T_SEMICOLON], $pointer);
 		assert($nextSemicolon !== null);
 
-		$firstOnLinePointer = TokenHelper::findFirstTokenOnNextLine($file, $nextSemicolon);
+		$firstOnLinePointer = TokenHelper::findFirstTokenOnNextLine($phpcsFile, $nextSemicolon);
 		assert($firstOnLinePointer !== null);
 
-		$nextFunctionPointer = TokenHelper::findNext($file, [T_FUNCTION, T_STRING, T_VARIABLE], $firstOnLinePointer);
+		$nextFunctionPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_STRING, T_VARIABLE], $firstOnLinePointer);
 		if ($nextFunctionPointer === null || $tokens[$nextFunctionPointer]['code'] === T_FUNCTION || $tokens[$nextFunctionPointer]['conditions'] !== $tokens[$pointer]['conditions']) {
 			return $nextFunctionPointer ?? $firstOnLinePointer;
 		}
 
 		$types = [T_COMMENT, T_DOC_COMMENT_OPEN_TAG, T_CONST, T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE];
-		$nextPointer = TokenHelper::findNext($file, $types, $firstOnLinePointer);
+		$nextPointer = TokenHelper::findNext($phpcsFile, $types, $firstOnLinePointer);
 
 		$linesBetween = $tokens[$nextPointer]['line'] - $tokens[$nextSemicolon]['line'] - 1;
 		if (in_array($tokens[$nextPointer]['code'], [T_DOC_COMMENT_OPEN_TAG, T_COMMENT], true)) {
@@ -80,24 +80,24 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 			return $firstOnLinePointer;
 		}
 
-		$fix = $this->addError($file, $pointer, $minExpectedLines, $maxExpectedLines, $linesBetween);
+		$fix = $this->addError($phpcsFile, $pointer, $minExpectedLines, $maxExpectedLines, $linesBetween);
 		if (! $fix) {
 			return $firstOnLinePointer;
 		}
 
-		$file->fixer->beginChangeset();
+		$phpcsFile->fixer->beginChangeset();
 
 		if ($linesBetween > $maxExpectedLines) {
 			for ($i = $firstOnLinePointer; $i < $firstOnLinePointer + $maxExpectedLines; $i++) {
-				$file->fixer->replaceToken($i, '');
+				$phpcsFile->fixer->replaceToken($i, '');
 			}
 		} else {
 			for ($i = 0; $i < $minExpectedLines; $i++) {
-				$file->fixer->addNewlineBefore($firstOnLinePointer);
+				$phpcsFile->fixer->addNewlineBefore($firstOnLinePointer);
 			}
 		}
 
-		$file->fixer->endChangeset();
+		$phpcsFile->fixer->endChangeset();
 
 		return $firstOnLinePointer;
 	}

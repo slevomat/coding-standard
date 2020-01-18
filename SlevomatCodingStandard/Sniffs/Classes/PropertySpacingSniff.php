@@ -22,12 +22,12 @@ class PropertySpacingSniff extends AbstractPropertyAndConstantSpacing
 		return [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE];
 	}
 
-	protected function addError(File $file, int $pointer, int $min, int $max, int $found): bool
+	protected function addError(File $phpcsFile, int $pointer, int $min, int $max, int $found): bool
 	{
 		$message = 'Expected %d to %d blank lines after property, found %d.';
 		$error = sprintf($message, $min, $max, $found);
 
-		return $file->addFixableError($error, $pointer, self::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
+		return $phpcsFile->addFixableError($error, $pointer, self::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
 	}
 
 }
