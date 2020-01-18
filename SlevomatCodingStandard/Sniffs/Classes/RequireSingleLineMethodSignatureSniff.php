@@ -5,9 +5,9 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function assert;
-use function in_array;
 use function is_bool;
 use function is_int;
 use function is_string;
@@ -42,33 +42,29 @@ class RequireSingleLineMethodSignatureSniff implements Sniff
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param int $pointer
+	 * @param int $methodPointer
 	 */
-	public function process(File $phpcsFile, $pointer): void
+	public function process(File $phpcsFile, $methodPointer): void
 	{
-		if (!FunctionHelper::isMethod($phpcsFile, $pointer)) {
+		if (!FunctionHelper::isMethod($phpcsFile, $methodPointer)) {
 			return;
 		}
 
 		$tokens = $phpcsFile->getTokens();
 
-		$lineStartPointer = $phpcsFile->findFirstOnLine(T_OPEN_TAG, $pointer, true);
-		assert(!is_bool($lineStartPointer));
+		$signatureStartPointer = $phpcsFile->findFirstOnLine(T_OPEN_TAG, $methodPointer, true);
+		assert(!is_bool($signatureStartPointer));
 
-		$methodSignatureEndPointer = $phpcsFile->findNext([T_OPEN_CURLY_BRACKET, T_SEMICOLON], $pointer);
-		assert(is_int($methodSignatureEndPointer));
+		$pointerAfterSignatureEnd = TokenHelper::findNext($phpcsFile, [T_OPEN_CURLY_BRACKET, T_SEMICOLON], $methodPointer + 1);
 
-		$signatureEndLine = $tokens[$methodSignatureEndPointer]['line'];
-		if (in_array($tokens[$lineStartPointer]['line'], [$signatureEndLine, $signatureEndLine - 1], true)) {
+		$signatureEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointerAfterSignatureEnd - 1);
+		assert(is_int($signatureEndPointer));
+
+		if ($tokens[$signatureStartPointer]['line'] === $tokens[$signatureEndPointer]['line']) {
 			return;
 		}
 
-		$singleLineMethodSignatureEndPointer = $methodSignatureEndPointer;
-		if ($tokens[$methodSignatureEndPointer]['code'] === T_OPEN_CURLY_BRACKET) {
-			$singleLineMethodSignatureEndPointer--;
-		}
-
-		$methodSignature = TokenHelper::getContent($phpcsFile, $lineStartPointer, $singleLineMethodSignatureEndPointer);
+		$methodSignature = TokenHelper::getContent($phpcsFile, $signatureStartPointer, $signatureEndPointer);
 		$methodSignature = preg_replace(sprintf('~%s[ \t]*~', $phpcsFile->eolChar), ' ', $methodSignature);
 		assert(is_string($methodSignature));
 
@@ -79,30 +75,24 @@ class RequireSingleLineMethodSignatureSniff implements Sniff
 			return str_repeat('    ', strlen($matches[1]));
 		}, $methodSignature);
 
-		if ($this->maxLineLength !== 0 && strlen($methodSignatureWithoutTabIndetation) > $this->maxLineLength) {
+		$maxLineLength = SniffSettingsHelper::normalizeInteger($this->maxLineLength);
+		if ($maxLineLength !== 0 && strlen($methodSignatureWithoutTabIndetation) > SniffSettingsHelper::normalizeInteger($maxLineLength)) {
 			return;
 		}
 
-		$error = sprintf('Signature of method "%s" should be placed on a single line.', FunctionHelper::getName($phpcsFile, $pointer));
-		$fix = $phpcsFile->addFixableError($error, $pointer, self::CODE_REQUIRED_SINGLE_LINE_SIGNATURE);
+		$error = sprintf('Signature of method "%s" should be placed on a single line.', FunctionHelper::getName($phpcsFile, $methodPointer));
+		$fix = $phpcsFile->addFixableError($error, $methodPointer, self::CODE_REQUIRED_SINGLE_LINE_SIGNATURE);
 		if (!$fix) {
 			return;
 		}
 
-		$whitespaceBeforeMethod = $tokens[$lineStartPointer]['content'];
-
 		$phpcsFile->fixer->beginChangeset();
 
-		for ($i = $lineStartPointer; $i <= $methodSignatureEndPointer; $i++) {
+		$phpcsFile->fixer->replaceToken($signatureStartPointer, $methodSignature);
+
+		for ($i = $signatureStartPointer + 1; $i <= $signatureEndPointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
-
-		$replacement = $methodSignature;
-		if ($tokens[$methodSignatureEndPointer]['code'] === T_OPEN_CURLY_BRACKET) {
-			$replacement = sprintf("%s\n%s{", $methodSignature, $whitespaceBeforeMethod);
-		}
-
-		$phpcsFile->fixer->replaceToken($lineStartPointer, $replacement);
 
 		$phpcsFile->fixer->endChangeset();
 	}

@@ -45,7 +45,7 @@ interface B
 	);
 
 	public function multiLineMethodWithPrecisely121CharsOnSingleline(
-		$someHugeVariableNameJustToFillTheSpaceBlah
+		$someHugeVariableNameJustToFillTheSpaceBlaah
 	) : void;
 }
 
