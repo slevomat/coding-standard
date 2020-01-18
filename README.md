@@ -156,6 +156,10 @@ Disallows use of `empty()`.
 
 Requires use of null coalesce operator when possible.
 
+#### SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator 🔧
+
+Requires use of null coalesce equal operator when possible.
+
 #### SlevomatCodingStandard.ControlStructures.EarlyExit 🔧
 
 Requires use of early exit.
