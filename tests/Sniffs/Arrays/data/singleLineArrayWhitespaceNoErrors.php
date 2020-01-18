@@ -22,3 +22,5 @@ $array = [
 
 $array = [1, run([1, 2], 3)];
 $array = [1,];
+
+[$a, , $c] = $array;
