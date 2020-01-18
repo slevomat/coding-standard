@@ -14,14 +14,14 @@ class ConstantSpacingSniffTest extends TestCase
 
 	public function testErrors(): void
 	{
-		$file = self::checkFile(__DIR__ . '/data/constantSpacingSniffErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/constantSpacingSniffErrors.php');
 
-		self::assertSame(2, $file->getErrorCount());
+		self::assertSame(2, $report->getErrorCount());
 
-		self::assertSniffError($file, 5, ConstantSpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_CONSTANT);
-		self::assertSniffError($file, 22, ConstantSpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_CONSTANT);
+		self::assertSniffError($report, 5, ConstantSpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_CONSTANT);
+		self::assertSniffError($report, 22, ConstantSpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_CONSTANT);
 
-		self::assertAllFixedInFile($file);
+		self::assertAllFixedInFile($report);
 	}
 
 }

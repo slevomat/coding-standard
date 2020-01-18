@@ -14,28 +14,28 @@ class RequireOneLineDocCommentSniffTest extends TestCase
 
 	public function testErrors(): void
 	{
-		$file = self::checkFile(__DIR__ . '/data/oneLineDocCommentSniffErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/oneLineDocCommentSniffErrors.php');
 
-		self::assertSame(15, $file->getErrorCount());
+		self::assertSame(15, $report->getErrorCount());
 
-		self::assertSniffError($file, 6, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
-		self::assertSniffError($file, 11, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
-		self::assertSniffError($file, 16, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
-		self::assertSniffError($file, 21, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
-		self::assertSniffError($file, 26, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
-		self::assertSniffError($file, 32, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
-		self::assertSniffError($file, 38, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
-		self::assertSniffError($file, 46, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
-		self::assertSniffError($file, 50, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
-		self::assertSniffError($file, 54, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
+		self::assertSniffError($report, 6, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
+		self::assertSniffError($report, 11, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
+		self::assertSniffError($report, 16, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
+		self::assertSniffError($report, 21, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
+		self::assertSniffError($report, 26, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
+		self::assertSniffError($report, 32, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
+		self::assertSniffError($report, 38, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
+		self::assertSniffError($report, 46, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
+		self::assertSniffError($report, 50, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
+		self::assertSniffError($report, 54, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
 
-		self::assertSniffError($file, 61, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
-		self::assertSniffError($file, 66, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
-		self::assertSniffError($file, 71, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
-		self::assertSniffError($file, 76, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
-		self::assertSniffError($file, 81, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
+		self::assertSniffError($report, 61, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
+		self::assertSniffError($report, 66, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
+		self::assertSniffError($report, 71, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
+		self::assertSniffError($report, 76, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
+		self::assertSniffError($report, 81, RequireOneLineDocCommentSniff::CODE_MULTI_LINE_DOC_COMMENT);
 
-		self::assertAllFixedInFile($file);
+		self::assertAllFixedInFile($report);
 	}
 
 }

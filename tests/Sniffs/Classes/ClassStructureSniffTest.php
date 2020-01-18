@@ -27,76 +27,76 @@ class ClassStructureSniffTest extends TestCase
 
 	public function testErrors(): void
 	{
-		$file = self::checkFile(__DIR__ . '/data/classStructureSniffErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/classStructureSniffErrors.php');
 
-		self::assertSame(23, $file->getErrorCount());
+		self::assertSame(23, $report->getErrorCount());
 
-		self::assertSniffError($file, 6, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 12, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 18, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 24, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 33, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 44, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 55, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 66, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 77, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 88, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 99, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 111, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 117, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 128, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 132, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 145, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 154, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 158, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 161, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 175, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 198, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 6, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 12, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 18, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 24, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 33, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 44, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 55, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 66, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 77, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 88, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 99, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 111, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 117, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 128, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 132, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 145, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 154, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 158, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 161, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 175, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 198, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 
-		self::assertAllFixedInFile($file);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testManyErrors(): void
 	{
-		$file = self::checkFile(__DIR__ . '/data/classStructureSniffManyErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/classStructureSniffManyErrors.php');
 
-		self::assertSame(1, $file->getErrorCount());
-		self::assertAllFixedInFile($file);
+		self::assertSame(1, $report->getErrorCount());
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testNoErrorsWithDifferentRules(): void
 	{
-		$file = self::checkFile(
+		$report = self::checkFile(
 			__DIR__ . '/data/classStructureSniffNoErrorsWithDifferentRules.php',
 			['groups' => self::DIFFERENT_RULES]
 		);
 
-		self::assertNoSniffErrorInFile($file);
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrorsWithDifferentRules(): void
 	{
-		$file = self::checkFile(
+		$report = self::checkFile(
 			__DIR__ . '/data/classStructureSniffErrorsWithDifferentRules.php',
 			['groups' => self::DIFFERENT_RULES]
 		);
 
-		self::assertSame(13, $file->getErrorCount());
+		self::assertSame(13, $report->getErrorCount());
 
-		self::assertSniffError($file, 6, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 12, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 27, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 38, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 49, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 60, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 69, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 73, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 85, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 94, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 103, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($file, 107, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 6, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 12, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 27, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 38, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 49, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 60, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 69, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 73, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 85, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 94, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 103, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 107, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 
-		self::assertAllFixedInFile($file);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testThrowExceptionForUnsupportedSection(): void

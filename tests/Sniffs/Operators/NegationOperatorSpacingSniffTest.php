@@ -14,11 +14,11 @@ class NegationOperatorSpacingSniffTest extends TestCase
 
 	public function testErrors(): void
 	{
-		$file = self::checkFile(__DIR__ . '/data/negationOperatorSpacingErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/negationOperatorSpacingErrors.php');
 
-		self::assertSame(97, $file->getErrorCount());
+		self::assertSame(97, $report->getErrorCount());
 
-		self::assertAllFixedInFile($file);
+		self::assertAllFixedInFile($report);
 	}
 
 	public function testRequireSpaceNoErrors(): void
@@ -30,14 +30,14 @@ class NegationOperatorSpacingSniffTest extends TestCase
 
 	public function testRequireSpaceErrors(): void
 	{
-		$file = self::checkFile(
+		$report = self::checkFile(
 			__DIR__ . '/data/negationOperatorSpacingRequireSpaceErrors.php',
 			['spacesCount' => 1]
 		);
 
-		self::assertSame(97, $file->getErrorCount());
+		self::assertSame(97, $report->getErrorCount());
 
-		self::assertAllFixedInFile($file);
+		self::assertAllFixedInFile($report);
 	}
 
 }

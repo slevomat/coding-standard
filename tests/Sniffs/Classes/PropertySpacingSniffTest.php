@@ -14,22 +14,22 @@ class PropertySpacingSniffTest extends TestCase
 
 	public function testErrors(): void
 	{
-		$file = self::checkFile(__DIR__ . '/data/propertySpacingSniffErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/propertySpacingSniffErrors.php');
 
-		self::assertSame(10, $file->getErrorCount());
+		self::assertSame(10, $report->getErrorCount());
 
-		self::assertSniffError($file, 5, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
-		self::assertSniffError($file, 7, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
-		self::assertSniffError($file, 9, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
-		self::assertSniffError($file, 11, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
-		self::assertSniffError($file, 13, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
-		self::assertSniffError($file, 30, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
-		self::assertSniffError($file, 34, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
-		self::assertSniffError($file, 39, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
-		self::assertSniffError($file, 43, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
-		self::assertSniffError($file, 49, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
+		self::assertSniffError($report, 5, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
+		self::assertSniffError($report, 7, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
+		self::assertSniffError($report, 9, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
+		self::assertSniffError($report, 11, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
+		self::assertSniffError($report, 13, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
+		self::assertSniffError($report, 30, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
+		self::assertSniffError($report, 34, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
+		self::assertSniffError($report, 39, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
+		self::assertSniffError($report, 43, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
+		self::assertSniffError($report, 49, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
 
-		self::assertAllFixedInFile($file);
+		self::assertAllFixedInFile($report);
 	}
 
 }
