@@ -24,4 +24,17 @@ class X {
 		);
 		echo $x;
 	}
+
+	function e() {
+		return parent::e();
+	}
+
+	function f() {
+		return (bool) parent::f();
+	}
+
+	function g() {
+		yield parent::g();
+	}
+
 }

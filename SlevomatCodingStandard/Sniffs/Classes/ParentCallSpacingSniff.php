@@ -11,6 +11,8 @@ use function array_key_exists;
 use function array_merge;
 use function in_array;
 use const T_PARENT;
+use const T_RETURN;
+use const T_YIELD;
 
 class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 {
@@ -40,9 +42,13 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 			return;
 		}
 
-		$previousEffectivePointer = TokenHelper::findPreviousEffective($phpcsFile, $parentPointer - 1);
-		$assignmentAndEqualityTokens = array_merge(Tokens::$assignmentTokens, Tokens::$equalityTokens);
-		if (in_array($tokens[$previousEffectivePointer]['code'], $assignmentAndEqualityTokens, true)) {
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $parentPointer - 1);
+		if (in_array($tokens[$previousPointer]['code'], Tokens::$castTokens, true)) {
+			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
+		}
+
+		$tokensToIgnore = array_merge(Tokens::$assignmentTokens, Tokens::$equalityTokens, [T_RETURN, T_YIELD]);
+		if (in_array($tokens[$previousPointer]['code'], $tokensToIgnore, true)) {
 			return;
 		}
 
