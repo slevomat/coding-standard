@@ -449,11 +449,20 @@ class ClassStructureSniff implements Sniff
 				$order++;
 			}
 
-			$this->normalizedGroups = $normalizedGroups;
+			if (count($normalizedGroups) === 0) {
+				$normalizedGroups = array_flip($supportedGroups);
+			} else {
+				$missingGroupsOrder = count($normalizedGroups) + 1;
+				foreach ($supportedGroups as $supportedGroup) {
+					if (array_key_exists($supportedGroup, $normalizedGroups)) {
+						continue;
+					}
 
-			if (count($this->normalizedGroups) === 0) {
-				$this->normalizedGroups = array_flip($supportedGroups);
+					$normalizedGroups[$supportedGroup] = $missingGroupsOrder;
+				}
 			}
+
+			$this->normalizedGroups = $normalizedGroups;
 		}
 
 		return $this->normalizedGroups;

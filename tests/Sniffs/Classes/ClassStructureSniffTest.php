@@ -17,7 +17,6 @@ class ClassStructureSniffTest extends TestCase
 		'public methods, protected methods, private methods',
 		'constructor',
 		'static constructors',
-		'destructor',
 	];
 
 	public function testNoErrors(): void
