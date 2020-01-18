@@ -270,7 +270,7 @@ class ClassStructureSniff implements Sniff
 		$previousPointer = TokenHelper::findPrevious(
 			$file,
 			array_merge(Tokens::$scopeModifiers, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON]),
-			$pointer - 1,
+			$pointer - 1
 		);
 
 		return in_array($tokens[$previousPointer]['code'], Tokens::$scopeModifiers, true) ? $tokens[$previousPointer]['code'] : T_PUBLIC;
