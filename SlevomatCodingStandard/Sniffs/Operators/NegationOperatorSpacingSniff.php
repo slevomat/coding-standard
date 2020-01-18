@@ -21,7 +21,7 @@ use const T_STRING;
 use const T_VARIABLE;
 use const T_WHITESPACE;
 
-final class NegationOperatorSpacingSniff implements Sniff
+class NegationOperatorSpacingSniff implements Sniff
 {
 
 	public const CODE_INVALID_SPACE_AFTER_MINUS = 'InvalidSpaceAfterMinus';
