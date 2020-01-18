@@ -24,6 +24,11 @@
 	</rule>
 
 	<rule ref="Generic.Commenting.Todo"/>
+	<rule ref="Generic.Formatting.SpaceAfterNot">
+		<properties>
+			<property name="spacing" value="0"/>
+		</properties>
+	</rule>
 	<rule ref="Squiz.PHP.CommentedOutCode">
 		<properties>
 			<property name="maxPercentage" value="50"/>

@@ -81,7 +81,7 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 		}
 
 		$fix = $this->addError($phpcsFile, $pointer, $minExpectedLines, $maxExpectedLines, $linesBetween);
-		if (! $fix) {
+		if (!$fix) {
 			return $firstOnLinePointer;
 		}
 
