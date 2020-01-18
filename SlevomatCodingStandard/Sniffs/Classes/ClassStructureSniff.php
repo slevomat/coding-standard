@@ -23,6 +23,7 @@ use function preg_split;
 use function sprintf;
 use function str_repeat;
 use function strtolower;
+use const T_ABSTRACT;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CONST;
 use const T_FUNCTION;
@@ -55,8 +56,10 @@ class ClassStructureSniff implements Sniff
 	private const GROUP_DESTRUCTOR = 'destructor';
 	private const GROUP_MAGIC_METHODS = 'magic methods';
 	private const GROUP_PUBLIC_METHODS = 'public methods';
+	private const GROUP_PUBLIC_ABSTRACT_METHODS = 'public abstract methods';
 	private const GROUP_PUBLIC_STATIC_METHODS = 'public static methods';
 	private const GROUP_PROTECTED_METHODS = 'protected methods';
+	private const GROUP_PROTECTED_ABSTRACT_METHODS = 'protected abstract methods';
 	private const GROUP_PROTECTED_STATIC_METHODS = 'protected static methods';
 	private const GROUP_PRIVATE_METHODS = 'private methods';
 	private const GROUP_PRIVATE_STATIC_METHODS = 'private static methods';
@@ -232,13 +235,19 @@ class ClassStructureSniff implements Sniff
 					return self::SPECIAL_METHODS[$name];
 				}
 
+				$visibility = $this->getVisibilityForToken($file, $pointer);
+
+				if ($this->isFunctionAbstract($file, $pointer)) {
+					return $visibility === T_PUBLIC ? self::GROUP_PUBLIC_ABSTRACT_METHODS : self::GROUP_PROTECTED_ABSTRACT_METHODS;
+				}
+
 				$isStatic = $this->isMemberStatic($file, $pointer);
 
 				if ($isStatic && $this->isStaticConstructor($file, $pointer)) {
 					return self::GROUP_STATIC_CONSTRUCTORS;
 				}
 
-				switch ($this->getVisibilityForToken($file, $pointer)) {
+				switch ($visibility) {
 					case T_PUBLIC:
 						return $isStatic ? self::GROUP_PUBLIC_STATIC_METHODS : self::GROUP_PUBLIC_METHODS;
 					case T_PROTECTED:
@@ -247,8 +256,8 @@ class ClassStructureSniff implements Sniff
 
 				return $isStatic ? self::GROUP_PRIVATE_STATIC_METHODS : self::GROUP_PRIVATE_METHODS;
 			default:
-				$visibility = $this->getVisibilityForToken($file, $pointer);
 				$isStatic = $this->isMemberStatic($file, $pointer);
+				$visibility = $this->getVisibilityForToken($file, $pointer);
 
 				switch ($visibility) {
 					case T_PUBLIC:
@@ -280,6 +289,12 @@ class ClassStructureSniff implements Sniff
 	{
 		$previousPointer = TokenHelper::findPrevious($file, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_STATIC], $pointer - 1);
 		return $file->getTokens()[$previousPointer]['code'] === T_STATIC;
+	}
+
+	private function isFunctionAbstract(File $file, int $pointer): bool
+	{
+		$previousPointer = TokenHelper::findPrevious($file, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_ABSTRACT], $pointer - 1);
+		return $file->getTokens()[$previousPointer]['code'] === T_ABSTRACT;
 	}
 
 	private function isStaticConstructor(File $file, int $pointer): bool
@@ -419,6 +434,8 @@ class ClassStructureSniff implements Sniff
 				self::GROUP_PROTECTED_STATIC_PROPERTIES,
 				self::GROUP_PRIVATE_PROPERTIES,
 				self::GROUP_PRIVATE_STATIC_PROPERTIES,
+				self::GROUP_PUBLIC_ABSTRACT_METHODS,
+				self::GROUP_PROTECTED_ABSTRACT_METHODS,
 				self::GROUP_CONSTRUCTOR,
 				self::GROUP_STATIC_CONSTRUCTORS,
 				self::GROUP_DESTRUCTOR,

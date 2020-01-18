@@ -103,7 +103,7 @@ Sniff provides the following settings:
 
 * `groups`: order of groups. Use multiple groups in one `<element value="">` to not differentiate among them. Groups without defined order are sorted to the end.
 
-List of supported groups: uses, public constants, protected constants, private constants, public properties, public static properties, protected properties, protected static properties, private properties, private static properties, constructor, static constructors, destructor, public methods, public static methods, protected methods, protected static methods, private methods, private static methods, magic methods 
+List of supported groups: uses, public constants, protected constants, private constants, public properties, public static properties, protected properties, protected static properties, private properties, private static properties, constructor, static constructors, destructor, public methods, public abstract methods, public static methods, protected methods, protected abstract methods, protected static methods, private methods, private static methods, magic methods 
 
 ```xml
 <rule ref="SlevomatCodingStandard.Classes.ClassStructure">

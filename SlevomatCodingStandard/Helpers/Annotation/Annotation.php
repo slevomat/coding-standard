@@ -23,6 +23,10 @@ abstract class Annotation
 	/** @var string|null */
 	protected $content;
 
+	abstract public function isInvalid(): bool;
+
+	abstract public function export(): string;
+
 	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content)
 	{
 		$this->name = $name;
@@ -50,10 +54,6 @@ abstract class Annotation
 	{
 		return $this->content;
 	}
-
-	abstract public function isInvalid(): bool;
-
-	abstract public function export(): string;
 
 	protected function fixDescription(string $description): string
 	{

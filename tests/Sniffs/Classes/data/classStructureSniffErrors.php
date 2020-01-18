@@ -187,3 +187,14 @@ class M
 	{
 	}
 }
+
+abstract class WithAbstract
+{
+
+	public function notAbtractMethod()
+	{
+	}
+
+	abstract public function abstractMethod();
+
+}

@@ -37,6 +37,8 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 	/** @var int */
 	public $maxLinesCountBeforeWithoutComment = 1;
 
+	abstract protected function addError(File $file, int $pointer, int $min, int $max, int $found): bool;
+
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 * @param \PHP_CodeSniffer\Files\File $file
@@ -99,7 +101,5 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 
 		return $firstOnLinePointer;
 	}
-
-	abstract protected function addError(File $file, int $pointer, int $min, int $max, int $found): bool;
 
 }

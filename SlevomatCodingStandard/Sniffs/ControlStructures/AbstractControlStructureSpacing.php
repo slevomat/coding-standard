@@ -74,6 +74,16 @@ abstract class AbstractControlStructureSpacing implements Sniff
 	private $normalizedTokensToCheck;
 
 	/**
+	 * @return array<int|string>
+	 */
+	abstract protected function getSupportedTokens(): array;
+
+	/**
+	 * @return string[]
+	 */
+	abstract protected function getTokensToCheck(): array;
+
+	/**
 	 * @return (int|string)[]
 	 */
 	public function register(): array
@@ -97,16 +107,6 @@ abstract class AbstractControlStructureSpacing implements Sniff
 			return;
 		}
 	}
-
-	/**
-	 * @return array<int|string>
-	 */
-	abstract protected function getSupportedTokens(): array;
-
-	/**
-	 * @return string[]
-	 */
-	abstract protected function getTokensToCheck(): array;
 
 	protected function checkLinesBefore(File $phpcsFile, int $controlStructurePointer): void
 	{

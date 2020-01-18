@@ -45,6 +45,8 @@
 				<element value="protected static properties"/>
 				<element value="private properties"/>
 				<element value="private static properties"/>
+				<element value="public abstract methods"/>
+				<element value="protected abstract methods"/>
 				<element value="constructor"/>
 				<element value="public methods"/>
 				<element value="public static methods"/>

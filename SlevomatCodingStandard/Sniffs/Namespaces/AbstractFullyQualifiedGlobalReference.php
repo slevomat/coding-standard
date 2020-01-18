@@ -31,6 +31,12 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 	/** @var string[]|null */
 	private $normalizedExclude;
 
+	abstract protected function getNotFullyQualifiedMessage(): string;
+
+	abstract protected function isCaseSensitive(): bool;
+
+	abstract protected function isValidType(ReferencedName $name): bool;
+
 	/**
 	 * @return (int|string)[]
 	 */
@@ -98,12 +104,6 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 			$phpcsFile->fixer->endChangeset();
 		}
 	}
-
-	abstract protected function getNotFullyQualifiedMessage(): string;
-
-	abstract protected function isCaseSensitive(): bool;
-
-	abstract protected function isValidType(ReferencedName $name): bool;
 
 	/**
 	 * @return string[]
