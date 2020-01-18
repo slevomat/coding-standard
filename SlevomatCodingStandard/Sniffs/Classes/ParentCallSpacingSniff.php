@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Sniffs\ControlStructures\AbstractControlStructureSpacing;
 use function array_key_exists;
@@ -13,6 +14,18 @@ use const T_PARENT;
 
 class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 {
+
+	/** @var int */
+	public $linesCountBeforeParentCall = 1;
+
+	/** @var int */
+	public $linesCountBeforeFirstParentCall = 0;
+
+	/** @var int */
+	public $linesCountAfterParentCall = 1;
+
+	/** @var int */
+	public $linesCountAfterLastParentCall = 0;
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
@@ -50,6 +63,26 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 	protected function getTokensToCheck(): array
 	{
 		return ['T_PARENT'];
+	}
+
+	protected function getLinesCountBefore(): int
+	{
+		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeParentCall);
+	}
+
+	protected function getLinesCountBeforeFirst(): int
+	{
+		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirstParentCall);
+	}
+
+	protected function getLinesCountAfter(): int
+	{
+		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterParentCall);
+	}
+
+	protected function getLinesCountAfterLast(): int
+	{
+		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterLastParentCall);
 	}
 
 }

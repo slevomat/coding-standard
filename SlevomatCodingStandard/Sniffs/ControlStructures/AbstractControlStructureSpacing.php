@@ -58,18 +58,6 @@ abstract class AbstractControlStructureSpacing implements Sniff
 	public const CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE = 'IncorrectLinesCountAfterControlStructure';
 	public const CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTROL_STRUCTURE = 'IncorrectLinesCountAfterLastControlStructure';
 
-	/** @var int */
-	public $linesCountBeforeControlStructure = 1;
-
-	/** @var int */
-	public $linesCountBeforeFirstControlStructure = 0;
-
-	/** @var int */
-	public $linesCountAfterControlStructure = 1;
-
-	/** @var int */
-	public $linesCountAfterLastControlStructure = 0;
-
 	/** @var (string|int)[]|null */
 	private $normalizedTokensToCheck;
 
@@ -82,6 +70,14 @@ abstract class AbstractControlStructureSpacing implements Sniff
 	 * @return string[]
 	 */
 	abstract protected function getTokensToCheck(): array;
+
+	abstract protected function getLinesCountBefore(): int;
+
+	abstract protected function getLinesCountBeforeFirst(): int;
+
+	abstract protected function getLinesCountAfter(): int;
+
+	abstract protected function getLinesCountAfterLast(): int;
 
 	/**
 	 * @return (int|string)[]
@@ -148,7 +144,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 			$whitespaceBefore .= TokenHelper::getContent($phpcsFile, $pointerBefore + 1, $controlStructureStartPointer - 1);
 		}
 
-		$requiredLinesCountBefore = SniffSettingsHelper::normalizeInteger($isFirstControlStructure ? $this->linesCountBeforeFirstControlStructure : $this->linesCountBeforeControlStructure);
+		$requiredLinesCountBefore = $isFirstControlStructure ? $this->getLinesCountBeforeFirst() : $this->getLinesCountBefore();
 		$actualLinesCountBefore = substr_count($whitespaceBefore, $phpcsFile->eolChar) - 1;
 
 		if ($requiredLinesCountBefore === $actualLinesCountBefore) {
@@ -209,7 +205,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 			? $tokens[$pointerAfter]['code'] === T_CLOSE_CURLY_BRACKET
 			: in_array($tokens[$pointerAfter]['code'], [T_CLOSE_CURLY_BRACKET, T_CASE, T_DEFAULT], true);
 
-		$requiredLinesCountAfter = SniffSettingsHelper::normalizeInteger($isLastControlStructure ? $this->linesCountAfterLastControlStructure : $this->linesCountAfterControlStructure);
+		$requiredLinesCountAfter = $isLastControlStructure ? $this->getLinesCountAfterLast() : $this->getLinesCountAfter();
 		$actualLinesCountAfter = $tokens[$pointerAfter]['line'] - $tokens[$controlStructureEndPointer]['line'] - 1;
 
 		if ($requiredLinesCountAfter === $actualLinesCountAfter) {

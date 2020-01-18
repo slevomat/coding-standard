@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function abs;
 use function array_key_exists;
@@ -18,6 +19,18 @@ use const T_YIELD_FROM;
 
 class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 {
+
+	/** @var int */
+	public $linesCountBeforeControlStructure = 1;
+
+	/** @var int */
+	public $linesCountBeforeFirstControlStructure = 0;
+
+	/** @var int */
+	public $linesCountAfterControlStructure = 1;
+
+	/** @var int */
+	public $linesCountAfterLastControlStructure = 0;
 
 	/** @var bool */
 	public $allowSingleLineYieldStacking = true;
@@ -61,6 +74,26 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 	protected function getTokensToCheck(): array
 	{
 		return $this->tokensToCheck;
+	}
+
+	protected function getLinesCountBefore(): int
+	{
+		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeControlStructure);
+	}
+
+	protected function getLinesCountBeforeFirst(): int
+	{
+		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirstControlStructure);
+	}
+
+	protected function getLinesCountAfter(): int
+	{
+		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterControlStructure);
+	}
+
+	protected function getLinesCountAfterLast(): int
+	{
+		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterLastControlStructure);
 	}
 
 	protected function checkLinesBefore(File $phpcsFile, int $controlStructurePointer): void
