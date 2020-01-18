@@ -34,7 +34,7 @@
 	<rule ref="SlevomatCodingStandard.Arrays.SingleLineArrayWhitespace"/>
 	<rule ref="SlevomatCodingStandard.Classes.ClassStructure">
 		<properties>
-			<property name="sections" type="array">
+			<property name="groups" type="array">
 				<element value="uses"/>
 				<element value="public constants"/>
 				<element value="protected constants"/>
