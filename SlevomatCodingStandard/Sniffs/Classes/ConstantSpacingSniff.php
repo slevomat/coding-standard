@@ -21,7 +21,7 @@ class ConstantSpacingSniff extends AbstractPropertyAndConstantSpacing
 
 	protected function addError(File $file, int $pointer, int $min, int $max, int $found): bool
 	{
-		$message = 'Expected %d to %d blank lines after constant, found %d';
+		$message = 'Expected %d to %d blank lines after constant, found %d.';
 		$error = sprintf($message, $min, $max, $found);
 
 		return $file->addFixableError($error, $pointer, self::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_CONSTANT);

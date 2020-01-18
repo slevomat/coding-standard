@@ -24,7 +24,7 @@ class PropertySpacingSniff extends AbstractPropertyAndConstantSpacing
 
 	protected function addError(File $file, int $pointer, int $min, int $max, int $found): bool
 	{
-		$message = 'Expected %d to %d blank lines after property, found %d';
+		$message = 'Expected %d to %d blank lines after property, found %d.';
 		$error = sprintf($message, $min, $max, $found);
 
 		return $file->addFixableError($error, $pointer, self::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);

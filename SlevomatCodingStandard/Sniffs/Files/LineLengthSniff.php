@@ -8,6 +8,7 @@ use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use function in_array;
 use function is_int;
 use function ltrim;
+use function sprintf;
 use function strlen;
 use function strrpos;
 use const T_COMMENT;
@@ -130,12 +131,11 @@ class LineLengthSniff implements Sniff
 			}
 		}
 
-		$error = 'Line exceeds maximum limit of %s characters; contains %s characters';
+		$error = sprintf('Line exceeds maximum limit of %s characters, contains %s characters.', $this->lineLengthLimit, $lineLength);
 		$file->addError(
 			$error,
 			$pointer,
-			self::CODE_LINE_TOO_LONG,
-			[$this->lineLengthLimit, $lineLength]
+			self::CODE_LINE_TOO_LONG
 		);
 	}
 

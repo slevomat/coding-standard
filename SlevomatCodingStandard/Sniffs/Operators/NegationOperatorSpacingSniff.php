@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
+use function sprintf;
 use function strlen;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSE_SHORT_ARRAY;
@@ -72,10 +73,9 @@ final class NegationOperatorSpacingSniff implements Sniff
 		}
 
 		$fix = $file->addFixableError(
-			'Expected exactly %d space after "%s"; %d found',
+			sprintf('Expected exactly %d space after "%s", %d found.', $this->spacesCount, $tokens[$pointer]['content'], $numberOfSpaces),
 			$pointer,
-			self::CODE_INVALID_SPACE_AFTER_MINUS,
-			[$this->spacesCount, $tokens[$pointer]['content'], $numberOfSpaces]
+			self::CODE_INVALID_SPACE_AFTER_MINUS
 		);
 
 		if (!$fix) {
