@@ -57,13 +57,13 @@ use const T_VARIABLE;
 class ReferencedNameHelper
 {
 
-	/** @var \SlevomatCodingStandard\Helpers\ReferencedName[][] Cached data for method getAllReferencedNames, cacheKey(string) => pointer(integer) => name(string) */
+	/** @var ReferencedName[][] Cached data for method getAllReferencedNames, cacheKey(string) => pointer(integer) => name(string) */
 	private static $allReferencedTypesCache = [];
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $openTagPointer
-	 * @return \SlevomatCodingStandard\Helpers\ReferencedName[] referenced names
+	 * @return ReferencedName[] referenced names
 	 */
 	public static function getAllReferencedNames(File $phpcsFile, int $openTagPointer): array
 	{
@@ -124,9 +124,9 @@ class ReferencedNameHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $openTagPointer
-	 * @return \SlevomatCodingStandard\Helpers\ReferencedName[] referenced names
+	 * @return ReferencedName[] referenced names
 	 */
 	private static function createAllReferencedNames(File $phpcsFile, int $openTagPointer): array
 	{

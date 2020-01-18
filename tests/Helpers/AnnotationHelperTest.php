@@ -12,7 +12,7 @@ use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 class AnnotationHelperTest extends TestCase
 {
 
-	/** @var \PHP_CodeSniffer\Files\File */
+	/** @var File */
 	private $testedCodeSnifferFile;
 
 	public function testClassWithAnnotation(): void

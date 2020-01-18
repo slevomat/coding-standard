@@ -49,7 +49,7 @@ class UseSpacingSniff implements Sniff
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $openTagPointer
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
@@ -186,8 +186,8 @@ class UseSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
+	 * @param File $phpcsFile
+	 * @param UseStatement[] $useStatements
 	 */
 	private function checkLinesBetweenSameTypesOfUse(File $phpcsFile, array $useStatements): void
 	{
@@ -261,8 +261,8 @@ class UseSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
+	 * @param File $phpcsFile
+	 * @param UseStatement[] $useStatements
 	 */
 	private function checkLinesBetweenDifferentTypesOfUse(File $phpcsFile, array $useStatements): void
 	{

@@ -98,7 +98,7 @@ class UnusedPrivateElementsSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $classPointer
 	 */
 	public function process(File $phpcsFile, $classPointer): void
@@ -438,7 +438,7 @@ class UnusedPrivateElementsSniff implements Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $classTokenPointer
 	 * @return int[] string(name) => pointer
 	 */
@@ -499,7 +499,7 @@ class UnusedPrivateElementsSniff implements Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $privateTokenPointer
 	 * @return string[]
 	 */
@@ -509,7 +509,7 @@ class UnusedPrivateElementsSniff implements Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $classTokenPointer
 	 * @return int[] string(name) => pointer
 	 */
@@ -575,7 +575,7 @@ class UnusedPrivateElementsSniff implements Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $classTokenPointer
 	 * @return int[] string(name) => pointer
 	 */
@@ -608,7 +608,7 @@ class UnusedPrivateElementsSniff implements Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param array<int, array<string, array<int, int|string>|int|string>> $tokens
 	 * @param int $methodTokenPointer
 	 * @return int|null

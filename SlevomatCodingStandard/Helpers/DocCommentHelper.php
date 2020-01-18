@@ -48,9 +48,9 @@ class DocCommentHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $pointer
-	 * @return \SlevomatCodingStandard\Helpers\Comment[]|null
+	 * @return Comment[]|null
 	 */
 	public static function getDocCommentDescription(File $phpcsFile, int $pointer): ?array
 	{
@@ -83,7 +83,7 @@ class DocCommentHelper
 			$tokens[$docCommentOpenPointer]['comment_closer'] + 1
 		);
 
-		/** @var \SlevomatCodingStandard\Helpers\Comment[] $comments */
+		/** @var Comment[] $comments */
 		$comments = [];
 		for ($i = $descriptionStartPointer; $i < $tokenAfterDescriptionPointer; $i++) {
 			if ($tokens[$i]['code'] !== T_DOC_COMMENT_STRING) {

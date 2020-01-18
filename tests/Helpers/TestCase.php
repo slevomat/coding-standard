@@ -34,7 +34,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	/**
 	 * @param int|string $code
 	 * @param int $line
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int|null $tokenPointer
 	 */
 	protected function assertTokenPointer($code, int $line, File $phpcsFile, ?int $tokenPointer = null): void
@@ -122,7 +122,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $line
 	 * @param int|string $tokenCode
 	 * @return int|null
@@ -194,7 +194,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int|null $tokenPointer
 	 * @return mixed[]
 	 */

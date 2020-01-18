@@ -9,7 +9,7 @@ use const T_DOC_COMMENT_OPEN_TAG;
 class DocCommentHelperTest extends TestCase
 {
 
-	/** @var \PHP_CodeSniffer\Files\File */
+	/** @var File */
 	private $testedCodeSnifferFile;
 
 	public function testClassHasDocComment(): void
@@ -187,7 +187,7 @@ class DocCommentHelperTest extends TestCase
 	}
 
 	/**
-	 * @param \SlevomatCodingStandard\Helpers\Comment[] $comments
+	 * @param Comment[] $comments
 	 * @return string[]
 	 */
 	private function stringifyComments(array $comments): array

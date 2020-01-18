@@ -98,7 +98,7 @@ class ClassStructureSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $pointer
 	 * @return int
 	 */
@@ -157,7 +157,7 @@ class ClassStructureSniff implements Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $pointer
 	 * @param array{scope_closer: int, level: int} $rootScopeToken
 	 * @return array{int, int, string}|null

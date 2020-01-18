@@ -32,7 +32,7 @@ class UselessLateStaticBindingSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $staticPointer
 	 */
 	public function process(File $phpcsFile, $staticPointer): void

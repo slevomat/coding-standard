@@ -46,7 +46,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $openTagPointer
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
@@ -79,14 +79,14 @@ class AlphabeticallySortedUsesSniff implements Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param \SlevomatCodingStandard\Helpers\UseStatement[] $useStatements
+	 * @param File $phpcsFile
+	 * @param UseStatement[] $useStatements
 	 */
 	private function fixAlphabeticalOrder(File $phpcsFile, array $useStatements): void
 	{
-		/** @var \SlevomatCodingStandard\Helpers\UseStatement $firstUseStatement */
+		/** @var UseStatement $firstUseStatement */
 		$firstUseStatement = reset($useStatements);
-		/** @var \SlevomatCodingStandard\Helpers\UseStatement $lastUseStatement */
+		/** @var UseStatement $lastUseStatement */
 		$lastUseStatement = end($useStatements);
 		$lastSemicolonPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $lastUseStatement->getPointer());
 		$phpcsFile->fixer->beginChangeset();

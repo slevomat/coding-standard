@@ -52,7 +52,7 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $docCommentOpenPointer
 	 */
 	public function process(File $phpcsFile, $docCommentOpenPointer): void
@@ -113,8 +113,8 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 	}
 
 	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
-	 * @return \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode[]
+	 * @param TypeNode $typeNode
+	 * @return ArrayTypeNode[]
 	 */
 	public function getArrayTypeNodes(TypeNode $typeNode): array
 	{
@@ -150,9 +150,9 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 	}
 
 	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode $arrayTypeNode
-	 * @param \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode[] $unionTypeNodes
-	 * @return \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|null
+	 * @param ArrayTypeNode $arrayTypeNode
+	 * @param UnionTypeNode[] $unionTypeNodes
+	 * @return UnionTypeNode|null
 	 */
 	private function findUnionTypeThatContainsArrayType(ArrayTypeNode $arrayTypeNode, array $unionTypeNodes): ?UnionTypeNode
 	{

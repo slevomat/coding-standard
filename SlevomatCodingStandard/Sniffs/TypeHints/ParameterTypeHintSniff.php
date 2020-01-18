@@ -6,7 +6,11 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
@@ -67,7 +71,7 @@ class ParameterTypeHintSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $functionPointer
 	 */
 	public function process(File $phpcsFile, $functionPointer): void
@@ -89,10 +93,10 @@ class ParameterTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $functionPointer
-	 * @param (\SlevomatCodingStandard\Helpers\ParameterTypeHint|null)[] $parametersTypeHints
-	 * @param \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation[] $parametersAnnotations
+	 * @param (ParameterTypeHint|null)[] $parametersTypeHints
+	 * @param ParameterAnnotation[] $parametersAnnotations
 	 */
 	private function checkTypeHints(File $phpcsFile, int $functionPointer, array $parametersTypeHints, array $parametersAnnotations): void
 	{
@@ -137,7 +141,7 @@ class ParameterTypeHintSniff implements Sniff
 			}
 
 			if ($annotationContainsOneType) {
-				/** @var \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode $parameterTypeNode */
+				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode $parameterTypeNode */
 				$parameterTypeNode = $parameterTypeNode;
 				$possibleParameterTypeHint = $parameterTypeNode instanceof ArrayTypeNode || $parameterTypeNode instanceof ArrayShapeNode
 					? 'array'
@@ -145,7 +149,7 @@ class ParameterTypeHintSniff implements Sniff
 				$nullableParameterTypeHint = false;
 
 			} else {
-				/** @var \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $parameterTypeNode */
+				/** @var UnionTypeNode $parameterTypeNode */
 				$parameterTypeNode = $parameterTypeNode;
 
 				if (
@@ -156,7 +160,7 @@ class ParameterTypeHintSniff implements Sniff
 				}
 
 				if (AnnotationTypeHelper::containsNullType($parameterTypeNode)) {
-					/** @var \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode $notNullTypeHintNode */
+					/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode $notNullTypeHintNode */
 					$notNullTypeHintNode = AnnotationTypeHelper::getTypeFromNullableType($parameterTypeNode);
 					$possibleParameterTypeHint = $notNullTypeHintNode instanceof ArrayTypeNode || $notNullTypeHintNode instanceof ArrayShapeNode
 						? 'array'
@@ -225,10 +229,10 @@ class ParameterTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $functionPointer
-	 * @param (\SlevomatCodingStandard\Helpers\ParameterTypeHint|null)[] $parametersTypeHints
-	 * @param \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation[] $parametersAnnotations
+	 * @param (ParameterTypeHint|null)[] $parametersTypeHints
+	 * @param ParameterAnnotation[] $parametersAnnotations
 	 */
 	private function checkTraversableTypeHintSpecification(
 		File $phpcsFile,
@@ -289,10 +293,10 @@ class ParameterTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $functionPointer
-	 * @param (\SlevomatCodingStandard\Helpers\ParameterTypeHint|null)[] $parametersTypeHints
-	 * @param \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation[] $parametersAnnotations
+	 * @param (ParameterTypeHint|null)[] $parametersTypeHints
+	 * @param ParameterAnnotation[] $parametersAnnotations
 	 */
 	private function checkUselessAnnotations(
 		File $phpcsFile,

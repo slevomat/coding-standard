@@ -36,7 +36,7 @@ abstract class AbstractMethodSignature implements Sniff
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $methodPointer
 	 * @return array<int, int>
 	 */

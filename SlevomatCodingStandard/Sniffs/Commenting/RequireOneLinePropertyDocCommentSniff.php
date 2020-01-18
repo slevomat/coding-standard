@@ -16,7 +16,7 @@ class RequireOneLinePropertyDocCommentSniff extends RequireOneLineDocCommentSnif
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $docCommentStartPointer
 	 */
 	public function process(File $phpcsFile, $docCommentStartPointer): void

@@ -4,13 +4,16 @@ namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
@@ -43,8 +46,8 @@ class AnnotationHelper
 
 	/**
 	 * @internal
-	 * @param \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation|\SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation|\SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation $annotation
-	 * @return \PHPStan\PhpDocParser\Ast\Type\TypeNode[]
+	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation $annotation
+	 * @return TypeNode[]
 	 */
 	public static function getAnnotationTypes(Annotation $annotation): array
 	{
@@ -70,8 +73,8 @@ class AnnotationHelper
 
 	/**
 	 * @internal
-	 * @param \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation|\SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation|\SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation $annotation
-	 * @return \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode[]
+	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation $annotation
+	 * @return ConstExprNode[]
 	 */
 	public static function getAnnotationConstantExpressions(Annotation $annotation): array
 	{
@@ -94,10 +97,10 @@ class AnnotationHelper
 
 	/**
 	 * @internal
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation|\SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation|\SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation $annotation
-	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
-	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $fixedTypeNode
+	 * @param File $phpcsFile
+	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation $annotation
+	 * @param TypeNode $typeNode
+	 * @param TypeNode $fixedTypeNode
 	 * @return string
 	 */
 	public static function fixAnnotationType(File $phpcsFile, Annotation $annotation, TypeNode $typeNode, TypeNode $fixedTypeNode): string
@@ -143,10 +146,10 @@ class AnnotationHelper
 
 	/**
 	 * @internal
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
-	 * @param \SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation $annotation
-	 * @param \PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode $node
-	 * @param \PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode $fixedNode
+	 * @param File $phpcsFile
+	 * @param MethodAnnotation $annotation
+	 * @param ConstFetchNode $node
+	 * @param ConstFetchNode $fixedNode
 	 * @return string
 	 */
 	public static function fixAnnotationConstantFetchNode(
@@ -179,10 +182,10 @@ class AnnotationHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $pointer
 	 * @param string $annotationName
-	 * @return (\SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation|\SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation|\SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation|\SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation)[]
+	 * @return (VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|GenericAnnotation)[]
 	 */
 	public static function getAnnotationsByName(File $phpcsFile, int $pointer, string $annotationName): array
 	{
@@ -192,9 +195,9 @@ class AnnotationHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $pointer
-	 * @return (\SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation|\SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation|\SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation|\SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation)[][]
+	 * @return (VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|GenericAnnotation)[][]
 	 */
 	public static function getAnnotations(File $phpcsFile, int $pointer): array
 	{
@@ -301,10 +304,10 @@ class AnnotationHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $functionPointer
-	 * @param \SlevomatCodingStandard\Helpers\ReturnTypeHint|\SlevomatCodingStandard\Helpers\ParameterTypeHint|\SlevomatCodingStandard\Helpers\PropertyTypeHint|null $typeHint
-	 * @param \SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|\SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation|\SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation $annotation
+	 * @param ReturnTypeHint|ParameterTypeHint|PropertyTypeHint|null $typeHint
+	 * @param ReturnAnnotation|ParameterAnnotation|VariableAnnotation $annotation
 	 * @param array<int, string> $traversableTypeHints
 	 * @return bool
 	 */
@@ -333,7 +336,7 @@ class AnnotationHelper
 		}
 
 		if (AnnotationTypeHelper::isCompoundOfNull($annotation->getType())) {
-			/** @var \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $annotationTypeNode */
+			/** @var UnionTypeNode $annotationTypeNode */
 			$annotationTypeNode = $annotation->getType();
 
 			$annotationTypeHintNode = AnnotationTypeHelper::getTypeFromNullableType($annotationTypeNode);
@@ -353,7 +356,7 @@ class AnnotationHelper
 			return false;
 		}
 
-		/** @var \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\CallableTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $annotationTypeNode */
+		/** @var GenericTypeNode|CallableTypeNode|IdentifierTypeNode|ThisTypeNode $annotationTypeNode */
 		$annotationTypeNode = $annotation->getType();
 		$annotationTypeHint = AnnotationTypeHelper::getTypeHintFromOneType($annotationTypeNode);
 		return TypeHintHelper::typeHintEqualsAnnotation($phpcsFile, $functionPointer, $typeHint->getTypeHint(), $annotationTypeHint);

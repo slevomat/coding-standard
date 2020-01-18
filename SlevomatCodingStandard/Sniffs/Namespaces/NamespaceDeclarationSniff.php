@@ -32,7 +32,7 @@ class NamespaceDeclarationSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $namespacePointer
 	 */
 	public function process(File $phpcsFile, $namespacePointer): void

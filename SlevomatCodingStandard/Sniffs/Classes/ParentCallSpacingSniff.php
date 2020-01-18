@@ -29,7 +29,7 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $parentPointer
 	 */
 	public function process(File $phpcsFile, $parentPointer): void

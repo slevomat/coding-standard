@@ -6,6 +6,11 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
@@ -67,7 +72,7 @@ class PropertyTypeHintSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $propertyPointer
 	 */
 	public function process(File $phpcsFile, $propertyPointer): void
@@ -84,7 +89,7 @@ class PropertyTypeHintSniff implements Sniff
 			return;
 		}
 
-		/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation[] $varAnnotations */
+		/** @var VariableAnnotation[] $varAnnotations */
 		$varAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $propertyPointer, '@var');
 
 		$propertyTypeHint = PropertyHelper::findTypeHint($phpcsFile, $propertyPointer);
@@ -140,7 +145,7 @@ class PropertyTypeHintSniff implements Sniff
 		}
 
 		if ($annotationContainsOneType) {
-			/** @var \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $typeNode */
+			/** @var ArrayTypeNode|ArrayShapeNode|GenericTypeNode|IdentifierTypeNode|ThisTypeNode $typeNode */
 			$typeNode = $typeNode;
 			$possibleTypeHint = $typeNode instanceof ArrayTypeNode || $typeNode instanceof ArrayShapeNode
 				? 'array'
@@ -148,7 +153,7 @@ class PropertyTypeHintSniff implements Sniff
 			$nullableTypeHint = false;
 
 		} else {
-			/** @var \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode $typeNode */
+			/** @var UnionTypeNode|IntersectionTypeNode $typeNode */
 			$typeNode = $typeNode;
 
 			if (
@@ -159,7 +164,7 @@ class PropertyTypeHintSniff implements Sniff
 			}
 
 			if (AnnotationTypeHelper::containsNullType($typeNode)) {
-				/** @var \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode $notNullTypeHintNode */
+				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode $notNullTypeHintNode */
 				$notNullTypeHintNode = AnnotationTypeHelper::getTypeFromNullableType($typeNode);
 				$possibleTypeHint = $notNullTypeHintNode instanceof ArrayTypeNode || $notNullTypeHintNode instanceof ArrayShapeNode
 					? 'array'

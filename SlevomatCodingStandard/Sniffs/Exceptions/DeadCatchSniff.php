@@ -26,7 +26,7 @@ class DeadCatchSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $catchPointer
 	 */
 	public function process(File $phpcsFile, $catchPointer): void

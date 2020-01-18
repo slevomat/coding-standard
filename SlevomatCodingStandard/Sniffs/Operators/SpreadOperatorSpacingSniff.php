@@ -32,7 +32,7 @@ class SpreadOperatorSpacingSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $spreadOperatorPointer
 	 */
 	public function process(File $phpcsFile, $spreadOperatorPointer): void

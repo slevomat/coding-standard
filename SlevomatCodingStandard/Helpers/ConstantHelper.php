@@ -31,7 +31,7 @@ class ConstantHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @return string[]
 	 */
 	public static function getAllNames(File $phpcsFile): array
@@ -56,9 +56,9 @@ class ConstantHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $previousConstantPointer
-	 * @return \Generator<int>
+	 * @return Generator<int>
 	 */
 	private static function getAllConstantPointers(File $phpcsFile, int &$previousConstantPointer): Generator
 	{

@@ -112,7 +112,7 @@ class TokenHelper
 	];
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer
 	 * @param int|null $endPointer
@@ -126,7 +126,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer
 	 * @param int|null $endPointer
@@ -151,7 +151,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
 	 * @param string $content
 	 * @param int $startPointer
@@ -166,7 +166,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $startPointer search starts at this token, inclusive
 	 * @param int|null $endPointer search ends at this token, exclusive
 	 * @return int|null
@@ -177,7 +177,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer search starts at this token, inclusive
 	 * @param int|null $endPointer search ends at this token, exclusive
@@ -191,7 +191,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer
 	 * @param int|null $endPointer
@@ -205,7 +205,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer
 	 * @param int|null $endPointer
@@ -219,7 +219,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $startPointer search starts at this token, inclusive
 	 * @param int|null $endPointer search ends at this token, exclusive
 	 * @return int|null
@@ -230,7 +230,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer search starts at this token, inclusive
 	 * @param int|null $endPointer search ends at this token, exclusive
@@ -244,7 +244,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
 	 * @param string $content
 	 * @param int $startPointer
@@ -259,7 +259,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $startPointer search starts at this token, inclusive
 	 * @param int|null $endPointer search ends at this token, exclusive
 	 * @return int|null
@@ -270,7 +270,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer search starts at this token, inclusive
 	 * @param int|null $endPointer search ends at this token, exclusive
@@ -284,7 +284,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer
 	 * @param int|null $endPointer
@@ -298,7 +298,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $pointer search starts at this token, inclusive
 	 * @return int|null
 	 */
@@ -322,7 +322,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $pointer search starts at this token, inclusive
 	 * @return int|null
 	 */
@@ -344,7 +344,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $pointer search starts at this token, inclusive
 	 * @return int|null
 	 */

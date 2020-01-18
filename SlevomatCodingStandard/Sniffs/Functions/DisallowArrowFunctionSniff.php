@@ -23,7 +23,7 @@ class DisallowArrowFunctionSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $arrowFunctionPointer
 	 */
 	public function process(File $phpcsFile, $arrowFunctionPointer): void

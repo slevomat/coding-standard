@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
@@ -28,8 +29,8 @@ class AnnotationTypeHelper
 {
 
 	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
-	 * @return \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode[]|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode[]
+	 * @param TypeNode $typeNode
+	 * @return IdentifierTypeNode[]|ThisTypeNode[]
 	 */
 	public static function getIdentifierTypeNodes(TypeNode $typeNode): array
 	{
@@ -76,14 +77,14 @@ class AnnotationTypeHelper
 			return $identifierTypeNodes;
 		}
 
-		/** @var \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $typeNode */
+		/** @var IdentifierTypeNode|ThisTypeNode $typeNode */
 		$typeNode = $typeNode;
 		return [$typeNode];
 	}
 
 	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
-	 * @return \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode[]
+	 * @param TypeNode $typeNode
+	 * @return UnionTypeNode[]
 	 */
 	public static function getUnionTypeNodes(TypeNode $typeNode): array
 	{
@@ -135,8 +136,8 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
-	 * @return \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode[]
+	 * @param TypeNode $typeNode
+	 * @return ArrayTypeNode[]
 	 */
 	public static function getArrayTypeNodes(TypeNode $typeNode): array
 	{
@@ -187,7 +188,7 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $typeNode
+	 * @param IdentifierTypeNode|ThisTypeNode $typeNode
 	 * @return string
 	 */
 	public static function getTypeHintFromNode(TypeNode $typeNode): string
@@ -241,7 +242,7 @@ class AnnotationTypeHelper
 				$genericTypes[] = self::change($genericTypeNode, $typeNodeToChange, $changedTypeNode);
 			}
 
-			/** @var \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identificatorTypeNode */
+			/** @var IdentifierTypeNode $identificatorTypeNode */
 			$identificatorTypeNode = self::change($masterTypeNode->type, $typeNodeToChange, $changedTypeNode);
 			return new GenericTypeNode($identificatorTypeNode, $genericTypes);
 		}
@@ -260,7 +261,7 @@ class AnnotationTypeHelper
 		}
 
 		if ($masterTypeNode instanceof ArrayShapeItemNode) {
-			/** @var \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|null $keyName */
+			/** @var ConstExprIntegerNode|IdentifierTypeNode|null $keyName */
 			$keyName = $masterTypeNode->keyName instanceof IdentifierTypeNode
 				? self::change($masterTypeNode->keyName, $typeNodeToChange, $changedTypeNode)
 				: $masterTypeNode->keyName;
@@ -284,7 +285,7 @@ class AnnotationTypeHelper
 				);
 			}
 
-			/** @var \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identificatorTypeNode */
+			/** @var IdentifierTypeNode $identificatorTypeNode */
 			$identificatorTypeNode = self::change($masterTypeNode->identifier, $typeNodeToChange, $changedTypeNode);
 			return new CallableTypeNode(
 				$identificatorTypeNode,
@@ -297,7 +298,7 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode $typeNode
+	 * @param UnionTypeNode|IntersectionTypeNode $typeNode
 	 * @return bool
 	 */
 	public static function containsNullType(TypeNode $typeNode): bool
@@ -382,14 +383,14 @@ class AnnotationTypeHelper
 			return false;
 		}
 
-		/** @var \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode $typeNode */
+		/** @var UnionTypeNode|IntersectionTypeNode $typeNode */
 		$typeNode = $typeNode;
 		return self::containsNullType($typeNode);
 	}
 
 	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param TypeNode $typeNode
+	 * @param File $phpcsFile
 	 * @param int $pointer
 	 * @param array<int, string> $traversableTypeHints
 	 * @return bool
@@ -428,8 +429,8 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param TypeNode $typeNode
+	 * @param File $phpcsFile
 	 * @param int $pointer
 	 * @param array<int, string> $traversableTypeHints
 	 * @param bool $inTraversable
@@ -502,8 +503,8 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode $typeNode
-	 * @return \PHPStan\PhpDocParser\Ast\Type\TypeNode
+	 * @param UnionTypeNode|IntersectionTypeNode $typeNode
+	 * @return TypeNode
 	 */
 	public static function getTypeFromNullableType(TypeNode $typeNode): TypeNode
 	{
@@ -511,7 +512,7 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\CallableTypeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $typeNode
+	 * @param CallableTypeNode|GenericTypeNode|IdentifierTypeNode|ThisTypeNode $typeNode
 	 * @return string
 	 */
 	public static function getTypeHintFromOneType(TypeNode $typeNode): string
@@ -532,14 +533,14 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode $typeNode
+	 * @param UnionTypeNode|IntersectionTypeNode $typeNode
 	 * @param array<int, string> $traversableTypeHints
 	 * @return string
 	 */
 	public static function getTraversableTypeHintFromType(TypeNode $typeNode, array $traversableTypeHints): string
 	{
 		if (self::containsOneType($typeNode->types[0])) {
-			/** @var \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $oneTypeNode */
+			/** @var GenericTypeNode|ThisTypeNode|IdentifierTypeNode $oneTypeNode */
 			$oneTypeNode = $typeNode->types[0];
 			$typeHint = self::getTypeHintFromOneType($oneTypeNode);
 			if (TypeHintHelper::isTraversableType($typeHint, $traversableTypeHints)) {
@@ -547,20 +548,20 @@ class AnnotationTypeHelper
 			}
 		}
 
-		/** @var \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $oneTypeNode */
+		/** @var GenericTypeNode|ThisTypeNode|IdentifierTypeNode $oneTypeNode */
 		$oneTypeNode = $typeNode->types[1];
 		return self::getTypeHintFromOneType($oneTypeNode);
 	}
 
 	/**
-	 * @param \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode $typeNode
+	 * @param UnionTypeNode|IntersectionTypeNode $typeNode
 	 * @param array<int, string> $traversableTypeHints
-	 * @return \PHPStan\PhpDocParser\Ast\Type\TypeNode
+	 * @return TypeNode
 	 */
 	public static function getItemsSpecificationTypeFromType(TypeNode $typeNode, array $traversableTypeHints): TypeNode
 	{
 		if (self::containsOneType($typeNode->types[0])) {
-			/** @var \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $oneTypeNode */
+			/** @var GenericTypeNode|ThisTypeNode|IdentifierTypeNode $oneTypeNode */
 			$oneTypeNode = $typeNode->types[0];
 			$typeHint = self::getTypeHintFromOneType($oneTypeNode);
 			if (TypeHintHelper::isTraversableType($typeHint, $traversableTypeHints)) {

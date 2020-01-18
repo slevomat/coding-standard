@@ -29,7 +29,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 * @param string $filePath
 	 * @param (string|int|bool|(string|int|bool)[])[] $sniffProperties
 	 * @param string[] $codesToCheck
-	 * @return \PHP_CodeSniffer\Files\File
+	 * @return File
 	 */
 	protected static function checkFile(string $filePath, array $sniffProperties = [], array $codesToCheck = []): File
 	{

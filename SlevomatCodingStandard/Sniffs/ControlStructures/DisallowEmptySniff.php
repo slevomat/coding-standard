@@ -23,7 +23,7 @@ class DisallowEmptySniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $emptyPointer
 	 */
 	public function process(File $phpcsFile, $emptyPointer): void

@@ -5,7 +5,9 @@ namespace SlevomatCodingStandard\Helpers\Annotation;
 use InvalidArgumentException;
 use LogicException;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use function sprintf;
 
@@ -15,7 +17,7 @@ use function sprintf;
 class ThrowsAnnotation extends Annotation
 {
 
-	/** @var \PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode|null */
+	/** @var ThrowsTagValueNode|null */
 	private $contentNode;
 
 	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, ?ThrowsTagValueNode $contentNode)
@@ -58,7 +60,7 @@ class ThrowsAnnotation extends Annotation
 	}
 
 	/**
-	 * @return \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode
+	 * @return UnionTypeNode|IdentifierTypeNode
 	 */
 	public function getType(): TypeNode
 	{
@@ -66,7 +68,7 @@ class ThrowsAnnotation extends Annotation
 			throw new LogicException(sprintf('Invalid %s annotation.', $this->name));
 		}
 
-		/** @var \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $type */
+		/** @var UnionTypeNode|IdentifierTypeNode $type */
 		$type = $this->contentNode->type;
 		return $type;
 	}

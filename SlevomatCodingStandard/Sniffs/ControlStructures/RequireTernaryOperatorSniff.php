@@ -37,7 +37,7 @@ class RequireTernaryOperatorSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $ifPointer
 	 */
 	public function process(File $phpcsFile, $ifPointer): void

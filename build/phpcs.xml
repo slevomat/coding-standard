@@ -16,6 +16,7 @@
 		<exclude name="Squiz.Commenting.FunctionComment.IncorrectParamVarName"/><!-- Throws error with short type hint for integer and boolean -->
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedExceptions"/>
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameAfterKeyword"/>
+		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation"/>
 	</rule>
 
 	<rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
@@ -185,6 +186,7 @@
 	</rule>
 	<rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
 		<properties>
+			<property name="searchAnnotations" value="true"/>
 			<property name="fullyQualifiedKeywords" type="array"/>
 			<property name="allowFallbackGlobalFunctions" value="false"/>
 			<property name="allowFallbackGlobalConstants" value="false"/>
@@ -197,7 +199,7 @@
 	</rule>
 	<rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
 		<properties>
-			<property name="searchAnnotations" value="false"/>
+			<property name="searchAnnotations" value="true"/>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Namespaces.UselessAlias"/>

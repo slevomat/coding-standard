@@ -28,7 +28,7 @@ class DisallowContinueWithoutIntegerOperandInSwitchSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $continuePointer
 	 */
 	public function process(File $phpcsFile, $continuePointer): void

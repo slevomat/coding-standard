@@ -15,8 +15,8 @@ class AnnotationConstantExpressionHelper
 {
 
 	/**
-	 * @param \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode $contantExpressionNode
-	 * @return array<int, \PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode>
+	 * @param ConstExprNode $contantExpressionNode
+	 * @return array<int, ConstFetchNode>
 	 */
 	public static function getConstantFetchNodes(ConstExprNode $contantExpressionNode): array
 	{
@@ -52,7 +52,7 @@ class AnnotationConstantExpressionHelper
 		if ($masterNode instanceof ConstExprArrayNode) {
 			$items = [];
 			foreach ($masterNode->items as $itemNode) {
-				/** @var \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprArrayItemNode $changedItemNode */
+				/** @var ConstExprArrayItemNode $changedItemNode */
 				$changedItemNode = self::change($itemNode, $nodeToChange, $changedNode);
 
 				$items[] = $changedItemNode;

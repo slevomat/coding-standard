@@ -5,7 +5,15 @@ namespace SlevomatCodingStandard\Helpers\Annotation;
 use InvalidArgumentException;
 use LogicException;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use function sprintf;
 
@@ -15,7 +23,7 @@ use function sprintf;
 class VariableAnnotation extends Annotation
 {
 
-	/** @var \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode|null */
+	/** @var VarTagValueNode|null */
 	private $contentNode;
 
 	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, ?VarTagValueNode $contentNode)
@@ -67,7 +75,7 @@ class VariableAnnotation extends Annotation
 	}
 
 	/**
-	 * @return \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\CallableTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode|\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode
+	 * @return GenericTypeNode|CallableTypeNode|IntersectionTypeNode|UnionTypeNode|ArrayTypeNode|IdentifierTypeNode|ThisTypeNode|ArrayShapeNode
 	 */
 	public function getType(): TypeNode
 	{
@@ -75,7 +83,7 @@ class VariableAnnotation extends Annotation
 			throw new LogicException(sprintf('Invalid %s annotation.', $this->name));
 		}
 
-		/** @var \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\CallableTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode|\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode $type */
+		/** @var GenericTypeNode|CallableTypeNode|IntersectionTypeNode|UnionTypeNode|ArrayTypeNode|IdentifierTypeNode|ThisTypeNode|ArrayShapeNode $type */
 		$type = $this->contentNode->type;
 		return $type;
 	}

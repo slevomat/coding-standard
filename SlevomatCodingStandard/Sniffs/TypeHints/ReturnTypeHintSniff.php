@@ -6,8 +6,13 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
@@ -65,7 +70,7 @@ class ReturnTypeHintSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $pointer
 	 */
 	public function process(File $phpcsFile, $pointer): void
@@ -172,7 +177,7 @@ class ReturnTypeHintSniff implements Sniff
 		}
 
 		if ($annotationContainsOneType) {
-			/** @var \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $returnTypeNode */
+			/** @var ArrayTypeNode|ArrayShapeNode|GenericTypeNode|IdentifierTypeNode|ThisTypeNode $returnTypeNode */
 			$returnTypeNode = $returnTypeNode;
 			$possibleReturnTypeHint = $returnTypeNode instanceof ArrayTypeNode || $returnTypeNode instanceof ArrayShapeNode
 				? 'array'
@@ -180,7 +185,7 @@ class ReturnTypeHintSniff implements Sniff
 			$nullableReturnTypeHint = false;
 
 		} else {
-			/** @var \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode $returnTypeNode */
+			/** @var UnionTypeNode|IntersectionTypeNode $returnTypeNode */
 			$returnTypeNode = $returnTypeNode;
 
 			if (
@@ -191,7 +196,7 @@ class ReturnTypeHintSniff implements Sniff
 			}
 
 			if (AnnotationTypeHelper::containsNullType($returnTypeNode)) {
-				/** @var \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode $notNullTypeHintNode */
+				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode $notNullTypeHintNode */
 				$notNullTypeHintNode = AnnotationTypeHelper::getTypeFromNullableType($returnTypeNode);
 				$possibleReturnTypeHint = $notNullTypeHintNode instanceof ArrayTypeNode || $notNullTypeHintNode instanceof ArrayShapeNode
 					? 'array'
@@ -281,7 +286,7 @@ class ReturnTypeHintSniff implements Sniff
 			return;
 		}
 
-		/** @var \SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation $returnAnnotation */
+		/** @var ReturnAnnotation $returnAnnotation */
 		$returnAnnotation = $returnAnnotation;
 
 		$phpcsFile->addError(
@@ -368,8 +373,8 @@ class ReturnTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @param \SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation|null $returnAnnotation
-	 * @return \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\CallableTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode|\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode|\PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|null
+	 * @param ReturnAnnotation|null $returnAnnotation
+	 * @return GenericTypeNode|CallableTypeNode|IntersectionTypeNode|UnionTypeNode|ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|null
 	 */
 	private function getReturnTypeNode(?ReturnAnnotation $returnAnnotation): ?TypeNode
 	{

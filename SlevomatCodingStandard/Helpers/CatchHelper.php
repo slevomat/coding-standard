@@ -10,7 +10,7 @@ class CatchHelper
 {
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param array<string, array<int, int|string>|int|string> $catchToken
 	 * @return string[]
 	 */

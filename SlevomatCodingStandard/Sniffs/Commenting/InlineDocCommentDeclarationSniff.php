@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Commenting;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function count;
@@ -50,7 +51,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $commentOpenPointer
 	 */
 	public function process(File $phpcsFile, $commentOpenPointer): void
@@ -171,7 +172,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 
 		$variableNames = [];
 
-		/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation $variableAnnotation */
+		/** @var VariableAnnotation $variableAnnotation */
 		foreach ($variableAnnotations as $variableAnnotation) {
 			if ($variableAnnotation->isInvalid()) {
 				continue;
@@ -228,7 +229,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 			$codePointerBefore = $improveCodePointer($codePointerBefore);
 		}
 
-		/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation $variableAnnotation */
+		/** @var VariableAnnotation $variableAnnotation */
 		foreach ($variableAnnotations as $variableAnnotation) {
 			if ($variableAnnotation->isInvalid()) {
 				continue;

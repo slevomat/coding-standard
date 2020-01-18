@@ -9,6 +9,7 @@ use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -50,7 +51,7 @@ class RequireExplicitAssertionSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $docCommentOpenPointer
 	 */
 	public function process(File $phpcsFile, $docCommentOpenPointer): void
@@ -76,7 +77,7 @@ class RequireExplicitAssertionSniff implements Sniff
 			return;
 		}
 
-		/** @var \SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation $variableAnnotation */
+		/** @var VariableAnnotation $variableAnnotation */
 		foreach (array_reverse($variableAnnotations) as $variableAnnotation) {
 			if ($variableAnnotation->isInvalid()) {
 				continue;
@@ -191,7 +192,7 @@ class RequireExplicitAssertionSniff implements Sniff
 				}
 			}
 
-			/** @var \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $variableAnnotationType */
+			/** @var IdentifierTypeNode|ThisTypeNode|UnionTypeNode $variableAnnotationType */
 			$variableAnnotationType = $variableAnnotationType;
 
 			$assertion = $this->createAssert($variableAnnotation->getVariableName(), $variableAnnotationType);
@@ -227,7 +228,7 @@ class RequireExplicitAssertionSniff implements Sniff
 
 	/**
 	 * @param string $variableName
-	 * @param \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode|\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode|\PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode $typeNode
+	 * @param IdentifierTypeNode|ThisTypeNode|UnionTypeNode|IntersectionTypeNode $typeNode
 	 * @return string
 	 */
 	private function createAssert(string $variableName, TypeNode $typeNode): string
@@ -237,7 +238,7 @@ class RequireExplicitAssertionSniff implements Sniff
 		if ($typeNode instanceof IdentifierTypeNode || $typeNode instanceof ThisTypeNode) {
 			$conditions = $this->createConditions($variableName, $typeNode);
 		} else {
-			/** @var \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $innerTypeNode */
+			/** @var IdentifierTypeNode|ThisTypeNode $innerTypeNode */
 			foreach ($typeNode->types as $innerTypeNode) {
 				$conditions = array_merge($conditions, $this->createConditions($variableName, $innerTypeNode));
 			}
@@ -250,7 +251,7 @@ class RequireExplicitAssertionSniff implements Sniff
 
 	/**
 	 * @param string $variableName
-	 * @param \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\ThisTypeNode $typeNode
+	 * @param IdentifierTypeNode|ThisTypeNode $typeNode
 	 * @return string[]
 	 */
 	private function createConditions(string $variableName, TypeNode $typeNode): array

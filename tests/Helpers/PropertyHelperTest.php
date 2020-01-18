@@ -8,7 +8,7 @@ use const T_VARIABLE;
 class PropertyHelperTest extends TestCase
 {
 
-	/** @var \PHP_CodeSniffer\Files\File */
+	/** @var File */
 	private $testedCodeSnifferFile;
 
 	/**

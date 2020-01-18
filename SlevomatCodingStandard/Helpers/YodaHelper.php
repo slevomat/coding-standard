@@ -70,7 +70,7 @@ class YodaHelper
 	private const DYNAMISM_FUNCTION_CALL = self::DYNAMISM_VARIABLE;
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param array<int, array<string, array<int, int|string>|int|string>> $leftSideTokens
 	 * @param array<int, array<string, array<int, int|string>|int|string>> $rightSideTokens
 	 */
@@ -266,7 +266,7 @@ class YodaHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param array<int, array<string, array<int, int|string>|int|string>> $oldTokens
 	 * @param array<int, array<string, array<int, int|string>|int|string>> $newTokens
 	 */

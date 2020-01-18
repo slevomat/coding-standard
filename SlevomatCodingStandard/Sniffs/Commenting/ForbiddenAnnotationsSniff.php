@@ -39,7 +39,7 @@ class ForbiddenAnnotationsSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $docCommentOpenPointer
 	 */
 	public function process(File $phpcsFile, $docCommentOpenPointer): void

@@ -51,7 +51,7 @@ class TypeNameMatchesFileNameSniff implements Sniff
 	/** @var string[]|null */
 	private $normalizedExtensions;
 
-	/** @var \SlevomatCodingStandard\Sniffs\Files\FilepathNamespaceExtractor */
+	/** @var FilepathNamespaceExtractor */
 	private $namespaceExtractor;
 
 	/**
@@ -68,7 +68,7 @@ class TypeNameMatchesFileNameSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $typePointer
 	 */
 	public function process(File $phpcsFile, $typePointer): void

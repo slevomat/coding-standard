@@ -9,7 +9,7 @@ class SuppressHelperTest extends TestCase
 
 	private const CHECK_NAME = 'Sniff.Sniff.Sniff.check';
 
-	/** @var \PHP_CodeSniffer\Files\File */
+	/** @var File */
 	private $testedCodeSnifferFile;
 
 	public function testClassIsSuppressed(): void

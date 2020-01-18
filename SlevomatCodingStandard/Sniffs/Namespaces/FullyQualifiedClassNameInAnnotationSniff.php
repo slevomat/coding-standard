@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationConstantExpressionHelper;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
@@ -33,7 +34,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $docCommentOpenPointer
 	 */
 	public function process(File $phpcsFile, $docCommentOpenPointer): void
@@ -111,7 +112,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 
 						$phpcsFile->fixer->beginChangeset();
 
-						/** @var \SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation $annotation */
+						/** @var MethodAnnotation $annotation */
 						$annotation = $annotation;
 						$fixedAnnotationContent = AnnotationHelper::fixAnnotationConstantFetchNode($phpcsFile, $annotation, $constantFetchNode, new ConstFetchNode($fullyQualifiedTypeHint, $constantFetchNode->name));
 

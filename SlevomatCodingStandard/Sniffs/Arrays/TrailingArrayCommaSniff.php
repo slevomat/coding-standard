@@ -32,7 +32,7 @@ class TrailingArrayCommaSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $stackPointer
 	 */
 	public function process(File $phpcsFile, $stackPointer): void

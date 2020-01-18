@@ -23,7 +23,7 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $methodPointer
 	 */
 	public function process(File $phpcsFile, $methodPointer): void

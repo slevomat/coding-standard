@@ -201,7 +201,7 @@ class FunctionHelperTest extends TestCase
 	/**
 	 * @dataProvider dataParametersTypeHints
 	 * @param string $functionName
-	 * @param (\SlevomatCodingStandard\Helpers\ParameterTypeHint|null)[] $expectedParametersTypeHints
+	 * @param (ParameterTypeHint|null)[] $expectedParametersTypeHints
 	 */
 	public function testParametersTypeHints(string $functionName, array $expectedParametersTypeHints): void
 	{
@@ -226,7 +226,7 @@ class FunctionHelperTest extends TestCase
 	/**
 	 * @dataProvider dataParametersNullableTypeHints
 	 * @param string $functionName
-	 * @param (\SlevomatCodingStandard\Helpers\ParameterTypeHint|null)[] $expectedParametersTypeHints
+	 * @param (ParameterTypeHint|null)[] $expectedParametersTypeHints
 	 */
 	public function testParametersNullableTypeHints(string $functionName, array $expectedParametersTypeHints): void
 	{
@@ -327,7 +327,7 @@ class FunctionHelperTest extends TestCase
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'abstractWithReturnTypeHint');
 		self::assertTrue(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
 
-		/** @var \SlevomatCodingStandard\Helpers\ReturnTypeHint  $returnTypeHint */
+		/** @var ReturnTypeHint $returnTypeHint */
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 		self::assertSame('bool', $returnTypeHint->getTypeHint());
 		self::assertFalse($returnTypeHint->isNullable());

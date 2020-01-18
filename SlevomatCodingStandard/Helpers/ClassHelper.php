@@ -45,7 +45,7 @@ class ClassHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @return array<int, string>
 	 */
 	public static function getAllNames(File $phpcsFile): array
@@ -62,7 +62,7 @@ class ClassHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $classPointer
 	 * @return int[]
 	 */
@@ -89,9 +89,9 @@ class ClassHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $previousClassPointer
-	 * @return \Generator<int>
+	 * @return Generator<int>
 	 */
 	private static function getAllClassPointers(File $phpcsFile, int &$previousClassPointer): Generator
 	{

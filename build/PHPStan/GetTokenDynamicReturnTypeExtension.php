@@ -19,7 +19,7 @@ use PHPStan\Type\UnionType;
 class GetTokenDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
-	/** @var \PHPStan\Type\ArrayType|null */
+	/** @var ArrayType|null */
 	private $arrayType;
 
 	public function getClass(): string
@@ -34,10 +34,10 @@ class GetTokenDynamicReturnTypeExtension implements DynamicMethodReturnTypeExten
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
-	 * @param \PHPStan\Reflection\MethodReflection $methodReflection
-	 * @param \PhpParser\Node\Expr\MethodCall $methodCall
-	 * @param \PHPStan\Analyser\Scope $scope
-	 * @return \PHPStan\Type\Type
+	 * @param MethodReflection $methodReflection
+	 * @param MethodCall $methodCall
+	 * @param Scope $scope
+	 * @return Type
 	 */
 	public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): Type
 	{

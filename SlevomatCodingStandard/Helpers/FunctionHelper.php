@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Helpers;
 
 use Generator;
 use PHP_CodeSniffer\Files\File;
+use SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation;
 use function array_filter;
 use function array_map;
@@ -107,7 +108,7 @@ class FunctionHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $functionPointer
 	 * @return string[]
 	 */
@@ -128,9 +129,9 @@ class FunctionHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $functionPointer
-	 * @return (\SlevomatCodingStandard\Helpers\ParameterTypeHint|null)[]
+	 * @return (ParameterTypeHint|null)[]
 	 */
 	public static function getParametersTypeHints(File $phpcsFile, int $functionPointer): array
 	{
@@ -261,21 +262,21 @@ class FunctionHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $functionPointer
-	 * @return \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation[]
+	 * @return ParameterAnnotation[]
 	 */
 	public static function getParametersAnnotations(File $phpcsFile, int $functionPointer): array
 	{
-		/** @var \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation[] $parametersAnnotations */
+		/** @var ParameterAnnotation[] $parametersAnnotations */
 		$parametersAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $functionPointer, '@param');
 		return $parametersAnnotations;
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $functionPointer
-	 * @return array<string, \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation>
+	 * @return array<string, ParameterAnnotation>
 	 */
 	public static function getValidParametersAnnotations(File $phpcsFile, int $functionPointer): array
 	{
@@ -297,7 +298,7 @@ class FunctionHelper
 
 	public static function findReturnAnnotation(File $phpcsFile, int $functionPointer): ?ReturnAnnotation
 	{
-		/** @var \SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation[] $returnAnnotations */
+		/** @var ReturnAnnotation[] $returnAnnotations */
 		$returnAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $functionPointer, '@return');
 
 		if (count($returnAnnotations) === 0) {
@@ -308,7 +309,7 @@ class FunctionHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @return string[]
 	 */
 	public static function getAllFunctionNames(File $phpcsFile): array
@@ -329,9 +330,9 @@ class FunctionHelper
 	}
 
 	/**
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile
+	 * @param File $phpcsFile
 	 * @param int $previousFunctionPointer
-	 * @return \Generator<int>
+	 * @return Generator<int>
 	 */
 	private static function getAllFunctionOrMethodPointers(File $phpcsFile, int &$previousFunctionPointer): Generator
 	{
