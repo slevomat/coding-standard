@@ -119,7 +119,12 @@ class TypeHintHelper
 		return self::isSimpleIterableTypeHint($type) || in_array($type, $traversableTypeHints, true);
 	}
 
-	public static function typeHintEqualsAnnotation(File $phpcsFile, int $functionPointer, string $typeHint, string $typeHintInAnnotation): bool
+	public static function typeHintEqualsAnnotation(
+		File $phpcsFile,
+		int $functionPointer,
+		string $typeHint,
+		string $typeHintInAnnotation
+	): bool
 	{
 		return self::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint) === self::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHintInAnnotation);
 	}

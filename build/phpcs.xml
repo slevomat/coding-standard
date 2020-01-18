@@ -63,7 +63,16 @@
 	<rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference"/>
 	<rule ref="SlevomatCodingStandard.Classes.ParentCallSpacing"/>
 	<rule ref="SlevomatCodingStandard.Classes.PropertySpacing"/>
-	<rule ref="SlevomatCodingStandard.Classes.RequireSingleLineMethodSignature"/>
+	<rule ref="SlevomatCodingStandard.Classes.RequireSingleLineMethodSignature">
+		<properties>
+			<property name="maxLineLength" value="140"/>
+		</properties>
+	</rule>
+	<rule ref="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature">
+		<properties>
+			<property name="minLineLength" value="141"/>
+		</properties>
+	</rule>
 	<rule ref="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming">
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Classes/AbstractPropertyAndConstantSpacing.php</exclude-pattern>
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Classes/AbstractMethodSignature.php</exclude-pattern>

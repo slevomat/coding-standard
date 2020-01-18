@@ -18,13 +18,7 @@ class VariableAnnotation extends Annotation
 	/** @var \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode|null */
 	private $contentNode;
 
-	public function __construct(
-		string $name,
-		int $startPointer,
-		int $endPointer,
-		?string $content,
-		?VarTagValueNode $contentNode
-	)
+	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, ?VarTagValueNode $contentNode)
 	{
 		if ($name !== '@var') {
 			throw new InvalidArgumentException(sprintf('Unsupported annotation %s.', $name));

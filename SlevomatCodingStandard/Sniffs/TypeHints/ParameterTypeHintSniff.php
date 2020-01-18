@@ -230,7 +230,12 @@ class ParameterTypeHintSniff implements Sniff
 	 * @param (\SlevomatCodingStandard\Helpers\ParameterTypeHint|null)[] $parametersTypeHints
 	 * @param \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation[] $parametersAnnotations
 	 */
-	private function checkTraversableTypeHintSpecification(File $phpcsFile, int $functionPointer, array $parametersTypeHints, array $parametersAnnotations): void
+	private function checkTraversableTypeHintSpecification(
+		File $phpcsFile,
+		int $functionPointer,
+		array $parametersTypeHints,
+		array $parametersAnnotations
+	): void
 	{
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::getSniffName(self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION))) {
 			return;
@@ -289,7 +294,12 @@ class ParameterTypeHintSniff implements Sniff
 	 * @param (\SlevomatCodingStandard\Helpers\ParameterTypeHint|null)[] $parametersTypeHints
 	 * @param \SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation[] $parametersAnnotations
 	 */
-	private function checkUselessAnnotations(File $phpcsFile, int $functionPointer, array $parametersTypeHints, array $parametersAnnotations): void
+	private function checkUselessAnnotations(
+		File $phpcsFile,
+		int $functionPointer,
+		array $parametersTypeHints,
+		array $parametersAnnotations
+	): void
 	{
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::getSniffName(self::CODE_USELESS_ANNOTATION))) {
 			return;

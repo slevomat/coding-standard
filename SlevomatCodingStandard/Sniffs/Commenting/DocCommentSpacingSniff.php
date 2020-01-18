@@ -147,11 +147,7 @@ class DocCommentSpacingSniff implements Sniff
 		$this->checkLinesAfterLastContent($phpcsFile, $docCommentOpenerPointer, $tokens[$docCommentOpenerPointer]['comment_closer'], $lastContentEndPointer);
 	}
 
-	private function checkLinesBeforeFirstContent(
-		File $phpcsFile,
-		int $docCommentOpenerPointer,
-		int $firstContentStartPointer
-	): void
+	private function checkLinesBeforeFirstContent(File $phpcsFile, int $docCommentOpenerPointer, int $firstContentStartPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -254,11 +250,7 @@ class DocCommentSpacingSniff implements Sniff
 	 * @param int $docCommentOpenerPointer
 	 * @param \SlevomatCodingStandard\Helpers\Annotation\Annotation[] $annotations
 	 */
-	private function checkLinesBetweenDifferentAnnotationsTypes(
-		File $phpcsFile,
-		int $docCommentOpenerPointer,
-		array $annotations
-	): void
+	private function checkLinesBetweenDifferentAnnotationsTypes(File $phpcsFile, int $docCommentOpenerPointer, array $annotations): void
 	{
 		$requiredLinesCountBetweenDifferentAnnotationsTypes = SniffSettingsHelper::normalizeInteger($this->linesCountBetweenDifferentAnnotationsTypes);
 
@@ -362,11 +354,7 @@ class DocCommentSpacingSniff implements Sniff
 	 * @param int $docCommentOpenerPointer
 	 * @param \SlevomatCodingStandard\Helpers\Annotation\Annotation[][] $annotationsGroups
 	 */
-	private function checkLinesBetweenAnnotationsGroups(
-		File $phpcsFile,
-		int $docCommentOpenerPointer,
-		array $annotationsGroups
-	): void
+	private function checkLinesBetweenAnnotationsGroups(File $phpcsFile, int $docCommentOpenerPointer, array $annotationsGroups): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

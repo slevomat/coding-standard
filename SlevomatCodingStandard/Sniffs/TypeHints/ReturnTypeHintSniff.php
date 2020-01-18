@@ -92,7 +92,12 @@ class ReturnTypeHintSniff implements Sniff
 		}
 	}
 
-	private function checkFunctionTypeHint(File $phpcsFile, int $functionPointer, ?ReturnTypeHint $returnTypeHint, ?ReturnAnnotation $returnAnnotation): void
+	private function checkFunctionTypeHint(
+		File $phpcsFile,
+		int $functionPointer,
+		?ReturnTypeHint $returnTypeHint,
+		?ReturnAnnotation $returnAnnotation
+	): void
 	{
 		if ($returnTypeHint !== null) {
 			return;
@@ -234,7 +239,12 @@ class ReturnTypeHintSniff implements Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
-	private function checkFunctionTraversableTypeHintSpecification(File $phpcsFile, int $functionPointer, ?ReturnTypeHint $returnTypeHint, ?ReturnAnnotation $returnAnnotation): void
+	private function checkFunctionTraversableTypeHintSpecification(
+		File $phpcsFile,
+		int $functionPointer,
+		?ReturnTypeHint $returnTypeHint,
+		?ReturnAnnotation $returnAnnotation
+	): void
 	{
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::getSniffName(self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION))) {
 			return;
@@ -285,7 +295,12 @@ class ReturnTypeHintSniff implements Sniff
 		);
 	}
 
-	private function checkFunctionUselessAnnotation(File $phpcsFile, int $functionPointer, ?ReturnTypeHint $returnTypeHint, ?ReturnAnnotation $returnAnnotation): void
+	private function checkFunctionUselessAnnotation(
+		File $phpcsFile,
+		int $functionPointer,
+		?ReturnTypeHint $returnTypeHint,
+		?ReturnAnnotation $returnAnnotation
+	): void
 	{
 		if ($returnAnnotation === null) {
 			return;
@@ -365,7 +380,12 @@ class ReturnTypeHintSniff implements Sniff
 		return null;
 	}
 
-	private function hasTraversableTypeHint(File $phpcsFile, int $functionPointer, ?ReturnTypeHint $returnTypeHint, ?ReturnAnnotation $returnAnnotation): bool
+	private function hasTraversableTypeHint(
+		File $phpcsFile,
+		int $functionPointer,
+		?ReturnTypeHint $returnTypeHint,
+		?ReturnAnnotation $returnAnnotation
+	): bool
 	{
 		if ($returnTypeHint !== null && TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()), $this->getTraversableTypeHints())) {
 			return true;

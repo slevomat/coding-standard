@@ -149,7 +149,12 @@ class AnnotationHelper
 	 * @param \PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode $fixedNode
 	 * @return string
 	 */
-	public static function fixAnnotationConstantFetchNode(File $phpcsFile, MethodAnnotation $annotation, ConstFetchNode $node, ConstFetchNode $fixedNode): string
+	public static function fixAnnotationConstantFetchNode(
+		File $phpcsFile,
+		MethodAnnotation $annotation,
+		ConstFetchNode $node,
+		ConstFetchNode $fixedNode
+	): string
 	{
 		$fixedContentNode = clone $annotation->getContentNode();
 
@@ -303,7 +308,13 @@ class AnnotationHelper
 	 * @param array<int, string> $traversableTypeHints
 	 * @return bool
 	 */
-	public static function isAnnotationUseless(File $phpcsFile, int $functionPointer, $typeHint, Annotation $annotation, array $traversableTypeHints): bool
+	public static function isAnnotationUseless(
+		File $phpcsFile,
+		int $functionPointer,
+		$typeHint,
+		Annotation $annotation,
+		array $traversableTypeHints
+	): bool
 	{
 		if ($typeHint === null || $annotation->getContent() === null) {
 			return false;

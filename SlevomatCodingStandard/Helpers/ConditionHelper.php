@@ -33,7 +33,11 @@ use const T_OPEN_PARENTHESIS;
 class ConditionHelper
 {
 
-	public static function conditionReturnsBoolean(File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer): bool
+	public static function conditionReturnsBoolean(
+		File $phpcsFile,
+		int $conditionBoundaryStartPointer,
+		int $conditionBoundaryEndPointer
+	): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -73,7 +77,12 @@ class ConditionHelper
 		return false;
 	}
 
-	public static function getNegativeCondition(File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer, bool $nested = false): string
+	public static function getNegativeCondition(
+		File $phpcsFile,
+		int $conditionBoundaryStartPointer,
+		int $conditionBoundaryEndPointer,
+		bool $nested = false
+	): string
 	{
 		/** @var int $conditionStartPointer */
 		$conditionStartPointer = TokenHelper::findNextEffective($phpcsFile, $conditionBoundaryStartPointer);
@@ -96,7 +105,12 @@ class ConditionHelper
 		);
 	}
 
-	private static function getNegativeConditionPart(File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer, bool $nested): string
+	private static function getNegativeConditionPart(
+		File $phpcsFile,
+		int $conditionBoundaryStartPointer,
+		int $conditionBoundaryEndPointer,
+		bool $nested
+	): string
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -172,7 +186,11 @@ class ConditionHelper
 		return preg_replace('~^!\\s*~', '', $condition);
 	}
 
-	private static function getNegativeLogicalCondition(File $phpcsFile, int $conditionBoundaryStartPointer, int $conditionBoundaryEndPointer): string
+	private static function getNegativeLogicalCondition(
+		File $phpcsFile,
+		int $conditionBoundaryStartPointer,
+		int $conditionBoundaryEndPointer
+	): string
 	{
 		if (TokenHelper::findNext($phpcsFile, T_LOGICAL_XOR, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer) !== null) {
 			return sprintf('!(%s)', TokenHelper::getContent($phpcsFile, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer));

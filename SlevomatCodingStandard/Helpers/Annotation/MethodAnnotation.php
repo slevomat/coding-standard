@@ -19,13 +19,7 @@ class MethodAnnotation extends Annotation
 	/** @var \PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode|null */
 	private $contentNode;
 
-	public function __construct(
-		string $name,
-		int $startPointer,
-		int $endPointer,
-		?string $content,
-		?MethodTagValueNode $contentNode
-	)
+	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, ?MethodTagValueNode $contentNode)
 	{
 		if ($name !== '@method') {
 			throw new InvalidArgumentException(sprintf('Unsupported annotation %s.', $name));

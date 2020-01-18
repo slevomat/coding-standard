@@ -116,7 +116,13 @@ class RequireTernaryOperatorSniff implements Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
-	private function checkIfWithAssignments(File $phpcsFile, int $ifPointer, int $elsePointer, int $firstPointerInIf, int $firstPointerInElse): void
+	private function checkIfWithAssignments(
+		File $phpcsFile,
+		int $ifPointer,
+		int $elsePointer,
+		int $firstPointerInIf,
+		int $firstPointerInElse
+	): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

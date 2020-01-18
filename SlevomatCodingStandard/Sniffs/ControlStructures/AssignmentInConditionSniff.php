@@ -52,12 +52,7 @@ class AssignmentInConditionSniff implements Sniff
 		$this->processCondition($phpcsFile, $parenthesisOpener, $parenthesisCloser, $type);
 	}
 
-	private function processCondition(
-		File $phpcsFile,
-		int $parenthesisOpener,
-		int $parenthesisCloser,
-		string $conditionType
-	): void
+	private function processCondition(File $phpcsFile, int $parenthesisOpener, int $parenthesisCloser, string $conditionType): void
 	{
 		$equalsTokenPointer = TokenHelper::findNext($phpcsFile, T_EQUAL, $parenthesisOpener + 1, $parenthesisCloser);
 		if ($equalsTokenPointer === null) {

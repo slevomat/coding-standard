@@ -435,7 +435,13 @@ class AnnotationTypeHelper
 	 * @param bool $inTraversable
 	 * @return bool
 	 */
-	public static function containsItemsSpecificationForTraversable(TypeNode $typeNode, File $phpcsFile, int $pointer, array $traversableTypeHints, bool $inTraversable = false): bool
+	public static function containsItemsSpecificationForTraversable(
+		TypeNode $typeNode,
+		File $phpcsFile,
+		int $pointer,
+		array $traversableTypeHints,
+		bool $inTraversable = false
+	): bool
 	{
 		if ($typeNode instanceof GenericTypeNode) {
 			foreach ($typeNode->genericTypes as $genericType) {

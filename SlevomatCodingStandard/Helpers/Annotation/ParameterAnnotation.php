@@ -18,13 +18,7 @@ class ParameterAnnotation extends Annotation
 	/** @var \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|null */
 	private $contentNode;
 
-	public function __construct(
-		string $name,
-		int $startPointer,
-		int $endPointer,
-		?string $content,
-		?ParamTagValueNode $contentNode
-	)
+	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, ?ParamTagValueNode $contentNode)
 	{
 		if ($name !== '@param') {
 			throw new InvalidArgumentException(sprintf('Unsupported annotation %s.', $name));

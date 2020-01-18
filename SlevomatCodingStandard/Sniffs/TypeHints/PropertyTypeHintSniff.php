@@ -95,7 +95,12 @@ class PropertyTypeHintSniff implements Sniff
 		$this->checkUselessAnnotation($phpcsFile, $propertyPointer, $propertyTypeHint, $propertyAnnotation);
 	}
 
-	private function checkTypeHint(File $phpcsFile, int $propertyPointer, ?PropertyTypeHint $propertyTypeHint, ?VariableAnnotation $propertyAnnotation): void
+	private function checkTypeHint(
+		File $phpcsFile,
+		int $propertyPointer,
+		?PropertyTypeHint $propertyTypeHint,
+		?VariableAnnotation $propertyAnnotation
+	): void
 	{
 		if ($propertyTypeHint !== null) {
 			return;
@@ -216,7 +221,12 @@ class PropertyTypeHintSniff implements Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
-	private function checkTraversableTypeHintSpecification(File $phpcsFile, int $propertyPointer, ?PropertyTypeHint $propertyTypeHint, ?VariableAnnotation $propertyAnnotation): void
+	private function checkTraversableTypeHintSpecification(
+		File $phpcsFile,
+		int $propertyPointer,
+		?PropertyTypeHint $propertyTypeHint,
+		?VariableAnnotation $propertyAnnotation
+	): void
 	{
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, $this->getSniffName(self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION))) {
 			return;
@@ -262,7 +272,12 @@ class PropertyTypeHintSniff implements Sniff
 		);
 	}
 
-	private function checkUselessAnnotation(File $phpcsFile, int $propertyPointer, ?PropertyTypeHint $propertyTypeHint, ?VariableAnnotation $propertyAnnotation): void
+	private function checkUselessAnnotation(
+		File $phpcsFile,
+		int $propertyPointer,
+		?PropertyTypeHint $propertyTypeHint,
+		?VariableAnnotation $propertyAnnotation
+	): void
 	{
 		if ($propertyAnnotation === null) {
 			return;
@@ -353,7 +368,12 @@ class PropertyTypeHintSniff implements Sniff
 		return $propertyAnnotation !== null && $propertyAnnotation->getContent() !== null && !$propertyAnnotation->isInvalid();
 	}
 
-	private function hasTraversableTypeHint(File $phpcsFile, int $propertyPointer, ?PropertyTypeHint $propertyTypeHint, ?VariableAnnotation $propertyAnnotation): bool
+	private function hasTraversableTypeHint(
+		File $phpcsFile,
+		int $propertyPointer,
+		?PropertyTypeHint $propertyTypeHint,
+		?VariableAnnotation $propertyAnnotation
+	): bool
 	{
 		if ($propertyTypeHint !== null && TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $propertyPointer, $propertyTypeHint->getTypeHint()), $this->getTraversableTypeHints())) {
 			return true;

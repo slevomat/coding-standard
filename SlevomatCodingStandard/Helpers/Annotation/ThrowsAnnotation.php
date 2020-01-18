@@ -18,13 +18,7 @@ class ThrowsAnnotation extends Annotation
 	/** @var \PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode|null */
 	private $contentNode;
 
-	public function __construct(
-		string $name,
-		int $startPointer,
-		int $endPointer,
-		?string $content,
-		?ThrowsTagValueNode $contentNode
-	)
+	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, ?ThrowsTagValueNode $contentNode)
 	{
 		if ($name !== '@throws') {
 			throw new InvalidArgumentException(sprintf('Unsupported annotation %s.', $name));

@@ -134,7 +134,14 @@ class UseStatementHelperTest extends TestCase
 		self::assertUseStatement('Lerdorf\isBar', 'isBar', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_FUNCTION, 'isBar')], true, false, null);
 	}
 
-	private function assertUseStatement(string $fullyQualifiedTypeName, string $referencedName, UseStatement $useStatement, bool $isFunction, bool $isConstant, ?string $alias): void
+	private function assertUseStatement(
+		string $fullyQualifiedTypeName,
+		string $referencedName,
+		UseStatement $useStatement,
+		bool $isFunction,
+		bool $isConstant,
+		?string $alias
+	): void
 	{
 		self::assertSame($fullyQualifiedTypeName, $useStatement->getFullyQualifiedTypeName());
 		self::assertSame($referencedName, $useStatement->getNameAsReferencedInFile());

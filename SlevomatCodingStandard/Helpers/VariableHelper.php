@@ -32,7 +32,12 @@ class VariableHelper
 		return self::isUsedInScopeInternal($phpcsFile, $scopeOwnerPointer, $variablePointer, $firstPointerInScope);
 	}
 
-	public static function isUsedInScopeAfterPointer(File $phpcsFile, int $scopeOwnerPointer, int $variablePointer, int $startCheckPointer): bool
+	public static function isUsedInScopeAfterPointer(
+		File $phpcsFile,
+		int $scopeOwnerPointer,
+		int $variablePointer,
+		int $startCheckPointer
+	): bool
 	{
 		return self::isUsedInScopeInternal($phpcsFile, $scopeOwnerPointer, $variablePointer, $startCheckPointer);
 	}
@@ -97,7 +102,12 @@ class VariableHelper
 		return preg_match('~\$\{' . preg_quote($variableNameWithoutDollar, '~') . '\}~', $stringContent) !== 0;
 	}
 
-	private static function isUsedInScopeInternal(File $phpcsFile, int $scopeOwnerPointer, int $variablePointer, int $startCheckPointer): bool
+	private static function isUsedInScopeInternal(
+		File $phpcsFile,
+		int $scopeOwnerPointer,
+		int $variablePointer,
+		int $startCheckPointer
+	): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 

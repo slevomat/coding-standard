@@ -18,13 +18,7 @@ class ReturnAnnotation extends Annotation
 	/** @var \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode|null */
 	private $contentNode;
 
-	public function __construct(
-		string $name,
-		int $startPointer,
-		int $endPointer,
-		?string $content,
-		?ReturnTagValueNode $contentNode
-	)
+	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, ?ReturnTagValueNode $contentNode)
 	{
 		if ($name !== '@return') {
 			throw new InvalidArgumentException(sprintf('Unsupported annotation %s.', $name));

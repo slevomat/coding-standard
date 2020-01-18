@@ -19,13 +19,7 @@ class PropertyAnnotation extends Annotation
 	/** @var \PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode|null */
 	private $contentNode;
 
-	public function __construct(
-		string $name,
-		int $startPointer,
-		int $endPointer,
-		?string $content,
-		?PropertyTagValueNode $contentNode
-	)
+	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, ?PropertyTagValueNode $contentNode)
 	{
 		if (!in_array($name, ['@property', '@property-read', '@property-write'], true)) {
 			throw new InvalidArgumentException(sprintf('Unsupported annotation %s.', $name));
