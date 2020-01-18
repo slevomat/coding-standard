@@ -374,6 +374,14 @@ Sniff provides the following settings:
 * `$minLinesCountBeforeWithoutComment`: minimum number of lines before property without a doc comment
 * `$maxLinesCountBeforeWithoutComment`: maximum number of lines before property without a doc comment
 
+#### SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature 🔧
+
+Enforces method signature to be splitted to more lines so each parameter is on its own line.
+
+Sniff provides the following settings:
+
+* `minLineLength`: specifies min line length to enforce signature to be splitted. Use 0 value to enforce for all methods, regardless of length.
+
 #### SlevomatCodingStandard.Classes.RequireSingleLineMethodSignature 🔧
 
 Enforces method signature to be on a single line.
