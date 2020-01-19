@@ -532,7 +532,7 @@ Sniff provides the following settings:
 
 #### SlevomatCodingStandard.Functions.DisallowEmptyFunction
 
-Reports empty functions body and require at least a comment inside.
+Reports empty functions body and requires at least a comment inside.
 
 #### SlevomatCodingStandard.Functions.DisallowArrowFunction
 
