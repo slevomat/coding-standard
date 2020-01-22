@@ -197,4 +197,6 @@ abstract class WithAbstract
 
 	abstract public function abstractMethod();
 
+	abstract protected static function abstractStaticMethod();
+
 }

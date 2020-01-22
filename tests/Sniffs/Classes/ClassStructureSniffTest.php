@@ -29,7 +29,7 @@ class ClassStructureSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/classStructureSniffErrors.php');
 
-		self::assertSame(23, $report->getErrorCount());
+		self::assertSame(24, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 12, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
@@ -52,6 +52,7 @@ class ClassStructureSniffTest extends TestCase
 		self::assertSniffError($report, 161, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 175, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 198, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 200, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 
 		self::assertAllFixedInFile($report);
 	}

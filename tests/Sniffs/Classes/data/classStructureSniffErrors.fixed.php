@@ -191,6 +191,8 @@ class M
 abstract class WithAbstract
 {
 
+	abstract protected static function abstractStaticMethod();
+
 	abstract public function abstractMethod();
 
 	public function notAbtractMethod()
