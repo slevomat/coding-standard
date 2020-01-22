@@ -37,4 +37,12 @@ class X {
 		yield parent::g();
 	}
 
+	function h() {
+		yield from parent::e();
+	}
+
+	function i() {
+		return [parent::f()];
+	}
+
 }
