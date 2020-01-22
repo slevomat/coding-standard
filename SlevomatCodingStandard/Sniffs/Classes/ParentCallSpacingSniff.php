@@ -10,9 +10,11 @@ use SlevomatCodingStandard\Sniffs\ControlStructures\AbstractControlStructureSpac
 use function array_key_exists;
 use function array_merge;
 use function in_array;
+use const T_OPEN_SHORT_ARRAY;
 use const T_PARENT;
 use const T_RETURN;
 use const T_YIELD;
+use const T_YIELD_FROM;
 
 class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 {
@@ -47,7 +49,11 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
 		}
 
-		$tokensToIgnore = array_merge(Tokens::$assignmentTokens, Tokens::$equalityTokens, [T_RETURN, T_YIELD]);
+		$tokensToIgnore = array_merge(
+			Tokens::$assignmentTokens,
+			Tokens::$equalityTokens,
+			[T_RETURN, T_YIELD, T_YIELD_FROM, T_OPEN_SHORT_ARRAY]
+		);
 		if (in_array($tokens[$previousPointer]['code'], $tokensToIgnore, true)) {
 			return;
 		}
