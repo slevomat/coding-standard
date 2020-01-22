@@ -58,9 +58,11 @@ class ClassStructureSniff implements Sniff
 	private const GROUP_PUBLIC_METHODS = 'public methods';
 	private const GROUP_PUBLIC_ABSTRACT_METHODS = 'public abstract methods';
 	private const GROUP_PUBLIC_STATIC_METHODS = 'public static methods';
+	private const GROUP_PUBLIC_STATIC_ABSTRACT_METHODS = 'public static abstract methods';
 	private const GROUP_PROTECTED_METHODS = 'protected methods';
 	private const GROUP_PROTECTED_ABSTRACT_METHODS = 'protected abstract methods';
 	private const GROUP_PROTECTED_STATIC_METHODS = 'protected static methods';
+	private const GROUP_PROTECTED_STATIC_ABSTRACT_METHODS = 'protected static abstract methods';
 	private const GROUP_PRIVATE_METHODS = 'private methods';
 	private const GROUP_PRIVATE_STATIC_METHODS = 'private static methods';
 
@@ -86,7 +88,7 @@ class ClassStructureSniff implements Sniff
 	public $groups = [];
 
 	/** @var array<string, int>|null */
-	private $normalizedGroups = null;
+	private $normalizedGroups;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -236,14 +238,17 @@ class ClassStructureSniff implements Sniff
 				}
 
 				$visibility = $this->getVisibilityForToken($phpcsFile, $pointer);
-
-				if ($this->isFunctionAbstract($phpcsFile, $pointer)) {
-					return $visibility === T_PUBLIC ? self::GROUP_PUBLIC_ABSTRACT_METHODS : self::GROUP_PROTECTED_ABSTRACT_METHODS;
-				}
-
 				$isStatic = $this->isMemberStatic($phpcsFile, $pointer);
 
-				if ($isStatic && $this->isStaticConstructor($phpcsFile, $pointer)) {
+				if ($this->isFunctionAbstract($phpcsFile, $pointer)) {
+					if ($visibility === T_PUBLIC) {
+						return $isStatic ? self::GROUP_PUBLIC_STATIC_ABSTRACT_METHODS : self::GROUP_PUBLIC_ABSTRACT_METHODS;
+					}
+
+					return $isStatic ? self::GROUP_PROTECTED_STATIC_ABSTRACT_METHODS : self::GROUP_PROTECTED_ABSTRACT_METHODS;
+				}
+
+				if ($isStatic && $visibility === T_PUBLIC && $this->isStaticConstructor($phpcsFile, $pointer)) {
 					return self::GROUP_STATIC_CONSTRUCTORS;
 				}
 
@@ -299,10 +304,6 @@ class ClassStructureSniff implements Sniff
 
 	private function isStaticConstructor(File $phpcsFile, int $pointer): bool
 	{
-		if ($this->getVisibilityForToken($phpcsFile, $pointer) !== T_PUBLIC) {
-			return false;
-		}
-
 		$parentClassName = $this->getParentClassName($phpcsFile, $pointer);
 
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $pointer);
@@ -434,6 +435,8 @@ class ClassStructureSniff implements Sniff
 				self::GROUP_PROTECTED_STATIC_PROPERTIES,
 				self::GROUP_PRIVATE_PROPERTIES,
 				self::GROUP_PRIVATE_STATIC_PROPERTIES,
+				self::GROUP_PUBLIC_STATIC_ABSTRACT_METHODS,
+				self::GROUP_PROTECTED_STATIC_ABSTRACT_METHODS,
 				self::GROUP_PUBLIC_ABSTRACT_METHODS,
 				self::GROUP_PROTECTED_ABSTRACT_METHODS,
 				self::GROUP_CONSTRUCTOR,
