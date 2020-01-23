@@ -45,4 +45,8 @@ class X {
 		return [parent::f()];
 	}
 
+	function j() {
+		return doAnything() && parent::j();
+	}
+
 }

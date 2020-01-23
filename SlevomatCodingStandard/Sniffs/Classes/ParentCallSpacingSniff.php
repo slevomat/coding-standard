@@ -52,6 +52,7 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 		$tokensToIgnore = array_merge(
 			Tokens::$assignmentTokens,
 			Tokens::$equalityTokens,
+			Tokens::$booleanOperators,
 			[T_RETURN, T_YIELD, T_YIELD_FROM, T_OPEN_SHORT_ARRAY]
 		);
 		if (in_array($tokens[$previousPointer]['code'], $tokensToIgnore, true)) {
