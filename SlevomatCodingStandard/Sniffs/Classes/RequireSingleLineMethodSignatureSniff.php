@@ -36,10 +36,10 @@ class RequireSingleLineMethodSignatureSniff extends AbstractMethodSignature
 		}
 
 		$signature = $this->getSignature($phpcsFile, $signatureStartPointer, $signatureEndPointer);
-		$signatureWithoutTabIndetation = $this->getSignatureWithoutTabs($signature);
+		$signatureWithoutTabIndentation = $this->getSignatureWithoutTabs($signature);
 
 		$maxLineLength = SniffSettingsHelper::normalizeInteger($this->maxLineLength);
-		if ($maxLineLength !== 0 && strlen($signatureWithoutTabIndetation) > $maxLineLength) {
+		if ($maxLineLength !== 0 && strlen($signatureWithoutTabIndentation) > $maxLineLength) {
 			return;
 		}
 
