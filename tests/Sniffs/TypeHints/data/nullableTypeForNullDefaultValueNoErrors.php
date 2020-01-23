@@ -24,6 +24,14 @@ trait Foo
 class FooBar extends \stdClass
 {
 
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue
+	 */
+	private function isSniffSuppressed(string $a = null)
+	{
+
+	}
+
 	public function valid(?bool $bool = null, $noTypehint = null, ?int $int, string $a = 'default', ?string $b = 'null')
 	{
 

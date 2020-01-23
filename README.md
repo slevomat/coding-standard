@@ -735,7 +735,7 @@ Sniff provides the following settings:
 
 * `spacesCountBeforeColon`: the number of spaces expected between closing brace and colon.
 
-#### SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue 🔧
+#### SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue 🔧🚧
 
 Checks whether the nullablity `?` symbol is present before each nullable and optional parameter (which are marked as `= null`):
 
