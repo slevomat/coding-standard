@@ -46,6 +46,9 @@ abstract class AbstractMethodSignature implements Sniff
 		assert(!is_bool($signatureStartPointer));
 
 		$pointerAfterSignatureEnd = TokenHelper::findNext($phpcsFile, [T_OPEN_CURLY_BRACKET, T_SEMICOLON], $methodPointer + 1);
+		if ($phpcsFile->getTokens()[$pointerAfterSignatureEnd]['code'] === T_SEMICOLON) {
+			return [$signatureStartPointer, $pointerAfterSignatureEnd];
+		}
 
 		$signatureEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointerAfterSignatureEnd - 1);
 		assert(is_int($signatureEndPointer));
