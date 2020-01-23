@@ -103,4 +103,19 @@ class Whatever
 	 */
 	public $callable;
 
+	/**
+	 * @var Whatever|Something|Anything
+	 */
+	public $unionWithDifferentBase;
+
+	/**
+	 * @var array<int>|array<bool>|(A&B)
+	 */
+	public $unionWithMoreDifferentBase;
+
+	/**
+	 * @var Whatever|Something|Anything|null
+	 */
+	public $unionWithDifferentNullableBase;
+
 }
