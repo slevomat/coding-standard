@@ -172,4 +172,25 @@ class Whatever
 
 	}
 
+	/**
+	 * @return Whatever|Something|Anything
+	 */
+	public function unionWithDifferentBase()
+	{
+	}
+
+	/**
+	 * @return array<int>|array<bool>|(A&B)
+	 */
+	public function unionWithMoreDifferentBase()
+	{
+	}
+
+	/**
+	 * @return Whatever|Something|Anything|null
+	 */
+	public function unionWithDifferentNullableBase($a)
+	{
+	}
+
 }

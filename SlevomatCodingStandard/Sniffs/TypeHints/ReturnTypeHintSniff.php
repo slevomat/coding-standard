@@ -26,6 +26,9 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_key_exists;
 use function array_map;
+use function array_unique;
+use function array_values;
+use function count;
 use function lcfirst;
 use function sprintf;
 use function strtolower;
@@ -168,15 +171,7 @@ class ReturnTypeHintSniff implements Sniff
 			return;
 		}
 
-		$annotationContainsOneType = AnnotationTypeHelper::containsOneType($returnTypeNode);
-		if (
-			!$annotationContainsOneType
-			&& !AnnotationTypeHelper::containsJustTwoTypes($returnTypeNode)
-		) {
-			return;
-		}
-
-		if ($annotationContainsOneType) {
+		if (AnnotationTypeHelper::containsOneType($returnTypeNode)) {
 			/** @var ArrayTypeNode|ArrayShapeNode|GenericTypeNode|IdentifierTypeNode|ThisTypeNode $returnTypeNode */
 			$returnTypeNode = $returnTypeNode;
 			$possibleReturnTypeHint = $returnTypeNode instanceof ArrayTypeNode || $returnTypeNode instanceof ArrayShapeNode
@@ -185,34 +180,66 @@ class ReturnTypeHintSniff implements Sniff
 			$nullableReturnTypeHint = false;
 
 		} else {
-			/** @var UnionTypeNode|IntersectionTypeNode $returnTypeNode */
-			$returnTypeNode = $returnTypeNode;
+			$possibleReturnTypeHint = null;
+			$nullableReturnTypeHint = false;
 
-			if (
-				!AnnotationTypeHelper::containsNullType($returnTypeNode)
-				&& !AnnotationTypeHelper::containsTraversableType($returnTypeNode, $phpcsFile, $functionPointer, $this->getTraversableTypeHints())
-			) {
-				return;
+			if ($returnTypeNode instanceof UnionTypeNode && !AnnotationTypeHelper::containsJustTwoTypes($returnTypeNode)) {
+				$typeHints = [];
+				foreach ($returnTypeNode->types as $typeNode) {
+					if (!($typeNode instanceof CallableTypeNode
+						|| $typeNode instanceof GenericTypeNode
+						|| $typeNode instanceof IdentifierTypeNode
+						|| $typeNode instanceof ThisTypeNode)
+					) {
+						return;
+					}
+
+					$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($typeNode);
+				}
+
+				$typeHints = array_values(array_unique($typeHints));
+
+				if (count($typeHints) === 1) {
+					$possibleReturnTypeHint = $typeHints[0];
+					$nullableReturnTypeHint = false;
+				} elseif (count($typeHints) === 2 && ($typeHints[0] === 'null' || $typeHints[1] === 'null')) {
+					$possibleReturnTypeHint = $typeHints[0] === 'null' ? $typeHints[1] : $typeHints[0];
+					$nullableReturnTypeHint = true;
+				} else {
+					return;
+				}
 			}
 
-			if (AnnotationTypeHelper::containsNullType($returnTypeNode)) {
-				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode $notNullTypeHintNode */
-				$notNullTypeHintNode = AnnotationTypeHelper::getTypeFromNullableType($returnTypeNode);
-				$possibleReturnTypeHint = $notNullTypeHintNode instanceof ArrayTypeNode || $notNullTypeHintNode instanceof ArrayShapeNode
-					? 'array'
-					: AnnotationTypeHelper::getTypeHintFromOneType($notNullTypeHintNode);
-				$nullableReturnTypeHint = true;
-			} else {
-				$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($returnTypeNode, $this->getTraversableTypeHints());
-				if (!$itemsSpecificationTypeHint instanceof ArrayTypeNode) {
+			if ($possibleReturnTypeHint === null) {
+				/** @var UnionTypeNode|IntersectionTypeNode $returnTypeNode */
+				$returnTypeNode = $returnTypeNode;
+
+				if (
+					!AnnotationTypeHelper::containsNullType($returnTypeNode)
+					&& !AnnotationTypeHelper::containsTraversableType($returnTypeNode, $phpcsFile, $functionPointer, $this->getTraversableTypeHints())
+				) {
 					return;
 				}
 
-				$possibleReturnTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType($returnTypeNode, $this->getTraversableTypeHints());
-				$nullableReturnTypeHint = false;
+				if (AnnotationTypeHelper::containsNullType($returnTypeNode)) {
+					/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode $notNullTypeHintNode */
+					$notNullTypeHintNode = AnnotationTypeHelper::getTypeFromNullableType($returnTypeNode);
+					$possibleReturnTypeHint = $notNullTypeHintNode instanceof ArrayTypeNode || $notNullTypeHintNode instanceof ArrayShapeNode
+						? 'array'
+						: AnnotationTypeHelper::getTypeHintFromOneType($notNullTypeHintNode);
+					$nullableReturnTypeHint = true;
+				} else {
+					$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($returnTypeNode, $this->getTraversableTypeHints());
+					if (!$itemsSpecificationTypeHint instanceof ArrayTypeNode) {
+						return;
+					}
 
-				if (!TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $possibleReturnTypeHint), $this->getTraversableTypeHints())) {
-					return;
+					$possibleReturnTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType($returnTypeNode, $this->getTraversableTypeHints());
+					$nullableReturnTypeHint = false;
+
+					if (!TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $possibleReturnTypeHint), $this->getTraversableTypeHints())) {
+						return;
+					}
 				}
 			}
 		}

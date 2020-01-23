@@ -157,4 +157,25 @@ abstract class Whatever
 		return new \stdClass();
 	}
 
+	/**
+	 * @return array<string>|array<int>|array<bool>
+	 */
+	public function unionWithSameBase()
+	{
+	}
+
+	/**
+	 * @return array<int>|bool[]
+	 */
+	public function unionWithSameBaseToo()
+	{
+	}
+
+	/**
+	 * @return array<string>|array<int>|array<bool>|null
+	 */
+	public function unionWithSameNullableBase()
+	{
+	}
+
 }
