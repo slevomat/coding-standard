@@ -49,7 +49,7 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 		$signatureWithoutTabIndetation = $this->getSignatureWithoutTabs($signature);
 
 		$minLineLength = SniffSettingsHelper::normalizeInteger($this->minLineLength);
-		if ($minLineLength !== 0 && strlen($signatureWithoutTabIndetation) < SniffSettingsHelper::normalizeInteger($minLineLength)) {
+		if ($minLineLength !== 0 && strlen($signatureWithoutTabIndetation) < $minLineLength) {
 			return;
 		}
 
