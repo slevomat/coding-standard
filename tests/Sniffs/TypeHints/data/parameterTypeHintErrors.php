@@ -144,4 +144,25 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @param array<string>|array<int>|array<bool> $a
+	 */
+	public function unionWithSameBase($a)
+	{
+	}
+
+	/**
+	 * @param array<int>|bool[] $a
+	 */
+	public function unionWithSameBaseToo($a)
+	{
+	}
+
+	/**
+	 * @param array<string>|array<int>|array<bool>|null $a
+	 */
+	public function unionWithSameNullableBase($a)
+	{
+	}
+
 }

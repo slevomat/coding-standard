@@ -1,5 +1,9 @@
 <?php
 
+use SlevomatCodingStandard\Helpers\ParameterTypeHint;
+use SlevomatCodingStandard\Helpers\PropertyTypeHint;
+use SlevomatCodingStandard\Helpers\ReturnTypeHint;
+
 class Whatever
 {
 
@@ -148,6 +152,27 @@ class Whatever
 	public function callableArray(array $a): void
 	{
 
+	}
+
+	/**
+	 * @param Whatever|Something|Anything $a
+	 */
+	public function unionWithDifferentBase($a)
+	{
+	}
+
+	/**
+	 * @param array<int>|array<bool>|(A&B) $a
+	 */
+	public function unionWithMoreDifferentBase($a)
+	{
+	}
+
+	/**
+	 * @param Whatever|Something|Anything|null $a
+	 */
+	public function unionWithDifferentNullableBase($a)
+	{
 	}
 
 }

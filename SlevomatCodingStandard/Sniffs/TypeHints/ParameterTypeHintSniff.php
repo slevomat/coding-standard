@@ -6,8 +6,10 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation;
@@ -25,6 +27,9 @@ use function array_filter;
 use function array_key_exists;
 use function array_keys;
 use function array_map;
+use function array_unique;
+use function array_values;
+use function count;
 use function in_array;
 use function lcfirst;
 use function sprintf;
@@ -132,15 +137,7 @@ class ParameterTypeHintSniff implements Sniff
 				continue;
 			}
 
-			$annotationContainsOneType = AnnotationTypeHelper::containsOneType($parameterTypeNode);
-			if (
-				!$annotationContainsOneType
-				&& !AnnotationTypeHelper::containsJustTwoTypes($parameterTypeNode)
-			) {
-				continue;
-			}
-
-			if ($annotationContainsOneType) {
+			if (AnnotationTypeHelper::containsOneType($parameterTypeNode)) {
 				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode $parameterTypeNode */
 				$parameterTypeNode = $parameterTypeNode;
 				$possibleParameterTypeHint = $parameterTypeNode instanceof ArrayTypeNode || $parameterTypeNode instanceof ArrayShapeNode
@@ -149,35 +146,67 @@ class ParameterTypeHintSniff implements Sniff
 				$nullableParameterTypeHint = false;
 
 			} else {
-				/** @var UnionTypeNode $parameterTypeNode */
-				$parameterTypeNode = $parameterTypeNode;
+				$possibleParameterTypeHint = null;
+				$nullableParameterTypeHint = false;
 
-				if (
-					!AnnotationTypeHelper::containsNullType($parameterTypeNode)
-					&& !AnnotationTypeHelper::containsTraversableType($parameterTypeNode, $phpcsFile, $functionPointer, $this->getTraversableTypeHints())
-				) {
-					continue;
+				if ($parameterTypeNode instanceof UnionTypeNode && !AnnotationTypeHelper::containsJustTwoTypes($parameterTypeNode)) {
+					$typeHints = [];
+					foreach ($parameterTypeNode->types as $typeNode) {
+						if (!($typeNode instanceof CallableTypeNode
+							|| $typeNode instanceof GenericTypeNode
+							|| $typeNode instanceof IdentifierTypeNode
+							|| $typeNode instanceof ThisTypeNode)
+						) {
+							continue 2;
+						}
+
+						$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($typeNode);
+					}
+
+					$typeHints = array_values(array_unique($typeHints));
+
+					if (count($typeHints) === 1) {
+						$possibleParameterTypeHint = $typeHints[0];
+						$nullableParameterTypeHint = false;
+					} elseif (count($typeHints) === 2 && ($typeHints[0] === 'null' || $typeHints[1] === 'null')) {
+						$possibleParameterTypeHint = $typeHints[0] === 'null' ? $typeHints[1] : $typeHints[0];
+						$nullableParameterTypeHint = true;
+					} else {
+						continue;
+					}
 				}
 
-				if (AnnotationTypeHelper::containsNullType($parameterTypeNode)) {
-					/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode $notNullTypeHintNode */
-					$notNullTypeHintNode = AnnotationTypeHelper::getTypeFromNullableType($parameterTypeNode);
-					$possibleParameterTypeHint = $notNullTypeHintNode instanceof ArrayTypeNode || $notNullTypeHintNode instanceof ArrayShapeNode
-						? 'array'
-						: AnnotationTypeHelper::getTypeHintFromOneType($notNullTypeHintNode);
-					$nullableParameterTypeHint = true;
-				} else {
+				if ($possibleParameterTypeHint === null) {
+					/** @var UnionTypeNode|IntersectionTypeNode $parameterTypeNode */
+					$parameterTypeNode = $parameterTypeNode;
 
-					$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($parameterTypeNode, $this->getTraversableTypeHints());
-					if (!$itemsSpecificationTypeHint instanceof ArrayTypeNode) {
+					if (
+						!AnnotationTypeHelper::containsNullType($parameterTypeNode)
+						&& !AnnotationTypeHelper::containsTraversableType($parameterTypeNode, $phpcsFile, $functionPointer, $this->getTraversableTypeHints())
+					) {
 						continue;
 					}
 
-					$possibleParameterTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType($parameterTypeNode, $this->getTraversableTypeHints());
-					$nullableParameterTypeHint = false;
+					if (AnnotationTypeHelper::containsNullType($parameterTypeNode)) {
+						/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode $notNullTypeHintNode */
+						$notNullTypeHintNode = AnnotationTypeHelper::getTypeFromNullableType($parameterTypeNode);
+						$possibleParameterTypeHint = $notNullTypeHintNode instanceof ArrayTypeNode || $notNullTypeHintNode instanceof ArrayShapeNode
+							? 'array'
+							: AnnotationTypeHelper::getTypeHintFromOneType($notNullTypeHintNode);
+						$nullableParameterTypeHint = true;
+					} else {
 
-					if (!TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $possibleParameterTypeHint), $this->getTraversableTypeHints())) {
-						continue;
+						$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($parameterTypeNode, $this->getTraversableTypeHints());
+						if (!$itemsSpecificationTypeHint instanceof ArrayTypeNode) {
+							continue;
+						}
+
+						$possibleParameterTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType($parameterTypeNode, $this->getTraversableTypeHints());
+						$nullableParameterTypeHint = false;
+
+						if (!TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $possibleParameterTypeHint), $this->getTraversableTypeHints())) {
+							continue;
+						}
 					}
 				}
 			}
