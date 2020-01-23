@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Arrays;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
+use SlevomatCodingStandard\Helpers\TokenHelper;
 use function sprintf;
 use function str_repeat;
 use const T_COMMA;
@@ -19,6 +20,7 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 	public const CODE_SPACE_AFTER_COMMA = 'SpaceAfterComma';
 	public const CODE_SPACE_AFTER_ARRAY_OPEN = 'SpaceAfterArrayOpen';
 	public const CODE_SPACE_BEFORE_ARRAY_CLOSE = 'SpaceBeforeArrayClose';
+	public const CODE_SPACE_IN_EMPTY_ARRAY = 'SpaceInEmptyArray';
 
 	/** @var int */
 	public $spacesAroundBrackets = 0;
@@ -48,6 +50,16 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 			return $arrayEnd;
 		}
 
+		$content = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $arrayStart + 1, $arrayEnd + 1);
+		if ($content === $arrayEnd) {
+			// Empty array, but if the brackets aren't together, there's a problem.
+			$this->checkWhitespaceInEmptyArray($phpcsFile, $arrayStart, $arrayEnd);
+
+			// We can return here because there is nothing else to check.
+			// All code below can assume that the array is not empty.
+			return $arrayEnd + 1;
+		}
+
 		$this->checkWhitespaceAfterOpeningBracket($phpcsFile, $arrayStart);
 		$this->checkWhitespaceBeforeClosingBracket($phpcsFile, $arrayEnd);
 
@@ -71,8 +83,8 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 			}
 
 			// Before checking this comma, make sure we are not at the end of the array.
-			$next = $phpcsFile->findNext(T_WHITESPACE, $i + 1, $arrayEnd, true);
-			if ($next === false) {
+			$next = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $i + 1, $arrayEnd);
+			if ($next === null) {
 				return $arrayStart + 1;
 			}
 
@@ -86,6 +98,21 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 	protected function getSpacesAroundBrackets(): int
 	{
 		return SniffSettingsHelper::normalizeInteger($this->spacesAroundBrackets);
+	}
+
+	private function checkWhitespaceInEmptyArray(File $phpcsFile, int $arrayStart, int $arrayEnd): void
+	{
+		if ($arrayEnd - $arrayStart === 1) {
+			return;
+		}
+
+		$error = 'Empty array declaration must have no space between the parentheses.';
+		$fix = $phpcsFile->addFixableError($error, $arrayStart, self::CODE_SPACE_IN_EMPTY_ARRAY);
+		if (!$fix) {
+			return;
+		}
+
+		$phpcsFile->fixer->replaceToken($arrayStart + 1, '');
 	}
 
 	private function checkWhitespaceAfterOpeningBracket(File $phpcsFile, int $arrayStart): void
