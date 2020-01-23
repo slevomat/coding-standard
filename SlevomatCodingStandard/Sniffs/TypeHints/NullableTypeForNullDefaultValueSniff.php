@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function array_merge;
@@ -22,6 +23,8 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 
 	public const CODE_NULLABILITY_SYMBOL_REQUIRED = 'NullabilitySymbolRequired';
 
+	private const NAME = 'SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue';
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
@@ -37,6 +40,10 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $functionPointer): void
 	{
+		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::NAME)) {
+			return;
+		}
+
 		$tokens = $phpcsFile->getTokens();
 
 		$parenthesisOpener = array_key_exists('parenthesis_opener', $tokens[$functionPointer])
