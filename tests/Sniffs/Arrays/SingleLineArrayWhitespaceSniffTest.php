@@ -16,7 +16,7 @@ class SingleLineArrayWhitespaceSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/singleLineArrayWhitespaceErrors.php');
 
-		self::assertSame(15, $report->getErrorCount());
+		self::assertSame(16, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, SingleLineArrayWhitespaceSniff::CODE_SPACE_BEFORE_COMMA, '1 found');
 		self::assertSniffError($report, 3, SingleLineArrayWhitespaceSniff::CODE_SPACE_AFTER_COMMA, '2 found');
@@ -32,6 +32,7 @@ class SingleLineArrayWhitespaceSniffTest extends TestCase
 		self::assertSniffError($report, 7, SingleLineArrayWhitespaceSniff::CODE_SPACE_BEFORE_ARRAY_CLOSE, '1 found');
 		self::assertSniffError($report, 8, SingleLineArrayWhitespaceSniff::CODE_SPACE_AFTER_ARRAY_OPEN, '1 found');
 		self::assertSniffError($report, 8, SingleLineArrayWhitespaceSniff::CODE_SPACE_BEFORE_ARRAY_CLOSE, '1 found');
+		self::assertSniffError($report, 9, SingleLineArrayWhitespaceSniff::CODE_SPACE_IN_EMPTY_ARRAY);
 		self::assertCount(4, $report->getErrors()[8]);
 
 		self::assertAllFixedInFile($report);
@@ -41,10 +42,11 @@ class SingleLineArrayWhitespaceSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/singleLineArrayWhitespaceRequireSpacesErrors.php', ['spacesAroundBrackets' => 1]);
 
-		self::assertSame(4, $report->getErrorCount());
+		self::assertSame(5, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, SingleLineArrayWhitespaceSniff::CODE_SPACE_AFTER_ARRAY_OPEN, '0 found');
 		self::assertSniffError($report, 3, SingleLineArrayWhitespaceSniff::CODE_SPACE_BEFORE_ARRAY_CLOSE, '0 found');
+		self::assertSniffError($report, 3, SingleLineArrayWhitespaceSniff::CODE_SPACE_IN_EMPTY_ARRAY);
 
 		self::assertAllFixedInFile($report);
 	}
