@@ -512,7 +512,7 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param CallableTypeNode|GenericTypeNode|IdentifierTypeNode|ThisTypeNode $typeNode
+	 * @param CallableTypeNode|GenericTypeNode|IdentifierTypeNode|ThisTypeNode|ArrayTypeNode|ArrayShapeNode $typeNode
 	 * @return string
 	 */
 	public static function getTypeHintFromOneType(TypeNode $typeNode): string
@@ -529,6 +529,14 @@ class AnnotationTypeHelper
 			return $typeNode->identifier->name;
 		}
 
+		if ($typeNode instanceof ArrayTypeNode) {
+			return 'array';
+		}
+
+		if ($typeNode instanceof ArrayShapeNode) {
+			return 'array';
+		}
+
 		return (string) $typeNode;
 	}
 
@@ -539,10 +547,12 @@ class AnnotationTypeHelper
 	 */
 	public static function getTraversableTypeHintFromType(TypeNode $typeNode, array $traversableTypeHints): string
 	{
-		if (self::containsOneType($typeNode->types[0])) {
-			/** @var GenericTypeNode|ThisTypeNode|IdentifierTypeNode $oneTypeNode */
-			$oneTypeNode = $typeNode->types[0];
-			$typeHint = self::getTypeHintFromOneType($oneTypeNode);
+		if (
+			$typeNode->types[0] instanceof GenericTypeNode
+			|| $typeNode->types[0] instanceof ThisTypeNode
+			|| $typeNode->types[0] instanceof IdentifierTypeNode
+		) {
+			$typeHint = self::getTypeHintFromOneType($typeNode->types[0]);
 			if (TypeHintHelper::isTraversableType($typeHint, $traversableTypeHints)) {
 				return $typeHint;
 			}
@@ -560,10 +570,12 @@ class AnnotationTypeHelper
 	 */
 	public static function getItemsSpecificationTypeFromType(TypeNode $typeNode, array $traversableTypeHints): TypeNode
 	{
-		if (self::containsOneType($typeNode->types[0])) {
-			/** @var GenericTypeNode|ThisTypeNode|IdentifierTypeNode $oneTypeNode */
-			$oneTypeNode = $typeNode->types[0];
-			$typeHint = self::getTypeHintFromOneType($oneTypeNode);
+		if (
+			$typeNode->types[0] instanceof GenericTypeNode
+			|| $typeNode->types[0] instanceof ThisTypeNode
+			|| $typeNode->types[0] instanceof IdentifierTypeNode
+		) {
+			$typeHint = self::getTypeHintFromOneType($typeNode->types[0]);
 			if (TypeHintHelper::isTraversableType($typeHint, $traversableTypeHints)) {
 				return $typeNode->types[1];
 			}

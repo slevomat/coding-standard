@@ -145,9 +145,16 @@ class Whatever
 	}
 
 	/**
-	 * @param array<string>|array<int>|array<bool> $a
+	 * @param array<string>|array<int> $a
 	 */
 	public function unionWithSameBase($a)
+	{
+	}
+
+	/**
+	 * @param array<string>|array<int>|array<bool> $a
+	 */
+	public function unionWithSameBaseAndMoreTypes($a)
 	{
 	}
 
