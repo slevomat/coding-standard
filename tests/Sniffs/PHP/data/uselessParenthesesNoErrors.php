@@ -147,6 +147,14 @@ function ($value) {
 
 $x = fn ($a, $b) => $a . $b;
 
+(static function () : void {
+	echo $_SERVER['argv'][1];
+})();
+
+(static function () : void {
+	echo $_SERVER['argv'][1 + 1];
+})();
+
 // Must be last
 return true
 	? 100
