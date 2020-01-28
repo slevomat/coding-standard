@@ -62,6 +62,7 @@ class TraitUseSpacingSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/traitUseSpacingModifiedSettingsNoErrors.php', [
 			'linesCountBeforeFirstUse' => 0,
+			'linesCountBeforeFirstUseWhenFirstInClass' => 0,
 			'linesCountBetweenUses' => 1,
 			'linesCountAfterLastUse' => 2,
 			'linesCountAfterLastUseWhenLastInClass' => 2,
@@ -73,6 +74,7 @@ class TraitUseSpacingSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/traitUseSpacingModifiedSettingsErrors.php', [
 			'linesCountBeforeFirstUse' => 0,
+			'linesCountBeforeFirstUseWhenFirstInClass' => 0,
 			'linesCountBetweenUses' => 1,
 			'linesCountAfterLastUse' => 2,
 			'linesCountAfterLastUseWhenLastInClass' => 2,
@@ -89,10 +91,44 @@ class TraitUseSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testModifiedSettingWhenUseIsFirstInClassNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/traitUseSpacingModifiedSettingsWhenUseIsLastInClassNoErrors.php', [
+			'linesCountBeforeFirstUse' => 2,
+			'linesCountBeforeFirstUseWhenFirstInClass' => 0,
+			'linesCountBetweenUses' => 1,
+			'linesCountAfterLastUse' => 0,
+			'linesCountAfterLastUseWhenLastInClass' => 0,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testModifiedSettingWhenUseIsFirstInClassErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/traitUseSpacingModifiedSettingsWhenUseIsLastInClassErrors.php', [
+			'linesCountBeforeFirstUse' => 2,
+			'linesCountBeforeFirstUseWhenFirstInClass' => 0,
+			'linesCountBetweenUses' => 1,
+			'linesCountAfterLastUse' => 0,
+			'linesCountAfterLastUseWhenLastInClass' => 0,
+		]);
+
+		self::assertSame(5, $report->getErrorCount());
+
+		self::assertSniffError($report, 6, TraitUseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_USE);
+		self::assertSniffError($report, 7, TraitUseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_USES);
+		self::assertSniffError($report, 10, TraitUseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_USES);
+		self::assertSniffError($report, 11, TraitUseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_USES);
+		self::assertSniffError($report, 11, TraitUseSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_USE);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testModifiedSettingWhenUseIsLastInClassNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/traitUseSpacingModifiedSettingsWhenUseIsLastInClassNoErrors.php', [
 			'linesCountBeforeFirstUse' => 0,
+			'linesCountBeforeFirstUseWhenFirstInClass' => 0,
 			'linesCountBetweenUses' => 1,
 			'linesCountAfterLastUse' => 2,
 			'linesCountAfterLastUseWhenLastInClass' => 0,
@@ -104,6 +140,7 @@ class TraitUseSpacingSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/traitUseSpacingModifiedSettingsWhenUseIsLastInClassErrors.php', [
 			'linesCountBeforeFirstUse' => 0,
+			'linesCountBeforeFirstUseWhenFirstInClass' => 0,
 			'linesCountBetweenUses' => 1,
 			'linesCountAfterLastUse' => 2,
 			'linesCountAfterLastUseWhenLastInClass' => 0,
@@ -124,6 +161,7 @@ class TraitUseSpacingSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/traitUseSpacingModifiedSettingsWhenUseIsLastInClass2Errors.php', [
 			'linesCountBeforeFirstUse' => 0,
+			'linesCountBeforeFirstUseWhenFirstInClass' => 1,
 			'linesCountBetweenUses' => 0,
 			'linesCountAfterLastUse' => 1,
 			'linesCountAfterLastUseWhenLastInClass' => 0,
