@@ -39,6 +39,7 @@ use const T_MINUS_EQUAL;
 use const T_MOD_EQUAL;
 use const T_MUL_EQUAL;
 use const T_NEW;
+use const T_NULLABLE;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
 use const T_OR_EQUAL;
@@ -620,6 +621,16 @@ class UnusedPrivateElementsSniff implements Sniff
 		$visibilityModifiedToken = $tokens[$visibilityModifiedTokenPointer];
 		if (in_array($visibilityModifiedToken['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE], true)) {
 			return $visibilityModifiedTokenPointer;
+		}
+
+		if (in_array($visibilityModifiedToken['code'], [T_SELF, T_STRING], true)) {
+			$mightBeNullableTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $visibilityModifiedTokenPointer - 1);
+			$mightBeNullableToken = $tokens[$mightBeNullableTokenPointer];
+			if ($mightBeNullableToken['code'] === T_NULLABLE) {
+				$visibilityModifiedTokenPointer = $mightBeNullableTokenPointer;
+			}
+
+			return $this->findVisibilityModifierTokenPointer($phpcsFile, $tokens, $visibilityModifiedTokenPointer);
 		}
 
 		if (in_array($visibilityModifiedToken['code'], [T_ABSTRACT, T_STATIC], true)) {

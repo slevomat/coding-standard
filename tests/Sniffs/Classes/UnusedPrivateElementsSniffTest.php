@@ -231,4 +231,14 @@ class UnusedPrivateElementsSniffTest extends TestCase
 		}
 	}
 
+	public function testClassWithTypedProperties(): void
+	{
+		$resultFile = self::checkFile(__DIR__ . '/data/classWithTypedProperties.php');
+
+		self::assertNoSniffError($resultFile, 6);
+		self::assertSniffError($resultFile, 7, UnusedPrivateElementsSniff::CODE_WRITE_ONLY_PROPERTY);
+		self::assertSniffError($resultFile, 8, UnusedPrivateElementsSniff::CODE_WRITE_ONLY_PROPERTY);
+		self::assertSniffError($resultFile, 9, UnusedPrivateElementsSniff::CODE_WRITE_ONLY_PROPERTY);
+	}
+
 }
