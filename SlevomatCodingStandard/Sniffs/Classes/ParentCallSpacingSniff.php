@@ -10,6 +10,7 @@ use SlevomatCodingStandard\Sniffs\ControlStructures\AbstractControlStructureSpac
 use function array_key_exists;
 use function array_merge;
 use function in_array;
+use const T_COLON;
 use const T_OPEN_SHORT_ARRAY;
 use const T_PARENT;
 use const T_RETURN;
@@ -53,7 +54,7 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 			Tokens::$assignmentTokens,
 			Tokens::$equalityTokens,
 			Tokens::$booleanOperators,
-			[T_RETURN, T_YIELD, T_YIELD_FROM, T_OPEN_SHORT_ARRAY]
+			[T_RETURN, T_YIELD, T_YIELD_FROM, T_OPEN_SHORT_ARRAY, T_COLON]
 		);
 		if (in_array($tokens[$previousPointer]['code'], $tokensToIgnore, true)) {
 			return;

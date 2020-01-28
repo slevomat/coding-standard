@@ -49,4 +49,7 @@ class X {
 		return doAnything() && parent::j();
 	}
 
+	function k(): parent {
+	}
+
 }
