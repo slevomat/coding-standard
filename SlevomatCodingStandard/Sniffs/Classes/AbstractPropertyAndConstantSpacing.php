@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function assert;
 use function in_array;
@@ -69,11 +70,11 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 
 		$linesBetween = $tokens[$nextPointer]['line'] - $tokens[$nextSemicolon]['line'] - 1;
 		if (in_array($tokens[$nextPointer]['code'], [T_DOC_COMMENT_OPEN_TAG, T_COMMENT], true)) {
-			$minExpectedLines = $this->minLinesCountBeforeWithComment;
-			$maxExpectedLines = $this->maxLinesCountBeforeWithComment;
+			$minExpectedLines = SniffSettingsHelper::normalizeInteger($this->minLinesCountBeforeWithComment);
+			$maxExpectedLines = SniffSettingsHelper::normalizeInteger($this->maxLinesCountBeforeWithComment);
 		} else {
-			$minExpectedLines = $this->minLinesCountBeforeWithoutComment;
-			$maxExpectedLines = $this->maxLinesCountBeforeWithoutComment;
+			$minExpectedLines = SniffSettingsHelper::normalizeInteger($this->minLinesCountBeforeWithoutComment);
+			$maxExpectedLines = SniffSettingsHelper::normalizeInteger($this->maxLinesCountBeforeWithoutComment);
 		}
 
 		if ($linesBetween >= $minExpectedLines && $linesBetween <= $maxExpectedLines) {
