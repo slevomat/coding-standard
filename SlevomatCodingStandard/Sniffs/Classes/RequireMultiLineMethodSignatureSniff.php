@@ -29,6 +29,12 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 	/** @var string[]|null */
 	public $includedMethodNormalizedPatterns;
 
+	/** @var string[] */
+	public $excludedMethodPatterns = [];
+
+	/** @var string[]|null */
+	public $excludedMethodNormalizedPatterns;
+
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 * @param File $phpcsFile
@@ -58,6 +64,10 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 		$methodName = FunctionHelper::getName($phpcsFile, $methodPointer);
 
 		if (count($this->includedMethodPatterns) !== 0 && !$this->isMethodNameInPatterns($methodName, $this->getIncludedMethodNormalizedPatterns())) {
+			return;
+		}
+
+		if (count($this->excludedMethodPatterns) !== 0 && $this->isMethodNameInPatterns($methodName, $this->getExcludedMethodNormalizedPatterns())) {
 			return;
 		}
 
@@ -126,6 +136,17 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 			$this->includedMethodNormalizedPatterns = SniffSettingsHelper::normalizeArray($this->includedMethodPatterns);
 		}
 		return $this->includedMethodNormalizedPatterns;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getExcludedMethodNormalizedPatterns(): array
+	{
+		if ($this->excludedMethodNormalizedPatterns === null) {
+			$this->excludedMethodNormalizedPatterns = SniffSettingsHelper::normalizeArray($this->excludedMethodPatterns);
+		}
+		return $this->excludedMethodNormalizedPatterns;
 	}
 
 }
