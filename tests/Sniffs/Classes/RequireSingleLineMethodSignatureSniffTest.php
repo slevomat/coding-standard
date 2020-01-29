@@ -16,6 +16,11 @@ final class RequireSingleLineMethodSignatureSniffTest extends TestCase
 			__DIR__ . '/data/requireSingleLineMethodSignatureNoErrors.php',
 			['includedMethodPatterns' => ['invalidPattern']]
 		);
+
+		self::checkFile(
+			__DIR__ . '/data/requireSingleLineMethodSignatureNoErrors.php',
+			['excludedMethodPatterns' => ['invalidPattern']]
+		);
 	}
 
 	public function testNoErrors(): void
@@ -57,6 +62,20 @@ final class RequireSingleLineMethodSignatureSniffTest extends TestCase
 		self::assertSame(1, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, RequireSingleLineMethodSignatureSniff::CODE_REQUIRED_SINGLE_LINE_SIGNATURE);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testExcludedMethodPatterns(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireSingleLineMethodSignatureExcludedMethodsErrors.php', [
+			'maxLineLength' => 0,
+			'excludedMethodPatterns' => ['/__construct/'],
+		], [RequireSingleLineMethodSignatureSniff::CODE_REQUIRED_SINGLE_LINE_SIGNATURE]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 34, RequireSingleLineMethodSignatureSniff::CODE_REQUIRED_SINGLE_LINE_SIGNATURE);
 
 		self::assertAllFixedInFile($report);
 	}
