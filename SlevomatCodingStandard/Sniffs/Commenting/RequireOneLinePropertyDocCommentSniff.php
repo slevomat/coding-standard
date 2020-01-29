@@ -9,7 +9,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use function sprintf;
 use const T_VARIABLE;
 
-class RequireOneLinePropertyDocCommentSniff extends RequireOneLineDocCommentSniff
+class RequireOneLinePropertyDocCommentSniff extends AbstractRequireOneLineDocComment
 {
 
 	public const CODE_MULTI_LINE_PROPERTY_COMMENT = 'MultiLinePropertyComment';

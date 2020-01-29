@@ -82,6 +82,7 @@
 	<rule ref="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming">
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Classes/AbstractPropertyAndConstantSpacing.php</exclude-pattern>
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Classes/AbstractMethodSignature.php</exclude-pattern>
+		<exclude-pattern>SlevomatCodingStandard/Sniffs/Commenting/AbstractRequireOneLineDocComment.php</exclude-pattern>
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/ControlStructures/AbstractControlStructureSpacing.php</exclude-pattern>
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Namespaces/AbstractFullyQualifiedGlobalReference.php</exclude-pattern>
 	</rule>
