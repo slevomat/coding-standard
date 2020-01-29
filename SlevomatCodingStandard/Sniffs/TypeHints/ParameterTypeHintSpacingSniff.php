@@ -5,12 +5,14 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_key_exists;
 use function array_keys;
 use function sprintf;
 use const T_BITWISE_AND;
 use const T_COMMA;
 use const T_ELLIPSIS;
 use const T_NULLABLE;
+use const T_OPEN_PARENTHESIS;
 use const T_VARIABLE;
 use const T_WHITESPACE;
 
@@ -40,8 +42,12 @@ class ParameterTypeHintSpacingSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$parametersStartPointer = $tokens[$functionPointer]['parenthesis_opener'] + 1;
-		$parametersEndPointer = $tokens[$functionPointer]['parenthesis_closer'] - 1;
+		$parenthesisOpenerPointer = array_key_exists('parenthesis_opener', $tokens[$functionPointer])
+			? $tokens[$functionPointer]['parenthesis_opener']
+			: TokenHelper::findNext($phpcsFile, T_OPEN_PARENTHESIS, $functionPointer + 1);
+
+		$parametersStartPointer = $parenthesisOpenerPointer + 1;
+		$parametersEndPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] - 1;
 
 		for ($i = $parametersStartPointer; $i <= $parametersEndPointer; $i++) {
 			if ($tokens[$i]['code'] !== T_VARIABLE) {
