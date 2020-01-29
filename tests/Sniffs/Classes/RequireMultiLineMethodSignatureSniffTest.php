@@ -16,6 +16,11 @@ final class RequireMultiLineMethodSignatureSniffTest extends TestCase
 			__DIR__ . '/data/requireMultiLineMethodSignatureNoErrors.php',
 			['includedMethodPatterns' => ['invalidPattern']]
 		);
+
+		self::checkFile(
+			__DIR__ . '/data/requireMultiLineMethodSignatureNoErrors.php',
+			['excludedMethodPatterns' => ['invalidPattern']]
+		);
 	}
 
 	public function testNoErrors(): void
@@ -57,6 +62,20 @@ final class RequireMultiLineMethodSignatureSniffTest extends TestCase
 		self::assertSame(1, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, RequireMultiLineMethodSignatureSniff::CODE_REQUIRED_MULTI_LINE_SIGNATURE);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testExcludedMethodPatterns(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireMultiLineMethodSignatureExcludedMethodsErrors.php', [
+			'maxLineLength' => 0,
+			'excludedMethodPatterns' => ['/__construct/'],
+		], [RequireMultiLineMethodSignatureSniff::CODE_REQUIRED_MULTI_LINE_SIGNATURE]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 7, RequireMultiLineMethodSignatureSniff::CODE_REQUIRED_MULTI_LINE_SIGNATURE);
 
 		self::assertAllFixedInFile($report);
 	}
