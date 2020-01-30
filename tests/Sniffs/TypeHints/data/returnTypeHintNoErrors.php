@@ -80,6 +80,14 @@ class Whatever
 	}
 
 	/**
+	 * @return ?string
+	 */
+	public function shorthandNullableDocblock(): ?string
+	{
+		return rand(0, 1) ? null : '';
+	}
+
+	/**
 	 * @return string|int|bool
 	 */
 	public function aLotOfTypes()

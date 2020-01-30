@@ -298,11 +298,15 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param UnionTypeNode|IntersectionTypeNode $typeNode
+	 * @param UnionTypeNode|IntersectionTypeNode|NullableTypeNode $typeNode
 	 * @return bool
 	 */
 	public static function containsNullType(TypeNode $typeNode): bool
 	{
+		if ($typeNode instanceof NullableTypeNode) {
+			return true;
+		}
+
 		foreach ($typeNode->types as $innerTypeNode) {
 			if (!$innerTypeNode instanceof IdentifierTypeNode) {
 				continue;
@@ -503,12 +507,20 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param UnionTypeNode|IntersectionTypeNode $typeNode
+	 * @param UnionTypeNode|IntersectionTypeNode|NullableTypeNode $typeNode
 	 * @return TypeNode
 	 */
 	public static function getTypeFromNullableType(TypeNode $typeNode): TypeNode
 	{
-		return $typeNode->types[0] instanceof IdentifierTypeNode && strtolower($typeNode->types[0]->name) === 'null' ? $typeNode->types[1] : $typeNode->types[0];
+		if ($typeNode instanceof NullableTypeNode) {
+			return $typeNode->type;
+		} elseif (
+			$typeNode->types[0] instanceof IdentifierTypeNode
+			&& strtolower($typeNode->types[0]->name) === 'null'
+		) {
+			return $typeNode->types[1];
+		}
+		return $typeNode->types[0];
 	}
 
 	/**
