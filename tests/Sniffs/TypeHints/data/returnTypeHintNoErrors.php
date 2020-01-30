@@ -79,13 +79,15 @@ class Whatever
 		return null;
 	}
 
+	// phpcs:disable SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
 	/**
 	 * @return ?string
 	 */
-	public function shorthandNullableDocblock(): ?string
+	public function shorthandNullableDocblock()
 	{
 		return rand(0, 1) ? null : '';
 	}
+	// phpcs:enable
 
 	/**
 	 * @return string|int|bool
