@@ -514,7 +514,9 @@ class AnnotationTypeHelper
 	{
 		if ($typeNode instanceof NullableTypeNode) {
 			return $typeNode->type;
-		} elseif (
+		}
+
+		if (
 			$typeNode->types[0] instanceof IdentifierTypeNode
 			&& strtolower($typeNode->types[0]->name) === 'null'
 		) {
