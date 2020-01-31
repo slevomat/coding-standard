@@ -10,15 +10,15 @@
 	},
 	"require": {
 		"php": "^7.1",
-		"phpstan/phpdoc-parser": "0.3.5 - 0.4.2",
-		"squizlabs/php_codesniffer": "^3.5.3"
+		"phpstan/phpdoc-parser": "0.3.5 - 0.4.3",
+		"squizlabs/php_codesniffer": "^3.5.4"
 	},
 	"require-dev": {
 		"jakub-onderka/php-parallel-lint": "1.0.0",
 		"phing/phing": "2.16.2",
-		"phpstan/phpstan": "0.11.19|0.12.5",
+		"phpstan/phpstan": "0.11.19|0.12.8",
 		"phpstan/phpstan-phpunit": "0.11.2|0.12.6",
-		"phpstan/phpstan-strict-rules": "0.11.1|0.12.1",
+		"phpstan/phpstan-strict-rules": "0.11.1|0.12.2",
 		"phpunit/phpunit": "7.5.18|8.5.2",
 		"dealerdirect/phpcodesniffer-composer-installer": "0.5.0"
 	},

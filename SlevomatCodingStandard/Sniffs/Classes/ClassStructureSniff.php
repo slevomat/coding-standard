@@ -287,7 +287,9 @@ class ClassStructureSniff implements Sniff
 			$pointer - 1
 		);
 
-		return in_array($tokens[$previousPointer]['code'], Tokens::$scopeModifiers, true) ? $tokens[$previousPointer]['code'] : T_PUBLIC;
+		/** @var int $visibilityPointer */
+		$visibilityPointer = in_array($tokens[$previousPointer]['code'], Tokens::$scopeModifiers, true) ? $tokens[$previousPointer]['code'] : T_PUBLIC;
+		return $visibilityPointer;
 	}
 
 	private function isMemberStatic(File $phpcsFile, int $pointer): bool
