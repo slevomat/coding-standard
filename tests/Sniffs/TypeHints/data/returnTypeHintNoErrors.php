@@ -193,4 +193,11 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @return ?int
+	 */
+	public function nullableNotSupported()
+	{
+	}
+
 }

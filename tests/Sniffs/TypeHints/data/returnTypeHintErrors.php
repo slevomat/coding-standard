@@ -158,9 +158,16 @@ abstract class Whatever
 	}
 
 	/**
-	 * @return array<string>|array<int>|array<bool>
+	 * @return array<string>|array<int>
 	 */
 	public function unionWithSameBase()
+	{
+	}
+
+	/**
+	 * @return array<string>|array<int>|array<bool>
+	 */
+	public function unionWithSameBaseAndMoreTypes()
 	{
 	}
 
