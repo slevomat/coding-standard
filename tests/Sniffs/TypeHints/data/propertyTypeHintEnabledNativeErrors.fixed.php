@@ -88,19 +88,16 @@ class Whatever
 
 	public static int $staticSecond;
 
-	/**
-	 * @var array<string>|array<int>|array<bool>
-	 */
+	/** @var array<string>|array<int> */
 	public array $unionWithSameBase;
 
-	/**
-	 * @var array<int>|bool[]
-	 */
+	/** @var array<string>|array<int>|array<bool> */
+	public array $unionWithSameBaseAndMoreTypes;
+
+	/** @var array<int>|bool[] */
 	public array $unionWithSameBaseToo;
 
-	/**
-	 * @var array<string>|array<int>|array<bool>|null
-	 */
+	/** @var array<string>|array<int>|array<bool>|null */
 	public ?array $unionWithSameNullableBase = null;
 
 }

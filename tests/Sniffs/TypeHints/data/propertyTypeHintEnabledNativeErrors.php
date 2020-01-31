@@ -101,19 +101,16 @@ class Whatever
 	/** @var int */
 	public static $staticSecond;
 
-	/**
-	 * @var array<string>|array<int>|array<bool>
-	 */
+	/** @var array<string>|array<int> */
 	public $unionWithSameBase;
 
-	/**
-	 * @var array<int>|bool[]
-	 */
+	/** @var array<string>|array<int>|array<bool> */
+	public $unionWithSameBaseAndMoreTypes;
+
+	/** @var array<int>|bool[] */
 	public $unionWithSameBaseToo;
 
-	/**
-	 * @var array<string>|array<int>|array<bool>|null
-	 */
+	/** @var array<string>|array<int>|array<bool>|null */
 	public $unionWithSameNullableBase;
 
 }

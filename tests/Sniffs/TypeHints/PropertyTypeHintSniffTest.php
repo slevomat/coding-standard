@@ -49,7 +49,7 @@ class PropertyTypeHintSniffTest extends TestCase
 			'traversableTypeHints' => ['Traversable'],
 		]);
 
-		self::assertSame(28, $report->getErrorCount());
+		self::assertSame(29, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, PropertyTypeHintSniff::CODE_MISSING_ANY_TYPE_HINT);
 		self::assertSniffError($report, 11, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
@@ -76,9 +76,10 @@ class PropertyTypeHintSniffTest extends TestCase
 		self::assertSniffError($report, 94, PropertyTypeHintSniff::CODE_USELESS_ANNOTATION);
 		self::assertSniffError($report, 99, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 102, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
-		self::assertSniffError($report, 107, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
-		self::assertSniffError($report, 112, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
-		self::assertSniffError($report, 117, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 105, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 108, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 111, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 114, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 
 		self::assertAllFixedInFile($report);
 	}

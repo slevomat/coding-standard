@@ -118,4 +118,9 @@ class Whatever
 	 */
 	public $unionWithDifferentNullableBase;
 
+	/**
+	 * @var ?int
+	 */
+	public $nullableNotSupported;
+
 }
