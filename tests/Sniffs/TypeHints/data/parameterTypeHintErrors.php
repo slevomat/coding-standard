@@ -172,4 +172,11 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @param ?int $a
+	 */
+	public function nullable($a)
+	{
+	}
+
 }

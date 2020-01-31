@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation;
@@ -137,6 +138,11 @@ class ParameterTypeHintSniff implements Sniff
 				continue;
 			}
 
+			$originalParameterTypeNode = $parameterTypeNode;
+			if ($parameterTypeNode instanceof NullableTypeNode) {
+				$parameterTypeNode = $parameterTypeNode->type;
+			}
+
 			$typeHints = [];
 
 			if (AnnotationTypeHelper::containsOneType($parameterTypeNode)) {
@@ -155,8 +161,6 @@ class ParameterTypeHintSniff implements Sniff
 
 					$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($typeNode);
 				}
-			} else {
-				continue;
 			}
 
 			$typeHints = array_values(array_unique($typeHints));
@@ -190,6 +194,10 @@ class ParameterTypeHintSniff implements Sniff
 
 			if (!TypeHintHelper::isValidTypeHint($possibleParameterTypeHint, $this->enableObjectTypeHint)) {
 				continue;
+			}
+
+			if ($originalParameterTypeNode instanceof NullableTypeNode) {
+				$nullableParameterTypeHint = true;
 			}
 
 			$fix = $phpcsFile->addFixableError(
