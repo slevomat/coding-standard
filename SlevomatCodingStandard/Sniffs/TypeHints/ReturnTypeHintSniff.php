@@ -195,8 +195,6 @@ class ReturnTypeHintSniff implements Sniff
 
 				$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($typeNode);
 			}
-		} else {
-			return;
 		}
 
 		$typeHints = array_values(array_unique($typeHints));
