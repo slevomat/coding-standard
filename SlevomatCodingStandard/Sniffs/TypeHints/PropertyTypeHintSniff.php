@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
@@ -139,6 +140,10 @@ class PropertyTypeHintSniff implements Sniff
 		}
 
 		$typeNode = $propertyAnnotation->getType();
+		$originalTypeNode = $typeNode;
+		if ($typeNode instanceof NullableTypeNode) {
+			$typeNode = $typeNode->type;
+		}
 
 		$typeHints = [];
 
@@ -158,8 +163,6 @@ class PropertyTypeHintSniff implements Sniff
 
 				$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($innerTypeNode);
 			}
-		} else {
-			return;
 		}
 
 		$typeHints = array_values(array_unique($typeHints));
@@ -197,6 +200,10 @@ class PropertyTypeHintSniff implements Sniff
 
 		if (!TypeHintHelper::isValidTypeHint($possibleTypeHint, true)) {
 			return;
+		}
+
+		if ($originalTypeNode instanceof NullableTypeNode) {
+			$nullableTypeHint = true;
 		}
 
 		$fix = $phpcsFile->addFixableError(

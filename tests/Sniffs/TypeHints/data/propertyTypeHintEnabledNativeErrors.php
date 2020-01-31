@@ -113,4 +113,7 @@ class Whatever
 	/** @var array<string>|array<int>|array<bool>|null */
 	public $unionWithSameNullableBase;
 
+	/** @var ?int */
+	public $nullable;
+
 }

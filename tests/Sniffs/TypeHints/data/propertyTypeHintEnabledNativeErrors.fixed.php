@@ -100,4 +100,7 @@ class Whatever
 	/** @var array<string>|array<int>|array<bool>|null */
 	public ?array $unionWithSameNullableBase = null;
 
+	/** @var ?int */
+	public ?int $nullable = null;
+
 }
