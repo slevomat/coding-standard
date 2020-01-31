@@ -180,4 +180,11 @@ abstract class Whatever
 	{
 	}
 
+	/**
+	 * @return ?int
+	 */
+	public function nullable(): ?int
+	{
+	}
+
 }

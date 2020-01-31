@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
@@ -173,6 +174,11 @@ class ReturnTypeHintSniff implements Sniff
 
 		$typeHints = [];
 
+		$originalReturnTypeNode = $returnTypeNode;
+		if ($returnTypeNode instanceof NullableTypeNode) {
+			$returnTypeNode = $returnTypeNode->type;
+		}
+
 		if (AnnotationTypeHelper::containsOneType($returnTypeNode)) {
 			/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $returnTypeNode */
 			$returnTypeNode = $returnTypeNode;
@@ -224,6 +230,10 @@ class ReturnTypeHintSniff implements Sniff
 
 		if (!TypeHintHelper::isValidTypeHint($possibleReturnTypeHint, $this->enableObjectTypeHint)) {
 			return;
+		}
+
+		if ($originalReturnTypeNode instanceof NullableTypeNode) {
+			$nullableReturnTypeHint = true;
 		}
 
 		$fix = $phpcsFile->addFixableError(
@@ -379,7 +389,7 @@ class ReturnTypeHintSniff implements Sniff
 
 	/**
 	 * @param ReturnAnnotation|null $returnAnnotation
-	 * @return GenericTypeNode|CallableTypeNode|IntersectionTypeNode|UnionTypeNode|ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|null
+	 * @return GenericTypeNode|CallableTypeNode|IntersectionTypeNode|UnionTypeNode|ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|NullableTypeNode|null
 	 */
 	private function getReturnTypeNode(?ReturnAnnotation $returnAnnotation): ?TypeNode
 	{
