@@ -116,4 +116,9 @@ class Whatever
 	/** @var ?int */
 	public $nullable;
 
+	/**
+	 * @var mixed[]|array
+	 */
+	public $traversableArray;
+
 }

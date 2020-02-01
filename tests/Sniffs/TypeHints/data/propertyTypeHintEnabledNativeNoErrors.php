@@ -118,4 +118,7 @@ class Whatever
 	 */
 	public $unionWithDifferentNullableBase;
 
+	/** @var mixed[]|array|Traversable */
+	public $moreTraverasableTypes;
+
 }

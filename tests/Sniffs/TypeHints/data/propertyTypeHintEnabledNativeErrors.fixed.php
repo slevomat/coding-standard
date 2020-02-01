@@ -103,4 +103,9 @@ class Whatever
 	/** @var ?int */
 	public ?int $nullable = null;
 
+	/**
+	 * @var mixed[]|array
+	 */
+	public array $traversableArray;
+
 }

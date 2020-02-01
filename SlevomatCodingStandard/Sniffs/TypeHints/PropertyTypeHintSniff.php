@@ -153,6 +153,7 @@ class PropertyTypeHintSniff implements Sniff
 			$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($typeNode);
 
 		} elseif ($typeNode instanceof UnionTypeNode || $typeNode instanceof IntersectionTypeNode) {
+			$traversableTypeHints = [];
 			foreach ($typeNode->types as $innerTypeNode) {
 				if (!AnnotationTypeHelper::containsOneType($innerTypeNode)) {
 					return;
@@ -161,7 +162,22 @@ class PropertyTypeHintSniff implements Sniff
 				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $innerTypeNode */
 				$innerTypeNode = $innerTypeNode;
 
-				$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($innerTypeNode);
+				$typeHint = AnnotationTypeHelper::getTypeHintFromOneType($innerTypeNode);
+
+				if (
+					!$innerTypeNode instanceof ArrayTypeNode
+					&& !$innerTypeNode instanceof ArrayShapeNode
+					&& TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $propertyPointer, $typeHint), $this->getTraversableTypeHints())
+				) {
+					$traversableTypeHints[] = $typeHint;
+				}
+
+				$typeHints[] = $typeHint;
+			}
+
+			$traversableTypeHints = array_values(array_unique($traversableTypeHints));
+			if (count($traversableTypeHints) > 1) {
+				return;
 			}
 		}
 
