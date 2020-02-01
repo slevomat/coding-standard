@@ -25,9 +25,7 @@ abstract class Bar {
 	/** @var string */
 	const Bar = 'foo';
 
-
-
-
+	const WHATEVER = 'whatever';
 
 
 

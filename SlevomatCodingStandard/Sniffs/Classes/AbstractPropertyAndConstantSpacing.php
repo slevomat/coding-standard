@@ -38,6 +38,8 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 	/** @var int */
 	public $maxLinesCountBeforeWithoutComment = 1;
 
+	abstract protected function isNextMemberValid(File $phpcsFile, int $pointer): bool;
+
 	abstract protected function addError(File $phpcsFile, int $pointer, int $min, int $max, int $found): bool;
 
 	/**
@@ -67,6 +69,10 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 
 		$types = [T_COMMENT, T_DOC_COMMENT_OPEN_TAG, T_CONST, T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE];
 		$nextPointer = TokenHelper::findNext($phpcsFile, $types, $firstOnLinePointer);
+
+		if (!$this->isNextMemberValid($phpcsFile, $nextPointer)) {
+			return $nextPointer;
+		}
 
 		$linesBetween = $tokens[$nextPointer]['line'] - $tokens[$nextSemicolon]['line'] - 1;
 		if (in_array($tokens[$nextPointer]['code'], [T_DOC_COMMENT_OPEN_TAG, T_COMMENT], true)) {

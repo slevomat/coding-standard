@@ -37,4 +37,7 @@ class Foobar {
 	];
 
 	private const FOO = 3;
+
+
+	private $property;
 }

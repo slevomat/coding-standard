@@ -27,7 +27,7 @@ abstract class Bar {
 
 
 
-
+	const WHATEVER = 'whatever';
 
 
 

@@ -8,6 +8,9 @@ abstract class Foo {
 	protected  $bar = 'foo';
 	private $lvl = 9001;
 
+
+	private const CONSTANT = true;
+
 	public static abstract function wow();
 	private function such()
 	{

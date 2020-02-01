@@ -53,7 +53,7 @@ abstract class Bar {
 	private $lvl = 9001;
 
 
-
+	private $noComment = 'noComment';
 
 
 	/**
