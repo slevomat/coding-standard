@@ -193,4 +193,11 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @return mixed[]|array|Traversable
+	 */
+	public function moreTraverasableTypes()
+	{
+	}
+
 }

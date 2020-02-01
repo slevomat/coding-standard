@@ -192,4 +192,11 @@ abstract class Whatever
 	{
 	}
 
+	/**
+	 * @return mixed[]|array
+	 */
+	public function traversableArray()
+	{
+	}
+
 }
