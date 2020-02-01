@@ -144,6 +144,7 @@ class ParameterTypeHintSniff implements Sniff
 			}
 
 			$typeHints = [];
+			$nullableParameterTypeHint = false;
 
 			if (AnnotationTypeHelper::containsOneType($parameterTypeNode)) {
 				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $parameterTypeNode */
@@ -161,6 +162,11 @@ class ParameterTypeHintSniff implements Sniff
 					$typeNode = $typeNode;
 
 					$typeHint = AnnotationTypeHelper::getTypeHintFromOneType($typeNode);
+
+					if (strtolower($typeHint) === 'null') {
+						$nullableParameterTypeHint = true;
+						continue;
+					}
 
 					if (
 						!$typeNode instanceof ArrayTypeNode
@@ -183,26 +189,19 @@ class ParameterTypeHintSniff implements Sniff
 
 			if (count($typeHints) === 1) {
 				$possibleParameterTypeHint = $typeHints[0];
-				$nullableParameterTypeHint = false;
 			} elseif (count($typeHints) === 2) {
-				if (strtolower($typeHints[0]) === 'null' || strtolower($typeHints[1]) === 'null') {
-					$possibleParameterTypeHint = strtolower($typeHints[0]) === 'null' ? $typeHints[1] : $typeHints[0];
-					$nullableParameterTypeHint = true;
-				} else {
-					/** @var UnionTypeNode|IntersectionTypeNode $parameterTypeNode */
-					$parameterTypeNode = $parameterTypeNode;
+				/** @var UnionTypeNode|IntersectionTypeNode $parameterTypeNode */
+				$parameterTypeNode = $parameterTypeNode;
 
-					$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($parameterTypeNode, $this->getTraversableTypeHints());
-					if (!$itemsSpecificationTypeHint instanceof ArrayTypeNode) {
-						continue;
-					}
+				$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($parameterTypeNode, $this->getTraversableTypeHints());
+				if (!$itemsSpecificationTypeHint instanceof ArrayTypeNode) {
+					continue;
+				}
 
-					$possibleParameterTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType($parameterTypeNode, $this->getTraversableTypeHints());
-					$nullableParameterTypeHint = false;
+				$possibleParameterTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType($parameterTypeNode, $this->getTraversableTypeHints());
 
-					if (!TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $possibleParameterTypeHint), $this->getTraversableTypeHints())) {
-						continue;
-					}
+				if (!TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $possibleParameterTypeHint), $this->getTraversableTypeHints())) {
+					continue;
 				}
 			} else {
 				continue;

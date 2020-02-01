@@ -146,6 +146,7 @@ class PropertyTypeHintSniff implements Sniff
 		}
 
 		$typeHints = [];
+		$nullableTypeHint = false;
 
 		if (AnnotationTypeHelper::containsOneType($typeNode)) {
 			/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $typeNode */
@@ -163,6 +164,11 @@ class PropertyTypeHintSniff implements Sniff
 				$innerTypeNode = $innerTypeNode;
 
 				$typeHint = AnnotationTypeHelper::getTypeHintFromOneType($innerTypeNode);
+
+				if (strtolower($typeHint) === 'null') {
+					$nullableTypeHint = true;
+					continue;
+				}
 
 				if (
 					!$innerTypeNode instanceof ArrayTypeNode
@@ -185,26 +191,19 @@ class PropertyTypeHintSniff implements Sniff
 
 		if (count($typeHints) === 1) {
 			$possibleTypeHint = $typeHints[0];
-			$nullableTypeHint = false;
 		} elseif (count($typeHints) === 2) {
-			if (strtolower($typeHints[0]) === 'null' || strtolower($typeHints[1]) === 'null') {
-				$possibleTypeHint = strtolower($typeHints[0]) === 'null' ? $typeHints[1] : $typeHints[0];
-				$nullableTypeHint = true;
-			} else {
-				/** @var UnionTypeNode|IntersectionTypeNode $typeNode */
-				$typeNode = $typeNode;
+			/** @var UnionTypeNode|IntersectionTypeNode $typeNode */
+			$typeNode = $typeNode;
 
-				$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($typeNode, $this->getTraversableTypeHints());
-				if (!$itemsSpecificationTypeHint instanceof ArrayTypeNode) {
-					return;
-				}
+			$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($typeNode, $this->getTraversableTypeHints());
+			if (!$itemsSpecificationTypeHint instanceof ArrayTypeNode) {
+				return;
+			}
 
-				$possibleTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType($typeNode, $this->getTraversableTypeHints());
-				$nullableTypeHint = false;
+			$possibleTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType($typeNode, $this->getTraversableTypeHints());
 
-				if (!TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $propertyPointer, $possibleTypeHint), $this->getTraversableTypeHints())) {
-					return;
-				}
+			if (!TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $propertyPointer, $possibleTypeHint), $this->getTraversableTypeHints())) {
+				return;
 			}
 		} else {
 			return;
