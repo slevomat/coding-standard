@@ -151,6 +151,7 @@ class ParameterTypeHintSniff implements Sniff
 				$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($parameterTypeNode);
 
 			} elseif ($parameterTypeNode instanceof UnionTypeNode || $parameterTypeNode instanceof IntersectionTypeNode) {
+				$traversableTypeHints = [];
 				foreach ($parameterTypeNode->types as $typeNode) {
 					if (!AnnotationTypeHelper::containsOneType($typeNode)) {
 						continue 2;
@@ -159,7 +160,22 @@ class ParameterTypeHintSniff implements Sniff
 					/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $typeNode */
 					$typeNode = $typeNode;
 
-					$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($typeNode);
+					$typeHint = AnnotationTypeHelper::getTypeHintFromOneType($typeNode);
+
+					if (
+						!$typeNode instanceof ArrayTypeNode
+						&& !$typeNode instanceof ArrayShapeNode
+						&& TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint), $this->getTraversableTypeHints())
+					) {
+						$traversableTypeHints[] = $typeHint;
+					}
+
+					$typeHints[] = $typeHint;
+				}
+
+				$traversableTypeHints = array_values(array_unique($traversableTypeHints));
+				if (count($traversableTypeHints) > 1) {
+					continue;
 				}
 			}
 

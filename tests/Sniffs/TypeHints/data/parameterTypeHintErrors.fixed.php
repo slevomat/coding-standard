@@ -174,4 +174,11 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @param mixed[]|array $a
+	 */
+	public function traversableArray(array $a)
+	{
+	}
+
 }

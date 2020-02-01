@@ -1,5 +1,6 @@
 <?php
 
+use Doctrine\Common\Collections\ArrayCollection;
 use SlevomatCodingStandard\Helpers\ParameterTypeHint;
 use SlevomatCodingStandard\Helpers\PropertyTypeHint;
 use SlevomatCodingStandard\Helpers\ReturnTypeHint;
@@ -172,6 +173,13 @@ class Whatever
 	 * @param Whatever|Something|Anything|null $a
 	 */
 	public function unionWithDifferentNullableBase($a)
+	{
+	}
+
+	/**
+	 * @param mixed[]|array|Traversable $a
+	 */
+	public function moreTraverasableTypes($a)
 	{
 	}
 
