@@ -14,7 +14,9 @@ class SingleLineArrayWhitespaceSniffTest extends TestCase
 
 	public function testErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/singleLineArrayWhitespaceErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/singleLineArrayWhitespaceErrors.php', [
+			'enableEmptyArrayCheck' => true,
+		]);
 
 		self::assertSame(16, $report->getErrorCount());
 
@@ -40,7 +42,10 @@ class SingleLineArrayWhitespaceSniffTest extends TestCase
 
 	public function testRequireSpacesErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/singleLineArrayWhitespaceRequireSpacesErrors.php', ['spacesAroundBrackets' => 1]);
+		$report = self::checkFile(__DIR__ . '/data/singleLineArrayWhitespaceRequireSpacesErrors.php', [
+			'spacesAroundBrackets' => 1,
+			'enableEmptyArrayCheck' => true,
+		]);
 
 		self::assertSame(5, $report->getErrorCount());
 

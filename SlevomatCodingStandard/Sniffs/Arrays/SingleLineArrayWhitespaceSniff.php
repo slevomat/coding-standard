@@ -25,6 +25,9 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 	/** @var int */
 	public $spacesAroundBrackets = 0;
 
+	/** @var bool */
+	public $enableEmptyArrayCheck = false;
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
@@ -53,7 +56,9 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 		$content = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $arrayStart + 1, $arrayEnd + 1);
 		if ($content === $arrayEnd) {
 			// Empty array, but if the brackets aren't together, there's a problem.
-			$this->checkWhitespaceInEmptyArray($phpcsFile, $arrayStart, $arrayEnd);
+			if ($this->enableEmptyArrayCheck) {
+				$this->checkWhitespaceInEmptyArray($phpcsFile, $arrayStart, $arrayEnd);
+			}
 
 			// We can return here because there is nothing else to check.
 			// All code below can assume that the array is not empty.
