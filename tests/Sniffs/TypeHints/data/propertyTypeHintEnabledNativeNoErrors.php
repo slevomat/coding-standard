@@ -121,4 +121,9 @@ class Whatever
 	/** @var mixed[]|array|Traversable */
 	public $moreTraverasableTypes;
 
+	/**
+	 * @var mixed[]|array|SomethingThatLooksAsArray
+	 */
+	public $moreDifferentTypes;
+
 }

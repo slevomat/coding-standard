@@ -170,10 +170,16 @@ class PropertyTypeHintSniff implements Sniff
 					continue;
 				}
 
+				$isTraversable = TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $propertyPointer, $typeHint), $this->getTraversableTypeHints());
+
+				if (!$isTraversable && count($traversableTypeHints) > 0) {
+					return;
+				}
+
 				if (
 					!$innerTypeNode instanceof ArrayTypeNode
 					&& !$innerTypeNode instanceof ArrayShapeNode
-					&& TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $propertyPointer, $typeHint), $this->getTraversableTypeHints())
+					&& $isTraversable
 				) {
 					$traversableTypeHints[] = $typeHint;
 				}
