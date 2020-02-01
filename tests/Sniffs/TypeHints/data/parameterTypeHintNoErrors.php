@@ -183,4 +183,11 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @param mixed[]|array|SomethingThatLooksAsArray $a
+	 */
+	public function moreDifferentTypes($a)
+	{
+	}
+
 }
