@@ -200,4 +200,11 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @return mixed[]|array|SomethingThatLooksAsArray
+	 */
+	public function moreDifferentTypes()
+	{
+	}
+
 }

@@ -202,10 +202,16 @@ class ReturnTypeHintSniff implements Sniff
 					continue;
 				}
 
+				$isTraversable = TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint), $this->getTraversableTypeHints());
+
+				if (!$isTraversable && count($traversableTypeHints) > 0) {
+					return;
+				}
+
 				if (
 					!$typeNode instanceof ArrayTypeNode
 					&& !$typeNode instanceof ArrayShapeNode
-					&& TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint), $this->getTraversableTypeHints())
+					&& $isTraversable
 				) {
 					$traversableTypeHints[] = $typeHint;
 				}
