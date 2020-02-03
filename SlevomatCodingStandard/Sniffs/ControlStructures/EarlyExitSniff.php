@@ -11,6 +11,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use Throwable;
 use function array_key_exists;
 use function in_array;
+use function range;
 use function sort;
 use function sprintf;
 use const T_CLOSE_CURLY_BRACKET;
@@ -133,10 +134,10 @@ class EarlyExitSniff implements Sniff
 				$phpcsFile->fixer->replaceToken($i, '');
 			}
 
-			$ifCode = $this->getScopeCode($phpcsFile, $ifPointer);
+			$ifCodePointers = $this->getScopeCodePointers($phpcsFile, $ifPointer);
 			$elseCode = $this->getScopeCode($phpcsFile, $elsePointer);
 			$negativeIfCondition = ConditionHelper::getNegativeCondition($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'], $tokens[$ifPointer]['parenthesis_closer']);
-			$afterIfCode = IndentationHelper::fixIndentation($ifCode, $phpcsFile->eolChar, IndentationHelper::getIndentation($phpcsFile, $ifPointer));
+			$afterIfCode = IndentationHelper::fixIndentation($phpcsFile, $ifCodePointers, IndentationHelper::getIndentation($phpcsFile, $ifPointer));
 
 			$phpcsFile->fixer->addContent(
 				$ifPointer,
@@ -183,8 +184,8 @@ class EarlyExitSniff implements Sniff
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 
-		$elseCode = $this->getScopeCode($phpcsFile, $elsePointer);
-		$afterIfCode = IndentationHelper::fixIndentation($elseCode, $phpcsFile->eolChar, IndentationHelper::addIndentation(IndentationHelper::getIndentation($phpcsFile, $previousConditionPointer)));
+		$elseCodePointers = $this->getScopeCodePointers($phpcsFile, $elsePointer);
+		$afterIfCode = IndentationHelper::fixIndentation($phpcsFile, $elseCodePointers, IndentationHelper::addIndentation(IndentationHelper::getIndentation($phpcsFile, $previousConditionPointer)));
 
 		$phpcsFile->fixer->addContent(
 			$tokens[$elsePointer]['scope_closer'],
@@ -301,7 +302,7 @@ class EarlyExitSniff implements Sniff
 			return;
 		}
 
-		$ifCode = $this->getScopeCode($phpcsFile, $ifPointer);
+		$ifCodePointers = $this->getScopeCodePointers($phpcsFile, $ifPointer);
 		$ifIndentation = IndentationHelper::getIndentation($phpcsFile, $ifPointer);
 		$earlyExitCode = $this->getEarlyExitCode($tokens[$scopePointer]['code']);
 		$earlyExitCodeIndentation = IndentationHelper::addIndentation($ifIndentation);
@@ -314,7 +315,7 @@ class EarlyExitSniff implements Sniff
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 
-		$afterIfCode = IndentationHelper::fixIndentation($ifCode, $phpcsFile->eolChar, $ifIndentation);
+		$afterIfCode = IndentationHelper::fixIndentation($phpcsFile, $ifCodePointers, $ifIndentation);
 
 		$phpcsFile->fixer->addContent(
 			$ifPointer,
@@ -338,6 +339,17 @@ class EarlyExitSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 		return TokenHelper::getContent($phpcsFile, $tokens[$scopePointer]['scope_opener'] + 1, $tokens[$scopePointer]['scope_closer'] - 1);
+	}
+
+	/**
+	 * @param File $phpcsFile
+	 * @param int $scopePointer
+	 * @return int[]
+	 */
+	private function getScopeCodePointers(File $phpcsFile, int $scopePointer): array
+	{
+		$tokens = $phpcsFile->getTokens();
+		return range($tokens[$scopePointer]['scope_opener'] + 1, $tokens[$scopePointer]['scope_closer'] - 1);
 	}
 
 	/**

@@ -467,3 +467,43 @@ function uselessElseIf() {
 		doSomethingElse();
 	}
 }
+
+function heredoc() {
+	foreach ([] as $f) {
+		if (!file_exists($f)) {
+			continue;
+		}
+
+		echo <<<EOF
+XYZ
+EOF;
+	}
+}
+
+function nowdoc() {
+	foreach ([] as $f) {
+		if (!file_exists($f)) {
+			continue;
+		}
+
+		echo <<<'EOF'
+XYZ
+EOF;
+	}
+}
+
+function uselessElseWithHeredoc() {
+	if (true) {
+		return;
+	}
+
+	if (false) {
+		return <<<EOF
+		XYZ
+EOF;
+	}
+
+	echo <<<EOF
+	XYZ
+EOF;
+}

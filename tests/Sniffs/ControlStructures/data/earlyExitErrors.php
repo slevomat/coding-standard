@@ -409,3 +409,37 @@ function uselessElseIf() {
 		doSomethingElse();
 	}
 }
+
+function heredoc() {
+	foreach ([] as $f) {
+		if (file_exists($f)) {
+			echo <<<EOF
+XYZ
+EOF;
+		}
+	}
+}
+
+function nowdoc() {
+	foreach ([] as $f) {
+		if (file_exists($f)) {
+			echo <<<'EOF'
+XYZ
+EOF;
+		}
+	}
+}
+
+function uselessElseWithHeredoc() {
+	if (true) {
+		return;
+	} elseif (false) {
+		return <<<EOF
+		XYZ
+EOF;
+	} else {
+		echo <<<EOF
+	XYZ
+EOF;
+	}
+}

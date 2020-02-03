@@ -3,12 +3,15 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
-use function array_map;
-use function explode;
-use function implode;
+use function in_array;
 use function ltrim;
 use function rtrim;
+use function strlen;
 use function substr;
+use const T_END_HEREDOC;
+use const T_END_NOWDOC;
+use const T_START_HEREDOC;
+use const T_START_NOWDOC;
 use const T_WHITESPACE;
 
 /**
@@ -40,26 +43,49 @@ class IndentationHelper
 		return $identation . ($identation[0] === self::TAB_INDENT ? self::TAB_INDENT : self::SPACES_INDENT);
 	}
 
-	public static function fixIndentation(string $code, string $eolChar, string $defaultIndentation): string
+	/**
+	 * @param File $phpcsFile
+	 * @param int[] $codePointers
+	 * @param string $defaultIndentation
+	 * @return string
+	 */
+	public static function fixIndentation(File $phpcsFile, array $codePointers, string $defaultIndentation): string
 	{
-		/** @var string[] $lines */
-		$lines = explode($eolChar, rtrim($code));
+		$tokens = $phpcsFile->getTokens();
 
-		return implode($eolChar, array_map(static function (string $line) use ($defaultIndentation): string {
-			if ($line === '') {
-				return $line;
+		$eolLength = strlen($phpcsFile->eolChar);
+
+		$code = '';
+		$inHeredoc = false;
+
+		foreach ($codePointers as $no => $codePointer) {
+			$content = $tokens[$codePointer]['content'];
+
+			if (
+				!$inHeredoc
+				&& ($no === 0 || substr($tokens[$codePointer - 1]['content'], -$eolLength) === $phpcsFile->eolChar)
+			) {
+				if ($content === $phpcsFile->eolChar) {
+					// Nothing
+				} elseif ($content[0] === self::TAB_INDENT) {
+					$content = substr($content, 1);
+				} elseif (substr($content, 0, 4) === self::SPACES_INDENT) {
+					$content = substr($content, 4);
+				} else {
+					$content = $defaultIndentation . ltrim($content);
+				}
 			}
 
-			if ($line[0] === self::TAB_INDENT) {
-				return substr($line, 1);
+			if (in_array($tokens[$codePointer]['code'], [T_START_HEREDOC, T_START_NOWDOC], true)) {
+				$inHeredoc = true;
+			} elseif (in_array($tokens[$codePointer]['code'], [T_END_HEREDOC, T_END_NOWDOC], true)) {
+				$inHeredoc = false;
 			}
 
-			if (substr($line, 0, 4) === self::SPACES_INDENT) {
-				return substr($line, 4);
-			}
+			$code .= $content;
+		}
 
-			return $defaultIndentation . ltrim($line);
-		}, $lines));
+		return rtrim($code);
 	}
 
 }
