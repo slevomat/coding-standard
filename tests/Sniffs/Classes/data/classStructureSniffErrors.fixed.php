@@ -168,6 +168,15 @@ class M
 	{
 	}
 
+	/**
+	 * Static constuctor
+	 *
+	 * @return static
+	 */
+	public static function staticConstructorM()
+	{
+	}
+
 	public static function notAStaticConstructor() : D
 	{
 	}
