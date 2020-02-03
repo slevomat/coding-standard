@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 abstract class Foo {
 	public static $staticFoo = 'bar';
@@ -7,7 +7,7 @@ abstract class Foo {
 	public $foo = 'bar'; // there may be a comment
 	protected  $bar = 'foo';
 	private $lvl = 9001;
-
+	private int $int = 0;
 
 	private const CONSTANT = true;
 

@@ -9,7 +9,6 @@ use const T_FUNCTION;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
-use const T_STRING;
 use const T_VAR;
 use const T_VARIABLE;
 
@@ -26,9 +25,26 @@ class PropertySpacingSniff extends AbstractPropertyAndConstantSpacing
 		return [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE];
 	}
 
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+	 * @param File $phpcsFile
+	 * @param int $pointer
+	 */
+	public function process(File $phpcsFile, $pointer): int
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION], $pointer + 1);
+		if ($propertyPointer === null || $tokens[$propertyPointer]['code'] === T_FUNCTION) {
+			return $propertyPointer ?? $pointer;
+		}
+
+		return parent::process($phpcsFile, $propertyPointer);
+	}
+
 	protected function isNextMemberValid(File $phpcsFile, int $pointer): bool
 	{
-		$nextPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_STRING, T_VARIABLE], $pointer + 1);
+		$nextPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_VARIABLE], $pointer + 1);
 
 		return $phpcsFile->getTokens()[$nextPointer]['code'] === T_VARIABLE;
 	}

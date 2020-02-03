@@ -51,24 +51,19 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$nextFunctionPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_STRING, T_VARIABLE], $pointer + 1);
-		if ($nextFunctionPointer === null || $tokens[$nextFunctionPointer]['code'] === T_FUNCTION) {
-			return $nextFunctionPointer ?? $pointer;
-		}
-
-		$nextSemicolon = TokenHelper::findNext($phpcsFile, [T_SEMICOLON], $pointer);
+		$nextSemicolon = TokenHelper::findNext($phpcsFile, [T_SEMICOLON], $pointer + 1);
 		assert($nextSemicolon !== null);
 
 		$firstOnLinePointer = TokenHelper::findFirstTokenOnNextLine($phpcsFile, $nextSemicolon);
 		assert($firstOnLinePointer !== null);
 
-		$nextFunctionPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_STRING, T_VARIABLE], $firstOnLinePointer);
+		$nextFunctionPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_STRING, T_VARIABLE], $firstOnLinePointer + 1);
 		if ($nextFunctionPointer === null || $tokens[$nextFunctionPointer]['code'] === T_FUNCTION || $tokens[$nextFunctionPointer]['conditions'] !== $tokens[$pointer]['conditions']) {
 			return $nextFunctionPointer ?? $firstOnLinePointer;
 		}
 
 		$types = [T_COMMENT, T_DOC_COMMENT_OPEN_TAG, T_CONST, T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE];
-		$nextPointer = TokenHelper::findNext($phpcsFile, $types, $firstOnLinePointer);
+		$nextPointer = TokenHelper::findNext($phpcsFile, $types, $firstOnLinePointer + 1);
 
 		if (!$this->isNextMemberValid($phpcsFile, $nextPointer)) {
 			return $nextPointer;

@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 abstract class Foo {
 	/** @var string */
@@ -54,6 +54,12 @@ abstract class Bar {
 
 
 	private $noComment = 'noComment';
+
+
+	private int $int = 0;
+
+
+	private string $string = '';
 
 
 	/**
