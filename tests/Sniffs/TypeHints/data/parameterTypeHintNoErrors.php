@@ -197,4 +197,11 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @param Whatever|mixed[]|array $a
+	 */
+	public function yetAnotherDifferentTypes($a)
+	{
+	}
+
 }

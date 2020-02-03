@@ -131,4 +131,9 @@ class Whatever
 	 */
 	public $anotherDifferentTypes;
 
+	/**
+	 * @var Whatever|mixed[]|array
+	 */
+	public $yetAnotherDifferentTypes;
+
 }

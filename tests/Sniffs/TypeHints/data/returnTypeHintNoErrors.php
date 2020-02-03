@@ -214,4 +214,11 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @return Whatever|mixed[]|array
+	 */
+	public function yetAnotherDifferentTypes()
+	{
+	}
+
 }

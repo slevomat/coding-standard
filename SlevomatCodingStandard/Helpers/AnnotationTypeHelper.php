@@ -554,24 +554,22 @@ class AnnotationTypeHelper
 		array $traversableTypeHints
 	): ?string
 	{
+		$typeHint = null;
+
 		foreach ($typeNode->types as $type) {
 			if (
-				!$type instanceof GenericTypeNode
-				&& !$type instanceof ThisTypeNode
-				&& !$type instanceof IdentifierTypeNode
+				$type instanceof GenericTypeNode
+				|| $type instanceof ThisTypeNode
+				|| $type instanceof IdentifierTypeNode
 			) {
-				continue;
+				$typeHint = self::getTypeHintFromOneType($type);
+				break;
 			}
-
-			$typeHint = self::getTypeHintFromOneType($type);
-			if (!TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeHint), $traversableTypeHints)) {
-				continue;
-			}
-
-			return $typeHint;
 		}
 
-		return null;
+		return $typeHint !== null && TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeHint), $traversableTypeHints)
+			? $typeHint
+			: null;
 	}
 
 	/**
