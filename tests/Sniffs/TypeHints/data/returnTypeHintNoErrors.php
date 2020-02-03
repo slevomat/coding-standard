@@ -207,4 +207,11 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @return int[]|string[]|Anything
+	 */
+	public function anotherDifferentTypes()
+	{
+	}
+
 }

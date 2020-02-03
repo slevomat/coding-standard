@@ -126,4 +126,9 @@ class Whatever
 	 */
 	public $moreDifferentTypes;
 
+	/**
+	 * @var int[]|string[]|Anything
+	 */
+	public $anotherDifferentTypes;
+
 }

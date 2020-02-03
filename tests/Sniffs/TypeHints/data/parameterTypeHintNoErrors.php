@@ -190,4 +190,11 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @param int[]|string[]|Anything $a
+	 */
+	public function anotherDifferentTypes($a)
+	{
+	}
+
 }

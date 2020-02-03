@@ -233,14 +233,13 @@ class ReturnTypeHintSniff implements Sniff
 			/** @var UnionTypeNode|IntersectionTypeNode $returnTypeNode */
 			$returnTypeNode = $returnTypeNode;
 
-			$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($returnTypeNode, $this->getTraversableTypeHints());
-			if (!$itemsSpecificationTypeHint instanceof ArrayTypeNode) {
+			$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($returnTypeNode);
+			if ($itemsSpecificationTypeHint === null) {
 				return;
 			}
 
-			$possibleReturnTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType($returnTypeNode, $this->getTraversableTypeHints());
-
-			if (!TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $possibleReturnTypeHint), $this->getTraversableTypeHints())) {
+			$possibleReturnTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType($returnTypeNode, $phpcsFile, $functionPointer, $this->getTraversableTypeHints());
+			if ($possibleReturnTypeHint === null) {
 				return;
 			}
 		} else {

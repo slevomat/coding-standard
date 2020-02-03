@@ -201,14 +201,13 @@ class PropertyTypeHintSniff implements Sniff
 			/** @var UnionTypeNode|IntersectionTypeNode $typeNode */
 			$typeNode = $typeNode;
 
-			$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($typeNode, $this->getTraversableTypeHints());
-			if (!$itemsSpecificationTypeHint instanceof ArrayTypeNode) {
+			$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($typeNode);
+			if ($itemsSpecificationTypeHint === null) {
 				return;
 			}
 
-			$possibleTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType($typeNode, $this->getTraversableTypeHints());
-
-			if (!TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $propertyPointer, $possibleTypeHint), $this->getTraversableTypeHints())) {
+			$possibleTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType($typeNode, $phpcsFile, $propertyPointer, $this->getTraversableTypeHints());
+			if ($possibleTypeHint === null) {
 				return;
 			}
 		} else {

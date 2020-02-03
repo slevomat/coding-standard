@@ -199,14 +199,13 @@ class ParameterTypeHintSniff implements Sniff
 				/** @var UnionTypeNode|IntersectionTypeNode $parameterTypeNode */
 				$parameterTypeNode = $parameterTypeNode;
 
-				$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($parameterTypeNode, $this->getTraversableTypeHints());
-				if (!$itemsSpecificationTypeHint instanceof ArrayTypeNode) {
+				$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($parameterTypeNode);
+				if ($itemsSpecificationTypeHint === null) {
 					continue;
 				}
 
-				$possibleParameterTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType($parameterTypeNode, $this->getTraversableTypeHints());
-
-				if (!TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $possibleParameterTypeHint), $this->getTraversableTypeHints())) {
+				$possibleParameterTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType($parameterTypeNode, $phpcsFile, $functionPointer, $this->getTraversableTypeHints());
+				if ($possibleParameterTypeHint === null) {
 					continue;
 				}
 			} else {

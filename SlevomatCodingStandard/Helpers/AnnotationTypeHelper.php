@@ -542,46 +542,51 @@ class AnnotationTypeHelper
 
 	/**
 	 * @param UnionTypeNode|IntersectionTypeNode $typeNode
+	 * @param File $phpcsFile
+	 * @param int $pointer
 	 * @param array<int, string> $traversableTypeHints
-	 * @return string
+	 * @return string|null
 	 */
-	public static function getTraversableTypeHintFromType(TypeNode $typeNode, array $traversableTypeHints): string
+	public static function getTraversableTypeHintFromType(
+		TypeNode $typeNode,
+		File $phpcsFile,
+		int $pointer,
+		array $traversableTypeHints
+	): ?string
 	{
-		if (
-			$typeNode->types[0] instanceof GenericTypeNode
-			|| $typeNode->types[0] instanceof ThisTypeNode
-			|| $typeNode->types[0] instanceof IdentifierTypeNode
-		) {
-			$typeHint = self::getTypeHintFromOneType($typeNode->types[0]);
-			if (TypeHintHelper::isTraversableType($typeHint, $traversableTypeHints)) {
-				return $typeHint;
+		foreach ($typeNode->types as $type) {
+			if (
+				!$type instanceof GenericTypeNode
+				&& !$type instanceof ThisTypeNode
+				&& !$type instanceof IdentifierTypeNode
+			) {
+				continue;
 			}
+
+			$typeHint = self::getTypeHintFromOneType($type);
+			if (!TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeHint), $traversableTypeHints)) {
+				continue;
+			}
+
+			return $typeHint;
 		}
 
-		/** @var GenericTypeNode|ThisTypeNode|IdentifierTypeNode $oneTypeNode */
-		$oneTypeNode = $typeNode->types[1];
-		return self::getTypeHintFromOneType($oneTypeNode);
+		return null;
 	}
 
 	/**
 	 * @param UnionTypeNode|IntersectionTypeNode $typeNode
-	 * @param array<int, string> $traversableTypeHints
-	 * @return TypeNode
+	 * @return ?TypeNode
 	 */
-	public static function getItemsSpecificationTypeFromType(TypeNode $typeNode, array $traversableTypeHints): TypeNode
+	public static function getItemsSpecificationTypeFromType(TypeNode $typeNode): ?TypeNode
 	{
-		if (
-			$typeNode->types[0] instanceof GenericTypeNode
-			|| $typeNode->types[0] instanceof ThisTypeNode
-			|| $typeNode->types[0] instanceof IdentifierTypeNode
-		) {
-			$typeHint = self::getTypeHintFromOneType($typeNode->types[0]);
-			if (TypeHintHelper::isTraversableType($typeHint, $traversableTypeHints)) {
-				return $typeNode->types[1];
+		foreach ($typeNode->types as $type) {
+			if ($type instanceof ArrayTypeNode) {
+				return $type;
 			}
 		}
 
-		return $typeNode->types[0];
+		return null;
 	}
 
 }
