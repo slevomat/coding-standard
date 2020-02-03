@@ -16,7 +16,6 @@ use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
 use const T_SEMICOLON;
-use const T_STRING;
 use const T_VAR;
 use const T_VARIABLE;
 
@@ -57,7 +56,7 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 		$firstOnLinePointer = TokenHelper::findFirstTokenOnNextLine($phpcsFile, $nextSemicolon);
 		assert($firstOnLinePointer !== null);
 
-		$nextFunctionPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_STRING, T_VARIABLE], $firstOnLinePointer + 1);
+		$nextFunctionPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $firstOnLinePointer + 1);
 		if ($nextFunctionPointer === null || $tokens[$nextFunctionPointer]['code'] === T_FUNCTION || $tokens[$nextFunctionPointer]['conditions'] !== $tokens[$pointer]['conditions']) {
 			return $nextFunctionPointer ?? $firstOnLinePointer;
 		}

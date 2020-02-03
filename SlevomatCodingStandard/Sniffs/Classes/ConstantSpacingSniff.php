@@ -7,7 +7,6 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use function sprintf;
 use const T_CONST;
 use const T_FUNCTION;
-use const T_STRING;
 use const T_VARIABLE;
 
 class ConstantSpacingSniff extends AbstractPropertyAndConstantSpacing
@@ -25,9 +24,15 @@ class ConstantSpacingSniff extends AbstractPropertyAndConstantSpacing
 
 	protected function isNextMemberValid(File $phpcsFile, int $pointer): bool
 	{
-		$nextPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_STRING, T_VARIABLE], $pointer + 1);
+		$tokens = $phpcsFile->getTokens();
 
-		return $phpcsFile->getTokens()[$nextPointer]['code'] === T_STRING;
+		if ($tokens[$pointer]['code'] === T_CONST) {
+			return true;
+		}
+
+		$nextPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $pointer + 1);
+
+		return $tokens[$nextPointer]['code'] === T_CONST;
 	}
 
 	protected function addError(File $phpcsFile, int $pointer, int $min, int $max, int $found): bool
