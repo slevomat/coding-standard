@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 class A
 {
@@ -137,7 +137,7 @@ trait Tr
 	use SomeTrait;
 
 	static $staticLorem;
-	private $sit;
+	private int $sit;
 
 	private static $staticSit;
 

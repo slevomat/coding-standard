@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 class A
 {
@@ -24,9 +24,9 @@ class D
 	protected const DOLOR = 1;
 	private const SIT = 1;
 
-	var $lorem;
+	var string $lorem;
 	public $ipsum;
-	static $staticLorem;
+	static int $staticLorem;
 	public static $staticIpsum;
 
 	protected $dolor;

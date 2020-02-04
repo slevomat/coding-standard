@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 class A
 {
@@ -142,7 +142,7 @@ trait Tr
 	private static function staticSit() {
 	}
 
-	private $sit;
+	private int $sit;
 
 	protected static function staticDolor() {
 	}
