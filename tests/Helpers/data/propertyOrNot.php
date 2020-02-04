@@ -21,4 +21,11 @@ class Foo
 
 	private int $withSimpleTypeHint;
 
+	public function whatever()
+	{
+
+	}
+
+	private string $typedPropertyAfterMethod;
+
 }

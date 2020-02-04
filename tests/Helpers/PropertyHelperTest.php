@@ -45,6 +45,10 @@ class PropertyHelperTest extends TestCase
 				'$withSimpleTypeHint',
 				true,
 			],
+			[
+				'$typedPropertyAfterMethod',
+				true,
+			],
 		];
 	}
 

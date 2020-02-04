@@ -6,16 +6,20 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use function array_key_exists;
 use function array_keys;
+use function array_merge;
 use function array_reverse;
 use function array_values;
 use function count;
 use function in_array;
 use function sprintf;
 use const T_ANON_CLASS;
+use const T_CLOSE_CURLY_BRACKET;
 use const T_NULLABLE;
+use const T_OPEN_CURLY_BRACKET;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
+use const T_SEMICOLON;
 use const T_STATIC;
 use const T_VAR;
 
@@ -40,7 +44,8 @@ class PropertyHelper
 			return false;
 		}
 
-		if (TokenHelper::findPreviousLocal($phpcsFile, TokenHelper::$functionTokenCodes, $variablePointer - 1) !== null) {
+		$functionPointer = TokenHelper::findPrevious($phpcsFile, array_merge(TokenHelper::$functionTokenCodes, [T_SEMICOLON, T_CLOSE_CURLY_BRACKET, T_OPEN_CURLY_BRACKET]), $variablePointer - 1);
+		if ($functionPointer !== null && in_array($tokens[$functionPointer]['code'], TokenHelper::$functionTokenCodes, true)) {
 			return false;
 		}
 
