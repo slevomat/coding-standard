@@ -324,8 +324,8 @@ Checks whitespace in single line array declarations (whitespace between brackets
 
 Sniff provides the following settings:
 
-* `$spacesAroundBrackets`: number of spaces you require to have around array brackets
-* `$enableEmptyArrayCheck` (defaults to `false`): enables check for empty arrays
+* `spacesAroundBrackets`: number of spaces you require to have around array brackets
+* `enableEmptyArrayCheck` (defaults to `false`): enables check for empty arrays
 
 #### SlevomatCodingStandard.Arrays.TrailingArrayComma 🔧
 
@@ -343,10 +343,10 @@ Checks that there is a certain number of blank lines between constants.
 
 Sniff provides the following settings:
 
-* `$minLinesCountBeforeWithComment`: minimum number of lines before constant with a doc comment
-* `$maxLinesCountBeforeWithComment`: maximum number of lines before constant with a doc comment
-* `$minLinesCountBeforeWithoutComment`: minimum number of lines before constant without a doc comment
-* `$maxLinesCountBeforeWithoutComment`: maximum number of lines before constant without a doc comment
+* `minLinesCountBeforeWithComment`: minimum number of lines before constant with a doc comment
+* `maxLinesCountBeforeWithComment`: maximum number of lines before constant with a doc comment
+* `minLinesCountBeforeWithoutComment`: minimum number of lines before constant without a doc comment
+* `maxLinesCountBeforeWithoutComment`: maximum number of lines before constant without a doc comment
 
 #### SlevomatCodingStandard.Classes.ModernClassNameReference 🔧
 
@@ -370,10 +370,10 @@ Checks that there is a certain number of blank lines between properties.
 
 Sniff provides the following settings:
 
-* `$minLinesCountBeforeWithComment`: minimum number of lines before property with a doc comment
-* `$maxLinesCountBeforeWithComment`: maximum number of lines before property with a doc comment
-* `$minLinesCountBeforeWithoutComment`: minimum number of lines before property without a doc comment
-* `$maxLinesCountBeforeWithoutComment`: maximum number of lines before property without a doc comment
+* `minLinesCountBeforeWithComment`: minimum number of lines before property with a doc comment
+* `maxLinesCountBeforeWithComment`: maximum number of lines before property with a doc comment
+* `minLinesCountBeforeWithoutComment`: minimum number of lines before property without a doc comment
+* `maxLinesCountBeforeWithoutComment`: maximum number of lines before property without a doc comment
 
 #### SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature 🔧
 
