@@ -300,6 +300,28 @@ class TokenHelper
 	/**
 	 * @param File $phpcsFile
 	 * @param int $pointer search starts at this token, inclusive
+	 * @return int
+	 */
+	public static function findFirstTokenOnLine(File $phpcsFile, int $pointer): int
+	{
+		if ($pointer === 0) {
+			return $pointer;
+		}
+
+		$tokens = $phpcsFile->getTokens();
+
+		$line = $tokens[$pointer]['line'];
+
+		do {
+			$pointer--;
+		} while ($tokens[$pointer]['line'] === $line);
+
+		return $pointer + 1;
+	}
+
+	/**
+	 * @param File $phpcsFile
+	 * @param int $pointer search starts at this token, inclusive
 	 * @return int|null
 	 */
 	public static function findFirstTokenOnNextLine(File $phpcsFile, int $pointer): ?int

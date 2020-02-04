@@ -25,13 +25,17 @@ class IndentationHelper
 
 	public static function getIndentation(File $phpcsFile, int $pointer): string
 	{
-		$endOfLinePointer = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $pointer - 1);
+		$tokens = $phpcsFile->getTokens();
 
-		if ($endOfLinePointer === null) {
+		$nonWhitespacePointer = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $pointer - 1);
+
+		if ($tokens[$nonWhitespacePointer]['line'] === $tokens[$pointer]['line']) {
 			return '';
 		}
 
-		return TokenHelper::getContent($phpcsFile, $endOfLinePointer + 1, $pointer - 1);
+		$firstPointerOnLine = TokenHelper::findFirstTokenOnLine($phpcsFile, $pointer);
+
+		return TokenHelper::getContent($phpcsFile, $firstPointerOnLine, $pointer - 1);
 	}
 
 	public static function addIndentation(string $identation): string

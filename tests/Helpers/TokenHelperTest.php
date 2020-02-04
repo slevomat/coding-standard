@@ -212,6 +212,26 @@ class TokenHelperTest extends TestCase
 		], $lastTokenPointer, $openParenthesisTokenPointer));
 	}
 
+	public function testFindFirstTokenOnLine(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/sampleOne.php'
+		);
+		$functionCallPointer = TokenHelper::findNext($phpcsFile, T_STRING, 0);
+		self::assertTokenPointer(T_STRING, 3, $phpcsFile, $functionCallPointer);
+		self::assertTokenPointer(T_VARIABLE, 3, $phpcsFile, TokenHelper::findFirstTokenOnLine($phpcsFile, $functionCallPointer));
+	}
+
+	public function testFindFirstTokenOnLineForFirstToken(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/sampleOne.php'
+		);
+		$openTagPointer = TokenHelper::findNext($phpcsFile, T_OPEN_TAG, 0);
+		self::assertTokenPointer(T_OPEN_TAG, 1, $phpcsFile, $openTagPointer);
+		self::assertSame($openTagPointer, TokenHelper::findFirstTokenOnLine($phpcsFile, $openTagPointer));
+	}
+
 	public function testFindFirstTokenOnNextLine(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(

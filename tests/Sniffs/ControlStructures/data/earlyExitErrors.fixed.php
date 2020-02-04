@@ -507,3 +507,27 @@ EOF;
 	XYZ
 EOF;
 }
+
+function inlineCommentAfterForeach()
+{
+	foreach ([] as $_) { // Comment
+		if (false) {
+			continue;
+		}
+
+		$x = 1;
+	}
+}
+
+function moreInlineComments()
+{
+	if (true) { // Comment
+		return 1;
+	}
+
+	if (true) { // Comment
+		return 2;
+	}
+	// Comment
+	return 3;
+}

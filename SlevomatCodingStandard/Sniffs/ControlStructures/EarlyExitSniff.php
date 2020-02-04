@@ -178,23 +178,23 @@ class EarlyExitSniff implements Sniff
 			return;
 		}
 
-		$phpcsFile->fixer->beginChangeset();
-
-		for ($i = $tokens[$previousConditionPointer]['scope_closer'] + 1; $i <= $tokens[$elsePointer]['scope_closer']; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
-
 		$elseCodePointers = $this->getScopeCodePointers($phpcsFile, $elsePointer);
 		$afterIfCode = IndentationHelper::fixIndentation($phpcsFile, $elseCodePointers, IndentationHelper::addIndentation(IndentationHelper::getIndentation($phpcsFile, $previousConditionPointer)));
 
-		$phpcsFile->fixer->addContent(
-			$tokens[$elsePointer]['scope_closer'],
+		$phpcsFile->fixer->beginChangeset();
+
+		$phpcsFile->fixer->replaceToken(
+			$tokens[$previousConditionPointer]['scope_closer'] + 1,
 			sprintf(
 				'%s%s',
 				$phpcsFile->eolChar,
 				$afterIfCode
 			)
 		);
+
+		for ($i = $tokens[$previousConditionPointer]['scope_closer'] + 2; $i <= $tokens[$elsePointer]['scope_closer']; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -308,16 +308,11 @@ class EarlyExitSniff implements Sniff
 		$earlyExitCodeIndentation = IndentationHelper::addIndentation($ifIndentation);
 
 		$negativeIfCondition = ConditionHelper::getNegativeCondition($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'], $tokens[$ifPointer]['parenthesis_closer']);
+		$afterIfCode = IndentationHelper::fixIndentation($phpcsFile, $ifCodePointers, $ifIndentation);
 
 		$phpcsFile->fixer->beginChangeset();
 
-		for ($i = $ifPointer; $i <= $tokens[$ifPointer]['scope_closer']; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
-
-		$afterIfCode = IndentationHelper::fixIndentation($phpcsFile, $ifCodePointers, $ifIndentation);
-
-		$phpcsFile->fixer->addContent(
+		$phpcsFile->fixer->replaceToken(
 			$ifPointer,
 			sprintf(
 				'if %s {%s%s%s;%s%s}%s%s',
@@ -331,6 +326,10 @@ class EarlyExitSniff implements Sniff
 				$afterIfCode
 			)
 		);
+
+		for ($i = $ifPointer + 1; $i <= $tokens[$ifPointer]['scope_closer']; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$phpcsFile->fixer->endChangeset();
 	}

@@ -443,3 +443,23 @@ EOF;
 EOF;
 	}
 }
+
+function inlineCommentAfterForeach()
+{
+	foreach ([] as $_) { // Comment
+		if (true) {
+			$x = 1;
+		}
+	}
+}
+
+function moreInlineComments()
+{
+	if (true) { // Comment
+		return 1;
+	} elseif (true) { // Comment
+		return 2;
+	} else { // Comment
+		return 3;
+	}
+}
