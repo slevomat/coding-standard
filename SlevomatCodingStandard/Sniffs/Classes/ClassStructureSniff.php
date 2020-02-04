@@ -70,18 +70,18 @@ class ClassStructureSniff implements Sniff
 		'__construct' => self::GROUP_CONSTRUCTOR,
 		'__destruct' => self::GROUP_DESTRUCTOR,
 		'__call' => self::GROUP_MAGIC_METHODS,
-		'__callStatic' => self::GROUP_MAGIC_METHODS,
+		'__callstatic' => self::GROUP_MAGIC_METHODS,
 		'__get' => self::GROUP_MAGIC_METHODS,
 		'__set' => self::GROUP_MAGIC_METHODS,
 		'__isset' => self::GROUP_MAGIC_METHODS,
 		'__unset' => self::GROUP_MAGIC_METHODS,
 		'__sleep' => self::GROUP_MAGIC_METHODS,
 		'__wakeup' => self::GROUP_MAGIC_METHODS,
-		'__toString' => self::GROUP_MAGIC_METHODS,
+		'__tostring' => self::GROUP_MAGIC_METHODS,
 		'__invoke' => self::GROUP_MAGIC_METHODS,
 		'__set_state' => self::GROUP_MAGIC_METHODS,
 		'__clone' => self::GROUP_MAGIC_METHODS,
-		'__debugInfo' => self::GROUP_MAGIC_METHODS,
+		'__debuginfo' => self::GROUP_MAGIC_METHODS,
 	];
 
 	/** @var string[] */
