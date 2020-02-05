@@ -78,11 +78,15 @@ class TypeCastSniff implements Sniff
 				return;
 			}
 
-			for ($i = $pointer, $end = TokenHelper::findNextEffective($phpcsFile, $pointer + 1); $i < $end; $i++) {
-				$phpcsFile->fixer->beginChangeset();
+			$end = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
+
+			$phpcsFile->fixer->beginChangeset();
+
+			for ($i = $pointer; $i < $end; $i++) {
 				$phpcsFile->fixer->replaceToken($i, '');
-				$phpcsFile->fixer->endChangeset();
 			}
+
+			$phpcsFile->fixer->endChangeset();
 
 			return;
 		}

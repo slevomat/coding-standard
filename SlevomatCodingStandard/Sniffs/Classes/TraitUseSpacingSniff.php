@@ -111,9 +111,10 @@ class TraitUseSpacingSniff implements Sniff
 			return;
 		}
 
+		$pointerBeforeIndentation = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $firstUsePointer, $pointerBeforeFirstUse);
+
 		$phpcsFile->fixer->beginChangeset();
 
-		$pointerBeforeIndentation = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $firstUsePointer, $pointerBeforeFirstUse);
 		if ($pointerBeforeIndentation !== null) {
 			for ($i = $pointerBeforeFirstUse + 1; $i <= $pointerBeforeIndentation; $i++) {
 				$phpcsFile->fixer->replaceToken($i, '');
@@ -122,6 +123,7 @@ class TraitUseSpacingSniff implements Sniff
 		for ($i = 0; $i <= $requiredLinesCountBeforeFirstUse; $i++) {
 			$phpcsFile->fixer->addNewline($pointerBeforeFirstUse);
 		}
+
 		$phpcsFile->fixer->endChangeset();
 	}
 

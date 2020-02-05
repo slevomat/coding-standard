@@ -200,12 +200,13 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 			return;
 		}
 
-		$phpcsFile->fixer->beginChangeset();
-
 		/** @var int $conditionStart */
 		$conditionStart = $isYodaCondition ? $pointerBeforeIdenticalOperator : $variableStartPointer;
+		$variableContent = trim(TokenHelper::getContent($phpcsFile, $variableStartPointer, $variableEndPointer));
 
-		$phpcsFile->fixer->replaceToken($conditionStart, sprintf('%s ??', trim(TokenHelper::getContent($phpcsFile, $variableStartPointer, $variableEndPointer))));
+		$phpcsFile->fixer->beginChangeset();
+
+		$phpcsFile->fixer->replaceToken($conditionStart, sprintf('%s ??', $variableContent));
 
 		if ($tokens[$identicalOperator]['code'] === T_IS_IDENTICAL) {
 			for ($i = $conditionStart + 1; $i <= $inlineThenPointer; $i++) {

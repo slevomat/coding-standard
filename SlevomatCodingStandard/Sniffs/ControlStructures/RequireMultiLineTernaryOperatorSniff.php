@@ -109,16 +109,16 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 		}
 
 		$indentation = $this->getIndentation($phpcsFile, $endOfLineBeforeInlineThenPointer);
+		$pointerBeforeInlineThen = TokenHelper::findPreviousEffective($phpcsFile, $inlineThenPointer - 1);
+		$pointerBeforeInlineElse = TokenHelper::findPreviousEffective($phpcsFile, $inlineElsePointer - 1);
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$pointerBeforeInlineThen = TokenHelper::findPreviousEffective($phpcsFile, $inlineThenPointer - 1);
 		for ($i = $pointerBeforeInlineThen + 1; $i < $inlineThenPointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 		$phpcsFile->fixer->addContentBefore($inlineThenPointer, $phpcsFile->eolChar . $indentation);
 
-		$pointerBeforeInlineElse = TokenHelper::findPreviousEffective($phpcsFile, $inlineElsePointer - 1);
 		for ($i = $pointerBeforeInlineElse + 1; $i < $inlineElsePointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}

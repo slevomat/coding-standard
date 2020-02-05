@@ -235,8 +235,6 @@ class ParameterTypeHintSniff implements Sniff
 				continue;
 			}
 
-			$phpcsFile->fixer->beginChangeset();
-
 			$parameterTypeHint = TypeHintHelper::isSimpleTypeHint($possibleParameterTypeHint)
 				? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleParameterTypeHint)
 				: $possibleParameterTypeHint;
@@ -256,8 +254,8 @@ class ParameterTypeHintSniff implements Sniff
 				$beforeParameterPointer = $previousPointer;
 			} while (true);
 
+			$phpcsFile->fixer->beginChangeset();
 			$phpcsFile->fixer->addContentBefore($beforeParameterPointer, sprintf('%s%s ', ($nullableParameterTypeHint ? '?' : ''), $parameterTypeHint));
-
 			$phpcsFile->fixer->endChangeset();
 		}
 	}

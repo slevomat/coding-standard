@@ -76,8 +76,9 @@ class UseFromSameNamespaceSniff implements Sniff
 			return;
 		}
 
-		$phpcsFile->fixer->beginChangeset();
 		$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $usePointer) + 1;
+
+		$phpcsFile->fixer->beginChangeset();
 		for ($i = $usePointer; $i <= $endPointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}

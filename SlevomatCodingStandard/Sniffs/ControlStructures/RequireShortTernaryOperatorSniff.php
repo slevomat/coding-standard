@@ -134,14 +134,14 @@ class RequireShortTernaryOperatorSniff implements Sniff
 			return;
 		}
 
+		$pointerBeforeInlineElseEnd = TokenHelper::findPreviousEffective($phpcsFile, $inlineElseEndPointer - 1);
+
 		$phpcsFile->fixer->beginChangeset();
 
 		if ($tokens[$pointerBeforeCondition]['code'] === T_BOOLEAN_NOT) {
 			for ($i = $pointerBeforeCondition; $i < $conditionStartPointer; $i++) {
 				$phpcsFile->fixer->replaceToken($i, '');
 			}
-
-			$pointerBeforeInlineElseEnd = TokenHelper::findPreviousEffective($phpcsFile, $inlineElseEndPointer - 1);
 
 			for ($i = $inlineThenPointer + 1; $i <= $pointerBeforeInlineElseEnd; $i++) {
 				$phpcsFile->fixer->replaceToken($i, '');

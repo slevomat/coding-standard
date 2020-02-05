@@ -91,22 +91,22 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 			return;
 		}
 
+		$phpcsFile->fixer->beginChangeset();
+
 		if ($lines < $linesCountAfterOpeningBrace) {
-			$phpcsFile->fixer->beginChangeset();
 			for ($i = $lines; $i < $linesCountAfterOpeningBrace; $i++) {
 				$phpcsFile->fixer->addNewline($openerPointer);
 			}
-			$phpcsFile->fixer->endChangeset();
 		} else {
-			$phpcsFile->fixer->beginChangeset();
 			for ($i = $openerPointer + $linesCountAfterOpeningBrace + 2; $i < $nextPointerAfterOpeningBrace; $i++) {
 				if ($tokens[$i]['content'] !== $phpcsFile->eolChar) {
 					break;
 				}
 				$phpcsFile->fixer->replaceToken($i, '');
 			}
-			$phpcsFile->fixer->endChangeset();
 		}
+
+		$phpcsFile->fixer->endChangeset();
 	}
 
 	private function processClosingBrace(File $phpcsFile, int $stackPointer): void
@@ -142,19 +142,19 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 			return;
 		}
 
+		$phpcsFile->fixer->beginChangeset();
+
 		if ($lines < $linesCountBeforeClosingBrace) {
-			$phpcsFile->fixer->beginChangeset();
 			for ($i = $lines; $i < $linesCountBeforeClosingBrace; $i++) {
 				$phpcsFile->fixer->addNewlineBefore($closerPointer);
 			}
-			$phpcsFile->fixer->endChangeset();
 		} else {
-			$phpcsFile->fixer->beginChangeset();
 			for ($i = $previousPointerBeforeClosingBrace + $linesCountBeforeClosingBrace + 2; $i < $closerPointer; $i++) {
 				$phpcsFile->fixer->replaceToken($i, '');
 			}
-			$phpcsFile->fixer->endChangeset();
 		}
+
+		$phpcsFile->fixer->endChangeset();
 	}
 
 }

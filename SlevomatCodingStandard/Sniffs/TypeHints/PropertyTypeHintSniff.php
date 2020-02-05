@@ -245,15 +245,18 @@ class PropertyTypeHintSniff implements Sniff
 
 		$propertyStartPointer = TokenHelper::findPrevious($phpcsFile, [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR, T_STATIC], $propertyPointer - 1);
 
+		$tokens = $phpcsFile->getTokens();
+
+		$pointerAfterProperty = null;
+		if ($nullableTypeHint) {
+			$pointerAfterProperty = TokenHelper::findNextEffective($phpcsFile, $propertyPointer + 1);
+		}
+
 		$phpcsFile->fixer->beginChangeset();
 		$phpcsFile->fixer->addContent($propertyStartPointer, sprintf(' %s%s', ($nullableTypeHint ? '?' : ''), $propertyTypeHint));
 
-		if ($nullableTypeHint) {
-			$pointerAfterProperty = TokenHelper::findNextEffective($phpcsFile, $propertyPointer + 1);
-			$tokens = $phpcsFile->getTokens();
-			if (in_array($tokens[$pointerAfterProperty]['code'], [T_SEMICOLON, T_COMMA], true)) {
-				$phpcsFile->fixer->addContent($propertyPointer, ' = null');
-			}
+		if ($pointerAfterProperty !== null && in_array($tokens[$pointerAfterProperty]['code'], [T_SEMICOLON, T_COMMA], true)) {
+			$phpcsFile->fixer->addContent($propertyPointer, ' = null');
 		}
 
 		$phpcsFile->fixer->endChangeset();

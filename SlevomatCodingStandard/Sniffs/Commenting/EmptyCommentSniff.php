@@ -70,14 +70,14 @@ class EmptyCommentSniff implements Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
-		$phpcsFile->fixer->beginChangeset();
-
 		/** @var int $pointerBeforeWhitespaceBeforeComment */
 		$pointerBeforeWhitespaceBeforeComment = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $commentStartPointer - 1);
 		$whitespaceBeforeComment = $pointerBeforeWhitespaceBeforeComment !== $commentStartPointer - 1
 			? TokenHelper::getContent($phpcsFile, $pointerBeforeWhitespaceBeforeComment + 1, $commentStartPointer - 1)
 			: '';
 		$fixedWhitespaceBeforeComment = preg_replace('~[ \\t]+$~', '', $whitespaceBeforeComment);
+
+		$phpcsFile->fixer->beginChangeset();
 
 		for ($i = $pointerBeforeWhitespaceBeforeComment + 1; $i < $commentStartPointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');

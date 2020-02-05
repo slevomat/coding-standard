@@ -128,16 +128,16 @@ class EarlyExitSniff implements Sniff
 				return;
 			}
 
+			$ifCodePointers = $this->getScopeCodePointers($phpcsFile, $ifPointer);
+			$elseCode = $this->getScopeCode($phpcsFile, $elsePointer);
+			$negativeIfCondition = ConditionHelper::getNegativeCondition($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'], $tokens[$ifPointer]['parenthesis_closer']);
+			$afterIfCode = IndentationHelper::fixIndentation($phpcsFile, $ifCodePointers, IndentationHelper::getIndentation($phpcsFile, $ifPointer));
+
 			$phpcsFile->fixer->beginChangeset();
 
 			for ($i = $ifPointer; $i <= $tokens[$elsePointer]['scope_closer']; $i++) {
 				$phpcsFile->fixer->replaceToken($i, '');
 			}
-
-			$ifCodePointers = $this->getScopeCodePointers($phpcsFile, $ifPointer);
-			$elseCode = $this->getScopeCode($phpcsFile, $elsePointer);
-			$negativeIfCondition = ConditionHelper::getNegativeCondition($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'], $tokens[$ifPointer]['parenthesis_closer']);
-			$afterIfCode = IndentationHelper::fixIndentation($phpcsFile, $ifCodePointers, IndentationHelper::getIndentation($phpcsFile, $ifPointer));
 
 			$phpcsFile->fixer->addContent(
 				$ifPointer,
@@ -247,10 +247,10 @@ class EarlyExitSniff implements Sniff
 			return;
 		}
 
-		$phpcsFile->fixer->beginChangeset();
-
 		/** @var int $pointerBeforeElseIfPointer */
 		$pointerBeforeElseIfPointer = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $elseIfPointer - 1);
+
+		$phpcsFile->fixer->beginChangeset();
 
 		for ($i = $pointerBeforeElseIfPointer + 1; $i < $elseIfPointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');

@@ -74,9 +74,9 @@ class LongTypeHintsSniff implements Sniff
 							continue;
 						}
 
-						$phpcsFile->fixer->beginChangeset();
-
 						$fixedAnnotationContent = AnnotationHelper::fixAnnotationType($phpcsFile, $annotation, $typeHintNode, new IdentifierTypeNode($shortTypeHint));
+
+						$phpcsFile->fixer->beginChangeset();
 
 						$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
 						for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {

@@ -146,13 +146,14 @@ class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 				$keyword
 			), $keywordPointer, self::getErrorCode($keyword));
 			if ($fix) {
-				$phpcsFile->fixer->beginChangeset();
 
 				$fullyQualifiedName = NamespaceHelper::resolveClassName(
 					$phpcsFile,
 					$name,
 					$nameStartPointer
 				);
+
+				$phpcsFile->fixer->beginChangeset();
 
 				for ($i = $nameStartPointer; $i <= $endPointer; $i++) {
 					$phpcsFile->fixer->replaceToken($i, '');

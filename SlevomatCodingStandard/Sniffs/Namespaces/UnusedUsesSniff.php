@@ -288,8 +288,9 @@ class UnusedUsesSniff implements Sniff
 					continue;
 				}
 
-				$phpcsFile->fixer->beginChangeset();
 				$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $unusedUse->getPointer()) + 1;
+
+				$phpcsFile->fixer->beginChangeset();
 				for ($i = $unusedUse->getPointer(); $i <= $endPointer; $i++) {
 					$phpcsFile->fixer->replaceToken($i, '');
 				}

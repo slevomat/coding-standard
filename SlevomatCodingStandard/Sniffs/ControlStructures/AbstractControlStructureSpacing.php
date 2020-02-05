@@ -161,13 +161,13 @@ abstract class AbstractControlStructureSpacing implements Sniff
 			return;
 		}
 
+		$endOfLineBeforePointer = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $controlStructureStartPointer - 1);
+
 		$phpcsFile->fixer->beginChangeset();
 
 		if ($tokens[$pointerBefore]['code'] === T_OPEN_TAG) {
 			$phpcsFile->fixer->replaceToken($pointerBefore, '<?php');
 		}
-
-		$endOfLineBeforePointer = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $controlStructureStartPointer - 1);
 
 		for ($i = $pointerBefore + 1; $i <= $endOfLineBeforePointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
@@ -222,10 +222,10 @@ abstract class AbstractControlStructureSpacing implements Sniff
 			return;
 		}
 
-		$phpcsFile->fixer->beginChangeset();
-
 		$replaceStartPointer = $hasCommentAfter ? $notWhitespacePointerAfter : $controlStructureEndPointer;
 		$endOfLineBeforeAfterPointer = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $pointerAfter - 1);
+
+		$phpcsFile->fixer->beginChangeset();
 
 		for ($i = $replaceStartPointer + 1; $i <= $endOfLineBeforeAfterPointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
