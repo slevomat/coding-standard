@@ -11,8 +11,10 @@ use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_diff;
 use function array_flip;
 use function array_key_exists;
+use function array_keys;
 use function array_merge;
 use function array_values;
 use function assert;
@@ -471,16 +473,12 @@ class ClassStructureSniff implements Sniff
 				$order++;
 			}
 
-			if (count($normalizedGroups) === 0) {
+			if ($normalizedGroups === []) {
 				$normalizedGroups = array_flip($supportedGroups);
 			} else {
-				$missingGroupsOrder = count($normalizedGroups) + 1;
-				foreach ($supportedGroups as $supportedGroup) {
-					if (array_key_exists($supportedGroup, $normalizedGroups)) {
-						continue;
-					}
-
-					$normalizedGroups[$supportedGroup] = $missingGroupsOrder;
+				$missingGroups = array_diff($supportedGroups, array_keys($normalizedGroups));
+				if ($missingGroups !== []) {
+					throw new MissingClassGroupsException($missingGroups);
 				}
 			}
 

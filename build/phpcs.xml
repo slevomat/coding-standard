@@ -52,8 +52,10 @@
 				<element value="private properties"/>
 				<element value="private static properties"/>
 				<element value="public abstract methods, public static abstract methods"/>
-				<element value="protected abstract methods, protected abstract methods"/>
+				<element value="protected abstract methods, protected static abstract methods"/>
 				<element value="constructor"/>
+				<element value="static constructors"/>
+				<element value="destructor"/>
 				<element value="public methods"/>
 				<element value="public static methods"/>
 				<element value="protected methods"/>
