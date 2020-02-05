@@ -11,11 +11,11 @@ class ClassStructureSniffTest extends TestCase
 		'uses',
 		'public constants, protected constants, private constants',
 		'public static properties, protected static properties, private static properties',
-		'public static methods, protected static methods, private static methods',
+		'public static abstract methods, public static methods, protected static abstract methods, protected static methods, private static methods',
 		'public properties, protected properties, private properties',
 		'magic methods',
-		'public methods, protected methods, private methods',
-		'constructor',
+		'public abstract methods, public methods, protected abstract methods, protected methods, private methods',
+		'constructor, destructor',
 		'static constructors',
 	];
 
@@ -101,7 +101,7 @@ class ClassStructureSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
-	public function testThrowExceptionForUnsupportedSection(): void
+	public function testThrowExceptionForUnsupportedGroup(): void
 	{
 		try {
 			self::checkFile(
@@ -111,6 +111,19 @@ class ClassStructureSniffTest extends TestCase
 			self::fail();
 		} catch (UnsupportedClassGroupException $e) {
 			self::assertStringContainsString('whatever', $e->getMessage());
+		}
+	}
+
+	public function testThrowExceptionForMissingGroups(): void
+	{
+		try {
+			self::checkFile(
+				__DIR__ . '/data/classStructureSniffNoErrors.php',
+				['groups' => ['uses']]
+			);
+			self::fail();
+		} catch (MissingClassGroupsException $e) {
+			self::assertStringContainsString(', constructor, static constructors, destructor, ', $e->getMessage());
 		}
 	}
 
