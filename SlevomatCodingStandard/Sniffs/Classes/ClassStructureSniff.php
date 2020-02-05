@@ -12,13 +12,14 @@ use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_diff;
+use function array_filter;
 use function array_flip;
 use function array_key_exists;
 use function array_keys;
 use function array_merge;
 use function array_values;
 use function assert;
-use function count;
+use function implode;
 use function in_array;
 use function preg_replace;
 use function preg_split;
@@ -132,8 +133,19 @@ class ClassStructureSniff implements Sniff
 				continue;
 			}
 
+			$expectedGroups = array_filter(
+				$groupsOrder,
+				static function (int $order) use ($groupsOrder, $expectedGroup): bool {
+					return $order >= $groupsOrder[$expectedGroup];
+				}
+			);
 			$fix = $phpcsFile->addFixableError(
-				sprintf('The placement of "%s" group is invalid.', $group),
+				sprintf(
+					'The placement of "%s" group is invalid. Last group was "%s" and one of these is expected after it: %s',
+					$group,
+					$expectedGroup,
+					implode(', ', array_keys($expectedGroups))
+				),
 				$groupFirstMemberPointer,
 				self::CODE_INCORRECT_GROUP_ORDER
 			);
