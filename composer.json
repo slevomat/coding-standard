@@ -14,7 +14,7 @@
 		"squizlabs/php_codesniffer": "^3.5.4"
 	},
 	"require-dev": {
-		"jakub-onderka/php-parallel-lint": "1.0.0",
+		"grogy/php-parallel-lint": "1.1.0",
 		"phing/phing": "2.16.3",
 		"phpstan/phpstan": "0.11.19|0.12.9",
 		"phpstan/phpstan-phpunit": "0.11.2|0.12.6",
