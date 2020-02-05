@@ -463,3 +463,17 @@ function moreInlineComments()
 		return 3;
 	}
 }
+
+class Whatever
+{
+	public function moreInlineCommentsWithMoreIndentation(): int
+	{
+		if (true) { // Comment
+			return 1;
+		} elseif (true) { // Comment
+			return 2;
+		} else { // Comment
+			return 3;
+		}
+	}
+}

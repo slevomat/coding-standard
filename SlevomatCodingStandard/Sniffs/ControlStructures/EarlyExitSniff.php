@@ -179,7 +179,7 @@ class EarlyExitSniff implements Sniff
 		}
 
 		$elseCodePointers = $this->getScopeCodePointers($phpcsFile, $elsePointer);
-		$afterIfCode = IndentationHelper::fixIndentation($phpcsFile, $elseCodePointers, IndentationHelper::addIndentation(IndentationHelper::getIndentation($phpcsFile, $previousConditionPointer)));
+		$afterIfCode = IndentationHelper::fixIndentation($phpcsFile, $elseCodePointers, IndentationHelper::getIndentation($phpcsFile, $ifPointer));
 
 		$phpcsFile->fixer->beginChangeset();
 

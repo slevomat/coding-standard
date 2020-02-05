@@ -12,7 +12,6 @@ use const T_END_HEREDOC;
 use const T_END_NOWDOC;
 use const T_START_HEREDOC;
 use const T_START_NOWDOC;
-use const T_WHITESPACE;
 
 /**
  * @internal
@@ -25,14 +24,6 @@ class IndentationHelper
 
 	public static function getIndentation(File $phpcsFile, int $pointer): string
 	{
-		$tokens = $phpcsFile->getTokens();
-
-		$nonWhitespacePointer = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $pointer - 1);
-
-		if ($tokens[$nonWhitespacePointer]['line'] === $tokens[$pointer]['line']) {
-			return '';
-		}
-
 		$firstPointerOnLine = TokenHelper::findFirstTokenOnLine($phpcsFile, $pointer);
 
 		return TokenHelper::getContent($phpcsFile, $firstPointerOnLine, $pointer - 1);

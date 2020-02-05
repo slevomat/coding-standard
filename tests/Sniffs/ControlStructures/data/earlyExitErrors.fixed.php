@@ -531,3 +531,19 @@ function moreInlineComments()
 	// Comment
 	return 3;
 }
+
+class Whatever
+{
+	public function moreInlineCommentsWithMoreIndentation(): int
+	{
+		if (true) { // Comment
+			return 1;
+		}
+
+		if (true) { // Comment
+			return 2;
+		}
+		// Comment
+		return 3;
+	}
+}
