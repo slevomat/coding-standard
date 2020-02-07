@@ -33,8 +33,10 @@ use function sprintf;
 use function strtolower;
 use const PHP_VERSION_ID;
 use const T_COMMA;
+use const T_CONST;
 use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOC_COMMENT_STAR;
+use const T_FUNCTION;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
@@ -71,18 +73,23 @@ class PropertyTypeHintSniff implements Sniff
 	public function register(): array
 	{
 		return [
-			T_VARIABLE,
+			T_VAR,
+			T_PUBLIC,
+			T_PROTECTED,
+			T_PRIVATE,
 		];
 	}
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 * @param File $phpcsFile
-	 * @param int $propertyPointer
+	 * @param int $visibilityPointer
 	 */
-	public function process(File $phpcsFile, $propertyPointer): void
+	public function process(File $phpcsFile, $visibilityPointer): void
 	{
-		if (!PropertyHelper::isProperty($phpcsFile, $propertyPointer)) {
+		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $visibilityPointer + 1);
+
+		if ($phpcsFile->getTokens()[$propertyPointer]['code'] !== T_VARIABLE) {
 			return;
 		}
 

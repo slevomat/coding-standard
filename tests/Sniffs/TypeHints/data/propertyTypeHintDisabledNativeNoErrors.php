@@ -1,9 +1,13 @@
 <?php
 
-$variable = null;
-
 class Whatever
 {
+
+	public const WHATEVER = 0;
+
+	public function whatever()
+	{
+	}
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint
