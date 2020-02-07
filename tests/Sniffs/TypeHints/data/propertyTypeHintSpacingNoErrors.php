@@ -1,9 +1,13 @@
 <?php // lint >= 7.4
 
-$variable = 'variable';
-
 class Whatever
 {
+
+	public const WHATEVER = 0;
+
+	public function whatever()
+	{
+	}
 
 	private $withoutTypeHint = 'false';
 

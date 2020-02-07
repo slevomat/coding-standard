@@ -4,8 +4,9 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use const T_CONST;
+use const T_FUNCTION;
 use const T_NULLABLE;
 use const T_PRIVATE;
 use const T_PROTECTED;
@@ -37,24 +38,29 @@ class PropertyTypeHintSpacingSniff implements Sniff
 	public function register(): array
 	{
 		return [
-			T_VARIABLE,
+			T_VAR,
+			T_PUBLIC,
+			T_PROTECTED,
+			T_PRIVATE,
 		];
 	}
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 * @param File $phpcsFile
-	 * @param int $propertyPointer
+	 * @param int $visibilityPointer
 	 */
-	public function process(File $phpcsFile, $propertyPointer): void
+	public function process(File $phpcsFile, $visibilityPointer): void
 	{
-		if (!PropertyHelper::isProperty($phpcsFile, $propertyPointer)) {
+		$tokens = $phpcsFile->getTokens();
+
+		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $visibilityPointer + 1);
+
+		if ($tokens[$propertyPointer]['code'] !== T_VARIABLE) {
 			return;
 		}
 
-		$tokens = $phpcsFile->getTokens();
-
-		$propertyStartPointer = TokenHelper::findPrevious($phpcsFile, [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR], $propertyPointer - 1);
+		$propertyStartPointer = $visibilityPointer;
 
 		$typeHintEndPointer = TokenHelper::findPrevious($phpcsFile, TokenHelper::$typeHintTokenCodes, $propertyPointer - 1, $propertyStartPointer);
 		if ($typeHintEndPointer === null) {
