@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs;
 
-use Exception;
 use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Files\LocalFile;
@@ -61,16 +60,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
 		$file = new LocalFile($filePath, $codeSniffer->ruleset, $codeSniffer->config);
 		$file->process();
-
-		foreach ($file->getErrors() as $errorsOnLine) {
-			foreach ($errorsOnLine as $errorsOnPosition) {
-				foreach ($errorsOnPosition as $error) {
-					if (strpos($error['source'], 'Internal.') === 0) {
-						throw new Exception($error['message']);
-					}
-				}
-			}
-		}
 
 		return $file;
 	}
@@ -164,8 +153,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 * @param string|null $message
 	 * @return bool
 	 */
-	private static function hasError(array $errorsOnLine, string $sniffCode, ?string $message = null): bool
+	private static function hasError(array $errorsOnLine, string $sniffCode, ?string $message): bool
 	{
+		$hasError = false;
+
 		foreach ($errorsOnLine as $errorsOnPosition) {
 			foreach ($errorsOnPosition as $error) {
 				/** @var string $errorSource */
@@ -173,18 +164,16 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 				/** @var string $errorMessage */
 				$errorMessage = $error['message'];
 
-				if (!(
-					$errorSource === $sniffCode
+				if ($errorSource === $sniffCode
 					&& ($message === null || strpos($errorMessage, $message) !== false)
-				)) {
-					continue;
+				) {
+					$hasError = true;
+					break;
 				}
-
-				return true;
 			}
 		}
 
-		return false;
+		return $hasError;
 	}
 
 	/**
