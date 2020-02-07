@@ -30,3 +30,7 @@ $n = ($something ?? false);
 $o[$something ?? true] = true;
 
 $p = doSomething()() ?? false;
+
+function ($options) {
+	return $options['value'] ?? 1;
+};

@@ -103,13 +103,18 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 			return;
 		}
 
-		$phpcsFile->fixer->beginChangeset();
-
-		for ($i = $issetPointer; $i <= $inlineElsePointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
+		$startPointer = $issetPointer;
+		if (in_array($tokens[$previousPointer]['code'], Tokens::$castTokens, true)) {
+			$startPointer = $previousPointer;
 		}
 
-		$phpcsFile->fixer->addContent($issetPointer, sprintf('%s ??', $variableContent));
+		$phpcsFile->fixer->beginChangeset();
+
+		$phpcsFile->fixer->replaceToken($startPointer, sprintf('%s ??', $variableContent));
+
+		for ($i = $startPointer + 1; $i <= $inlineElsePointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
 
 		$phpcsFile->fixer->endChangeset();
 	}

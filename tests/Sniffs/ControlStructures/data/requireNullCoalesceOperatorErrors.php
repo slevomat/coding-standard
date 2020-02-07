@@ -36,3 +36,7 @@ $n = ($something === null ? false : $something);
 $o[$something === null ? true : $something] = true;
 
 $p = doSomething()() === null ? false : doSomething()();
+
+function ($options) {
+	return (int) isset($options['value']) ? $options['value'] : 1;
+};
