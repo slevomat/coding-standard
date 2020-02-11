@@ -101,4 +101,27 @@ class EarlyExitSniffTest extends TestCase
 		self::assertSniffError($report, 11, EarlyExitSniff::CODE_EARLY_EXIT_NOT_USED, 'Use early exit to reduce code nesting.');
 	}
 
+	public function testIgnoredOneLineTrailingIfNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/earlyExitIgnoredOneLineTrailingIfNoErrors.php', [
+			'ignoreOneLineTrailingIf' => true,
+		]);
+
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testIgnoredOneLineTrailingIfErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/earlyExitIgnoredOneLineTrailingIfErrors.php', [
+			'ignoreOneLineTrailingIf' => true,
+		]);
+
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 7, EarlyExitSniff::CODE_USELESS_ELSEIF);
+		self::assertSniffError($report, 17, EarlyExitSniff::CODE_USELESS_ELSEIF);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }

@@ -40,6 +40,9 @@ class EarlyExitSniff implements Sniff
 	/** @var bool */
 	public $ignoreStandaloneIfInScope = false;
 
+	/** @var bool */
+	public $ignoreOneLineTrailingIf = false;
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
@@ -280,6 +283,13 @@ class EarlyExitSniff implements Sniff
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $ifPointer - 1);
 		if ($this->ignoreStandaloneIfInScope && in_array($tokens[$previousPointer]['code'], [T_OPEN_CURLY_BRACKET, T_COLON], true)) {
+			return;
+		}
+
+		if (
+			$this->ignoreOneLineTrailingIf
+			&& $tokens[$tokens[$ifPointer]['scope_opener']]['line'] + 2 === $tokens[$tokens[$ifPointer]['scope_closer']]['line']
+		) {
 			return;
 		}
 

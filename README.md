@@ -176,6 +176,18 @@ foreach ($values as $value) {
 }
 ```
 
+* `ignoreOneLineTrailingIf`: ignores `if` that has one line content and is on the last position in scope, like this:
+
+```php
+foreach ($values as $value) {
+    $value .= 'whatever';
+
+	if ($value) {
+		doSomething();
+	}
+}
+```
+
 #### SlevomatCodingStandard.Functions.StaticClosure 🔧
 
 Reports closures not using `$this` that are not declared `static`.
