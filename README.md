@@ -963,6 +963,10 @@ Reports empty comments.
 
 Reports invalid inline phpDocs with `@var`.
 
+Sniff provides the following settings:
+
+* `allowDocCommentAboveReturn`: Allows documentation comments without variable name above `return` statemens.
+
 #### SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment 🔧
 
 Requires property comments with single-line content to be written as one-liners.

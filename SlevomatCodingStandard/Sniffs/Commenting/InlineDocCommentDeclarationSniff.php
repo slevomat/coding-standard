@@ -25,6 +25,7 @@ use const T_OPEN_SHORT_ARRAY;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
+use const T_RETURN;
 use const T_SEMICOLON;
 use const T_STATIC;
 use const T_VARIABLE;
@@ -37,6 +38,9 @@ class InlineDocCommentDeclarationSniff implements Sniff
 	public const CODE_INVALID_COMMENT_TYPE = 'InvalidCommentType';
 	public const CODE_MISSING_VARIABLE = 'MissingVariable';
 	public const CODE_NO_ASSIGNMENT = 'NoAssignment';
+
+	/** @var bool */
+	public $allowDocCommentAboveReturn = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -111,6 +115,13 @@ class InlineDocCommentDeclarationSniff implements Sniff
 
 		if (preg_match('~^@var~', $commentContent) === 0) {
 			return;
+		}
+
+		if ($this->allowDocCommentAboveReturn) {
+			$pointerAfterCommentClosePointer = TokenHelper::findNextEffective($phpcsFile, $commentClosePointer + 1);
+			if ($tokens[$pointerAfterCommentClosePointer]['code'] === T_RETURN) {
+				return;
+			}
 		}
 
 		if (preg_match('~^@var\\s+(?:\\S+(?:<.+>|\{.+\})?)(?:\\s*[|&]\\s*(?:\\S+(?:<.+>|\{.+\})?))*\\s+\$\\S+(?:\\s+.+)?$~', $commentContent) !== 0) {

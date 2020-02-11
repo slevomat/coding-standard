@@ -102,4 +102,25 @@ class InlineDocCommentDeclarationSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testNoErrorsWithDocCommentAboveReturnAllowed(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/inlineDocDocommentDeclarationWithDocCommentAboveReturnAllowedNoErrors.php', [
+			'allowDocCommentAboveReturn' => true,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testErrorsWithDocCommentAboveReturnAllowed(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/inlineDocDocommentDeclarationWithDocCommentAboveReturnAllowedErrors.php', [
+			'allowDocCommentAboveReturn' => true,
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 4, InlineDocCommentDeclarationSniff::CODE_INVALID_COMMENT_TYPE);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
