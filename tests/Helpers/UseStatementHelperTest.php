@@ -123,7 +123,7 @@ class UseStatementHelperTest extends TestCase
 		);
 		$useStatements = UseStatementHelper::getFileUseStatements($phpcsFile)[0];
 		self::assertCount(8, $useStatements);
-		self::assertSame(2, $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Baz')]->getPointer());
+		self::assertSame(3, $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Baz')]->getPointer());
 		self::assertUseStatement('Bar\Baz', 'Baz', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Baz')], false, false, null);
 		self::assertUseStatement('Foo', 'Foo', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Foo')], false, false, null);
 		self::assertUseStatement('Lorem\Ipsum', 'LoremIpsum', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'LoremIpsum')], false, false, 'LoremIpsum');

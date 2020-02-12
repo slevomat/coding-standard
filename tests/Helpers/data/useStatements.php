@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 use Bar\Baz;
 use Foo;
@@ -29,3 +29,19 @@ function () use ($test) {
 };
 
 use Zero;
+
+class MyClass
+{
+    public function __construct() {
+        if (
+            $this->valid(fn(): bool => 2 > 1)
+        ) {
+
+        }
+    }
+
+    private function valid(callable $callable): bool
+    {
+        return $callable();
+    }
+}

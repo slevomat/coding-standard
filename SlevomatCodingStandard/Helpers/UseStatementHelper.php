@@ -13,6 +13,7 @@ use const T_ANON_CLASS;
 use const T_AS;
 use const T_COMMA;
 use const T_NAMESPACE;
+use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_TAG;
 use const T_SEMICOLON;
@@ -192,7 +193,14 @@ class UseStatementHelper
 
 			$token = $tokens[$pointer];
 			if (in_array($token['code'], TokenHelper::$typeKeywordTokenCodes, true)) {
-				$pointer = $token['scope_closer'] + 1;
+				if (!array_key_exists('scope_closer', $token)) {
+					$scopeOpenerPointer = TokenHelper::findNext($phpcsFile, T_OPEN_CURLY_BRACKET, $pointer + 1);
+					$scopeCloserPointer = $tokens[$scopeOpenerPointer]['bracket_closer'];
+				} else {
+					$scopeCloserPointer = $token['scope_closer'];
+				}
+
+				$pointer = $scopeCloserPointer + 1;
 				continue;
 			}
 			if (self::isAnonymousFunctionUse($phpcsFile, $pointer)) {
