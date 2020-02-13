@@ -72,9 +72,11 @@ class UselessParameterDefaultValueSniff implements Sniff
 				}
 
 				$commaPointer = TokenHelper::findPrevious($phpcsFile, T_COMMA, $parameters[$i + 1]['token'] - 1);
+				/** @var int $parameterPointer */
+				$parameterPointer = $parameter['token'];
 
 				$phpcsFile->fixer->beginChangeset();
-				for ($k = $parameter['token'] + 1; $k < $commaPointer; $k++) {
+				for ($k = $parameterPointer + 1; $k < $commaPointer; $k++) {
 					$phpcsFile->fixer->replaceToken($k, '');
 				}
 				$phpcsFile->fixer->endChangeset();

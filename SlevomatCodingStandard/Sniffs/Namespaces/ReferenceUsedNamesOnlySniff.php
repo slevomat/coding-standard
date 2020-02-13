@@ -168,6 +168,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 			$useStatements = UseStatementHelper::getUseStatementsForPointer($phpcsFile, $reference->startPointer);
 
 			$name = $reference->name;
+			/** @var int $startPointer */
 			$startPointer = $reference->startPointer;
 			$canonicalName = NamespaceHelper::normalizeToCanonicalName($name);
 			$unqualifiedName = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name);
