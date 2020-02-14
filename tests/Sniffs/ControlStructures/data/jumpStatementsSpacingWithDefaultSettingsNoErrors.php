@@ -160,3 +160,11 @@ function () {
 		$this->decodePayload($endpoint, $httpResponse, yield $httpResponse->getBody())
 	);
 };
+
+function ($array) {
+	foreach ($array as $item) {
+		if ($item) { // whatever
+			continue;
+		}
+	}
+};

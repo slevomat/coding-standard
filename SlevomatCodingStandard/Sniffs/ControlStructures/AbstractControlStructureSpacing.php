@@ -126,7 +126,12 @@ abstract class AbstractControlStructureSpacing implements Sniff
 			}
 		}
 
-		$isFirstControlStructure = in_array($tokens[$pointerBefore]['code'], [T_OPEN_CURLY_BRACKET, T_COLON], true);
+		if (in_array($tokens[$pointerBefore]['code'], Tokens::$commentTokens, true)) {
+			$pointerBeforeComment = TokenHelper::findPreviousEffective($phpcsFile, $pointerBefore - 1);
+			$isFirstControlStructure = in_array($tokens[$pointerBeforeComment]['code'], [T_OPEN_CURLY_BRACKET, T_COLON], true);
+		} else {
+			$isFirstControlStructure = in_array($tokens[$pointerBefore]['code'], [T_OPEN_CURLY_BRACKET, T_COLON], true);
+		}
 
 		$whitespaceBefore = '';
 
