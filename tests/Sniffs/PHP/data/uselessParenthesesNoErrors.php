@@ -155,6 +155,8 @@ $x = fn ($a, $b) => $a . $b;
 	echo $_SERVER['argv'][1 + 1];
 })();
 
+$output = (($a and $b) ? 'yes' : 'nope');
+
 // Must be last
 return true
 	? 100

@@ -42,6 +42,8 @@ use const T_INT_CAST;
 use const T_ISSET;
 use const T_LIST;
 use const T_LNUMBER;
+use const T_LOGICAL_AND;
+use const T_LOGICAL_OR;
 use const T_MINUS;
 use const T_MODULUS;
 use const T_MULTIPLY;
@@ -182,6 +184,10 @@ class UselessParenthesesSniff implements Sniff
 
 		$ternaryOperatorPointer = TokenHelper::findNextEffective($phpcsFile, $parenthesisCloserPointer + 1);
 		if ($tokens[$ternaryOperatorPointer]['code'] !== T_INLINE_THEN) {
+			return;
+		}
+
+		if (TokenHelper::findNext($phpcsFile, [T_LOGICAL_AND, T_LOGICAL_OR], $parenthesisOpenerPointer + 1, $parenthesisCloserPointer) !== null) {
 			return;
 		}
 
