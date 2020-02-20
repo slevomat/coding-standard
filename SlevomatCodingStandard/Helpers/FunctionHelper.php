@@ -296,6 +296,33 @@ class FunctionHelper
 		return $parametersAnnotations;
 	}
 
+	/**
+	 * @param File $phpcsFile
+	 * @param int $functionPointer
+	 * @return array<string, ParameterAnnotation>
+	 */
+	public static function getValidPrefixedParametersAnnotations(File $phpcsFile, int $functionPointer): array
+	{
+		$parametersAnnotations = [];
+		foreach (['psalm', 'phpstan'] as $prefix) {
+			/** @var ParameterAnnotation[] $annotations */
+			$annotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $functionPointer, sprintf('@%s-param', $prefix));
+			foreach ($annotations as $parameterAnnotation) {
+				if ($parameterAnnotation->getContent() === null) {
+					continue;
+				}
+
+				if ($parameterAnnotation->isInvalid()) {
+					continue;
+				}
+
+				$parametersAnnotations[$parameterAnnotation->getParameterName()] = $parameterAnnotation;
+			}
+		}
+
+		return $parametersAnnotations;
+	}
+
 	public static function findReturnAnnotation(File $phpcsFile, int $functionPointer): ?ReturnAnnotation
 	{
 		/** @var ReturnAnnotation[] $returnAnnotations */

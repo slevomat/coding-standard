@@ -272,6 +272,8 @@ class AnnotationHelper
 
 			$mapping = [
 				'@param' => ParameterAnnotation::class,
+				'@psalm-param' => ParameterAnnotation::class,
+				'@phpstan-param' => ParameterAnnotation::class,
 				'@return' => ReturnAnnotation::class,
 				'@var' => VariableAnnotation::class,
 				'@throws' => ThrowsAnnotation::class,

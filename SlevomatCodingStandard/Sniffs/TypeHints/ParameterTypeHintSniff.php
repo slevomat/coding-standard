@@ -92,9 +92,10 @@ class ParameterTypeHintSniff implements Sniff
 
 		$parametersTypeHints = FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer);
 		$parametersAnnotations = FunctionHelper::getValidParametersAnnotations($phpcsFile, $functionPointer);
+		$prefixedParametersAnnotations = FunctionHelper::getValidPrefixedParametersAnnotations($phpcsFile, $functionPointer);
 
-		$this->checkTypeHints($phpcsFile, $functionPointer, $parametersTypeHints, $parametersAnnotations);
-		$this->checkTraversableTypeHintSpecification($phpcsFile, $functionPointer, $parametersTypeHints, $parametersAnnotations);
+		$this->checkTypeHints($phpcsFile, $functionPointer, $parametersTypeHints, $parametersAnnotations, $prefixedParametersAnnotations);
+		$this->checkTraversableTypeHintSpecification($phpcsFile, $functionPointer, $parametersTypeHints, $parametersAnnotations, $prefixedParametersAnnotations);
 		$this->checkUselessAnnotations($phpcsFile, $functionPointer, $parametersTypeHints, $parametersAnnotations);
 	}
 
@@ -103,8 +104,15 @@ class ParameterTypeHintSniff implements Sniff
 	 * @param int $functionPointer
 	 * @param (ParameterTypeHint|null)[] $parametersTypeHints
 	 * @param ParameterAnnotation[] $parametersAnnotations
+	 * @param ParameterAnnotation[] $prefixedParametersAnnotations
 	 */
-	private function checkTypeHints(File $phpcsFile, int $functionPointer, array $parametersTypeHints, array $parametersAnnotations): void
+	private function checkTypeHints(
+		File $phpcsFile,
+		int $functionPointer,
+		array $parametersTypeHints,
+		array $parametersAnnotations,
+		array $prefixedParametersAnnotations
+	): void
 	{
 		$parametersWithoutTypeHint = array_keys(array_filter($parametersTypeHints, static function (?ParameterTypeHint $parameterTypeHint = null): bool {
 			return $parameterTypeHint === null;
@@ -112,18 +120,24 @@ class ParameterTypeHintSniff implements Sniff
 
 		foreach ($parametersWithoutTypeHint as $parameterName) {
 			if (!array_key_exists($parameterName, $parametersAnnotations)) {
-				if (!SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::getSniffName(self::CODE_MISSING_ANY_TYPE_HINT))) {
-					$phpcsFile->addError(
-						sprintf(
-							'%s %s() does not have parameter type hint nor @param annotation for its parameter %s.',
-							FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
-							FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-							$parameterName
-						),
-						$functionPointer,
-						self::CODE_MISSING_ANY_TYPE_HINT
-					);
+				if (array_key_exists($parameterName, $prefixedParametersAnnotations)) {
+					continue;
 				}
+
+				if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::getSniffName(self::CODE_MISSING_ANY_TYPE_HINT))) {
+					continue;
+				}
+
+				$phpcsFile->addError(
+					sprintf(
+						'%s %s() does not have parameter type hint nor @param annotation for its parameter %s.',
+						FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
+						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
+						$parameterName
+					),
+					$functionPointer,
+					self::CODE_MISSING_ANY_TYPE_HINT
+				);
 
 				continue;
 			}
@@ -265,12 +279,14 @@ class ParameterTypeHintSniff implements Sniff
 	 * @param int $functionPointer
 	 * @param (ParameterTypeHint|null)[] $parametersTypeHints
 	 * @param ParameterAnnotation[] $parametersAnnotations
+	 * @param ParameterAnnotation[] $prefixedParametersAnnotations
 	 */
 	private function checkTraversableTypeHintSpecification(
 		File $phpcsFile,
 		int $functionPointer,
 		array $parametersTypeHints,
-		array $parametersAnnotations
+		array $parametersAnnotations,
+		array $prefixedParametersAnnotations
 	): void
 	{
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::getSniffName(self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION))) {
@@ -278,6 +294,10 @@ class ParameterTypeHintSniff implements Sniff
 		}
 
 		foreach ($parametersTypeHints as $parameterName => $parameterTypeHint) {
+			if (array_key_exists($parameterName, $prefixedParametersAnnotations)) {
+				continue;
+			}
+
 			$hasTraversableTypeHint = false;
 			if ($parameterTypeHint !== null && TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()), $this->getTraversableTypeHints())) {
 				$hasTraversableTypeHint = true;

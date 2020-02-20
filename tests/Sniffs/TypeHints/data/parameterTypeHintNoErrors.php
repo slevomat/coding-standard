@@ -204,4 +204,36 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @psalm-param Whatever<int> $a
+	 */
+	public function withPsalmAnnotationAndMissingNativeTypeHint($a)
+	{
+	}
+
+	/**
+	 * @phpstan-param Whatever<int> $a
+	 */
+	public function withPhpstanAnnotationAndMissingNativeTypeHint($a)
+	{
+	}
+
+	/**
+	 * @psalm-param
+	 * @psalm-param $b Invalid
+	 * @psalm-param Whatever<int> $a
+	 */
+	public function withPsalmAnnotationAndTraversableNativeTypeHint(array $a)
+	{
+	}
+
+	/**
+	 * @phpstan-param
+	 * @phpstan-param $b Invalid
+	 * @phpstan-param Whatever<int> $a
+	 */
+	public function withPhpstanAnnotationAndTraversableNativeTypeHint(array $a)
+	{
+	}
+
 }
