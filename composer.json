@@ -16,7 +16,7 @@
 	"require-dev": {
 		"grogy/php-parallel-lint": "1.1.0",
 		"phing/phing": "2.16.3",
-		"phpstan/phpstan": "0.12.10",
+		"phpstan/phpstan": "0.12.11",
 		"phpstan/phpstan-phpunit": "0.12.6",
 		"phpstan/phpstan-strict-rules": "0.12.2",
 		"phpunit/phpunit": "7.5.20|8.5.2|9.0.1",
