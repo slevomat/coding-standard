@@ -92,20 +92,29 @@ class ReturnTypeHintSniff implements Sniff
 		if ($token['code'] === T_FUNCTION) {
 			$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $pointer);
 			$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $pointer);
+			$prefixedReturnAnnotations = FunctionHelper::getValidPrefixedReturnAnnotations($phpcsFile, $pointer);
 
-			$this->checkFunctionTypeHint($phpcsFile, $pointer, $returnTypeHint, $returnAnnotation);
-			$this->checkFunctionTraversableTypeHintSpecification($phpcsFile, $pointer, $returnTypeHint, $returnAnnotation);
+			$this->checkFunctionTypeHint($phpcsFile, $pointer, $returnTypeHint, $returnAnnotation, $prefixedReturnAnnotations);
+			$this->checkFunctionTraversableTypeHintSpecification($phpcsFile, $pointer, $returnTypeHint, $returnAnnotation, $prefixedReturnAnnotations);
 			$this->checkFunctionUselessAnnotation($phpcsFile, $pointer, $returnTypeHint, $returnAnnotation);
 		} elseif ($token['code'] === T_CLOSURE) {
 			$this->checkClosureTypeHint($phpcsFile, $pointer);
 		}
 	}
 
+	/**
+	 * @param File $phpcsFile
+	 * @param int $functionPointer
+	 * @param ReturnTypeHint|null $returnTypeHint
+	 * @param ReturnAnnotation|null $returnAnnotation
+	 * @param ReturnAnnotation[] $prefixedReturnAnnotations
+	 */
 	private function checkFunctionTypeHint(
 		File $phpcsFile,
 		int $functionPointer,
 		?ReturnTypeHint $returnTypeHint,
-		?ReturnAnnotation $returnAnnotation
+		?ReturnAnnotation $returnAnnotation,
+		array $prefixedReturnAnnotations
 	): void
 	{
 		if ($returnTypeHint !== null) {
@@ -125,17 +134,23 @@ class ReturnTypeHintSniff implements Sniff
 		$returnsValue = $isAbstract ? ($hasReturnAnnotation && !$isAnnotationReturnTypeVoid) : FunctionHelper::returnsValue($phpcsFile, $functionPointer);
 
 		if ($returnsValue && !$hasReturnAnnotation) {
-			if (!SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::getSniffName(self::CODE_MISSING_ANY_TYPE_HINT))) {
-				$phpcsFile->addError(
-					sprintf(
-						'%s %s() does not have return type hint nor @return annotation for its return value.',
-						FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
-						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
-					),
-					$functionPointer,
-					self::CODE_MISSING_ANY_TYPE_HINT
-				);
+			if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::getSniffName(self::CODE_MISSING_ANY_TYPE_HINT))) {
+				return;
 			}
+
+			if (count($prefixedReturnAnnotations) !== 0) {
+				return;
+			}
+
+			$phpcsFile->addError(
+				sprintf(
+					'%s %s() does not have return type hint nor @return annotation for its return value.',
+					FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
+					FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
+				),
+				$functionPointer,
+				self::CODE_MISSING_ANY_TYPE_HINT
+			);
 
 			return;
 		}
@@ -277,11 +292,19 @@ class ReturnTypeHintSniff implements Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
+	/**
+	 * @param File $phpcsFile
+	 * @param int $functionPointer
+	 * @param ReturnTypeHint|null $returnTypeHint
+	 * @param ReturnAnnotation|null $returnAnnotation
+	 * @param ReturnAnnotation[] $prefixedReturnAnnotations
+	 */
 	private function checkFunctionTraversableTypeHintSpecification(
 		File $phpcsFile,
 		int $functionPointer,
 		?ReturnTypeHint $returnTypeHint,
-		?ReturnAnnotation $returnAnnotation
+		?ReturnAnnotation $returnAnnotation,
+		array $prefixedReturnAnnotations
 	): void
 	{
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::getSniffName(self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION))) {
@@ -292,6 +315,10 @@ class ReturnTypeHintSniff implements Sniff
 		$hasReturnAnnotation = $this->hasReturnAnnotation($returnAnnotation);
 
 		if ($hasTraversableTypeHint && !$hasReturnAnnotation) {
+			if (count($prefixedReturnAnnotations) !== 0) {
+				return;
+			}
+
 			$phpcsFile->addError(
 				sprintf(
 					'%s %s() does not have @return annotation for its traversable return value.',

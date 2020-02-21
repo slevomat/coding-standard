@@ -221,4 +221,36 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @psalm-return Whatever<int>
+	 */
+	public function withPsalmAnnotationAndMissingNativeTypeHint()
+	{
+		return [];
+	}
+
+	/**
+	 * @phpstan-return Whatever<int>
+	 */
+	public function withPhpstanAnnotationAndMissingNativeTypeHint()
+	{
+		return [];
+	}
+
+	/**
+	 * @psalm-return
+	 * @psalm-return Whatever<int>
+	 */
+	public function withPsalmAnnotationAndTraversableNativeTypeHint(): array
+	{
+	}
+
+	/**
+	 * @phpstan-return
+	 * @phpstan-return Whatever<int> $a
+	 */
+	public function withPhpstanAnnotationAndTraversableNativeTypeHint(): array
+	{
+	}
+
 }

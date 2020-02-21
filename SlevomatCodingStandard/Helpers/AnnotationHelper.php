@@ -44,6 +44,8 @@ use const T_DOC_COMMENT_WHITESPACE;
 class AnnotationHelper
 {
 
+	public const PREFIXES = ['psalm', 'phpstan'];
+
 	/**
 	 * @internal
 	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation $annotation
@@ -275,6 +277,8 @@ class AnnotationHelper
 				'@psalm-param' => ParameterAnnotation::class,
 				'@phpstan-param' => ParameterAnnotation::class,
 				'@return' => ReturnAnnotation::class,
+				'@psalm-return' => ReturnAnnotation::class,
+				'@phpstan-return' => ReturnAnnotation::class,
 				'@var' => VariableAnnotation::class,
 				'@throws' => ThrowsAnnotation::class,
 				'@property' => PropertyAnnotation::class,

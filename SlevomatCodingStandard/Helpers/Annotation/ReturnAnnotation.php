@@ -16,6 +16,7 @@ use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
+use function in_array;
 use function sprintf;
 
 /**
@@ -29,7 +30,7 @@ class ReturnAnnotation extends Annotation
 
 	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, ?ReturnTagValueNode $contentNode)
 	{
-		if ($name !== '@return') {
+		if (!in_array($name, ['@return', '@psalm-return', '@phpstan-return'], true)) {
 			throw new InvalidArgumentException(sprintf('Unsupported annotation %s.', $name));
 		}
 
