@@ -280,6 +280,8 @@ class AnnotationHelper
 				'@psalm-return' => ReturnAnnotation::class,
 				'@phpstan-return' => ReturnAnnotation::class,
 				'@var' => VariableAnnotation::class,
+				'@psalm-var' => VariableAnnotation::class,
+				'@phpstan-var' => VariableAnnotation::class,
 				'@throws' => ThrowsAnnotation::class,
 				'@property' => PropertyAnnotation::class,
 				'@property-read' => PropertyAnnotation::class,

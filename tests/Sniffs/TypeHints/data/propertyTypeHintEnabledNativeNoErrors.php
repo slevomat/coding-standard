@@ -136,4 +136,26 @@ class Whatever
 	 */
 	public $yetAnotherDifferentTypes;
 
+	/**
+	 * @psalm-var Whatever<int>
+	 */
+	public $withPsalmAnnotationAndMissingNativeTypeHint;
+
+	/**
+	 * @phpstan-var Whatever<int>
+	 */
+	public $withPhpstanAnnotationAndMissingNativeTypeHint;
+
+	/**
+	 * @psalm-var
+	 * @psalm-var Whatever<int>
+	 */
+	public array $withPsalmAnnotationAndTraversableNativeTypeHint;
+
+	/**
+	 * @phpstan-var
+	 * @phpstan-var Whatever<int>
+	 */
+	public array $withPhpstanAnnotationAndTraversableNativeTypeHint;
+
 }

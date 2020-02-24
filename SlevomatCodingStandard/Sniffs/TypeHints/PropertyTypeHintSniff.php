@@ -103,20 +103,29 @@ class PropertyTypeHintSniff implements Sniff
 
 		/** @var VariableAnnotation[] $varAnnotations */
 		$varAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $propertyPointer, '@var');
+		$prefixedPropertyAnnotations = $this->getValidPrefixedAnnotations($phpcsFile, $propertyPointer);
 
 		$propertyTypeHint = PropertyHelper::findTypeHint($phpcsFile, $propertyPointer);
 		$propertyAnnotation = count($varAnnotations) > 0 ? $varAnnotations[0] : null;
 
-		$this->checkTypeHint($phpcsFile, $propertyPointer, $propertyTypeHint, $propertyAnnotation);
-		$this->checkTraversableTypeHintSpecification($phpcsFile, $propertyPointer, $propertyTypeHint, $propertyAnnotation);
+		$this->checkTypeHint($phpcsFile, $propertyPointer, $propertyTypeHint, $propertyAnnotation, $prefixedPropertyAnnotations);
+		$this->checkTraversableTypeHintSpecification($phpcsFile, $propertyPointer, $propertyTypeHint, $propertyAnnotation, $prefixedPropertyAnnotations);
 		$this->checkUselessAnnotation($phpcsFile, $propertyPointer, $propertyTypeHint, $propertyAnnotation);
 	}
 
+	/**
+	 * @param File $phpcsFile
+	 * @param int $propertyPointer
+	 * @param PropertyTypeHint|null $propertyTypeHint
+	 * @param VariableAnnotation|null $propertyAnnotation
+	 * @param VariableAnnotation[] $prefixedPropertyAnnotations
+	 */
 	private function checkTypeHint(
 		File $phpcsFile,
 		int $propertyPointer,
 		?PropertyTypeHint $propertyTypeHint,
-		?VariableAnnotation $propertyAnnotation
+		?VariableAnnotation $propertyAnnotation,
+		array $prefixedPropertyAnnotations
 	): void
 	{
 		if ($propertyTypeHint !== null) {
@@ -124,16 +133,22 @@ class PropertyTypeHintSniff implements Sniff
 		}
 
 		if (!$this->hasAnnotation($propertyAnnotation)) {
-			if (!SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, self::getSniffName(self::CODE_MISSING_ANY_TYPE_HINT))) {
-				$phpcsFile->addError(
-					sprintf(
-						$this->enableNativeTypeHint ? 'Property %s does not have native type hint nor @var annotation for its value.' : 'Property %s does not have @var annotation for its value.',
-						PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer)
-					),
-					$propertyPointer,
-					self::CODE_MISSING_ANY_TYPE_HINT
-				);
+			if (SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, self::getSniffName(self::CODE_MISSING_ANY_TYPE_HINT))) {
+				return;
 			}
+
+			if (count($prefixedPropertyAnnotations) !== 0) {
+				return;
+			}
+
+			$phpcsFile->addError(
+				sprintf(
+					$this->enableNativeTypeHint ? 'Property %s does not have native type hint nor @var annotation for its value.' : 'Property %s does not have @var annotation for its value.',
+					PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer)
+				),
+				$propertyPointer,
+				self::CODE_MISSING_ANY_TYPE_HINT
+			);
 
 			return;
 		}
@@ -269,11 +284,19 @@ class PropertyTypeHintSniff implements Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
+	/**
+	 * @param File $phpcsFile
+	 * @param int $propertyPointer
+	 * @param PropertyTypeHint|null $propertyTypeHint
+	 * @param VariableAnnotation|null $propertyAnnotation
+	 * @param VariableAnnotation[] $prefixedPropertyAnnotations
+	 */
 	private function checkTraversableTypeHintSpecification(
 		File $phpcsFile,
 		int $propertyPointer,
 		?PropertyTypeHint $propertyTypeHint,
-		?VariableAnnotation $propertyAnnotation
+		?VariableAnnotation $propertyAnnotation,
+		array $prefixedPropertyAnnotations
 	): void
 	{
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, $this->getSniffName(self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION))) {
@@ -284,6 +307,10 @@ class PropertyTypeHintSniff implements Sniff
 		$hasAnnotation = $this->hasAnnotation($propertyAnnotation);
 
 		if ($hasTraversableTypeHint && !$hasAnnotation) {
+			if (count($prefixedPropertyAnnotations) !== 0) {
+				return;
+			}
+
 			$phpcsFile->addError(
 				sprintf(
 					'@var annotation of property %s does not specify type hint for its items.',
@@ -430,6 +457,29 @@ class PropertyTypeHintSniff implements Sniff
 		return
 			$this->hasAnnotation($propertyAnnotation)
 			&& AnnotationTypeHelper::containsTraversableType($propertyAnnotation->getType(), $phpcsFile, $propertyPointer, $this->getTraversableTypeHints());
+	}
+
+	/**
+	 * @param File $phpcsFile
+	 * @param int $propertyPointer
+	 * @return VariableAnnotation[]
+	 */
+	private function getValidPrefixedAnnotations(File $phpcsFile, int $propertyPointer): array
+	{
+		$returnAnnotations = [];
+
+		foreach (AnnotationHelper::PREFIXES as $prefix) {
+			/** @var VariableAnnotation[] $annotations */
+			$annotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $propertyPointer, sprintf('@%s-var', $prefix));
+			foreach ($annotations as $annotation) {
+				if (!$annotation->isInvalid()) {
+					$returnAnnotations[] = $annotation;
+					break;
+				}
+			}
+		}
+
+		return $returnAnnotations;
 	}
 
 }

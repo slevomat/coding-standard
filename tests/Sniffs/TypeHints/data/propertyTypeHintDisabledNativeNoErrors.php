@@ -40,4 +40,14 @@ class Whatever
 	 */
 	private $withTraversableTypeHintSpecification;
 
+	/**
+	 * @psalm-var Whatever<int>
+	 */
+	public $withPsalmAnnotationAndMissingNativeTypeHint;
+
+	/**
+	 * @phpstan-var Whatever<int>
+	 */
+	public $withPhpstanAnnotationAndMissingNativeTypeHint;
+
 }
