@@ -288,6 +288,10 @@ The list of these functions varies across PHP versions, but is the same as funct
 
 Looks for useless semicolons.
 
+#### SlevomatCodingStandard.Variables.DisallowSuperGlobalVariable
+
+Disallows use of super global variables.
+
 #### SlevomatCodingStandard.Variables.DuplicateAssignmentToVariable
 
 Looks for duplicate assignments to a variable.
