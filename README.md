@@ -1046,26 +1046,7 @@ You can choose one of two ways to run only selected sniffs from the standard on 
 
 ### Choose which sniffs to run
 
-Mention Slevomat Coding Standard in your project's `ruleset.xml`:
-
-```xml
-<?xml version="1.0"?>
-<ruleset name="AcmeProject">
-	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml"><!-- relative path to your ruleset.xml -->
-		<!-- sniffs to exclude -->
-	</rule>
-</ruleset>
-```
-
-When running `phpcs` [on the command line](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage), use the `--sniffs` option to list all the sniffs you want to use separated by a comma:
-
-```
-vendor/bin/phpcs --standard=ruleset.xml \
---sniffs=SlevomatCodingStandard.ControlStructures.DisallowYodaComparison,SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses \
---extensions=php --encoding=utf-8 --tab-width=4 -sp src tests
-```
-
-Or write your own ruleset.xml by referencing the selected sniffs. This is a sample ruleset.xml:
+The recommended way is to write your own ruleset.xml by referencing only the selected sniffs. This is a sample ruleset.xml:
 
 ```xml
 <?xml version="1.0"?>
@@ -1082,37 +1063,20 @@ Then run the `phpcs` executable the usual way:
 vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests
 ```
 
-### Using all sniffs from the standard
+### Exclude sniffs you don't want to run
 
-⚠️ This is no longer a recommended way to use Slevomat Coding Standard, because your build can break when moving between minor versions of the standard (which can happen if you use `^` or `~` version constraint in `composer.json`). We regularly add new sniffs even in minor versions meaning your code won't most likely comply with new minor versions of the package.
-
-If you want to use the whole coding standard, besides requiring `slevomat/coding-standard` in composer.json, require also Consistence Coding Standard:
-
-```JSON
-{
-	"require-dev": {
-		"consistence/coding-standard": "~2.0"
-	}
-}
-```
-
-Then mention both standards in `ruleset.xml`:
+You can also mention Slevomat Coding Standard in your project's `ruleset.xml` and exclude only some sniffs:
 
 ```xml
 <?xml version="1.0"?>
 <ruleset name="AcmeProject">
-	<rule ref="vendor/consistence/coding-standard/Consistence/ruleset.xml" />
-	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml" />
-	<!-- additional settings -->
+	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml"><!-- relative path to your ruleset.xml -->
+		<!-- sniffs to exclude -->
+	</rule>
 </ruleset>
 ```
 
-To check your code base for violations, run `PHP-Parallel-Lint` and `PHP_CodeSniffer` from the command line:
-
-```
-vendor/bin/parallel-lint src tests
-vendor/bin/phpcs --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests
-```
+However it is not a recommended way to use Slevomat Coding Standard, because your build can break when moving between minor versions of the standard (which can happen if you use `^` or `~` version constraint in `composer.json`). We regularly add new sniffs even in minor versions meaning your code won't most likely comply with new minor versions of the package.
 
 ## Fixing errors automatically
 
