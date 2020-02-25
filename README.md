@@ -364,6 +364,10 @@ Sniff provides the following settings:
 * `minLinesCountBeforeWithoutComment`: minimum number of lines before constant without a doc comment
 * `maxLinesCountBeforeWithoutComment`: maximum number of lines before constant without a doc comment
 
+#### SlevomatCodingStandard.Classes.DisallowMultiConstantDefinition 🔧
+
+Disallowes multi constant definition.
+
 #### SlevomatCodingStandard.Classes.ModernClassNameReference 🔧
 
 Reports use of `__CLASS__`, `get_parent_class()`, `get_called_class()`, `get_class()` and `get_class($this)`.
