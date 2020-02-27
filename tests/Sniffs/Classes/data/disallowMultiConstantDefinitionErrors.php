@@ -23,4 +23,10 @@ class Foo
 	 */
 	private const FOO = 'foo', FOOO = 'fooo';
 
+	private const
+		A = ['a'],
+		B = ['b'],
+		C = ['c']
+	;
+
 }

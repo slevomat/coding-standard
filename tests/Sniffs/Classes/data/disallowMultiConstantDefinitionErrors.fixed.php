@@ -29,4 +29,8 @@ class Foo
 	 */
 	private const FOOO = 'fooo';
 
+	private const A = ['a'];
+	private const B = ['b'];
+	private const C = ['c'];
+
 }

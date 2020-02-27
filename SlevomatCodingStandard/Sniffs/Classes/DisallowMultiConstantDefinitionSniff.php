@@ -14,6 +14,7 @@ use function sprintf;
 use function trim;
 use const T_COMMA;
 use const T_CONST;
+use const T_OPEN_SHORT_ARRAY;
 use const T_SEMICOLON;
 
 class DisallowMultiConstantDefinitionSniff implements Sniff
@@ -39,7 +40,23 @@ class DisallowMultiConstantDefinitionSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$semicolonPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $constantPointer + 1);
-		$commaPointers = TokenHelper::findNextAll($phpcsFile, T_COMMA, $constantPointer + 1, $semicolonPointer);
+		$commaPointers = [];
+		$nextPointer = $constantPointer;
+		do {
+			$nextPointer = TokenHelper::findNext($phpcsFile, [T_COMMA, T_OPEN_SHORT_ARRAY], $nextPointer + 1, $semicolonPointer);
+
+			if ($nextPointer === null) {
+				break;
+			}
+
+			if ($tokens[$nextPointer]['code'] === T_OPEN_SHORT_ARRAY) {
+				$nextPointer = $tokens[$nextPointer]['bracket_closer'];
+				continue;
+			}
+
+			$commaPointers[] = $nextPointer;
+
+		} while (true);
 
 		if (count($commaPointers) === 0) {
 			return;
