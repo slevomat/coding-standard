@@ -133,7 +133,7 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 					$docComment !== null ? sprintf('%s%s%s', $indentation, $docComment, $phpcsFile->eolChar) : '',
 					$indentation,
 					$visibility,
-					$typeHint !== null ? sprintf(' %s', $typeHint) : '',
+					$typeHint !== null ? sprintf(' %s', $typeHint) : ''
 				),
 			);
 
