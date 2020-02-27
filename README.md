@@ -192,6 +192,10 @@ foreach ($values as $value) {
 
 Reports closures not using `$this` that are not declared `static`.
 
+#### SlevomatCodingStandard.PHP.DisallowDirectMagicInvokeCall 🔧
+
+Disallows direct call of `__invoke()`.
+
 #### SlevomatCodingStandard.Operators.DisallowEqualOperators 🔧
 
 Disallows using loose `==` and `!=` comparison operators. Use `===` and `!==` instead, they are much more secure and predictable.
