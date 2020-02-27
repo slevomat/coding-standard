@@ -368,6 +368,10 @@ Sniff provides the following settings:
 
 Disallowes multi constant definition.
 
+#### SlevomatCodingStandard.Classes.DisallowMultiPropertyDefinition 🔧
+
+Disallows multi property definition.
+
 #### SlevomatCodingStandard.Classes.ModernClassNameReference 🔧
 
 Reports use of `__CLASS__`, `get_parent_class()`, `get_called_class()`, `get_class()` and `get_class($this)`.
