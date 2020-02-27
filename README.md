@@ -366,7 +366,7 @@ Sniff provides the following settings:
 
 #### SlevomatCodingStandard.Classes.DisallowMultiConstantDefinition 🔧
 
-Disallowes multi constant definition.
+Disallows multi constant definition.
 
 #### SlevomatCodingStandard.Classes.DisallowMultiPropertyDefinition 🔧
 
