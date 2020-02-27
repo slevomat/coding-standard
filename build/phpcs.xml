@@ -215,6 +215,7 @@
 	<rule ref="SlevomatCodingStandard.Namespaces.UselessAlias"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.UseSpacing"/>
 	<rule ref="SlevomatCodingStandard.Numbers.DisallowNumericLiteralSeparator"/>
+	<rule ref="SlevomatCodingStandard.PHP.DisallowDirectMagicInvokeCall"/>
 	<rule ref="SlevomatCodingStandard.PHP.OptimizedFunctionsWithoutUnpacking"/>
 	<rule ref="SlevomatCodingStandard.PHP.ReferenceSpacing"/>
 	<rule ref="SlevomatCodingStandard.PHP.RequireNowdoc"/>
