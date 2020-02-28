@@ -134,7 +134,7 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 					$indentation,
 					$visibility,
 					$typeHint !== null ? sprintf(' %s', $typeHint) : ''
-				),
+				)
 			);
 
 			for ($i = $commaPointer + 1; $i < $data[$commaPointer]['pointerAfterComma']; $i++) {

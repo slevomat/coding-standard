@@ -109,7 +109,7 @@ class DisallowMultiConstantDefinitionSniff implements Sniff
 					$docComment !== null ? sprintf('%s%s%s', $indentation, $docComment, $phpcsFile->eolChar) : '',
 					$indentation,
 					$visibility !== null ? sprintf('%s ', $visibility) : ''
-				),
+				)
 			);
 
 			for ($i = $commaPointer + 1; $i < $data[$commaPointer]['pointerAfterComma']; $i++) {
