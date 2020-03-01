@@ -104,6 +104,13 @@ class Foo
 
 		/** @var int $tt */
 		array_map(fn ($tt): int => $tt, []);
+
+		/** @var callable(string) : int $callable1 */
+		$callable1 = static function(string $x) : int{return 1;};
+		/** @var callable(string): int $callable2 */
+		$callable2 = static function(string $x) : int{return 1;};
+		/** @var callable(string):int $callable3 */
+		$callable3 = static function(string $x) : int{return 1;};
 	}
 
 	public function get()

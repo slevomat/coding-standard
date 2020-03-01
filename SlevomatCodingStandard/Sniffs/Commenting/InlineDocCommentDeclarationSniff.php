@@ -124,7 +124,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 			}
 		}
 
-		if (preg_match('~^@var\\s+(?:\\S+(?:<.+>|\{.+\})?)(?:\\s*[|&]\\s*(?:\\S+(?:<.+>|\{.+\})?))*\\s+\$\\S+(?:\\s+.+)?$~', $commentContent) !== 0) {
+		if (preg_match('~^@var\\s+(?:\\S+?( ?: ?\S+)?(?:<.+>|{.+})?)(?:\\s*[|&]\\s*(?:\\S+(?:<.+>|\{.+\})?))*\\s+\$\\S+(?:\\s+.+)?$~', $commentContent) !== 0) {
 			return;
 		}
 
