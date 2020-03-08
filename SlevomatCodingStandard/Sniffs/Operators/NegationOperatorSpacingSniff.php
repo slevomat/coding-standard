@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Operators;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
 use function sprintf;
@@ -68,12 +69,13 @@ class NegationOperatorSpacingSniff implements Sniff
 		$whitespacePointer = $pointer + 1;
 
 		$numberOfSpaces = $tokens[$whitespacePointer]['code'] !== T_WHITESPACE ? 0 : strlen($tokens[$whitespacePointer]['content']);
-		if ($numberOfSpaces === $this->spacesCount) {
+		$requiredNumberOfSpaces = SniffSettingsHelper::normalizeInteger($this->spacesCount);
+		if ($numberOfSpaces === $requiredNumberOfSpaces) {
 			return;
 		}
 
 		$fix = $phpcsFile->addFixableError(
-			sprintf('Expected exactly %d space after "%s", %d found.', $this->spacesCount, $tokens[$pointer]['content'], $numberOfSpaces),
+			sprintf('Expected exactly %d space after "%s", %d found.', $requiredNumberOfSpaces, $tokens[$pointer]['content'], $numberOfSpaces),
 			$pointer,
 			self::CODE_INVALID_SPACE_AFTER_MINUS
 		);
@@ -82,7 +84,7 @@ class NegationOperatorSpacingSniff implements Sniff
 			return;
 		}
 
-		if ($this->spacesCount > $numberOfSpaces) {
+		if ($requiredNumberOfSpaces > $numberOfSpaces) {
 			$phpcsFile->fixer->addContent($pointer, ' ');
 
 			return;
