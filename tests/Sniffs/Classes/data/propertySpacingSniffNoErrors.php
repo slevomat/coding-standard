@@ -45,4 +45,22 @@ abstract class Bar {
 	private function such()
 	{
 	}
+
+	public function testAnonymousClass(): void
+	{
+		$enum = new class() extends Enum {
+			public const FOO = 'foo';
+		};
+
+		/** @var Enum $class */
+		$class = get_class($enum);
+
+		$enum2 = new class() extends Enum {
+			public const FOO = 'foo';
+		};
+
+		/** @var Enum $class */
+		$class2 = get_class($enum2);
+	}
+
 }
