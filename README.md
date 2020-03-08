@@ -376,6 +376,15 @@ Disallows multi constant definition.
 
 Disallows multi property definition.
 
+#### SlevomatCodingStandard.Classes.MethodSpacing 🔧
+
+Checks that there is a certain number of blank lines between methods.
+
+Sniff provides the following settings:
+
+* `minLinesCount`: minimum number of blank lines
+* `maxLinesCount`: maximum number of blank lines
+
 #### SlevomatCodingStandard.Classes.ModernClassNameReference 🔧
 
 Reports use of `__CLASS__`, `get_parent_class()`, `get_called_class()`, `get_class()` and `get_class($this)`.
