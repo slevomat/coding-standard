@@ -24,6 +24,7 @@ class ConditionHelperTest extends TestCase
 			[35, true],
 		];
 	}
+
 	/**
 	 * @dataProvider dataConditionReturnsBoolean
 	 * @param int $line

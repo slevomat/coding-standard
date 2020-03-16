@@ -22,7 +22,6 @@ class DisallowEmptyFunctionSniff implements Sniff
 		return [T_FUNCTION];
 	}
 
-
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 * @param File $phpcsFile

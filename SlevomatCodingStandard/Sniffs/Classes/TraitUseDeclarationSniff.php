@@ -45,7 +45,6 @@ class TraitUseDeclarationSniff implements Sniff
 		}
 	}
 
-
 	private function checkDeclaration(File $phpcsFile, int $usePointer): void
 	{
 		$commaPointer = TokenHelper::findNextLocal($phpcsFile, T_COMMA, $usePointer + 1);

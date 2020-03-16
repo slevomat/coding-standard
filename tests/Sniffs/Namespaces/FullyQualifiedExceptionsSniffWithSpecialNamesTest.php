@@ -43,7 +43,6 @@ class FullyQualifiedExceptionsSniffWithSpecialNamesTest extends TestCase
 		self::assertNoSniffError($this->getFileReport(), 15);
 	}
 
-
 	public function testCatchingFullyQualifiedExceptionFromSameNamespace(): void
 	{
 		self::assertNoSniffError($this->getFileReport(), 17);

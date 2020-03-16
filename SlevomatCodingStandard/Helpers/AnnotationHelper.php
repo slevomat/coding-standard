@@ -382,7 +382,6 @@ class AnnotationHelper
 		return preg_replace('~(\r\n|\n|\r)~', '\1 * ', $fixedAnnotationContent);
 	}
 
-
 	private static function parseAnnotationContent(string $annotationName, string $annotationContent): PhpDocTagValueNode
 	{
 		$annotationContentWithoutNewLines = preg_replace('~[\r\n]~', ' ', $annotationContent);
