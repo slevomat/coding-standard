@@ -346,6 +346,28 @@ class TokenHelper
 	/**
 	 * @param File $phpcsFile
 	 * @param int $pointer search starts at this token, inclusive
+	 * @return int
+	 */
+	public static function findFirstNonWhitespaceOnLine(File $phpcsFile, int $pointer): int
+	{
+		if ($pointer === 0) {
+			return $pointer;
+		}
+
+		$tokens = $phpcsFile->getTokens();
+
+		$line = $tokens[$pointer]['line'];
+
+		do {
+			$pointer--;
+		} while ($tokens[$pointer]['line'] === $line);
+
+		return self::findNextExcluding($phpcsFile, [T_WHITESPACE, T_DOC_COMMENT_WHITESPACE], $pointer + 1);
+	}
+
+	/**
+	 * @param File $phpcsFile
+	 * @param int $pointer search starts at this token, inclusive
 	 * @return int|null
 	 */
 	public static function findFirstNonWhitespaceOnNextLine(File $phpcsFile, int $pointer): ?int

@@ -243,6 +243,29 @@ class TokenHelperTest extends TestCase
 		self::assertTokenPointer(T_STRING, 4, $phpcsFile, TokenHelper::findFirstTokenOnNextLine($phpcsFile, $variableTokenPointer));
 	}
 
+	public function testFindFirstNonWhitespaceOnLine(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/sampleThree.php'
+		);
+		self::assertSame(0, TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, 0));
+	}
+
+	public function testFindFirstNonWhitespaceOnIndentedLine(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/forLoop.php'
+		);
+		$tokens = $phpcsFile->getTokens();
+
+		$openParenthesisPointer = $this->findPointerByLineAndType($phpcsFile, 4, T_OPEN_PARENTHESIS);
+		self::assertNotNull($openParenthesisPointer);
+
+		$firstNonWhiteSpaceTokenPointer = TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $openParenthesisPointer);
+		self::assertTokenPointer(T_STRING, 4, $phpcsFile, $firstNonWhiteSpaceTokenPointer);
+		self::assertSame('foo', $tokens[$firstNonWhiteSpaceTokenPointer]['content']);
+	}
+
 	public function testFindFirstTokenOnNextLineEndingWithAComment(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/sampleFour.php');
