@@ -23,6 +23,9 @@ class RequireYodaComparisonSniff implements Sniff
 
 	public const CODE_REQUIRED_YODA_COMPARISON = 'RequiredYodaComparison';
 
+	/** @var bool */
+	public $alwaysVariableOnRight = false;
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
@@ -54,6 +57,10 @@ class RequireYodaComparisonSniff implements Sniff
 		}
 
 		if ($leftDynamism <= $rightDynamism) {
+			return;
+		}
+
+		if (!$this->alwaysVariableOnRight && $leftDynamism >= 900 && $rightDynamism >= 900) {
 			return;
 		}
 

@@ -60,6 +60,10 @@ class DisallowYodaComparisonSniff implements Sniff
 			return;
 		}
 
+		if ($leftDynamism >= 900 && $rightDynamism >= 900) {
+			return;
+		}
+
 		$errorParameters = [
 			'Yoda comparisons are disallowed.',
 			$comparisonTokenPointer,

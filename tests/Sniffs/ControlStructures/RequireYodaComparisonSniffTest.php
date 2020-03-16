@@ -28,4 +28,16 @@ class RequireYodaComparisonSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testAlwaysVariableOnRight(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireYodaComparisonsAlwaysVariableOnRightErrors.php', [
+			'alwaysVariableOnRight' => true,
+		], [RequireYodaComparisonSniff::CODE_REQUIRED_YODA_COMPARISON]);
+
+		self::assertSame(1, $report->getErrorCount());
+		self::assertSniffError($report, 3, RequireYodaComparisonSniff::CODE_REQUIRED_YODA_COMPARISON);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }

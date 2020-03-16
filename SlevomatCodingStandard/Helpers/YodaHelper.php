@@ -67,7 +67,7 @@ class YodaHelper
 
 	private const DYNAMISM_CONSTANT = 1;
 
-	private const DYNAMISM_FUNCTION_CALL = self::DYNAMISM_VARIABLE;
+	private const DYNAMISM_FUNCTION_CALL = 998;
 
 	/**
 	 * @param File $phpcsFile
