@@ -99,7 +99,7 @@ class VariableHelper
 		}
 
 		$variableNameWithoutDollar = substr($variableName, 1);
-		return preg_match('~\$\{' . preg_quote($variableNameWithoutDollar, '~') . '\}~', $stringContent) !== 0;
+		return preg_match('~\$\{' . preg_quote($variableNameWithoutDollar, '~') . '(<=\}|\b)~', $stringContent) !== 0;
 	}
 
 	private static function isUsedInScopeInternal(

@@ -131,6 +131,11 @@ function () {
 
 function () {
 	$a = '';
+	echo "${a[0]}";
+};
+
+function () {
+	$a = '';
 	echo "$a()";
 };
 
