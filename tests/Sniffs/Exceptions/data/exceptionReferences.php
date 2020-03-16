@@ -39,4 +39,12 @@ class Foo extends \Exception
 		}
 	}
 
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly.ReferencedGeneralException
+	 */
+	public function methodFromInterface(\Exception $e)
+	{
+
+	}
+
 }

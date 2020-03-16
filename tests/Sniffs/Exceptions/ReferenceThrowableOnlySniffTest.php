@@ -24,6 +24,7 @@ class ReferenceThrowableOnlySniffTest extends TestCase
 		self::assertSniffError($report, 33, ReferenceThrowableOnlySniff::CODE_REFERENCED_GENERAL_EXCEPTION);
 		self::assertNoSniffError($report, 35);
 		self::assertSniffError($report, 37, ReferenceThrowableOnlySniff::CODE_REFERENCED_GENERAL_EXCEPTION);
+		self::assertNoSniffError($report, 45);
 	}
 
 	public function testExceptionReferencesWithoutNamespace(): void
