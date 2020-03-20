@@ -4,9 +4,9 @@ namespace SlevomatCodingStandard\Sniffs\Arrays;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
-use const PHP_VERSION_ID;
 use const T_COMMA;
 use const T_END_HEREDOC;
 use const T_END_NOWDOC;
@@ -17,8 +17,8 @@ class TrailingArrayCommaSniff implements Sniff
 
 	public const CODE_MISSING_TRAILING_COMMA = 'MissingTrailingComma';
 
-	/** @var bool */
-	public $enableAfterHeredoc = PHP_VERSION_ID >= 70300;
+	/** @var bool|null */
+	public $enableAfterHeredoc = null;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -37,6 +37,8 @@ class TrailingArrayCommaSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $stackPointer): void
 	{
+		$this->enableAfterHeredoc = SniffSettingsHelper::isEnabledByPhpVersion($this->enableAfterHeredoc, 70300);
+
 		$tokens = $phpcsFile->getTokens();
 		$arrayToken = $tokens[$stackPointer];
 		$closeParenthesisPointer = $arrayToken['bracket_closer'];

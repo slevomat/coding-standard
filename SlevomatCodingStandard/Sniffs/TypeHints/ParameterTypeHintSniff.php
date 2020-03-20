@@ -35,7 +35,6 @@ use function in_array;
 use function lcfirst;
 use function sprintf;
 use function strtolower;
-use const PHP_VERSION_ID;
 use const T_BITWISE_AND;
 use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOC_COMMENT_STAR;
@@ -56,8 +55,8 @@ class ParameterTypeHintSniff implements Sniff
 
 	private const NAME = 'SlevomatCodingStandard.TypeHints.ParameterTypeHint';
 
-	/** @var bool */
-	public $enableObjectTypeHint = PHP_VERSION_ID >= 70200;
+	/** @var bool|null */
+	public $enableObjectTypeHint = null;
 
 	/** @var string[] */
 	public $traversableTypeHints = [];
@@ -82,6 +81,8 @@ class ParameterTypeHintSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $functionPointer): void
 	{
+		$this->enableObjectTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableObjectTypeHint, 70200);
+
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::NAME)) {
 			return;
 		}

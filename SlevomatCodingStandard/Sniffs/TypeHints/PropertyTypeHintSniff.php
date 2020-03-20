@@ -31,7 +31,6 @@ use function count;
 use function in_array;
 use function sprintf;
 use function strtolower;
-use const PHP_VERSION_ID;
 use const T_COMMA;
 use const T_CONST;
 use const T_DOC_COMMENT_CLOSE_TAG;
@@ -58,8 +57,8 @@ class PropertyTypeHintSniff implements Sniff
 
 	private const NAME = 'SlevomatCodingStandard.TypeHints.PropertyTypeHint';
 
-	/** @var bool */
-	public $enableNativeTypeHint = PHP_VERSION_ID >= 70400;
+	/** @var bool|null */
+	public $enableNativeTypeHint = null;
 
 	/** @var string[] */
 	public $traversableTypeHints = [];
@@ -87,6 +86,8 @@ class PropertyTypeHintSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $visibilityPointer): void
 	{
+		$this->enableNativeTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableNativeTypeHint, 70400);
+
 		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $visibilityPointer + 1);
 
 		if ($phpcsFile->getTokens()[$propertyPointer]['code'] !== T_VARIABLE) {

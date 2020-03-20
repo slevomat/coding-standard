@@ -2,12 +2,14 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use PHP_CodeSniffer\Config;
 use function array_filter;
 use function array_map;
 use function array_values;
 use function is_string;
 use function preg_match;
 use function trim;
+use const PHP_VERSION_ID;
 
 class SniffSettingsHelper
 {
@@ -63,6 +65,16 @@ class SniffSettingsHelper
 	{
 		return preg_match('~^(?:\(.*\)|\{.*\}|\[.*\])[a-z]*\z~i', $expression) !== 0
 			|| preg_match('~^([^a-z\s\\\\]).*\\1[a-z]*\z~i', $expression) !== 0;
+	}
+
+	public static function isEnabledByPhpVersion(?bool $value, int $phpVersionLimit): bool
+	{
+		if ($value !== null) {
+			return $value;
+		}
+
+		$phpVersion = Config::getConfigData('php_version') !== null ? (int) Config::getConfigData('php_version') : PHP_VERSION_ID;
+		return $phpVersion >= $phpVersionLimit;
 	}
 
 }
