@@ -50,10 +50,16 @@ class PropertySpacingSniff extends AbstractPropertyAndConstantSpacing
 		return $phpcsFile->getTokens()[$nextPointer]['code'] === T_VARIABLE;
 	}
 
-	protected function addError(File $phpcsFile, int $pointer, int $min, int $max, int $found): bool
+	protected function addError(File $phpcsFile, int $pointer, int $minExpectedLines, int $maxExpectedLines, int $found): bool
 	{
-		$message = 'Expected %d to %d blank lines after property, found %d.';
-		$error = sprintf($message, $min, $max, $found);
+		if ($minExpectedLines === $maxExpectedLines) {
+			$errorMessage = $minExpectedLines === 1
+				? 'Expected 1 blank line after property, found %3$d.'
+				: 'Expected %2$d blank lines after property, found %3$d.';
+		} else {
+			$errorMessage = 'Expected %1$d to %2$d blank lines after property, found %3$d.';
+		}
+		$error = sprintf($errorMessage, $minExpectedLines, $maxExpectedLines, $found);
 
 		return $phpcsFile->addFixableError($error, $pointer, self::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
 	}
