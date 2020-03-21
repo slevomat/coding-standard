@@ -35,4 +35,22 @@ class PropertySpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testZeroBlankLinesErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/propertySpacingZeroBlankLinesErrors.php', [
+			'minLinesCountBeforeWithComment' => 0,
+			'maxLinesCountBeforeWithComment' => 0,
+			'minLinesCountBeforeWithoutComment' => 0,
+			'maxLinesCountBeforeWithoutComment' => 0,
+		]);
+
+		self::assertSame(3, $report->getErrorCount());
+
+		self::assertSniffError($report, 5, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
+		self::assertSniffError($report, 7, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
+		self::assertSniffError($report, 10, PropertySpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }

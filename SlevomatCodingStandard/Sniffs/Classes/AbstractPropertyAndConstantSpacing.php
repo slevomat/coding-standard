@@ -8,6 +8,7 @@ use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function assert;
 use function in_array;
+use function str_repeat;
 use const T_COMMENT;
 use const T_CONST;
 use const T_DOC_COMMENT_OPEN_TAG;
@@ -50,10 +51,10 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$nextSemicolon = TokenHelper::findNext($phpcsFile, [T_SEMICOLON], $pointer + 1);
-		assert($nextSemicolon !== null);
+		$semicolonPointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON], $pointer + 1);
+		assert($semicolonPointer !== null);
 
-		$firstOnLinePointer = TokenHelper::findFirstTokenOnNextLine($phpcsFile, $nextSemicolon);
+		$firstOnLinePointer = TokenHelper::findFirstTokenOnNextLine($phpcsFile, $semicolonPointer);
 		assert($firstOnLinePointer !== null);
 
 		$nextFunctionPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $firstOnLinePointer + 1);
@@ -68,7 +69,7 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 			return $nextPointer;
 		}
 
-		$linesBetween = $tokens[$nextPointer]['line'] - $tokens[$nextSemicolon]['line'] - 1;
+		$linesBetween = $tokens[$nextPointer]['line'] - $tokens[$semicolonPointer]['line'] - 1;
 		if (in_array($tokens[$nextPointer]['code'], [T_DOC_COMMENT_OPEN_TAG, T_COMMENT], true)) {
 			$minExpectedLines = SniffSettingsHelper::normalizeInteger($this->minLinesCountBeforeWithComment);
 			$maxExpectedLines = SniffSettingsHelper::normalizeInteger($this->maxLinesCountBeforeWithComment);
@@ -86,19 +87,29 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 			return $firstOnLinePointer;
 		}
 
-		$phpcsFile->fixer->beginChangeset();
-
 		if ($linesBetween > $maxExpectedLines) {
-			for ($i = $firstOnLinePointer; $i < $firstOnLinePointer + $maxExpectedLines; $i++) {
+			$lastPointerOnLine = TokenHelper::findLastTokenOnLine($phpcsFile, $semicolonPointer);
+
+			$phpcsFile->fixer->beginChangeset();
+
+			if ($maxExpectedLines > 0) {
+				$phpcsFile->fixer->addContent($lastPointerOnLine, str_repeat($phpcsFile->eolChar, $maxExpectedLines));
+			}
+
+			for ($i = $lastPointerOnLine + 1; $i < TokenHelper::findFirstTokenOnLine($phpcsFile, $nextPointer); $i++) {
 				$phpcsFile->fixer->replaceToken($i, '');
 			}
+
+			$phpcsFile->fixer->endChangeset();
 		} else {
+			$phpcsFile->fixer->beginChangeset();
+
 			for ($i = 0; $i < $minExpectedLines; $i++) {
 				$phpcsFile->fixer->addNewlineBefore($firstOnLinePointer);
 			}
-		}
 
-		$phpcsFile->fixer->endChangeset();
+			$phpcsFile->fixer->endChangeset();
+		}
 
 		return $firstOnLinePointer;
 	}
