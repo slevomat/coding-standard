@@ -9,12 +9,12 @@ class ConstantSpacingSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/constantSpacingSniffNoErrors.php'));
+		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/constantSpacingNoErrors.php'));
 	}
 
 	public function testErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/constantSpacingSniffErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/constantSpacingErrors.php');
 
 		self::assertSame(3, $report->getErrorCount());
 

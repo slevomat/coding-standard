@@ -9,12 +9,12 @@ class PropertySpacingSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/propertySpacingSniffNoErrors.php'));
+		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/propertySpacingNoErrors.php'));
 	}
 
 	public function testErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/propertySpacingSniffErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/propertySpacingErrors.php');
 
 		self::assertSame(13, $report->getErrorCount());
 
