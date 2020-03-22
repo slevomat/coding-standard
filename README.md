@@ -674,6 +674,10 @@ Disallows numeric literal separators.
 
 Requires use of numeric literal separators.
 
+This sniff provides the following setting:
+
+* `enable`: either to enable or no this sniff. By default, it is enabled for PHP versions 7.4 or higher.
+
 #### SlevomatCodingStandard.PHP.ReferenceSpacing 🔧
 
 Enforces configurable number of spaces after reference.
