@@ -607,6 +607,10 @@ Commas after the last parameter in function or method call make adding a new par
 
 This sniff enforces trailing commas in multi-line calls.
 
+This sniff provides the following setting:
+
+* `enable`: either to enable or no this sniff. By default, it is enabled for PHP versions 7.3 or higher.
+
 #### SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses 🔧
 
 Checks whether uses at the top of a file are alphabetically sorted. Follows natural sorting and takes edge cases with special symbols into consideration. The following code snippet is an example of correctly sorted uses:

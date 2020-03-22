@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Functions;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function in_array;
@@ -23,6 +24,9 @@ class TrailingCommaInCallSniff implements Sniff
 
 	public const CODE_MISSING_TRAILING_COMMA = 'MissingTrailingComma';
 
+	/** @var bool|null  */
+	public $enable = null;
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
@@ -40,6 +44,12 @@ class TrailingCommaInCallSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $parenthesisOpenerPointer): void
 	{
+		$this->enable = SniffSettingsHelper::isEnabledByPhpVersion($this->enable, 70300);
+
+		if (!$this->enable) {
+			return;
+		}
+
 		$tokens = $phpcsFile->getTokens();
 
 		if (array_key_exists('parenthesis_owner', $tokens[$parenthesisOpenerPointer])) {
