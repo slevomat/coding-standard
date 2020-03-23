@@ -197,12 +197,15 @@ class InlineDocCommentDeclarationSniff implements Sniff
 			$variableNames[] = $variableName;
 		}
 
-		$improveCodePointer = static function (int $codePointer) use ($phpcsFile, $tokens, $checkedTokens, $variableNames): int {
+		$improveCodePointer = function (int $codePointer) use ($phpcsFile, $tokens, $checkedTokens, $variableNames): int {
 			$shouldSearchClosure = false;
 
 			if (!in_array($tokens[$codePointer]['code'], $checkedTokens, true)) {
 				$shouldSearchClosure = true;
-			} elseif ($tokens[$codePointer]['code'] === T_VARIABLE && !in_array($tokens[$codePointer]['content'], $variableNames, true)) {
+			} elseif (
+				$tokens[$codePointer]['code'] === T_VARIABLE
+				&& (!$this->isAssignment($phpcsFile, $codePointer) || !in_array($tokens[$codePointer]['content'], $variableNames, true))
+			) {
 				$shouldSearchClosure = true;
 			}
 
@@ -273,19 +276,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 				}
 
 				if ($tokens[$codePointer]['code'] === T_VARIABLE) {
-					$assigmentFound = false;
-
-					$pointerAfterVariable = TokenHelper::findNextEffective($phpcsFile, $codePointer + 1);
-					if ($tokens[$pointerAfterVariable]['code'] === T_SEMICOLON) {
-						$pointerBeforeVariable = TokenHelper::findPreviousEffective($phpcsFile, $codePointer - 1);
-						if ($tokens[$pointerBeforeVariable]['code'] === T_STATIC) {
-							$assigmentFound = true;
-						}
-					} elseif ($tokens[$pointerAfterVariable]['code'] === T_EQUAL) {
-						$assigmentFound = true;
-					}
-
-					if (!$assigmentFound) {
+					if (!$this->isAssignment($phpcsFile, $codePointer)) {
 						if ($tryNo === 2) {
 							$phpcsFile->addError(...$noAssignmentErrorParameters);
 						}
@@ -377,6 +368,19 @@ class InlineDocCommentDeclarationSniff implements Sniff
 				continue 2;
 			}
 		}
+	}
+
+	private function isAssignment(File $phpcsFile, int $pointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$pointerAfterVariable = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
+		if ($tokens[$pointerAfterVariable]['code'] === T_SEMICOLON) {
+			$pointerBeforeVariable = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
+			return $tokens[$pointerBeforeVariable]['code'] === T_STATIC;
+		}
+
+		return $tokens[$pointerAfterVariable]['code'] === T_EQUAL;
 	}
 
 }

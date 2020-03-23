@@ -85,8 +85,18 @@ class Foo
 		}
 
 		array_map(static function ($p): int {
-			/** @var string $p */
+			/** @var Whatever $p */
+			$p->call(static function ($p) {
+				/** @var Whatever $p */
+				$p->doSomething();
+			});
 		}, []);
+
+		$pp = new Whatever();
+		$pp->call(static function ($pp) {
+			/** @var Whatever $pp */
+			$pp->doSomething();
+		});
 
 		/** @var string $q */
 		array_map(static function ($q): int {
