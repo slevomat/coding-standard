@@ -116,7 +116,7 @@ public static methods, protected static methods, private static methods,
 private methods
 
 **List of supported shortcuts**:
-constants, properties, static properties, methods, static methods, final methods, abstract methods
+constants, properties, static properties, methods, all public methods, all protected methods, all private methods, static methods, final methods, abstract methods
 
 ```xml
 <rule ref="SlevomatCodingStandard.Classes.ClassStructure">
@@ -131,8 +131,9 @@ constants, properties, static properties, methods, static methods, final methods
 			<!-- You don't care about the order among the properties. The same can be done with "properties" shortcut -->
 			<element value="public properties, protected properties, private properties"/>
 
-			<!-- Constructor is first, then all other methods and magic methods are last -->
+			<!-- Constructor is first, then all public methods, then protected/private methods and magic methods are last -->
 			<element value="constructor"/>
+			<element value="all public methods"/>
 			<element value="methods"/>
 			<element value="magic methods"/>
 		</property>

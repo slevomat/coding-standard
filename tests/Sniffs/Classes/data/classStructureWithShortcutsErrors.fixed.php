@@ -37,15 +37,15 @@ abstract class Whatever
 	{
 	}
 
+	private function privateMethod()
+	{
+	}
+
 	public function __destruct()
 	{
 	}
 
 	protected function protectedMethod()
-	{
-	}
-
-	private function privateMethod()
 	{
 	}
 

@@ -79,6 +79,9 @@ class ClassStructureSniff implements Sniff
 	private const GROUP_SHORTCUT_PROPERTIES = 'properties';
 	private const GROUP_SHORTCUT_STATIC_PROPERTIES = 'static properties';
 	private const GROUP_SHORTCUT_METHODS = 'methods';
+	private const GROUP_SHORTCUT_PUBLIC_METHODS = 'all public methods';
+	private const GROUP_SHORTCUT_PROTECTED_METHODS = 'all protected methods';
+	private const GROUP_SHORTCUT_PRIVATE_METHODS = 'all private methods';
 	private const GROUP_SHORTCUT_STATIC_METHODS = 'static methods';
 	private const GROUP_SHORTCUT_ABSTRACT_METHODS = 'abstract methods';
 	private const GROUP_SHORTCUT_FINAL_METHODS = 'final methods';
@@ -99,6 +102,26 @@ class ClassStructureSniff implements Sniff
 			self::GROUP_PUBLIC_PROPERTIES,
 			self::GROUP_PROTECTED_PROPERTIES,
 			self::GROUP_PRIVATE_PROPERTIES,
+		],
+		self::GROUP_SHORTCUT_PUBLIC_METHODS => [
+			self::GROUP_PUBLIC_FINAL_METHODS,
+			self::GROUP_PUBLIC_STATIC_FINAL_METHODS,
+			self::GROUP_PUBLIC_ABSTRACT_METHODS,
+			self::GROUP_PUBLIC_STATIC_ABSTRACT_METHODS,
+			self::GROUP_PUBLIC_STATIC_METHODS,
+			self::GROUP_PUBLIC_METHODS,
+		],
+		self::GROUP_SHORTCUT_PROTECTED_METHODS => [
+			self::GROUP_PROTECTED_FINAL_METHODS,
+			self::GROUP_PROTECTED_STATIC_FINAL_METHODS,
+			self::GROUP_PROTECTED_ABSTRACT_METHODS,
+			self::GROUP_PROTECTED_STATIC_ABSTRACT_METHODS,
+			self::GROUP_PROTECTED_STATIC_METHODS,
+			self::GROUP_PROTECTED_METHODS,
+		],
+		self::GROUP_SHORTCUT_PRIVATE_METHODS => [
+			self::GROUP_PRIVATE_STATIC_METHODS,
+			self::GROUP_PRIVATE_METHODS,
 		],
 		self::GROUP_SHORTCUT_FINAL_METHODS => [
 			self::GROUP_PUBLIC_FINAL_METHODS,

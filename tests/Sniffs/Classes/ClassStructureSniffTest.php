@@ -137,12 +137,13 @@ class ClassStructureSniffTest extends TestCase
 					'static properties',
 					'properties',
 					'constructor',
-					'public methods',
+					'all public methods',
 					'final methods',
 					'public abstract methods',
 					'abstract methods',
 					'public static methods',
 					'static methods',
+					'all private methods',
 					'methods',
 					'magic methods',
 				],
@@ -150,7 +151,7 @@ class ClassStructureSniffTest extends TestCase
 			]
 		);
 
-		self::assertSame(9, $report->getErrorCount());
+		self::assertSame(10, $report->getErrorCount());
 		self::assertAllFixedInFile($report);
 	}
 
