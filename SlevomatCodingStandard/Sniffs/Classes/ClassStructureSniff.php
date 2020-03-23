@@ -25,6 +25,7 @@ use function preg_replace;
 use function preg_split;
 use function sprintf;
 use function str_repeat;
+use function strpos;
 use function strtolower;
 use const T_ABSTRACT;
 use const T_CLOSE_CURLY_BRACKET;
@@ -73,6 +74,66 @@ class ClassStructureSniff implements Sniff
 	private const GROUP_PROTECTED_STATIC_FINAL_METHODS = 'protected static final methods';
 	private const GROUP_PRIVATE_METHODS = 'private methods';
 	private const GROUP_PRIVATE_STATIC_METHODS = 'private static methods';
+
+	private const GROUP_SHORTCUT_CONSTANTS = 'constants';
+	private const GROUP_SHORTCUT_PROPERTIES = 'properties';
+	private const GROUP_SHORTCUT_STATIC_PROPERTIES = 'static properties';
+	private const GROUP_SHORTCUT_METHODS = 'methods';
+	private const GROUP_SHORTCUT_STATIC_METHODS = 'static methods';
+	private const GROUP_SHORTCUT_ABSTRACT_METHODS = 'abstract methods';
+	private const GROUP_SHORTCUT_FINAL_METHODS = 'final methods';
+
+	private const SHORTCUTS = [
+		self::GROUP_SHORTCUT_CONSTANTS => [
+			self::GROUP_PUBLIC_CONSTANTS,
+			self::GROUP_PROTECTED_CONSTANTS,
+			self::GROUP_PRIVATE_CONSTANTS,
+		],
+		self::GROUP_SHORTCUT_STATIC_PROPERTIES => [
+			self::GROUP_PUBLIC_STATIC_PROPERTIES,
+			self::GROUP_PROTECTED_STATIC_PROPERTIES,
+			self::GROUP_PRIVATE_STATIC_PROPERTIES,
+		],
+		self::GROUP_SHORTCUT_PROPERTIES => [
+			self::GROUP_SHORTCUT_STATIC_PROPERTIES,
+			self::GROUP_PUBLIC_PROPERTIES,
+			self::GROUP_PROTECTED_PROPERTIES,
+			self::GROUP_PRIVATE_PROPERTIES,
+		],
+		self::GROUP_SHORTCUT_FINAL_METHODS => [
+			self::GROUP_PUBLIC_FINAL_METHODS,
+			self::GROUP_PROTECTED_FINAL_METHODS,
+			self::GROUP_PUBLIC_STATIC_FINAL_METHODS,
+			self::GROUP_PROTECTED_STATIC_FINAL_METHODS,
+		],
+		self::GROUP_SHORTCUT_ABSTRACT_METHODS => [
+			self::GROUP_PUBLIC_ABSTRACT_METHODS,
+			self::GROUP_PROTECTED_ABSTRACT_METHODS,
+			self::GROUP_PUBLIC_STATIC_ABSTRACT_METHODS,
+			self::GROUP_PROTECTED_STATIC_ABSTRACT_METHODS,
+		],
+		self::GROUP_SHORTCUT_STATIC_METHODS => [
+			self::GROUP_STATIC_CONSTRUCTORS,
+			self::GROUP_PUBLIC_STATIC_FINAL_METHODS,
+			self::GROUP_PROTECTED_STATIC_FINAL_METHODS,
+			self::GROUP_PUBLIC_STATIC_ABSTRACT_METHODS,
+			self::GROUP_PROTECTED_STATIC_ABSTRACT_METHODS,
+			self::GROUP_PUBLIC_STATIC_METHODS,
+			self::GROUP_PROTECTED_STATIC_METHODS,
+			self::GROUP_PRIVATE_STATIC_METHODS,
+		],
+		self::GROUP_SHORTCUT_METHODS => [
+			self::GROUP_SHORTCUT_FINAL_METHODS,
+			self::GROUP_SHORTCUT_ABSTRACT_METHODS,
+			self::GROUP_SHORTCUT_STATIC_METHODS,
+			self::GROUP_CONSTRUCTOR,
+			self::GROUP_DESTRUCTOR,
+			self::GROUP_PUBLIC_METHODS,
+			self::GROUP_PROTECTED_METHODS,
+			self::GROUP_PRIVATE_METHODS,
+			self::GROUP_MAGIC_METHODS,
+		],
+	];
 
 	private const SPECIAL_METHODS = [
 		'__construct' => self::GROUP_CONSTRUCTOR,
@@ -474,9 +535,13 @@ class ClassStructureSniff implements Sniff
 				self::GROUP_PROTECTED_STATIC_PROPERTIES,
 				self::GROUP_PRIVATE_PROPERTIES,
 				self::GROUP_PRIVATE_STATIC_PROPERTIES,
+				self::GROUP_PUBLIC_STATIC_FINAL_METHODS,
 				self::GROUP_PUBLIC_STATIC_ABSTRACT_METHODS,
+				self::GROUP_PROTECTED_STATIC_FINAL_METHODS,
 				self::GROUP_PROTECTED_STATIC_ABSTRACT_METHODS,
+				self::GROUP_PUBLIC_FINAL_METHODS,
 				self::GROUP_PUBLIC_ABSTRACT_METHODS,
+				self::GROUP_PROTECTED_FINAL_METHODS,
 				self::GROUP_PROTECTED_ABSTRACT_METHODS,
 				self::GROUP_CONSTRUCTOR,
 				self::GROUP_STATIC_CONSTRUCTORS,
@@ -490,29 +555,53 @@ class ClassStructureSniff implements Sniff
 				self::GROUP_MAGIC_METHODS,
 			];
 
-			if ($this->enableFinalMethods) {
-				$supportedGroups[] = self::GROUP_PUBLIC_FINAL_METHODS;
-				$supportedGroups[] = self::GROUP_PUBLIC_STATIC_FINAL_METHODS;
-				$supportedGroups[] = self::GROUP_PROTECTED_FINAL_METHODS;
-				$supportedGroups[] = self::GROUP_PROTECTED_STATIC_FINAL_METHODS;
+			if (!$this->enableFinalMethods) {
+				foreach ($supportedGroups as $supportedGroupNo => $supportedGroupName) {
+					if (strpos($supportedGroupName, ' final ') === false) {
+						continue;
+					}
+
+					unset($supportedGroups[$supportedGroupNo]);
+				}
 			}
 
-			$normalizedGroups = [];
+			$normalizedGroupsWithShortcuts = [];
 			$order = 1;
 			foreach (SniffSettingsHelper::normalizeArray($this->groups) as $groupsString) {
 				/** @var string[] $groups */
-				$groups = preg_split('~\\s*,\\s*~', $groupsString);
-				foreach ($groups as $group) {
-					$group = preg_replace('~\\s+~', ' ', $group);
+				$groups = preg_split('~\\s*,\\s*~', strtolower($groupsString));
+				foreach ($groups as $groupOrShortcut) {
+					$groupOrShortcut = preg_replace('~\\s+~', ' ', $groupOrShortcut);
 
-					if (!in_array($group, $supportedGroups, true)) {
-						throw new UnsupportedClassGroupException($group);
+					if (
+						!in_array($groupOrShortcut, $supportedGroups, true)
+						&& !array_key_exists($groupOrShortcut, self::SHORTCUTS)
+					) {
+						throw new UnsupportedClassGroupException($groupOrShortcut);
 					}
 
-					$normalizedGroups[$group] = $order;
+					$normalizedGroupsWithShortcuts[$groupOrShortcut] = $order;
 				}
 
 				$order++;
+			}
+
+			$normalizedGroups = [];
+			foreach ($normalizedGroupsWithShortcuts as $groupOrShortcut => $groupOrder) {
+				if (in_array($groupOrShortcut, $supportedGroups, true)) {
+					$normalizedGroups[$groupOrShortcut] = $groupOrder;
+				} else {
+					foreach ($this->unpackShortcut($groupOrShortcut, $supportedGroups) as $group) {
+						if (
+							array_key_exists($group, $normalizedGroupsWithShortcuts)
+							|| array_key_exists($group, $normalizedGroups)
+						) {
+							continue;
+						}
+
+						$normalizedGroups[$group] = $groupOrder;
+					}
+				}
 			}
 
 			if ($normalizedGroups === []) {
@@ -528,6 +617,26 @@ class ClassStructureSniff implements Sniff
 		}
 
 		return $this->normalizedGroups;
+	}
+
+	/**
+	 * @param string $shortcut
+	 * @param array<int, string> $supportedGroups
+	 * @return array<int, string>
+	 */
+	private function unpackShortcut(string $shortcut, array $supportedGroups): array
+	{
+		$groups = [];
+
+		foreach (self::SHORTCUTS[$shortcut] as $groupOrShortcut) {
+			if (in_array($groupOrShortcut, $supportedGroups, true)) {
+				$groups[] = $groupOrShortcut;
+			} else {
+				$groups = array_merge($groups, $this->unpackShortcut($groupOrShortcut, $supportedGroups));
+			}
+		}
+
+		return $groups;
 	}
 
 }

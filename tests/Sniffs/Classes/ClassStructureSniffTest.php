@@ -125,6 +125,35 @@ class ClassStructureSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testErrorsWithShortcuts(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/classStructureWithShortcutsErrors.php',
+			[
+				'groups' => [
+					'uses',
+					'constants',
+					'private properties',
+					'static properties',
+					'properties',
+					'constructor',
+					'public methods',
+					'final methods',
+					'public abstract methods',
+					'abstract methods',
+					'public static methods',
+					'static methods',
+					'methods',
+					'magic methods',
+				],
+				'enableFinalMethods' => true,
+			]
+		);
+
+		self::assertSame(9, $report->getErrorCount());
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testThrowExceptionForUnsupportedGroup(): void
 	{
 		try {
@@ -160,7 +189,7 @@ class ClassStructureSniffTest extends TestCase
 			);
 			self::fail();
 		} catch (MissingClassGroupsException $e) {
-			self::assertStringContainsString(': public final methods, public static final methods, protected final methods, protected static final methods.', $e->getMessage());
+			self::assertStringContainsString(': public static final methods, protected static final methods, public final methods, protected final methods.', $e->getMessage());
 		}
 	}
 
