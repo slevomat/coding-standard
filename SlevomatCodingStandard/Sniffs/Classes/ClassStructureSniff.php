@@ -29,6 +29,7 @@ use function strtolower;
 use const T_ABSTRACT;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CONST;
+use const T_FINAL;
 use const T_FUNCTION;
 use const T_OPEN_CURLY_BRACKET;
 use const T_PROTECTED;
@@ -60,12 +61,16 @@ class ClassStructureSniff implements Sniff
 	private const GROUP_MAGIC_METHODS = 'magic methods';
 	private const GROUP_PUBLIC_METHODS = 'public methods';
 	private const GROUP_PUBLIC_ABSTRACT_METHODS = 'public abstract methods';
+	private const GROUP_PUBLIC_FINAL_METHODS = 'public final methods';
 	private const GROUP_PUBLIC_STATIC_METHODS = 'public static methods';
 	private const GROUP_PUBLIC_STATIC_ABSTRACT_METHODS = 'public static abstract methods';
+	private const GROUP_PUBLIC_STATIC_FINAL_METHODS = 'public static final methods';
 	private const GROUP_PROTECTED_METHODS = 'protected methods';
 	private const GROUP_PROTECTED_ABSTRACT_METHODS = 'protected abstract methods';
+	private const GROUP_PROTECTED_FINAL_METHODS = 'protected final methods';
 	private const GROUP_PROTECTED_STATIC_METHODS = 'protected static methods';
 	private const GROUP_PROTECTED_STATIC_ABSTRACT_METHODS = 'protected static abstract methods';
+	private const GROUP_PROTECTED_STATIC_FINAL_METHODS = 'protected static final methods';
 	private const GROUP_PRIVATE_METHODS = 'private methods';
 	private const GROUP_PRIVATE_STATIC_METHODS = 'private static methods';
 
@@ -89,6 +94,9 @@ class ClassStructureSniff implements Sniff
 
 	/** @var string[] */
 	public $groups = [];
+
+	/** @var bool */
+	public $enableFinalMethods = false;
 
 	/** @var array<string, int>|null */
 	private $normalizedGroups;
@@ -253,8 +261,9 @@ class ClassStructureSniff implements Sniff
 
 				$visibility = $this->getVisibilityForToken($phpcsFile, $pointer);
 				$isStatic = $this->isMemberStatic($phpcsFile, $pointer);
+				$isFinal = $this->isMethodFinal($phpcsFile, $pointer);
 
-				if ($this->isFunctionAbstract($phpcsFile, $pointer)) {
+				if ($this->isMethodAbstract($phpcsFile, $pointer)) {
 					if ($visibility === T_PUBLIC) {
 						return $isStatic ? self::GROUP_PUBLIC_STATIC_ABSTRACT_METHODS : self::GROUP_PUBLIC_ABSTRACT_METHODS;
 					}
@@ -268,8 +277,16 @@ class ClassStructureSniff implements Sniff
 
 				switch ($visibility) {
 					case T_PUBLIC:
+						if ($this->enableFinalMethods && $isFinal) {
+							return $isStatic ? self::GROUP_PUBLIC_STATIC_FINAL_METHODS : self::GROUP_PUBLIC_FINAL_METHODS;
+						}
+
 						return $isStatic ? self::GROUP_PUBLIC_STATIC_METHODS : self::GROUP_PUBLIC_METHODS;
 					case T_PROTECTED:
+						if ($this->enableFinalMethods && $isFinal) {
+							return $isStatic ? self::GROUP_PROTECTED_STATIC_FINAL_METHODS : self::GROUP_PROTECTED_FINAL_METHODS;
+						}
+
 						return $isStatic ? self::GROUP_PROTECTED_STATIC_METHODS : self::GROUP_PROTECTED_METHODS;
 				}
 
@@ -312,7 +329,13 @@ class ClassStructureSniff implements Sniff
 		return $phpcsFile->getTokens()[$previousPointer]['code'] === T_STATIC;
 	}
 
-	private function isFunctionAbstract(File $phpcsFile, int $pointer): bool
+	private function isMethodFinal(File $phpcsFile, int $pointer): bool
+	{
+		$previousPointer = TokenHelper::findPrevious($phpcsFile, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_FINAL], $pointer - 1);
+		return $phpcsFile->getTokens()[$previousPointer]['code'] === T_FINAL;
+	}
+
+	private function isMethodAbstract(File $phpcsFile, int $pointer): bool
 	{
 		$previousPointer = TokenHelper::findPrevious($phpcsFile, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_ABSTRACT], $pointer - 1);
 		return $phpcsFile->getTokens()[$previousPointer]['code'] === T_ABSTRACT;
@@ -466,6 +489,13 @@ class ClassStructureSniff implements Sniff
 				self::GROUP_PRIVATE_STATIC_METHODS,
 				self::GROUP_MAGIC_METHODS,
 			];
+
+			if ($this->enableFinalMethods) {
+				$supportedGroups[] = self::GROUP_PUBLIC_FINAL_METHODS;
+				$supportedGroups[] = self::GROUP_PUBLIC_STATIC_FINAL_METHODS;
+				$supportedGroups[] = self::GROUP_PROTECTED_FINAL_METHODS;
+				$supportedGroups[] = self::GROUP_PROTECTED_STATIC_FINAL_METHODS;
+			}
 
 			$normalizedGroups = [];
 			$order = 1;

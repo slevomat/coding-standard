@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use SlevomatCodingStandard\Sniffs\TestCase;
+use function array_merge;
 
 class ClassStructureSniffTest extends TestCase
 {
@@ -17,6 +18,13 @@ class ClassStructureSniffTest extends TestCase
 		'public abstract methods, public methods, protected abstract methods, protected methods, private methods',
 		'constructor, destructor',
 		'static constructors',
+	];
+
+	private const RULES_FOR_FINAL_METHODS = [
+		'public final methods',
+		'public static final methods',
+		'protected final methods',
+		'protected static final methods',
 	];
 
 	public function testNoErrors(): void
@@ -101,6 +109,22 @@ class ClassStructureSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testErrorsWithFinalMethodsEnabled(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/classStructureWithFinalMethodsEnabledErrors.php',
+			['groups' => array_merge(self::DIFFERENT_RULES, self::RULES_FOR_FINAL_METHODS), 'enableFinalMethods' => true]
+		);
+
+		self::assertSame(3, $report->getErrorCount());
+
+		self::assertSniffError($report, 10, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 14, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 18, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testThrowExceptionForUnsupportedGroup(): void
 	{
 		try {
@@ -124,6 +148,19 @@ class ClassStructureSniffTest extends TestCase
 			self::fail();
 		} catch (MissingClassGroupsException $e) {
 			self::assertStringContainsString(', constructor, static constructors, destructor, ', $e->getMessage());
+		}
+	}
+
+	public function testThrowExceptionForMissingGroupsWithFinalMethodsEnabled(): void
+	{
+		try {
+			self::checkFile(
+				__DIR__ . '/data/classStructureSniffNoErrors.php',
+				['groups' => self::DIFFERENT_RULES, 'enableFinalMethods' => true]
+			);
+			self::fail();
+		} catch (MissingClassGroupsException $e) {
+			self::assertStringContainsString(': public final methods, public static final methods, protected final methods, protected static final methods.', $e->getMessage());
 		}
 	}
 
