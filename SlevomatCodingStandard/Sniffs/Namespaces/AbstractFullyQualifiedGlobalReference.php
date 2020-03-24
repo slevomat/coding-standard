@@ -56,6 +56,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
+		$namespacePointers = NamespaceHelper::getAllNamespacesPointers($phpcsFile);
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
 		$exclude = array_flip($this->getNormalizedExclude());
 
@@ -75,7 +76,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 				continue;
 			}
 
-			if (NamespaceHelper::findCurrentNamespaceName($phpcsFile, $namePointer) === null) {
+			if ($namespacePointers === []) {
 				continue;
 			}
 
