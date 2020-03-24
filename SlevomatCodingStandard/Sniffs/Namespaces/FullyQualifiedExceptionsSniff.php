@@ -11,6 +11,7 @@ use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use Throwable;
+use function array_reverse;
 use function in_array;
 use function sprintf;
 use const T_OPEN_TAG;
@@ -49,6 +50,8 @@ class FullyQualifiedExceptionsSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
+		$namespacePointers = array_reverse(NamespaceHelper::getAllNamespacesPointers($phpcsFile));
+
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
 		foreach ($referencedNames as $referencedName) {
 			$pointer = $referencedName->getStartPointer();
@@ -70,7 +73,19 @@ class FullyQualifiedExceptionsSniff implements Sniff
 					continue;
 				}
 			} else {
-				$fileNamespace = NamespaceHelper::findCurrentNamespaceName($phpcsFile, $pointer);
+				$fileNamespacePointer = null;
+				if ($namespacePointers !== []) {
+					foreach ($namespacePointers as $namespacePointer) {
+						if ($namespacePointer < $pointer) {
+							$fileNamespacePointer = $namespacePointer;
+							break;
+						}
+					}
+				}
+
+				$fileNamespace = $fileNamespacePointer !== null
+					? NamespaceHelper::getName($phpcsFile, $fileNamespacePointer)
+					: null;
 				$canonicalName = $name;
 				if (!NamespaceHelper::isFullyQualifiedName($name) && $fileNamespace !== null) {
 					$canonicalName = sprintf('%s%s%s', $fileNamespace, NamespaceHelper::NAMESPACE_SEPARATOR, $name);

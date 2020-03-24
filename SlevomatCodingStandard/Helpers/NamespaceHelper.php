@@ -55,6 +55,15 @@ class NamespaceHelper
 		return explode(self::NAMESPACE_SEPARATOR, $name);
 	}
 
+	public static function getName(File $phpcsFile, int $namespacePointer): string
+	{
+		/** @var int $namespaceNameStartPointer */
+		$namespaceNameStartPointer = TokenHelper::findNextEffective($phpcsFile, $namespacePointer + 1);
+		$namespaceNameEndPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $namespaceNameStartPointer + 1) - 1;
+
+		return TokenHelper::getContent($phpcsFile, $namespaceNameStartPointer, $namespaceNameEndPointer);
+	}
+
 	public static function findCurrentNamespaceName(File $phpcsFile, int $anyPointer): ?string
 	{
 		$namespacePointer = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $anyPointer);
@@ -62,11 +71,7 @@ class NamespaceHelper
 			return null;
 		}
 
-		/** @var int $namespaceNameStartPointer */
-		$namespaceNameStartPointer = TokenHelper::findNextEffective($phpcsFile, $namespacePointer + 1);
-		$namespaceNameEndPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $namespaceNameStartPointer + 1) - 1;
-
-		return TokenHelper::getContent($phpcsFile, $namespaceNameStartPointer, $namespaceNameEndPointer);
+		return self::getName($phpcsFile, $namespacePointer);
 	}
 
 	public static function getUnqualifiedNameFromFullyQualifiedName(string $name): string
