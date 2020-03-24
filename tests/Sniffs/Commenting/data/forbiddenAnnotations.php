@@ -72,4 +72,9 @@ class Foo
 
 	}
 
+	/** @see https://www.slevomat.cz */
+	public function oneLineAnnotation()
+	{
+	}
+
 }

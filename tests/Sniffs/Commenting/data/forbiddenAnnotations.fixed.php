@@ -54,4 +54,8 @@ class Foo
 
 	}
 
+	public function oneLineAnnotation()
+	{
+	}
+
 }

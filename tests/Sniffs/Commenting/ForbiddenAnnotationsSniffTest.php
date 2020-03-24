@@ -21,9 +21,9 @@ class ForbiddenAnnotationsSniffTest extends TestCase
 			'forbiddenAnnotations' => ['@see', '@throws', '@Route'],
 		]);
 
-		self::assertSame(9, $report->getErrorCount());
+		self::assertSame(10, $report->getErrorCount());
 
-		foreach ([5, 6, 20, 21, 30, 32, 45, 53, 66] as $line) {
+		foreach ([5, 6, 20, 21, 30, 32, 45, 53, 66, 75] as $line) {
 			self::assertSniffError($report, $line, ForbiddenAnnotationsSniff::CODE_ANNOTATION_FORBIDDEN);
 		}
 

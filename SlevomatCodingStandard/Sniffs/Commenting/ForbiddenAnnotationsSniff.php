@@ -59,8 +59,8 @@ class ForbiddenAnnotationsSniff implements Sniff
 					continue;
 				}
 
-				/** @var int $annotationStartPointer */
-				$annotationStartPointer = TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_STAR, $annotation->getStartPointer() - 1);
+				$starPointer = TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_STAR, $annotation->getStartPointer() - 1, $docCommentOpenPointer);
+				$annotationStartPointer = $starPointer ?? $docCommentOpenPointer + 1;
 
 				/** @var int $nextPointer */
 				$nextPointer = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_TAG, T_DOC_COMMENT_CLOSE_TAG], $annotation->getEndPointer() + 1);
@@ -69,7 +69,7 @@ class ForbiddenAnnotationsSniff implements Sniff
 				}
 				$annotationEndPointer = $nextPointer - 1;
 
-				if ($tokens[$nextPointer]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
+				if ($tokens[$nextPointer]['code'] === T_DOC_COMMENT_CLOSE_TAG && $starPointer !== null) {
 					$pointerBeforeWhitespace = TokenHelper::findPreviousExcluding($phpcsFile, [T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STAR], $annotationStartPointer - 1);
 					/** @var int $annotationStartPointer */
 					$annotationStartPointer = TokenHelper::findNext($phpcsFile, T_DOC_COMMENT_STAR, $pointerBeforeWhitespace + 1);
