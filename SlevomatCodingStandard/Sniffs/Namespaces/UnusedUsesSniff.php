@@ -79,6 +79,10 @@ class UnusedUsesSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
+		if (TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $openTagPointer - 1) !== null) {
+			return;
+		}
+
 		$startPointer = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $openTagPointer - 1);
 		if ($startPointer === null) {
 			$startPointer = TokenHelper::findNext($phpcsFile, T_OPEN_TAG, 0);
