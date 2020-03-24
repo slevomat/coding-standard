@@ -164,6 +164,8 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 			}
 		}
 
+		$namespacePointers = NamespaceHelper::getAllNamespacesPointers($phpcsFile);
+
 		foreach ($references as $reference) {
 			$useStatements = UseStatementHelper::getUseStatementsForPointer($phpcsFile, $reference->startPointer);
 
@@ -176,7 +178,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 			$isFullyQualified = NamespaceHelper::isFullyQualifiedName($name);
 			$isGlobalFallback = !$isFullyQualified
 				&& !NamespaceHelper::hasNamespace($name)
-				&& NamespaceHelper::findCurrentNamespaceName($phpcsFile, $startPointer) !== null
+				&& $namespacePointers !== []
 				&& !array_key_exists(UseStatement::getUniqueId($reference->type, $name), $useStatements);
 
 			$isGlobalFunctionFallback = false;
@@ -243,7 +245,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 					if (
 						$isFullyQualified
 						&& !NamespaceHelper::hasNamespace($name)
-						&& NamespaceHelper::findCurrentNamespaceName($phpcsFile, $startPointer) === null
+						&& $namespacePointers === []
 					) {
 						$label = sprintf($reference->isConstant ? 'Constant %s' : ($reference->isFunction ? 'Function %s()' : 'Class %s'), $name);
 
