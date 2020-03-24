@@ -37,7 +37,7 @@ function () {
 	for ($i = 0; $i < 10; $i++) {
 		if (true) {
 
-		}
+		} // Fucking line comment
 
 		// With line comment
 		if (false) {

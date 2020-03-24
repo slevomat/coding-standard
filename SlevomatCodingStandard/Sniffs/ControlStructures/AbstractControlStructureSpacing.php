@@ -204,7 +204,9 @@ abstract class AbstractControlStructureSpacing implements Sniff
 		}
 
 		$hasCommentAfter = in_array($tokens[$notWhitespacePointerAfter]['code'], Tokens::$commentTokens, true) && $tokens[$notWhitespacePointerAfter]['line'] === $tokens[$controlStructureEndPointer]['line'];
-		$pointerAfter = $hasCommentAfter ? TokenHelper::findNextEffective($phpcsFile, $controlStructureEndPointer + 1) : $notWhitespacePointerAfter;
+		$pointerAfter = $hasCommentAfter
+			? TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $notWhitespacePointerAfter + 1)
+			: $notWhitespacePointerAfter;
 
 		$isLastControlStructure = in_array($tokens[$controlStructurePointer]['code'], [T_CASE, T_DEFAULT], true)
 			? $tokens[$pointerAfter]['code'] === T_CLOSE_CURLY_BRACKET
