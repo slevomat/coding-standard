@@ -29,6 +29,7 @@ use function array_diff_key;
 use function array_key_exists;
 use function array_map;
 use function array_merge;
+use function array_reverse;
 use function count;
 use function in_array;
 use function preg_match;
@@ -86,44 +87,57 @@ class UnusedUsesSniff implements Sniff
 		$fileUnusedNames = UseStatementHelper::getFileUseStatements($phpcsFile);
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $startPointer);
 
-		$namespaces = NamespaceHelper::getAllNamespacesPointers($phpcsFile);
-		if (count($namespaces) === 0) {
-			$namespaces = [$startPointer];
+		$pointersBeforeUseStatements = array_reverse(NamespaceHelper::getAllNamespacesPointers($phpcsFile));
+		if ($pointersBeforeUseStatements === []) {
+			$pointersBeforeUseStatements = [$startPointer];
 		}
+		$pointersBeforeUseStatementsCount = count($pointersBeforeUseStatements);
 
 		$allUsedNames = [];
-		foreach ($namespaces as $pointerBeforeUseStatements) {
-			foreach ($referencedNames as $referencedName) {
-				$name = $referencedName->getNameAsReferencedInFile();
-				$pointer = $referencedName->getStartPointer();
-				$nameParts = NamespaceHelper::getNameParts($name);
-				$nameAsReferencedInFile = $nameParts[0];
-				$nameReferencedWithoutSubNamespace = count($nameParts) === 1;
-				$uniqueId = $nameReferencedWithoutSubNamespace
-					? UseStatement::getUniqueId($referencedName->getType(), $nameAsReferencedInFile)
-					: UseStatement::getUniqueId(ReferencedName::TYPE_DEFAULT, $nameAsReferencedInFile);
-				if (
-					NamespaceHelper::isFullyQualifiedName($name)
-					|| !array_key_exists($pointerBeforeUseStatements, $fileUnusedNames)
-					|| !array_key_exists($uniqueId, $fileUnusedNames[$pointerBeforeUseStatements])
-				) {
-					continue;
-				}
 
-				if ($fileUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
-					$phpcsFile->addError(
-						sprintf(
-							'Case of reference name "%s" and use statement "%s" does not match.',
-							$nameAsReferencedInFile,
-							$fileUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
-						),
-						$pointer,
-						self::CODE_MISMATCHING_CASE
-					);
-				}
+		foreach ($referencedNames as $referencedName) {
+			$pointer = $referencedName->getStartPointer();
 
-				$allUsedNames[$pointerBeforeUseStatements][$uniqueId] = true;
+			if ($pointersBeforeUseStatementsCount === 1) {
+				$pointerBeforeUseStatements = $pointersBeforeUseStatements[0];
+			} else {
+				$pointerBeforeUseStatements = $startPointer;
+				foreach ($pointersBeforeUseStatements as $currentPointerBeforeUseStatements) {
+					if ($currentPointerBeforeUseStatements < $pointer) {
+						$pointerBeforeUseStatements = $currentPointerBeforeUseStatements;
+						break;
+					}
+				}
 			}
+
+			$name = $referencedName->getNameAsReferencedInFile();
+			$nameParts = NamespaceHelper::getNameParts($name);
+			$nameAsReferencedInFile = $nameParts[0];
+			$nameReferencedWithoutSubNamespace = count($nameParts) === 1;
+			$uniqueId = $nameReferencedWithoutSubNamespace
+				? UseStatement::getUniqueId($referencedName->getType(), $nameAsReferencedInFile)
+				: UseStatement::getUniqueId(ReferencedName::TYPE_DEFAULT, $nameAsReferencedInFile);
+			if (
+				NamespaceHelper::isFullyQualifiedName($name)
+				|| !array_key_exists($pointerBeforeUseStatements, $fileUnusedNames)
+				|| !array_key_exists($uniqueId, $fileUnusedNames[$pointerBeforeUseStatements])
+			) {
+				continue;
+			}
+
+			if ($fileUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
+				$phpcsFile->addError(
+					sprintf(
+						'Case of reference name "%s" and use statement "%s" does not match.',
+						$nameAsReferencedInFile,
+						$fileUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
+					),
+					$pointer,
+					self::CODE_MISMATCHING_CASE
+				);
+			}
+
+			$allUsedNames[$pointerBeforeUseStatements][$uniqueId] = true;
 		}
 
 		if ($this->searchAnnotations) {
