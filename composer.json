@@ -32,5 +32,10 @@
 			"SlevomatCodingStandard\\PHPStan\\": "build/PHPStan",
 			"SlevomatCodingStandard\\": "tests"
 		}
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "6.x-dev"
+		}
 	}
 }
