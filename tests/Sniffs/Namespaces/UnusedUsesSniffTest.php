@@ -10,11 +10,18 @@ class UnusedUsesSniffTest extends TestCase
 
 	public function testUnusedUse(): void
 	{
+		self::assertEquals(5, $this->getFileReport()->getErrorCount());
 		self::assertSniffError(
 			$this->getFileReport(),
 			5,
 			UnusedUsesSniff::CODE_UNUSED_USE,
 			'First\ObjectPrototype'
+		);
+		self::assertSniffError(
+			$this->getFileReport(),
+			8,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'My\ObjectPrototype (as MyObject)'
 		);
 		self::assertSniffError(
 			$this->getFileReport(),
@@ -27,6 +34,12 @@ class UnusedUsesSniffTest extends TestCase
 			14,
 			UnusedUsesSniff::CODE_UNUSED_USE,
 			'FooBar\UNUSED_CONSTANT'
+		);
+		self::assertSniffError(
+			$this->getFileReport(),
+			16,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'X'
 		);
 	}
 
