@@ -4,7 +4,7 @@ namespace FooNamespace;
 
 use Exception as GeneralException;
 use SomeOther\Exception;
-
+?><?php
 class Foo extends \Exception
 {
 

@@ -48,6 +48,10 @@ class ReferenceThrowableOnlySniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
+		if (TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $openTagPointer - 1) !== null) {
+			return;
+		}
+
 		$tokens = $phpcsFile->getTokens();
 		$message = sprintf('Referencing general \%s; use \%s instead.', Exception::class, Throwable::class);
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
