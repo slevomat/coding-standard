@@ -73,11 +73,11 @@ abstract class AbstractControlStructureSpacing implements Sniff
 
 	abstract protected function getLinesCountBefore(): int;
 
-	abstract protected function getLinesCountBeforeFirst(): int;
+	abstract protected function getLinesCountBeforeFirst(File $phpcsFile, int $controlStructurePointer): int;
 
 	abstract protected function getLinesCountAfter(): int;
 
-	abstract protected function getLinesCountAfterLast(): int;
+	abstract protected function getLinesCountAfterLast(File $phpcsFile, int $controlStructurePointer, int $controlStructureEndPointer): int;
 
 	/**
 	 * @return (int|string)[]
@@ -149,7 +149,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 			$whitespaceBefore .= TokenHelper::getContent($phpcsFile, $pointerBefore + 1, $controlStructureStartPointer - 1);
 		}
 
-		$requiredLinesCountBefore = $isFirstControlStructure ? $this->getLinesCountBeforeFirst() : $this->getLinesCountBefore();
+		$requiredLinesCountBefore = $isFirstControlStructure ? $this->getLinesCountBeforeFirst($phpcsFile, $controlStructurePointer) : $this->getLinesCountBefore();
 		$actualLinesCountBefore = substr_count($whitespaceBefore, $phpcsFile->eolChar) - 1;
 
 		if ($requiredLinesCountBefore === $actualLinesCountBefore) {
@@ -210,7 +210,9 @@ abstract class AbstractControlStructureSpacing implements Sniff
 			? $tokens[$pointerAfter]['code'] === T_CLOSE_CURLY_BRACKET
 			: in_array($tokens[$pointerAfter]['code'], [T_CLOSE_CURLY_BRACKET, T_CASE, T_DEFAULT], true);
 
-		$requiredLinesCountAfter = $isLastControlStructure ? $this->getLinesCountAfterLast() : $this->getLinesCountAfter();
+		$requiredLinesCountAfter = $isLastControlStructure
+			? $this->getLinesCountAfterLast($phpcsFile, $controlStructurePointer, $controlStructureEndPointer)
+			: $this->getLinesCountAfter();
 		$actualLinesCountAfter = $tokens[$pointerAfter]['line'] - $tokens[$controlStructureEndPointer]['line'] - 1;
 
 		if ($requiredLinesCountAfter === $actualLinesCountAfter) {

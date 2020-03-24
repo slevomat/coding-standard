@@ -80,7 +80,13 @@ class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacing
 		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeControlStructure);
 	}
 
-	protected function getLinesCountBeforeFirst(): int
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+	 * @param File $phpcsFile
+	 * @param int $controlStructurePointer
+	 * @return int
+	 */
+	protected function getLinesCountBeforeFirst(File $phpcsFile, int $controlStructurePointer): int
 	{
 		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirstControlStructure);
 	}
@@ -90,7 +96,14 @@ class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacing
 		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterControlStructure);
 	}
 
-	protected function getLinesCountAfterLast(): int
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+	 * @param File $phpcsFile
+	 * @param int $controlStructurePointer
+	 * @param int $controlStructureEndPointer
+	 * @return int
+	 */
+	protected function getLinesCountAfterLast(File $phpcsFile, int $controlStructurePointer, int $controlStructureEndPointer): int
 	{
 		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterLastControlStructure);
 	}

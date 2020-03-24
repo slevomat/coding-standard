@@ -107,4 +107,32 @@ class JumpStatementsSpacingSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testIgnoreWhenInCaseOrDefaultStatementNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/jumpStatementsWhenInCaseOrDefaultNoErrors.php', [
+			'linesCountBeforeWhenFirstInCaseOrDefault' => 0,
+			'linesCountAfterWhenLastInCaseOrDefault' => 1,
+			'linesCountAfterWhenLastInLastCaseOrDefault' => 0,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testWhenInCaseOrDefaultStatementErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/jumpStatementsWhenInCaseOrDefaultErrors.php', [
+			'linesCountBeforeWhenFirstInCaseOrDefault' => 0,
+			'linesCountAfterWhenLastInCaseOrDefault' => 1,
+			'linesCountAfterWhenLastInLastCaseOrDefault' => 0,
+		]);
+
+		self::assertSame(4, $report->getErrorCount());
+
+		self::assertSniffError($report, 7, JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_CONTROL_STRUCTURE, 'Expected 0 lines before "throw", found 1.');
+		self::assertSniffError($report, 7, JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTROL_STRUCTURE, 'Expected 1 lines after "throw", found 0.');
+		self::assertSniffError($report, 17, JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTROL_STRUCTURE, 'Expected 1 lines after "break", found 0.');
+		self::assertSniffError($report, 22, JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTROL_STRUCTURE, 'Expected 0 lines after "break", found 1.');
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
