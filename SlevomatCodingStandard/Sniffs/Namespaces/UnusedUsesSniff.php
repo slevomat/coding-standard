@@ -83,10 +83,7 @@ class UnusedUsesSniff implements Sniff
 			return;
 		}
 
-		$startPointer = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $openTagPointer - 1);
-		if ($startPointer === null) {
-			$startPointer = TokenHelper::findNext($phpcsFile, T_OPEN_TAG, 0);
-		}
+		$startPointer = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $openTagPointer - 1) ?? $openTagPointer;
 
 		$fileUnusedNames = UseStatementHelper::getFileUseStatements($phpcsFile);
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $startPointer);
