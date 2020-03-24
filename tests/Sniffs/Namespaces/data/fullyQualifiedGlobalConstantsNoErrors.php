@@ -33,7 +33,7 @@ namespace Foo
 	}
 
 }
-
+?><?php
 namespace {
 
 	\PHP_OS;

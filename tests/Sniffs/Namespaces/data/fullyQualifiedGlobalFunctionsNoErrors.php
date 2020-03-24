@@ -22,7 +22,7 @@ namespace Foo
 	}
 
 }
-
+?><?php
 namespace {
 
 	\MAX(10, 100);
