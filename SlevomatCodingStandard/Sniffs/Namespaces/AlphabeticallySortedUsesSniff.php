@@ -51,6 +51,10 @@ class AlphabeticallySortedUsesSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
+		if (TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $openTagPointer - 1) !== null) {
+			return;
+		}
+
 		$fileUseStatements = UseStatementHelper::getFileUseStatements($phpcsFile);
 		foreach ($fileUseStatements as $useStatements) {
 			$lastUse = null;
