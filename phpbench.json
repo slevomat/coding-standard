@@ -1,0 +1,20 @@
+{
+  "bootstrap": "tests/bootstrap.php",
+  "path": "tests/Benchmarks",
+  "reports": {
+    "consumation_of_time": {
+      "extends": "default",
+      "title": "Execution time per Sniff",
+      "description": "Benchmark how long it takes to execute sniff on test 8kloc file",
+      "cols": [
+        "params",
+        "mode",
+        "mem_peak"
+      ],
+      "sort": {
+        "mode": "desc",
+        "params": "asc"
+      }
+    }
+  }
+}
