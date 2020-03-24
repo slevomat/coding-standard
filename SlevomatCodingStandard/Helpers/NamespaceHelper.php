@@ -23,6 +23,15 @@ class NamespaceHelper
 
 	public const NAMESPACE_SEPARATOR = '\\';
 
+	/**
+	 * @param File $phpcsFile
+	 * @return int[]
+	 */
+	public static function getAllNamespacesPointers(File $phpcsFile): array
+	{
+		return TokenHelper::findNextAll($phpcsFile, T_NAMESPACE, 0);
+	}
+
 	public static function isFullyQualifiedName(string $typeName): bool
 	{
 		return StringHelper::startsWith($typeName, self::NAMESPACE_SEPARATOR);

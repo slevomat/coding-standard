@@ -30,6 +30,50 @@ class UnusedUsesSniffTest extends TestCase
 		);
 	}
 
+	public function testUnusedUseWithMultipleNamespaces(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/unusedUsesMultipleNamespaces.php');
+
+		self::assertEquals(8, $report->getErrorCount());
+		self::assertSniffError(
+			$report,
+			5,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'First\ObjectPrototype'
+		);
+		self::assertSniffError(
+			$report,
+			12,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'FooBar\UnusedFunction'
+		);
+		self::assertSniffError(
+			$report,
+			14,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'FooBar\UNUSED_CONSTANT'
+		);
+		self::assertSniffError(
+			$report,
+			53,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'Human\Arm'
+		);
+		self::assertSniffError(
+			$report,
+			55,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'Human\Leg'
+		);
+
+		self::assertSniffError(
+			$report,
+			56,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'Human\HEAD_SIZE_UNUSED'
+		);
+	}
+
 	public function testUnusedUseNoNamespaceNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/unusedUsesNoNamespaceNoErrors.php');
