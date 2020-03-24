@@ -199,4 +199,17 @@ abstract class Whatever
 	{
 	}
 
+    /**
+     *
+     * Documentation
+     *
+     */
+    public function withComment(): void
+    {
+    }
+
+    /** @return string */
+    public function inlinePhpDoc(): string
+    {
+    }
 }
