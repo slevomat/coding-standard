@@ -12,7 +12,7 @@ function foo(FooException $e)
 
 	}
 }
-
+?><?php
 function bar(\Some\Exception $e)
 {
 	try {

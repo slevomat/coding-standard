@@ -8,6 +8,7 @@ use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
+use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use Throwable;
@@ -50,6 +51,10 @@ class FullyQualifiedExceptionsSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
+		if (TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $openTagPointer - 1) !== null) {
+			return;
+		}
+
 		$namespacePointers = array_reverse(NamespaceHelper::getAllNamespacesPointers($phpcsFile));
 
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
