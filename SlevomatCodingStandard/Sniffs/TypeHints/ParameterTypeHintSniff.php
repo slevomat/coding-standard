@@ -387,8 +387,10 @@ class ParameterTypeHintSniff implements Sniff
 				continue;
 			}
 
-			/** @var int $changeStart */
-			$changeStart = TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_STAR, $parameterAnnotation->getStartPointer() - 1);
+			$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $functionPointer);
+			$starPointer = TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_STAR, $parameterAnnotation->getStartPointer() - 1, $docCommentOpenPointer);
+
+			$changeStart = $starPointer ?? $docCommentOpenPointer + 1;
 			/** @var int $changeEnd */
 			$changeEnd = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR], $parameterAnnotation->getEndPointer() + 1) - 1;
 			$phpcsFile->fixer->beginChangeset();

@@ -181,4 +181,9 @@ class Whatever
 	{
 	}
 
+	/***/
+	public function oneLineDocComment(string $a)
+	{
+	}
+
 }

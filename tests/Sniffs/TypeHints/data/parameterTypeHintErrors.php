@@ -186,4 +186,9 @@ class Whatever
 	{
 	}
 
+	/** @param string $a */
+	public function oneLineDocComment(string $a)
+	{
+	}
+
 }
