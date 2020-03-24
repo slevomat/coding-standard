@@ -167,6 +167,15 @@ class NamespaceHelperTest extends TestCase
 		self::assertSame('Lorem\Ipsum', $namespace);
 	}
 
+	public function testGetAllNamespacesWithMultipleNamespacesInFile(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(
+			__DIR__ . '/data/multipleNamespaces.php'
+		);
+		$namespaces = NamespaceHelper::getAllNamespacesPointers($phpcsFile);
+		self::assertEquals([2, 16], $namespaces);
+	}
+
 	public function testResolveClassNameWithMoreNamespaces(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(
