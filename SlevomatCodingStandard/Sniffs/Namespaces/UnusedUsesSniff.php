@@ -89,27 +89,17 @@ class UnusedUsesSniff implements Sniff
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $startPointer);
 
 		$pointersBeforeUseStatements = array_reverse(NamespaceHelper::getAllNamespacesPointers($phpcsFile));
-		if ($pointersBeforeUseStatements === []) {
-			$pointersBeforeUseStatements = [$startPointer];
-		}
-		$pointersBeforeUseStatementsCount = count($pointersBeforeUseStatements);
 
 		$allUsedNames = [];
 
 		foreach ($referencedNames as $referencedName) {
 			$pointer = $referencedName->getStartPointer();
 
-			if ($pointersBeforeUseStatementsCount === 1) {
-				$pointerBeforeUseStatements = $pointersBeforeUseStatements[0];
-			} else {
-				$pointerBeforeUseStatements = $startPointer;
-				foreach ($pointersBeforeUseStatements as $currentPointerBeforeUseStatements) {
-					if ($currentPointerBeforeUseStatements < $pointer) {
-						$pointerBeforeUseStatements = $currentPointerBeforeUseStatements;
-						break;
-					}
-				}
-			}
+			$pointerBeforeUseStatements = $this->firstPointerBefore(
+				$pointer,
+				$pointersBeforeUseStatements,
+				$startPointer
+			);
 
 			$name = $referencedName->getNameAsReferencedInFile();
 			$nameParts = NamespaceHelper::getNameParts($name);
@@ -157,10 +147,11 @@ class UnusedUsesSniff implements Sniff
 					continue;
 				}
 
-				$pointerBeforeUseStatements = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $docCommentOpenPointer - 1);
-				if ($pointerBeforeUseStatements === null) {
-					$pointerBeforeUseStatements = $startPointer;
-				}
+				$pointerBeforeUseStatements = $this->firstPointerBefore(
+					$docCommentOpenPointer - 1,
+					$pointersBeforeUseStatements,
+					$startPointer
+				);
 
 				if (!array_key_exists($pointerBeforeUseStatements, $fileUnusedNames)) {
 					$searchAnnotationsPointer = $tokens[$docCommentOpenPointer]['comment_closer'] + 1;
@@ -349,6 +340,23 @@ class UnusedUsesSniff implements Sniff
 		}
 
 		return $this->normalizedIgnoredAnnotations;
+	}
+
+	/**
+	 * @param int   $pointer
+	 * @param int[] $pointers
+	 * @param int   $startPointer
+	 * @return int
+	 */
+	private function firstPointerBefore(int $pointer, array $pointers, int $startPointer): int
+	{
+		foreach ($pointers as $currentPointerBeforeUseStatements) {
+			if ($currentPointerBeforeUseStatements < $pointer) {
+				return $currentPointerBeforeUseStatements;
+			}
+		}
+
+		return $startPointer;
 	}
 
 }
