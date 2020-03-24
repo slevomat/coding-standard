@@ -55,7 +55,7 @@ class ReturnTypeHintSniffTest extends TestCase
 		self::assertSniffError($report, 184, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 191, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 198, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
-		self::assertSniffError($report, 211, ReturnTypeHintSniff::CODE_USELESS_ANNOTATION);
+		self::assertSniffError($report, 202, ReturnTypeHintSniff::CODE_USELESS_ANNOTATION);
 
 		self::assertAllFixedInFile($report);
 	}

@@ -31,12 +31,10 @@ use function array_unique;
 use function array_values;
 use function count;
 use function lcfirst;
-use function max;
 use function sprintf;
 use function strtolower;
 use const T_CLOSURE;
 use const T_DOC_COMMENT_CLOSE_TAG;
-use const T_DOC_COMMENT_OPEN_TAG;
 use const T_DOC_COMMENT_STAR;
 use const T_FUNCTION;
 
@@ -396,10 +394,10 @@ class ReturnTypeHintSniff implements Sniff
 			return;
 		}
 
-		$star = TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_STAR, $returnAnnotation->getStartPointer() - 1);
-		$commentOpen = TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_OPEN_TAG, $returnAnnotation->getStartPointer() - 1) + 1;
-		/** @var int $changeStart */
-		$changeStart = max($star, $commentOpen);
+		$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $functionPointer);
+		$starPointer = TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_STAR, $returnAnnotation->getStartPointer() - 1, $docCommentOpenPointer);
+
+		$changeStart = $starPointer ?? $docCommentOpenPointer + 1;
 
 		/** @var int $changeEnd */
 		$changeEnd = TokenHelper::findNext($phpcsFile, [T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR], $returnAnnotation->getEndPointer() + 1) - 1;
