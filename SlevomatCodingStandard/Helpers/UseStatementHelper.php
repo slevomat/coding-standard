@@ -23,9 +23,6 @@ use const T_USE;
 class UseStatementHelper
 {
 
-	/** @var array<string, array<int, array<string, UseStatement>>> */
-	private static $fileUseStatements = [];
-
 	public static function isAnonymousFunctionUse(File $phpcsFile, int $usePointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
@@ -118,17 +115,10 @@ class UseStatementHelper
 	 */
 	public static function getFileUseStatements(File $phpcsFile): array
 	{
-		$cacheKey = $phpcsFile->getFilename();
+		static $cache;
+		$cache = $cache ?? new SniffLocalCache();
 
-		$fixerLoops = $phpcsFile->fixer !== null ? $phpcsFile->fixer->loops : null;
-		if ($fixerLoops !== null) {
-			$cacheKey .= '-loop' . $fixerLoops;
-			if ($fixerLoops > 0) {
-				unset(self::$fileUseStatements[$cacheKey . '-loop' . ($fixerLoops - 1)]);
-			}
-		}
-
-		if (!array_key_exists($cacheKey, self::$fileUseStatements)) {
+		$lazyValue = static function () use ($phpcsFile): array {
 			$useStatements = [];
 			$tokens = $phpcsFile->getTokens();
 
@@ -166,10 +156,10 @@ class UseStatementHelper
 				$useStatements[$pointerBeforeUseStatements][UseStatement::getUniqueId($type, $name)] = $useStatement;
 			}
 
-			self::$fileUseStatements[$cacheKey] = $useStatements;
-		}
+			return $useStatements;
+		};
 
-		return self::$fileUseStatements[$cacheKey];
+		return $cache->getAndSetIfNotCached($phpcsFile, $lazyValue);
 	}
 
 	/**
