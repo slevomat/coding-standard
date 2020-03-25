@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use function array_merge;
 use function array_reverse;
 use function sprintf;
 use const T_ANON_CLASS;
@@ -17,7 +18,7 @@ class ClassHelper
 	{
 		$classPointers = array_reverse(self::getAllClassPointers($phpcsFile));
 		foreach ($classPointers as $classPointer) {
-			if ($classPointer < $pointer) {
+			if ($classPointer < $pointer && ScopeHelper::isInSameScope($phpcsFile, $classPointer, $pointer)) {
 				return $classPointer;
 			}
 		}
@@ -61,9 +62,15 @@ class ClassHelper
 	 */
 	public static function getAllNames(File $phpcsFile): array
 	{
+		$tokens = $phpcsFile->getTokens();
+
 		$names = [];
 		/** @var int $classPointer */
 		foreach (self::getAllClassPointers($phpcsFile) as $classPointer) {
+			if ($tokens[$classPointer]['code'] === T_ANON_CLASS) {
+				continue;
+			}
+
 			$names[$classPointer] = self::getName($phpcsFile, $classPointer);
 		}
 
@@ -107,7 +114,7 @@ class ClassHelper
 		$cache = $cache ?? new SniffLocalCache();
 
 		$lazyValue = static function () use ($phpcsFile): array {
-			return TokenHelper::findNextAll($phpcsFile, TokenHelper::$typeKeywordTokenCodes, 0);
+			return TokenHelper::findNextAll($phpcsFile, array_merge(TokenHelper::$typeKeywordTokenCodes, [T_ANON_CLASS]), 0);
 		};
 
 		return $cache->getAndSetIfNotCached($phpcsFile, $lazyValue);
