@@ -57,9 +57,6 @@ use const T_VARIABLE;
 class ReferencedNameHelper
 {
 
-	/** @var ReferencedName[][] Cached data for method getAllReferencedNames, cacheKey(string) => pointer(integer) => name(string) */
-	private static $allReferencedTypesCache = [];
-
 	/**
 	 * @param File $phpcsFile
 	 * @param int $openTagPointer
@@ -67,21 +64,14 @@ class ReferencedNameHelper
 	 */
 	public static function getAllReferencedNames(File $phpcsFile, int $openTagPointer): array
 	{
-		$cacheKey = $phpcsFile->getFilename() . '-' . $openTagPointer;
+		static $cache;
+		$cache = $cache ?? new SniffLocalCache();
 
-		$fixerLoops = $phpcsFile->fixer !== null ? $phpcsFile->fixer->loops : null;
-		if ($fixerLoops !== null) {
-			$cacheKey .= '-loop' . $fixerLoops;
-			if ($fixerLoops > 0) {
-				unset(self::$allReferencedTypesCache[$cacheKey . '-loop' . ($fixerLoops - 1)]);
-			}
-		}
+		$lazyValue = static function () use ($phpcsFile, $openTagPointer): array {
+			return self::createAllReferencedNames($phpcsFile, $openTagPointer);
+		};
 
-		if (!isset(self::$allReferencedTypesCache[$cacheKey])) {
-			self::$allReferencedTypesCache[$cacheKey] = self::createAllReferencedNames($phpcsFile, $openTagPointer);
-		}
-
-		return self::$allReferencedTypesCache[$cacheKey];
+		return $cache->getAndSetIfNotCached($phpcsFile, $lazyValue);
 	}
 
 	public static function getReferenceName(File $phpcsFile, int $nameStartPointer, int $nameEndPointer): string
