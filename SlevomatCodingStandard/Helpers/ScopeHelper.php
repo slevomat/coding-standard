@@ -37,16 +37,17 @@ class ScopeHelper
 
 	public static function getRootPointer(File $phpcsFile, int $pointer): int
 	{
-		$roots = array_reverse(self::getAllRootPointers($phpcsFile));
-		foreach ($roots as $rootPointer) {
-			if ($rootPointer < $pointer) {
-				return $rootPointer;
+		$rootPointer = 0;
+
+		$rootPointers = array_reverse(self::getAllRootPointers($phpcsFile));
+		foreach ($rootPointers as $currentRootPointer) {
+			if ($currentRootPointer < $pointer) {
+				$rootPointer = $currentRootPointer;
+				break;
 			}
 		}
 
-		// @codeCoverageIgnoreStart
-		return 0;
-		// @codeCoverageIgnoreEnd
+		return $rootPointer;
 	}
 
 	/**
