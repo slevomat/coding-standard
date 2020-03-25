@@ -23,4 +23,35 @@ abstract class Whatever
 
 	}
 
+	public function fifthMethod(): array
+	{
+		$anonymousClassA = new class () extends Exception {
+
+			public function returnTrue(): bool
+			{
+				return true;
+			}
+		};
+		$anonymousClassB = new class () extends Exception {
+
+			public function returnTrue(): bool
+			{
+				return true;
+			}
+
+			public function returnFalse(): bool
+			{
+				return false;
+			}
+
+		};
+
+		return [$anonymousClassA, $anonymousClassB];
+	}
+
+	public function sixthMethod()
+	{
+
+	}
+
 }

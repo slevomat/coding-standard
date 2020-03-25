@@ -8,7 +8,6 @@ use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
-use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
@@ -53,21 +52,12 @@ class MethodSpacingSniff implements Sniff
 			? $tokens[$methodPointer]['scope_closer']
 			: TokenHelper::findNext($phpcsFile, T_SEMICOLON, $methodPointer + 1);
 
-		$classPointer = ClassHelper::getClassPointer($phpcsFile, $methodPointer - 1);
+		$classPointer = ClassHelper::getClassPointer($phpcsFile, $methodPointer);
 
-		$actualPointer = $methodEndPointer;
-		do {
-			$nextMethodPointer = TokenHelper::findNext($phpcsFile, T_FUNCTION, $actualPointer + 1, $tokens[$classPointer]['scope_closer']);
-			if ($nextMethodPointer === null) {
-				return;
-			}
-
-			if (ScopeHelper::isInSameScope($phpcsFile, $methodPointer, $nextMethodPointer)) {
-				break;
-			}
-
-			$actualPointer = $tokens[$nextMethodPointer]['scope_closer'];
-		} while (true);
+		$nextMethodPointer = TokenHelper::findNext($phpcsFile, T_FUNCTION, $methodEndPointer + 1, $tokens[$classPointer]['scope_closer']);
+		if ($nextMethodPointer === null) {
+			return;
+		}
 
 		$nextMethodDocCommentStartPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $nextMethodPointer);
 		$nextMethodFirstLinePointer = $tokens[$nextMethodPointer]['line'] === $tokens[$methodEndPointer]['line']

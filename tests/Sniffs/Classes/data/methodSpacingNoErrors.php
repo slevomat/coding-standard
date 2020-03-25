@@ -1,5 +1,11 @@
 <?php
 
+use Consistence\PhpException;
+use React\Promise\ExtendedPromiseInterface;
+use Slevomat\RabbitMq\FooTestMessage;
+use Slevomat\RabbitMq\StopConsumerException;
+use function React\Promise\reject;
+
 function a()
 {
 
@@ -48,6 +54,27 @@ abstract class Whatever
 	public function thirdMethod()
 	{
 
+	}
+
+	public function methodWithAnonymousClasses(): array
+	{
+		$anonymousClassA = new class () extends Exception {
+
+			public function returnTrue(): bool
+			{
+				return true;
+			}
+		};
+		$anonymousClassB = new class () extends Exception {
+
+			public function returnTrue(): bool
+			{
+				return true;
+			}
+
+		};
+
+		return [$anonymousClassA, $anonymousClassB];
 	}
 
 }
