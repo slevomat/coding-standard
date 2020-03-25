@@ -1,26 +1,19 @@
 <?php
 
-class Foo {
-	public function test()
+class Foo
+{
+
+	public function methodInFoo()
 	{
 	}
+
 }
 
 class Bar
 {
-	public function test()
- 	{
- 	}
-}
 
-
-class Zoo
-{
-	public function test()
+	public function methodInBar()
 	{
 	}
 
-	public function test1()
-	{
-	}
 }

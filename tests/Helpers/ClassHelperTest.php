@@ -4,6 +4,8 @@ namespace SlevomatCodingStandard\Helpers;
 
 use function array_values;
 use const T_ANON_CLASS;
+use const T_USE;
+use const T_WHITESPACE;
 
 class ClassHelperTest extends TestCase
 {
@@ -55,21 +57,32 @@ class ClassHelperTest extends TestCase
 	public function testGetClassPointerWithoutClass(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/namespacedFile.php');
-		self::assertNull(ClassHelper::getClassPointer($phpcsFile, 5));
+
+		$usePointer = $this->findPointerByLineAndType($phpcsFile, 5, T_USE);
+		self::assertNotNull($usePointer);
+		self::assertNull(ClassHelper::getClassPointer($phpcsFile, $usePointer));
 	}
 
 	public function testGetClassPointerWithClass(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithoutNamespace.php');
-		self::assertEquals(2, ClassHelper::getClassPointer($phpcsFile, 5));
+
+		$whitespacePointer = $this->findPointerByLineAndType($phpcsFile, 5, T_WHITESPACE);
+		self::assertNotNull($whitespacePointer);
+		self::assertSame(2, ClassHelper::getClassPointer($phpcsFile, $whitespacePointer));
 	}
 
 	public function testGetClassPointerWithMultipleClasses(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/multipleClasses.php');
-		self::assertEquals(2, ClassHelper::getClassPointer($phpcsFile, 5));
-		self::assertEquals(26, ClassHelper::getClassPointer($phpcsFile, 30));
-		self::assertEquals(51, ClassHelper::getClassPointer($phpcsFile, 52));
+
+		$methodInFooPointer = $this->findFunctionPointerByName($phpcsFile, 'methodInFoo');
+		self::assertNotNull($methodInFooPointer);
+		self::assertSame(2, ClassHelper::getClassPointer($phpcsFile, $methodInFooPointer));
+
+		$methodInBarPointer = $this->findFunctionPointerByName($phpcsFile, 'methodInBar');
+		self::assertNotNull($methodInBarPointer);
+		self::assertSame(28, ClassHelper::getClassPointer($phpcsFile, $methodInBarPointer));
 	}
 
 }
