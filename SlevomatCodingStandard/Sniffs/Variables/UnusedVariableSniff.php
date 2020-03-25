@@ -155,7 +155,7 @@ class UnusedVariableSniff implements Sniff
 			return;
 		}
 
-		$scopeOwnerPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $variablePointer - 1);
+		$scopeOwnerPointer = ScopeHelper::getRootPointer($phpcsFile, $variablePointer - 1);
 		foreach (array_reverse($tokens[$variablePointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
 			if (in_array($conditionTokenCode, TokenHelper::$functionTokenCodes, true)) {
 				$scopeOwnerPointer = $conditionPointer;
