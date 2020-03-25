@@ -343,16 +343,16 @@ class UnusedUsesSniff implements Sniff
 	}
 
 	/**
-	 * @param int   $pointer
-	 * @param int[] $pointers
-	 * @param int   $startPointer
+	 * @param int $pointer
+	 * @param int[] $pointersBeforeUseStatements
+	 * @param int $startPointer
 	 * @return int
 	 */
-	private function firstPointerBefore(int $pointer, array $pointers, int $startPointer): int
+	private function firstPointerBefore(int $pointer, array $pointersBeforeUseStatements, int $startPointer): int
 	{
-		foreach ($pointers as $currentPointerBeforeUseStatements) {
-			if ($currentPointerBeforeUseStatements < $pointer) {
-				return $currentPointerBeforeUseStatements;
+		foreach ($pointersBeforeUseStatements as $pointerBeforeUseStatements) {
+			if ($pointerBeforeUseStatements < $pointer) {
+				return $pointerBeforeUseStatements;
 			}
 		}
 
