@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
@@ -52,7 +53,7 @@ class MethodSpacingSniff implements Sniff
 			? $tokens[$methodPointer]['scope_closer']
 			: TokenHelper::findNext($phpcsFile, T_SEMICOLON, $methodPointer + 1);
 
-		$classPointer = TokenHelper::findPrevious($phpcsFile, TokenHelper::$typeKeywordTokenCodes, $methodPointer - 1);
+		$classPointer = ClassHelper::getClassPointer($phpcsFile, $methodPointer - 1);
 
 		$actualPointer = $methodEndPointer;
 		do {
