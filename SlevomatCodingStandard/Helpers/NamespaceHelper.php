@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use function array_reverse;
 use function array_slice;
 use function count;
 use function explode;
@@ -29,7 +30,14 @@ class NamespaceHelper
 	 */
 	public static function getAllNamespacesPointers(File $phpcsFile): array
 	{
-		return TokenHelper::findNextAll($phpcsFile, T_NAMESPACE, 0);
+		static $cache;
+		$cache = $cache ?? new SniffLocalCache();
+
+		$lazyValue = static function () use ($phpcsFile): array {
+			return TokenHelper::findNextAll($phpcsFile, T_NAMESPACE, 0);
+		};
+
+		return $cache->getAndSetIfNotCached($phpcsFile, $lazyValue);
 	}
 
 	public static function isFullyQualifiedName(string $typeName): bool
@@ -64,9 +72,21 @@ class NamespaceHelper
 		return TokenHelper::getContent($phpcsFile, $namespaceNameStartPointer, $namespaceNameEndPointer);
 	}
 
+	public static function findCurrentNamespacePointer(File $phpcsFile, int $pointer): ?int
+	{
+		$allNamespacesPointers = array_reverse(self::getAllNamespacesPointers($phpcsFile));
+		foreach ($allNamespacesPointers as $namespacesPointer) {
+			if ($namespacesPointer < $pointer) {
+				return $namespacesPointer;
+			}
+		}
+
+		return null;
+	}
+
 	public static function findCurrentNamespaceName(File $phpcsFile, int $anyPointer): ?string
 	{
-		$namespacePointer = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $anyPointer);
+		$namespacePointer = self::findCurrentNamespacePointer($phpcsFile, $anyPointer);
 		if ($namespacePointer === null) {
 			return null;
 		}
