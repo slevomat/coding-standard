@@ -2,9 +2,8 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-use Generator;
 use PHP_CodeSniffer\Files\File;
-use function iterator_to_array;
+use function array_reverse;
 use function sprintf;
 use const T_ANON_CLASS;
 use const T_FINAL;
@@ -13,6 +12,18 @@ use const T_USE;
 
 class ClassHelper
 {
+
+	public static function getClassPointer(File $phpcsFile, int $pointer): ?int
+	{
+		$classPointers = array_reverse(self::getAllClassPointers($phpcsFile));
+		foreach ($classPointers as $classPointer) {
+			if ($classPointer < $pointer) {
+				return $classPointer;
+			}
+		}
+
+		return null;
+	}
 
 	public static function isFinal(File $phpcsFile, int $classPointer): bool
 	{
@@ -50,11 +61,9 @@ class ClassHelper
 	 */
 	public static function getAllNames(File $phpcsFile): array
 	{
-		$previousClassPointer = 0;
-
 		$names = [];
 		/** @var int $classPointer */
-		foreach (iterator_to_array(self::getAllClassPointers($phpcsFile, $previousClassPointer)) as $classPointer) {
+		foreach (self::getAllClassPointers($phpcsFile) as $classPointer) {
 			$names[$classPointer] = self::getName($phpcsFile, $classPointer);
 		}
 
@@ -90,21 +99,18 @@ class ClassHelper
 
 	/**
 	 * @param File $phpcsFile
-	 * @param int $previousClassPointer
-	 * @return Generator<int>
+	 * @return array<int>
 	 */
-	private static function getAllClassPointers(File $phpcsFile, int &$previousClassPointer): Generator
+	private static function getAllClassPointers(File $phpcsFile): array
 	{
-		do {
-			$nextClassPointer = TokenHelper::findNext($phpcsFile, TokenHelper::$typeKeywordTokenCodes, $previousClassPointer + 1);
-			if ($nextClassPointer === null) {
-				break;
-			}
+		static $cache;
+		$cache = $cache ?? new SniffLocalCache();
 
-			$previousClassPointer = $nextClassPointer;
+		$lazyValue = static function () use ($phpcsFile): array {
+			return TokenHelper::findNextAll($phpcsFile, TokenHelper::$typeKeywordTokenCodes, 0);
+		};
 
-			yield $nextClassPointer;
-		} while (true);
+		return $cache->getAndSetIfNotCached($phpcsFile, $lazyValue);
 	}
 
 }

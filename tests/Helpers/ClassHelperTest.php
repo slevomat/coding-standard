@@ -52,4 +52,24 @@ class ClassHelperTest extends TestCase
 		self::assertSame([], ClassHelper::getAllNames($phpcsFile));
 	}
 
+	public function testGetClassPointerWithoutClass(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/namespacedFile.php');
+		self::assertNull(ClassHelper::getClassPointer($phpcsFile, 5));
+	}
+
+	public function testGetClassPointerWithClass(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithoutNamespace.php');
+		self::assertEquals(2, ClassHelper::getClassPointer($phpcsFile, 5));
+	}
+
+	public function testGetClassPointerWithMultipleClasses(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/multipleClasses.php');
+		self::assertEquals(2, ClassHelper::getClassPointer($phpcsFile, 5));
+		self::assertEquals(26, ClassHelper::getClassPointer($phpcsFile, 30));
+		self::assertEquals(51, ClassHelper::getClassPointer($phpcsFile, 52));
+	}
+
 }
