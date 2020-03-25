@@ -18,6 +18,7 @@ use function sprintf;
 use const T_AND_EQUAL;
 use const T_AS;
 use const T_BITWISE_AND;
+use const T_CLOSE_CURLY_BRACKET;
 use const T_CLOSE_SHORT_ARRAY;
 use const T_CLOSURE;
 use const T_COMMA;
@@ -41,6 +42,7 @@ use const T_MINUS_EQUAL;
 use const T_MOD_EQUAL;
 use const T_MUL_EQUAL;
 use const T_OBJECT_OPERATOR;
+use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_OPEN_SQUARE_BRACKET;
 use const T_OPEN_TAG;
@@ -137,7 +139,11 @@ class UnusedVariableSniff implements Sniff
 			return;
 		}
 
-		if ($this->isUsedInLoop($phpcsFile, $variablePointer, $variableName)) {
+		if ($this->isDefinedInDoConditionAndUsedInLoop($phpcsFile, $variablePointer, $variableName)) {
+			return;
+		}
+
+		if ($this->isUsedInLoopCycle($phpcsFile, $variablePointer, $variableName)) {
 			return;
 		}
 
@@ -315,7 +321,40 @@ class UnusedVariableSniff implements Sniff
 		return false;
 	}
 
-	private function isUsedInLoop(File $phpcsFile, int $variablePointer, string $variableName): bool
+	private function isDefinedInDoConditionAndUsedInLoop(File $phpcsFile, int $variablePointer, string $variableName): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$parenthesisOpener = TokenHelper::findPrevious($phpcsFile, T_OPEN_PARENTHESIS, $variablePointer - 1);
+		if ($parenthesisOpener === null || $tokens[$parenthesisOpener]['parenthesis_closer'] < $variablePointer) {
+			return false;
+		}
+
+		$whilePointer = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpener - 1);
+		if ($tokens[$whilePointer]['code'] !== T_WHILE) {
+			return false;
+		}
+
+		$loopCloserPointer = TokenHelper::findPreviousEffective($phpcsFile, $whilePointer - 1);
+		if ($tokens[$loopCloserPointer]['code'] !== T_CLOSE_CURLY_BRACKET) {
+			return false;
+		}
+
+		$doPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$loopCloserPointer]['bracket_opener'] - 1);
+		if ($tokens[$doPointer]['code'] !== T_DO) {
+			return false;
+		}
+
+		return TokenHelper::findNextContent(
+			$phpcsFile,
+			T_VARIABLE,
+			$variableName,
+			$tokens[$loopCloserPointer]['bracket_opener'] + 1,
+			$loopCloserPointer
+		) !== null;
+	}
+
+	private function isUsedInLoopCycle(File $phpcsFile, int $variablePointer, string $variableName): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 

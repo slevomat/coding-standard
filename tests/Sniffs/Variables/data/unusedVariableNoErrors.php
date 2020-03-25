@@ -287,6 +287,24 @@ function () {
 	return $a;
 };
 
+function ($result) {
+	if ($row = mysqli_fetch_assoc($result)) {
+		do {
+			doSomething($row);
+		} while ($row = mysqli_fetch_assoc($result));
+	}
+};
+
+function ($result) {
+	if (true) {
+
+	}
+
+	while ($row = current($result)) {
+		doSomething($row);
+	}
+};
+
 function () {
 	$GLOBALS = [];
 	$_SERVER = [];
