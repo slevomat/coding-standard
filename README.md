@@ -203,7 +203,7 @@ foreach ($values as $value) {
 
 ```php
 foreach ($values as $value) {
-    $value .= 'whatever';
+	$value .= 'whatever';
 
 	if ($value) {
 		doSomething();
@@ -333,7 +333,7 @@ Sniff provides the following settings:
 
 ```php
 foreach ($values as $key => $value) {
-  echo $key;
+	echo $key;
 }
 ```
 
