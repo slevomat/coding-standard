@@ -28,7 +28,6 @@ use const T_CATCH;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CLOSURE;
 use const T_COLON;
-use const T_COMMENT;
 use const T_DEFAULT;
 use const T_DO;
 use const T_ELSE;
@@ -139,7 +138,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 			$whitespaceBefore .= substr($tokens[$pointerBefore]['content'], strlen('<?php'));
 		}
 
-		$hasCommentWithLineEndBefore = ($tokens[$pointerBefore]['code'] === T_COMMENT || in_array($tokens[$pointerBefore]['code'], Tokens::$phpcsCommentTokens, true))
+		$hasCommentWithLineEndBefore = in_array($tokens[$pointerBefore]['code'], TokenHelper::$inlineCommentTokenCodes, true)
 			&& substr($tokens[$pointerBefore]['content'], -strlen($phpcsFile->eolChar)) === $phpcsFile->eolChar;
 		if ($hasCommentWithLineEndBefore) {
 			$whitespaceBefore .= $phpcsFile->eolChar;
