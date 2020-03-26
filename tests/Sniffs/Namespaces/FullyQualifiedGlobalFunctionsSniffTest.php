@@ -33,8 +33,21 @@ class FullyQualifiedGlobalFunctionsSniffTest extends TestCase
 
 	public function testExcludeErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsExcludeErrors.php', [
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsIncludeExcludeErrors.php', [
 			'exclude' => ['min'],
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 28, FullyQualifiedGlobalFunctionsSniff::CODE_NON_FULLY_QUALIFIED, 'Function max() should be referenced via a fully qualified name.');
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testIncludeErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsIncludeExcludeErrors.php', [
+			'include' => ['max'],
 		]);
 
 		self::assertSame(1, $report->getErrorCount());
