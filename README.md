@@ -607,6 +607,16 @@ Sniff provides the following settings:
 * `ignoreComments`: whether or not to ignore line length of comments
 * `ignoreImports`: whether or not to ignore line length of import (use) statements
 
+#### SlevomatCodingStandard.Functions.ArrowFunctionDeclaration
+
+Checks `fn` declaration.
+
+Sniff provides the following settings:
+
+* `spacesCountAfterKeyword`: the number of spaces after `fn`.
+* `spacesCountBeforeArrow`: the number of spaces before `=>`.
+* `spacesCountAfterArrow`: the number of spaces after `=>`.
+
 #### SlevomatCodingStandard.Functions.DisallowEmptyFunction
 
 Reports empty functions body and requires at least a comment inside.
