@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function preg_match;
 use function sprintf;
 use function str_repeat;
 use function strlen;
@@ -58,10 +59,12 @@ class ArrowFunctionDeclarationSniff implements Sniff
 	{
 		$pointerAfter = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $arrowFunctionPointer + 1);
 
-		$actualSpaces = strlen(TokenHelper::getContent($phpcsFile, $arrowFunctionPointer + 1, $pointerAfter - 1));
+		$spaces = TokenHelper::getContent($phpcsFile, $arrowFunctionPointer + 1, $pointerAfter - 1);
+
+		$actualSpaces = strlen($spaces);
 		$requiredSpaces = SniffSettingsHelper::normalizeInteger($this->spacesCountAfterKeyword);
 
-		if ($actualSpaces === $requiredSpaces) {
+		if ($actualSpaces === $requiredSpaces && ($requiredSpaces === 0 || preg_match('~^ +$~', $spaces) === 1)) {
 			return;
 		}
 
@@ -77,10 +80,12 @@ class ArrowFunctionDeclarationSniff implements Sniff
 	{
 		$pointerBefore = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $arrowPointer - 1);
 
-		$actualSpaces = strlen(TokenHelper::getContent($phpcsFile, $pointerBefore + 1, $arrowPointer - 1));
+		$spaces = TokenHelper::getContent($phpcsFile, $pointerBefore + 1, $arrowPointer - 1);
+
+		$actualSpaces = strlen($spaces);
 		$requiredSpaces = SniffSettingsHelper::normalizeInteger($this->spacesCountBeforeArrow);
 
-		if ($actualSpaces === $requiredSpaces) {
+		if ($actualSpaces === $requiredSpaces && ($requiredSpaces === 0 || preg_match('~^ +$~', $spaces) === 1)) {
 			return;
 		}
 
@@ -96,10 +101,12 @@ class ArrowFunctionDeclarationSniff implements Sniff
 	{
 		$pointerAfter = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $arrowPointer + 1);
 
-		$actualSpaces = strlen(TokenHelper::getContent($phpcsFile, $arrowPointer + 1, $pointerAfter - 1));
+		$spaces = TokenHelper::getContent($phpcsFile, $arrowPointer + 1, $pointerAfter - 1);
+
+		$actualSpaces = strlen($spaces);
 		$requiredSpaces = SniffSettingsHelper::normalizeInteger($this->spacesCountAfterArrow);
 
-		if ($actualSpaces === $requiredSpaces) {
+		if ($actualSpaces === $requiredSpaces && ($requiredSpaces === 0 || preg_match('~^ +$~', $spaces) === 1)) {
 			return;
 		}
 

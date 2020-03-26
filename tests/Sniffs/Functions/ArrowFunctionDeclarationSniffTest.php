@@ -17,7 +17,7 @@ class ArrowFunctionDeclarationSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/arrowFunctionDeclarationDefaultSettingsErrors.php');
 
-		self::assertSame(6, $report->getErrorCount());
+		self::assertSame(9, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, ArrowFunctionDeclarationSniff::CODE_INCORRECT_SPACES_AFTER_KEYWORD, 'There must be exactly 1 whitespace after "fn" keyword.');
 		self::assertSniffError($report, 3, ArrowFunctionDeclarationSniff::CODE_INCORRECT_SPACES_BEFORE_ARROW, 'There must be exactly 1 whitespace before =>.');
@@ -25,6 +25,9 @@ class ArrowFunctionDeclarationSniffTest extends TestCase
 		self::assertSniffError($report, 5, ArrowFunctionDeclarationSniff::CODE_INCORRECT_SPACES_AFTER_KEYWORD, 'There must be exactly 1 whitespace after "fn" keyword.');
 		self::assertSniffError($report, 5, ArrowFunctionDeclarationSniff::CODE_INCORRECT_SPACES_BEFORE_ARROW, 'There must be exactly 1 whitespace before =>.');
 		self::assertSniffError($report, 5, ArrowFunctionDeclarationSniff::CODE_INCORRECT_SPACES_AFTER_ARROW, 'There must be exactly 1 whitespace after =>.');
+		self::assertSniffError($report, 7, ArrowFunctionDeclarationSniff::CODE_INCORRECT_SPACES_AFTER_KEYWORD, 'There must be exactly 1 whitespace after "fn" keyword.');
+		self::assertSniffError($report, 9, ArrowFunctionDeclarationSniff::CODE_INCORRECT_SPACES_BEFORE_ARROW, 'There must be exactly 1 whitespace before =>.');
+		self::assertSniffError($report, 9, ArrowFunctionDeclarationSniff::CODE_INCORRECT_SPACES_AFTER_ARROW, 'There must be exactly 1 whitespace after =>.');
 
 		self::assertAllFixedInFile($report);
 	}
