@@ -10,6 +10,7 @@ use function preg_match;
 use function sprintf;
 use function str_repeat;
 use function strlen;
+use function strpos;
 use const T_FN;
 use const T_FN_ARROW;
 use const T_WHITESPACE;
@@ -29,6 +30,9 @@ class ArrowFunctionDeclarationSniff implements Sniff
 
 	/** @var int */
 	public $spacesCountAfterArrow = 1;
+
+	/** @var bool */
+	public $allowMultiLine = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -61,6 +65,10 @@ class ArrowFunctionDeclarationSniff implements Sniff
 
 		$spaces = TokenHelper::getContent($phpcsFile, $arrowFunctionPointer + 1, $pointerAfter - 1);
 
+		if ($this->allowMultiLine && strpos($spaces, $phpcsFile->eolChar) === 0) {
+			return;
+		}
+
 		$actualSpaces = strlen($spaces);
 		$requiredSpaces = SniffSettingsHelper::normalizeInteger($this->spacesCountAfterKeyword);
 
@@ -82,6 +90,10 @@ class ArrowFunctionDeclarationSniff implements Sniff
 
 		$spaces = TokenHelper::getContent($phpcsFile, $pointerBefore + 1, $arrowPointer - 1);
 
+		if ($this->allowMultiLine && strpos($spaces, $phpcsFile->eolChar) === 0) {
+			return;
+		}
+
 		$actualSpaces = strlen($spaces);
 		$requiredSpaces = SniffSettingsHelper::normalizeInteger($this->spacesCountBeforeArrow);
 
@@ -102,6 +114,10 @@ class ArrowFunctionDeclarationSniff implements Sniff
 		$pointerAfter = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $arrowPointer + 1);
 
 		$spaces = TokenHelper::getContent($phpcsFile, $arrowPointer + 1, $pointerAfter - 1);
+
+		if ($this->allowMultiLine && strpos($spaces, $phpcsFile->eolChar) === 0) {
+			return;
+		}
 
 		$actualSpaces = strlen($spaces);
 		$requiredSpaces = SniffSettingsHelper::normalizeInteger($this->spacesCountAfterArrow);
