@@ -154,8 +154,10 @@ class ReferencedNameHelper
 				} elseif (
 					!in_array($tokens[$nextTokenAfterEndPointer]['code'], [
 						T_VARIABLE,
-						T_ELLIPSIS, // Variadic parameter
-						T_BITWISE_AND, // Parameter by reference
+						// Variadic parameter
+						T_ELLIPSIS,
+						// Parameter by reference
+						T_BITWISE_AND,
 					], true)
 				) {
 					if (
@@ -163,10 +165,13 @@ class ReferencedNameHelper
 							T_EXTENDS,
 							T_IMPLEMENTS,
 							T_INSTANCEOF,
-							T_USE, // Trait
+							// Trait
+							T_USE,
 							T_NEW,
-							T_COLON, // Return type hint
-							T_NULLABLE, // Nullable type hint
+							// Return type hint
+							T_COLON,
+							// Nullable type hint
+							T_NULLABLE,
 						], true)
 						&& $tokens[$nextTokenAfterEndPointer]['code'] !== T_DOUBLE_COLON
 					) {

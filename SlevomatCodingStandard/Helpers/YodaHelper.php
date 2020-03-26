@@ -303,7 +303,8 @@ class YodaHelper
 				T_DNUMBER => 0,
 				T_LNUMBER => 0,
 				T_OPEN_SHORT_ARRAY => 0,
-				T_ARRAY => 0, // Do not stack error messages when the old-style array syntax is used
+				// Do not stack error messages when the old-style array syntax is used
+				T_ARRAY => 0,
 				T_CONSTANT_ENCAPSED_STRING => 0,
 				T_VARIABLE => self::DYNAMISM_VARIABLE,
 				T_STRING => self::DYNAMISM_FUNCTION_CALL,

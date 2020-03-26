@@ -66,7 +66,8 @@ class ReferenceThrowableOnlySniff implements Sniff
 			}
 			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $referencedName->getStartPointer() - 1);
 			if (in_array($tokens[$previousPointer]['code'], [T_EXTENDS, T_NEW, T_INSTANCEOF], true)) {
-				continue; // Allow \Exception in extends and instantiating it
+				// Allow \Exception in extends and instantiating it
+				continue;
 			}
 			if ($tokens[$previousPointer]['code'] === T_BITWISE_OR) {
 				$previousPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::$nameTokenCodes, [T_BITWISE_OR]), $previousPointer - 1);

@@ -95,6 +95,7 @@
 	<rule ref="SlevomatCodingStandard.Classes.TraitUseDeclaration"/>
 	<rule ref="SlevomatCodingStandard.Classes.TraitUseSpacing"/>
 	<rule ref="SlevomatCodingStandard.Classes.UselessLateStaticBinding"/>
+	<rule ref="SlevomatCodingStandard.Commenting.DisallowCommentAfterCode"/>
 	<rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing">
 		<properties>
 			<property name="linesCountBetweenAnnotationsGroups" value="0"/>

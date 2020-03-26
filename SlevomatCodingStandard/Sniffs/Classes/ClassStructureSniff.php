@@ -257,7 +257,8 @@ class ClassStructureSniff implements Sniff
 					$firstMemberPointer
 				);
 
-				return $pointer - 1; // run the sniff again to fix the rest of the groups
+				// run the sniff again to fix the rest of the groups
+				return $pointer - 1;
 			}
 		}
 

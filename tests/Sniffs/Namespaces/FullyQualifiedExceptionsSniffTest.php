@@ -92,10 +92,13 @@ class FullyQualifiedExceptionsSniffTest extends TestCase
 	public function testClassSuffixedErrorOrExceptionIsNotAnExceptionButReportedInNamespace(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/ignoredNamesInNamespace.php');
-		self::assertNoSniffError($report, 5); // *Error names are reported only with a root namespace
+		// *Error names are reported only with a root namespace
+		self::assertNoSniffError($report, 5);
 		self::assertSniffError($report, 9, FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION);
-		self::assertNoSniffError($report, 13); // look like Exception but isn't - handled by ReferenceUsedNamesOnlySniff
-		self::assertNoSniffError($report, 17); // dtto
+		// look like Exception but isn't - handled by ReferenceUsedNamesOnlySniff
+		self::assertNoSniffError($report, 13);
+		// dtto
+		self::assertNoSniffError($report, 17);
 	}
 
 	public function testIgnoredNamesInNamespace(): void
