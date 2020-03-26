@@ -33,8 +33,21 @@ class FullyQualifiedGlobalConstantsSniffTest extends TestCase
 
 	public function testExcludeErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsExcludeErrors.php', [
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsIncludeExcludeErrors.php', [
 			'exclude' => ['PHP_VERSION'],
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 28, FullyQualifiedGlobalConstantsSniff::CODE_NON_FULLY_QUALIFIED, 'Constant PHP_OS should be referenced via a fully qualified name.');
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testIncludeErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsIncludeExcludeErrors.php', [
+			'include' => ['PHP_OS'],
 		]);
 
 		self::assertSame(1, $report->getErrorCount());

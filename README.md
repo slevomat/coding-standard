@@ -102,7 +102,7 @@ Checks that class/trait/interface members are in the correct order.
 Sniff provides the following settings:
 
 * `groups`: order of groups. Use multiple groups in one `<element value="">` to not differentiate among them. You can use specific groups or shortcuts.
-* `enableFinalMethods`: enables groups for `final` methods 
+* `enableFinalMethods`: enables groups for `final` methods
 
 **List of supported groups**:
 uses,
@@ -901,6 +901,7 @@ All references to global constants must be referenced via a fully qualified name
 
 Sniff provides the following settings:
 
+* `include`: list of global constants that must be referenced via FQN. If not set all constants are considered.
 * `exclude`: list of global constants that are allowed not to be referenced via FQN.
 
 #### SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalFunctions 🔧
@@ -909,6 +910,7 @@ All references to global functions must be referenced via a fully qualified name
 
 Sniff provides the following settings:
 
+* `include`: list of global functions that must be referenced via FQN. If not set all functions are considered.
 * `exclude`: list of global functions that are allowed not to be referenced via FQN.
 
 #### SlevomatCodingStandard.Namespaces.MultipleUsesPerLine

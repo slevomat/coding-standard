@@ -29,8 +29,14 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 	/** @var string[] */
 	public $exclude = [];
 
+	/** @var string[] */
+	public $include = [];
+
 	/** @var string[]|null */
 	private $normalizedExclude;
+
+	/** @var string[]|null */
+	private $normalizedInclude;
 
 	abstract protected function getNotFullyQualifiedMessage(): string;
 
@@ -63,6 +69,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 
 		$namespacePointers = NamespaceHelper::getAllNamespacesPointers($phpcsFile);
 		$referencedNames = ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer);
+		$include = array_flip($this->getNormalizedInclude());
 		$exclude = array_flip($this->getNormalizedExclude());
 
 		foreach ($referencedNames as $referencedName) {
@@ -96,6 +103,10 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 				}
 			}
 
+			if ($include !== [] && !array_key_exists($canonicalName, $include)) {
+				continue;
+			}
+
 			if (array_key_exists($canonicalName, $exclude)) {
 				continue;
 			}
@@ -117,17 +128,37 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 	private function getNormalizedExclude(): array
 	{
 		if ($this->normalizedExclude === null) {
-			$exclude = SniffSettingsHelper::normalizeArray($this->exclude);
-
-			if (!$this->isCaseSensitive()) {
-				$exclude = array_map(static function (string $name): string {
-					return strtolower($name);
-				}, $exclude);
-			}
-
-			$this->normalizedExclude = $exclude;
+			$this->normalizedExclude = $this->normalizeNames($this->exclude);
 		}
 		return $this->normalizedExclude;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getNormalizedInclude(): array
+	{
+		if ($this->normalizedInclude === null) {
+			$this->normalizedInclude = $this->normalizeNames($this->include);
+		}
+		return $this->normalizedInclude;
+	}
+
+	/**
+	 * @param string[] $names
+	 * @return string[]
+	 */
+	private function normalizeNames(array $names): array
+	{
+		$names = SniffSettingsHelper::normalizeArray($names);
+
+		if (!$this->isCaseSensitive()) {
+			$names = array_map(static function (string $name): string {
+				return strtolower($name);
+			}, $names);
+		}
+
+		return $names;
 	}
 
 }
