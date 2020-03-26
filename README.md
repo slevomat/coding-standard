@@ -973,6 +973,10 @@ Sniff provides the following settings:
 
 Enforces fully qualified names of classes and interfaces in phpDocs - in annotations. This results in unambiguous phpDocs.
 
+#### SlevomatCodingStandard.Commenting.DisallowCommentAfterCode 🔧
+
+Disallows comments after code at the same line.
+
 #### SlevomatCodingStandard.Commenting.ForbiddenAnnotations 🔧
 
 Reports forbidden annotations. No annotations are forbidden by default, the configuration is completely up to the user. It's recommended to forbid obsolete and inappropriate annotations like:
