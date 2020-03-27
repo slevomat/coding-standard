@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use PHP_CodeSniffer\Files\File;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function sprintf;
+use const T_AS;
 use const T_CONST;
 use const T_FUNCTION;
 use const T_PRIVATE;
@@ -34,6 +35,11 @@ class PropertySpacingSniff extends AbstractPropertyAndConstantSpacing
 	public function process(File $phpcsFile, $pointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
+
+		$asPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
+		if ($tokens[$asPointer]['code'] === T_AS) {
+			return $pointer;
+		}
 
 		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION, T_CONST], $pointer + 1);
 		if ($propertyPointer === null || $tokens[$propertyPointer]['code'] !== T_VARIABLE) {

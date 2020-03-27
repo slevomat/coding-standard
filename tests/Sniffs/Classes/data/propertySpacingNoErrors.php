@@ -57,6 +57,16 @@ abstract class Bar {
 	{
 	}
 
+	public function anonymousClassWithTrait()
+	{
+		$mock = new class () {
+			use Whatever {
+				doSomething as public;
+				doSomethingElse as public;
+			}
+		};
+	}
+
 	public function testAnonymousClass(): void
 	{
 		$enum = new class() extends Enum {
