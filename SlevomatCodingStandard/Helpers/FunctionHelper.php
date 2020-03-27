@@ -36,6 +36,42 @@ use const T_YIELD_FROM;
 class FunctionHelper
 {
 
+	public const SPECIAL_FUNCTIONS = [
+		'array_key_exists',
+		'array_slice',
+		'boolval',
+		'call_user_func',
+		'call_user_func_array',
+		'chr',
+		'count',
+		'doubleval',
+		'defined',
+		'floatval',
+		'func_get_args',
+		'func_num_args',
+		'get_called_class',
+		'get_class',
+		'gettype',
+		'in_array',
+		'intval',
+		'is_array',
+		'is_bool',
+		'is_double',
+		'is_float',
+		'is_long',
+		'is_int',
+		'is_integer',
+		'is_null',
+		'is_object',
+		'is_real',
+		'is_resource',
+		'is_string',
+		'ord',
+		'sizeof',
+		'strlen',
+		'strval',
+	];
+
 	public static function getTypeLabel(File $phpcsFile, int $functionPointer): string
 	{
 		return self::isMethod($phpcsFile, $functionPointer) ? 'Method' : 'Function';
