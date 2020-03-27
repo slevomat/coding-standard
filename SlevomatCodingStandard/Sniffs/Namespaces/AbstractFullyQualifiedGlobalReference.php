@@ -125,23 +125,23 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 	/**
 	 * @return string[]
 	 */
+	protected function getNormalizedInclude(): array
+	{
+		if ($this->normalizedInclude === null) {
+			$this->normalizedInclude = $this->normalizeNames($this->include);
+		}
+		return $this->normalizedInclude;
+	}
+
+	/**
+	 * @return string[]
+	 */
 	private function getNormalizedExclude(): array
 	{
 		if ($this->normalizedExclude === null) {
 			$this->normalizedExclude = $this->normalizeNames($this->exclude);
 		}
 		return $this->normalizedExclude;
-	}
-
-	/**
-	 * @return string[]
-	 */
-	private function getNormalizedInclude(): array
-	{
-		if ($this->normalizedInclude === null) {
-			$this->normalizedInclude = $this->normalizeNames($this->include);
-		}
-		return $this->normalizedInclude;
 	}
 
 	/**

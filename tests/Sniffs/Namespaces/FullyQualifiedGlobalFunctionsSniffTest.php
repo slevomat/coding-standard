@@ -57,4 +57,28 @@ class FullyQualifiedGlobalFunctionsSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testIncludeSpecialNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsIncludeSpecialNoErrors.php', [
+			'includeSpecialFunctions' => true,
+			'include' => ['max'],
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testIncludeSpecialErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalFunctionsIncludeSpecialErrors.php', [
+			'includeSpecialFunctions' => true,
+			'include' => ['max'],
+		]);
+
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 5, FullyQualifiedGlobalFunctionsSniff::CODE_NON_FULLY_QUALIFIED, 'Function array_key_exists() should be referenced via a fully qualified name.');
+		self::assertSniffError($report, 9, FullyQualifiedGlobalFunctionsSniff::CODE_NON_FULLY_QUALIFIED, 'Function max() should be referenced via a fully qualified name.');
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
