@@ -18,6 +18,12 @@ class RequireNumericLiteralSeparatorSniff implements Sniff
 	/** @var bool|null  */
 	public $enable = null;
 
+	/** @var int */
+	public $minDigitsBeforeDecimalPoint = 4;
+
+	/** @var int */
+	public $minDigitsAfterDecimalPoint = 4;
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
@@ -48,7 +54,8 @@ class RequireNumericLiteralSeparatorSniff implements Sniff
 			return;
 		}
 
-		if (preg_match('~(?:^\\d{4}|\.\\d{4})~', $tokens[$numberPointer]['content']) === 0) {
+		$regexp = '~(?:^\\d{' . SniffSettingsHelper::normalizeInteger($this->minDigitsBeforeDecimalPoint) . '}|\.\\d{' . SniffSettingsHelper::normalizeInteger($this->minDigitsAfterDecimalPoint) . '})~';
+		if (preg_match($regexp, $tokens[$numberPointer]['content']) === 0) {
 			return;
 		}
 
