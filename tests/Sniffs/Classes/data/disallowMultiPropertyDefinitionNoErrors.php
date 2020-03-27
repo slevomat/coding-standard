@@ -3,6 +3,10 @@
 class Foo
 {
 
+	use Whatever {
+		doSomething as public;
+	}
+
 	private $boo = 'boo';
 
 	public string $booo = 'booo';

@@ -10,6 +10,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use function count;
 use function sprintf;
 use function trim;
+use const T_AS;
 use const T_COMMA;
 use const T_FUNCTION;
 use const T_OPEN_SHORT_ARRAY;
@@ -41,6 +42,11 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 	public function process(File $phpcsFile, $visibilityPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
+
+		$asPointer = TokenHelper::findPreviousEffective($phpcsFile, $visibilityPointer - 1);
+		if ($tokens[$asPointer]['code'] === T_AS) {
+			return;
+		}
 
 		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION], $visibilityPointer + 1);
 		if ($propertyPointer === null || $tokens[$propertyPointer]['code'] === T_FUNCTION) {
