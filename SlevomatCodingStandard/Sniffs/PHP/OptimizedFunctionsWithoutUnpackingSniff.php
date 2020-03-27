@@ -56,6 +56,7 @@ class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
 		'is_resource',
 		'is_string',
 		'ord',
+		'sizeof',
 		'strlen',
 		'strval',
 	];
