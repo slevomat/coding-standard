@@ -1,5 +1,16 @@
 <?php // lint >= 7.4
 
+$var = 'foo';
+switch ($var) {
+	case 'foo':
+		echo 'foo';
+		break;
+
+	case 'bar':
+		echo 'bar';
+		break;
+}
+
 abstract class Foo {
 	public static $staticFoo = 'bar';
 	protected  static $staticBar = 'foo';
