@@ -16,6 +16,7 @@ use function str_replace;
 use function strlen;
 use const PREG_OFFSET_CAPTURE;
 use const T_DOC_COMMENT_OPEN_TAG;
+use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_STRING;
 use const T_DOC_COMMENT_TAG;
 use const T_DOC_COMMENT_WHITESPACE;
@@ -71,6 +72,13 @@ class DuplicateSpacesSniff implements Sniff
 				}
 			}
 		} else {
+			if (
+				$tokens[$whitespacePointer - 1]['code'] === T_DOC_COMMENT_STAR
+				&& $tokens[$whitespacePointer + 1]['code'] === T_DOC_COMMENT_STRING
+			) {
+				return;
+			}
+
 			if ($this->ignoreSpacesInAnnotation) {
 				$pointerBefore = TokenHelper::findPrevious($phpcsFile, [T_DOC_COMMENT_OPEN_TAG, T_DOC_COMMENT_TAG], $whitespacePointer - 1);
 				if ($pointerBefore !== null && $tokens[$pointerBefore]['code'] === T_DOC_COMMENT_TAG) {
