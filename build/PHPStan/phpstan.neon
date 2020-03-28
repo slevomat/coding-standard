@@ -17,9 +17,11 @@ parameters:
 		- '#Parameter \#5 \$contentNode of class SlevomatCodingStandard\\Helpers\\Annotation\\(Method|Parameter|Property|Return|Throws|Variable)Annotation constructor expects PHPStan\\PhpDocParser\\Ast\\PhpDoc\\#'
 		-
 			message: '#Unreachable statement - code above always terminates#'
+			count: 1
 			path: %currentWorkingDirectory%/SlevomatCodingStandard/Helpers/FunctionHelper.php
 		-
 			message: '#Anonymous function should return int but return statement is missing#'
+			count: 1
 			path: %currentWorkingDirectory%/SlevomatCodingStandard/Sniffs/Commenting/DocCommentSpacingSniff.php
 		-
 			message: '#Access to an undefined property PHP_CodeSniffer\\Config::\$tabWidth#'
