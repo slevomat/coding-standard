@@ -768,6 +768,14 @@ Enforces using short form of list syntax, `[...]` instead of `list(...)`.
 
 Enforces using shorthand cast operators, forbids use of unset and binary cast operators: `(bool)` instead of `(boolean)`, `(int)` instead of `(integer)`, `(float)` instead of `(double)` or `(real)`. `(binary)` and `(unset)` are forbidden.
 
+#### SlevomatCodingStandard.Whitespaces.DuplicateSpaces 🔧
+
+Checks duplicate spaces anywhere because there aren't sniffs for every part of code to check formatting.
+
+Sniff provides the following settings:
+
+* `ignoreSpacesBeforeAssignment`: to allow multiple spaces to align assignments.
+* `ignoreSpacesInAnnotation`: to allow multiple spaces to align annotations.
 
 #### SlevomatCodingStandard.Files.TypeNameMatchesFileName
 

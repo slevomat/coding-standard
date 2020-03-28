@@ -19,8 +19,8 @@ use const T_START_NOWDOC;
 class IndentationHelper
 {
 
-	private const TAB_INDENT = "\t";
-	private const SPACES_INDENT = '    ';
+	public const TAB_INDENT = "\t";
+	public const SPACES_INDENT = '    ';
 
 	public static function getIndentation(File $phpcsFile, int $pointer): string
 	{

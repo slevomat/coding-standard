@@ -21,6 +21,10 @@ parameters:
 		-
 			message: '#Anonymous function should return int but return statement is missing#'
 			path: %currentWorkingDirectory%/SlevomatCodingStandard/Sniffs/Commenting/DocCommentSpacingSniff.php
+		-
+			message: '#Access to an undefined property PHP_CodeSniffer\\Config::\$tabWidth#'
+			count: 1
+			path: %currentWorkingDirectory%/SlevomatCodingStandard/Sniffs/Whitespaces/DuplicateSpacesSniff.php
 
 services:
 	-
