@@ -376,8 +376,26 @@ class EarlyExitSniff implements Sniff
 
 	private function findEarlyExitInScope(File $phpcsFile, int $startPointer, int $endPointer): ?int
 	{
-		$lastSemicolonInScopePointer = TokenHelper::findPreviousEffective($phpcsFile, $endPointer - 1);
-		return $phpcsFile->getTokens()[$lastSemicolonInScopePointer]['code'] === T_SEMICOLON
+		$tokens = $phpcsFile->getTokens();
+
+		$ifPointers = TokenHelper::findNextAll($phpcsFile, T_IF, $startPointer + 1, $endPointer);
+		if ($ifPointers !== []) {
+			foreach ($ifPointers as $ifPointer) {
+				if ($tokens[$ifPointer]['level'] - 1 !== $tokens[$startPointer]['level']) {
+					continue;
+				}
+
+				$conditionPointers = $this->getAllConditionsPointers($phpcsFile, $ifPointer);
+				foreach ($conditionPointers as $conditionPointer) {
+					if ($this->findEarlyExitInScope($phpcsFile, $tokens[$conditionPointer]['scope_opener'], $tokens[$conditionPointer]['scope_closer']) === null) {
+						return null;
+					}
+				}
+			}
+		}
+
+		$lastSemicolonInScopePointer = TokenHelper::findPreviousEffective($phpcsFile, $endPointer - 1, $startPointer);
+		return $tokens[$lastSemicolonInScopePointer]['code'] === T_SEMICOLON
 			? TokenHelper::findPreviousLocal($phpcsFile, TokenHelper::$earlyExitTokenCodes, $lastSemicolonInScopePointer - 1, $startPointer)
 			: null;
 	}

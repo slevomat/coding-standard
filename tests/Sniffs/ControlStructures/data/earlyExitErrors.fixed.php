@@ -547,3 +547,24 @@ class Whatever
 		return 3;
 	}
 }
+
+function nestedIfWhenOneBranchDoesNotHaveEarlyExit($a, $b)
+{
+	if ($a === 1) {
+		if ($b === 1) {
+			return doSomething(function () {
+				if (true) {
+					// Nothing
+				}
+
+				return false;
+			});
+		}
+
+		if ($b === 2) {
+			throw new \Exception('2');
+		}
+
+		throw new \Exception('anything');
+	}
+};

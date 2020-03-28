@@ -210,3 +210,20 @@ function manyYields(bool $flag)
 		yield 3;
 	}
 }
+
+function nestedIfWhenOneBranchDoesNotHaveEarlyExit($a, $b)
+{
+	if ($a === 1) {
+		if ($b === 1) {
+			doSomething();
+		} elseif ($b === 2) {
+			throw new \Exception('2');
+		}
+
+		throw new \Exception('anything');
+	} elseif ($a === 2) {
+		doElseIf();
+	} else {
+		doElse();
+	}
+};
