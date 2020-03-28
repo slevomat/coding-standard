@@ -101,7 +101,7 @@ class DuplicateSpacesSniff implements Sniff
 			$fixable = $phpcsFile->addFixableError(
 				sprintf('Duplicate spaces at position %d.', $position),
 				$whitespacePointer,
-				self::CODE_DUPLICATE_SPACES,
+				self::CODE_DUPLICATE_SPACES
 			);
 
 			if ($fixable) {
