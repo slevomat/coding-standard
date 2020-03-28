@@ -31,6 +31,7 @@ use function count;
 use function in_array;
 use function sprintf;
 use function strtolower;
+use const T_AS;
 use const T_COMMA;
 use const T_CONST;
 use const T_DOC_COMMENT_CLOSE_TAG;
@@ -88,9 +89,16 @@ class PropertyTypeHintSniff implements Sniff
 	{
 		$this->enableNativeTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableNativeTypeHint, 70400);
 
+		$tokens = $phpcsFile->getTokens();
+
+		$asPointer = TokenHelper::findPreviousEffective($phpcsFile, $visibilityPointer - 1);
+		if ($tokens[$asPointer]['code'] === T_AS) {
+			return;
+		}
+
 		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $visibilityPointer + 1);
 
-		if ($phpcsFile->getTokens()[$propertyPointer]['code'] !== T_VARIABLE) {
+		if ($tokens[$propertyPointer]['code'] !== T_VARIABLE) {
 			return;
 		}
 
