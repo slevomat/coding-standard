@@ -122,7 +122,7 @@ class EarlyExitSniff implements Sniff
 
 		if ($elseEarlyExitPointer !== null && $previousConditionEarlyExitPointer === null) {
 			$fix = $phpcsFile->addFixableError(
-				'Use early exit instead of else.',
+				'Use early exit instead of "else".',
 				$elsePointer,
 				self::CODE_EARLY_EXIT_NOT_USED
 			);
@@ -172,7 +172,7 @@ class EarlyExitSniff implements Sniff
 		}
 
 		$fix = $phpcsFile->addFixableError(
-			'Remove useless else to reduce code nesting.',
+			'Remove useless "else" to reduce code nesting.',
 			$elsePointer,
 			self::CODE_USELESS_ELSE
 		);
@@ -241,7 +241,7 @@ class EarlyExitSniff implements Sniff
 		}
 
 		$fix = $phpcsFile->addFixableError(
-			'Use if instead of elseif.',
+			'Use "if" instead of "elseif".',
 			$elseIfPointer,
 			self::CODE_USELESS_ELSEIF
 		);
