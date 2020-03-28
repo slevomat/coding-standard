@@ -3,6 +3,10 @@
 class Whatever
 {
 
+	use Anything {
+		doSomething as public;
+	}
+
 	public const WHATEVER = 0;
 
 	public function whatever()
