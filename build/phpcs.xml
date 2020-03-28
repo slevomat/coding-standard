@@ -144,7 +144,12 @@
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowContinueWithoutIntegerOperandInSwitch"/>
-	<rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit"/>
+	<rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit">
+		<properties>
+			<property name="ignoreStandaloneIfInScope" value="true"/>
+			<property name="ignoreOneLineTrailingIf" value="true"/>
+		</properties>
+	</rule>
 	<rule ref="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing">
 		<properties>
 			<property name="tokensToCheck" type="array">
