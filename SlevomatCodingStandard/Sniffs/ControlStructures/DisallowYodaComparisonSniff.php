@@ -18,8 +18,8 @@ use const T_IS_NOT_IDENTICAL;
  * Bigger value must be on the left side:
  *
  * ($variable, Foo::$class, Foo::bar(), foo())
- * > (Foo::BAR, BAR)
- * > (true, false, null, 1, 1.0, arrays, 'foo')
+ *  > (Foo::BAR, BAR)
+ *  > (true, false, null, 1, 1.0, arrays, 'foo')
  */
 class DisallowYodaComparisonSniff implements Sniff
 {
