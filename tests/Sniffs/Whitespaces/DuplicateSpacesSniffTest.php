@@ -48,4 +48,17 @@ class DuplicateSpacesSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testIgnoreSpacesInAnnotationErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/duplicateSpacesIgnoreSpacesInAnnotationErrors.php', [
+			'ignoreSpacesInAnnotation' => true,
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 3, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES, 'Duplicate spaces at position 21.');
+
+		self::assertAllFixedInFile($report);
+	}
+
 }

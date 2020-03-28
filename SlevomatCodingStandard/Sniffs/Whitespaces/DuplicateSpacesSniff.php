@@ -15,6 +15,7 @@ use function str_repeat;
 use function str_replace;
 use function strlen;
 use const PREG_OFFSET_CAPTURE;
+use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_STRING;
@@ -81,7 +82,11 @@ class DuplicateSpacesSniff implements Sniff
 
 			if ($this->ignoreSpacesInAnnotation) {
 				$pointerBefore = TokenHelper::findPrevious($phpcsFile, [T_DOC_COMMENT_OPEN_TAG, T_DOC_COMMENT_TAG], $whitespacePointer - 1);
-				if ($pointerBefore !== null && $tokens[$pointerBefore]['code'] === T_DOC_COMMENT_TAG) {
+				if (
+					$pointerBefore !== null
+					&& $tokens[$pointerBefore]['code'] === T_DOC_COMMENT_TAG
+					&& $tokens[$whitespacePointer + 1]['code'] !== T_DOC_COMMENT_CLOSE_TAG
+				) {
 					return;
 				}
 			}
