@@ -24,7 +24,7 @@ class TrailingCommaInCallSniff implements Sniff
 
 	public const CODE_MISSING_TRAILING_COMMA = 'MissingTrailingComma';
 
-	/** @var bool|null  */
+	/** @var bool|null */
 	public $enable = null;
 
 	/**

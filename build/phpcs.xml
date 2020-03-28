@@ -264,4 +264,5 @@
 	<rule ref="SlevomatCodingStandard.Variables.DuplicateAssignmentToVariable"/>
 	<rule ref="SlevomatCodingStandard.Variables.UnusedVariable"/>
 	<rule ref="SlevomatCodingStandard.Variables.UselessVariable"/>
+	<rule ref="SlevomatCodingStandard.Whitespaces.DuplicateSpaces"/>
 </ruleset>

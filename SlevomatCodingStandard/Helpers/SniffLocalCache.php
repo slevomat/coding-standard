@@ -22,7 +22,7 @@ final class SniffLocalCache
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
-	 * @param File    $phpcsFile
+	 * @param File $phpcsFile
 	 * @param Closure $lazyValue
 	 * @return mixed
 	 */
@@ -61,7 +61,7 @@ final class SniffLocalCache
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
-	 * @param File  $phpcsFile
+	 * @param File $phpcsFile
 	 * @param mixed $value
 	 */
 	private function set(File $phpcsFile, $value): void

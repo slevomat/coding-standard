@@ -15,7 +15,7 @@ class RequireNumericLiteralSeparatorSniff implements Sniff
 
 	public const CODE_REQUIRED_NUMERIC_LITERAL_SEPARATOR = 'RequiredNumericLiteralSeparator';
 
-	/** @var bool|null  */
+	/** @var bool|null */
 	public $enable = null;
 
 	/** @var int */

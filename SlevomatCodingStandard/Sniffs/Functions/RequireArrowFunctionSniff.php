@@ -25,7 +25,7 @@ class RequireArrowFunctionSniff implements Sniff
 	/** @var bool */
 	public $allowNested = true;
 
-	/** @var bool|null  */
+	/** @var bool|null */
 	public $enable = null;
 
 	/**
