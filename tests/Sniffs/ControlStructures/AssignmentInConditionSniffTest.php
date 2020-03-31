@@ -17,7 +17,34 @@ class AssignmentInConditionSniffTest extends TestCase
 	public function testIncorrectFile(): void
 	{
 		$resultFile = self::checkFile(__DIR__ . '/data/allAssignmentsInConditions.php');
-		foreach (range(3, 6) as $lineNumber) {
+		self::assertEquals(6, $resultFile->getErrorCount());
+		foreach (range(3, 8) as $lineNumber) {
+			self::assertSniffError($resultFile, $lineNumber, AssignmentInConditionSniff::CODE_ASSIGNMENT_IN_CONDITION);
+		}
+	}
+
+	public function testNoErrorsWithIgnoreAssignmentsInsideFunctionCalls(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/noAssignmentsInConditionsIgnoreAssignmentsInsideFunctionCalls.php',
+			[
+				'ignoreAssignmentsInsideFunctionCalls' => true,
+			]
+		);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testErrorsWithIgnoreAssignmentsInsideFunctionCalls(): void
+	{
+		$resultFile = self::checkFile(
+			__DIR__ . '/data/allAssignmentsInConditions.php',
+			[
+				'ignoreAssignmentsInsideFunctionCalls' => true,
+			]
+		);
+
+		self::assertEquals(7, $resultFile->getErrorCount());
+		foreach (range(3, 8) as $lineNumber) {
 			self::assertSniffError($resultFile, $lineNumber, AssignmentInConditionSniff::CODE_ASSIGNMENT_IN_CONDITION);
 		}
 	}

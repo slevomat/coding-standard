@@ -27,6 +27,10 @@ parameters:
 			message: '#Access to an undefined property PHP_CodeSniffer\\Config::\$tabWidth#'
 			count: 1
 			path: %currentWorkingDirectory%/SlevomatCodingStandard/Sniffs/Whitespaces/DuplicateSpacesSniff.php
+		-
+			message: '#Offset ''nested_parenthesis'' does not exist on array#'
+			count: 1
+			path: %currentWorkingDirectory%/SlevomatCodingStandard/Sniffs/ControlStructures/AssignmentInConditionSniff.php
 
 services:
 	-
