@@ -88,9 +88,12 @@ class TypeNameMatchesFileNameSniff implements Sniff
 			return;
 		}
 
-		$expectedTypeName = $this->getNamespaceExtractor()->getTypeNameFromProjectPath(
-			$phpcsFile->getFilename()
-		);
+        $filename = $phpcsFile->getFilename();
+        if ($phpcsFile->config->basepath !== null && StringHelper::startsWith($filename, $phpcsFile->config->basepath)) {
+            $filename = substr($filename, strlen($phpcsFile->config->basepath));
+        }
+
+        $expectedTypeName = $this->getNamespaceExtractor()->getTypeNameFromProjectPath($filename);
 		if ($typeName === $expectedTypeName) {
 			return;
 		}
