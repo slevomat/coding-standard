@@ -54,4 +54,18 @@ class LineLengthSniffTest extends TestCase
 		self::assertSniffError($report, 22, LineLengthSniff::CODE_LINE_TOO_LONG);
 	}
 
+	public function testErrorsWithoutUseStatements(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/LineLengthSniffErrorsWithoutUseStatements.php');
+
+		self::assertSame(6, $report->getErrorCount());
+
+		self::assertSniffError($report, 5, LineLengthSniff::CODE_LINE_TOO_LONG);
+		self::assertSniffError($report, 8, LineLengthSniff::CODE_LINE_TOO_LONG);
+		self::assertSniffError($report, 10, LineLengthSniff::CODE_LINE_TOO_LONG);
+		self::assertSniffError($report, 13, LineLengthSniff::CODE_LINE_TOO_LONG);
+		self::assertSniffError($report, 17, LineLengthSniff::CODE_LINE_TOO_LONG);
+		self::assertSniffError($report, 18, LineLengthSniff::CODE_LINE_TOO_LONG);
+	}
+
 }
