@@ -41,3 +41,6 @@ class Foobar {
 
 	private $property;
 }
+
+const GLOBAL_CONSTANT = 1;
+const GLOBAL_CONSTANT_2 = 2;

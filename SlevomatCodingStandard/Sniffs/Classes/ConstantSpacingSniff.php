@@ -4,9 +4,15 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_keys;
+use function count;
+use function in_array;
 use function sprintf;
+use const T_ANON_CLASS;
+use const T_CLASS;
 use const T_CONST;
 use const T_FUNCTION;
+use const T_INTERFACE;
 use const T_VARIABLE;
 
 class ConstantSpacingSniff extends AbstractPropertyAndConstantSpacing
@@ -20,6 +26,28 @@ class ConstantSpacingSniff extends AbstractPropertyAndConstantSpacing
 	public function register(): array
 	{
 		return [T_CONST];
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+	 * @param File $phpcsFile
+	 * @param int $constantPointer
+	 */
+	public function process(File $phpcsFile, $constantPointer): int
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		if ($tokens[$constantPointer]['conditions'] === []) {
+			return $constantPointer;
+		}
+
+		/** @var int $classPointer */
+		$classPointer = array_keys($tokens[$constantPointer]['conditions'])[count($tokens[$constantPointer]['conditions']) - 1];
+		if (!in_array($tokens[$classPointer]['code'], [T_CLASS, T_INTERFACE, T_ANON_CLASS], true)) {
+			return $constantPointer;
+		}
+
+		return parent::process($phpcsFile, $constantPointer);
 	}
 
 	protected function isNextMemberValid(File $phpcsFile, int $pointer): bool

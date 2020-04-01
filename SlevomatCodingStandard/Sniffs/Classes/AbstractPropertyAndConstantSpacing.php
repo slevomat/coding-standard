@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function assert;
@@ -51,6 +52,8 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
+		$classPointer = ClassHelper::getClassPointer($phpcsFile, $pointer);
+
 		$semicolonPointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON], $pointer + 1);
 		assert($semicolonPointer !== null);
 
@@ -63,7 +66,7 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 		}
 
 		$types = [T_COMMENT, T_DOC_COMMENT_OPEN_TAG, T_CONST, T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE];
-		$nextPointer = TokenHelper::findNext($phpcsFile, $types, $firstOnLinePointer + 1);
+		$nextPointer = TokenHelper::findNext($phpcsFile, $types, $firstOnLinePointer + 1, $tokens[$classPointer]['scope_closer']);
 
 		if (!$this->isNextMemberValid($phpcsFile, $nextPointer)) {
 			return $nextPointer;
