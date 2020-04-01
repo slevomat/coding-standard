@@ -162,6 +162,19 @@ class UseStatementHelper
 		return $cache->getAndSetIfNotCached($phpcsFile, $lazyValue);
 	}
 
+	public static function getUseStatementPointer(File $phpcsFile, int $pointer): ?int
+	{
+		$pointers = self::getUseStatementPointers($phpcsFile, 0);
+
+		foreach (array_reverse($pointers) as $pointerBeforeUseStatements) {
+			if ($pointerBeforeUseStatements < $pointer) {
+				return $pointerBeforeUseStatements;
+			}
+		}
+
+		return null;
+	}
+
 	/**
 	 * Searches for all use statements in a file, skips bodies of classes and traits.
 	 *
@@ -171,36 +184,44 @@ class UseStatementHelper
 	 */
 	private static function getUseStatementPointers(File $phpcsFile, int $openTagPointer): array
 	{
-		$tokens = $phpcsFile->getTokens();
-		$pointer = $openTagPointer + 1;
-		$pointers = [];
-		while (true) {
-			$typesToFind = array_merge([T_USE], TokenHelper::$typeKeywordTokenCodes);
-			$pointer = TokenHelper::findNext($phpcsFile, $typesToFind, $pointer);
-			if ($pointer === null) {
-				break;
-			}
+		static $cache;
+		$cache = $cache ?? new SniffLocalCache();
 
-			$token = $tokens[$pointer];
-			if (in_array($token['code'], TokenHelper::$typeKeywordTokenCodes, true)) {
-				if (!array_key_exists('scope_closer', $token)) {
-					$scopeOpenerPointer = TokenHelper::findNext($phpcsFile, T_OPEN_CURLY_BRACKET, $pointer + 1);
-					$scopeCloserPointer = $tokens[$scopeOpenerPointer]['bracket_closer'];
-				} else {
-					$scopeCloserPointer = $token['scope_closer'];
+		$lazy = static function () use ($phpcsFile, $openTagPointer): array {
+			$tokens = $phpcsFile->getTokens();
+			$pointer = $openTagPointer + 1;
+			$pointers = [];
+			while (true) {
+				$typesToFind = array_merge([T_USE], TokenHelper::$typeKeywordTokenCodes);
+				$pointer = TokenHelper::findNext($phpcsFile, $typesToFind, $pointer);
+				if ($pointer === null) {
+					break;
 				}
 
-				$pointer = $scopeCloserPointer + 1;
-				continue;
-			}
-			if (self::isAnonymousFunctionUse($phpcsFile, $pointer)) {
+				$token = $tokens[$pointer];
+				if (in_array($token['code'], TokenHelper::$typeKeywordTokenCodes, true)) {
+					if (!array_key_exists('scope_closer', $token)) {
+						$scopeOpenerPointer = TokenHelper::findNext($phpcsFile, T_OPEN_CURLY_BRACKET, $pointer + 1);
+						$scopeCloserPointer = $tokens[$scopeOpenerPointer]['bracket_closer'];
+					} else {
+						$scopeCloserPointer = $token['scope_closer'];
+					}
+
+					$pointer = $scopeCloserPointer + 1;
+					continue;
+				}
+				if (self::isAnonymousFunctionUse($phpcsFile, $pointer)) {
+					$pointer++;
+					continue;
+				}
+				$pointers[] = $pointer;
 				$pointer++;
-				continue;
 			}
-			$pointers[] = $pointer;
-			$pointer++;
-		}
-		return $pointers;
+
+			return $pointers;
+		};
+
+		return $cache->getAndSetIfNotCached($phpcsFile, $lazy);
 	}
 
 }

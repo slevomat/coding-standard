@@ -14,7 +14,6 @@ use function strrpos;
 use const T_COMMENT;
 use const T_DOC_COMMENT_STRING;
 use const T_OPEN_TAG;
-use const T_USE;
 
 class LineLengthSniff implements Sniff
 {
@@ -123,7 +122,7 @@ class LineLengthSniff implements Sniff
 		}
 
 		if ($this->ignoreImports) {
-			$usePointer = $phpcsFile->findPrevious(T_USE, $pointer - 1);
+			$usePointer = UseStatementHelper::getUseStatementPointer($phpcsFile, $pointer - 1);
 			if (is_int($usePointer)
 				&& $tokens[$usePointer]['line'] === $tokens[$pointer]['line']
 				&& !UseStatementHelper::isTraitUse($phpcsFile, $usePointer)) {
