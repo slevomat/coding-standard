@@ -19,7 +19,7 @@
 		"phpstan/phpstan": "0.12.18",
 		"phpstan/phpstan-phpunit": "0.12.6",
 		"phpstan/phpstan-strict-rules": "0.12.2",
-		"phpunit/phpunit": "7.5.20|8.5.2|9.0.1",
+		"phpunit/phpunit": "7.5.20|8.5.2|9.0.2",
 		"dealerdirect/phpcodesniffer-composer-installer": "0.6.2"
 	},
 	"autoload": {
