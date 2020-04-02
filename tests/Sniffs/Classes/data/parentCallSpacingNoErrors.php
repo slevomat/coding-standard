@@ -52,4 +52,9 @@ class X {
 	function k(): parent {
 	}
 
+	function l()
+	{
+		return '"' . parent::l() . '"';
+	}
+
 }
