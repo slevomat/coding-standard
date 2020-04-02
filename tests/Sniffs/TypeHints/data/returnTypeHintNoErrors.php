@@ -253,4 +253,10 @@ class Whatever
 	{
 	}
 
+	/** @return array<int, ?Whatever> */
+	public function traversableWithNullableItem(): array
+	{
+
+	}
+
 }

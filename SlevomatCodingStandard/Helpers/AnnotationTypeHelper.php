@@ -464,6 +464,10 @@ class AnnotationTypeHelper
 			return true;
 		}
 
+		if ($typeNode instanceof NullableTypeNode) {
+			return self::containsItemsSpecificationForTraversable($typeNode->type, $phpcsFile, $pointer, $traversableTypeHints, true);
+		}
+
 		if ($typeNode instanceof IdentifierTypeNode) {
 			if (!$inTraversable) {
 				return false;

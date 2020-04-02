@@ -158,4 +158,7 @@ class Whatever
 	 */
 	public array $withPhpstanAnnotationAndTraversableNativeTypeHint;
 
+	/** @var array<int, ?Whatever> */
+	public array $traversableWithNullableItem;
+
 }

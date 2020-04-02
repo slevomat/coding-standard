@@ -236,4 +236,9 @@ class Whatever
 	{
 	}
 
+	/** @param array<int, ?Whatever> $a */
+	public function traversableWithNullableItem(array $a)
+	{
+	}
+
 }
