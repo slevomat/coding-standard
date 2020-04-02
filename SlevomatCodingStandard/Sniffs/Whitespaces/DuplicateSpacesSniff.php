@@ -34,6 +34,9 @@ class DuplicateSpacesSniff implements Sniff
 	/** @var bool */
 	public $ignoreSpacesInAnnotation = false;
 
+	/** @var bool */
+	public $ignoreSpacesInComment = false;
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
@@ -73,6 +76,10 @@ class DuplicateSpacesSniff implements Sniff
 				}
 			}
 		} else {
+			if ($this->ignoreSpacesInComment) {
+				return;
+			}
+
 			if (
 				$tokens[$whitespacePointer - 1]['code'] === T_DOC_COMMENT_STAR
 				&& $tokens[$whitespacePointer + 1]['code'] === T_DOC_COMMENT_STRING
