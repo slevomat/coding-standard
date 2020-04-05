@@ -22,15 +22,10 @@
 		"phpunit/phpunit": "7.5.20|8.5.2|9.0.2",
 		"dealerdirect/phpcodesniffer-composer-installer": "0.6.2"
 	},
-	"autoload": {
-		"psr-4": {
-			"SlevomatCodingStandard\\": "SlevomatCodingStandard"
-		}
-	},
 	"autoload-dev": {
 		"psr-4": {
-			"SlevomatCodingStandard\\PHPStan\\": "build/PHPStan",
-			"SlevomatCodingStandard\\": "tests"
+			"SlevomatCodingStandard\\": ["SlevomatCodingStandard", "tests"],
+			"SlevomatCodingStandard\\PHPStan\\": "build/PHPStan"
 		}
 	},
 	"extra": {
