@@ -27,7 +27,7 @@ class EarlyExitSniffTest extends TestCase
 			self::assertSniffError($report, $line, EarlyExitSniff::CODE_EARLY_EXIT_NOT_USED, 'Use early exit to reduce code nesting.');
 		}
 
-		foreach ([173, 182, 328, 353, 398, 440, 462, 475, 504] as $line) {
+		foreach ([173, 182, 328, 353, 398, 440, 462, 475, 503] as $line) {
 			self::assertSniffError($report, $line, EarlyExitSniff::CODE_USELESS_ELSE, 'Remove useless "else" to reduce code nesting.');
 		}
 

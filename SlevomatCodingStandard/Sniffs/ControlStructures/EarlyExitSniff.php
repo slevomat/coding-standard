@@ -167,7 +167,7 @@ class EarlyExitSniff implements Sniff
 		}
 
 		$pointerAfterElseCondition = TokenHelper::findNextEffective($phpcsFile, $tokens[$elsePointer]['scope_closer'] + 1);
-		if ($pointerAfterElseCondition === null || $tokens[$pointerAfterElseCondition]['code'] !== T_CLOSE_CURLY_BRACKET) {
+		if ($pointerAfterElseCondition !== null && $tokens[$pointerAfterElseCondition]['code'] !== T_CLOSE_CURLY_BRACKET) {
 			return;
 		}
 

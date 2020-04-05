@@ -497,11 +497,9 @@ function nestedIfWhenOneBranchDoesNotHaveEarlyExit($a, $b)
 	}
 };
 
-function simpleIfElse()
-{
-	if (true) {
-		return true;
-	} else {
-		doSomething();
-	}
-};
+// Simple else - needs to be last
+if (true) {
+	return true;
+} else {
+	doSomething();
+}
