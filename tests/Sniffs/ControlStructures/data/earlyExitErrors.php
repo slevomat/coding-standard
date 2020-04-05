@@ -496,3 +496,12 @@ function nestedIfWhenOneBranchDoesNotHaveEarlyExit($a, $b)
 		throw new \Exception('anything');
 	}
 };
+
+function simpleIfElse()
+{
+	if (true) {
+		return true;
+	} else {
+		doSomething();
+	}
+};
