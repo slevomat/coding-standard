@@ -2,6 +2,8 @@
 
 namespace SlevomatCodingStandard\Helpers\Annotation;
 
+use LogicException;
+use function sprintf;
 use function strlen;
 use function substr;
 
@@ -58,6 +60,13 @@ abstract class Annotation
 	protected function fixDescription(string $description): string
 	{
 		return substr($this->getContent(), -strlen($description));
+	}
+
+	protected function errorWhenInvalid(): void
+	{
+		if ($this->isInvalid()) {
+			throw new LogicException(sprintf('Invalid %s annotation.', $this->name));
+		}
 	}
 
 }

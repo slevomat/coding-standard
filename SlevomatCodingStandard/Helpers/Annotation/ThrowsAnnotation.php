@@ -3,7 +3,6 @@
 namespace SlevomatCodingStandard\Helpers\Annotation;
 
 use InvalidArgumentException;
-use LogicException;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -38,9 +37,7 @@ class ThrowsAnnotation extends Annotation
 
 	public function getContentNode(): ThrowsTagValueNode
 	{
-		if ($this->isInvalid()) {
-			throw new LogicException(sprintf('Invalid %s annotation.', $this->name));
-		}
+		$this->errorWhenInvalid();
 
 		return $this->contentNode;
 	}
@@ -52,9 +49,7 @@ class ThrowsAnnotation extends Annotation
 
 	public function getDescription(): ?string
 	{
-		if ($this->isInvalid()) {
-			throw new LogicException(sprintf('Invalid %s annotation.', $this->name));
-		}
+		$this->errorWhenInvalid();
 
 		return $this->contentNode->description !== '' ? $this->contentNode->description : null;
 	}
@@ -64,9 +59,7 @@ class ThrowsAnnotation extends Annotation
 	 */
 	public function getType(): TypeNode
 	{
-		if ($this->isInvalid()) {
-			throw new LogicException(sprintf('Invalid %s annotation.', $this->name));
-		}
+		$this->errorWhenInvalid();
 
 		/** @var UnionTypeNode|IdentifierTypeNode $type */
 		$type = $this->contentNode->type;

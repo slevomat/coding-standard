@@ -3,7 +3,6 @@
 namespace SlevomatCodingStandard\Helpers\Annotation;
 
 use InvalidArgumentException;
-use LogicException;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
@@ -46,9 +45,7 @@ class ParameterAnnotation extends Annotation
 
 	public function getContentNode(): ParamTagValueNode
 	{
-		if ($this->isInvalid()) {
-			throw new LogicException(sprintf('Invalid %s annotation.', $this->name));
-		}
+		$this->errorWhenInvalid();
 
 		return $this->contentNode;
 	}
@@ -60,18 +57,14 @@ class ParameterAnnotation extends Annotation
 
 	public function getDescription(): ?string
 	{
-		if ($this->isInvalid()) {
-			throw new LogicException(sprintf('Invalid %s annotation.', $this->name));
-		}
+		$this->errorWhenInvalid();
 
 		return $this->contentNode->description !== '' ? $this->contentNode->description : null;
 	}
 
 	public function getParameterName(): string
 	{
-		if ($this->isInvalid()) {
-			throw new LogicException(sprintf('Invalid %s annotation.', $this->name));
-		}
+		$this->errorWhenInvalid();
 
 		return $this->contentNode->parameterName;
 	}
@@ -81,9 +74,7 @@ class ParameterAnnotation extends Annotation
 	 */
 	public function getType(): TypeNode
 	{
-		if ($this->isInvalid()) {
-			throw new LogicException(sprintf('Invalid %s annotation.', $this->name));
-		}
+		$this->errorWhenInvalid();
 
 		/** @var GenericTypeNode|CallableTypeNode|IntersectionTypeNode|UnionTypeNode|ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|NullableTypeNode $type */
 		$type = $this->contentNode->type;
