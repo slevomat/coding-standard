@@ -160,3 +160,15 @@ class ConstantExpression
 {
 
 }
+
+/**
+ * @template Template of \DateTime
+ * @template-covariant Template2 of \DateTimeImmutable
+ * @template-extends \Iterator<\DateTimeImmutable>
+ * @template-implements \Iterator<\DateTimeImmutable>
+ * @template-use \Iterator<\DateTimeImmutable>
+ */
+class Template
+{
+
+}

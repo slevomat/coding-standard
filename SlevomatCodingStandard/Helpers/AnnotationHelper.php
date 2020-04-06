@@ -20,12 +20,16 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use SlevomatCodingStandard\Helpers\Annotation\Annotation;
+use SlevomatCodingStandard\Helpers\Annotation\ExtendsAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation\ImplementsAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation\TemplateAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation\UseAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use function array_key_exists;
 use function array_merge;
@@ -49,7 +53,7 @@ class AnnotationHelper
 
 	/**
 	 * @internal
-	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation $annotation
+	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation $annotation
 	 * @return TypeNode[]
 	 */
 	public static function getAnnotationTypes(Annotation $annotation): array
@@ -67,6 +71,10 @@ class AnnotationHelper
 
 				$annotationTypes[] = $methodParameterAnnotation->type;
 			}
+		} elseif ($annotation instanceof TemplateAnnotation) {
+			if ($annotation->getBound() !== null) {
+				$annotationTypes[] = $annotation->getBound();
+			}
 		} else {
 			$annotationTypes[] = $annotation->getType();
 		}
@@ -76,7 +84,7 @@ class AnnotationHelper
 
 	/**
 	 * @internal
-	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation $annotation
+	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation $annotation
 	 * @return ConstExprNode[]
 	 */
 	public static function getAnnotationConstantExpressions(Annotation $annotation): array
@@ -101,7 +109,7 @@ class AnnotationHelper
 	/**
 	 * @internal
 	 * @param File $phpcsFile
-	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation $annotation
+	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation $annotation
 	 * @param TypeNode $typeNode
 	 * @param TypeNode $fixedTypeNode
 	 * @return string
@@ -122,27 +130,31 @@ class AnnotationHelper
 				$fixedContentNode->parameters[$parameterNo] = clone $parameterNode;
 				$fixedContentNode->parameters[$parameterNo]->type = AnnotationTypeHelper::change($parameterNode->type, $typeNode, $fixedTypeNode);
 			}
-
-			$fixedAnnotation = new MethodAnnotation(
-				$annotation->getName(),
-				$annotation->getStartPointer(),
-				$annotation->getEndPointer(),
-				$annotation->getContent(),
-				$fixedContentNode
-			);
+		} elseif ($annotation instanceof TemplateAnnotation) {
+			$fixedContentNode = clone $annotation->getContentNode();
+			$fixedContentNode->bound = AnnotationTypeHelper::change($annotation->getBound(), $typeNode, $fixedTypeNode);
+		} elseif (
+			$annotation instanceof ExtendsAnnotation
+			|| $annotation instanceof ImplementsAnnotation
+			|| $annotation instanceof UseAnnotation
+		) {
+			$fixedContentNode = clone $annotation->getContentNode();
+			/** @var GenericTypeNode $fixedType */
+			$fixedType = AnnotationTypeHelper::change($annotation->getType(), $typeNode, $fixedTypeNode);
+			$fixedContentNode->type = $fixedType;
 		} else {
 			$fixedContentNode = clone $annotation->getContentNode();
 			$fixedContentNode->type = AnnotationTypeHelper::change($annotation->getType(), $typeNode, $fixedTypeNode);
-
-			$annotationClassName = get_class($annotation);
-			$fixedAnnotation = new $annotationClassName(
-				$annotation->getName(),
-				$annotation->getStartPointer(),
-				$annotation->getEndPointer(),
-				$annotation->getContent(),
-				$fixedContentNode
-			);
 		}
+
+		$annotationClassName = get_class($annotation);
+		$fixedAnnotation = new $annotationClassName(
+			$annotation->getName(),
+			$annotation->getStartPointer(),
+			$annotation->getEndPointer(),
+			$annotation->getContent(),
+			$fixedContentNode
+		);
 
 		return self::fix($phpcsFile, $annotation, $fixedAnnotation);
 	}
@@ -188,7 +200,7 @@ class AnnotationHelper
 	 * @param File $phpcsFile
 	 * @param int $pointer
 	 * @param string $annotationName
-	 * @return (VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|GenericAnnotation)[]
+	 * @return (VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|GenericAnnotation)[]
 	 */
 	public static function getAnnotationsByName(File $phpcsFile, int $pointer, string $annotationName): array
 	{
@@ -200,7 +212,7 @@ class AnnotationHelper
 	/**
 	 * @param File $phpcsFile
 	 * @param int $pointer
-	 * @return (VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|GenericAnnotation)[][]
+	 * @return (VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|GenericAnnotation)[][]
 	 */
 	public static function getAnnotations(File $phpcsFile, int $pointer): array
 	{
@@ -289,6 +301,21 @@ class AnnotationHelper
 					'@property-read' => PropertyAnnotation::class,
 					'@property-write' => PropertyAnnotation::class,
 					'@method' => MethodAnnotation::class,
+					'@template' => TemplateAnnotation::class,
+					'@psalm-template' => TemplateAnnotation::class,
+					'@phpstan-template' => TemplateAnnotation::class,
+					'@template-covariant' => TemplateAnnotation::class,
+					'@psalm-template-covariant' => TemplateAnnotation::class,
+					'@phpstan-template-covariant' => TemplateAnnotation::class,
+					'@extends' => ExtendsAnnotation::class,
+					'@template-extends' => ExtendsAnnotation::class,
+					'@phpstan-extends' => ExtendsAnnotation::class,
+					'@implements' => ImplementsAnnotation::class,
+					'@template-implements' => ImplementsAnnotation::class,
+					'@phpstan-implements' => ImplementsAnnotation::class,
+					'@use' => UseAnnotation::class,
+					'@template-use' => UseAnnotation::class,
+					'@phpstan-use' => UseAnnotation::class,
 				];
 
 				if (array_key_exists($annotationName, $mapping)) {

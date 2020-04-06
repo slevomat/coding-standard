@@ -14,7 +14,6 @@ parameters:
 	ignoreErrors:
 		- "#Offset '(bracket|scope|parenthesis|comment)_(opener|closer)' does not exist#"
 		- "#Offset '(conditions|scope_condition)' does not exist#"
-		- '#Parameter \#5 \$contentNode of class SlevomatCodingStandard\\Helpers\\Annotation\\(Method|Parameter|Property|Return|Throws|Variable)Annotation constructor expects PHPStan\\PhpDocParser\\Ast\\PhpDoc\\#'
 		-
 			message: '#Unreachable statement - code above always terminates#'
 			count: 1
