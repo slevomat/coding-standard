@@ -15,6 +15,7 @@ use function sprintf;
 use function str_repeat;
 use const T_FUNCTION;
 use const T_SEMICOLON;
+use const T_WHITESPACE;
 
 class MethodSpacingSniff implements Sniff
 {
@@ -60,9 +61,20 @@ class MethodSpacingSniff implements Sniff
 		}
 
 		$nextMethodDocCommentStartPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $nextMethodPointer);
+		if (
+			$nextMethodDocCommentStartPointer !== null
+			&& $tokens[$tokens[$nextMethodDocCommentStartPointer]['comment_closer']]['line'] + 1 !== $tokens[$nextMethodPointer]['line']
+		) {
+			$nextMethodDocCommentStartPointer = null;
+		}
+
 		$nextMethodFirstLinePointer = $tokens[$nextMethodPointer]['line'] === $tokens[$methodEndPointer]['line']
 			? TokenHelper::findNextEffective($phpcsFile, $methodEndPointer + 1)
 			: TokenHelper::findFirstTokenOnLine($phpcsFile, $nextMethodDocCommentStartPointer ?? $nextMethodPointer);
+
+		if (TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $methodEndPointer + 1, $nextMethodFirstLinePointer) !== null) {
+			return;
+		}
 
 		$linesBetween = $tokens[$nextMethodFirstLinePointer]['line'] !== $tokens[$methodEndPointer]['line']
 			? $tokens[$nextMethodFirstLinePointer]['line'] - $tokens[$methodEndPointer]['line'] - 1

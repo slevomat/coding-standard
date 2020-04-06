@@ -56,6 +56,27 @@ abstract class Whatever
 
 	}
 
+
+	/****** completely useless comment ******/
+
+
+	/**
+	 * Comment
+	 */
+	public function forthMethod()
+	{
+
+	}
+
+
+	/****** completely useless comment ******/
+
+
+	public function fifthMethod()
+	{
+
+	}
+
 	public function methodWithAnonymousClasses(): array
 	{
 		$anonymousClassA = new class () extends Exception {
