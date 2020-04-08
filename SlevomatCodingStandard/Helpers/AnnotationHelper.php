@@ -33,6 +33,7 @@ use function get_class;
 use function in_array;
 use function preg_match;
 use function preg_replace;
+use function sprintf;
 use function substr_count;
 use function trim;
 use const T_DOC_COMMENT_CLOSE_TAG;
@@ -203,112 +204,114 @@ class AnnotationHelper
 	 */
 	public static function getAnnotations(File $phpcsFile, int $pointer): array
 	{
-		$annotations = [];
+		return SniffLocalCache::getAndSetIfNotCached($phpcsFile, sprintf('annotations-%d', $pointer), static function () use ($phpcsFile, $pointer): array {
+			$annotations = [];
 
-		$docCommentOpenToken = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $pointer);
-		if ($docCommentOpenToken === null) {
-			return $annotations;
-		}
-
-		$annotationNameCodes = array_merge([T_DOC_COMMENT_TAG], Tokens::$phpcsCommentTokens);
-
-		$tokens = $phpcsFile->getTokens();
-		$i = $docCommentOpenToken + 1;
-		while ($i < $tokens[$docCommentOpenToken]['comment_closer']) {
-			if (!in_array($tokens[$i]['code'], $annotationNameCodes, true)) {
-				$i++;
-				continue;
+			$docCommentOpenToken = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $pointer);
+			if ($docCommentOpenToken === null) {
+				return $annotations;
 			}
 
-			$annotationStartPointer = $i;
-			$annotationEndPointer = $i;
+			$annotationNameCodes = array_merge([T_DOC_COMMENT_TAG], Tokens::$phpcsCommentTokens);
 
-			// Fix for wrong PHPCS parsing
-			$parenthesesLevel = substr_count($tokens[$i]['content'], '(') - substr_count($tokens[$i]['content'], ')');
-			$annotationCode = $tokens[$i]['content'];
-
-			for ($j = $i + 1; $j <= $tokens[$docCommentOpenToken]['comment_closer']; $j++) {
-				if ($tokens[$j]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
-					$i = $j;
-					break;
-				}
-
-				if (in_array($tokens[$j]['code'], $annotationNameCodes, true) && $parenthesesLevel === 0) {
-					$i = $j;
-					break;
-				}
-
-				if ($tokens[$j]['code'] === T_DOC_COMMENT_STAR) {
+			$tokens = $phpcsFile->getTokens();
+			$i = $docCommentOpenToken + 1;
+			while ($i < $tokens[$docCommentOpenToken]['comment_closer']) {
+				if (!in_array($tokens[$i]['code'], $annotationNameCodes, true)) {
+					$i++;
 					continue;
 				}
 
-				if (in_array($tokens[$j]['code'], array_merge([T_DOC_COMMENT_STRING], $annotationNameCodes), true)) {
-					$annotationEndPointer = $j;
-				} elseif ($tokens[$j]['code'] === T_DOC_COMMENT_WHITESPACE) {
-					if (array_key_exists($j - 1, $tokens) && $tokens[$j - 1]['code'] === T_DOC_COMMENT_STAR) {
+				$annotationStartPointer = $i;
+				$annotationEndPointer = $i;
+
+				// Fix for wrong PHPCS parsing
+				$parenthesesLevel = substr_count($tokens[$i]['content'], '(') - substr_count($tokens[$i]['content'], ')');
+				$annotationCode = $tokens[$i]['content'];
+
+				for ($j = $i + 1; $j <= $tokens[$docCommentOpenToken]['comment_closer']; $j++) {
+					if ($tokens[$j]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
+						$i = $j;
+						break;
+					}
+
+					if (in_array($tokens[$j]['code'], $annotationNameCodes, true) && $parenthesesLevel === 0) {
+						$i = $j;
+						break;
+					}
+
+					if ($tokens[$j]['code'] === T_DOC_COMMENT_STAR) {
 						continue;
 					}
-					if (array_key_exists($j + 1, $tokens) && $tokens[$j + 1]['code'] === T_DOC_COMMENT_STAR) {
-						continue;
+
+					if (in_array($tokens[$j]['code'], array_merge([T_DOC_COMMENT_STRING], $annotationNameCodes), true)) {
+						$annotationEndPointer = $j;
+					} elseif ($tokens[$j]['code'] === T_DOC_COMMENT_WHITESPACE) {
+						if (array_key_exists($j - 1, $tokens) && $tokens[$j - 1]['code'] === T_DOC_COMMENT_STAR) {
+							continue;
+						}
+						if (array_key_exists($j + 1, $tokens) && $tokens[$j + 1]['code'] === T_DOC_COMMENT_STAR) {
+							continue;
+						}
+					}
+
+					$parenthesesLevel += substr_count($tokens[$j]['content'], '(') - substr_count($tokens[$j]['content'], ')');
+					$annotationCode .= $tokens[$j]['content'];
+				}
+
+				$annotationName = $tokens[$annotationStartPointer]['content'];
+				$annotationParameters = null;
+				$annotationContent = null;
+				if (preg_match('~^(@[-a-zA-Z\\\\:]+)(?:\((.*)\))?(?:\\s+(.+))?($)~s', trim($annotationCode), $matches) !== 0) {
+					$annotationName = $matches[1];
+					$annotationParameters = trim($matches[2]);
+					if ($annotationParameters === '') {
+						$annotationParameters = null;
+					}
+					$annotationContent = trim($matches[3]);
+					if ($annotationContent === '') {
+						$annotationContent = null;
 					}
 				}
 
-				$parenthesesLevel += substr_count($tokens[$j]['content'], '(') - substr_count($tokens[$j]['content'], ')');
-				$annotationCode .= $tokens[$j]['content'];
-			}
+				$mapping = [
+					'@param' => ParameterAnnotation::class,
+					'@psalm-param' => ParameterAnnotation::class,
+					'@phpstan-param' => ParameterAnnotation::class,
+					'@return' => ReturnAnnotation::class,
+					'@psalm-return' => ReturnAnnotation::class,
+					'@phpstan-return' => ReturnAnnotation::class,
+					'@var' => VariableAnnotation::class,
+					'@psalm-var' => VariableAnnotation::class,
+					'@phpstan-var' => VariableAnnotation::class,
+					'@throws' => ThrowsAnnotation::class,
+					'@property' => PropertyAnnotation::class,
+					'@property-read' => PropertyAnnotation::class,
+					'@property-write' => PropertyAnnotation::class,
+					'@method' => MethodAnnotation::class,
+				];
 
-			$annotationName = $tokens[$annotationStartPointer]['content'];
-			$annotationParameters = null;
-			$annotationContent = null;
-			if (preg_match('~^(@[-a-zA-Z\\\\:]+)(?:\((.*)\))?(?:\\s+(.+))?($)~s', trim($annotationCode), $matches) !== 0) {
-				$annotationName = $matches[1];
-				$annotationParameters = trim($matches[2]);
-				if ($annotationParameters === '') {
-					$annotationParameters = null;
-				}
-				$annotationContent = trim($matches[3]);
-				if ($annotationContent === '') {
-					$annotationContent = null;
-				}
-			}
+				if (array_key_exists($annotationName, $mapping)) {
+					$className = $mapping[$annotationName];
 
-			$mapping = [
-				'@param' => ParameterAnnotation::class,
-				'@psalm-param' => ParameterAnnotation::class,
-				'@phpstan-param' => ParameterAnnotation::class,
-				'@return' => ReturnAnnotation::class,
-				'@psalm-return' => ReturnAnnotation::class,
-				'@phpstan-return' => ReturnAnnotation::class,
-				'@var' => VariableAnnotation::class,
-				'@psalm-var' => VariableAnnotation::class,
-				'@phpstan-var' => VariableAnnotation::class,
-				'@throws' => ThrowsAnnotation::class,
-				'@property' => PropertyAnnotation::class,
-				'@property-read' => PropertyAnnotation::class,
-				'@property-write' => PropertyAnnotation::class,
-				'@method' => MethodAnnotation::class,
-			];
-
-			if (array_key_exists($annotationName, $mapping)) {
-				$className = $mapping[$annotationName];
-
-				$parsedContent = null;
-				if ($annotationContent !== null) {
-					$parsedContent = self::parseAnnotationContent($annotationName, $annotationContent);
-					if ($parsedContent instanceof InvalidTagValueNode) {
-						$parsedContent = null;
+					$parsedContent = null;
+					if ($annotationContent !== null) {
+						$parsedContent = self::parseAnnotationContent($annotationName, $annotationContent);
+						if ($parsedContent instanceof InvalidTagValueNode) {
+							$parsedContent = null;
+						}
 					}
+
+					$annotation = new $className($annotationName, $annotationStartPointer, $annotationEndPointer, $annotationContent, $parsedContent);
+				} else {
+					$annotation = new GenericAnnotation($annotationName, $annotationStartPointer, $annotationEndPointer, $annotationParameters, $annotationContent);
 				}
 
-				$annotation = new $className($annotationName, $annotationStartPointer, $annotationEndPointer, $annotationContent, $parsedContent);
-			} else {
-				$annotation = new GenericAnnotation($annotationName, $annotationStartPointer, $annotationEndPointer, $annotationParameters, $annotationContent);
+				$annotations[$annotationName][] = $annotation;
 			}
 
-			$annotations[$annotationName][] = $annotation;
-		}
-
-		return $annotations;
+			return $annotations;
+		});
 	}
 
 	/**
