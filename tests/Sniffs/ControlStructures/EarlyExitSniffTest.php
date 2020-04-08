@@ -124,4 +124,29 @@ class EarlyExitSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testIgnoredTrailingIfWithOneInstructionNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/earlyExitIgnoredTrailingIfWithOneInstructionNoErrors.php', [
+			'ignoreTrailingIfWithOneInstruction' => true,
+		]);
+
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testIgnoredTrailingIfWithOneInstructionErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/earlyExitIgnoredTrailingIfWithOneInstructionErrors.php', [
+			'ignoreTrailingIfWithOneInstruction' => true,
+		]);
+
+		self::assertSame(4, $report->getErrorCount());
+
+		self::assertSniffError($report, 7, EarlyExitSniff::CODE_USELESS_ELSEIF);
+		self::assertSniffError($report, 17, EarlyExitSniff::CODE_USELESS_ELSEIF);
+		self::assertSniffError($report, 26, EarlyExitSniff::CODE_EARLY_EXIT_NOT_USED);
+		self::assertSniffError($report, 36, EarlyExitSniff::CODE_EARLY_EXIT_NOT_USED);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }

@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ConditionHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
+use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use Throwable;
 use function array_key_exists;
@@ -42,6 +43,9 @@ class EarlyExitSniff implements Sniff
 
 	/** @var bool */
 	public $ignoreOneLineTrailingIf = false;
+
+	/** @var bool */
+	public $ignoreTrailingIfWithOneInstruction = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -291,6 +295,23 @@ class EarlyExitSniff implements Sniff
 			&& $tokens[$tokens[$ifPointer]['scope_opener']]['line'] + 2 === $tokens[$tokens[$ifPointer]['scope_closer']]['line']
 		) {
 			return;
+		}
+
+		if ($this->ignoreTrailingIfWithOneInstruction) {
+			$pointerBeforeScopeCloser = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$ifPointer]['scope_closer'] - 1);
+			if ($tokens[$pointerBeforeScopeCloser]['code'] === T_SEMICOLON) {
+				$ignore = true;
+				foreach (TokenHelper::findNextAll($phpcsFile, T_SEMICOLON, $tokens[$ifPointer]['scope_opener'] + 1, $pointerBeforeScopeCloser) as $anotherSemicolonPointer) {
+					if (ScopeHelper::isInSameScope($phpcsFile, $anotherSemicolonPointer, $pointerBeforeScopeCloser)) {
+						$ignore = false;
+						break;
+					}
+				}
+
+				if ($ignore) {
+					return;
+				}
+			}
 		}
 
 		$scopePointer = $tokens[$nextPointer]['scope_condition'];
