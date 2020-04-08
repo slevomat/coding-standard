@@ -56,14 +56,11 @@ class ScopeHelper
 	 */
 	public static function getAllRootPointers(File $phpcsFile): array
 	{
-		static $cache;
-		$cache = $cache ?? new SniffLocalCache();
-
 		$lazyValue = static function () use ($phpcsFile): array {
 			return TokenHelper::findNextAll($phpcsFile, T_OPEN_TAG, 0);
 		};
 
-		return $cache->getAndSetIfNotCached($phpcsFile, $lazyValue);
+		return SniffLocalCache::getAndSetIfNotCached($phpcsFile, 'openTagPointers', $lazyValue);
 	}
 
 }

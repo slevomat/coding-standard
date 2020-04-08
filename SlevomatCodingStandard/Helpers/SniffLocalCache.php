@@ -5,10 +5,9 @@ namespace SlevomatCodingStandard\Helpers;
 use Closure;
 use PHP_CodeSniffer\Files\File;
 use function array_key_exists;
+use function sprintf;
 
 /**
- * Use for caching some value based on phpcsFile version
- *
  * @internal
  */
 final class SniffLocalCache
@@ -16,88 +15,38 @@ final class SniffLocalCache
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
-	 * @var array<string, mixed>
+	 * @var array<int, array<string, mixed>>
 	 */
-	private $cache = [];
+	private static $cache = [];
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
 	 * @param File $phpcsFile
+	 * @param string $key
 	 * @param Closure $lazyValue
 	 * @return mixed
 	 */
-	public function getAndSetIfNotCached(File $phpcsFile, Closure $lazyValue)
+	public static function getAndSetIfNotCached(File $phpcsFile, string $key, Closure $lazyValue)
 	{
-		$this->setIfNotCached($phpcsFile, $lazyValue);
+		$fixerLoops = $phpcsFile->fixer !== null ? $phpcsFile->fixer->loops : 0;
+		$internalKey = sprintf('%s-%s', $phpcsFile->getFilename(), $key);
 
-		return $this->get($phpcsFile);
+		self::setIfNotCached($fixerLoops, $internalKey, $lazyValue);
+
+		return self::$cache[$fixerLoops][$internalKey] ?? null;
 	}
 
-	private function setIfNotCached(File $phpcsFile, Closure $lazyValue): void
+	private static function setIfNotCached(int $fixerLoops, string $internalKey, Closure $lazyValue): void
 	{
-		if ($this->has($phpcsFile)) {
+		if (array_key_exists($fixerLoops, self::$cache) && array_key_exists($internalKey, self::$cache[$fixerLoops])) {
 			return;
 		}
 
-		$this->set($phpcsFile, $lazyValue());
-	}
+		self::$cache[$fixerLoops][$internalKey] = $lazyValue();
 
-	private function has(File $phpcsFile): bool
-	{
-		$key = $this->key($phpcsFile);
-
-		return array_key_exists($key, $this->cache);
-	}
-
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
-	 * @param File $phpcsFile
-	 * @return mixed
-	 */
-	private function get(File $phpcsFile)
-	{
-		return $this->cache[$this->key($phpcsFile) ] ?? null;
-	}
-
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
-	 * @param File $phpcsFile
-	 * @param mixed $value
-	 */
-	private function set(File $phpcsFile, $value): void
-	{
-		$key = $this->key($phpcsFile);
-		$this->cache[$key] = $value;
-		$this->removeOldCache($phpcsFile);
-	}
-
-	private function key(File $phpcsFile): string
-	{
-		$cacheKey = $phpcsFile->getFilename();
-		$fixerLoops = $phpcsFile->fixer !== null ? $phpcsFile->fixer->loops : 0;
-
-		return $cacheKey . '-loop' . $fixerLoops;
-	}
-
-	private function previousKey(File $phpcsFile): ?string
-	{
-		$cacheKey = $phpcsFile->getFilename();
-		$fixerLoops = $phpcsFile->fixer !== null ? $phpcsFile->fixer->loops : 0;
-		if ($fixerLoops === 0) {
-			return null;
+		if ($fixerLoops > 0) {
+			unset(self::$cache[$fixerLoops - 1]);
 		}
-
-		return $cacheKey . '-loop' . ($fixerLoops - 1);
-	}
-
-	private function removeOldCache(File $phpcsFile): void
-	{
-		$key = $this->previousKey($phpcsFile);
-		if ($key === null) {
-			return;
-		}
-
-		unset($this->cache[$key]);
 	}
 
 }

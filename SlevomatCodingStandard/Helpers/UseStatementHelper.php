@@ -115,9 +115,6 @@ class UseStatementHelper
 	 */
 	public static function getFileUseStatements(File $phpcsFile): array
 	{
-		static $cache;
-		$cache = $cache ?? new SniffLocalCache();
-
 		$lazyValue = static function () use ($phpcsFile): array {
 			$useStatements = [];
 			$tokens = $phpcsFile->getTokens();
@@ -159,7 +156,7 @@ class UseStatementHelper
 			return $useStatements;
 		};
 
-		return $cache->getAndSetIfNotCached($phpcsFile, $lazyValue);
+		return SniffLocalCache::getAndSetIfNotCached($phpcsFile, 'useStatements', $lazyValue);
 	}
 
 	public static function getUseStatementPointer(File $phpcsFile, int $pointer): ?int
@@ -184,9 +181,6 @@ class UseStatementHelper
 	 */
 	private static function getUseStatementPointers(File $phpcsFile, int $openTagPointer): array
 	{
-		static $cache;
-		$cache = $cache ?? new SniffLocalCache();
-
 		$lazy = static function () use ($phpcsFile, $openTagPointer): array {
 			$tokens = $phpcsFile->getTokens();
 			$pointer = $openTagPointer + 1;
@@ -221,7 +215,7 @@ class UseStatementHelper
 			return $pointers;
 		};
 
-		return $cache->getAndSetIfNotCached($phpcsFile, $lazy);
+		return SniffLocalCache::getAndSetIfNotCached($phpcsFile, 'useStatementPointers', $lazy);
 	}
 
 }

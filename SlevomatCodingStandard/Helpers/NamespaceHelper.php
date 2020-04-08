@@ -30,14 +30,11 @@ class NamespaceHelper
 	 */
 	public static function getAllNamespacesPointers(File $phpcsFile): array
 	{
-		static $cache;
-		$cache = $cache ?? new SniffLocalCache();
-
 		$lazyValue = static function () use ($phpcsFile): array {
 			return TokenHelper::findNextAll($phpcsFile, T_NAMESPACE, 0);
 		};
 
-		return $cache->getAndSetIfNotCached($phpcsFile, $lazyValue);
+		return SniffLocalCache::getAndSetIfNotCached($phpcsFile, 'namespacePointers', $lazyValue);
 	}
 
 	public static function isFullyQualifiedName(string $typeName): bool

@@ -64,14 +64,11 @@ class ReferencedNameHelper
 	 */
 	public static function getAllReferencedNames(File $phpcsFile, int $openTagPointer): array
 	{
-		static $cache;
-		$cache = $cache ?? new SniffLocalCache();
-
 		$lazyValue = static function () use ($phpcsFile, $openTagPointer): array {
 			return self::createAllReferencedNames($phpcsFile, $openTagPointer);
 		};
 
-		return $cache->getAndSetIfNotCached($phpcsFile, $lazyValue);
+		return SniffLocalCache::getAndSetIfNotCached($phpcsFile, 'references', $lazyValue);
 	}
 
 	public static function getReferenceName(File $phpcsFile, int $nameStartPointer, int $nameEndPointer): string
