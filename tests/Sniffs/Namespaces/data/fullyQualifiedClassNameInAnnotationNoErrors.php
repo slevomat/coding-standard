@@ -2,6 +2,9 @@
 
 namespace FooNamespace;
 
+/**
+ * @template TemplateAboveClass
+ */
 class FooClass
 {
 
@@ -101,5 +104,25 @@ class FooClass
 	{
 
 	}
+
+	/**
+	 * @template TemplateAboveMethod
+	 * @return TemplateAboveMethod
+	 */
+	public function usingTemplateAboveMethod()
+	{
+
+	}
+
+	/**
+	 * @return TemplateAboveClass
+	 */
+	public function usingTemplateAboveClass()
+	{
+
+	}
+
+	/** @var TemplateAboveClass */
+	public $usingTemplateAboveClass;
 
 }

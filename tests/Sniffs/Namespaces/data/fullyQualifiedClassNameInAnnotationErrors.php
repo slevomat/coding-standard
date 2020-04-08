@@ -171,4 +171,12 @@ class ConstantExpression
 class Template
 {
 
+	/**
+	 * @phpstan-return TemplateThatDoesNotExist
+	 */
+	public function withInvalidTemplate()
+	{
+
+	}
+
 }
