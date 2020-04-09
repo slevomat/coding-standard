@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use function sprintf;
 use const T_STRING;
 
 class NamespaceHelperTest extends TestCase
@@ -30,6 +31,15 @@ class NamespaceHelperTest extends TestCase
 	}
 
 	/**
+	 * @dataProvider dataIsFullyQualifiedName
+	 * @param string $typeName
+	 */
+	public function testGetFullyQualifiedTypeNameUnchanged(string $typeName): void
+	{
+		self::assertSame($typeName, NamespaceHelper::getFullyQualifiedTypeName($typeName));
+	}
+
+	/**
 	 * @return string[][]
 	 */
 	public function dataIsNotFullyQualifiedName(): array
@@ -49,6 +59,18 @@ class NamespaceHelperTest extends TestCase
 	public function testIsNotFullyQualifiedName(string $typeName): void
 	{
 		self::assertFalse(NamespaceHelper::isFullyQualifiedName($typeName));
+	}
+
+	/**
+	 * @dataProvider dataIsNotFullyQualifiedName
+	 * @param string $typeName
+	 */
+	public function testGetFullyQualifiedTypeNameChanged(string $typeName): void
+	{
+		self::assertSame(
+			sprintf('\\%s', $typeName),
+			NamespaceHelper::getFullyQualifiedTypeName($typeName)
+		);
 	}
 
 	/**
