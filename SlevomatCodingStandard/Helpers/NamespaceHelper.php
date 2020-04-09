@@ -42,6 +42,15 @@ class NamespaceHelper
 		return StringHelper::startsWith($typeName, self::NAMESPACE_SEPARATOR);
 	}
 
+	public static function getFullyQualifiedTypeName(string $typeName): string
+	{
+		if (self::isFullyQualifiedName($typeName)) {
+			return $typeName;
+		}
+
+		return sprintf('%s%s', self::NAMESPACE_SEPARATOR, $typeName);
+	}
+
 	public static function hasNamespace(string $typeName): bool
 	{
 		$parts = self::getNameParts($typeName);
