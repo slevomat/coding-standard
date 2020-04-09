@@ -26,7 +26,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
 	/**
 	 * @param string $filePath
-	 * @param (string|int|bool|(string|int|bool)[])[] $sniffProperties
+	 * @param (string|int|bool|array<int|string, (string|int|bool|null)>)[] $sniffProperties
 	 * @param string[] $codesToCheck
 	 * @return File
 	 */

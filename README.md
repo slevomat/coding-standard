@@ -312,6 +312,30 @@ Looks for `use` alias that is same as unqualified name.
 
 Disallows references.
 
+#### SlevomatCodingStandard.PHP.ForbiddenClasses 🔧
+
+Sniff checks forbidden classes, interfaces, parent classes and traits. And provide the following settings:
+
+* `forbiddenClasses`: Creating instances with `new` keyword or accessing with `::` operator
+* `forbiddenExtends`: Extending with `extends` keyword
+* `forbiddenInterfaces`: Used in `implements` section
+* `forbiddenTraits`: Imported with `use` keyword
+
+Optionally can be passed as an alternative for auto fixes. See `phpcs.xml` file example:
+
+```xml
+<rule ref="SlevomatCodingStandard.PHP.ForbiddenClasses">
+    <properties>
+        <property name="forbiddenClasses" type="array">
+            <element key="Validator" value="Illuminate\Support\Facades\Validator"/>
+        </property>
+        <property name="forbiddenTraits" type="array">
+            <element key="\AuthTrait" value="null"/>
+        </property>
+    </properties>
+</rule>
+```
+
 #### SlevomatCodingStandard.PHP.RequireExplicitAssertion 🔧
 
 Requires assertion via `assert` instead of inline documentation comments.
