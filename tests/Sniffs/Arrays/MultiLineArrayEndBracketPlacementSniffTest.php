@@ -10,13 +10,13 @@ class MultiLineArrayEndBracketPlacementSniffTest extends TestCase
 	public function testNoErrors(): void
 	{
 		self::assertNoSniffErrorInFile(self::checkFile(
-			__DIR__ . '/data/MultiLineArrayEndBracketPlacementSniffNoErrors.php'
+			__DIR__ . '/data/multiLineArrayEndBracketPlacementNoErrors.php'
 		));
 	}
 
 	public function testErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/MultiLineArrayEndBracketPlacementSniffErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/multiLineArrayEndBracketPlacementErrors.php');
 
 		self::assertSame(5, $report->getErrorCount());
 
