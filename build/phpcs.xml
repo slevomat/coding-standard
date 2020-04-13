@@ -193,6 +193,7 @@
 	<rule ref="SlevomatCodingStandard.Functions.DisallowArrowFunction"/>
 	<rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
 	<rule ref="SlevomatCodingStandard.Functions.StaticClosure"/>
+	<rule ref="SlevomatCodingStandard.Functions.StrictCall"/>
 	<rule ref="SlevomatCodingStandard.Functions.UselessParameterDefaultValue"/>
 	<rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure"/>
 	<rule ref="SlevomatCodingStandard.Functions.UnusedParameter"/>
