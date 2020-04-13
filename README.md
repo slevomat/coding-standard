@@ -234,6 +234,10 @@ foreach ($values as $value) {
 }
 ```
 
+#### SlevomatCodingStandard.Functions.StrictCall
+
+Some functions have `$strict` parameter. This sniff reports calls to these functions without the parameter or with `$strict = false`.
+
 #### SlevomatCodingStandard.Functions.StaticClosure 🔧
 
 Reports closures not using `$this` that are not declared `static`.
