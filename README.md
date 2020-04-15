@@ -1,10 +1,10 @@
 # Slevomat Coding Standard
 
-[![Latest version](https://img.shields.io/packagist/v/slevomat/coding-standard.svg?style=flat-square&colorB=007EC6)](https://packagist.org/packages/slevomat/coding-standard)
-[![Downloads](https://img.shields.io/packagist/dt/slevomat/coding-standard.svg?style=flat-square&colorB=007EC6)](https://packagist.org/packages/slevomat/coding-standard)
-[![Build status](https://img.shields.io/travis/slevomat/coding-standard/master.svg?label=travis&style=flat-square)](https://travis-ci.org/slevomat/coding-standard)
-[![Code coverage](https://img.shields.io/coveralls/slevomat/coding-standard/master.svg?style=flat-square)](https://coveralls.io/github/slevomat/coding-standard?branch=master)
-![PHPStan](https://img.shields.io/badge/style-level%207-brightgreen.svg?style=flat-square&label=phpstan)
+[![Latest version](https://img.shields.io/packagist/v/slevomat/coding-standard.svg?colorB=007EC6)](https://packagist.org/packages/slevomat/coding-standard)
+[![Downloads](https://img.shields.io/packagist/dt/slevomat/coding-standard.svg?colorB=007EC6)](https://packagist.org/packages/slevomat/coding-standard)
+[![Build status](https://github.com/slevomat/coding-standard/workflows/Build/badge.svg)](https://github.com/slevomat/coding-standard/actions?query=workflow%3ABuild+branch%3Amaster)
+[![Code coverage](https://codecov.io/gh/slevomat/coding-standard/branch/master/graph/badge.svg)](https://codecov.io/gh/slevomat/coding-standard)
+![PHPStan](https://img.shields.io/badge/style-level%207-brightgreen.svg?&label=phpstan)
 
 Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) provides sniffs that fall into three categories:
 

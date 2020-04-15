@@ -1,0 +1,10 @@
+comment: false
+coverage:
+  status:
+    project:
+      default:
+        target: 100
+    patch: off
+  range: 99...100
+  round: down
+  precision: 0

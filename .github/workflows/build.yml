@@ -1,0 +1,186 @@
+# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
+
+name: "Build"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  lint:
+    name: "Lint"
+
+    runs-on: "ubuntu-latest"
+
+    strategy:
+      matrix:
+        php-version:
+          - "7.1"
+          - "7.2"
+          - "7.3"
+          - "7.4"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2.0.0"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@1.8.2"
+        with:
+          coverage: "none"
+          php-version: "${{ matrix.php-version }}"
+
+      - name: "Cache dependencies"
+        uses: "actions/cache@v1.1.2"
+        with:
+          path: "~/.composer/cache"
+          key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json') }}"
+          restore-keys: "php-${{ matrix.php-version }}-composer-"
+
+      - name: "Install dependencies"
+        run: "composer update --prefer-dist --no-interaction --no-progress --no-suggest"
+
+      - name: "Lint"
+        run: "bin/phing lint"
+
+  coding-standards:
+    name: "Coding standards"
+
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2.0.0"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@1.8.2"
+        with:
+          coverage: "none"
+          php-version: "7.4"
+
+      - name: "Cache dependencies"
+        uses: "actions/cache@v1.1.2"
+        with:
+          path: "~/.composer/cache"
+          key: "php-7.4-composer-${{ hashFiles('**/composer.json') }}"
+          restore-keys: "php-7.4-composer-"
+
+      - name: "Install dependencies"
+        run: "composer update --prefer-dist --no-interaction --no-progress --no-suggest"
+
+      - name: "Lint"
+        run: "bin/phing lint"
+
+      - name: "Coding Standard"
+        run: "bin/phing cs"
+
+  static-analysis:
+    name: "Static analysis"
+
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2.0.0"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@1.8.2"
+        with:
+          coverage: "none"
+          php-version: "7.4"
+
+      - name: "Cache dependencies"
+        uses: "actions/cache@v1.1.2"
+        with:
+          path: "~/.composer/cache"
+          key: "php-7.4-composer-${{ hashFiles('**/composer.json') }}"
+          restore-keys: "php-7.4-composer-"
+
+      - name: "Install dependencies"
+        run: "composer update --prefer-dist --no-interaction --no-progress --no-suggest"
+
+      - name: "PHPStan"
+        run: "bin/phing phpstan"
+
+  tests:
+    name: "Tests"
+
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      matrix:
+        dependencies: ["lowest", "highest"]
+        php-version:
+          - "7.1"
+          - "7.2"
+          - "7.3"
+          - "7.4"
+        operating-system: ["ubuntu-latest", "windows-latest"]
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2.0.0"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@1.8.2"
+        with:
+          coverage: "none"
+          php-version: "${{ matrix.php-version }}"
+          extensions: mbstring
+
+      - name: "Cache dependencies"
+        uses: "actions/cache@v1.1.2"
+        with:
+          path: "~/.composer/cache"
+          key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json') }}"
+          restore-keys: "php-${{ matrix.php-version }}-composer-"
+
+      - name: "Install lowest dependencies"
+        if: ${{ matrix.dependencies == 'lowest' }}
+        run: "composer update --prefer-lowest --prefer-dist --no-interaction --no-progress --no-suggest"
+
+      - name: "Install highest dependencies"
+        if: ${{ matrix.dependencies == 'highest' }}
+        run: "composer update --prefer-dist --no-interaction --no-progress --no-suggest"
+
+      - name: "Tests"
+        run: "bin/phing tests-without-code-coverage"
+
+  code-coverage:
+    name: "Code coverage"
+
+    runs-on: "ubuntu-latest"
+
+    env:
+      COVERALLS_REPO_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2.0.0"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@1.8.2"
+        with:
+          coverage: "pcov"
+          php-version: "7.4"
+          tools: pecl
+
+      - name: "Cache dependencies"
+        uses: "actions/cache@v1.1.2"
+        with:
+          path: "~/.composer/cache"
+          key: "php-7.4-composer-${{ hashFiles('**/composer.json') }}"
+          restore-keys: "php-7.4-composer-"
+
+      - name: "Install dependencies"
+        run: "composer update --prefer-dist --no-interaction --no-progress --no-suggest"
+
+      - name: "Tests"
+        run: bin/phing tests
+
+      - name: "Upload to Codecov.io"
+        env:
+          CODECOV_TOKEN: "${{ secrets.CODECOV }}"
+        run: "bash <(curl -s https://codecov.io/bash) -f temp/coverage.xml"
