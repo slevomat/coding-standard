@@ -261,12 +261,7 @@ class AnnotationTypeHelper
 		}
 
 		if ($masterTypeNode instanceof ArrayShapeItemNode) {
-			/** @var ConstExprIntegerNode|IdentifierTypeNode|null $keyName */
-			$keyName = $masterTypeNode->keyName instanceof IdentifierTypeNode
-				? self::change($masterTypeNode->keyName, $typeNodeToChange, $changedTypeNode)
-				: $masterTypeNode->keyName;
-
-			return new ArrayShapeItemNode($keyName, $masterTypeNode->optional, self::change($masterTypeNode->valueType, $typeNodeToChange, $changedTypeNode));
+			return new ArrayShapeItemNode($masterTypeNode->keyName, $masterTypeNode->optional, self::change($masterTypeNode->valueType, $typeNodeToChange, $changedTypeNode));
 		}
 
 		if ($masterTypeNode instanceof NullableTypeNode) {
