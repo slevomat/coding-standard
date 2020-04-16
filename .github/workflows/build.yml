@@ -153,9 +153,6 @@ jobs:
 
     runs-on: "ubuntu-latest"
 
-    env:
-      COVERALLS_REPO_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v2.0.0"
