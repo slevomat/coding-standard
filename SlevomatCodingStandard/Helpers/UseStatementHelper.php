@@ -3,7 +3,6 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
-use function array_key_exists;
 use function array_merge;
 use function array_reverse;
 use function count;
@@ -13,7 +12,6 @@ use const T_ANON_CLASS;
 use const T_AS;
 use const T_COMMA;
 use const T_NAMESPACE;
-use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_TAG;
 use const T_SEMICOLON;
@@ -194,14 +192,7 @@ class UseStatementHelper
 
 				$token = $tokens[$pointer];
 				if (in_array($token['code'], TokenHelper::$typeKeywordTokenCodes, true)) {
-					if (!array_key_exists('scope_closer', $token)) {
-						$scopeOpenerPointer = TokenHelper::findNext($phpcsFile, T_OPEN_CURLY_BRACKET, $pointer + 1);
-						$scopeCloserPointer = $tokens[$scopeOpenerPointer]['bracket_closer'];
-					} else {
-						$scopeCloserPointer = $token['scope_closer'];
-					}
-
-					$pointer = $scopeCloserPointer + 1;
+					$pointer = $token['scope_closer'] + 1;
 					continue;
 				}
 				if (self::isAnonymousFunctionUse($phpcsFile, $pointer)) {

@@ -11,9 +11,11 @@ class UseOnlyWhitelistedNamespacesSniffTest extends TestCase
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/whitelistedNamespacesInUses.php',
-			['namespacesRequiredToUse' => [
-				'Foo',
-			]]
+			[
+				'namespacesRequiredToUse' => [
+					'Foo',
+				],
+			]
 		);
 
 		self::assertSniffError(

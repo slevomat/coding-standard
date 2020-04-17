@@ -57,10 +57,12 @@ class FullyQualifiedExceptionsSniffWithSpecialNamesTest extends TestCase
 	{
 		return self::checkFile(
 			__DIR__ . '/data/fullyQualifiedSpecialExceptionNames.php',
-			['specialExceptionNames' => [
-				'Foo\SomeError',
-				'Lorem\Ipsum\SomeOtherError',
-			]]
+			[
+				'specialExceptionNames' => [
+					'Foo\SomeError',
+					'Lorem\Ipsum\SomeOtherError',
+				],
+			]
 		);
 	}
 
