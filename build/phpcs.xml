@@ -38,6 +38,7 @@
 	<rule ref="SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation"/>
 	<rule ref="SlevomatCodingStandard.Arrays.MultiLineArrayEndBracketPlacement"/>
 	<rule ref="SlevomatCodingStandard.Arrays.SingleLineArrayWhitespace"/>
+	<rule ref="SlevomatCodingStandard.Classes.ClassMemberSpacing"/>
 	<rule ref="SlevomatCodingStandard.Classes.ClassStructure">
 		<properties>
 			<property name="groups" type="array">
