@@ -431,6 +431,14 @@ Sniff provides the following settings:
 
 * `enableAfterHeredoc`: enables/disables trailing commas after HEREDOC/NOWDOC, default based on PHP version.
 
+#### SlevomatCodingStandard.Classes.ClassMemberSpacing 🔧
+
+Checks lines count between different class members, eg. between last property and first method.
+
+Sniff provides the following settings:
+
+* `linesCountBetweenMembers`: lines count between different class members
+
 #### SlevomatCodingStandard.Classes.ConstantSpacing 🔧
 
 Checks that there is a certain number of blank lines between constants.
