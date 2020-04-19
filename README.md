@@ -318,7 +318,7 @@ Disallows references.
 
 #### SlevomatCodingStandard.PHP.ForbiddenClasses 🔧
 
-Sniff checks forbidden classes, interfaces, parent classes and traits. And provide the following settings:
+Reports usage of forbidden classes, interfaces, parent classes and traits. And provide the following settings:
 
 * `forbiddenClasses`: forbids creating instances with `new` keyword or accessing with `::` operator
 * `forbiddenExtends`: forbids extending with `extends` keyword
