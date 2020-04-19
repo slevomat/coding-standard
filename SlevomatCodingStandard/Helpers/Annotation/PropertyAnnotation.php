@@ -28,7 +28,7 @@ class PropertyAnnotation extends Annotation
 
 	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, ?PropertyTagValueNode $contentNode)
 	{
-		if (!in_array($name, ['@property', '@property-read', '@property-write'], true)) {
+		if (!in_array($name, ['@property', '@property-read', '@property-write', '@psalm-property', '@psalm-property-read', '@psalm-property-write', '@phpstan-property', '@phpstan-property-read', '@phpstan-property-write'], true)) {
 			throw new InvalidArgumentException(sprintf('Unsupported annotation %s.', $name));
 		}
 

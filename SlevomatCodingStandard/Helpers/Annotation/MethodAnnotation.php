@@ -15,6 +15,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use function implode;
+use function in_array;
 use function sprintf;
 
 /**
@@ -28,7 +29,7 @@ class MethodAnnotation extends Annotation
 
 	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, ?MethodTagValueNode $contentNode)
 	{
-		if ($name !== '@method') {
+		if (!in_array($name, ['@method', '@psalm-method', '@phpstan-method'], true)) {
 			throw new InvalidArgumentException(sprintf('Unsupported annotation %s.', $name));
 		}
 
