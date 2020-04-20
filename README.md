@@ -167,7 +167,7 @@ Sniff provides the following settings:
 * `ignoreAssignmentsInsideFunctionCalls`: ignores assignment inside function calls, like this:
 
 ```php
-if (in_array(1, $haystack, $strict = true) {
+if (in_array(1, $haystack, $strict = true)) {
 
 }
 ```
