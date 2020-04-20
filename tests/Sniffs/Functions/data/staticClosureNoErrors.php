@@ -35,8 +35,13 @@ class Whatever extends Something
 		return array_map(function ($i) {
 			return "{$this->anything}{$i}";
 		}, []);
-
 	}
+
+	public function arrayFilterEtc($list)
+	{
+		return count(array_filter($list->call('something'), fn (object $object): bool => $object->getAnything() === $this->anything)) === 1;
+	}
+
 }
 
 Closure::bind(function ($instance, $value) {
