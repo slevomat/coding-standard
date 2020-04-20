@@ -84,4 +84,16 @@ abstract class WithoutErrors
 
 	abstract public function third();
 
+	/**
+	 * @codingStandardsIgnoreStart
+	 *
+	 * @var string
+	 */
+	protected $forth;
+	// @codingStandardsIgnoreEnd
+
+	public function forth()
+	{
+	}
+
 }

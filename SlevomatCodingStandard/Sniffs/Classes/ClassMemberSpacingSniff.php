@@ -81,6 +81,24 @@ class ClassMemberSpacingSniff implements Sniff
 			}
 
 			$previousMemberEndPointer = $this->getMemberEndPointer($phpcsFile, $previousMemberPointer);
+
+			$hasCommentWithNewLineAfterPreviousMember = false;
+
+			$commentPointerAfterPreviousMember = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $previousMemberEndPointer + 1);
+			if (
+				in_array($tokens[$commentPointerAfterPreviousMember]['code'], TokenHelper::$inlineCommentTokenCodes, true)
+				&& (
+					$tokens[$previousMemberEndPointer]['line'] === $tokens[$commentPointerAfterPreviousMember]['line']
+					|| $tokens[$previousMemberEndPointer]['line'] + 1 === $tokens[$commentPointerAfterPreviousMember]['line']
+				)
+			) {
+				$previousMemberEndPointer = CommentHelper::getCommentEndPointer($phpcsFile, $commentPointerAfterPreviousMember);
+
+				if (substr($tokens[$commentPointerAfterPreviousMember]['content'], -strlen($phpcsFile->eolChar)) === $phpcsFile->eolChar) {
+					$hasCommentWithNewLineAfterPreviousMember = true;
+				}
+			}
+
 			$memberStartPointer = $this->getMemberStartPointer($phpcsFile, $memberPointer);
 
 			$actualLinesCount = $tokens[$memberStartPointer]['line'] - $tokens[$previousMemberEndPointer]['line'] - 1;
@@ -103,31 +121,13 @@ class ClassMemberSpacingSniff implements Sniff
 				continue;
 			}
 
-			$hasCommentAfterPreviousMember = false;
-			$hasCommentWithNewLineAfterPreviousMember = false;
-
-			$commentPointerAfterPreviousMember = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $previousMemberEndPointer + 1);
-			if (
-				in_array($tokens[$commentPointerAfterPreviousMember]['code'], TokenHelper::$inlineCommentTokenCodes, true)
-				&& $tokens[$previousMemberEndPointer]['line'] === $tokens[$commentPointerAfterPreviousMember]['line']
-			) {
-				$hasCommentAfterPreviousMember = true;
-				if (substr($tokens[$commentPointerAfterPreviousMember]['content'], -strlen($phpcsFile->eolChar)) === $phpcsFile->eolChar) {
-					$hasCommentWithNewLineAfterPreviousMember = true;
-				}
-			}
-
 			$newLines = str_repeat($phpcsFile->eolChar, $requiredLinesCount + ($hasCommentWithNewLineAfterPreviousMember ? 0 : 1));
-
-			$pointerToFix = $hasCommentAfterPreviousMember
-				? CommentHelper::getCommentEndPointer($phpcsFile, $commentPointerAfterPreviousMember)
-				: $previousMemberEndPointer;
 
 			$phpcsFile->fixer->beginChangeset();
 
-			$phpcsFile->fixer->addContent($pointerToFix, $newLines);
+			$phpcsFile->fixer->addContent($previousMemberEndPointer, $newLines);
 
-			for ($i = $pointerToFix + 1; $i < TokenHelper::findFirstTokenOnLine($phpcsFile, $memberStartPointer); $i++) {
+			for ($i = $previousMemberEndPointer + 1; $i < TokenHelper::findFirstTokenOnLine($phpcsFile, $memberStartPointer); $i++) {
 				$phpcsFile->fixer->replaceToken($i, '');
 			}
 
