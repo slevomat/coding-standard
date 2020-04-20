@@ -18,6 +18,7 @@ class ClassStructureSniffTest extends TestCase
 		'public abstract methods, public methods, protected abstract methods, protected methods, private methods',
 		'constructor, destructor',
 		'static constructors',
+		'methods',
 	];
 
 	private const RULES_FOR_FINAL_METHODS = [
@@ -187,7 +188,20 @@ class ClassStructureSniffTest extends TestCase
 		try {
 			self::checkFile(
 				__DIR__ . '/data/classStructureSniffNoErrors.php',
-				['groups' => self::DIFFERENT_RULES, 'enableFinalMethods' => true]
+				[
+					'groups' => [
+						'uses',
+						'constants',
+						'properties',
+						'public static abstract methods, public static methods, protected static abstract methods, protected static methods, private static methods',
+						'public abstract methods, public methods, protected abstract methods, protected methods, private methods',
+						'constructor',
+						'static constructors',
+						'destructor',
+						'magic methods',
+					],
+					'enableFinalMethods' => true,
+				]
 			);
 			self::fail();
 		} catch (MissingClassGroupsException $e) {

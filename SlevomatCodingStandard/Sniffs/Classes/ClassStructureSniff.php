@@ -25,7 +25,6 @@ use function preg_replace;
 use function preg_split;
 use function sprintf;
 use function str_repeat;
-use function strpos;
 use function strtolower;
 use const T_ABSTRACT;
 use const T_CLOSE_CURLY_BRACKET;
@@ -581,7 +580,7 @@ class ClassStructureSniff implements Sniff
 
 			if (!$this->enableFinalMethods) {
 				foreach ($supportedGroups as $supportedGroupNo => $supportedGroupName) {
-					if (strpos($supportedGroupName, ' final ') === false) {
+					if (!in_array($supportedGroupName, self::SHORTCUTS[self::GROUP_SHORTCUT_FINAL_METHODS], true)) {
 						continue;
 					}
 
@@ -655,6 +654,11 @@ class ClassStructureSniff implements Sniff
 		foreach (self::SHORTCUTS[$shortcut] as $groupOrShortcut) {
 			if (in_array($groupOrShortcut, $supportedGroups, true)) {
 				$groups[] = $groupOrShortcut;
+			} elseif (
+				!array_key_exists($groupOrShortcut, self::SHORTCUTS)
+				&& in_array($groupOrShortcut, self::SHORTCUTS[self::GROUP_SHORTCUT_FINAL_METHODS], true)
+			) {
+				// Nothing
 			} else {
 				$groups = array_merge($groups, $this->unpackShortcut($groupOrShortcut, $supportedGroups));
 			}
