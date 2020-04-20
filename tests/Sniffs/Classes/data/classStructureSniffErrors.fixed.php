@@ -209,3 +209,20 @@ abstract class WithAbstract
 	}
 
 }
+
+class N
+{
+
+	public $whatever;
+
+	/**
+	* The attributes that should be hidden for arrays.
+	*
+	* @var array
+	*/
+	protected $hidden = [
+		'password',
+		'remember_token',
+	];
+
+}
