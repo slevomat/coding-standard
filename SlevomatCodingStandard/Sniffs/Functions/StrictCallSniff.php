@@ -84,10 +84,19 @@ class StrictCallSniff implements Sniff
 			}
 		}
 
-		$parametersCount = count($commaPointers) + 1;
+		$commaPointersCount = count($commaPointers);
+
+		$parametersCount = $commaPointersCount + 1;
+		$lastCommaPointer = $commaPointersCount > 0 ? $commaPointers[$commaPointersCount - 1] : null;
+
+		if (
+			$lastCommaPointer !== null
+			&& TokenHelper::findNextEffective($phpcsFile, $lastCommaPointer + 1, $tokens[$parenthesisOpenerPointer]['parenthesis_closer']) === null
+		) {
+			$parametersCount--;
+		}
 
 		if ($parametersCount === self::FUNCTIONS[$functionName]) {
-			$lastCommaPointer = $commaPointers[count($commaPointers) - 1];
 
 			$strictParameterValue = strtolower(trim(TokenHelper::getContent($phpcsFile, $lastCommaPointer + 1, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] - 1)));
 
