@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 array_search(0, [1, 2]);
 array_keys([], 0);

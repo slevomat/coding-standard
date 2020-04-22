@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 namespace Foo;
 
