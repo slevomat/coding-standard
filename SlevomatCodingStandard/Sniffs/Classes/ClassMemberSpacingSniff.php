@@ -4,13 +4,14 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\CommentHelper;
-use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use function array_key_exists;
 use function array_merge;
 use function in_array;
 use function sprintf;
@@ -182,8 +183,24 @@ class ClassMemberSpacingSniff implements Sniff
 
 	private function getMemberStartPointer(File $phpcsFile, int $memberPointer): int
 	{
-		return DocCommentHelper::findDocCommentOpenToken($phpcsFile, $memberPointer)
-			?? $this->getMemberFirstCodePointer($phpcsFile, $memberPointer);
+		$tokens = $phpcsFile->getTokens();
+
+		$memberFirstCodePointer = $this->getMemberFirstCodePointer($phpcsFile, $memberPointer);
+		$pointerBefore = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $memberFirstCodePointer - 1);
+
+		if (
+			in_array($tokens[$pointerBefore]['code'], Tokens::$commentTokens, true)
+			&& $tokens[$pointerBefore]['line'] + 1 === $tokens[$memberFirstCodePointer]['line']
+		) {
+			$pointerBeforeComment = TokenHelper::findPreviousEffective($phpcsFile, $pointerBefore - 1);
+			if ($tokens[$pointerBeforeComment]['line'] !== $tokens[$pointerBefore]['line']) {
+				return array_key_exists('comment_opener', $tokens[$pointerBefore])
+					? $tokens[$pointerBefore]['comment_opener']
+					: CommentHelper::getMultilineCommentStartPointer($phpcsFile, $pointerBefore);
+			}
+		}
+
+		return $memberFirstCodePointer;
 	}
 
 	private function getMemberFirstCodePointer(File $phpcsFile, int $memberPointer): int

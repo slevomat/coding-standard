@@ -96,4 +96,14 @@ abstract class WithoutErrors
 	{
 	}
 
+	// Invalid comment
+	public const THIRD = [3];
+
+	/*
+	 Invalid comment
+	*/
+	public function fifth()
+	{
+	}
+
 }
