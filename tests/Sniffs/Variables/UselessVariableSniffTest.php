@@ -17,7 +17,7 @@ class UselessVariableSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/uselessVariableErrors.php');
 
-		self::assertSame(18, $report->getErrorCount());
+		self::assertSame(19, $report->getErrorCount());
 
 		self::assertSniffError($report, 4, UselessVariableSniff::CODE_USELESS_VARIABLE, 'Useless variable $a.');
 		self::assertSniffError($report, 9, UselessVariableSniff::CODE_USELESS_VARIABLE, 'Useless variable $b.');
@@ -36,7 +36,8 @@ class UselessVariableSniffTest extends TestCase
 		self::assertSniffError($report, 78, UselessVariableSniff::CODE_USELESS_VARIABLE, 'Useless variable $o.');
 		self::assertSniffError($report, 84, UselessVariableSniff::CODE_USELESS_VARIABLE, 'Useless variable $p.');
 		self::assertSniffError($report, 89, UselessVariableSniff::CODE_USELESS_VARIABLE, 'Useless variable $q.');
-		self::assertSniffError($report, 93, UselessVariableSniff::CODE_USELESS_VARIABLE, 'Useless variable $z.');
+		self::assertSniffError($report, 99, UselessVariableSniff::CODE_USELESS_VARIABLE, 'Useless variable $r.');
+		self::assertSniffError($report, 103, UselessVariableSniff::CODE_USELESS_VARIABLE, 'Useless variable $z.');
 
 		self::assertAllFixedInFile($report);
 	}

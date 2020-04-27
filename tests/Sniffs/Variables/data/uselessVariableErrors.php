@@ -90,5 +90,15 @@ function assigmentAfterAssignment() {
 	return $q;
 }
 
+function afterIfStatement(float $seconds): string
+{
+	if ($seconds < 1) {
+		return round($seconds * 1000, 2) . 'ms';
+	}
+
+	$r = round($seconds, 2) . 's';
+	return $r;
+}
+
 $z = null;
 return $z;

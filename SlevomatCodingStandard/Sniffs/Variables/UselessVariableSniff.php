@@ -16,6 +16,7 @@ use function preg_quote;
 use function sprintf;
 use const T_AND_EQUAL;
 use const T_BITWISE_AND;
+use const T_CLOSE_CURLY_BRACKET;
 use const T_CONCAT_EQUAL;
 use const T_DIV_EQUAL;
 use const T_DO;
@@ -130,7 +131,7 @@ class UselessVariableSniff implements Sniff
 		}
 
 		if (
-			!in_array($tokens[$pointerBeforePreviousVariable]['code'], [T_SEMICOLON, T_OPEN_CURLY_BRACKET], true)
+			!in_array($tokens[$pointerBeforePreviousVariable]['code'], [T_SEMICOLON, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET], true)
 			&& TokenHelper::findNextEffective($phpcsFile, $returnSemicolonPointer + 1) !== null
 		) {
 			$phpcsFile->addError(...$errorParameters);
