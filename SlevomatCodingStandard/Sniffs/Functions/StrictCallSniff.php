@@ -56,6 +56,8 @@ class StrictCallSniff implements Sniff
 			return;
 		}
 
+		$parenthesisCloserPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_closer'];
+
 		$functionName = strtolower($tokens[$stringPointer]['content']);
 
 		if (!array_key_exists($functionName, self::FUNCTIONS)) {
@@ -68,7 +70,7 @@ class StrictCallSniff implements Sniff
 		}
 
 		$commaPointers = [];
-		for ($i = $parenthesisOpenerPointer + 1; $i < $tokens[$parenthesisOpenerPointer]['parenthesis_closer']; $i++) {
+		for ($i = $parenthesisOpenerPointer + 1; $i < $parenthesisCloserPointer; $i++) {
 			if ($tokens[$i]['code'] === T_OPEN_PARENTHESIS) {
 				$i = $tokens[$i]['parenthesis_closer'];
 				continue;
@@ -88,19 +90,25 @@ class StrictCallSniff implements Sniff
 
 		$parametersCount = $commaPointersCount + 1;
 		$lastCommaPointer = $commaPointersCount > 0 ? $commaPointers[$commaPointersCount - 1] : null;
+		$hasTrailingComma = false;
 
 		if (
 			$lastCommaPointer !== null
-			&& TokenHelper::findNextEffective($phpcsFile, $lastCommaPointer + 1, $tokens[$parenthesisOpenerPointer]['parenthesis_closer']) === null
+			&& TokenHelper::findNextEffective($phpcsFile, $lastCommaPointer + 1, $parenthesisCloserPointer) === null
 		) {
+			$hasTrailingComma = true;
 			$parametersCount--;
 		}
 
 		if ($parametersCount === self::FUNCTIONS[$functionName]) {
 
-			$strictParameterValue = strtolower(trim(TokenHelper::getContent($phpcsFile, $lastCommaPointer + 1, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] - 1)));
+			$strictParameterValue = TokenHelper::getContent(
+				$phpcsFile,
+				$commaPointers[self::FUNCTIONS[$functionName] - 2] + 1,
+				($hasTrailingComma ? $lastCommaPointer : $parenthesisCloserPointer) - 1
+			);
 
-			if ($strictParameterValue === 'true') {
+			if (strtolower(trim($strictParameterValue)) === 'true') {
 				return;
 			}
 

@@ -2,7 +2,6 @@
 
 namespace Foo;
 
-use SlevomatCodingStandard\Helpers\ParameterTypeHint;
 use function array_filter;
 use function array_keys;
 
@@ -37,4 +36,19 @@ in_array(0);
 array_keys([]);
 array_keys(
 	[],
+);
+
+in_array(
+	0,
+	[
+		1,
+		2,
+	],
+	true,
+);
+
+in_array(
+	$whatever,
+	$cache[$cacheKey],
+	true,
 );

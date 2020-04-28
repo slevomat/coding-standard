@@ -17,7 +17,7 @@ class StrictCallSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/strictCallErrors.php');
 
-		self::assertSame(6, $report->getErrorCount());
+		self::assertSame(7, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, StrictCallSniff::CODE_STRICT_PARAMETER_MISSING);
 		self::assertSniffError($report, 4, StrictCallSniff::CODE_STRICT_PARAMETER_MISSING);
@@ -26,6 +26,7 @@ class StrictCallSniffTest extends TestCase
 		self::assertSniffError($report, 10, StrictCallSniff::CODE_NON_STRICT_COMPARISON);
 		self::assertSniffError($report, 11, StrictCallSniff::CODE_NON_STRICT_COMPARISON);
 		self::assertSniffError($report, 16, StrictCallSniff::CODE_NON_STRICT_COMPARISON);
+		self::assertSniffError($report, 18, StrictCallSniff::CODE_NON_STRICT_COMPARISON);
 	}
 
 }

@@ -14,3 +14,12 @@ in_array(
 	false,
 );
 base64_decode('', false);
+
+in_array(
+	0,
+	[
+		1,
+		2,
+	],
+	false,
+);
