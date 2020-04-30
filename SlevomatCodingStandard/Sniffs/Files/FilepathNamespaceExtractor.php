@@ -10,10 +10,12 @@ use function array_shift;
 use function array_unshift;
 use function count;
 use function explode;
+use function getcwd;
 use function implode;
 use function in_array;
 use function pathinfo;
 use function preg_split;
+use function str_replace;
 use function strlen;
 use function strtolower;
 use function substr;
@@ -53,7 +55,7 @@ class FilepathNamespaceExtractor
 		}
 
 		/** @var string[] $pathParts */
-		$pathParts = preg_split('~[/\\\]~', $path);
+		$pathParts = preg_split('~[/\\\]~', str_replace($this->getCurrentDir(), '', $path));
 		$rootNamespace = null;
 		while (count($pathParts) > 0) {
 			array_shift($pathParts);
@@ -83,6 +85,13 @@ class FilepathNamespaceExtractor
 		}));
 
 		return substr($typeName, 0, -strlen('.' . $extension));
+	}
+
+	protected function getCurrentDir(): string
+	{
+		$dir = getcwd();
+
+		return $dir !== false ? $dir : '';
 	}
 
 }
