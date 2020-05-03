@@ -241,4 +241,12 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @param \Foo::INTEGER $a
+	 */
+	public function constTypeNode($a)
+	{
+
+	}
+
 }

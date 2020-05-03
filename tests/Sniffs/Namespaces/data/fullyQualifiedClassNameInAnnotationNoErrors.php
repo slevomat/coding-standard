@@ -126,3 +126,12 @@ class FooClass
 	public $usingTemplateAboveClass;
 
 }
+
+/**
+ * @template TemplateForMixin
+ * @mixin TemplateForMixin
+ */
+class Mixin
+{
+
+}

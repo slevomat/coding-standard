@@ -7,7 +7,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationConstantExpressionHelper;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
@@ -111,8 +110,6 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 							continue;
 						}
 
-						/** @var MethodAnnotation $annotation */
-						$annotation = $annotation;
 						$fixedAnnotationContent = AnnotationHelper::fixAnnotationConstantFetchNode($phpcsFile, $annotation, $constantFetchNode, new ConstFetchNode($fullyQualifiedTypeHint, $constantFetchNode->name));
 
 						$phpcsFile->fixer->beginChangeset();

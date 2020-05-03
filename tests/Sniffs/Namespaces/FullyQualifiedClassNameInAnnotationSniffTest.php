@@ -17,7 +17,7 @@ class FullyQualifiedClassNameInAnnotationSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedClassNameInAnnotationErrors.php');
 
-		self::assertSame(61, $report->getErrorCount());
+		self::assertSame(66, $report->getErrorCount());
 
 		self::assertSniffError($report, 16, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \XXX\PropertySameNamespace in @var should be referenced via a fully qualified name');
 		self::assertSniffError($report, 19, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \YYY\PropertyUsed in @var should be referenced via a fully qualified name');
@@ -84,6 +84,13 @@ class FullyQualifiedClassNameInAnnotationSniffTest extends TestCase
 		self::assertSniffError($report, 169, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \Iterator in @template-use should be referenced via a fully qualified name');
 		self::assertSniffError($report, 169, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \DateTimeImmutable in @template-use should be referenced via a fully qualified name');
 		self::assertSniffError($report, 175, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \XXX\TemplateThatDoesNotExist in @phpstan-return should be referenced via a fully qualified name');
+
+		self::assertSniffError($report, 185, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \YYY\PropertyUsed in @mixin should be referenced via a fully qualified name');
+
+		self::assertSniffError($report, 196, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \DateTimeImmutable in @param should be referenced via a fully qualified name');
+		self::assertSniffError($report, 203, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \DateTimeImmutable in @param should be referenced via a fully qualified name');
+		self::assertSniffError($report, 210, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \DateTimeImmutable in @param should be referenced via a fully qualified name');
+		self::assertSniffError($report, 210, FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME, 'Class name \DateTime in @param should be referenced via a fully qualified name');
 
 		self::assertAllFixedInFile($report);
 	}

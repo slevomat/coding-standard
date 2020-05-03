@@ -8,6 +8,7 @@ use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeParameterNode;
+use PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
@@ -76,8 +77,68 @@ class AnnotationTypeHelper
 			return $identifierTypeNodes;
 		}
 
+		if ($typeNode instanceof ConstTypeNode) {
+			return [];
+		}
+
 		/** @var IdentifierTypeNode|ThisTypeNode $typeNode */
 		$typeNode = $typeNode;
+		return [$typeNode];
+	}
+
+	/**
+	 * @param TypeNode $typeNode
+	 * @return ConstTypeNode[]
+	 */
+	public static function getConstantTypeNodes(TypeNode $typeNode): array
+	{
+		if ($typeNode instanceof ArrayTypeNode) {
+			return self::getConstantTypeNodes($typeNode->type);
+		}
+
+		if ($typeNode instanceof ArrayShapeNode) {
+			$constTypeNodes = [];
+			foreach ($typeNode->items as $arrayShapeItemNode) {
+				$constTypeNodes = array_merge($constTypeNodes, self::getConstantTypeNodes($arrayShapeItemNode->valueType));
+			}
+			return $constTypeNodes;
+		}
+
+		if (
+			$typeNode instanceof UnionTypeNode
+			|| $typeNode instanceof IntersectionTypeNode
+		) {
+			$constTypeNodes = [];
+			foreach ($typeNode->types as $innerTypeNode) {
+				$constTypeNodes = array_merge($constTypeNodes, self::getConstantTypeNodes($innerTypeNode));
+			}
+			return $constTypeNodes;
+		}
+
+		if ($typeNode instanceof GenericTypeNode) {
+			$constTypeNodes = [];
+			foreach ($typeNode->genericTypes as $innerTypeNode) {
+				$constTypeNodes = array_merge($constTypeNodes, self::getConstantTypeNodes($innerTypeNode));
+			}
+			return $constTypeNodes;
+		}
+
+		if ($typeNode instanceof NullableTypeNode) {
+			return self::getConstantTypeNodes($typeNode->type);
+		}
+
+		if ($typeNode instanceof CallableTypeNode) {
+			$constTypeNodes = self::getConstantTypeNodes($typeNode->returnType);
+			foreach ($typeNode->parameters as $callableParameterNode) {
+				$constTypeNodes = array_merge($constTypeNodes, self::getConstantTypeNodes($callableParameterNode->type));
+			}
+			return $constTypeNodes;
+		}
+
+		if (!$typeNode instanceof ConstTypeNode) {
+			return [];
+		}
+
 		return [$typeNode];
 	}
 

@@ -3,34 +3,25 @@
 namespace SlevomatCodingStandard\Helpers\Annotation;
 
 use InvalidArgumentException;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
-use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\MixinTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
-use function in_array;
 use function sprintf;
 
 /**
  * @internal
  */
-class ReturnAnnotation extends Annotation
+class MixinAnnotation extends Annotation
 {
 
-	/** @var ReturnTagValueNode|null */
+	/** @var MixinTagValueNode|null */
 	private $contentNode;
 
-	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, ?ReturnTagValueNode $contentNode)
+	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, ?MixinTagValueNode $contentNode)
 	{
-		if (!in_array($name, ['@return', '@psalm-return', '@phpstan-return'], true)) {
+		if ($name !== '@mixin') {
 			throw new InvalidArgumentException(sprintf('Unsupported annotation %s.', $name));
 		}
 
@@ -44,7 +35,7 @@ class ReturnAnnotation extends Annotation
 		return $this->contentNode === null;
 	}
 
-	public function getContentNode(): ReturnTagValueNode
+	public function getContentNode(): MixinTagValueNode
 	{
 		$this->errorWhenInvalid();
 
@@ -64,13 +55,13 @@ class ReturnAnnotation extends Annotation
 	}
 
 	/**
-	 * @return GenericTypeNode|CallableTypeNode|IntersectionTypeNode|UnionTypeNode|ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|NullableTypeNode|ConstTypeNode
+	 * @return GenericTypeNode|IdentifierTypeNode
 	 */
 	public function getType(): TypeNode
 	{
 		$this->errorWhenInvalid();
 
-		/** @var GenericTypeNode|CallableTypeNode|IntersectionTypeNode|UnionTypeNode|ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|NullableTypeNode|ConstTypeNode $type */
+		/** @var GenericTypeNode|IdentifierTypeNode $type */
 		$type = $this->contentNode->type;
 		return $type;
 	}

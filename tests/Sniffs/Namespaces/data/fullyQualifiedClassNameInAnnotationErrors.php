@@ -180,3 +180,37 @@ class Template
 	}
 
 }
+
+/**
+ * @mixin PropertyUsed
+ */
+class Mixin
+{
+
+}
+
+class ConstTypeNode
+{
+
+	/**
+	 * @param DateTimeImmutable::ATOM $a
+	 */
+	public function constant($a)
+	{
+	}
+
+	/**
+	 * @param DateTimeImmutable::* $a
+	 */
+	public function constantWildcard($a)
+	{
+	}
+
+	/**
+	 * @param DateTimeImmutable::ATOM|DateTime::ATOM $a
+	 */
+	public function constantUnion($a)
+	{
+	}
+
+}
