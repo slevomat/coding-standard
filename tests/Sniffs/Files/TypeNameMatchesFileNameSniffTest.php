@@ -84,4 +84,11 @@ class TypeNameMatchesFileNameSniffTest extends TestCase
 		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/rootNamespace2/Xxx/Boo.php', $sniffProperties2));
 	}
 
+	public function testWithProvidedBasePathAndNestedSameDirName(): void
+	{
+		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/data/Foo/Bar.php', [
+			'rootNamespaces' => ['data' => 'Data'],
+		], [], ['--basepath=' . __DIR__ . '/data']));
+	}
+
 }
