@@ -7,7 +7,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function assert;
 use function is_bool;
-use function is_int;
 use function is_string;
 use function preg_replace;
 use function preg_replace_callback;
@@ -45,13 +44,14 @@ abstract class AbstractMethodSignature implements Sniff
 		$signatureStartPointer = $phpcsFile->findFirstOnLine(T_OPEN_TAG, $methodPointer, true);
 		assert(!is_bool($signatureStartPointer));
 
+		/** @var int $pointerAfterSignatureEnd */
 		$pointerAfterSignatureEnd = TokenHelper::findNext($phpcsFile, [T_OPEN_CURLY_BRACKET, T_SEMICOLON], $methodPointer + 1);
 		if ($phpcsFile->getTokens()[$pointerAfterSignatureEnd]['code'] === T_SEMICOLON) {
 			return [$signatureStartPointer, $pointerAfterSignatureEnd];
 		}
 
+		/** @var int $signatureEndPointer */
 		$signatureEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointerAfterSignatureEnd - 1);
-		assert(is_int($signatureEndPointer));
 
 		return [$signatureStartPointer, $signatureEndPointer];
 	}
