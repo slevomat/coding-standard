@@ -8,7 +8,10 @@ use PHP_CodeSniffer\Files\LocalFile;
 use PHP_CodeSniffer\Runner;
 use ReflectionClass;
 use function array_map;
+use function array_merge;
 use function count;
+use function define;
+use function defined;
 use function implode;
 use function in_array;
 use function preg_replace;
@@ -28,14 +31,16 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 * @param string $filePath
 	 * @param (string|int|bool|array<int|string, (string|int|bool|null)>)[] $sniffProperties
 	 * @param string[] $codesToCheck
+	 * @param string[] $cliArgs
 	 * @return File
 	 */
-	protected static function checkFile(string $filePath, array $sniffProperties = [], array $codesToCheck = []): File
+	protected static function checkFile(string $filePath, array $sniffProperties = [], array $codesToCheck = [], array $cliArgs = []): File
 	{
+		if (defined('PHP_CODESNIFFER_CBF') === false) {
+			define('PHP_CODESNIFFER_CBF', false);
+		}
 		$codeSniffer = new Runner();
-		$codeSniffer->config = new Config([
-			'-s',
-		]);
+		$codeSniffer->config = new Config(array_merge(['-s'], $cliArgs));
 		$codeSniffer->init();
 
 		if (count($sniffProperties) > 0) {

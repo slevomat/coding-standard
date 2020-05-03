@@ -15,8 +15,11 @@ use function min;
 use function sprintf;
 use function str_replace;
 use function strcasecmp;
+use function strlen;
+use function substr;
 use function ucfirst;
 use function uksort;
+use const DIRECTORY_SEPARATOR;
 use const T_CLASS;
 use const T_INTERFACE;
 use const T_STRING;
@@ -88,8 +91,14 @@ class TypeNameMatchesFileNameSniff implements Sniff
 			return;
 		}
 
+		$filename = str_replace('/', DIRECTORY_SEPARATOR, $phpcsFile->getFilename());
+		$basePath = str_replace('/', DIRECTORY_SEPARATOR, $phpcsFile->config->basepath ?? '');
+		if ($basePath !== '' && StringHelper::startsWith($filename, $basePath)) {
+			$filename = substr($filename, strlen($basePath));
+		}
+
 		$expectedTypeName = $this->getNamespaceExtractor()->getTypeNameFromProjectPath(
-			$phpcsFile->getFilename()
+			$filename
 		);
 		if ($typeName === $expectedTypeName) {
 			return;
