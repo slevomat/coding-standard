@@ -199,4 +199,39 @@ abstract class Whatever
 	{
 	}
 
+	/** @return true */
+	public function constTrue(): bool
+	{
+	}
+
+	/** @return FALSE */
+	public function constFalse(): bool
+	{
+	}
+
+	/** @return 0 */
+	public function constInteger(): int
+	{
+	}
+
+	/** @return 0.0 */
+	public function constFloat(): float
+	{
+	}
+
+	/** @return 'foo' */
+	public function constString(): string
+	{
+	}
+
+	/** @return 'foo'|null */
+	public function constNullableString(): ?string
+	{
+	}
+
+	/** @return 'foo'|'bar' */
+	public function constUnionString(): string
+	{
+	}
+
 }

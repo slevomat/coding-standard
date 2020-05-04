@@ -121,4 +121,25 @@ class Whatever
 	 */
 	public $traversableArray;
 
+	/** @var true */
+	public $constTrue;
+
+	/** @var FALSE */
+	public $constFalse;
+
+	/** @var 0 */
+	public $constInteger;
+
+	/** @var 0.0 */
+	public $constFloat;
+
+	/** @var 'foo' */
+	public $constString;
+
+	/** @var 'foo'|null */
+	public $constNullableString;
+
+	/** @var 'foo'|'bar' */
+	public $constUnionString;
+
 }

@@ -108,4 +108,25 @@ class Whatever
 	 */
 	public array $traversableArray;
 
+	/** @var true */
+	public bool $constTrue;
+
+	/** @var FALSE */
+	public bool $constFalse;
+
+	/** @var 0 */
+	public int $constInteger;
+
+	/** @var 0.0 */
+	public float $constFloat;
+
+	/** @var 'foo' */
+	public string $constString;
+
+	/** @var 'foo'|null */
+	public ?string $constNullableString = null;
+
+	/** @var 'foo'|'bar' */
+	public string $constUnionString;
+
 }

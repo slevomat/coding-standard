@@ -186,4 +186,39 @@ class Whatever
 	{
 	}
 
+	/** @param true $a */
+	public function constTrue(bool $a)
+	{
+	}
+
+	/** @param FALSE $a */
+	public function constFalse(bool $a)
+	{
+	}
+
+	/** @param 0 $a */
+	public function constInteger(int $a)
+	{
+	}
+
+	/** @param 0.0 $a */
+	public function constFloat(float $a)
+	{
+	}
+
+	/** @param 'foo' $a */
+	public function constString(string $a)
+	{
+	}
+
+	/** @param 'foo'|null $a */
+	public function constNullableString(?string $a)
+	{
+	}
+
+	/** @param 'foo'|'bar' $a */
+	public function constUnionString(string $a)
+	{
+	}
+
 }

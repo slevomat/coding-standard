@@ -3,6 +3,9 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFloatNode;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprStringNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
@@ -417,7 +420,25 @@ class AnnotationTypeHelper
 			return true;
 		}
 
-		return $typeNode instanceof ArrayTypeNode;
+		if ($typeNode instanceof ArrayTypeNode) {
+			return true;
+		}
+
+		if ($typeNode instanceof ConstTypeNode) {
+			if ($typeNode->constExpr instanceof ConstExprIntegerNode) {
+				return true;
+			}
+
+			if ($typeNode->constExpr instanceof ConstExprFloatNode) {
+				return true;
+			}
+
+			if ($typeNode->constExpr instanceof ConstExprStringNode) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public static function containsJustTwoTypes(TypeNode $typeNode): bool
@@ -571,7 +592,7 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param CallableTypeNode|GenericTypeNode|IdentifierTypeNode|ThisTypeNode|ArrayTypeNode|ArrayShapeNode $typeNode
+	 * @param CallableTypeNode|GenericTypeNode|IdentifierTypeNode|ThisTypeNode|ArrayTypeNode|ArrayShapeNode|ConstTypeNode $typeNode
 	 * @return string
 	 */
 	public static function getTypeHintFromOneType(TypeNode $typeNode): string
@@ -581,6 +602,14 @@ class AnnotationTypeHelper
 		}
 
 		if ($typeNode instanceof IdentifierTypeNode) {
+			if (strtolower($typeNode->name) === 'true') {
+				return 'bool';
+			}
+
+			if (strtolower($typeNode->name) === 'false') {
+				return 'bool';
+			}
+
 			return $typeNode->name;
 		}
 
@@ -594,6 +623,20 @@ class AnnotationTypeHelper
 
 		if ($typeNode instanceof ArrayShapeNode) {
 			return 'array';
+		}
+
+		if ($typeNode instanceof ConstTypeNode) {
+			if ($typeNode->constExpr instanceof ConstExprIntegerNode) {
+				return 'int';
+			}
+
+			if ($typeNode->constExpr instanceof ConstExprFloatNode) {
+				return 'float';
+			}
+
+			if ($typeNode->constExpr instanceof ConstExprStringNode) {
+				return 'string';
+			}
 		}
 
 		return (string) $typeNode;

@@ -40,6 +40,7 @@ use function in_array;
 use function preg_match;
 use function preg_replace;
 use function sprintf;
+use function strtolower;
 use function substr_count;
 use function trim;
 use const T_DOC_COMMENT_CLOSE_TAG;
@@ -381,6 +382,10 @@ class AnnotationHelper
 			return false;
 		}
 
+		if ($annotation->getType() instanceof ConstTypeNode) {
+			return false;
+		}
+
 		if ($annotation->getType() instanceof GenericTypeNode) {
 			return false;
 		}
@@ -391,6 +396,14 @@ class AnnotationHelper
 
 		/** @var GenericTypeNode|CallableTypeNode|IdentifierTypeNode|ThisTypeNode $annotationTypeNode */
 		$annotationTypeNode = $annotation->getType();
+
+		if (
+			$annotationTypeNode instanceof IdentifierTypeNode
+			&& in_array(strtolower($annotationTypeNode->name), ['true', 'false'], true)
+		) {
+			return false;
+		}
+
 		$annotationTypeHint = AnnotationTypeHelper::getTypeHintFromOneType($annotationTypeNode);
 		return TypeHintHelper::typeHintEqualsAnnotation($phpcsFile, $functionPointer, $typeHint->getTypeHint(), $annotationTypeHint);
 	}

@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
@@ -162,7 +163,7 @@ class ParameterTypeHintSniff implements Sniff
 			$nullableParameterTypeHint = false;
 
 			if (AnnotationTypeHelper::containsOneType($parameterTypeNode)) {
-				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $parameterTypeNode */
+				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode|ConstTypeNode $parameterTypeNode */
 				$parameterTypeNode = $parameterTypeNode;
 				$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($parameterTypeNode);
 
@@ -173,7 +174,7 @@ class ParameterTypeHintSniff implements Sniff
 						continue 2;
 					}
 
-					/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $typeNode */
+					/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode|ConstTypeNode $typeNode */
 					$typeNode = $typeNode;
 
 					$typeHint = AnnotationTypeHelper::getTypeHintFromOneType($typeNode);
