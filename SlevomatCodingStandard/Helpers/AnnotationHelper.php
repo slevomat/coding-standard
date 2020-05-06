@@ -38,10 +38,10 @@ use function array_merge;
 use function get_class;
 use function in_array;
 use function preg_match;
+use function preg_match_all;
 use function preg_replace;
 use function sprintf;
 use function strtolower;
-use function substr_count;
 use function trim;
 use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOC_COMMENT_STAR;
@@ -225,7 +225,7 @@ class AnnotationHelper
 				$annotationEndPointer = $i;
 
 				// Fix for wrong PHPCS parsing
-				$parenthesesLevel = substr_count($tokens[$i]['content'], '(') - substr_count($tokens[$i]['content'], ')');
+				$parenthesesLevel = (int) preg_match_all('~[({]~', $tokens[$i]['content']) - (int) preg_match_all('~[)}]~', $tokens[$i]['content']);
 				$annotationCode = $tokens[$i]['content'];
 
 				for ($j = $i + 1; $j <= $tokens[$docCommentOpenToken]['comment_closer']; $j++) {
@@ -254,7 +254,7 @@ class AnnotationHelper
 						}
 					}
 
-					$parenthesesLevel += substr_count($tokens[$j]['content'], '(') - substr_count($tokens[$j]['content'], ')');
+					$parenthesesLevel += (int) preg_match_all('~[({]~', $tokens[$j]['content']) - (int) preg_match_all('~[)}]~', $tokens[$j]['content']);
 					$annotationCode .= $tokens[$j]['content'];
 				}
 

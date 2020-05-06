@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation;
@@ -165,6 +166,21 @@ class AnnotationHelperTest extends TestCase
 		self::assertInstanceOf(GenericAnnotation::class, $annotations[0]);
 		self::assertSame('targetEntity=Bar::class, mappedBy="boo"', $annotations[0]->getParameters());
 		self::assertNull($annotations[0]->getContent());
+	}
+
+	public function testWordPressAnnotations(): void
+	{
+		$annotations = AnnotationHelper::getAnnotations($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'wordPress'));
+
+		self::assertCount(1, $annotations);
+		self::assertCount(1, $annotations['@param']);
+
+		$annotation = $annotations['@param'][0];
+
+		self::assertInstanceOf(ParameterAnnotation::class, $annotation);
+		self::assertInstanceOf(IdentifierTypeNode::class, $annotation->getType());
+		self::assertSame('$parameters', $annotation->getParameterName());
+		self::assertSame('{ Optional. Parameters for filtering the list of user assignments. Default empty array. @type bool $is_active                Pass `true` to only return active user assignments and `false` to return  inactive user assignments. @type DateTime|string $updated_since Only return user assignments that have been updated since the given date and time. }', $annotation->getDescription());
 	}
 
 	public function testFunctionWithoutAnnotation(): void
