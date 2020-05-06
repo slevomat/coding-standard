@@ -176,4 +176,13 @@ class Whatever
 		return true;
 	}
 
+	/**
+	 * @param [] $a
+	 * @return []
+	 */
+	public function invalidAnnotation(array $a): array
+	{
+		return [];
+	}
+
 }

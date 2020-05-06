@@ -365,6 +365,10 @@ class AnnotationHelper
 		array $traversableTypeHints
 	): bool
 	{
+		if ($annotation->isInvalid()) {
+			return false;
+		}
+
 		if ($typeHint === null || $annotation->getContent() === null) {
 			return false;
 		}
