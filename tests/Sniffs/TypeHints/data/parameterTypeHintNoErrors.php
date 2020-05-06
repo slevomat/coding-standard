@@ -250,3 +250,10 @@ class Whatever
 	}
 
 }
+
+/**
+ * @param array{a: string, b: ?int} $a
+ */
+function arrayShape(array $a)
+{
+}
