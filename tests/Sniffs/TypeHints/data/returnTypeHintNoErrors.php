@@ -260,3 +260,10 @@ class Whatever
 	}
 
 }
+
+/**
+ * @return array{a: string, b: ?int}
+ */
+function arrayShape(): array
+{
+}
