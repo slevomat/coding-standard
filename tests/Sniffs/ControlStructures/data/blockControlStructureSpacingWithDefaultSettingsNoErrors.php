@@ -79,6 +79,16 @@ function () {
 	}
 };
 
+switch ($foo) {
+    case 'bar':
+
+    case 'baz':
+        return true;
+
+    case 'lorem':
+        return false;
+}
+
 if (true) {
 
 }
