@@ -168,3 +168,13 @@ function ($array) {
 		}
 	}
 };
+
+function () {
+	$foo = 1;
+	$bar = 2;
+
+	// first comment
+
+	// second comment
+	return $foo + $bar;
+};
