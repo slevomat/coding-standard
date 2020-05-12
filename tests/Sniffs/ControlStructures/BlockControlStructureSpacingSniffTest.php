@@ -18,7 +18,7 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/blockControlStructureSpacingWithDefaultSettingsErrors.php');
 
-		self::assertSame(25, $report->getErrorCount());
+		self::assertSame(26, $report->getErrorCount());
 
 		self::assertSniffError($report, 4, BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE, 'Expected 1 lines before "if", found 2.');
 		self::assertSniffError($report, 4, BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE, 'Expected 1 lines after "if", found 0.');
@@ -45,6 +45,7 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 		self::assertSniffError($report, 81, BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE, 'Expected 1 lines before "if", found 2.');
 		self::assertSniffError($report, 87, BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE, 'Expected 1 lines after "if", found 0.');
 		self::assertSniffError($report, 94, BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE, 'Expected 1 lines after "if", found 2.');
+		self::assertSniffError($report, 106, BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE, 'Expected 1 lines before "foreach", found 0.');
 
 		self::assertAllFixedInFile($report);
 	}

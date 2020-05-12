@@ -107,36 +107,36 @@ abstract class AbstractControlStructureSpacing implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		/** @var int $pointerBefore */
-		$pointerBefore = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $controlStructurePointer - 1);
-		$controlStructureStartPointer = $controlStructurePointer;
+		$nonWhitespacePointerBefore = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $controlStructurePointer - 1);
 
-		if (
-			in_array($tokens[$pointerBefore]['code'], Tokens::$commentTokens, true)
-			&& $tokens[$pointerBefore]['line'] + 1 === $tokens[$controlStructurePointer]['line']
-		) {
-			$pointerBeforeComment = TokenHelper::findPreviousEffective($phpcsFile, $pointerBefore - 1);
-			if ($tokens[$pointerBeforeComment]['line'] !== $tokens[$pointerBefore]['line']) {
-				$controlStructureStartPointer = array_key_exists('comment_opener', $tokens[$pointerBefore])
-					? $tokens[$pointerBefore]['comment_opener']
-					: CommentHelper::getMultilineCommentStartPointer($phpcsFile, $pointerBefore);
-				/** @var int $pointerBefore */
-				$pointerBefore = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $controlStructureStartPointer - 1);
+		$controlStructureStartPointer = $controlStructurePointer;
+		$pointerBefore = $nonWhitespacePointerBefore;
+
+		$pointerToCheckFirst = $pointerBefore;
+
+		if (in_array($tokens[$nonWhitespacePointerBefore]['code'], Tokens::$commentTokens, true)) {
+			$effectivePointerBefore = TokenHelper::findPreviousEffective($phpcsFile, $pointerBefore - 1);
+
+			if ($tokens[$effectivePointerBefore]['line'] === $tokens[$nonWhitespacePointerBefore]['line']) {
+				$pointerToCheckFirst = $effectivePointerBefore;
+			} elseif ($tokens[$nonWhitespacePointerBefore]['line'] + 1 === $tokens[$controlStructurePointer]['line']) {
+				if ($tokens[$effectivePointerBefore]['line'] !== $tokens[$nonWhitespacePointerBefore]['line']) {
+					$controlStructureStartPointer = array_key_exists('comment_opener', $tokens[$nonWhitespacePointerBefore])
+						? $tokens[$nonWhitespacePointerBefore]['comment_opener']
+						: CommentHelper::getMultilineCommentStartPointer($phpcsFile, $nonWhitespacePointerBefore);
+					$pointerBefore = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $controlStructureStartPointer - 1);
+				}
+				$pointerToCheckFirst = $pointerBefore;
 			}
 		}
 
-		$pointerBeforeComment = $pointerBefore;
-		if (in_array($tokens[$pointerBefore]['code'], Tokens::$commentTokens, true)) {
-			$pointerBeforeComment = TokenHelper::findPreviousEffective($phpcsFile, $pointerBefore - 1);
-		}
-
-		$isFirstControlStructure = in_array($tokens[$pointerBeforeComment]['code'], [T_OPEN_CURLY_BRACKET, T_COLON], true);
+		$isFirstControlStructure = in_array($tokens[$pointerToCheckFirst]['code'], [T_OPEN_CURLY_BRACKET, T_COLON], true);
 
 		if (
 			$isFirstControlStructure
 			&& in_array($tokens[$controlStructurePointer]['code'], [T_CASE, T_DEFAULT], true)
-			&& array_key_exists('scope_condition', $tokens[$pointerBeforeComment])
-			&& in_array($tokens[$tokens[$pointerBeforeComment]['scope_condition']]['code'], [T_CASE, T_DEFAULT], true)
+			&& array_key_exists('scope_condition', $tokens[$pointerBefore])
+			&& in_array($tokens[$tokens[$pointerBefore]['scope_condition']]['code'], [T_CASE, T_DEFAULT], true)
 		) {
 			$isFirstControlStructure = false;
 		}
