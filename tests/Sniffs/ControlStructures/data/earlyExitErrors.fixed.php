@@ -569,6 +569,17 @@ function nestedIfWhenOneBranchDoesNotHaveEarlyExit($a, $b)
 	}
 };
 
+function yieldWithElse($handle)
+{
+	while (($data = fgetcsv($handle, 0, ',')) !== false) {
+		if (is_numeric($data[0])) {
+			yield $data;
+		}
+
+		echo 'skip';
+	}
+};
+
 // Simple else - needs to be last
 if (true) {
 	return true;
