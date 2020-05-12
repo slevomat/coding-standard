@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
@@ -81,7 +82,21 @@ class RequireTernaryOperatorSniff implements Sniff
 
 	private function checkIfWithReturns(File $phpcsFile, int $ifPointer, int $elsePointer, int $returnInIf, int $returnInElse): void
 	{
-		$fix = $phpcsFile->addFixableError('Use ternary operator.', $ifPointer, self::CODE_TERNARY_OPERATOR_NOT_USED);
+		$ifContainsComment = $this->containsComment($phpcsFile, $ifPointer);
+		$elseContainsComment = $this->containsComment($phpcsFile, $elsePointer);
+
+		$errorParameters = [
+			'Use ternary operator.',
+			$ifPointer,
+			self::CODE_TERNARY_OPERATOR_NOT_USED,
+		];
+
+		if ($ifContainsComment || $elseContainsComment) {
+			$phpcsFile->addError(...$errorParameters);
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError(...$errorParameters);
 
 		if (!$fix) {
 			return;
@@ -157,7 +172,21 @@ class RequireTernaryOperatorSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError('Use ternary operator.', $ifPointer, self::CODE_TERNARY_OPERATOR_NOT_USED);
+		$ifContainsComment = $this->containsComment($phpcsFile, $ifPointer);
+		$elseContainsComment = $this->containsComment($phpcsFile, $elsePointer);
+
+		$errorParameters = [
+			'Use ternary operator.',
+			$ifPointer,
+			self::CODE_TERNARY_OPERATOR_NOT_USED,
+		];
+
+		if ($ifContainsComment || $elseContainsComment) {
+			$phpcsFile->addError(...$errorParameters);
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError(...$errorParameters);
 
 		if (!$fix) {
 			return;
@@ -211,6 +240,17 @@ class RequireTernaryOperatorSniff implements Sniff
 
 		$pointerAfterSemicolon = TokenHelper::findNextEffective($phpcsFile, $semicolonPointer + 1);
 		return $pointerAfterSemicolon === $scopeCloserPointer;
+	}
+
+	private function containsComment(File $phpcsFile, int $scopeOwnerPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+		return TokenHelper::findNext(
+			$phpcsFile,
+			Tokens::$commentTokens,
+			$tokens[$scopeOwnerPointer]['scope_opener'] + 1,
+			$tokens[$scopeOwnerPointer]['scope_closer']
+		) !== null;
 	}
 
 }
