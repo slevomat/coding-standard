@@ -4,7 +4,39 @@ function () {
 	return true ? true : false;
 };
 
+function () {
+	if (true) {
+		// Comment
+		return true;
+	} else {
+		return false;
+	}
+};
+
+function () {
+	if (true) {
+		return true;
+	} else {
+		// Comment
+		return false;
+	}
+};
+
 $a = doSomething() ? 'a' : 'aa';
+
+if (doAnything()) {
+	// Comment
+	$a = 'a';
+} else {
+	$a = 'aa';
+}
+
+if (doNothing()) {
+	$a = 'a';
+} else {
+	// Comment
+	$a = 'aa';
+}
 
 class Whatever
 {
