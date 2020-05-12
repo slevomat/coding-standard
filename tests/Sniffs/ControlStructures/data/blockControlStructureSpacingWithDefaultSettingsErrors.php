@@ -98,3 +98,13 @@ function () {
 
 	doSomething();
 };
+
+function ($foo) {
+	foreach ($foo as $bar) {
+	    // TODO lorem ipsum
+	    /** @var string $baz */
+	    foreach ($bar as $baz) {
+	        echo $baz;
+	    }
+	}
+};

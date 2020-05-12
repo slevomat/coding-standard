@@ -79,6 +79,17 @@ function () {
 	}
 };
 
+function ($foo) {
+	foreach ($foo as $bar) {
+	    // TODO lorem ipsum
+
+	    /** @var string $baz */
+	    foreach ($bar as $baz) {
+	        echo $baz;
+	    }
+	}
+};
+
 switch ($foo) {
     case 'bar':
 
