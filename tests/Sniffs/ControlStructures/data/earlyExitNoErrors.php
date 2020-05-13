@@ -207,3 +207,14 @@ function nestedIfWhenOneBranchDoesNotHaveEarlyExit($a, $b)
 		doElse();
 	}
 };
+
+function oneConditionWithoutEarlyExitWithElse()
+{
+	if (true) {
+		doAnything();
+	} elseif (false) {
+		return;
+	} else {
+		throw new \Exception('');
+	}
+};
