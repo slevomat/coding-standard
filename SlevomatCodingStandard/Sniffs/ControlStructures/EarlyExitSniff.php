@@ -11,6 +11,7 @@ use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use Throwable;
 use function array_key_exists;
+use function count;
 use function in_array;
 use function range;
 use function sort;
@@ -106,16 +107,16 @@ class EarlyExitSniff implements Sniff
 				continue;
 			}
 
+			if (count($allConditionsPointers) > 2 && $conditionEarlyExitPointer === null) {
+				return;
+			}
+
 			$previousConditionPointer = $conditionPointer;
 			$previousConditionEarlyExitPointer = $conditionEarlyExitPointer;
 
 			if ($conditionPointer === $ifPointer) {
 				$ifEarlyExitPointer = $conditionEarlyExitPointer;
 				continue;
-			}
-
-			if ($conditionEarlyExitPointer === null) {
-				return;
 			}
 		}
 
