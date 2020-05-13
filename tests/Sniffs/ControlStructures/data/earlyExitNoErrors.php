@@ -42,7 +42,7 @@ do {
 
 function () {
 	if (false) {
-		yield [];
+		return [];
 	}
 
 	// Something
@@ -189,26 +189,6 @@ if (!empty($_SERVER['argv'])) {
 	something();
 } elseif (PHP_SAPI !== 'cli') {
 	somethingElse();
-}
-
-function twoYields(bool $flag)
-{
-	if ($flag) {
-		yield 1;
-	} else {
-		yield 2;
-	}
-}
-
-function manyYields(bool $flag)
-{
-	if ($flag) {
-		yield 1;
-	} elseif (!$flag) {
-		yield 2;
-	} else {
-		yield 3;
-	}
 }
 
 function nestedIfWhenOneBranchDoesNotHaveEarlyExit($a, $b)

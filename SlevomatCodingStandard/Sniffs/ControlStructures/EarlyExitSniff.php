@@ -29,7 +29,6 @@ use const T_OPEN_CURLY_BRACKET;
 use const T_SEMICOLON;
 use const T_WHILE;
 use const T_WHITESPACE;
-use const T_YIELD;
 
 class EarlyExitSniff implements Sniff
 {
@@ -162,15 +161,6 @@ class EarlyExitSniff implements Sniff
 			return;
 		}
 
-		if (
-			$previousConditionEarlyExitPointer !== null
-			&& $tokens[$previousConditionEarlyExitPointer]['code'] === T_YIELD
-			&& $elseEarlyExitPointer !== null
-			&& $tokens[$elseEarlyExitPointer]['code'] === T_YIELD
-		) {
-			return;
-		}
-
 		$pointerAfterElseCondition = TokenHelper::findNextEffective($phpcsFile, $tokens[$elsePointer]['scope_closer'] + 1);
 		if ($pointerAfterElseCondition !== null && $tokens[$pointerAfterElseCondition]['code'] !== T_CLOSE_CURLY_BRACKET) {
 			return;
@@ -218,31 +208,16 @@ class EarlyExitSniff implements Sniff
 			return;
 		}
 
-		$elseIfEarlyExitPointer = null;
-		$previousConditionEarlyExitPointer = null;
-
 		foreach ($allConditionsPointers as $conditionPointer) {
 			$conditionEarlyExitPointer = $this->findEarlyExitInScope($phpcsFile, $tokens[$conditionPointer]['scope_opener'], $tokens[$conditionPointer]['scope_closer']);
 
 			if ($conditionPointer === $elseIfPointer) {
-				$elseIfEarlyExitPointer = $conditionEarlyExitPointer;
 				break;
 			}
-
-			$previousConditionEarlyExitPointer = $conditionEarlyExitPointer;
 
 			if ($conditionEarlyExitPointer === null) {
 				return;
 			}
-		}
-
-		if (
-			$previousConditionEarlyExitPointer !== null
-			&& $tokens[$previousConditionEarlyExitPointer]['code'] === T_YIELD
-			&& $elseIfEarlyExitPointer !== null
-			&& $tokens[$elseIfEarlyExitPointer]['code'] === T_YIELD
-		) {
-			return;
 		}
 
 		$fix = $phpcsFile->addFixableError(

@@ -36,8 +36,6 @@ use const T_STRING;
 use const T_THROW;
 use const T_TRAIT;
 use const T_WHITESPACE;
-use const T_YIELD;
-use const T_YIELD_FROM;
 
 class TokenHelper
 {
@@ -99,8 +97,6 @@ class TokenHelper
 		T_CONTINUE,
 		T_BREAK,
 		T_THROW,
-		T_YIELD,
-		T_YIELD_FROM,
 		T_EXIT,
 	];
 
