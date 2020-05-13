@@ -48,7 +48,7 @@ function greateThanOrEqualCondition() {
 	if ($number >= 0) {
 		// Something
 	} else {
-		yield [];
+		return [];
 	}
 }
 
@@ -370,14 +370,6 @@ function logicalVeryComplicatedCondition() {
 	}
 }
 
-function yieldFrom() {
-	if ($number >= 0) {
-		// Something
-	} else {
-		yield from [];
-	}
-}
-
 function negativeInstanceOf($phpEditor, $jsonEditor) {
 	$this->phpEditor = $phpEditor;
 	$this->jsonEditor = $jsonEditor;
@@ -494,17 +486,6 @@ function nestedIfWhenOneBranchDoesNotHaveEarlyExit($a, $b)
 		}
 
 		throw new \Exception('anything');
-	}
-};
-
-function yieldWithElse($handle)
-{
-	while (($data = fgetcsv($handle, 0, ',')) !== false) {
-		if (is_numeric($data[0])) {
-			yield $data;
-		} else {
-			echo 'skip';
-		}
 	}
 };
 
