@@ -403,7 +403,7 @@ class AnnotationHelper
 
 		if (
 			$annotationTypeNode instanceof IdentifierTypeNode
-			&& in_array(strtolower($annotationTypeNode->name), ['true', 'false'], true)
+			&& in_array(strtolower($annotationTypeNode->name), ['true', 'false', 'class-string'], true)
 		) {
 			return false;
 		}

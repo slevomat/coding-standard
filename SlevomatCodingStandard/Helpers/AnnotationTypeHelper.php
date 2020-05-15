@@ -610,6 +610,10 @@ class AnnotationTypeHelper
 				return 'bool';
 			}
 
+			if (strtolower($typeNode->name) === 'class-string') {
+				return 'string';
+			}
+
 			return $typeNode->name;
 		}
 

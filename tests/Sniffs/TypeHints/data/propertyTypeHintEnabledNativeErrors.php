@@ -142,4 +142,7 @@ class Whatever
 	/** @var 'foo'|'bar' */
 	public $constUnionString;
 
+	/** @var class-string */
+	public $classString;
+
 }

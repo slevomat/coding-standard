@@ -249,6 +249,11 @@ class Whatever
 
 	}
 
+	/** @param class-string $a */
+	public function classString(string $a)
+	{
+	}
+
 }
 
 /**

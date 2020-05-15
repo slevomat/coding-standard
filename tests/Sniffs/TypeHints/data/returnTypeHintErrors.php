@@ -239,4 +239,9 @@ abstract class Whatever
 	{
 	}
 
+	/** @return class-string */
+	public function classString()
+	{
+	}
+
 }

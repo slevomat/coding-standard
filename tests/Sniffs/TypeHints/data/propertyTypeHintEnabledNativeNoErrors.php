@@ -161,4 +161,7 @@ class Whatever
 	/** @var array<int, ?Whatever> */
 	public array $traversableWithNullableItem;
 
+	/** @var class-string */
+	public string $classString;
+
 }

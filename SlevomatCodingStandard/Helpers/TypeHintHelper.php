@@ -166,6 +166,7 @@ class TypeHintHelper
 				'resource',
 				'static',
 				'$this',
+				'class-string',
 			];
 		}
 
