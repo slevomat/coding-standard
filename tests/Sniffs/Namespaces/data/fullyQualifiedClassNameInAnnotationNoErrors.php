@@ -2,6 +2,8 @@
 
 namespace FooNamespace;
 
+use stdClass;
+
 /**
  * @template TemplateAboveClass
  */
@@ -119,7 +121,10 @@ class FooClass
 	 */
 	public function usingTemplateAboveClass()
 	{
+		/** @var TemplateAboveClass $instance */
+		$instance = new \stdClass();
 
+		return $instance;
 	}
 
 	/** @var TemplateAboveClass */
