@@ -6,6 +6,7 @@ class ClassWithTypedProperties
 	private self $self;
 	private ?self $empty;
 	private ClassWithTypedProperties $static;
+	private \ClassWithTypedProperties $static2;
 	private int $int;
 
 	public function __construct()
@@ -13,6 +14,7 @@ class ClassWithTypedProperties
 		$this->self = $this;
 		$this->empty = null;
 		$this->static = $this;
+		$this->static2 = $this;
 		$this->int = 0;
 	}
 

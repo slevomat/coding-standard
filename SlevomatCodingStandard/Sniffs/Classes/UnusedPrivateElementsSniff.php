@@ -13,6 +13,7 @@ use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_keys;
+use function array_merge;
 use function array_reverse;
 use function count;
 use function in_array;
@@ -455,7 +456,7 @@ class UnusedPrivateElementsSniff implements Sniff
 				break;
 			}
 
-			$visibilityModifierTokenPointer = $this->findVisibilityModifierTokenPointer($phpcsFile, $tokens, $propertyTokenPointer);
+			$visibilityModifierTokenPointer = $this->findVisibilityPointer($phpcsFile, $propertyTokenPointer);
 			if ($visibilityModifierTokenPointer === null || $tokens[$visibilityModifierTokenPointer]['code'] !== T_PRIVATE) {
 				$findPropertiesStartTokenPointer = $propertyTokenPointer + 1;
 				continue;
@@ -526,7 +527,7 @@ class UnusedPrivateElementsSniff implements Sniff
 				break;
 			}
 
-			$visibilityModifierTokenPointer = $this->findVisibilityModifierTokenPointer($phpcsFile, $tokens, $methodTokenPointer);
+			$visibilityModifierTokenPointer = $this->findVisibilityPointer($phpcsFile, $methodTokenPointer);
 			if ($visibilityModifierTokenPointer === null || $tokens[$visibilityModifierTokenPointer]['code'] !== T_PRIVATE) {
 				$findMethodsStartTokenPointer = $methodTokenPointer + 1;
 				continue;
@@ -592,7 +593,7 @@ class UnusedPrivateElementsSniff implements Sniff
 				break;
 			}
 
-			$visibilityModifierTokenPointer = $this->findVisibilityModifierTokenPointer($phpcsFile, $tokens, $constantTokenPointer);
+			$visibilityModifierTokenPointer = $this->findVisibilityPointer($phpcsFile, $constantTokenPointer);
 			if ($visibilityModifierTokenPointer === null || $tokens[$visibilityModifierTokenPointer]['code'] !== T_PRIVATE) {
 				$findConstantsStartTokenPointer = $constantTokenPointer + 1;
 				continue;
@@ -608,33 +609,34 @@ class UnusedPrivateElementsSniff implements Sniff
 		return $reportedConstants;
 	}
 
-	/**
-	 * @param File $phpcsFile
-	 * @param array<int, array<string, array<int, int|string>|int|string>> $tokens
-	 * @param int $methodTokenPointer
-	 * @return int|null
-	 */
-	private function findVisibilityModifierTokenPointer(File $phpcsFile, array $tokens, int $methodTokenPointer): ?int
+	private function findVisibilityPointer(File $phpcsFile, int $pointer): ?int
 	{
-		/** @var int $visibilityModifiedTokenPointer */
-		$visibilityModifiedTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $methodTokenPointer - 1);
-		$visibilityModifiedToken = $tokens[$visibilityModifiedTokenPointer];
-		if (in_array($visibilityModifiedToken['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE], true)) {
-			return $visibilityModifiedTokenPointer;
-		}
+		$tokens = $phpcsFile->getTokens();
 
-		if (in_array($visibilityModifiedToken['code'], [T_SELF, T_STRING], true)) {
-			$mightBeNullableTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $visibilityModifiedTokenPointer - 1);
-			$mightBeNullableToken = $tokens[$mightBeNullableTokenPointer];
-			if ($mightBeNullableToken['code'] === T_NULLABLE) {
-				$visibilityModifiedTokenPointer = $mightBeNullableTokenPointer;
+		$visibilityPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
+
+		if (in_array($tokens[$visibilityPointer]['code'], [T_SELF, T_STRING], true)) {
+			$visibilityPointer = TokenHelper::findPreviousExcluding(
+				$phpcsFile,
+				array_merge(TokenHelper::$nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
+				$visibilityPointer - 1
+			);
+
+			if ($tokens[$visibilityPointer]['code'] === T_NULLABLE) {
+				$visibilityPointer = TokenHelper::findPreviousEffective($phpcsFile, $visibilityPointer - 1);
 			}
-
-			return $this->findVisibilityModifierTokenPointer($phpcsFile, $tokens, $visibilityModifiedTokenPointer);
 		}
 
-		if (in_array($visibilityModifiedToken['code'], [T_ABSTRACT, T_STATIC], true)) {
-			return $this->findVisibilityModifierTokenPointer($phpcsFile, $tokens, $visibilityModifiedTokenPointer);
+		if (in_array($tokens[$visibilityPointer]['code'], [T_ABSTRACT, T_STATIC], true)) {
+			$visibilityPointer = TokenHelper::findPreviousExcluding(
+				$phpcsFile,
+				array_merge([T_ABSTRACT, T_STATIC], TokenHelper::$ineffectiveTokenCodes),
+				$visibilityPointer - 1
+			);
+		}
+
+		if (in_array($tokens[$visibilityPointer]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE], true)) {
+			return $visibilityPointer;
 		}
 
 		return null;
