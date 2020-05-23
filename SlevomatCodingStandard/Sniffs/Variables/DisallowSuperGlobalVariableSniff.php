@@ -46,11 +46,12 @@ class DisallowSuperGlobalVariableSniff implements Sniff
 		if (!in_array($tokens[$variablePointer]['content'], self::SUPER_GLOBALS, true)) {
 			return;
 		}
-		
+
 		$phpcsFile->addError(
-			'Use of super global variable is disallowed. Use filter_input() instead.', 
-			$variablePointer, 
+			'Use of super global variable is disallowed. Use filter_input() instead.',
+			$variablePointer,
 			self::CODE_DISALLOWED_SUPER_GLOBAL_VARIABLE
 		);
 	}
+
 }
