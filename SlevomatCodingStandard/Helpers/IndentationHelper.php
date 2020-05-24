@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use function in_array;
 use function ltrim;
 use function rtrim;
+use function str_repeat;
 use function strlen;
 use function substr;
 use const T_END_HEREDOC;
@@ -29,13 +30,13 @@ class IndentationHelper
 		return TokenHelper::getContent($phpcsFile, $firstPointerOnLine, $pointer - 1);
 	}
 
-	public static function addIndentation(string $identation): string
+	public static function addIndentation(string $identation, int $level = 1): string
 	{
-		if ($identation === '') {
-			return self::TAB_INDENT;
-		}
+		$whitespace = $identation === ''
+			? self::TAB_INDENT
+			: ($identation[0] === self::TAB_INDENT ? self::TAB_INDENT : self::SPACES_INDENT);
 
-		return $identation . ($identation[0] === self::TAB_INDENT ? self::TAB_INDENT : self::SPACES_INDENT);
+		return $identation . str_repeat($whitespace, $level);
 	}
 
 	/**

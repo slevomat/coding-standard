@@ -641,6 +641,17 @@ Sniff provides the following settings:
 * `maxLineLength`: specifies max allowed line length. If conditition (and the rest of the line) would fit on it, it's enforced. Use 0 value to enforce for all conditions, regardless of length.
 * `alwaysForSimpleConditions`: allows to enforce single line for all simple conditions (i.e no `&&`, `||` or `xor`), regardless of length.
 
+#### SlevomatCodingStandard.ControlStructures.RequireMultiLineCondition 🔧
+
+Enforces conditions of `if`, `elseif`, `while` and `do-while` with one or more boolean operators to be splitted to more lines
+so each condition part is on its own line.
+
+Sniff provides the following settings:
+
+* `minLineLength`: specifies mininum line length to enforce condition to be splitted. Use 0 value to enforce for all conditions, regardless of length.
+* `booleanOperatorOnPreviousLine`: boolean operator is placed at the end of previous line when fixing.
+* `alwaysSplitAllConditionParts`: require all condition parts to be on its own line - it reports error even if condition is already multi-line but there are some condition parts on the same line.
+
 #### SlevomatCodingStandard.ControlStructures.RequireShortTernaryOperator 🔧
 
 Requires short ternary operator `?:` when possible.

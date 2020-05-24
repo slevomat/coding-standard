@@ -90,6 +90,7 @@
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Classes/AbstractMethodSignature.php</exclude-pattern>
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Commenting/AbstractRequireOneLineDocComment.php</exclude-pattern>
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/ControlStructures/AbstractControlStructureSpacing.php</exclude-pattern>
+		<exclude-pattern>SlevomatCodingStandard/Sniffs/ControlStructures/AbstractLineCondition.php</exclude-pattern>
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Namespaces/AbstractFullyQualifiedGlobalReference.php</exclude-pattern>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming"/>
