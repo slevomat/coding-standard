@@ -84,9 +84,9 @@ class AnnotationTypeHelper
 			return [];
 		}
 
-		/** @var IdentifierTypeNode|ThisTypeNode $typeNode */
-		$typeNode = clone $typeNode;
-		return [$typeNode];
+		/** @var IdentifierTypeNode|ThisTypeNode $typeNode2 */
+		$typeNode2 = $typeNode;
+		return [$typeNode2];
 	}
 
 	/**
