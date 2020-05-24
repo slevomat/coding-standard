@@ -164,7 +164,7 @@ class ParameterTypeHintSniff implements Sniff
 
 			if (AnnotationTypeHelper::containsOneType($parameterTypeNode)) {
 				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode|ConstTypeNode $parameterTypeNode */
-				$parameterTypeNode = $parameterTypeNode;
+				$parameterTypeNode = clone $parameterTypeNode;
 				$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($parameterTypeNode);
 
 			} elseif ($parameterTypeNode instanceof UnionTypeNode || $parameterTypeNode instanceof IntersectionTypeNode) {
@@ -175,7 +175,7 @@ class ParameterTypeHintSniff implements Sniff
 					}
 
 					/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode|ConstTypeNode $typeNode */
-					$typeNode = $typeNode;
+					$typeNode = clone $typeNode;
 
 					$typeHint = AnnotationTypeHelper::getTypeHintFromOneType($typeNode);
 
@@ -213,7 +213,7 @@ class ParameterTypeHintSniff implements Sniff
 				$possibleParameterTypeHint = $typeHints[0];
 			} elseif (count($typeHints) === 2) {
 				/** @var UnionTypeNode|IntersectionTypeNode $parameterTypeNode */
-				$parameterTypeNode = $parameterTypeNode;
+				$parameterTypeNode = clone $parameterTypeNode;
 
 				$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($parameterTypeNode);
 				if ($itemsSpecificationTypeHint === null) {

@@ -85,7 +85,7 @@ class AnnotationTypeHelper
 		}
 
 		/** @var IdentifierTypeNode|ThisTypeNode $typeNode */
-		$typeNode = $typeNode;
+		$typeNode = clone $typeNode;
 		return [$typeNode];
 	}
 
@@ -460,7 +460,7 @@ class AnnotationTypeHelper
 		}
 
 		/** @var UnionTypeNode|IntersectionTypeNode $typeNode */
-		$typeNode = $typeNode;
+		$typeNode = clone $typeNode;
 		return self::containsNullType($typeNode);
 	}
 

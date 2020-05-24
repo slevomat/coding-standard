@@ -199,7 +199,7 @@ class ReturnTypeHintSniff implements Sniff
 
 		if (AnnotationTypeHelper::containsOneType($returnTypeNode)) {
 			/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $returnTypeNode */
-			$returnTypeNode = $returnTypeNode;
+			$returnTypeNode = clone $returnTypeNode;
 			$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($returnTypeNode);
 
 		} elseif ($returnTypeNode instanceof UnionTypeNode || $returnTypeNode instanceof IntersectionTypeNode) {
@@ -210,7 +210,7 @@ class ReturnTypeHintSniff implements Sniff
 				}
 
 				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $typeNode */
-				$typeNode = $typeNode;
+				$typeNode = clone $typeNode;
 
 				$typeHint = AnnotationTypeHelper::getTypeHintFromOneType($typeNode);
 
@@ -248,7 +248,7 @@ class ReturnTypeHintSniff implements Sniff
 			$possibleReturnTypeHint = $typeHints[0];
 		} elseif (count($typeHints) === 2) {
 			/** @var UnionTypeNode|IntersectionTypeNode $returnTypeNode */
-			$returnTypeNode = $returnTypeNode;
+			$returnTypeNode = clone $returnTypeNode;
 
 			$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($returnTypeNode);
 			if ($itemsSpecificationTypeHint === null) {
@@ -349,7 +349,7 @@ class ReturnTypeHintSniff implements Sniff
 		}
 
 		/** @var ReturnAnnotation $returnAnnotation */
-		$returnAnnotation = $returnAnnotation;
+		$returnAnnotation = clone $returnAnnotation;
 
 		$phpcsFile->addError(
 			sprintf(

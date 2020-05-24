@@ -134,7 +134,7 @@ class RequireArrowFunctionSniff implements Sniff
 		}
 
 		/** @var int $semicolonPointer */
-		$semicolonPointer = $semicolonPointer;
+		$semicolonPointer = (int) $semicolonPointer;
 		return $semicolonPointer;
 	}
 

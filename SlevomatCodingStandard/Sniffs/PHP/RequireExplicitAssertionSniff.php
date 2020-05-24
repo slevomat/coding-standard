@@ -193,7 +193,7 @@ class RequireExplicitAssertionSniff implements Sniff
 			}
 
 			/** @var IdentifierTypeNode|ThisTypeNode|UnionTypeNode $variableAnnotationType */
-			$variableAnnotationType = $variableAnnotationType;
+			$variableAnnotationType = clone $variableAnnotationType;
 
 			$assertion = $this->createAssert($variableAnnotation->getVariableName(), $variableAnnotationType);
 

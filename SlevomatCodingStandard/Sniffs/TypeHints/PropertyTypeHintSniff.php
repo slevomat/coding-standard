@@ -181,7 +181,7 @@ class PropertyTypeHintSniff implements Sniff
 
 		if (AnnotationTypeHelper::containsOneType($typeNode)) {
 			/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $typeNode */
-			$typeNode = $typeNode;
+			$typeNode = clone $typeNode;
 			$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($typeNode);
 
 		} elseif ($typeNode instanceof UnionTypeNode || $typeNode instanceof IntersectionTypeNode) {
@@ -192,7 +192,7 @@ class PropertyTypeHintSniff implements Sniff
 				}
 
 				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $innerTypeNode */
-				$innerTypeNode = $innerTypeNode;
+				$innerTypeNode = clone $innerTypeNode;
 
 				$typeHint = AnnotationTypeHelper::getTypeHintFromOneType($innerTypeNode);
 
@@ -230,7 +230,7 @@ class PropertyTypeHintSniff implements Sniff
 			$possibleTypeHint = $typeHints[0];
 		} elseif (count($typeHints) === 2) {
 			/** @var UnionTypeNode|IntersectionTypeNode $typeNode */
-			$typeNode = $typeNode;
+			$typeNode = clone $typeNode;
 
 			$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($typeNode);
 			if ($itemsSpecificationTypeHint === null) {

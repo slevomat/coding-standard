@@ -162,7 +162,7 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 		}
 
 		/** @var int $endOfLineBefore */
-		$endOfLineBefore = $endOfLineBefore;
+		$endOfLineBefore = (int) $endOfLineBefore;
 		return $endOfLineBefore;
 	}
 
