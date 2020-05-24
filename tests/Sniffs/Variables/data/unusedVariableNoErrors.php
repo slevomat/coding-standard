@@ -316,3 +316,9 @@ function () {
 	$_REQUEST = [];
 	$_ENV = [];
 };
+
+
+function () {
+	$a = 1;
+	return get_defined_vars();
+};
