@@ -9,6 +9,7 @@ use function in_array;
 use function sprintf;
 use const T_DOUBLE_COLON;
 use const T_EQUAL;
+use const T_SEMICOLON;
 use const T_OBJECT_OPERATOR;
 use const T_VARIABLE;
 
@@ -57,7 +58,7 @@ class DuplicateAssignmentToVariableSniff implements Sniff
 		}
 
 		$pointerAfterSecondVariable = TokenHelper::findNextEffective($phpcsFile, $secondVariablePointer + 1);
-		if ($tokens[$pointerAfterSecondVariable]['code'] !== T_EQUAL) {
+		if (!in_array($tokens[$pointerAfterSecondVariable]['code'], [T_EQUAL, T_SEMICOLON], true)) {
 			return;
 		}
 
