@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use function preg_split;
+use const T_DOC_COMMENT_OPEN_TAG;
 
 class TypeHintHelperTest extends TestCase
 {
@@ -281,6 +282,32 @@ class TypeHintHelperTest extends TestCase
 		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithParameterTypeHint');
 		$parameterTypeHint = FunctionHelper::getParametersTypeHints($phpcsFile, $methodPointer)['$parameter'];
 		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint->getTypeHint()));
+	}
+
+	/**
+	 * @return mixed[][]
+	 */
+	public function dataIsTemplate(): array
+	{
+		return [
+			['Whatever', false],
+		];
+	}
+
+	/**
+	 * @dataProvider dataIsTemplate
+	 * @param string $typeHintName
+	 * @param bool $isTemplate
+	 */
+	public function testIsTemplate(string $typeHintName, bool $isTemplate): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintTemplates.php');
+
+		$docCommentOpenPointer = $this->findPointerByLineAndType($phpcsFile, 3, T_DOC_COMMENT_OPEN_TAG);
+
+		self::assertNotNull($docCommentOpenPointer);
+
+		self::assertSame($isTemplate, TypeHintHelper::isTemplate($phpcsFile, $docCommentOpenPointer, $typeHintName));
 	}
 
 }
