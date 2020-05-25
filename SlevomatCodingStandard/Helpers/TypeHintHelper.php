@@ -103,6 +103,10 @@ class TypeHintHelper
 
 		$classPointer = ClassHelper::getClassPointer($phpcsFile, $pointerToFindClass);
 
+		if ($classPointer === null) {
+			return false;
+		}
+
 		$classDocCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $classPointer);
 		if ($classDocCommentOpenPointer === null) {
 			return false;
