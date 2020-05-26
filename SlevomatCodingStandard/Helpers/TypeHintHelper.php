@@ -178,6 +178,12 @@ class TypeHintHelper
 				'static',
 				'$this',
 				'class-string',
+				'trait-string',
+				'callable-string',
+				'numeric-string',
+				'array-key',
+				'list',
+				'empty',
 			];
 		}
 
