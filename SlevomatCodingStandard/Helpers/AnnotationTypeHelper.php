@@ -21,6 +21,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use function array_merge;
 use function count;
+use function in_array;
 use function preg_replace;
 use function strtolower;
 use function substr;
@@ -610,7 +611,7 @@ class AnnotationTypeHelper
 				return 'bool';
 			}
 
-			if (strtolower($typeNode->name) === 'class-string') {
+			if (in_array(strtolower($typeNode->name), ['class-string', 'trait-string', 'callable-string', 'numeric-string'], true)) {
 				return 'string';
 			}
 
