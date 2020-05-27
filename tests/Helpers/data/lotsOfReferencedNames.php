@@ -5,6 +5,9 @@ namespace FooNamespace;
 use Doctrine\ORM\Mapping as ORM;
 use UsedNamespace\UsedNameFooBar as UsedNameFooBarBaz;
 use function DI\string;
+use function doSomething;
+use function stream_wrapper_restore;
+use const STREAM_URL_STAT_QUIET;
 
 class FooClass extends \ExtendedClass implements \ImplementedInterface, \SecondImplementedInterface, \ThirdImplementedInterface
 {
@@ -110,3 +113,14 @@ $class = new class ()
 };
 
 string();
+
+function whatever($flags)
+{
+	foreach ([] as $item) {
+		doSomething($item);
+	}
+
+	if ($flags & STREAM_URL_STAT_QUIET) {
+
+	}
+}
