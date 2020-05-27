@@ -270,8 +270,13 @@ class ReferencedNameHelper
 			if ($constPointer !== null && TokenHelper::findNext($phpcsFile, [T_OPEN_SHORT_ARRAY, T_ARRAY], $constPointer + 1, $startPointer) === null) {
 				return false;
 			}
-		} elseif ($previousToken['code'] === T_BITWISE_AND && TokenHelper::findPreviousLocal($phpcsFile, [T_FUNCTION], $previousPointer - 1) !== null) {
-			return false;
+		} elseif ($previousToken['code'] === T_BITWISE_AND) {
+			$pointerBefore = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
+			$isFunctionPointerBefore = TokenHelper::findPreviousLocal($phpcsFile, T_FUNCTION, $previousPointer - 1) !== null;
+
+			if ($tokens[$pointerBefore]['code'] !== T_VARIABLE && $isFunctionPointerBefore) {
+				return false;
+			}
 		} elseif ($previousToken['code'] === T_GOTO) {
 			return false;
 		}

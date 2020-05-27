@@ -52,6 +52,8 @@ class ReferencedNameHelperTest extends TestCase
 			['OPENSSL_ALGO_SHA512', false, true],
 			['SomeTrait', false, false],
 			['string', true, false],
+			['doSomething', true, false],
+			['STREAM_URL_STAT_QUIET', false, true],
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
