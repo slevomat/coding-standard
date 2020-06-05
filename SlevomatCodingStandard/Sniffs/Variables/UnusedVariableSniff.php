@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Variables;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\ParameterHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
@@ -53,6 +54,7 @@ use const T_SL_EQUAL;
 use const T_SR_EQUAL;
 use const T_STATIC;
 use const T_STRING;
+use const T_STRING_CONCAT;
 use const T_USE;
 use const T_VARIABLE;
 use const T_WHILE;
@@ -188,6 +190,10 @@ class UnusedVariableSniff implements Sniff
 			return;
 		}
 
+		if ($this->isPartOfStatementAndWithIncrementOrDecrementOperator($phpcsFile, $variablePointer)) {
+			return;
+		}
+
 		$phpcsFile->addError(
 			sprintf('Unused variable %s.', $variableName),
 			$variablePointer,
@@ -238,7 +244,9 @@ class UnusedVariableSniff implements Sniff
 			$actualPointer = $parenthesisOpenerPointer;
 		} while ($parenthesisOwnerPointer === null && isset($tokens[$actualPointer]['nested_parenthesis']));
 
-		if (in_array($tokens[$nextPointer]['code'], [T_INC, T_DEC], true)) {
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $variablePointer - 1);
+
+		if (in_array($tokens[$nextPointer]['code'], [T_INC, T_DEC], true) || in_array($tokens[$previousPointer]['code'], [T_INC, T_DEC], true)) {
 			if ($parenthesisOwnerPointer === null) {
 				return true;
 			}
@@ -452,8 +460,8 @@ class UnusedVariableSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $variablePointer - 1);
-		if ($tokens[$previousPointer]['code'] === T_OPEN_SQUARE_BRACKET) {
+		$squareBracketOpenerPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_SQUARE_BRACKET, $variablePointer - 1);
+		if ($squareBracketOpenerPointer !== null && $tokens[$squareBracketOpenerPointer]['bracket_closer'] > $variablePointer) {
 			return true;
 		}
 
@@ -473,6 +481,11 @@ class UnusedVariableSniff implements Sniff
 		}
 
 		$pointerBeforeVariable = TokenHelper::findPreviousEffective($phpcsFile, $variablePointer - 1);
+
+		if (in_array($tokens[$pointerBeforeVariable]['code'], [T_INC, T_DEC], true)) {
+			$pointerBeforeVariable = TokenHelper::findPreviousEffective($phpcsFile, $pointerBeforeVariable - 1);
+		}
+
 		return in_array($tokens[$pointerBeforeVariable]['code'], [T_OPEN_SHORT_ARRAY, T_COMMA, T_DOUBLE_ARROW], true);
 	}
 
@@ -585,6 +598,24 @@ class UnusedVariableSniff implements Sniff
 		}
 
 		return false;
+	}
+
+	private function isPartOfStatementAndWithIncrementOrDecrementOperator(File $phpcsFile, int $variablePointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $variablePointer - 1);
+		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $variablePointer + 1);
+
+		if (in_array($tokens[$previousPointer]['code'], [T_DEC, T_INC], true)) {
+			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
+		} elseif ($nextPointer !== null && in_array($tokens[$nextPointer]['code'], [T_DEC, T_INC], true)) {
+			// Nothing
+		} else {
+			return false;
+		}
+
+		return in_array($tokens[$previousPointer]['code'], array_merge([T_STRING_CONCAT], Tokens::$operators, Tokens::$assignmentTokens, Tokens::$booleanOperators), true);
 	}
 
 	private function findNestedParenthesisWithOwner(File $phpcsFile, int $pointer): ?int

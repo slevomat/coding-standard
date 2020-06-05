@@ -322,3 +322,27 @@ function () {
 	$a = 1;
 	return get_defined_vars();
 };
+
+function ($c) {
+	$a = 0;
+
+	$b = $c + $a--;
+
+	return $b;
+};
+
+function ($c) {
+	$a = 0;
+
+	$b = $c + --$a;
+
+	return $b;
+};
+
+function ($i) {
+	$result = [];
+	foreach ([] as $key => $item) {
+		$result[$key ?: $i++] = $item;
+	}
+	return $result;
+};

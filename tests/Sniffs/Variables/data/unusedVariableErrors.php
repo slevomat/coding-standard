@@ -116,3 +116,15 @@ function ($values) {
 		($a += $value);
 	}
 };
+
+function ($b) {
+	$a = 0;
+	$a--;
+	return $b;
+};
+
+function ($b) {
+	$a = 0;
+	--$a;
+	return $b;
+};
