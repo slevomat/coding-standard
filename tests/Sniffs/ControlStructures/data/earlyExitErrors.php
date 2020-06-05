@@ -489,6 +489,24 @@ function nestedIfWhenOneBranchDoesNotHaveEarlyExit($a, $b)
 	}
 };
 
+function conditionWithNullCoalesceOperator()
+{
+	foreach ([] as $key => $item) {
+		if ($key ?? false) {
+			yield $item;
+		}
+	}
+};
+
+function conditionWithShortTernaryOperator()
+{
+	foreach ([] as $key => $item) {
+		if ($key ?: false) {
+			yield $item;
+		}
+	}
+};
+
 // Simple else - needs to be last
 if (true) {
 	return true;
