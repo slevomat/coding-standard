@@ -17,7 +17,7 @@ class UnusedVariableSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/unusedVariableErrors.php');
 
-		self::assertSame(23, $report->getErrorCount());
+		self::assertSame(25, $report->getErrorCount());
 
 		self::assertSniffError($report, 7, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $firstMatch.');
 		self::assertSniffError($report, 12, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $unused.');
@@ -42,6 +42,8 @@ class UnusedVariableSniffTest extends TestCase
 		self::assertSniffError($report, 101, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $a.');
 		self::assertSniffError($report, 108, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $a.');
 		self::assertSniffError($report, 116, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $a.');
+		self::assertSniffError($report, 122, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $a.');
+		self::assertSniffError($report, 128, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $a.');
 	}
 
 	public function testNoErrorsWithIgnoredUnusedValuesWhenOnlyKeysAreUsedInForeach(): void
