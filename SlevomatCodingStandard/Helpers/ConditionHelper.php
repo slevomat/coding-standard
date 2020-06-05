@@ -16,7 +16,9 @@ use const T_BOOLEAN_AND;
 use const T_BOOLEAN_NOT;
 use const T_BOOLEAN_OR;
 use const T_CLOSE_PARENTHESIS;
+use const T_COALESCE;
 use const T_GREATER_THAN;
+use const T_INLINE_THEN;
 use const T_INSTANCEOF;
 use const T_IS_EQUAL;
 use const T_IS_GREATER_OR_EQUAL;
@@ -148,7 +150,7 @@ class ConditionHelper
 			return self::removeBooleanNot($condition);
 		}
 
-		if (TokenHelper::findNext($phpcsFile, [T_INSTANCEOF, T_BITWISE_AND], $conditionBoundaryStartPointer, $conditionBoundaryEndPointer + 1) !== null) {
+		if (TokenHelper::findNext($phpcsFile, [T_INSTANCEOF, T_BITWISE_AND, T_COALESCE, T_INLINE_THEN], $conditionBoundaryStartPointer, $conditionBoundaryEndPointer + 1) !== null) {
 			return sprintf('!(%s)', $condition);
 		}
 
