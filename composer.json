@@ -18,10 +18,10 @@
 		"phing/phing": "2.16.3",
 		"php-parallel-lint/php-parallel-lint": "1.2.0",
 		"phpstan/phpstan": "0.12.25",
-		"phpstan/phpstan-deprecation-rules": "0.12.3",
-		"phpstan/phpstan-phpunit": "0.12.8",
+		"phpstan/phpstan-deprecation-rules": "0.12.4",
+		"phpstan/phpstan-phpunit": "0.12.11",
 		"phpstan/phpstan-strict-rules": "0.12.2",
-		"phpunit/phpunit": "7.5.20|8.5.2|9.1.4"
+		"phpunit/phpunit": "7.5.20|8.5.2|9.2.1"
 	},
 	"autoload": {
 		"psr-4": {
