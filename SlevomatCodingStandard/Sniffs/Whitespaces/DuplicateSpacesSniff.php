@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
+use SlevomatCodingStandard\Helpers\ParameterHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
 use function preg_match_all;
@@ -21,6 +22,7 @@ use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_STRING;
 use const T_DOC_COMMENT_TAG;
 use const T_DOC_COMMENT_WHITESPACE;
+use const T_VARIABLE;
 use const T_WHITESPACE;
 
 class DuplicateSpacesSniff implements Sniff
@@ -36,6 +38,9 @@ class DuplicateSpacesSniff implements Sniff
 
 	/** @var bool */
 	public $ignoreSpacesInComment = false;
+
+	/** @var bool */
+	public $ignoreSpacesInParameters = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -72,6 +77,13 @@ class DuplicateSpacesSniff implements Sniff
 			if ($this->ignoreSpacesBeforeAssignment) {
 				$pointerAfter = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $whitespacePointer + 1);
 				if ($pointerAfter !== null && in_array($tokens[$pointerAfter]['code'], Tokens::$assignmentTokens, true)) {
+					return;
+				}
+			}
+
+			if ($this->ignoreSpacesInParameters) {
+				$pointerAfter = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $whitespacePointer + 1);
+				if ($pointerAfter !== null && $tokens[$pointerAfter]['code'] === T_VARIABLE && ParameterHelper::isParameter($phpcsFile, $pointerAfter)) {
 					return;
 				}
 			}

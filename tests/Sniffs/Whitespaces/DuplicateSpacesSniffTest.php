@@ -82,4 +82,26 @@ class DuplicateSpacesSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testIgnoreSpacesInParametersNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/duplicateSpacesIgnoreSpacesInParametersNoErrors.php', [
+			'ignoreSpacesInParameters' => true,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testIgnoreSpacesInParametersErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/duplicateSpacesIgnoreSpacesInParametersErrors.php', [
+			'ignoreSpacesInParameters' => true,
+		]);
+
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 7, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES, 'Duplicate spaces at position 12.');
+		self::assertSniffError($report, 7, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES, 'Duplicate spaces at position 15.');
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
