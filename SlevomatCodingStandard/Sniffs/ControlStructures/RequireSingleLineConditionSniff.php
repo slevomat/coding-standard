@@ -107,11 +107,9 @@ class RequireSingleLineConditionSniff implements Sniff
 		$lineEnd = $this->getLineEnd($phpcsFile, $parenthesisCloserPointer);
 
 		$lineLength = strlen($lineStart . $condition . $lineEnd);
-
 		$isSimpleCondition = TokenHelper::findNext($phpcsFile, Tokens::$booleanOperators, $parenthesisOpenerPointer + 1, $parenthesisCloserPointer) === null;
 
-		$maxLineLength = SniffSettingsHelper::normalizeInteger($this->maxLineLength);
-		if ($maxLineLength !== 0 && $lineLength > $maxLineLength && (!$isSimpleCondition || !$this->alwaysForSimpleConditions)) {
+		if (!$this->shouldReportError($lineLength, $isSimpleCondition)) {
 			return;
 		}
 
@@ -161,6 +159,21 @@ class RequireSingleLineConditionSniff implements Sniff
 		$firstPointerOnNextLine = TokenHelper::findFirstTokenOnNextLine($phpcsFile, $parenthesisCloserPointer);
 
 		return rtrim(TokenHelper::getContent($phpcsFile, $parenthesisCloserPointer + 1, $firstPointerOnNextLine - 1));
+	}
+
+	private function shouldReportError(int $lineLength, bool $isSimpleCondition): bool
+	{
+		$maxLineLength = SniffSettingsHelper::normalizeInteger($this->maxLineLength);
+
+		if ($maxLineLength === 0) {
+			return true;
+		}
+
+		if ($lineLength <= $maxLineLength) {
+			return true;
+		}
+
+		return $isSimpleCondition && $this->alwaysForSimpleConditions;
 	}
 
 }
