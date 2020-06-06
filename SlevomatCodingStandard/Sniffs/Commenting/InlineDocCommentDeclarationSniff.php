@@ -42,6 +42,9 @@ class InlineDocCommentDeclarationSniff implements Sniff
 	/** @var bool */
 	public $allowDocCommentAboveReturn = false;
 
+	/** @var bool */
+	public $allowAboveNonAssignment = false;
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
@@ -221,7 +224,9 @@ class InlineDocCommentDeclarationSniff implements Sniff
 			return $codePointer;
 		};
 
-		$codePointerAfter = TokenHelper::findFirstNonWhitespaceOnNextLine($phpcsFile, $commentClosePointer);
+		$firstPointerOnNextLine = TokenHelper::findFirstNonWhitespaceOnNextLine($phpcsFile, $commentClosePointer);
+
+		$codePointerAfter = $firstPointerOnNextLine;
 		while ($codePointerAfter !== null && $tokens[$codePointerAfter]['code'] === T_DOC_COMMENT_OPEN_TAG) {
 			$codePointerAfter = TokenHelper::findFirstNonWhitespaceOnNextLine($phpcsFile, $codePointerAfter + 1);
 		}
@@ -265,6 +270,22 @@ class InlineDocCommentDeclarationSniff implements Sniff
 				$docCommentOpenPointer,
 				self::CODE_NO_ASSIGNMENT,
 			];
+
+			if ($this->allowAboveNonAssignment) {
+				for ($i = $firstPointerOnNextLine; $i < count($tokens); $i++) {
+					if ($tokens[$i]['line'] > $tokens[$firstPointerOnNextLine]['line']) {
+						break;
+					}
+
+					if ($tokens[$i]['code'] !== T_VARIABLE) {
+						continue;
+					}
+
+					if ($tokens[$i]['content'] === $variableName) {
+						return;
+					}
+				}
+			}
 
 			foreach ([1 => $codePointerBefore, 2 => $codePointerAfter] as $tryNo => $codePointer) {
 				if ($codePointer === null || !in_array($tokens[$codePointer]['code'], $checkedTokens, true)) {

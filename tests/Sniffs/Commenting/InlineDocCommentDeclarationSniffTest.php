@@ -123,4 +123,23 @@ class InlineDocCommentDeclarationSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testNoErrorsWithDocCommentAboveNonAssigmentAllowed(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/inlineDocDocommentDeclarationWithDocCommentAboveNonAssigmentAllowedNoErrors.php', [
+			'allowAboveNonAssignment' => true,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testErrorsWithDocCommentAboveNonAssigmentAllowed(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/inlineDocDocommentDeclarationWithDocCommentAboveNonAssigmentAllowedErrors.php', [
+			'allowAboveNonAssignment' => true,
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 6, InlineDocCommentDeclarationSniff::CODE_MISSING_VARIABLE);
+	}
+
 }
