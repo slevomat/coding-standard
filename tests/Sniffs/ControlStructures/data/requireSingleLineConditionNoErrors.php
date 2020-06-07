@@ -20,4 +20,12 @@ function () {
 	) { // Too looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong fucking comment
 
 	}
+
+	if (
+		doSomething('')
+		// Comment
+		&& doAnything()
+	) {
+
+	}
 };

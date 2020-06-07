@@ -40,6 +40,10 @@ class RequireSingleLineConditionSniff extends AbstractLineCondition
 			return;
 		}
 
+		if (TokenHelper::findNext($phpcsFile, TokenHelper::$inlineCommentTokenCodes, $parenthesisOpenerPointer + 1, $parenthesisCloserPointer) !== null) {
+			return;
+		}
+
 		$lineStart = $this->getLineStart($phpcsFile, $parenthesisOpenerPointer);
 		$condition = $this->getCondition($phpcsFile, $parenthesisOpenerPointer, $parenthesisCloserPointer);
 		$lineEnd = $this->getLineEnd($phpcsFile, $parenthesisCloserPointer);
