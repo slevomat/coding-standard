@@ -410,7 +410,7 @@ try {
 
 #### SlevomatCodingStandard.Arrays.MultiLineArrayEndBracketPlacement 🔧
 
-Enforces reasonable end bracket placement for multiline arrays.
+Enforces reasonable end bracket placement for multi-line arrays.
 
 #### SlevomatCodingStandard.Arrays.SingleLineArrayWhitespace 🔧
 
@@ -639,7 +639,6 @@ Enforces conditions of `if`, `elseif`, `while` and `do-while` to be on a single 
 Sniff provides the following settings:
 
 * `maxLineLength`: specifies max allowed line length. If conditition (and the rest of the line) would fit on it, it's enforced. Use 0 value to enforce for all conditions, regardless of length.
-
 * `alwaysForSimpleConditions`: allows to enforce single line for all simple conditions (i.e no `&&`, `||` or `xor`), regardless of length.
 
 #### SlevomatCodingStandard.ControlStructures.RequireShortTernaryOperator 🔧
@@ -652,7 +651,7 @@ Requires ternary operator when possible.
 
 Sniff provides the following settings:
 
-* `ignoreMultiLine` (defaults to `false`): ignores multiLine statements.
+* `ignoreMultiLine` (defaults to `false`): ignores multi-line statements.
 
 #### SlevomatCodingStandard.ControlStructures.DisallowYodaComparison/RequireYodaComparison 🔧
 
@@ -685,7 +684,7 @@ Sniff provides the following settings:
 * `spacesCountAfterKeyword`: the number of spaces after `fn`.
 * `spacesCountBeforeArrow`: the number of spaces before `=>`.
 * `spacesCountAfterArrow`: the number of spaces after `=>`.
-* `allowMultiLine`: allows multiline declaration.
+* `allowMultiLine`: allows multi-line declaration.
 
 #### SlevomatCodingStandard.Functions.DisallowEmptyFunction
 
