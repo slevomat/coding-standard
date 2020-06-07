@@ -158,7 +158,10 @@ class RequireTernaryOperatorSniff implements Sniff
 		$assignmentPointerInIf = TokenHelper::findNextEffective($phpcsFile, $identificatorEndPointerInIf + 1);
 		$assignmentPointerInElse = TokenHelper::findNextEffective($phpcsFile, $identificatorEndPointerInElse + 1);
 
-		if ($tokens[$assignmentPointerInIf]['code'] !== T_EQUAL || $tokens[$assignmentPointerInElse]['code'] !== T_EQUAL) {
+		if (
+			$tokens[$assignmentPointerInIf]['code'] !== T_EQUAL
+			|| $tokens[$assignmentPointerInElse]['code'] !== T_EQUAL
+		) {
 			return;
 		}
 

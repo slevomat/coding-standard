@@ -246,7 +246,10 @@ class UnusedVariableSniff implements Sniff
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $variablePointer - 1);
 
-		if (in_array($tokens[$nextPointer]['code'], [T_INC, T_DEC], true) || in_array($tokens[$previousPointer]['code'], [T_INC, T_DEC], true)) {
+		if (
+			in_array($tokens[$nextPointer]['code'], [T_INC, T_DEC], true)
+			|| in_array($tokens[$previousPointer]['code'], [T_INC, T_DEC], true)
+		) {
 			if ($parenthesisOwnerPointer === null) {
 				return true;
 			}
@@ -389,7 +392,10 @@ class UnusedVariableSniff implements Sniff
 				$tokens[$loopConditionPointer]['parenthesis_opener'] + 1,
 				$tokens[$loopConditionPointer]['parenthesis_closer']
 			);
-			if ($variableUsedInLoopConditionPointer === null || $variableUsedInLoopConditionPointer === $variablePointer) {
+			if (
+				$variableUsedInLoopConditionPointer === null
+				|| $variableUsedInLoopConditionPointer === $variablePointer
+			) {
 				continue;
 			}
 
@@ -448,7 +454,10 @@ class UnusedVariableSniff implements Sniff
 			}
 
 			$parenthesisOwnerPointer = $this->findNestedParenthesisWithOwner($phpcsFile, $i);
-			if ($parenthesisOwnerPointer !== null && in_array($tokens[$parenthesisOwnerPointer]['code'], [T_IF, T_ELSEIF], true)) {
+			if (
+				$parenthesisOwnerPointer !== null
+				&& in_array($tokens[$parenthesisOwnerPointer]['code'], [T_IF, T_ELSEIF], true)
+			) {
 				return true;
 			}
 		}
@@ -461,7 +470,10 @@ class UnusedVariableSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$squareBracketOpenerPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_SQUARE_BRACKET, $variablePointer - 1);
-		if ($squareBracketOpenerPointer !== null && $tokens[$squareBracketOpenerPointer]['bracket_closer'] > $variablePointer) {
+		if (
+			$squareBracketOpenerPointer !== null
+			&& $tokens[$squareBracketOpenerPointer]['bracket_closer'] > $variablePointer
+		) {
 			return true;
 		}
 

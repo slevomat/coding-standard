@@ -151,7 +151,10 @@ class IdentificatorHelper
 			return self::getStartPointerBeforeVariablePart($phpcsFile, $tokens[$previousPointer]['bracket_opener']);
 		}
 
-		if ($tokens[$previousPointer]['code'] === T_CLOSE_CURLY_BRACKET && !array_key_exists('scope_condition', $tokens[$previousPointer])) {
+		if (
+			$tokens[$previousPointer]['code'] === T_CLOSE_CURLY_BRACKET
+			&& !array_key_exists('scope_condition', $tokens[$previousPointer])
+		) {
 			return self::getStartPointerBeforeVariablePart($phpcsFile, $tokens[$previousPointer]['bracket_opener']);
 		}
 

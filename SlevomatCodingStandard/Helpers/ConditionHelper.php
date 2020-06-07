@@ -92,7 +92,10 @@ class ConditionHelper
 		$conditionEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $conditionBoundaryEndPointer);
 
 		$tokens = $phpcsFile->getTokens();
-		if ($tokens[$conditionStartPointer]['code'] === T_OPEN_PARENTHESIS && $tokens[$conditionStartPointer]['parenthesis_closer'] === $conditionEndPointer) {
+		if (
+			$tokens[$conditionStartPointer]['code'] === T_OPEN_PARENTHESIS
+			&& $tokens[$conditionStartPointer]['parenthesis_closer'] === $conditionEndPointer
+		) {
 			/** @var int $conditionStartPointer */
 			$conditionStartPointer = TokenHelper::findNextEffective($phpcsFile, $conditionStartPointer + 1);
 			/** @var int $conditionEndPointer */
@@ -136,7 +139,10 @@ class ConditionHelper
 				}
 
 				$pointerAfterParenthesisCloser = TokenHelper::findNextEffective($phpcsFile, $tokens[$pointerAfterBooleanNot]['parenthesis_closer'] + 1, $conditionBoundaryEndPointer + 1);
-				if ($pointerAfterParenthesisCloser === null || $pointerAfterParenthesisCloser === $conditionBoundaryEndPointer) {
+				if (
+					$pointerAfterParenthesisCloser === null
+					|| $pointerAfterParenthesisCloser === $conditionBoundaryEndPointer
+				) {
 					return TokenHelper::getContent($phpcsFile, $pointerAfterBooleanNot + 1, $tokens[$pointerAfterBooleanNot]['parenthesis_closer'] - 1);
 				}
 			}

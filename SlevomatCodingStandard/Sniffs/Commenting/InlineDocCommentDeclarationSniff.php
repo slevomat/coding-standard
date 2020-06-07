@@ -207,7 +207,10 @@ class InlineDocCommentDeclarationSniff implements Sniff
 				$shouldSearchClosure = true;
 			} elseif (
 				$tokens[$codePointer]['code'] === T_VARIABLE
-				&& (!$this->isAssignment($phpcsFile, $codePointer) || !in_array($tokens[$codePointer]['content'], $variableNames, true))
+				&& (
+					!$this->isAssignment($phpcsFile, $codePointer)
+					|| !in_array($tokens[$codePointer]['content'], $variableNames, true)
+				)
 			) {
 				$shouldSearchClosure = true;
 			}

@@ -108,7 +108,10 @@ class ReferenceSpacingSniff implements Sniff
 			}
 
 			$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $previousParenthesisOpenerPointer - 1);
-			if ($pointerBeforeParenthesisOpener !== null && $tokens[$pointerBeforeParenthesisOpener]['code'] === T_USE) {
+			if (
+				$pointerBeforeParenthesisOpener !== null
+				&& $tokens[$pointerBeforeParenthesisOpener]['code'] === T_USE
+			) {
 				return true;
 			}
 		}

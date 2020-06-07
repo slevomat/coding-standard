@@ -140,12 +140,18 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 				array_merge([T_WHITESPACE, T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO], TokenHelper::$inlineCommentTokenCodes),
 				$startPointer
 			);
-			if ($tokens[$possibleEndOfLinePointer]['code'] === T_WHITESPACE && $tokens[$possibleEndOfLinePointer]['content'] === $phpcsFile->eolChar) {
+			if (
+				$tokens[$possibleEndOfLinePointer]['code'] === T_WHITESPACE
+				&& $tokens[$possibleEndOfLinePointer]['content'] === $phpcsFile->eolChar
+			) {
 				$endOfLineBefore = $possibleEndOfLinePointer;
 				break;
 			}
 
-			if ($tokens[$possibleEndOfLinePointer]['code'] === T_OPEN_TAG || $tokens[$possibleEndOfLinePointer]['code'] === T_OPEN_TAG_WITH_ECHO) {
+			if (
+				$tokens[$possibleEndOfLinePointer]['code'] === T_OPEN_TAG
+				|| $tokens[$possibleEndOfLinePointer]['code'] === T_OPEN_TAG_WITH_ECHO
+			) {
 				$endOfLineBefore = $possibleEndOfLinePointer;
 				break;
 			}

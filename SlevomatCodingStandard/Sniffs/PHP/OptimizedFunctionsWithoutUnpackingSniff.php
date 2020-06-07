@@ -82,7 +82,10 @@ class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
 		do {
 			$lastArgumentSeparatorPointer = TokenHelper::findPrevious($phpcsFile, [T_COMMA], $startPointer - 1, $openBracketPointer);
 			$startPointer = $lastArgumentSeparatorPointer;
-		} while ($lastArgumentSeparatorPointer !== null && $tokens[$lastArgumentSeparatorPointer]['level'] !== $tokens[$openBracketPointer]['level']);
+		} while (
+			$lastArgumentSeparatorPointer !== null
+			&& $tokens[$lastArgumentSeparatorPointer]['level'] !== $tokens[$openBracketPointer]['level']
+		);
 
 		if ($lastArgumentSeparatorPointer === null) {
 			$lastArgumentSeparatorPointer = $openBracketPointer;

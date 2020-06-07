@@ -68,7 +68,10 @@ class TraitUseDeclarationSniff implements Sniff
 
 		$indentation = '';
 		$currentPointer = $usePointer - 1;
-		while ($tokens[$currentPointer]['code'] === T_WHITESPACE && $tokens[$currentPointer]['content'] !== $phpcsFile->eolChar) {
+		while (
+			$tokens[$currentPointer]['code'] === T_WHITESPACE
+			&& $tokens[$currentPointer]['content'] !== $phpcsFile->eolChar
+		) {
 			$indentation .= $tokens[$currentPointer]['content'];
 			$currentPointer--;
 		}

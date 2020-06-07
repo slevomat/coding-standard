@@ -40,12 +40,18 @@ class PropertyHelper
 			return true;
 		}
 
-		if (!array_key_exists('conditions', $tokens[$variablePointer]) || count($tokens[$variablePointer]['conditions']) === 0) {
+		if (
+			!array_key_exists('conditions', $tokens[$variablePointer])
+			|| count($tokens[$variablePointer]['conditions']) === 0
+		) {
 			return false;
 		}
 
 		$functionPointer = TokenHelper::findPrevious($phpcsFile, array_merge(TokenHelper::$functionTokenCodes, [T_SEMICOLON, T_CLOSE_CURLY_BRACKET, T_OPEN_CURLY_BRACKET]), $variablePointer - 1);
-		if ($functionPointer !== null && in_array($tokens[$functionPointer]['code'], TokenHelper::$functionTokenCodes, true)) {
+		if (
+			$functionPointer !== null
+			&& in_array($tokens[$functionPointer]['code'], TokenHelper::$functionTokenCodes, true)
+		) {
 			return false;
 		}
 

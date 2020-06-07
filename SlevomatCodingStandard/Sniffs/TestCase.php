@@ -169,8 +169,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 				/** @var string $errorMessage */
 				$errorMessage = $error['message'];
 
-				if ($errorSource === $sniffCode
-					&& ($message === null || strpos($errorMessage, $message) !== false)
+				if (
+					$errorSource === $sniffCode
+					&& (
+						$message === null
+						|| strpos($errorMessage, $message) !== false
+					)
 				) {
 					$hasError = true;
 					break;

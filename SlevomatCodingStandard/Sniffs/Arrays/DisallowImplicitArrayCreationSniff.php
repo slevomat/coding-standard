@@ -103,7 +103,10 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 				return;
 			}
 
-			if ($tokens[$scopeOwnerPointer]['code'] === T_CLOSURE && $this->isInheritedVariable($phpcsFile, $scopeOwnerPointer, $variablePointer)) {
+			if (
+				$tokens[$scopeOwnerPointer]['code'] === T_CLOSURE
+				&& $this->isInheritedVariable($phpcsFile, $scopeOwnerPointer, $variablePointer)
+			) {
 				return;
 			}
 		}

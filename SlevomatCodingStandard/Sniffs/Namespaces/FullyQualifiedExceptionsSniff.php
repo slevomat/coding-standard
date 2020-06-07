@@ -64,7 +64,10 @@ class FullyQualifiedExceptionsSniff implements Sniff
 			$uniqueId = UseStatement::getUniqueId($referencedName->getType(), $name);
 			$useStatements = UseStatementHelper::getUseStatementsForPointer($phpcsFile, $pointer);
 
-			if (isset($useStatements[$uniqueId]) && $referencedName->hasSameUseStatementType($useStatements[$uniqueId])) {
+			if (
+				isset($useStatements[$uniqueId])
+				&& $referencedName->hasSameUseStatementType($useStatements[$uniqueId])
+			) {
 				$useStatement = $useStatements[$uniqueId];
 				if (
 					in_array($useStatement->getFullyQualifiedTypeName(), $this->getIgnoredNames(), true)

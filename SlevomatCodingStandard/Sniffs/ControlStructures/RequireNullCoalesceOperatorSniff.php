@@ -128,7 +128,10 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 		/** @var int $pointerAfterIdenticalOperator */
 		$pointerAfterIdenticalOperator = TokenHelper::findNextEffective($phpcsFile, $identicalOperator + 1);
 
-		if ($tokens[$pointerBeforeIdenticalOperator]['code'] !== T_NULL && $tokens[$pointerAfterIdenticalOperator]['code'] !== T_NULL) {
+		if (
+			$tokens[$pointerBeforeIdenticalOperator]['code'] !== T_NULL
+			&& $tokens[$pointerAfterIdenticalOperator]['code'] !== T_NULL
+		) {
 			return;
 		}
 

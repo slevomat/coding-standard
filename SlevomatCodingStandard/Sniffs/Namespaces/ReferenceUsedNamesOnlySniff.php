@@ -354,12 +354,18 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 						if ($fix) {
 							$addUse = true;
 
-							if ($reference->isClass && array_key_exists($canonicalNameToReference, $definedClassesIndex)) {
+							if (
+								$reference->isClass
+								&& array_key_exists($canonicalNameToReference, $definedClassesIndex)
+							) {
 								$addUse = false;
 							}
 
 							foreach ($useStatements as $useStatement) {
-								if ($useStatement->getType() !== $reference->type || $useStatement->getFullyQualifiedTypeName() !== $canonicalName) {
+								if (
+									$useStatement->getType() !== $reference->type
+									|| $useStatement->getFullyQualifiedTypeName() !== $canonicalName
+								) {
 									continue;
 								}
 

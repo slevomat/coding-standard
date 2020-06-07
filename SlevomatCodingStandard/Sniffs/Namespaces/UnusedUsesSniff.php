@@ -288,7 +288,10 @@ class UnusedUsesSniff implements Sniff
 			$usedNames = $allUsedNames[$pointerBeforeUnusedNames] ?? [];
 			foreach (array_diff_key($unusedNames, $usedNames) as $unusedUse) {
 				$fullName = $unusedUse->getFullyQualifiedTypeName();
-				if ($unusedUse->getNameAsReferencedInFile() !== $fullName && $unusedUse->getNameAsReferencedInFile() !== NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($fullName)) {
+				if (
+					$unusedUse->getNameAsReferencedInFile() !== $fullName
+					&& $unusedUse->getNameAsReferencedInFile() !== NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($fullName)
+				) {
 					$fullName .= sprintf(' (as %s)', $unusedUse->getNameAsReferencedInFile());
 				}
 				$fix = $phpcsFile->addFixableError(sprintf(

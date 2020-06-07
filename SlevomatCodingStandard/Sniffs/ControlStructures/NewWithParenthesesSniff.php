@@ -78,7 +78,10 @@ class NewWithParenthesesSniff implements Sniff
 			$shouldBeOpenParenthesisPointer++;
 		} while (true);
 
-		if ($shouldBeOpenParenthesisPointer !== null && $tokens[$shouldBeOpenParenthesisPointer]['code'] === T_OPEN_PARENTHESIS) {
+		if (
+			$shouldBeOpenParenthesisPointer !== null
+			&& $tokens[$shouldBeOpenParenthesisPointer]['code'] === T_OPEN_PARENTHESIS
+		) {
 			return;
 		}
 

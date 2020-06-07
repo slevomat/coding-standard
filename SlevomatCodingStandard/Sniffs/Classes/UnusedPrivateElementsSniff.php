@@ -299,7 +299,10 @@ class UnusedPrivateElementsSniff implements Sniff
 					$possibleThisTokenPointer = $tokenPointer - 1;
 					do {
 						$possibleThisTokenPointer = TokenHelper::findPreviousLocal($phpcsFile, T_VARIABLE, $possibleThisTokenPointer - 1);
-					} while ($possibleThisTokenPointer !== null && $tokens[$possibleThisTokenPointer]['content'] !== '$this');
+					} while (
+						$possibleThisTokenPointer !== null
+						&& $tokens[$possibleThisTokenPointer]['content'] !== '$this'
+					);
 
 					if ($possibleThisTokenPointer !== null) {
 						$possibleMethodNamePointer = TokenHelper::findNextEffective($phpcsFile, $tokenPointer + 1);
@@ -457,7 +460,10 @@ class UnusedPrivateElementsSniff implements Sniff
 			}
 
 			$visibilityModifierTokenPointer = $this->findVisibilityPointer($phpcsFile, $propertyTokenPointer);
-			if ($visibilityModifierTokenPointer === null || $tokens[$visibilityModifierTokenPointer]['code'] !== T_PRIVATE) {
+			if (
+				$visibilityModifierTokenPointer === null
+				|| $tokens[$visibilityModifierTokenPointer]['code'] !== T_PRIVATE
+			) {
 				$findPropertiesStartTokenPointer = $propertyTokenPointer + 1;
 				continue;
 			}
@@ -473,7 +479,10 @@ class UnusedPrivateElementsSniff implements Sniff
 						break 2;
 					}
 
-					if (substr($alwaysUsedPropertyAnnotationName, -1) === '\\' && strpos($annotationName, $alwaysUsedPropertyAnnotationName) === 0) {
+					if (
+						substr($alwaysUsedPropertyAnnotationName, -1) === '\\'
+						&& strpos($annotationName, $alwaysUsedPropertyAnnotationName) === 0
+					) {
 						$alwaysUsedProperty = true;
 						break 2;
 					}
@@ -528,7 +537,10 @@ class UnusedPrivateElementsSniff implements Sniff
 			}
 
 			$visibilityModifierTokenPointer = $this->findVisibilityPointer($phpcsFile, $methodTokenPointer);
-			if ($visibilityModifierTokenPointer === null || $tokens[$visibilityModifierTokenPointer]['code'] !== T_PRIVATE) {
+			if (
+				$visibilityModifierTokenPointer === null
+				|| $tokens[$visibilityModifierTokenPointer]['code'] !== T_PRIVATE
+			) {
 				$findMethodsStartTokenPointer = $methodTokenPointer + 1;
 				continue;
 			}
@@ -544,7 +556,10 @@ class UnusedPrivateElementsSniff implements Sniff
 						break 2;
 					}
 
-					if (substr($alwaysUsedMethodAnnotationName, -1) === '\\' && strpos($annotationName, $alwaysUsedMethodAnnotationName) === 0) {
+					if (
+						substr($alwaysUsedMethodAnnotationName, -1) === '\\'
+						&& strpos($annotationName, $alwaysUsedMethodAnnotationName) === 0
+					) {
 						$alwaysUsedMethod = true;
 						break 2;
 					}
@@ -594,7 +609,10 @@ class UnusedPrivateElementsSniff implements Sniff
 			}
 
 			$visibilityModifierTokenPointer = $this->findVisibilityPointer($phpcsFile, $constantTokenPointer);
-			if ($visibilityModifierTokenPointer === null || $tokens[$visibilityModifierTokenPointer]['code'] !== T_PRIVATE) {
+			if (
+				$visibilityModifierTokenPointer === null
+				|| $tokens[$visibilityModifierTokenPointer]['code'] !== T_PRIVATE
+			) {
 				$findConstantsStartTokenPointer = $constantTokenPointer + 1;
 				continue;
 			}

@@ -167,7 +167,10 @@ class ParameterTypeHintSniff implements Sniff
 				$parameterTypeNode = $parameterTypeNode;
 				$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($parameterTypeNode);
 
-			} elseif ($parameterTypeNode instanceof UnionTypeNode || $parameterTypeNode instanceof IntersectionTypeNode) {
+			} elseif (
+				$parameterTypeNode instanceof UnionTypeNode
+				|| $parameterTypeNode instanceof IntersectionTypeNode
+			) {
 				$traversableTypeHints = [];
 				foreach ($parameterTypeNode->types as $typeNode) {
 					if (!AnnotationTypeHelper::containsOneType($typeNode)) {
@@ -262,7 +265,10 @@ class ParameterTypeHintSniff implements Sniff
 			$beforeParameterPointer = $parameterPointer;
 			do {
 				$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $beforeParameterPointer - 1, $tokens[$functionPointer]['parenthesis_opener'] + 1);
-				if ($previousPointer === null || !in_array($tokens[$previousPointer]['code'], [T_BITWISE_AND, T_ELLIPSIS], true)) {
+				if (
+					$previousPointer === null
+					|| !in_array($tokens[$previousPointer]['code'], [T_BITWISE_AND, T_ELLIPSIS], true)
+				) {
 					break;
 				}
 
@@ -301,7 +307,10 @@ class ParameterTypeHintSniff implements Sniff
 			}
 
 			$hasTraversableTypeHint = false;
-			if ($parameterTypeHint !== null && TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()), $this->getTraversableTypeHints())) {
+			if (
+				$parameterTypeHint !== null
+				&& TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()), $this->getTraversableTypeHints())
+			) {
 				$hasTraversableTypeHint = true;
 			} elseif (
 				array_key_exists($parameterName, $parametersAnnotations)

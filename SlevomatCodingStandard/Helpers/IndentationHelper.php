@@ -59,7 +59,10 @@ class IndentationHelper
 
 			if (
 				!$inHeredoc
-				&& ($no === 0 || substr($tokens[$codePointer - 1]['content'], -$eolLength) === $phpcsFile->eolChar)
+				&& (
+					$no === 0
+					|| substr($tokens[$codePointer - 1]['content'], -$eolLength) === $phpcsFile->eolChar
+				)
 			) {
 				if ($content === $phpcsFile->eolChar) {
 					// Nothing

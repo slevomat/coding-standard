@@ -231,7 +231,10 @@ class ReferencedNameHelper
 			return $tokens[$previousPointer]['code'] !== T_OBJECT_OPERATOR;
 		}
 
-		if (count($tokens[$startPointer]['conditions']) > 0 && array_values(array_reverse($tokens[$startPointer]['conditions']))[0] === T_USE) {
+		if (
+			count($tokens[$startPointer]['conditions']) > 0
+			&& array_values(array_reverse($tokens[$startPointer]['conditions']))[0] === T_USE
+		) {
 			// Method imported from trait
 			return false;
 		}
@@ -257,17 +260,27 @@ class ReferencedNameHelper
 			return false;
 		}
 
-		if ($previousToken['code'] === T_OPEN_PARENTHESIS && isset($previousToken['parenthesis_owner']) && $tokens[$previousToken['parenthesis_owner']]['code'] === T_DECLARE) {
+		if (
+			$previousToken['code'] === T_OPEN_PARENTHESIS
+			&& isset($previousToken['parenthesis_owner'])
+			&& $tokens[$previousToken['parenthesis_owner']]['code'] === T_DECLARE
+		) {
 			return false;
 		}
 
-		if ($previousToken['code'] === T_COMMA && TokenHelper::findPreviousLocal($phpcsFile, T_DECLARE, $previousPointer - 1) !== null) {
+		if (
+			$previousToken['code'] === T_COMMA
+			&& TokenHelper::findPreviousLocal($phpcsFile, T_DECLARE, $previousPointer - 1) !== null
+		) {
 			return false;
 		}
 
 		if ($previousToken['code'] === T_COMMA) {
 			$constPointer = TokenHelper::findPreviousLocal($phpcsFile, T_CONST, $previousPointer - 1);
-			if ($constPointer !== null && TokenHelper::findNext($phpcsFile, [T_OPEN_SHORT_ARRAY, T_ARRAY], $constPointer + 1, $startPointer) === null) {
+			if (
+				$constPointer !== null
+				&& TokenHelper::findNext($phpcsFile, [T_OPEN_SHORT_ARRAY, T_ARRAY], $constPointer + 1, $startPointer) === null
+			) {
 				return false;
 			}
 		} elseif ($previousToken['code'] === T_BITWISE_AND) {

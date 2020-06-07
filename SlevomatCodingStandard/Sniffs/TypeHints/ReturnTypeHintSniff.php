@@ -163,7 +163,10 @@ class ReturnTypeHintSniff implements Sniff
 
 		if (
 			!$returnsValue
-			&& (!$hasReturnAnnotation || $isAnnotationReturnTypeVoid)
+			&& (
+				!$hasReturnAnnotation
+				|| $isAnnotationReturnTypeVoid
+			)
 		) {
 			$message = !$hasReturnAnnotation
 				? sprintf(
@@ -340,7 +343,10 @@ class ReturnTypeHintSniff implements Sniff
 			return;
 		}
 
-		if (!$hasTraversableTypeHint && !AnnotationTypeHelper::containsTraversableType($returnTypeNode, $phpcsFile, $functionPointer, $this->getTraversableTypeHints())) {
+		if (
+			!$hasTraversableTypeHint
+			&& !AnnotationTypeHelper::containsTraversableType($returnTypeNode, $phpcsFile, $functionPointer, $this->getTraversableTypeHints())
+		) {
 			return;
 		}
 
@@ -457,7 +463,10 @@ class ReturnTypeHintSniff implements Sniff
 		?ReturnAnnotation $returnAnnotation
 	): bool
 	{
-		if ($returnTypeHint !== null && TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()), $this->getTraversableTypeHints())) {
+		if (
+			$returnTypeHint !== null
+			&& TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()), $this->getTraversableTypeHints())
+		) {
 			return true;
 		}
 

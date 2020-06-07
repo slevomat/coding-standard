@@ -54,7 +54,10 @@ class EmptyCommentSniff implements Sniff
 			return;
 		}
 
-		if ($isLineComment && $this->isPartOfMultiLineInlineComments($phpcsFile, $commentStartPointer, $commentEndPointer)) {
+		if (
+			$isLineComment
+			&& $this->isPartOfMultiLineInlineComments($phpcsFile, $commentStartPointer, $commentEndPointer)
+		) {
 			return;
 		}
 

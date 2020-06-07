@@ -95,7 +95,10 @@ class ForbiddenClassesSniff implements Sniff
 
 		if (
 			$token['code'] === T_IMPLEMENTS
-			|| ($token['code'] === T_USE && UseStatementHelper::isTraitUse($phpcsFile, $tokenPointer))
+			|| (
+				$token['code'] === T_USE
+				&& UseStatementHelper::isTraitUse($phpcsFile, $tokenPointer)
+			)
 		) {
 			$endTokenPointer = TokenHelper::findNext(
 				$phpcsFile,

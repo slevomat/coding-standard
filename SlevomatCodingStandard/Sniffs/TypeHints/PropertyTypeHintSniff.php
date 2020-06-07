@@ -286,7 +286,10 @@ class PropertyTypeHintSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 		$phpcsFile->fixer->addContent($propertyStartPointer, sprintf(' %s%s', ($nullableTypeHint ? '?' : ''), $propertyTypeHint));
 
-		if ($pointerAfterProperty !== null && in_array($tokens[$pointerAfterProperty]['code'], [T_SEMICOLON, T_COMMA], true)) {
+		if (
+			$pointerAfterProperty !== null
+			&& in_array($tokens[$pointerAfterProperty]['code'], [T_SEMICOLON, T_COMMA], true)
+		) {
 			$phpcsFile->fixer->addContent($propertyPointer, ' = null');
 		}
 
@@ -338,7 +341,10 @@ class PropertyTypeHintSniff implements Sniff
 
 		$typeNode = $propertyAnnotation->getType();
 
-		if (!$hasTraversableTypeHint && !AnnotationTypeHelper::containsTraversableType($typeNode, $phpcsFile, $propertyPointer, $this->getTraversableTypeHints())) {
+		if (
+			!$hasTraversableTypeHint
+			&& !AnnotationTypeHelper::containsTraversableType($typeNode, $phpcsFile, $propertyPointer, $this->getTraversableTypeHints())
+		) {
 			return;
 		}
 
@@ -459,7 +465,10 @@ class PropertyTypeHintSniff implements Sniff
 		?VariableAnnotation $propertyAnnotation
 	): bool
 	{
-		if ($propertyTypeHint !== null && TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $propertyPointer, $propertyTypeHint->getTypeHint()), $this->getTraversableTypeHints())) {
+		if (
+			$propertyTypeHint !== null
+			&& TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $propertyPointer, $propertyTypeHint->getTypeHint()), $this->getTraversableTypeHints())
+		) {
 			return true;
 		}
 

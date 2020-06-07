@@ -162,6 +162,11 @@
 			</property>
 		</properties>
 	</rule>
+	<rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineCondition">
+		<properties>
+			<property name="alwaysSplitAllConditionParts" value="true"/>
+		</properties>
+	</rule>
 	<rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator">
 		<properties>
 			<property name="lineLengthLimit" value="180"/>

@@ -66,7 +66,10 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 			$ignoreTokensToFindTypeHint = array_merge(TokenHelper::$ineffectiveTokenCodes, [T_BITWISE_AND, T_ELLIPSIS]);
 			$typeHintPointer = TokenHelper::findPreviousExcluding($phpcsFile, $ignoreTokensToFindTypeHint, $i - 1, $startPointer);
 
-			if ($typeHintPointer === null || !in_array($tokens[$typeHintPointer]['code'], TokenHelper::$typeHintTokenCodes, true)) {
+			if (
+				$typeHintPointer === null
+				|| !in_array($tokens[$typeHintPointer]['code'], TokenHelper::$typeHintTokenCodes, true)
+			) {
 				continue;
 			}
 

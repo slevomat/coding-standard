@@ -59,7 +59,10 @@ class TrailingArrayCommaSniff implements Sniff
 			return;
 		}
 
-		if (!$this->enableAfterHeredoc && in_array($previousToCloseParenthesisToken['code'], [T_END_HEREDOC, T_END_NOWDOC], true)) {
+		if (
+			!$this->enableAfterHeredoc
+			&& in_array($previousToCloseParenthesisToken['code'], [T_END_HEREDOC, T_END_NOWDOC], true)
+		) {
 			return;
 		}
 

@@ -161,7 +161,10 @@ class UselessParenthesesSniff implements Sniff
 		}
 
 		$pointerAfterParenthesisCloser = TokenHelper::findNextEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1);
-		if ($pointerAfterParenthesisCloser !== null && $tokens[$pointerAfterParenthesisCloser]['code'] === T_OPEN_PARENTHESIS) {
+		if (
+			$pointerAfterParenthesisCloser !== null
+			&& $tokens[$pointerAfterParenthesisCloser]['code'] === T_OPEN_PARENTHESIS
+		) {
 			return;
 		}
 
@@ -466,15 +469,24 @@ class UselessParenthesesSniff implements Sniff
 				return;
 			}
 
-			if ($tokens[$pointerBeforeParenthesisOpener]['code'] === T_MINUS && in_array($tokens[$firstOperatorPointer]['code'], [T_PLUS, T_MINUS], true)) {
+			if (
+				$tokens[$pointerBeforeParenthesisOpener]['code'] === T_MINUS
+				&& in_array($tokens[$firstOperatorPointer]['code'], [T_PLUS, T_MINUS], true)
+			) {
 				return;
 			}
 
-			if ($tokens[$pointerBeforeParenthesisOpener]['code'] === T_DIVIDE && in_array($tokens[$firstOperatorPointer]['code'], [T_DIVIDE, T_MULTIPLY], true)) {
+			if (
+				$tokens[$pointerBeforeParenthesisOpener]['code'] === T_DIVIDE
+				&& in_array($tokens[$firstOperatorPointer]['code'], [T_DIVIDE, T_MULTIPLY], true)
+			) {
 				return;
 			}
 
-			if ($tokens[$pointerBeforeParenthesisOpener]['code'] === T_MODULUS && $tokens[$firstOperatorPointer]['code'] === T_MODULUS) {
+			if (
+				$tokens[$pointerBeforeParenthesisOpener]['code'] === T_MODULUS
+				&& $tokens[$firstOperatorPointer]['code'] === T_MODULUS
+			) {
 				return;
 			}
 		}

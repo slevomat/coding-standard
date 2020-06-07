@@ -61,7 +61,11 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 		assert($firstOnLinePointer !== null);
 
 		$nextFunctionPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $firstOnLinePointer + 1);
-		if ($nextFunctionPointer === null || $tokens[$nextFunctionPointer]['code'] === T_FUNCTION || $tokens[$nextFunctionPointer]['conditions'] !== $tokens[$pointer]['conditions']) {
+		if (
+			$nextFunctionPointer === null
+			|| $tokens[$nextFunctionPointer]['code'] === T_FUNCTION
+			|| $tokens[$nextFunctionPointer]['conditions'] !== $tokens[$pointer]['conditions']
+		) {
 			return $nextFunctionPointer ?? $firstOnLinePointer;
 		}
 

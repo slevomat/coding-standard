@@ -66,7 +66,10 @@ class UselessFunctionDocCommentSniff implements Sniff
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
 
-		if ($returnAnnotation !== null && !AnnotationHelper::isAnnotationUseless($phpcsFile, $functionPointer, $returnTypeHint, $returnAnnotation, $this->getTraversableTypeHints())) {
+		if (
+			$returnAnnotation !== null
+			&& !AnnotationHelper::isAnnotationUseless($phpcsFile, $functionPointer, $returnTypeHint, $returnAnnotation, $this->getTraversableTypeHints())
+		) {
 			return;
 		}
 

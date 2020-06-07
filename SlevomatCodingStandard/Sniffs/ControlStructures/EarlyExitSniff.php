@@ -163,7 +163,10 @@ class EarlyExitSniff implements Sniff
 		}
 
 		$pointerAfterElseCondition = TokenHelper::findNextEffective($phpcsFile, $tokens[$elsePointer]['scope_closer'] + 1);
-		if ($pointerAfterElseCondition !== null && $tokens[$pointerAfterElseCondition]['code'] !== T_CLOSE_CURLY_BRACKET) {
+		if (
+			$pointerAfterElseCondition !== null
+			&& $tokens[$pointerAfterElseCondition]['code'] !== T_CLOSE_CURLY_BRACKET
+		) {
 			return;
 		}
 
@@ -263,7 +266,10 @@ class EarlyExitSniff implements Sniff
 		}
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $ifPointer - 1);
-		if ($this->ignoreStandaloneIfInScope && in_array($tokens[$previousPointer]['code'], [T_OPEN_CURLY_BRACKET, T_COLON], true)) {
+		if (
+			$this->ignoreStandaloneIfInScope
+			&& in_array($tokens[$previousPointer]['code'], [T_OPEN_CURLY_BRACKET, T_COLON], true)
+		) {
 			return;
 		}
 
@@ -414,7 +420,10 @@ class EarlyExitSniff implements Sniff
 
 		$conditionsPointers = [$conditionPointer];
 
-		if (isset($tokens[$conditionPointer]['scope_opener']) && $tokens[$tokens[$conditionPointer]['scope_opener']]['code'] === T_COLON) {
+		if (
+			isset($tokens[$conditionPointer]['scope_opener'])
+			&& $tokens[$tokens[$conditionPointer]['scope_opener']]['code'] === T_COLON
+		) {
 			// Alternative control structure syntax.
 			throw new Exception(sprintf('"%s" without curly braces is not supported.', $tokens[$conditionPointer]['content']));
 		}

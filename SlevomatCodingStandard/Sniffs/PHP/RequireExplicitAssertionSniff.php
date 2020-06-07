@@ -65,7 +65,10 @@ class RequireExplicitAssertionSniff implements Sniff
 
 		if ($codePointer === null || !in_array($tokens[$codePointer]['code'], $tokenCodes, true)) {
 			$firstPointerOnPreviousLine = TokenHelper::findFirstNonWhitespaceOnPreviousLine($phpcsFile, $docCommentOpenPointer);
-			if ($firstPointerOnPreviousLine === null || !in_array($tokens[$firstPointerOnPreviousLine]['code'], $tokenCodes, true)) {
+			if (
+				$firstPointerOnPreviousLine === null
+				|| !in_array($tokens[$firstPointerOnPreviousLine]['code'], $tokenCodes, true)
+			) {
 				return;
 			}
 
@@ -89,7 +92,10 @@ class RequireExplicitAssertionSniff implements Sniff
 
 			$variableAnnotationType = $variableAnnotation->getType();
 
-			if ($variableAnnotationType instanceof UnionTypeNode || $variableAnnotationType instanceof IntersectionTypeNode) {
+			if (
+				$variableAnnotationType instanceof UnionTypeNode
+				|| $variableAnnotationType instanceof IntersectionTypeNode
+			) {
 				foreach ($variableAnnotationType->types as $typeNode) {
 					if (!$this->isValidTypeNode($typeNode)) {
 						continue 2;
@@ -197,7 +203,10 @@ class RequireExplicitAssertionSniff implements Sniff
 
 			$assertion = $this->createAssert($variableAnnotation->getVariableName(), $variableAnnotationType);
 
-			if ($pointerToAddAssertion < $docCommentClosePointer && array_key_exists($pointerAfterDocComment + 1, $tokens)) {
+			if (
+				$pointerToAddAssertion < $docCommentClosePointer
+				&& array_key_exists($pointerAfterDocComment + 1, $tokens)
+			) {
 				$phpcsFile->fixer->addContentBefore(
 					$pointerAfterDocComment + 1,
 					$indentation . $assertion . $phpcsFile->eolChar

@@ -201,7 +201,10 @@ abstract class AbstractControlStructureSpacing implements Sniff
 		$controlStructureEndPointer = $this->findControlStructureEnd($phpcsFile, $controlStructurePointer);
 
 		$pointerAfterControlStructureEnd = TokenHelper::findNextEffective($phpcsFile, $controlStructureEndPointer + 1);
-		if ($pointerAfterControlStructureEnd !== null && $tokens[$pointerAfterControlStructureEnd]['code'] === T_SEMICOLON) {
+		if (
+			$pointerAfterControlStructureEnd !== null
+			&& $tokens[$pointerAfterControlStructureEnd]['code'] === T_SEMICOLON
+		) {
 			$controlStructureEndPointer = $pointerAfterControlStructureEnd;
 		}
 
