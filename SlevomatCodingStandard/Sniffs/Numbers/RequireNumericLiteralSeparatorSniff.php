@@ -59,7 +59,7 @@ class RequireNumericLiteralSeparatorSniff implements Sniff
 			return;
 		}
 
-		$phpcsFile->addError('Use of numeric literator separator is required.', $numberPointer, self::CODE_REQUIRED_NUMERIC_LITERAL_SEPARATOR);
+		$phpcsFile->addError('Use of numeric literal separator is required.', $numberPointer, self::CODE_REQUIRED_NUMERIC_LITERAL_SEPARATOR);
 	}
 
 }
