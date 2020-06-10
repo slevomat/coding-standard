@@ -6,7 +6,7 @@ includes:
 parameters:
 	checkGenericClassInNonGenericObjectType: false
 
-	autoload_files:
+	bootstrapFiles:
 		- %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/autoload.php
 		- %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/src/Util/Tokens.php
 	excludes_analyse:
