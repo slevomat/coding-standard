@@ -30,3 +30,5 @@ class Whatever
 {
 
 }
+
+$match = Strings::match($address, /** @lang RegExp */'~^regexp$~');

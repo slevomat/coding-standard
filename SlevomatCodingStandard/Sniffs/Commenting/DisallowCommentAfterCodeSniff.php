@@ -47,14 +47,24 @@ class DisallowCommentAfterCodeSniff implements Sniff
 			return;
 		}
 
+		$tokens = $phpcsFile->getTokens();
+
+		$commentEndPointer = CommentHelper::getCommentEndPointer($phpcsFile, $commentPointer);
+		$nextNonWhitespacePointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $commentEndPointer + 1);
+
+		if (
+			$nextNonWhitespacePointer !== null
+			&& $tokens[$nextNonWhitespacePointer]['line'] === $tokens[$commentEndPointer]['line']
+
+		) {
+			return;
+		}
+
 		$fix = $phpcsFile->addFixableError('Comment after code is disallowed.', $commentPointer, self::CODE_DISALLOWED_COMMENT_AFTER_CODE);
 		if (!$fix) {
 			return;
 		}
 
-		$tokens = $phpcsFile->getTokens();
-
-		$commentEndPointer = CommentHelper::getCommentEndPointer($phpcsFile, $commentPointer);
 		$commentContent = TokenHelper::getContent($phpcsFile, $commentPointer, $commentEndPointer);
 		$commentHasNewLineAtTheEnd = substr($commentContent, -strlen($phpcsFile->eolChar)) === $phpcsFile->eolChar;
 
