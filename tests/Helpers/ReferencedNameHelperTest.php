@@ -54,6 +54,8 @@ class ReferencedNameHelperTest extends TestCase
 			['string', true, false],
 			['doSomething', true, false],
 			['STREAM_URL_STAT_QUIET', false, true],
+			['E_ALL', false, true],
+			['E_NOTICE', false, true],
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
