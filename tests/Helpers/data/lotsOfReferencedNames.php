@@ -124,3 +124,5 @@ function whatever($flags)
 
 	}
 }
+
+echo E_ALL & ~E_NOTICE;

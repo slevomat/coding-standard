@@ -148,13 +148,16 @@ class ReferencedNameHelper
 					if ($tokens[$previousTokenBeforeStartPointer]['code'] !== T_NEW) {
 						$type = ReferencedName::TYPE_FUNCTION;
 					}
+				} elseif ($tokens[$nextTokenAfterEndPointer]['code'] === T_BITWISE_AND) {
+					$tokenAfterNextToken = TokenHelper::findNextEffective($phpcsFile, $nextTokenAfterEndPointer + 1);
+					if (!in_array($tokens[$tokenAfterNextToken]['code'], [T_VARIABLE, T_ELLIPSIS], true)) {
+						$type = ReferencedName::TYPE_CONSTANT;
+					}
 				} elseif (
 					!in_array($tokens[$nextTokenAfterEndPointer]['code'], [
 						T_VARIABLE,
 						// Variadic parameter
 						T_ELLIPSIS,
-						// Parameter by reference
-						T_BITWISE_AND,
 					], true)
 				) {
 					if (
