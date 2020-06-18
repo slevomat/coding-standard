@@ -33,7 +33,6 @@ use const T_NULLABLE;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
-use const T_RETURN_TYPE;
 use const T_TRAIT;
 use const T_USE;
 use const T_VARIABLE;
@@ -91,8 +90,7 @@ class ReferencedNameHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$nameTokenCodes = array_merge([T_RETURN_TYPE], TokenHelper::$nameTokenCodes);
-		$nameTokenCodesWithWhitespace = array_merge($nameTokenCodes, Tokens::$emptyTokens);
+		$nameTokenCodesWithWhitespace = array_merge(TokenHelper::$nameTokenCodes, Tokens::$emptyTokens);
 
 		$lastNamePointer = $startPointer;
 		for ($i = $startPointer + 1; $i < count($tokens); $i++) {
@@ -100,7 +98,7 @@ class ReferencedNameHelper
 				break;
 			}
 
-			if (!in_array($tokens[$i]['code'], $nameTokenCodes, true)) {
+			if (!in_array($tokens[$i]['code'], TokenHelper::$nameTokenCodes, true)) {
 				continue;
 			}
 
@@ -120,11 +118,10 @@ class ReferencedNameHelper
 		$tokens = $phpcsFile->getTokens();
 
 		$beginSearchAtPointer = $openTagPointer + 1;
-		$searchTypes = array_merge([T_RETURN_TYPE], TokenHelper::$nameTokenCodes);
 		$types = [];
 
 		while (true) {
-			$nameStartPointer = TokenHelper::findNext($phpcsFile, $searchTypes, $beginSearchAtPointer);
+			$nameStartPointer = TokenHelper::findNext($phpcsFile, TokenHelper::$nameTokenCodes, $beginSearchAtPointer);
 			if ($nameStartPointer === null) {
 				break;
 			}
@@ -132,7 +129,7 @@ class ReferencedNameHelper
 			if (!self::isReferencedName($phpcsFile, $nameStartPointer)) {
 				$beginSearchAtPointer = TokenHelper::findNextExcluding(
 					$phpcsFile,
-					array_merge(TokenHelper::$ineffectiveTokenCodes, [T_RETURN_TYPE], TokenHelper::$nameTokenCodes),
+					array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::$nameTokenCodes),
 					$nameStartPointer + 1
 				);
 				continue;
