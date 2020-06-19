@@ -69,6 +69,11 @@ class NamespaceHelper
 		return explode(self::NAMESPACE_SEPARATOR, $name);
 	}
 
+	public static function getLastNamePart(string $name): string
+	{
+		return array_slice(self::getNameParts($name), -1)[0];
+	}
+
 	public static function getName(File $phpcsFile, int $namespacePointer): string
 	{
 		/** @var int $namespaceNameStartPointer */

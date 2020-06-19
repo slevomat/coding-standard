@@ -29,6 +29,7 @@ use function array_flip;
 use function array_key_exists;
 use function array_map;
 use function array_merge;
+use function array_reduce;
 use function array_values;
 use function constant;
 use function count;
@@ -170,6 +171,8 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 		$namespacePointers = NamespaceHelper::getAllNamespacesPointers($phpcsFile);
 
+		$referenceErrors = [];
+
 		foreach ($references as $reference) {
 			$useStatements = UseStatementHelper::getUseStatementsForPointer($phpcsFile, $reference->startPointer);
 
@@ -307,111 +310,12 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 							continue;
 						}
 
-						$nameToReference = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name);
-						$canonicalNameToReference = $reference->isConstant ? $nameToReference : strtolower($nameToReference);
-
-						$canBeFixed = true;
-						foreach ($useStatements as $useStatement) {
-							if ($useStatement->getType() !== $reference->type) {
-								continue;
-							}
-
-							if ($useStatement->getFullyQualifiedTypeName() === $canonicalName) {
-								continue;
-							}
-
-							if (!(
-								$useStatement->getCanonicalNameAsReferencedInFile() === $canonicalNameToReference
-								|| (
-									$reference->isClass
-									&& array_key_exists($canonicalNameToReference, $definedClassesIndex)
-									&& $canonicalName !== NamespaceHelper::normalizeToCanonicalName($definedClassesIndex[$canonicalNameToReference])
-								)
-								|| ($reference->isFunction && array_key_exists($canonicalNameToReference, $definedFunctionsIndex))
-								|| ($reference->isConstant && array_key_exists($canonicalNameToReference, $definedConstantsIndex))
-							)) {
-								continue;
-							}
-
-							$canBeFixed = false;
-							break;
-						}
-
-						$label = sprintf($reference->isConstant ? 'Constant %s' : ($reference->isFunction ? 'Function %s()' : 'Class %s'), $name);
-						$errorCode = $isGlobalConstantFallback || $isGlobalFunctionFallback
-							? self::CODE_REFERENCE_VIA_FALLBACK_GLOBAL_NAME
-							: self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME;
-						$errorMessage = $isGlobalConstantFallback || $isGlobalFunctionFallback
-							? sprintf('%s should not be referenced via a fallback global name, but via a use statement.', $label)
-							: sprintf('%s should not be referenced via a fully qualified name, but via a use statement.', $label);
-						if ($canBeFixed) {
-							$fix = $phpcsFile->addFixableError($errorMessage, $startPointer, $errorCode);
-						} else {
-							$phpcsFile->addError($errorMessage, $startPointer, $errorCode);
-							$fix = false;
-						}
-
-						if ($fix) {
-							$addUse = true;
-
-							if (
-								$reference->isClass
-								&& array_key_exists($canonicalNameToReference, $definedClassesIndex)
-							) {
-								$addUse = false;
-							}
-
-							foreach ($useStatements as $useStatement) {
-								if (
-									$useStatement->getType() !== $reference->type
-									|| $useStatement->getFullyQualifiedTypeName() !== $canonicalName
-								) {
-									continue;
-								}
-
-								$nameToReference = $useStatement->getNameAsReferencedInFile();
-								$addUse = false;
-								break;
-							}
-
-							$phpcsFile->fixer->beginChangeset();
-
-							if ($reference->source === self::SOURCE_ANNOTATION) {
-								$fixedAnnotationContent = AnnotationHelper::fixAnnotationType(
-									$phpcsFile,
-									$reference->annotation,
-									$reference->nameNode,
-									new IdentifierTypeNode($nameToReference)
-								);
-								$phpcsFile->fixer->replaceToken($startPointer, $fixedAnnotationContent);
-							} elseif ($reference->source === self::SOURCE_ANNOTATION_CONSTANT_FETCH) {
-								$fixedAnnotationContent = AnnotationHelper::fixAnnotationConstantFetchNode(
-									$phpcsFile,
-									$reference->annotation,
-									$reference->constantFetchNode,
-									new ConstFetchNode($nameToReference, $reference->constantFetchNode->name)
-								);
-								$phpcsFile->fixer->replaceToken($startPointer, $fixedAnnotationContent);
-							} else {
-								$phpcsFile->fixer->replaceToken($startPointer, $nameToReference);
-							}
-
-							for ($i = $startPointer + 1; $i <= $reference->endPointer; $i++) {
-								$phpcsFile->fixer->replaceToken($i, '');
-							}
-
-							if ($addUse) {
-								$useStatementPlacePointer = $this->getUseStatementPlacePointer($phpcsFile, $openTagPointer, $useStatements);
-
-								$useTypeName = UseStatement::getTypeName($reference->type);
-								$useTypeFormatted = $useTypeName !== null ? sprintf('%s ', $useTypeName) : '';
-
-								$phpcsFile->fixer->addNewline($useStatementPlacePointer);
-								$phpcsFile->fixer->addContent($useStatementPlacePointer, sprintf('use %s%s;', $useTypeFormatted, $canonicalName));
-							}
-
-							$phpcsFile->fixer->endChangeset();
-						}
+						$referenceErrors[] = (object) [
+							'reference' => $reference,
+							'canonicalName' => $canonicalName,
+							'isGlobalConstantFallback' => $isGlobalConstantFallback,
+							'isGlobalFunctionFallback' => $isGlobalFunctionFallback,
+						];
 					}
 				}
 			} elseif (!$this->allowPartialUses) {
@@ -423,6 +327,141 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 				}
 			}
 		}
+
+		if (count($referenceErrors) === 0) {
+			return;
+		}
+
+		$alreadyAddedUses = [
+			UseStatement::TYPE_DEFAULT => [],
+			UseStatement::TYPE_FUNCTION => [],
+			UseStatement::TYPE_CONSTANT => [],
+		];
+
+		$phpcsFile->fixer->beginChangeset();
+
+		foreach ($referenceErrors as $referenceData) {
+			$reference = $referenceData->reference;
+			/** @var int $startPointer */
+			$startPointer = $reference->startPointer;
+			$canonicalName = $referenceData->canonicalName;
+			$nameToReference = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($reference->name);
+			$canonicalNameToReference = $reference->isConstant ? $nameToReference : strtolower($nameToReference);
+			$isGlobalConstantFallback = $referenceData->isGlobalConstantFallback;
+			$isGlobalFunctionFallback = $referenceData->isGlobalFunctionFallback;
+
+			$useStatements = UseStatementHelper::getUseStatementsForPointer($phpcsFile, $reference->startPointer);
+
+			$canBeFixed = array_reduce($alreadyAddedUses[$reference->type], static function (bool $carry, string $use) use ($canonicalName): bool {
+				return NamespaceHelper::getLastNamePart($use) === NamespaceHelper::getLastNamePart($canonicalName)
+					? false
+					: $carry;
+			}, true);
+
+			foreach ($useStatements as $useStatement) {
+				if ($useStatement->getType() !== $reference->type) {
+					continue;
+				}
+
+				if ($useStatement->getFullyQualifiedTypeName() === $canonicalName) {
+					continue;
+				}
+
+				if (!(
+					$useStatement->getCanonicalNameAsReferencedInFile() === $canonicalNameToReference
+					|| (
+						$reference->isClass
+						&& array_key_exists($canonicalNameToReference, $definedClassesIndex)
+						&& $canonicalName !== NamespaceHelper::normalizeToCanonicalName($definedClassesIndex[$canonicalNameToReference])
+					)
+					|| ($reference->isFunction && array_key_exists($canonicalNameToReference, $definedFunctionsIndex))
+					|| ($reference->isConstant && array_key_exists($canonicalNameToReference, $definedConstantsIndex))
+				)) {
+					continue;
+				}
+
+				$canBeFixed = false;
+				break;
+			}
+
+			$label = sprintf($reference->isConstant ? 'Constant %s' : ($reference->isFunction ? 'Function %s()' : 'Class %s'), $reference->name);
+			$errorCode = $isGlobalConstantFallback || $isGlobalFunctionFallback
+				? self::CODE_REFERENCE_VIA_FALLBACK_GLOBAL_NAME
+				: self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME;
+			$errorMessage = $isGlobalConstantFallback || $isGlobalFunctionFallback
+				? sprintf('%s should not be referenced via a fallback global name, but via a use statement.', $label)
+				: sprintf('%s should not be referenced via a fully qualified name, but via a use statement.', $label);
+
+			if (!$canBeFixed) {
+				$phpcsFile->addError($errorMessage, $startPointer, $errorCode);
+				continue;
+			}
+
+			$fix = $phpcsFile->addFixableError($errorMessage, $startPointer, $errorCode);
+
+			if (!$fix) {
+				continue;
+			}
+
+			$addUse = !in_array($canonicalName, $alreadyAddedUses[$reference->type], true);
+
+			if (
+				$reference->isClass
+				&& array_key_exists($canonicalNameToReference, $definedClassesIndex)
+			) {
+				$addUse = false;
+			}
+
+			foreach ($useStatements as $useStatement) {
+				if (
+					$useStatement->getType() !== $reference->type
+					|| $useStatement->getFullyQualifiedTypeName() !== $canonicalName
+				) {
+					continue;
+				}
+
+				$nameToReference = $useStatement->getNameAsReferencedInFile();
+				$addUse = false;
+				break;
+			}
+
+			if ($addUse) {
+				$useStatementPlacePointer = $this->getUseStatementPlacePointer($phpcsFile, $openTagPointer, $useStatements);
+				$useTypeName = UseStatement::getTypeName($reference->type);
+				$useTypeFormatted = $useTypeName !== null ? sprintf('%s ', $useTypeName) : '';
+
+				$phpcsFile->fixer->addNewline($useStatementPlacePointer);
+				$phpcsFile->fixer->addContent($useStatementPlacePointer, sprintf('use %s%s;', $useTypeFormatted, $canonicalName));
+
+				$alreadyAddedUses[$reference->type][] = $canonicalName;
+			}
+
+			if ($reference->source === self::SOURCE_ANNOTATION) {
+				$fixedAnnotationContent = AnnotationHelper::fixAnnotationType(
+					$phpcsFile,
+					$reference->annotation,
+					$reference->nameNode,
+					new IdentifierTypeNode($nameToReference)
+				);
+				$phpcsFile->fixer->replaceToken($startPointer, $fixedAnnotationContent);
+			} elseif ($reference->source === self::SOURCE_ANNOTATION_CONSTANT_FETCH) {
+				$fixedAnnotationContent = AnnotationHelper::fixAnnotationConstantFetchNode(
+					$phpcsFile,
+					$reference->annotation,
+					$reference->constantFetchNode,
+					new ConstFetchNode($nameToReference, $reference->constantFetchNode->name)
+				);
+				$phpcsFile->fixer->replaceToken($startPointer, $fixedAnnotationContent);
+			} else {
+				$phpcsFile->fixer->replaceToken($startPointer, $nameToReference);
+			}
+
+			for ($i = $startPointer + 1; $i <= $reference->endPointer; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
+		}
+
+		$phpcsFile->fixer->endChangeset();
 	}
 
 	/**
