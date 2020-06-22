@@ -49,3 +49,30 @@ function () {
 		empty($day['from']) || !empty($day['to'])
 	);
 };
+
+function () {
+	if (true) {
+		// Comment in if
+		return true;
+	}
+
+	return false;
+};
+
+function () {
+	if (true) {
+		return false;
+	} else {
+		// Comment in else
+		return true;
+	}
+};
+
+function () {
+	if (true) {
+		return true;
+	}
+
+	// Comment before return
+	return false;
+};
