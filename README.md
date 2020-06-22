@@ -1100,6 +1100,10 @@ Sniff provides the following settings:
 
 Enforces fully qualified names of classes and interfaces in phpDocs - in annotations. This results in unambiguous phpDocs.
 
+#### SlevomatCodingStandard.Commenting.DeprecatedAnnotationDeclarationSniff
+
+Reports `@deprecated` annotations without description.
+
 #### SlevomatCodingStandard.Commenting.DisallowCommentAfterCode 🔧
 
 Disallows comments after code at the same line.
