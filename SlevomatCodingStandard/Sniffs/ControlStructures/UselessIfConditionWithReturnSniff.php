@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\ConditionHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
@@ -60,14 +61,6 @@ class UselessIfConditionWithReturnSniff implements Sniff
 				: ConditionHelper::getNegativeCondition($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'] + 1, $tokens[$ifPointer]['parenthesis_closer'] - 1);
 		};
 
-		$isFixable = function (int $ifPointer) use ($phpcsFile, $tokens): bool {
-			if ($this->assumeAllConditionExpressionsAreAlreadyBoolean) {
-				return true;
-			}
-
-			return ConditionHelper::conditionReturnsBoolean($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'] + 1, $tokens[$ifPointer]['parenthesis_closer'] - 1);
-		};
-
 		$elsePointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$ifPointer]['scope_closer'] + 1);
 
 		$errorParameters = [
@@ -90,7 +83,7 @@ class UselessIfConditionWithReturnSniff implements Sniff
 				return;
 			}
 
-			if (!$isFixable($ifPointer)) {
+			if (!$this->isFixable($phpcsFile, $ifPointer, $tokens[$elsePointer]['scope_closer'])) {
 				$phpcsFile->addError(...$errorParameters);
 				return;
 			}
@@ -119,7 +112,7 @@ class UselessIfConditionWithReturnSniff implements Sniff
 				return;
 			}
 
-			if (!$isFixable($ifPointer)) {
+			if (!$this->isFixable($phpcsFile, $ifPointer, $semicolonPointer)) {
 				$phpcsFile->addError(...$errorParameters);
 				return;
 			}
@@ -137,6 +130,21 @@ class UselessIfConditionWithReturnSniff implements Sniff
 			}
 			$phpcsFile->fixer->endChangeset();
 		}
+	}
+
+	private function isFixable(File $phpcsFile, int $ifPointer, int $endPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		if (TokenHelper::findNext($phpcsFile, Tokens::$commentTokens, $ifPointer + 1, $endPointer) !== null) {
+			return false;
+		}
+
+		if ($this->assumeAllConditionExpressionsAreAlreadyBoolean) {
+			return true;
+		}
+
+		return ConditionHelper::conditionReturnsBoolean($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'] + 1, $tokens[$ifPointer]['parenthesis_closer'] - 1);
 	}
 
 	private function findBooleanAfterReturnInScope(File $phpcsFile, int $scopeOpenerPointer): ?int
