@@ -1,4 +1,6 @@
+#!/usr/bin/env php
 <?php
+$used = true;
 
 class NoError
 {
@@ -18,8 +20,6 @@ $noErrorToo = null;
 function ($noError = 'noError') use ($noErrorToo) {
 
 };
-
-$used = true;
 
 function foo($foo) {
 	return preg_replace_callback('~~', function ($matches) {

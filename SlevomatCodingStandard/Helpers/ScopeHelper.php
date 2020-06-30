@@ -37,7 +37,7 @@ class ScopeHelper
 
 	public static function getRootPointer(File $phpcsFile, int $pointer): int
 	{
-		$rootPointer = 0;
+		$rootPointer = TokenHelper::findNext($phpcsFile, T_OPEN_TAG, 0);
 
 		$rootPointers = array_reverse(self::getAllRootPointers($phpcsFile));
 		foreach ($rootPointers as $currentRootPointer) {
