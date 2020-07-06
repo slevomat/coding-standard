@@ -152,6 +152,14 @@ function assigmentInCondition() {
 
 }
 
+function triggerError($file) {
+	if (file_exists($path = realpath($file))) {
+		@trigger_error('foo', E_USER_DEPRECATED);
+		return $path;
+	}
+	return null;
+}
+
 class Foo
 {
 
