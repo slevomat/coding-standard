@@ -11,6 +11,7 @@ use const T_FUNCTION;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
+use const T_USE;
 use const T_VAR;
 use const T_VARIABLE;
 
@@ -41,7 +42,7 @@ class PropertySpacingSniff extends AbstractPropertyAndConstantSpacing
 			return $pointer;
 		}
 
-		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION, T_CONST], $pointer + 1);
+		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION, T_CONST, T_USE], $pointer + 1);
 		if ($propertyPointer === null || $tokens[$propertyPointer]['code'] !== T_VARIABLE) {
 			return $propertyPointer ?? $pointer;
 		}

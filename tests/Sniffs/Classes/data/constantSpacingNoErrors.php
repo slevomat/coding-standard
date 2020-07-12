@@ -44,3 +44,12 @@ class Foobar {
 
 const GLOBAL_CONSTANT = 1;
 const GLOBAL_CONSTANT_2 = 2;
+
+class TestClass
+{
+	public const CONSTANT_1 = 'foo';
+
+	use TestTrait;
+
+	private const CONSTANT_2 = 'bar';
+}

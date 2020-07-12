@@ -13,6 +13,7 @@ use const T_CLASS;
 use const T_CONST;
 use const T_FUNCTION;
 use const T_INTERFACE;
+use const T_USE;
 use const T_VARIABLE;
 
 class ConstantSpacingSniff extends AbstractPropertyAndConstantSpacing
@@ -58,7 +59,7 @@ class ConstantSpacingSniff extends AbstractPropertyAndConstantSpacing
 			return true;
 		}
 
-		$nextPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $pointer + 1);
+		$nextPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE, T_USE], $pointer + 1);
 
 		return $tokens[$nextPointer]['code'] === T_CONST;
 	}
