@@ -85,3 +85,12 @@ abstract class Bar {
 	}
 
 }
+
+class TestClass
+{
+	public $foo = 'foo';
+
+	use TestTrait;
+
+	public $bar = 'bar';
+}
