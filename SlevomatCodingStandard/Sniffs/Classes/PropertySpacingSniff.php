@@ -54,6 +54,10 @@ class PropertySpacingSniff extends AbstractPropertyAndConstantSpacing
 	{
 		$nextPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_VARIABLE], $pointer + 1);
 
+		if ($nextPointer === null) {
+			return false;
+		}
+
 		return $phpcsFile->getTokens()[$nextPointer]['code'] === T_VARIABLE;
 	}
 
