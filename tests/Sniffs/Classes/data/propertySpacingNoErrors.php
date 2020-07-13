@@ -93,4 +93,6 @@ class TestClass
 	use TestTrait;
 
 	public $bar = 'bar';
+
+	const WHATEVER = 'whatever';
 }
