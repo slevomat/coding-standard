@@ -266,6 +266,9 @@ Requires using combined assignment operators, eg `+=`, `.=` etc.
 
 #### SlevomatCodingStandard.Classes.UnusedPrivateElements 🚧
 
+**DEPRECATED**
+See https://phpstan.org/blog/detecting-unused-private-properties-methods-constants
+
 Although PHP_CodeSniffer is not suitable for static analysis because it is limited to analysing one file at a time, it is possible to use it to perform certain checks. `UnusedPrivateElementsSniff` checks for unused methods, unused or write-only properties in a class and unused private constants. Reported unused elements are safe to remove.
 
 This is very useful during refactoring to clean up dead code and injected dependencies.
