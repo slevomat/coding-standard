@@ -57,6 +57,9 @@ use const T_STRING;
 use const T_VARIABLE;
 use const T_XOR_EQUAL;
 
+/**
+ * @deprecated https://phpstan.org/blog/detecting-unused-private-properties-methods-constants
+ */
 class UnusedPrivateElementsSniff implements Sniff
 {
 
