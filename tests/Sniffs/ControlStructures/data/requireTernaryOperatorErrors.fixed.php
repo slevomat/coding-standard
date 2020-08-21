@@ -55,3 +55,17 @@ $a = ! (
 	&& $association->getInversedBy()
 	&& $association instanceof OneToOneAssociationMetadata
  ? 'a' : 'aa';
+
+if (doAnything() and doNothing()) {
+	$a = 'a';
+} else {
+	$a = 'aa';
+}
+
+function () {
+	if (doAnything() and doNothing()) {
+		return 'a';
+	} else {
+		return 'aa';
+	}
+};
