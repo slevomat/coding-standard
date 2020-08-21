@@ -14,6 +14,9 @@ use const T_ELSE;
 use const T_EQUAL;
 use const T_IF;
 use const T_INLINE_THEN;
+use const T_LOGICAL_AND;
+use const T_LOGICAL_OR;
+use const T_LOGICAL_XOR;
 use const T_RETURN;
 use const T_SEMICOLON;
 use const T_WHITESPACE;
@@ -84,6 +87,7 @@ class RequireTernaryOperatorSniff implements Sniff
 	{
 		$ifContainsComment = $this->containsComment($phpcsFile, $ifPointer);
 		$elseContainsComment = $this->containsComment($phpcsFile, $elsePointer);
+		$conditionContainsLogicalOperators = $this->containsLogicalOperators($phpcsFile, $ifPointer);
 
 		$errorParameters = [
 			'Use ternary operator.',
@@ -91,7 +95,7 @@ class RequireTernaryOperatorSniff implements Sniff
 			self::CODE_TERNARY_OPERATOR_NOT_USED,
 		];
 
-		if ($ifContainsComment || $elseContainsComment) {
+		if ($ifContainsComment || $elseContainsComment || $conditionContainsLogicalOperators) {
 			$phpcsFile->addError(...$errorParameters);
 			return;
 		}
@@ -177,6 +181,7 @@ class RequireTernaryOperatorSniff implements Sniff
 
 		$ifContainsComment = $this->containsComment($phpcsFile, $ifPointer);
 		$elseContainsComment = $this->containsComment($phpcsFile, $elsePointer);
+		$conditionContainsLogicalOperators = $this->containsLogicalOperators($phpcsFile, $ifPointer);
 
 		$errorParameters = [
 			'Use ternary operator.',
@@ -184,7 +189,7 @@ class RequireTernaryOperatorSniff implements Sniff
 			self::CODE_TERNARY_OPERATOR_NOT_USED,
 		];
 
-		if ($ifContainsComment || $elseContainsComment) {
+		if ($ifContainsComment || $elseContainsComment || $conditionContainsLogicalOperators) {
 			$phpcsFile->addError(...$errorParameters);
 			return;
 		}
@@ -253,6 +258,17 @@ class RequireTernaryOperatorSniff implements Sniff
 			Tokens::$commentTokens,
 			$tokens[$scopeOwnerPointer]['scope_opener'] + 1,
 			$tokens[$scopeOwnerPointer]['scope_closer']
+		) !== null;
+	}
+
+	private function containsLogicalOperators(File $phpcsFile, int $scopeOwnerPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+		return TokenHelper::findNext(
+			$phpcsFile,
+			[T_LOGICAL_AND, T_LOGICAL_OR, T_LOGICAL_XOR],
+			$tokens[$scopeOwnerPointer]['parenthesis_opener'] + 1,
+			$tokens[$scopeOwnerPointer]['parenthesis_closer']
 		) !== null;
 	}
 

@@ -16,7 +16,7 @@ class RequireTernaryOperatorSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireTernaryOperatorErrors.php');
 
-		self::assertSame(8, $report->getErrorCount());
+		self::assertSame(10, $report->getErrorCount());
 
 		self::assertSniffError($report, 4, RequireTernaryOperatorSniff::CODE_TERNARY_OPERATOR_NOT_USED);
 		self::assertSniffError($report, 12, RequireTernaryOperatorSniff::CODE_TERNARY_OPERATOR_NOT_USED);
@@ -26,6 +26,8 @@ class RequireTernaryOperatorSniffTest extends TestCase
 		self::assertSniffError($report, 42, RequireTernaryOperatorSniff::CODE_TERNARY_OPERATOR_NOT_USED);
 		self::assertSniffError($report, 54, RequireTernaryOperatorSniff::CODE_TERNARY_OPERATOR_NOT_USED);
 		self::assertSniffError($report, 63, RequireTernaryOperatorSniff::CODE_TERNARY_OPERATOR_NOT_USED);
+		self::assertSniffError($report, 75, RequireTernaryOperatorSniff::CODE_TERNARY_OPERATOR_NOT_USED);
+		self::assertSniffError($report, 82, RequireTernaryOperatorSniff::CODE_TERNARY_OPERATOR_NOT_USED);
 
 		self::assertAllFixedInFile($report);
 	}
