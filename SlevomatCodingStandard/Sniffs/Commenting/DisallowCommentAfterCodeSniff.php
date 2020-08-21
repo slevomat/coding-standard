@@ -54,6 +54,7 @@ class DisallowCommentAfterCodeSniff implements Sniff
 
 		if (
 			$nextNonWhitespacePointer !== null
+			&& $commentEndPointer !== null
 			&& $tokens[$nextNonWhitespacePointer]['line'] === $tokens[$commentEndPointer]['line']
 
 		) {
