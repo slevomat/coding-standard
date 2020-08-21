@@ -24,7 +24,7 @@ function () {
 // phpcs:enable
 
 /**
- *
+ * phpcs:disable SomeSniff
  */
 class Whatever
 {
