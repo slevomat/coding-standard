@@ -297,6 +297,7 @@ class AnnotationHelper
 					'@psalm-var' => VariableAnnotation::class,
 					'@phpstan-var' => VariableAnnotation::class,
 					'@throws' => ThrowsAnnotation::class,
+					'@phpstan-throws' => ThrowsAnnotation::class,
 					'@property' => PropertyAnnotation::class,
 					'@psalm-property' => PropertyAnnotation::class,
 					'@phpstan-property' => PropertyAnnotation::class,
