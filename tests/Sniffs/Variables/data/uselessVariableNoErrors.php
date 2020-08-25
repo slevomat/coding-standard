@@ -152,6 +152,15 @@ function assigmentInCondition() {
 
 }
 
+function assigmentInConditionAgain($file) {
+	if (file_exists($path = realpath($file))) {
+		doAnything();
+		return $path;
+	}
+
+	return null;
+}
+
 class Foo
 {
 

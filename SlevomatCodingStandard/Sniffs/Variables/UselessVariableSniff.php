@@ -123,14 +123,29 @@ class UselessVariableSniff implements Sniff
 			self::CODE_USELESS_VARIABLE,
 		];
 
+		$searchBefore = $previousVariablePointer;
+		do {
+			$previousOpenParenthesisPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_PARENTHESIS, $searchBefore - 1);
+
+			if (
+				$previousOpenParenthesisPointer === null
+				|| $tokens[$previousOpenParenthesisPointer]['parenthesis_closer'] < $previousVariablePointer
+			) {
+				break;
+			}
+
+			if (
+				array_key_exists('parenthesis_owner', $tokens[$previousOpenParenthesisPointer])
+				&& in_array($tokens[$tokens[$previousOpenParenthesisPointer]['parenthesis_owner']]['code'], [T_IF, T_ELSEIF, T_WHILE], true)
+			) {
+				return;
+			}
+
+			$searchBefore = $previousOpenParenthesisPointer;
+
+		} while (true);
+
 		$pointerBeforePreviousVariable = TokenHelper::findPreviousEffective($phpcsFile, $previousVariablePointer - 1);
-		if (
-			$tokens[$pointerBeforePreviousVariable]['code'] === T_OPEN_PARENTHESIS
-			&& array_key_exists('parenthesis_owner', $tokens[$pointerBeforePreviousVariable])
-			&& in_array($tokens[$tokens[$pointerBeforePreviousVariable]['parenthesis_owner']]['code'], [T_IF, T_ELSEIF, T_WHILE], true)
-		) {
-			return;
-		}
 
 		if (
 			!in_array($tokens[$pointerBeforePreviousVariable]['code'], [T_SEMICOLON, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET], true)
