@@ -49,6 +49,7 @@ new parent($c);
 $z = ($a ? '0' : '1') ? '2' : '3';
 $zzz = !($a) ? true : false;
 $zzzz = null !== ($a = 'a') ? true : false;
+$zzzzz = null !== ($a === 'a') ? true : false;
 
 exit($a);
 die($a);
@@ -156,6 +157,8 @@ $x = fn ($a, $b) => $a . $b;
 })();
 
 $output = (($a and $b) ? 'yes' : 'nope');
+
+$whatever = (null !== $a = $b->call());
 
 // Must be last
 return true
