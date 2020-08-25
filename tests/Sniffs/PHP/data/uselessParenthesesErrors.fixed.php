@@ -1,6 +1,6 @@
 <?php
 
-class Whatever
+class Whatever extends Anything
 {
 
 	public function __construct($parameter)

@@ -18,7 +18,7 @@ interface Foo
 
 }
 
-class FooBar
+class FooBar extends Anything
 {
 
 	public function invalid(bool $bool = null)

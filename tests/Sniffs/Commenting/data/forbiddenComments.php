@@ -3,7 +3,7 @@
 /**
  * Created by PhpStorm.
  */
-class Foo
+class Foo extends Whatever
 {
 
 	/**

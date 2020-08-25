@@ -10,7 +10,7 @@ namespace FooNamespace{
 	{
 
 		use \FullyQualified\SomeOtherTrait,
-			SomeDifferentTrait, /** Try comments */ \FullyQualified \ /* in this ugly way */ SometTotallyDifferentTrait /** also after */;
+			SomeDifferentTrait, \FullyQualified\SometTotallyDifferentTrait /** also after */;
 		use SomeTraitA, \SomeTraitB {
 			SomeTraitA::someMethods insteadof \SomeTraitB;
 		}
@@ -22,7 +22,7 @@ namespace FooNamespace{
 
 			$classicClass = new SomeInstanceClass($withParams);
 			$classWithoutParams = new Nested\SomeClass;
-			$classWithoutParamsAndMethodCall = (new \ FullyQualified\ Nested \ SomeClass)->someMethod();
+			$classWithoutParamsAndMethodCall = (new \FullyQualified\Nested\SomeClass)->someMethod();
 
 			$testNewSelf = new self("foo");
 

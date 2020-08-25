@@ -16,7 +16,7 @@ class NegationOperatorSpacingSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/negationOperatorSpacingErrors.php');
 
-		self::assertSame(97, $report->getErrorCount());
+		self::assertSame(95, $report->getErrorCount());
 
 		self::assertAllFixedInFile($report);
 	}
@@ -35,7 +35,7 @@ class NegationOperatorSpacingSniffTest extends TestCase
 			['spacesCount' => 1]
 		);
 
-		self::assertSame(97, $report->getErrorCount());
+		self::assertSame(95, $report->getErrorCount());
 
 		self::assertAllFixedInFile($report);
 	}
