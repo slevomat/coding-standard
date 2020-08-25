@@ -58,6 +58,24 @@ class TraitUseSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testDefaultSettingWithCommentsNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/traitUseSpacingDefaultSettingsWithCommentsNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testDefaultSettingWithCommentsErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/traitUseSpacingDefaultSettingsWithCommentsErrors.php');
+
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 8, TraitUseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_USE);
+		self::assertSniffError($report, 14, TraitUseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_USES);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testModifiedSettingNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/traitUseSpacingModifiedSettingsNoErrors.php', [
