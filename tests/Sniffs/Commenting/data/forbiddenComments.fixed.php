@@ -1,6 +1,6 @@
 <?php
 
-class Foo
+class Foo extends Whatever
 {
 
 	public function __construct()

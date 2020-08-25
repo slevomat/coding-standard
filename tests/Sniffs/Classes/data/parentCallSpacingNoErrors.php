@@ -1,6 +1,7 @@
 <?php
 
-class X {
+class X extends Whatever
+{
 	function a() {
 		parent::a();
 

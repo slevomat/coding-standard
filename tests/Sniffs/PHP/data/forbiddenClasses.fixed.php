@@ -10,7 +10,7 @@ namespace FooNamespace{
 	{
 
 		use \FullyQualified\SomeOtherTrait,
-			SomeDifferentTrait, /** Try comments */ \DatabaseTrait /** also after */;
+			SomeDifferentTrait, \DatabaseTrait /** also after */;
 		use SomeTraitA, \SomeTraitB {
 			SomeTraitA::someMethods insteadof \SomeTraitB;
 		}
