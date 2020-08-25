@@ -57,4 +57,21 @@ class X {
 		return '"' . parent::l() . '"';
 	}
 
+	public function m(): object
+	{
+		return true
+			? parent::foo()
+			: self::bar();
+	}
+
+	public function n(): object
+	{
+		return true ?? parent::foo();
+	}
+
+	public function o(): object
+	{
+		return true ?: parent::foo();
+	}
+
 }
