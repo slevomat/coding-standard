@@ -72,4 +72,13 @@ class Whatever
 	{
 	}
 
+	private function s(): void
+	{
+		/**
+		 * @param int[] $data
+		 * @return mixed[]
+		 */
+		$closure = function (array $data): array {};
+	}
+
 }
