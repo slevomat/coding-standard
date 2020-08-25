@@ -12,6 +12,7 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
+use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_key_exists;
@@ -109,7 +110,7 @@ class RequireExplicitAssertionSniff implements Sniff
 					continue;
 				}
 
-				$pointerToAddAssertion = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $codePointer + 1);
+				$pointerToAddAssertion = $this->getNextSemicolonInSameScope($phpcsFile, $codePointer, $codePointer + 1);
 				$indentation = IndentationHelper::getIndentation($phpcsFile, $docCommentOpenPointer);
 
 			} elseif ($tokens[$codePointer]['code'] === T_LIST) {
@@ -120,7 +121,7 @@ class RequireExplicitAssertionSniff implements Sniff
 					continue;
 				}
 
-				$pointerToAddAssertion = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $codePointer + 1);
+				$pointerToAddAssertion = $this->getNextSemicolonInSameScope($phpcsFile, $codePointer, $codePointer + 1);
 				$indentation = IndentationHelper::getIndentation($phpcsFile, $docCommentOpenPointer);
 
 			} elseif ($tokens[$codePointer]['code'] === T_OPEN_SHORT_ARRAY) {
@@ -134,7 +135,7 @@ class RequireExplicitAssertionSniff implements Sniff
 					continue;
 				}
 
-				$pointerToAddAssertion = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $tokens[$codePointer]['bracket_closer'] + 1);
+				$pointerToAddAssertion = $this->getNextSemicolonInSameScope($phpcsFile, $codePointer, $tokens[$codePointer]['bracket_closer'] + 1);
 				$indentation = IndentationHelper::getIndentation($phpcsFile, $docCommentOpenPointer);
 
 			} else {
@@ -224,6 +225,24 @@ class RequireExplicitAssertionSniff implements Sniff
 		}
 
 		return !in_array($typeNode->name, ['mixed', 'static'], true);
+	}
+
+	private function getNextSemicolonInSameScope(File $phpcsFile, int $scopePointer, int $searchAt): int
+	{
+		$semicolonPointer = null;
+
+		do {
+			$semicolonPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $searchAt);
+
+			if (ScopeHelper::isInSameScope($phpcsFile, $scopePointer, $semicolonPointer)) {
+				break;
+			}
+
+			$searchAt = $semicolonPointer + 1;
+
+		} while (true);
+
+		return $semicolonPointer;
 	}
 
 	/**

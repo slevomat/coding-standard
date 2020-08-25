@@ -90,5 +90,12 @@ function () {
 	\assert($y2 === true);
 };
 
+function () {
+	$form = $this->formCreator->create(['inputs' => array_map(static function (Config $config): array {
+		return $config->toArray();
+	}, $this->config->inputs)]);
+	\assert($form instanceof Form);
+};
+
 $z = new ArrayObject();
 \assert($z instanceof \Traversable && $z instanceof \Countable);

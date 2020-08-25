@@ -98,5 +98,12 @@ function () {
 	 */
 };
 
+function () {
+	/** @var Form $form */
+	$form = $this->formCreator->create(['inputs' => array_map(static function (Config $config): array {
+		return $config->toArray();
+	}, $this->config->inputs)]);
+};
+
 $z = new ArrayObject();
 /** @var \Traversable&\Countable $z */
