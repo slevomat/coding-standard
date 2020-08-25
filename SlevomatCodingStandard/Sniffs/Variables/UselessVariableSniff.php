@@ -82,16 +82,18 @@ class UselessVariableSniff implements Sniff
 
 		$functionPointer = $this->findFunctionPointer($phpcsFile, $variablePointer);
 
-		if ($this->isReturnedByReference($phpcsFile, $functionPointer)) {
-			return;
-		}
+		if ($functionPointer !== null) {
+			if ($this->isReturnedByReference($phpcsFile, $functionPointer)) {
+				return;
+			}
 
-		if ($this->isStaticVariable($phpcsFile, $functionPointer, $variablePointer, $variableName)) {
-			return;
-		}
+			if ($this->isStaticVariable($phpcsFile, $functionPointer, $variablePointer, $variableName)) {
+				return;
+			}
 
-		if ($this->isFunctionParameter($phpcsFile, $functionPointer, $variableName)) {
-			return;
+			if ($this->isFunctionParameter($phpcsFile, $functionPointer, $variableName)) {
+				return;
+			}
 		}
 
 		$previousVariablePointer = $this->findPreviousVariablePointer($phpcsFile, $returnPointer, $variableName);
@@ -251,12 +253,8 @@ class UselessVariableSniff implements Sniff
 		return null;
 	}
 
-	private function isStaticVariable(File $phpcsFile, ?int $functionPointer, int $variablePointer, string $variableName): bool
+	private function isStaticVariable(File $phpcsFile, int $functionPointer, int $variablePointer, string $variableName): bool
 	{
-		if ($functionPointer === null) {
-			return false;
-		}
-
 		$tokens = $phpcsFile->getTokens();
 
 		for ($i = $tokens[$functionPointer]['scope_opener'] + 1; $i < $variablePointer; $i++) {
@@ -276,12 +274,8 @@ class UselessVariableSniff implements Sniff
 		return false;
 	}
 
-	private function isFunctionParameter(File $phpcsFile, ?int $functionPointer, string $variableName): bool
+	private function isFunctionParameter(File $phpcsFile, int $functionPointer, string $variableName): bool
 	{
-		if ($functionPointer === null) {
-			return false;
-		}
-
 		$tokens = $phpcsFile->getTokens();
 
 		for ($i = $tokens[$functionPointer]['parenthesis_opener'] + 1; $i < $tokens[$functionPointer]['parenthesis_closer']; $i++) {
@@ -298,12 +292,8 @@ class UselessVariableSniff implements Sniff
 		return false;
 	}
 
-	private function isReturnedByReference(File $phpcsFile, ?int $functionPointer): bool
+	private function isReturnedByReference(File $phpcsFile, int $functionPointer): bool
 	{
-		if ($functionPointer === null) {
-			return false;
-		}
-
 		$tokens = $phpcsFile->getTokens();
 
 		$referencePointer = TokenHelper::findNextEffective($phpcsFile, $functionPointer + 1);
