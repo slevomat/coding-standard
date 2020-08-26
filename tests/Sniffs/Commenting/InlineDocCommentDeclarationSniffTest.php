@@ -46,22 +46,10 @@ class InlineDocCommentDeclarationSniffTest extends TestCase
 			'Invalid inline documentation comment format "@var $f string", expected "@var string $f".'
 		);
 
-		self::assertSniffError(
-			$report,
-			33,
-			InlineDocCommentDeclarationSniff::CODE_INVALID_COMMENT_TYPE
-		);
-		self::assertSniffError(
-			$report,
-			33,
-			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT
-		);
+		self::assertSniffError($report, 33, InlineDocCommentDeclarationSniff::CODE_INVALID_COMMENT_TYPE);
+		self::assertSniffError($report, 33, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
 
-		self::assertSniffError(
-			$report,
-			36,
-			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT
-		);
+		self::assertSniffError($report, 36, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
 
 		self::assertSniffError($report, 39, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);
 		self::assertSniffError($report, 42, InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT);

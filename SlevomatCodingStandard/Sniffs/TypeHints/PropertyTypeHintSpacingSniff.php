@@ -87,11 +87,7 @@ class PropertyTypeHintSpacingSniff implements Sniff
 				$errorCode = self::CODE_NO_SPACE_BEFORE_TYPE_HINT;
 			}
 
-			$fix = $phpcsFile->addFixableError(
-				$errorMessage,
-				$typeHintEndPointer,
-				$errorCode
-			);
+			$fix = $phpcsFile->addFixableError($errorMessage, $typeHintEndPointer, $errorCode);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
 				$phpcsFile->fixer->addContent($propertyStartPointer, ' ');
@@ -106,11 +102,7 @@ class PropertyTypeHintSpacingSniff implements Sniff
 				$errorCode = self::CODE_MULTIPLE_SPACES_BEFORE_TYPE_HINT;
 			}
 
-			$fix = $phpcsFile->addFixableError(
-				$errorMessage,
-				$propertyStartPointer,
-				$errorCode
-			);
+			$fix = $phpcsFile->addFixableError($errorMessage, $propertyStartPointer, $errorCode);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
 				$phpcsFile->fixer->replaceToken($propertyStartPointer + 1, ' ');

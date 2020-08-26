@@ -123,11 +123,7 @@ class FullyQualifiedExceptionsSniff implements Sniff
 				continue;
 			}
 
-			$fullyQualifiedName = NamespaceHelper::resolveClassName(
-				$phpcsFile,
-				$name,
-				$pointer
-			);
+			$fullyQualifiedName = NamespaceHelper::resolveClassName($phpcsFile, $name, $pointer);
 
 			$phpcsFile->fixer->beginChangeset();
 

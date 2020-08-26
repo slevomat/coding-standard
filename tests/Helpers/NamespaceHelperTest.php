@@ -154,9 +154,7 @@ class NamespaceHelperTest extends TestCase
 
 	public function testFindCurrentNamespaceName(): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/namespacedFile.php'
-		);
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/namespacedFile.php');
 		$namespace = NamespaceHelper::findCurrentNamespaceName(
 			$phpcsFile,
 			TokenHelper::getLastTokenPointer($phpcsFile)
@@ -166,9 +164,7 @@ class NamespaceHelperTest extends TestCase
 
 	public function testFindCurrentNamespaceNameInFileWithoutNamespace(): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/fileWithoutNamespace.php'
-		);
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/fileWithoutNamespace.php');
 		self::assertNull(
 			NamespaceHelper::findCurrentNamespaceName(
 				$phpcsFile,
@@ -179,9 +175,7 @@ class NamespaceHelperTest extends TestCase
 
 	public function testClosestNamespaceNameWithMultipleNamespacesInFile(): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/multipleNamespaces.php'
-		);
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/multipleNamespaces.php');
 		$namespace = NamespaceHelper::findCurrentNamespaceName(
 			$phpcsFile,
 			TokenHelper::getLastTokenPointer($phpcsFile)
@@ -191,18 +185,14 @@ class NamespaceHelperTest extends TestCase
 
 	public function testGetAllNamespacesWithMultipleNamespacesInFile(): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/multipleNamespaces.php'
-		);
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/multipleNamespaces.php');
 		$namespaces = NamespaceHelper::getAllNamespacesPointers($phpcsFile);
 		self::assertEquals([2, 16], $namespaces);
 	}
 
 	public function testResolveClassNameWithMoreNamespaces(): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/moreNamespaces.php'
-		);
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/moreNamespaces.php');
 
 		self::assertSame('\Something\Foo', NamespaceHelper::resolveClassName($phpcsFile, 'Foo', $this->findPointerByLineAndType($phpcsFile, 7, T_STRING)));
 		self::assertSame('\Anything\Foo', NamespaceHelper::resolveClassName($phpcsFile, 'Foo', $this->findPointerByLineAndType($phpcsFile, 16, T_STRING)));

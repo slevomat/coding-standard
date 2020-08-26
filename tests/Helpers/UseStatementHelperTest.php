@@ -11,45 +11,35 @@ class UseStatementHelperTest extends TestCase
 
 	public function testIsAnonymousFunctionUse(): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/anonymousFunction.php'
-		);
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/anonymousFunction.php');
 		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
 		self::assertTrue(UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer));
 	}
 
 	public function testIsNotAnonymousFunctionUse(): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/useStatements.php'
-		);
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/useStatements.php');
 		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
 		self::assertFalse(UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer));
 	}
 
 	public function testIsTraitUse(): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/classWithTrait.php'
-		);
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithTrait.php');
 		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
 		self::assertTrue(UseStatementHelper::isTraitUse($phpcsFile, $usePointer));
 	}
 
 	public function testIsTraitUseInAnonymousClass(): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/anonymousClassWithTrait.php'
-		);
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/anonymousClassWithTrait.php');
 		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
 		self::assertTrue(UseStatementHelper::isTraitUse($phpcsFile, $usePointer));
 	}
 
 	public function testIsNotTraitUse(): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/useStatements.php'
-		);
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/useStatements.php');
 		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
 		self::assertFalse(UseStatementHelper::isTraitUse($phpcsFile, $usePointer));
 
@@ -61,9 +51,7 @@ class UseStatementHelperTest extends TestCase
 
 	public function testGetAlias(): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/useStatements.php'
-		);
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/useStatements.php');
 		$bazUsePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
 		self::assertNull(UseStatementHelper::getAlias($phpcsFile, $bazUsePointer));
 
@@ -76,9 +64,7 @@ class UseStatementHelperTest extends TestCase
 
 	public function testGetNameAsReferencedInClassFromUse(): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/useStatements.php'
-		);
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/useStatements.php');
 		$bazUsePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
 		self::assertSame('Baz', UseStatementHelper::getNameAsReferencedInClassFromUse($phpcsFile, $bazUsePointer));
 
@@ -91,9 +77,7 @@ class UseStatementHelperTest extends TestCase
 
 	public function testGetFullyQualifiedTypeNameFromUse(): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/useStatements.php'
-		);
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/useStatements.php');
 		$bazUsePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
 		self::assertSame('Bar\Baz', UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $bazUsePointer));
 
@@ -118,9 +102,7 @@ class UseStatementHelperTest extends TestCase
 
 	public function testGetFileUseStatements(): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(
-			__DIR__ . '/data/useStatements.php'
-		);
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/useStatements.php');
 		$useStatements = UseStatementHelper::getFileUseStatements($phpcsFile)[0];
 		self::assertCount(8, $useStatements);
 		self::assertSame(3, $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Baz')]->getPointer());

@@ -131,11 +131,7 @@ class LineLengthSniff implements Sniff
 		}
 
 		$error = sprintf('Line exceeds maximum limit of %s characters, contains %s characters.', $this->lineLengthLimit, $lineLength);
-		$phpcsFile->addError(
-			$error,
-			$pointer,
-			self::CODE_LINE_TOO_LONG
-		);
+		$phpcsFile->addError($error, $pointer, self::CODE_LINE_TOO_LONG);
 	}
 
 }

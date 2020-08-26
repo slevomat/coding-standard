@@ -156,11 +156,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		]);
 		$codeSniffer->init();
 
-		$phpcsFile = new LocalFile(
-			$filename,
-			$codeSniffer->ruleset,
-			$codeSniffer->config
-		);
+		$phpcsFile = new LocalFile($filename, $codeSniffer->ruleset, $codeSniffer->config);
 
 		$phpcsFile->process();
 

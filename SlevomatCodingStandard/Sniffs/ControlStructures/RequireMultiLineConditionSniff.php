@@ -58,14 +58,8 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 		$conditionStartsOnNewLine = $tokens[$parenthesisOpenerPointer]['line'] !== $tokens[$conditionStartPointer]['line'];
 		$conditionEndsOnNewLine = $tokens[$parenthesisCloserPointer]['line'] !== $tokens[$conditionEndPointer]['line'];
 
-		$lineStart = $this->getLineStart(
-			$phpcsFile,
-			$conditionStartsOnNewLine ? $conditionStartPointer - 1 : $parenthesisOpenerPointer
-		);
-		$lineEnd = $this->getLineEnd(
-			$phpcsFile,
-			$conditionEndsOnNewLine ? $conditionEndPointer + 1 : $parenthesisCloserPointer
-		);
+		$lineStart = $this->getLineStart($phpcsFile, $conditionStartsOnNewLine ? $conditionStartPointer - 1 : $parenthesisOpenerPointer);
+		$lineEnd = $this->getLineEnd($phpcsFile, $conditionEndsOnNewLine ? $conditionEndPointer + 1 : $parenthesisCloserPointer);
 
 		$condition = $this->getCondition($phpcsFile, $parenthesisOpenerPointer, $parenthesisCloserPointer);
 

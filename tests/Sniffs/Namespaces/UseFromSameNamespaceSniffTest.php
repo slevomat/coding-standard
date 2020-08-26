@@ -44,12 +44,7 @@ class UseFromSameNamespaceSniffTest extends TestCase
 	public function testCheckNearestPreviousNamespaceWithMultipleNamespacesInFile(): void
 	{
 		$report = $this->getFileReport();
-		self::assertSniffError(
-			$report,
-			18,
-			UseFromSameNamespaceSniff::CODE_USE_FROM_SAME_NAMESPACE,
-			'Bar\Baz\Test'
-		);
+		self::assertSniffError($report, 18, UseFromSameNamespaceSniff::CODE_USE_FROM_SAME_NAMESPACE, 'Bar\Baz\Test');
 		self::assertNoSniffError($report, 19);
 	}
 

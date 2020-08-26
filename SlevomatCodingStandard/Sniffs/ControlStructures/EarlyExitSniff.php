@@ -125,11 +125,7 @@ class EarlyExitSniff implements Sniff
 		}
 
 		if ($elseEarlyExitPointer !== null && $previousConditionEarlyExitPointer === null) {
-			$fix = $phpcsFile->addFixableError(
-				'Use early exit instead of "else".',
-				$elsePointer,
-				self::CODE_EARLY_EXIT_NOT_USED
-			);
+			$fix = $phpcsFile->addFixableError('Use early exit instead of "else".', $elsePointer, self::CODE_EARLY_EXIT_NOT_USED);
 
 			if (!$fix) {
 				return;
@@ -170,11 +166,7 @@ class EarlyExitSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError(
-			'Remove useless "else" to reduce code nesting.',
-			$elsePointer,
-			self::CODE_USELESS_ELSE
-		);
+		$fix = $phpcsFile->addFixableError('Remove useless "else" to reduce code nesting.', $elsePointer, self::CODE_USELESS_ELSE);
 
 		if (!$fix) {
 			return;
@@ -224,11 +216,7 @@ class EarlyExitSniff implements Sniff
 			}
 		}
 
-		$fix = $phpcsFile->addFixableError(
-			'Use "if" instead of "elseif".',
-			$elseIfPointer,
-			self::CODE_USELESS_ELSEIF
-		);
+		$fix = $phpcsFile->addFixableError('Use "if" instead of "elseif".', $elseIfPointer, self::CODE_USELESS_ELSEIF);
 
 		if (!$fix) {
 			return;
@@ -307,11 +295,7 @@ class EarlyExitSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError(
-			'Use early exit to reduce code nesting.',
-			$ifPointer,
-			self::CODE_EARLY_EXIT_NOT_USED
-		);
+		$fix = $phpcsFile->addFixableError('Use early exit to reduce code nesting.', $ifPointer, self::CODE_EARLY_EXIT_NOT_USED);
 		if (!$fix) {
 			return;
 		}

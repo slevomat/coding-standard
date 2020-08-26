@@ -61,11 +61,7 @@ class EmptyCommentSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError(
-			'Empty comment',
-			$commentStartPointer,
-			self::CODE_EMPTY_COMMENT
-		);
+		$fix = $phpcsFile->addFixableError('Empty comment', $commentStartPointer, self::CODE_EMPTY_COMMENT);
 
 		if (!$fix) {
 			return;

@@ -70,11 +70,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 			return;
 		}
 
-		$possibleCommaPointer = $this->checkReferencedName(
-			$phpcsFile,
-			$keywordPointer,
-			$nameStartPointer
-		);
+		$possibleCommaPointer = $this->checkReferencedName($phpcsFile, $keywordPointer, $nameStartPointer);
 
 		if (!in_array($tokens[$keywordPointer]['code'], [T_IMPLEMENTS, T_USE], true)) {
 			return;
@@ -87,11 +83,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 				if ($possibleCommaToken['code'] === T_COMMA) {
 					/** @var int $nameStartPointer */
 					$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $possibleCommaPointer + 1);
-					$possibleCommaPointer = $this->checkReferencedName(
-						$phpcsFile,
-						$keywordPointer,
-						$nameStartPointer
-					);
+					$possibleCommaPointer = $this->checkReferencedName($phpcsFile, $keywordPointer, $nameStartPointer);
 					continue;
 				}
 			}
@@ -147,11 +139,7 @@ class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 			), $keywordPointer, self::getErrorCode($keyword));
 			if ($fix) {
 
-				$fullyQualifiedName = NamespaceHelper::resolveClassName(
-					$phpcsFile,
-					$name,
-					$nameStartPointer
-				);
+				$fullyQualifiedName = NamespaceHelper::resolveClassName($phpcsFile, $name, $nameStartPointer);
 
 				$phpcsFile->fixer->beginChangeset();
 

@@ -65,11 +65,7 @@ class UselessSemicolonSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError(
-			'Useless semicolon.',
-			$semicolonPointer,
-			self::CODE_USELESS_SEMICOLON
-		);
+		$fix = $phpcsFile->addFixableError('Useless semicolon.', $semicolonPointer, self::CODE_USELESS_SEMICOLON);
 
 		if (!$fix) {
 			return;
@@ -87,11 +83,7 @@ class UselessSemicolonSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError(
-			'Useless semicolon.',
-			$semicolonPointer,
-			self::CODE_USELESS_SEMICOLON
-		);
+		$fix = $phpcsFile->addFixableError('Useless semicolon.', $semicolonPointer, self::CODE_USELESS_SEMICOLON);
 
 		if (!$fix) {
 			return;
@@ -118,11 +110,7 @@ class UselessSemicolonSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError(
-			'Useless semicolon.',
-			$semicolonPointer,
-			self::CODE_USELESS_SEMICOLON
-		);
+		$fix = $phpcsFile->addFixableError('Useless semicolon.', $semicolonPointer, self::CODE_USELESS_SEMICOLON);
 
 		if (!$fix) {
 			return;

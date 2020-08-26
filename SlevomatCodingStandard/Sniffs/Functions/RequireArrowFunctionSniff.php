@@ -73,11 +73,7 @@ class RequireArrowFunctionSniff implements Sniff
 			}
 		}
 
-		$fix = $phpcsFile->addFixableError(
-			'Use arrow function.',
-			$closurePointer,
-			self::CODE_REQUIRED_ARROW_FUNCTION
-		);
+		$fix = $phpcsFile->addFixableError('Use arrow function.', $closurePointer, self::CODE_REQUIRED_ARROW_FUNCTION);
 		if (!$fix) {
 			return;
 		}

@@ -249,12 +249,7 @@ class ClassStructureSniff implements Sniff
 					continue;
 				}
 
-				$this->fixIncorrectGroupOrder(
-					$phpcsFile,
-					$groupFirstMemberPointer,
-					$groupLastMemberPointer,
-					$firstMemberPointer
-				);
+				$this->fixIncorrectGroupOrder($phpcsFile, $groupFirstMemberPointer, $groupLastMemberPointer, $firstMemberPointer);
 
 				// run the sniff again to fix the rest of the groups
 				return $pointer - 1;

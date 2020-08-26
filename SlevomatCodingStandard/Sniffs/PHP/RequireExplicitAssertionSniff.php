@@ -208,15 +208,9 @@ class RequireExplicitAssertionSniff implements Sniff
 				$pointerToAddAssertion < $docCommentClosePointer
 				&& array_key_exists($pointerAfterDocComment + 1, $tokens)
 			) {
-				$phpcsFile->fixer->addContentBefore(
-					$pointerAfterDocComment + 1,
-					$indentation . $assertion . $phpcsFile->eolChar
-				);
+				$phpcsFile->fixer->addContentBefore($pointerAfterDocComment + 1, $indentation . $assertion . $phpcsFile->eolChar);
 			} else {
-				$phpcsFile->fixer->addContent(
-					$pointerToAddAssertion,
-					$phpcsFile->eolChar . $indentation . $assertion
-				);
+				$phpcsFile->fixer->addContent($pointerToAddAssertion, $phpcsFile->eolChar . $indentation . $assertion);
 			}
 
 			$phpcsFile->fixer->endChangeset();

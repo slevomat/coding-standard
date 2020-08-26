@@ -72,11 +72,7 @@ class NamespaceDeclarationSniff implements Sniff
 			? 'Expected one space after namespace statement, found tab.'
 			: sprintf('Expected one space after namespace statement, found %d.', strlen($tokens[$whitespacePointer]['content']));
 
-		$fix = $phpcsFile->addFixableError(
-			$errorMessage,
-			$namespacePointer,
-			self::CODE_INVALID_WHITESPACE_AFTER_NAMESPACE
-		);
+		$fix = $phpcsFile->addFixableError($errorMessage, $namespacePointer, self::CODE_INVALID_WHITESPACE_AFTER_NAMESPACE);
 
 		if (!$fix) {
 			return;

@@ -45,11 +45,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 	public function testDeclareStrictTypesMissing(string $file, int $line): void
 	{
 		$report = self::checkFile($file);
-		self::assertSniffError(
-			$report,
-			$line,
-			DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING
-		);
+		self::assertSniffError($report, $line, DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING);
 	}
 
 	/**
@@ -77,11 +73,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 	public function testDeclareStrictTypesIncorrectFormat(string $file): void
 	{
 		$report = self::checkFile($file);
-		self::assertSniffError(
-			$report,
-			1,
-			DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT
-		);
+		self::assertSniffError($report, 1, DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT);
 	}
 
 	public function testEmptyFile(): void
@@ -95,11 +87,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/declareStrictTypesIncorrectFormatNoSpaces.php', [
 			'spacesCountAroundEqualsSign' => 0,
 		]);
-		self::assertSniffError(
-			$report,
-			1,
-			DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT
-		);
+		self::assertSniffError($report, 1, DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT);
 	}
 
 	public function testDeclareStrictTwoNewlinesBefore(): void

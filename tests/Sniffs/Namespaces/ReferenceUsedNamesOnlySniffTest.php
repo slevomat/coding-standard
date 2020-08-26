@@ -55,12 +55,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/shouldBeInUseStatement.php', [
 			'ignoredNames' => $ignoredNames,
 		]);
-		self::assertSniffError(
-			$report,
-			12,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Foo\SomeError'
-		);
+		self::assertSniffError($report, 12, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Foo\SomeError');
 	}
 
 	/**
@@ -72,34 +67,19 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/shouldBeInUseStatement.php', [
 			'ignoredNames' => $ignoredNames,
 		]);
-		self::assertSniffError(
-			$report,
-			11,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Some\ConstantClass'
-		);
+		self::assertSniffError($report, 11, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Some\ConstantClass');
 	}
 
 	public function testReferencingConstantViaFullyQualifiedName(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/shouldBeInUseStatement.php');
-		self::assertSniffError(
-			$report,
-			16,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Boo\FOO'
-		);
+		self::assertSniffError($report, 16, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Boo\FOO');
 	}
 
 	public function testReferencingFunctionViaFullyQualifiedName(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/shouldBeInUseStatement.php');
-		self::assertSniffError(
-			$report,
-			17,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Boo\foo'
-		);
+		self::assertSniffError($report, 17, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Boo\foo');
 	}
 
 	public function testReferencingGlobalFunctionViaFallback(): void
@@ -107,12 +87,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/shouldBeInUseStatement.php', [
 			'allowFallbackGlobalFunctions' => false,
 		]);
-		self::assertSniffError(
-			$report,
-			18,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FALLBACK_GLOBAL_NAME,
-			'min'
-		);
+		self::assertSniffError($report, 18, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FALLBACK_GLOBAL_NAME, 'min');
 	}
 
 	public function testReferencingDefinedFunction(): void
@@ -128,12 +103,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/shouldBeInUseStatement.php', [
 			'allowFallbackGlobalConstants' => false,
 		]);
-		self::assertSniffError(
-			$report,
-			19,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FALLBACK_GLOBAL_NAME,
-			'PHP_VERSION'
-		);
+		self::assertSniffError($report, 19, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FALLBACK_GLOBAL_NAME, 'PHP_VERSION');
 	}
 
 	public function testReferencingDefinedConstant(): void
@@ -175,24 +145,9 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 				'ignoredNames' => $ignoredNames,
 			]
 		);
-		self::assertSniffError(
-			$report,
-			13,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Some\CommonException'
-		);
-		self::assertSniffError(
-			$report,
-			14,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Exception'
-		);
-		self::assertSniffError(
-			$report,
-			15,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Nette\ObjectPrototype'
-		);
+		self::assertSniffError($report, 13, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Some\CommonException');
+		self::assertSniffError($report, 14, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Exception');
+		self::assertSniffError($report, 15, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Nette\ObjectPrototype');
 	}
 
 	/**
@@ -207,12 +162,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 				'ignoredNames' => $ignoredNames,
 			]
 		);
-		self::assertSniffError(
-			$report,
-			3,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Lorem\Dolor'
-		);
+		self::assertSniffError($report, 3, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Lorem\Dolor');
 		self::assertNoSniffError($report, 8);
 	}
 
@@ -234,12 +184,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE,
 			'\SomeClass'
 		);
-		self::assertSniffError(
-			$report,
-			3,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Some\OtherClass'
-		);
+		self::assertSniffError($report, 3, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Some\OtherClass');
 		self::assertNoSniffError($report, 8);
 	}
 
@@ -257,12 +202,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			]
 		);
 		self::assertSame(1, $report->getErrorCount());
-		self::assertSniffError(
-			$report,
-			28,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Foo\BarError'
-		);
+		self::assertSniffError($report, 28, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Foo\BarError');
 	}
 
 	/**
@@ -278,12 +218,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 				'ignoredNames' => $ignoredNames,
 			]
 		);
-		self::assertSniffError(
-			$report,
-			16,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Some\Exception'
-		);
+		self::assertSniffError($report, 16, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Some\Exception');
 		self::assertNoSniffError($report, 3);
 	}
 
@@ -300,12 +235,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 				'ignoredNames' => $ignoredNames,
 			]
 		);
-		self::assertSniffError(
-			$report,
-			19,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Some\Other\Exception'
-		);
+		self::assertSniffError($report, 19, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Some\Other\Exception');
 		self::assertNoSniffError($report, 6);
 	}
 
@@ -346,12 +276,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE,
 			'\TypeError'
 		);
-		self::assertSniffError(
-			$report,
-			28,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Foo\BarError'
-		);
+		self::assertSniffError($report, 28, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Foo\BarError');
 		self::assertNoSniffError($report, 7);
 		self::assertNoSniffError($report, 9);
 		self::assertNoSniffError($report, 11);
@@ -370,12 +295,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 				'ignoredNames' => $ignoredNames,
 			]
 		);
-		self::assertSniffError(
-			$report,
-			7,
-			ReferenceUsedNamesOnlySniff::CODE_PARTIAL_USE,
-			'SomeFramework\ObjectPrototype'
-		);
+		self::assertSniffError($report, 7, ReferenceUsedNamesOnlySniff::CODE_PARTIAL_USE, 'SomeFramework\ObjectPrototype');
 		self::assertNoSniffError($report, 6);
 	}
 
@@ -412,12 +332,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			]
 		);
 
-		self::assertSniffError(
-			$report,
-			3,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Foo\Bar'
-		);
+		self::assertSniffError($report, 3, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Foo\Bar');
 		self::assertNoSniffError($report, 4);
 		self::assertNoSniffError($report, 5);
 	}
@@ -450,24 +365,9 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 				'ignoredNames' => $ignoredNames,
 			]
 		);
-		self::assertSniffError(
-			$report,
-			3,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE,
-			'\Bar'
-		);
-		self::assertSniffError(
-			$report,
-			3,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE,
-			'\Baz'
-		);
-		self::assertSniffError(
-			$report,
-			3,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Foo\Baz'
-		);
+		self::assertSniffError($report, 3, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE, '\Bar');
+		self::assertSniffError($report, 3, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE, '\Baz');
+		self::assertSniffError($report, 3, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Foo\Baz');
 	}
 
 	/**
@@ -483,18 +383,8 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			]
 		);
 
-		self::assertSniffError(
-			$report,
-			3,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE,
-			'\Foo'
-		);
-		self::assertSniffError(
-			$report,
-			4,
-			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Bar\Lorem'
-		);
+		self::assertSniffError($report, 3, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE, '\Foo');
+		self::assertSniffError($report, 4, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Bar\Lorem');
 	}
 
 	/**

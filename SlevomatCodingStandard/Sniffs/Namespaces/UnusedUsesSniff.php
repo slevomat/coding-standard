@@ -95,11 +95,7 @@ class UnusedUsesSniff implements Sniff
 		foreach ($referencedNames as $referencedName) {
 			$pointer = $referencedName->getStartPointer();
 
-			$pointerBeforeUseStatements = $this->firstPointerBefore(
-				$pointer,
-				$pointersBeforeUseStatements,
-				$startPointer
-			);
+			$pointerBeforeUseStatements = $this->firstPointerBefore($pointer, $pointersBeforeUseStatements, $startPointer);
 
 			$name = $referencedName->getNameAsReferencedInFile();
 			$nameParts = NamespaceHelper::getNameParts($name);

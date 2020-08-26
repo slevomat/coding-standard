@@ -10,9 +10,7 @@ class TestCaseChecksTokenBoundsTest extends TestCase
 	public function testThrowsTokenPointerOutOfBoundsException(): void
 	{
 		try {
-			$phpcsFile = $this->getCodeSnifferFile(
-				__DIR__ . '/data/emptyPhpFile.php'
-			);
+			$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/emptyPhpFile.php');
 			self::assertTokenPointer(T_OPEN_TAG, 1, $phpcsFile, 5);
 			self::fail();
 		} catch (TokenPointerOutOfBoundsException $e) {

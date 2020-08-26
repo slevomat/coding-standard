@@ -107,11 +107,7 @@ abstract class AbstractLineCondition implements Sniff
 
 	protected function getCondition(File $phpcsFile, int $parenthesisOpenerPointer, int $parenthesisCloserPointer): string
 	{
-		$condition = TokenHelper::getContent(
-			$phpcsFile,
-			$parenthesisOpenerPointer + 1,
-			$parenthesisCloserPointer - 1
-		);
+		$condition = TokenHelper::getContent($phpcsFile, $parenthesisOpenerPointer + 1, $parenthesisCloserPointer - 1);
 
 		return trim(preg_replace(sprintf('~%s[ \t]*~', $phpcsFile->eolChar), ' ', $condition));
 	}

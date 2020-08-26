@@ -222,9 +222,7 @@ class AnnotationHelperTest extends TestCase
 	private function getTestedCodeSnifferFile(): File
 	{
 		if ($this->testedCodeSnifferFile === null) {
-			$this->testedCodeSnifferFile = $this->getCodeSnifferFile(
-				__DIR__ . '/data/annotation.php'
-			);
+			$this->testedCodeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/annotation.php');
 		}
 		return $this->testedCodeSnifferFile;
 	}

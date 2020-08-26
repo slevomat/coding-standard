@@ -94,15 +94,9 @@ class DisallowCommentAfterCodeSniff implements Sniff
 				$phpcsFile->eolChar . IndentationHelper::addIndentation($indentation) . $commentContent
 			);
 		} elseif ($tokens[$firstNonWhitespacePointerOnLine]['code'] === T_CLOSE_CURLY_BRACKET) {
-			$phpcsFile->fixer->addContent(
-				$firstNonWhiteSpacePointerBeforeComment,
-				$phpcsFile->eolChar . $indentation . $commentContent
-			);
+			$phpcsFile->fixer->addContent($firstNonWhiteSpacePointerBeforeComment, $phpcsFile->eolChar . $indentation . $commentContent);
 		} else {
-			$phpcsFile->fixer->addContentBefore(
-				$firstPointerOnLine,
-				$indentation . $commentContent
-			);
+			$phpcsFile->fixer->addContentBefore($firstPointerOnLine, $indentation . $commentContent);
 			$phpcsFile->fixer->addNewline($firstNonWhiteSpacePointerBeforeComment);
 		}
 

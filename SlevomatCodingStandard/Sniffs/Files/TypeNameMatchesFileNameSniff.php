@@ -97,9 +97,7 @@ class TypeNameMatchesFileNameSniff implements Sniff
 			$filename = substr($filename, strlen($basePath));
 		}
 
-		$expectedTypeName = $this->getNamespaceExtractor()->getTypeNameFromProjectPath(
-			$filename
-		);
+		$expectedTypeName = $this->getNamespaceExtractor()->getTypeNameFromProjectPath($filename);
 		if ($typeName === $expectedTypeName) {
 			return;
 		}

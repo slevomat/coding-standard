@@ -202,6 +202,11 @@
 	<rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
 	<rule ref="SlevomatCodingStandard.Functions.StaticClosure"/>
 	<rule ref="SlevomatCodingStandard.Functions.StrictCall"/>
+	<rule ref="SlevomatCodingStandard.Functions.RequireSingleLineCall">
+		<properties>
+			<property name="maxLineLength" value="140"/>
+		</properties>
+	</rule>
 	<rule ref="SlevomatCodingStandard.Functions.UselessParameterDefaultValue"/>
 	<rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure"/>
 	<rule ref="SlevomatCodingStandard.Functions.UnusedParameter"/>

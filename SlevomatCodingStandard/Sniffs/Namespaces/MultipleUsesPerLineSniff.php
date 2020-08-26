@@ -46,11 +46,7 @@ class MultipleUsesPerLineSniff implements Sniff
 			return;
 		}
 
-		$phpcsFile->addError(
-			'Multiple used types per use statement are forbidden.',
-			$commaPointer,
-			self::CODE_MULTIPLE_USES_PER_LINE
-		);
+		$phpcsFile->addError('Multiple used types per use statement are forbidden.', $commaPointer, self::CODE_MULTIPLE_USES_PER_LINE);
 	}
 
 }

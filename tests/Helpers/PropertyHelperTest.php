@@ -86,9 +86,7 @@ class PropertyHelperTest extends TestCase
 	private function getTestedCodeSnifferFile(): File
 	{
 		if ($this->testedCodeSnifferFile === null) {
-			$this->testedCodeSnifferFile = $this->getCodeSnifferFile(
-				__DIR__ . '/data/propertyOrNot.php'
-			);
+			$this->testedCodeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/propertyOrNot.php');
 		}
 		return $this->testedCodeSnifferFile;
 	}
