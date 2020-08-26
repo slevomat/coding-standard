@@ -717,6 +717,15 @@ Sniff provides the following settings:
 * `allowNested` (defaults to `true`)
 * `enable`: either to enable or no this sniff. By default, it is enabled for PHP versions 7.4 or higher.
 
+#### SlevomatCodingStandard.Functions.RequireSingleLineCall 🔧
+
+Enforces function call to be on a single line.
+
+Sniff provides the following settings:
+
+* `maxLineLength`: specifies max allowed line length. If call would fit on it, it's enforced. Use 0 value to enforce for all calls, regardless of length.
+* `ignoreWithComplexParameter` (defaults to `true`): ignores calls with arrays, closures, arrow functions and nested calls.
+
 #### SlevomatCodingStandard.Functions.TrailingCommaInCall 🔧
 
 Commas after the last parameter in function or method call make adding a new parameter easier and result in a cleaner versioning diff.
