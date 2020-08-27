@@ -37,6 +37,10 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 	 */
 	public function process(File $phpcsFile, $stringPointer): void
 	{
+		if (!$this->isCall($phpcsFile, $stringPointer)) {
+			return;
+		}
+
 		if ($this->shouldBeSkipped($phpcsFile, $stringPointer)) {
 			return;
 		}
@@ -115,12 +119,8 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 		$phpcsFile->fixer->endChangeset();
 	}
 
-	protected function shouldBeSkipped(File $phpcsFile, int $stringPointer): bool
+	private function shouldBeSkipped(File $phpcsFile, int $stringPointer): bool
 	{
-		if (parent::shouldBeSkipped($phpcsFile, $stringPointer)) {
-			return true;
-		}
-
 		$tokens = $phpcsFile->getTokens();
 
 		foreach (array_reverse(TokenHelper::findNextAll($phpcsFile, [T_OPEN_PARENTHESIS, T_FUNCTION], 0, $stringPointer)) as $pointer) {

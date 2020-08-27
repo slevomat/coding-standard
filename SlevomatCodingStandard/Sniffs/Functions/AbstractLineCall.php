@@ -30,19 +30,19 @@ abstract class AbstractLineCall implements Sniff
 		return [T_STRING, T_SELF, T_STATIC, T_PARENT];
 	}
 
-	protected function shouldBeSkipped(File $phpcsFile, int $stringPointer): bool
+	protected function isCall(File $phpcsFile, int $stringPointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $stringPointer + 1);
 
 		if ($tokens[$nextPointer]['code'] !== T_OPEN_PARENTHESIS) {
-			return true;
+			return false;
 		}
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $stringPointer - 1);
 
-		return $tokens[$previousPointer]['code'] === T_FUNCTION;
+		return $tokens[$previousPointer]['code'] !== T_FUNCTION;
 	}
 
 	protected function getLineStart(File $phpcsFile, int $pointer): string
