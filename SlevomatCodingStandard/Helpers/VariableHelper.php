@@ -26,10 +26,7 @@ class VariableHelper
 
 	public static function isUsedInScope(File $phpcsFile, int $scopeOwnerPointer, int $variablePointer): bool
 	{
-		$tokens = $phpcsFile->getTokens();
-
-		$firstPointerInScope = $tokens[$scopeOwnerPointer]['code'] === T_OPEN_TAG ? $scopeOwnerPointer + 1 : $tokens[$scopeOwnerPointer]['scope_opener'] + 1;
-		return self::isUsedInScopeInternal($phpcsFile, $scopeOwnerPointer, $variablePointer, $firstPointerInScope);
+		return self::isUsedInScopeInternal($phpcsFile, $scopeOwnerPointer, $variablePointer, null);
 	}
 
 	public static function isUsedInScopeAfterPointer(
@@ -106,7 +103,7 @@ class VariableHelper
 		File $phpcsFile,
 		int $scopeOwnerPointer,
 		int $variablePointer,
-		int $startCheckPointer
+		?int $startCheckPointer
 	): bool
 	{
 		$tokens = $phpcsFile->getTokens();
@@ -117,6 +114,10 @@ class VariableHelper
 		$firstPointerInScope = $tokens[$scopeOwnerPointer]['code'] === T_OPEN_TAG
 			? $scopeOwnerPointer + 1
 			: $tokens[$scopeOwnerPointer]['scope_opener'] + 1;
+
+		if ($startCheckPointer === null) {
+			$startCheckPointer = $firstPointerInScope;
+		}
 
 		for ($i = $startCheckPointer; $i <= $scopeCloserPointer; $i++) {
 			if (!ScopeHelper::isInSameScope($phpcsFile, $i, $firstPointerInScope)) {
