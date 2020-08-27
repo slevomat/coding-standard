@@ -12,6 +12,10 @@ class Whatever
 	{
 	}
 
+	public function onlyNullableParameter(?int $a): void
+	{
+	}
+
 	public function onlyReturn(): void
 	{
 	}

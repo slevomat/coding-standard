@@ -20,6 +20,13 @@ class Whatever
 	}
 
 	/**
+	 * @param null|int $a
+	 */
+	public function onlyNullableParameter(?int $a): void
+	{
+	}
+
+	/**
 	 * @return void
 	 */
 	public function onlyReturn(): void
