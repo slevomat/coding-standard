@@ -32,11 +32,16 @@ class IndentationHelper
 
 	public static function addIndentation(string $identation, int $level = 1): string
 	{
-		$whitespace = $identation === ''
-			? self::TAB_INDENT
-			: ($identation[0] === self::TAB_INDENT ? self::TAB_INDENT : self::SPACES_INDENT);
+		$whitespace = self::getOneIndentationLevel($identation);
 
 		return $identation . str_repeat($whitespace, $level);
+	}
+
+	public static function getOneIndentationLevel(string $identation): string
+	{
+		return $identation === ''
+			? self::TAB_INDENT
+			: ($identation[0] === self::TAB_INDENT ? self::TAB_INDENT : self::SPACES_INDENT);
 	}
 
 	/**

@@ -721,6 +721,14 @@ Sniff provides the following settings:
 * `allowNested` (defaults to `true`)
 * `enable`: either to enable or no this sniff. By default, it is enabled for PHP versions 7.4 or higher.
 
+#### SlevomatCodingStandard.Functions.RequireMultiLineCall 🔧
+
+Enforces function call to be splitted to more lines so each parameter is on its own line.
+
+Sniff provides the following settings:
+
+* `minLineLength`: specifies min line length to enforce call to be splitted. Use 0 value to enforce for all calls, regardless of length.
+
 #### SlevomatCodingStandard.Functions.RequireSingleLineCall 🔧
 
 Enforces function call to be on a single line.
