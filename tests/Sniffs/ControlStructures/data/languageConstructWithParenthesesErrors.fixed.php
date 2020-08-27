@@ -40,3 +40,7 @@ function booo()
 {
 	yield from [];
 }
+
+if (include_once __FILE__) {
+    echo 'OK', PHP_EOL;
+}
