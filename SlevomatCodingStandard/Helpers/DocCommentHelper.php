@@ -44,7 +44,13 @@ class DocCommentHelper
 			return null;
 		}
 
-		return trim(TokenHelper::getContent($phpcsFile, $docCommentOpenToken + 1, $phpcsFile->getTokens()[$docCommentOpenToken]['comment_closer'] - 1));
+		return trim(
+			TokenHelper::getContent(
+				$phpcsFile,
+				$docCommentOpenToken + 1,
+				$phpcsFile->getTokens()[$docCommentOpenToken]['comment_closer'] - 1
+			)
+		);
 	}
 
 	/**
@@ -139,7 +145,11 @@ class DocCommentHelper
 
 		if (
 			$nextPointer !== null
-			&& in_array($tokens[$nextPointer]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT], true)
+			&& in_array(
+				$tokens[$nextPointer]['code'],
+				[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT],
+				true
+			)
 		) {
 			return false;
 		}

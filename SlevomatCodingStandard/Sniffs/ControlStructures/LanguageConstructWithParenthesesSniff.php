@@ -73,12 +73,20 @@ class LanguageConstructWithParenthesesSniff implements Sniff
 			return;
 		}
 
-		$containsContentBetweenParentheses = TokenHelper::findNextEffective($phpcsFile, $openParenthesisPointer + 1, $closeParenthesisPointer) !== null;
+		$containsContentBetweenParentheses = TokenHelper::findNextEffective(
+			$phpcsFile,
+			$openParenthesisPointer + 1,
+			$closeParenthesisPointer
+		) !== null;
 		if ($tokens[$languageConstructPointer]['code'] === T_EXIT && $containsContentBetweenParentheses) {
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError(sprintf('Usage of language construct "%s" with parentheses is disallowed.', $tokens[$languageConstructPointer]['content']), $languageConstructPointer, self::CODE_USED_WITH_PARENTHESES);
+		$fix = $phpcsFile->addFixableError(
+			sprintf('Usage of language construct "%s" with parentheses is disallowed.', $tokens[$languageConstructPointer]['content']),
+			$languageConstructPointer,
+			self::CODE_USED_WITH_PARENTHESES
+		);
 		if (!$fix) {
 			return;
 		}

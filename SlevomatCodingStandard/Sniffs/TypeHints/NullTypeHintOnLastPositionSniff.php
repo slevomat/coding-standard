@@ -98,7 +98,12 @@ class NullTypeHintOnLastPositionSniff implements Sniff
 						$fixedTypeNodes[] = $nullTypeNode;
 						$fixedUnionTypeNode = new UnionTypeNode($fixedTypeNodes);
 
-						$fixedAnnotationContent = AnnotationHelper::fixAnnotationType($phpcsFile, $annotation, $unionTypeNode, $fixedUnionTypeNode);
+						$fixedAnnotationContent = AnnotationHelper::fixAnnotationType(
+							$phpcsFile,
+							$annotation,
+							$unionTypeNode,
+							$fixedUnionTypeNode
+						);
 
 						$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
 						for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {

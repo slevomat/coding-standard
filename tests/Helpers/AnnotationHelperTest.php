@@ -18,7 +18,11 @@ class AnnotationHelperTest extends TestCase
 
 	public function testClassWithAnnotation(): void
 	{
-		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithAnnotation'), '@see');
+		$annotations = AnnotationHelper::getAnnotationsByName(
+			$this->getTestedCodeSnifferFile(),
+			$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithAnnotation'),
+			'@see'
+		);
 
 		self::assertCount(1, $annotations);
 
@@ -30,12 +34,23 @@ class AnnotationHelperTest extends TestCase
 
 	public function testClassWithoutAnnotation(): void
 	{
-		self::assertCount(0, AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithoutAnnotation'), '@see'));
+		self::assertCount(
+			0,
+			AnnotationHelper::getAnnotationsByName(
+				$this->getTestedCodeSnifferFile(),
+				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithoutAnnotation'),
+				'@see'
+			)
+		);
 	}
 
 	public function testConstantWithAnnotation(): void
 	{
-		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITH_ANNOTATION'), '@var');
+		$annotations = AnnotationHelper::getAnnotationsByName(
+			$this->getTestedCodeSnifferFile(),
+			$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITH_ANNOTATION'),
+			'@var'
+		);
 
 		self::assertCount(1, $annotations);
 
@@ -50,12 +65,23 @@ class AnnotationHelperTest extends TestCase
 
 	public function testConstantWithoutAnnotation(): void
 	{
-		self::assertCount(0, AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITHOUT_ANNOTATION'), '@var'));
+		self::assertCount(
+			0,
+			AnnotationHelper::getAnnotationsByName(
+				$this->getTestedCodeSnifferFile(),
+				$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITHOUT_ANNOTATION'),
+				'@var'
+			)
+		);
 	}
 
 	public function testPropertyWithAnnotation(): void
 	{
-		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withAnnotation'), '@var');
+		$annotations = AnnotationHelper::getAnnotationsByName(
+			$this->getTestedCodeSnifferFile(),
+			$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withAnnotation'),
+			'@var'
+		);
 
 		self::assertCount(1, $annotations);
 
@@ -70,12 +96,23 @@ class AnnotationHelperTest extends TestCase
 
 	public function testPropertyWithoutAnnotation(): void
 	{
-		self::assertCount(0, AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withoutAnnotation'), '@var'));
+		self::assertCount(
+			0,
+			AnnotationHelper::getAnnotationsByName(
+				$this->getTestedCodeSnifferFile(),
+				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withoutAnnotation'),
+				'@var'
+			)
+		);
 	}
 
 	public function testReturnAnnotation(): void
 	{
-		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withReturnAnnotation'), '@return');
+		$annotations = AnnotationHelper::getAnnotationsByName(
+			$this->getTestedCodeSnifferFile(),
+			$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withReturnAnnotation'),
+			'@return'
+		);
 
 		self::assertCount(1, $annotations);
 
@@ -90,7 +127,11 @@ class AnnotationHelperTest extends TestCase
 
 	public function testFunctionWithAnnotation(): void
 	{
-		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withAnnotation'), '@param');
+		$annotations = AnnotationHelper::getAnnotationsByName(
+			$this->getTestedCodeSnifferFile(),
+			$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withAnnotation'),
+			'@param'
+		);
 
 		self::assertCount(2, $annotations);
 
@@ -115,7 +156,11 @@ class AnnotationHelperTest extends TestCase
 
 	public function testFunctionWithParametrizedAnnotation(): void
 	{
-		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withParametrizedAnnotation'), '@Route');
+		$annotations = AnnotationHelper::getAnnotationsByName(
+			$this->getTestedCodeSnifferFile(),
+			$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withParametrizedAnnotation'),
+			'@Route'
+		);
 
 		self::assertCount(1, $annotations);
 
@@ -126,7 +171,11 @@ class AnnotationHelperTest extends TestCase
 
 	public function testFunctionWithParametrizedAnnotationContainingParenthesis(): void
 	{
-		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withParametrizedAnnotationContainingParenthesis'), '@Security');
+		$annotations = AnnotationHelper::getAnnotationsByName(
+			$this->getTestedCodeSnifferFile(),
+			$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withParametrizedAnnotationContainingParenthesis'),
+			'@Security'
+		);
 
 		self::assertCount(1, $annotations);
 
@@ -137,18 +186,29 @@ class AnnotationHelperTest extends TestCase
 
 	public function testFunctionWithMultiLineParametrizedAnnotation(): void
 	{
-		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withMultiLineParametrizedAnnotation'), '@Route');
+		$annotations = AnnotationHelper::getAnnotationsByName(
+			$this->getTestedCodeSnifferFile(),
+			$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withMultiLineParametrizedAnnotation'),
+			'@Route'
+		);
 
 		self::assertCount(1, $annotations);
 
 		self::assertInstanceOf(GenericAnnotation::class, $annotations[0]);
-		self::assertSame("\"/configs/{config}/domains/{domain}/locales/{locale}/messages\", name=\"jms_translation_update_message\",\ndefaults = {\"id\" = null}, options = {\"i18n\" = false}, methods={\"PUT\"}", $annotations[0]->getParameters());
+		self::assertSame(
+			"\"/configs/{config}/domains/{domain}/locales/{locale}/messages\", name=\"jms_translation_update_message\",\ndefaults = {\"id\" = null}, options = {\"i18n\" = false}, methods={\"PUT\"}",
+			$annotations[0]->getParameters()
+		);
 		self::assertNull($annotations[0]->getContent());
 	}
 
 	public function testFunctionWithParametrizedAnnotationWithoutParameters(): void
 	{
-		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withParametrizedAnnotationWithoutParameters'), '@Assert\Callback');
+		$annotations = AnnotationHelper::getAnnotationsByName(
+			$this->getTestedCodeSnifferFile(),
+			$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withParametrizedAnnotationWithoutParameters'),
+			'@Assert\Callback'
+		);
 
 		self::assertCount(1, $annotations);
 
@@ -159,7 +219,11 @@ class AnnotationHelperTest extends TestCase
 
 	public function testInlineDocCommentWithParametrizedAnnotation(): void
 	{
-		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'inlineDocComment'), '@ORM\OneToMany');
+		$annotations = AnnotationHelper::getAnnotationsByName(
+			$this->getTestedCodeSnifferFile(),
+			$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'inlineDocComment'),
+			'@ORM\OneToMany'
+		);
 
 		self::assertCount(1, $annotations);
 
@@ -170,7 +234,10 @@ class AnnotationHelperTest extends TestCase
 
 	public function testWordPressAnnotations(): void
 	{
-		$annotations = AnnotationHelper::getAnnotations($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'wordPress'));
+		$annotations = AnnotationHelper::getAnnotations(
+			$this->getTestedCodeSnifferFile(),
+			$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'wordPress')
+		);
 
 		self::assertCount(1, $annotations);
 		self::assertCount(1, $annotations['@param']);
@@ -180,17 +247,30 @@ class AnnotationHelperTest extends TestCase
 		self::assertInstanceOf(ParameterAnnotation::class, $annotation);
 		self::assertInstanceOf(IdentifierTypeNode::class, $annotation->getType());
 		self::assertSame('$parameters', $annotation->getParameterName());
-		self::assertSame('{ Optional. Parameters for filtering the list of user assignments. Default empty array. @type bool $is_active                Pass `true` to only return active user assignments and `false` to return  inactive user assignments. @type DateTime|string $updated_since Only return user assignments that have been updated since the given date and time. }', $annotation->getDescription());
+		self::assertSame(
+			'{ Optional. Parameters for filtering the list of user assignments. Default empty array. @type bool $is_active                Pass `true` to only return active user assignments and `false` to return  inactive user assignments. @type DateTime|string $updated_since Only return user assignments that have been updated since the given date and time. }',
+			$annotation->getDescription()
+		);
 	}
 
 	public function testFunctionWithoutAnnotation(): void
 	{
-		self::assertCount(0, AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withoutAnnotation'), '@param'));
+		self::assertCount(
+			0,
+			AnnotationHelper::getAnnotationsByName(
+				$this->getTestedCodeSnifferFile(),
+				$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withoutAnnotation'),
+				'@param'
+			)
+		);
 	}
 
 	public function testMultiLineIndentedAnnotation(): void
 	{
-		$annotations = AnnotationHelper::getAnnotations($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'multiLineIndentedAnnotation'));
+		$annotations = AnnotationHelper::getAnnotations(
+			$this->getTestedCodeSnifferFile(),
+			$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'multiLineIndentedAnnotation')
+		);
 
 		self::assertCount(1, $annotations);
 		self::assertArrayHasKey('@X', $annotations);
@@ -208,7 +288,11 @@ class AnnotationHelperTest extends TestCase
 
 	public function testAnnotationWithDash(): void
 	{
-		$annotations = AnnotationHelper::getAnnotationsByName($this->getTestedCodeSnifferFile(), $this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'annotationWithDash'), '@property-read');
+		$annotations = AnnotationHelper::getAnnotationsByName(
+			$this->getTestedCodeSnifferFile(),
+			$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'annotationWithDash'),
+			'@property-read'
+		);
 
 		self::assertCount(1, $annotations);
 

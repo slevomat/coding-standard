@@ -15,7 +15,11 @@ class RequireNullCoalesceOperatorSniffTest extends TestCase
 
 	public function testErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/requireNullCoalesceOperatorErrors.php', [], [RequireNullCoalesceOperatorSniff::CODE_NULL_COALESCE_OPERATOR_NOT_USED]);
+		$report = self::checkFile(
+			__DIR__ . '/data/requireNullCoalesceOperatorErrors.php',
+			[],
+			[RequireNullCoalesceOperatorSniff::CODE_NULL_COALESCE_OPERATOR_NOT_USED]
+		);
 
 		self::assertSame(17, $report->getErrorCount());
 

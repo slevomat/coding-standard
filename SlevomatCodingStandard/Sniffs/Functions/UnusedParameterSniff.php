@@ -45,13 +45,22 @@ class UnusedParameterSniff implements Sniff
 
 		$currentPointer = $tokens[$functionPointer]['parenthesis_opener'] + 1;
 		while (true) {
-			$parameterPointer = TokenHelper::findNext($phpcsFile, T_VARIABLE, $currentPointer, $tokens[$functionPointer]['parenthesis_closer']);
+			$parameterPointer = TokenHelper::findNext(
+				$phpcsFile,
+				T_VARIABLE,
+				$currentPointer,
+				$tokens[$functionPointer]['parenthesis_closer']
+			);
 			if ($parameterPointer === null) {
 				break;
 			}
 
 			if (!VariableHelper::isUsedInScope($phpcsFile, $functionPointer, $parameterPointer)) {
-				$phpcsFile->addError(sprintf('Unused parameter %s.', $tokens[$parameterPointer]['content']), $parameterPointer, self::CODE_UNUSED_PARAMETER);
+				$phpcsFile->addError(
+					sprintf('Unused parameter %s.', $tokens[$parameterPointer]['content']),
+					$parameterPointer,
+					self::CODE_UNUSED_PARAMETER
+				);
 			}
 
 			$currentPointer = $parameterPointer + 1;

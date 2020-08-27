@@ -35,7 +35,11 @@ class DisallowEqualOperatorsSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		if ($tokens[$operatorPointer]['code'] === T_IS_EQUAL) {
-			$fix = $phpcsFile->addFixableError('Operator == is disallowed, use === instead.', $operatorPointer, self::CODE_DISALLOWED_EQUAL_OPERATOR);
+			$fix = $phpcsFile->addFixableError(
+				'Operator == is disallowed, use === instead.',
+				$operatorPointer,
+				self::CODE_DISALLOWED_EQUAL_OPERATOR
+			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
 				$phpcsFile->fixer->replaceToken($operatorPointer, '===');

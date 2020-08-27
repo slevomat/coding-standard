@@ -13,7 +13,13 @@ class TemplateAnnotationTest extends TestCase
 
 	public function testAnnotation(): void
 	{
-		$annotation = new TemplateAnnotation('@template', 1, 10, 'Description', new TemplateTagValueNode('Whatever', new IdentifierTypeNode('Anything'), 'Description'));
+		$annotation = new TemplateAnnotation(
+			'@template',
+			1,
+			10,
+			'Description',
+			new TemplateTagValueNode('Whatever', new IdentifierTypeNode('Anything'), 'Description')
+		);
 
 		self::assertSame('@template', $annotation->getName());
 		self::assertSame(1, $annotation->getStartPointer());

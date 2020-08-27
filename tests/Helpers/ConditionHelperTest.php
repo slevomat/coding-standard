@@ -37,7 +37,14 @@ class ConditionHelperTest extends TestCase
 
 		$ifPointer = $this->findPointerByLineAndType($phpcsFile, $line, T_IF);
 
-		self::assertSame($result, ConditionHelper::conditionReturnsBoolean($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'] + 1, $tokens[$ifPointer]['parenthesis_closer'] - 1));
+		self::assertSame(
+			$result,
+			ConditionHelper::conditionReturnsBoolean(
+				$phpcsFile,
+				$tokens[$ifPointer]['parenthesis_opener'] + 1,
+				$tokens[$ifPointer]['parenthesis_closer'] - 1
+			)
+		);
 	}
 
 }

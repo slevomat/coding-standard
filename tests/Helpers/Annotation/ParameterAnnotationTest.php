@@ -13,7 +13,13 @@ class ParameterAnnotationTest extends TestCase
 
 	public function testAnnotation(): void
 	{
-		$annotation = new ParameterAnnotation('@param', 1, 10, 'Description', new ParamTagValueNode(new IdentifierTypeNode('string'), false, '$parameter', 'Description'));
+		$annotation = new ParameterAnnotation(
+			'@param',
+			1,
+			10,
+			'Description',
+			new ParamTagValueNode(new IdentifierTypeNode('string'), false, '$parameter', 'Description')
+		);
 
 		self::assertSame('@param', $annotation->getName());
 		self::assertSame(1, $annotation->getStartPointer());

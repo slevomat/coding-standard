@@ -76,7 +76,11 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError('Use of multi property definition is disallowed.', $visibilityPointer, self::CODE_DISALLOWED_MULTI_PROPERTY_DEFINITION);
+		$fix = $phpcsFile->addFixableError(
+			'Use of multi property definition is disallowed.',
+			$visibilityPointer,
+			self::CODE_DISALLOWED_MULTI_PROPERTY_DEFINITION
+		);
 		if (!$fix) {
 			return;
 		}

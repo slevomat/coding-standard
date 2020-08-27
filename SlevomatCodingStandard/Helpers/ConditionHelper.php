@@ -43,7 +43,9 @@ class ConditionHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$conditionContent = strtolower(trim(TokenHelper::getContent($phpcsFile, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer)));
+		$conditionContent = strtolower(
+			trim(TokenHelper::getContent($phpcsFile, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer))
+		);
 
 		if ($conditionContent === 'false' || $conditionContent === 'true') {
 			return true;
@@ -104,9 +106,17 @@ class ConditionHelper
 
 		return sprintf(
 			'%s%s%s',
-			$conditionBoundaryStartPointer !== $conditionStartPointer ? TokenHelper::getContent($phpcsFile, $conditionBoundaryStartPointer, $conditionStartPointer - 1) : '',
+			$conditionBoundaryStartPointer !== $conditionStartPointer ? TokenHelper::getContent(
+				$phpcsFile,
+				$conditionBoundaryStartPointer,
+				$conditionStartPointer - 1
+			) : '',
 			self::getNegativeConditionPart($phpcsFile, $conditionStartPointer, $conditionEndPointer, $nested),
-			$conditionBoundaryEndPointer !== $conditionEndPointer ? TokenHelper::getContent($phpcsFile, $conditionEndPointer + 1, $conditionBoundaryEndPointer) : ''
+			$conditionBoundaryEndPointer !== $conditionEndPointer ? TokenHelper::getContent(
+				$phpcsFile,
+				$conditionEndPointer + 1,
+				$conditionBoundaryEndPointer
+			) : ''
 		);
 	}
 
@@ -129,7 +139,12 @@ class ConditionHelper
 		}
 
 		$pointerAfterConditionStart = TokenHelper::findNextEffective($phpcsFile, $conditionBoundaryStartPointer);
-		$booleanPointers = TokenHelper::findNextAll($phpcsFile, Tokens::$booleanOperators, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer + 1);
+		$booleanPointers = TokenHelper::findNextAll(
+			$phpcsFile,
+			Tokens::$booleanOperators,
+			$conditionBoundaryStartPointer,
+			$conditionBoundaryEndPointer + 1
+		);
 
 		if ($tokens[$pointerAfterConditionStart]['code'] === T_BOOLEAN_NOT) {
 			$pointerAfterBooleanNot = TokenHelper::findNextEffective($phpcsFile, $pointerAfterConditionStart + 1);
@@ -138,12 +153,20 @@ class ConditionHelper
 					return self::removeBooleanNot($condition);
 				}
 
-				$pointerAfterParenthesisCloser = TokenHelper::findNextEffective($phpcsFile, $tokens[$pointerAfterBooleanNot]['parenthesis_closer'] + 1, $conditionBoundaryEndPointer + 1);
+				$pointerAfterParenthesisCloser = TokenHelper::findNextEffective(
+					$phpcsFile,
+					$tokens[$pointerAfterBooleanNot]['parenthesis_closer'] + 1,
+					$conditionBoundaryEndPointer + 1
+				);
 				if (
 					$pointerAfterParenthesisCloser === null
 					|| $pointerAfterParenthesisCloser === $conditionBoundaryEndPointer
 				) {
-					return TokenHelper::getContent($phpcsFile, $pointerAfterBooleanNot + 1, $tokens[$pointerAfterBooleanNot]['parenthesis_closer'] - 1);
+					return TokenHelper::getContent(
+						$phpcsFile,
+						$pointerAfterBooleanNot + 1,
+						$tokens[$pointerAfterBooleanNot]['parenthesis_closer'] - 1
+					);
 				}
 			}
 		}
@@ -156,7 +179,12 @@ class ConditionHelper
 			return self::removeBooleanNot($condition);
 		}
 
-		if (TokenHelper::findNext($phpcsFile, [T_INSTANCEOF, T_BITWISE_AND, T_COALESCE, T_INLINE_THEN], $conditionBoundaryStartPointer, $conditionBoundaryEndPointer + 1) !== null) {
+		if (TokenHelper::findNext(
+			$phpcsFile,
+			[T_INSTANCEOF, T_BITWISE_AND, T_COALESCE, T_INLINE_THEN],
+			$conditionBoundaryStartPointer,
+			$conditionBoundaryEndPointer + 1
+		) !== null) {
 			return sprintf('!(%s)', $condition);
 		}
 
@@ -222,7 +250,12 @@ class ConditionHelper
 		$parenthesesLevel = 0;
 
 		do {
-			$actualPointer = TokenHelper::findNext($phpcsFile, array_merge([T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS], Tokens::$booleanOperators), $actualPointer, $conditionBoundaryEndPointer + 1);
+			$actualPointer = TokenHelper::findNext(
+				$phpcsFile,
+				array_merge([T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS], Tokens::$booleanOperators),
+				$actualPointer,
+				$conditionBoundaryEndPointer + 1
+			);
 
 			if ($actualPointer === null) {
 				break;
@@ -253,7 +286,12 @@ class ConditionHelper
 
 		} while (true);
 
-		return $negativeCondition . self::getNegativeCondition($phpcsFile, $nestedConditionStartPointer, $conditionBoundaryEndPointer, true);
+		return $negativeCondition . self::getNegativeCondition(
+			$phpcsFile,
+			$nestedConditionStartPointer,
+			$conditionBoundaryEndPointer,
+			true
+		);
 	}
 
 }

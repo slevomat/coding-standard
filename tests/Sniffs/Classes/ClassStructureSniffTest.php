@@ -205,7 +205,10 @@ class ClassStructureSniffTest extends TestCase
 			);
 			self::fail();
 		} catch (MissingClassGroupsException $e) {
-			self::assertStringContainsString(': public static final methods, protected static final methods, public final methods, protected final methods.', $e->getMessage());
+			self::assertStringContainsString(
+				': public static final methods, protected static final methods, public final methods, protected final methods.',
+				$e->getMessage()
+			);
 		}
 	}
 

@@ -45,7 +45,12 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 		$parenthesisOpenerPointer = $tokens[$controlStructurePointer]['parenthesis_opener'];
 		$parenthesisCloserPointer = $tokens[$controlStructurePointer]['parenthesis_closer'];
 
-		$booleanOperatorPointers = TokenHelper::findNextAll($phpcsFile, Tokens::$booleanOperators, $parenthesisOpenerPointer + 1, $parenthesisCloserPointer);
+		$booleanOperatorPointers = TokenHelper::findNextAll(
+			$phpcsFile,
+			Tokens::$booleanOperators,
+			$parenthesisOpenerPointer + 1,
+			$parenthesisCloserPointer
+		);
 		$booleanOperatorPointersCount = count($booleanOperatorPointers);
 
 		if ($booleanOperatorPointersCount === 0) {
@@ -85,7 +90,10 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 
 		$controlStructureIndentation = IndentationHelper::getIndentation(
 			$phpcsFile,
-			$conditionStartsOnNewLine ? $conditionStartPointer : TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $parenthesisOpenerPointer)
+			$conditionStartsOnNewLine ? $conditionStartPointer : TokenHelper::findFirstNonWhitespaceOnLine(
+				$phpcsFile,
+				$parenthesisOpenerPointer
+			)
 		);
 
 		$conditionIndentation = $conditionStartsOnNewLine
@@ -103,7 +111,12 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 
 		for ($i = $conditionStartPointer; $i <= $conditionEndPointer; $i++) {
 			if ($tokens[$i]['code'] === T_OPEN_PARENTHESIS) {
-				$containsBooleanOperator = TokenHelper::findNext($phpcsFile, Tokens::$booleanOperators, $i + 1, $tokens[$i]['parenthesis_closer']) !== null;
+				$containsBooleanOperator = TokenHelper::findNext(
+					$phpcsFile,
+					Tokens::$booleanOperators,
+					$i + 1,
+					$tokens[$i]['parenthesis_closer']
+				) !== null;
 
 				$innerConditionLevel++;
 

@@ -36,7 +36,11 @@ class DisallowMixedTypeHintSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $docCommentOpenPointer): void
 	{
-		if (SuppressHelper::isSniffSuppressed($phpcsFile, $docCommentOpenPointer, $this->getSniffName(self::CODE_DISALLOWED_MIXED_TYPE_HINT))) {
+		if (SuppressHelper::isSniffSuppressed(
+			$phpcsFile,
+			$docCommentOpenPointer,
+			$this->getSniffName(self::CODE_DISALLOWED_MIXED_TYPE_HINT)
+		)) {
 			return;
 		}
 

@@ -75,7 +75,11 @@ class UselessTernaryOperatorSniff implements Sniff
 		} elseif ($tokens[$pointerAfterInlineElseBranch]['code'] === T_CLOSE_PARENTHESIS) {
 			$pointerBeforeCondition = $tokens[$pointerAfterInlineElseBranch]['parenthesis_opener'];
 		} else {
-			$pointerBeforeCondition = TokenHelper::findPrevious($phpcsFile, [T_EQUAL, T_DOUBLE_ARROW, T_COMMA, T_RETURN, T_CASE, T_OPEN_TAG], $inlineThenPointer - 1);
+			$pointerBeforeCondition = TokenHelper::findPrevious(
+				$phpcsFile,
+				[T_EQUAL, T_DOUBLE_ARROW, T_COMMA, T_RETURN, T_CASE, T_OPEN_TAG],
+				$inlineThenPointer - 1
+			);
 		}
 
 		/** @var int $conditionStartPointer */

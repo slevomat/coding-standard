@@ -122,7 +122,13 @@ class TraitUseSpacingSniff implements Sniff
 			return;
 		}
 
-		$pointerBeforeIndentation = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $firstUsePointer, $pointerBeforeFirstUse);
+		$pointerBeforeIndentation = TokenHelper::findPreviousContent(
+			$phpcsFile,
+			T_WHITESPACE,
+			$phpcsFile->eolChar,
+			$firstUsePointer,
+			$pointerBeforeFirstUse
+		);
 
 		$phpcsFile->fixer->beginChangeset();
 
@@ -153,12 +159,20 @@ class TraitUseSpacingSniff implements Sniff
 
 		$whitespaceEnd = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $lastUseEndPointer + 1) - 1;
 		if ($lastUseEndPointer !== $whitespaceEnd && $tokens[$whitespaceEnd]['content'] !== $phpcsFile->eolChar) {
-			$lastEolPointer = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $whitespaceEnd - 1, $lastUseEndPointer);
+			$lastEolPointer = TokenHelper::findPreviousContent(
+				$phpcsFile,
+				T_WHITESPACE,
+				$phpcsFile->eolChar,
+				$whitespaceEnd - 1,
+				$lastUseEndPointer
+			);
 			$whitespaceEnd = $lastEolPointer ?? $lastUseEndPointer;
 		}
 		$whitespaceAfterLastUse = TokenHelper::getContent($phpcsFile, $lastUseEndPointer + 1, $whitespaceEnd);
 
-		$requiredLinesCountAfterLastUse = SniffSettingsHelper::normalizeInteger($isAtTheEndOfClass ? $this->linesCountAfterLastUseWhenLastInClass : $this->linesCountAfterLastUse);
+		$requiredLinesCountAfterLastUse = SniffSettingsHelper::normalizeInteger(
+			$isAtTheEndOfClass ? $this->linesCountAfterLastUseWhenLastInClass : $this->linesCountAfterLastUse
+		);
 		$actualLinesCountAfterLastUse = substr_count($whitespaceAfterLastUse, $phpcsFile->eolChar) - 1;
 
 		if ($actualLinesCountAfterLastUse === $requiredLinesCountAfterLastUse) {
@@ -221,7 +235,11 @@ class TraitUseSpacingSniff implements Sniff
 			$pointerBeforeUse = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $usePointer - 1);
 
 			if (in_array($tokens[$pointerBeforeUse]['code'], Tokens::$commentTokens, true)) {
-				$useStartPointer = TokenHelper::findNext($phpcsFile, Tokens::$commentTokens, TokenHelper::findPreviousEffective($phpcsFile, $pointerBeforeUse - 1) + 1);
+				$useStartPointer = TokenHelper::findNext(
+					$phpcsFile,
+					Tokens::$commentTokens,
+					TokenHelper::findPreviousEffective($phpcsFile, $pointerBeforeUse - 1) + 1
+				);
 			}
 
 			$actualLinesCountAfterPreviousUse = $tokens[$useStartPointer]['line'] - $tokens[$previousUseEndPointer]['line'] - 1;
@@ -256,7 +274,13 @@ class TraitUseSpacingSniff implements Sniff
 				continue;
 			}
 
-			$pointerBeforeIndentation = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $usePointer, $previousUseEndPointer);
+			$pointerBeforeIndentation = TokenHelper::findPreviousContent(
+				$phpcsFile,
+				T_WHITESPACE,
+				$phpcsFile->eolChar,
+				$usePointer,
+				$previousUseEndPointer
+			);
 
 			$phpcsFile->fixer->beginChangeset();
 			if ($pointerBeforeIndentation !== null) {

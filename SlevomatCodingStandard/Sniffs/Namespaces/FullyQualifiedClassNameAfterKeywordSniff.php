@@ -77,7 +77,11 @@ class FullyQualifiedClassNameAfterKeywordSniff implements Sniff
 		}
 
 		while (true) {
-			$possibleCommaPointer = TokenHelper::findNextExcluding($phpcsFile, array_merge(TokenHelper::$nameTokenCodes, [T_WHITESPACE]), $possibleCommaPointer);
+			$possibleCommaPointer = TokenHelper::findNextExcluding(
+				$phpcsFile,
+				array_merge(TokenHelper::$nameTokenCodes, [T_WHITESPACE]),
+				$possibleCommaPointer
+			);
 			if ($possibleCommaPointer !== null) {
 				$possibleCommaToken = $tokens[$possibleCommaPointer];
 				if ($possibleCommaToken['code'] === T_COMMA) {

@@ -325,7 +325,11 @@ class AnnotationTypeHelper
 		}
 
 		if ($masterTypeNode instanceof ArrayShapeItemNode) {
-			return new ArrayShapeItemNode($masterTypeNode->keyName, $masterTypeNode->optional, self::change($masterTypeNode->valueType, $typeNodeToChange, $changedTypeNode));
+			return new ArrayShapeItemNode(
+				$masterTypeNode->keyName,
+				$masterTypeNode->optional,
+				self::change($masterTypeNode->valueType, $typeNodeToChange, $changedTypeNode)
+			);
 		}
 
 		if ($masterTypeNode instanceof NullableTypeNode) {
@@ -533,7 +537,13 @@ class AnnotationTypeHelper
 
 		if ($typeNode instanceof ArrayShapeNode) {
 			foreach ($typeNode->items as $arrayShapeItemNode) {
-				if (!self::containsItemsSpecificationForTraversable($arrayShapeItemNode->valueType, $phpcsFile, $pointer, $traversableTypeHints, true)) {
+				if (!self::containsItemsSpecificationForTraversable(
+					$arrayShapeItemNode->valueType,
+					$phpcsFile,
+					$pointer,
+					$traversableTypeHints,
+					true
+				)) {
 					return false;
 				}
 			}
@@ -550,7 +560,10 @@ class AnnotationTypeHelper
 				return false;
 			}
 
-			return !TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeNode->name), $traversableTypeHints);
+			return !TypeHintHelper::isTraversableType(
+				TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeNode->name),
+				$traversableTypeHints
+			);
 		}
 
 		if ($typeNode instanceof CallableTypeNode) {
@@ -574,7 +587,13 @@ class AnnotationTypeHelper
 					continue;
 				}
 
-				if (self::containsItemsSpecificationForTraversable($innerTypeNode, $phpcsFile, $pointer, $traversableTypeHints, $inTraversable)) {
+				if (self::containsItemsSpecificationForTraversable(
+					$innerTypeNode,
+					$phpcsFile,
+					$pointer,
+					$traversableTypeHints,
+					$inTraversable
+				)) {
 					return true;
 				}
 			}
@@ -676,7 +695,10 @@ class AnnotationTypeHelper
 			}
 		}
 
-		return $typeHint !== null && TypeHintHelper::isTraversableType(TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeHint), $traversableTypeHints)
+		return $typeHint !== null && TypeHintHelper::isTraversableType(
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeHint),
+			$traversableTypeHints
+		)
 			? $typeHint
 			: null;
 	}

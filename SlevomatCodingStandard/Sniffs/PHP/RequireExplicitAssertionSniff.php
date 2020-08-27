@@ -122,7 +122,13 @@ class RequireExplicitAssertionSniff implements Sniff
 			} elseif ($tokens[$codePointer]['code'] === T_LIST) {
 				$listParenthesisOpener = TokenHelper::findNextEffective($phpcsFile, $codePointer + 1);
 
-				$variablePointerInList = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableAnnotation->getVariableName(), $listParenthesisOpener + 1, $tokens[$listParenthesisOpener]['parenthesis_closer']);
+				$variablePointerInList = TokenHelper::findNextContent(
+					$phpcsFile,
+					T_VARIABLE,
+					$variableAnnotation->getVariableName(),
+					$listParenthesisOpener + 1,
+					$tokens[$listParenthesisOpener]['parenthesis_closer']
+				);
 				if ($variablePointerInList === null) {
 					continue;
 				}
@@ -136,17 +142,33 @@ class RequireExplicitAssertionSniff implements Sniff
 					continue;
 				}
 
-				$variablePointerInList = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableAnnotation->getVariableName(), $codePointer + 1, $tokens[$codePointer]['bracket_closer']);
+				$variablePointerInList = TokenHelper::findNextContent(
+					$phpcsFile,
+					T_VARIABLE,
+					$variableAnnotation->getVariableName(),
+					$codePointer + 1,
+					$tokens[$codePointer]['bracket_closer']
+				);
 				if ($variablePointerInList === null) {
 					continue;
 				}
 
-				$pointerToAddAssertion = $this->getNextSemicolonInSameScope($phpcsFile, $codePointer, $tokens[$codePointer]['bracket_closer'] + 1);
+				$pointerToAddAssertion = $this->getNextSemicolonInSameScope(
+					$phpcsFile,
+					$codePointer,
+					$tokens[$codePointer]['bracket_closer'] + 1
+				);
 				$indentation = IndentationHelper::getIndentation($phpcsFile, $docCommentOpenPointer);
 
 			} else {
 				if ($tokens[$codePointer]['code'] === T_WHILE) {
-					$variablePointerInWhile = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableAnnotation->getVariableName(), $tokens[$codePointer]['parenthesis_opener'] + 1, $tokens[$codePointer]['parenthesis_closer']);
+					$variablePointerInWhile = TokenHelper::findNextContent(
+						$phpcsFile,
+						T_VARIABLE,
+						$variableAnnotation->getVariableName(),
+						$tokens[$codePointer]['parenthesis_opener'] + 1,
+						$tokens[$codePointer]['parenthesis_closer']
+					);
 					if ($variablePointerInWhile === null) {
 						continue;
 					}
@@ -156,8 +178,19 @@ class RequireExplicitAssertionSniff implements Sniff
 						continue;
 					}
 				} else {
-					$asPointer = TokenHelper::findNext($phpcsFile, T_AS, $tokens[$codePointer]['parenthesis_opener'] + 1, $tokens[$codePointer]['parenthesis_closer']);
-					$variablePointerInForeach = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableAnnotation->getVariableName(), $asPointer + 1, $tokens[$codePointer]['parenthesis_closer']);
+					$asPointer = TokenHelper::findNext(
+						$phpcsFile,
+						T_AS,
+						$tokens[$codePointer]['parenthesis_opener'] + 1,
+						$tokens[$codePointer]['parenthesis_closer']
+					);
+					$variablePointerInForeach = TokenHelper::findNextContent(
+						$phpcsFile,
+						T_VARIABLE,
+						$variableAnnotation->getVariableName(),
+						$asPointer + 1,
+						$tokens[$codePointer]['parenthesis_closer']
+					);
 					if ($variablePointerInForeach === null) {
 						continue;
 					}
@@ -167,7 +200,11 @@ class RequireExplicitAssertionSniff implements Sniff
 				$indentation = IndentationHelper::addIndentation(IndentationHelper::getIndentation($phpcsFile, $codePointer));
 			}
 
-			$fix = $phpcsFile->addFixableError('Use assertion instead of inline documentation comment.', $variableAnnotation->getStartPointer(), self::CODE_REQUIRED_EXPLICIT_ASSERTION);
+			$fix = $phpcsFile->addFixableError(
+				'Use assertion instead of inline documentation comment.',
+				$variableAnnotation->getStartPointer(),
+				self::CODE_REQUIRED_EXPLICIT_ASSERTION
+			);
 			if (!$fix) {
 				continue;
 			}
@@ -190,8 +227,18 @@ class RequireExplicitAssertionSniff implements Sniff
 				break;
 			}
 
-			$pointerBeforeDocComment = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $docCommentOpenPointer - 1);
-			$pointerAfterDocComment = TokenHelper::findNextContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $docCommentClosePointer + 1);
+			$pointerBeforeDocComment = TokenHelper::findPreviousContent(
+				$phpcsFile,
+				T_WHITESPACE,
+				$phpcsFile->eolChar,
+				$docCommentOpenPointer - 1
+			);
+			$pointerAfterDocComment = TokenHelper::findNextContent(
+				$phpcsFile,
+				T_WHITESPACE,
+				$phpcsFile->eolChar,
+				$docCommentClosePointer + 1
+			);
 
 			if (!$docCommentUseful) {
 				for ($i = $pointerBeforeDocComment + 1; $i <= $pointerAfterDocComment; $i++) {

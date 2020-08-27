@@ -19,7 +19,12 @@ class DuplicateAssignmentToVariableSniffTest extends TestCase
 
 		self::assertSame(2, $report->getErrorCount());
 
-		self::assertSniffError($report, 3, DuplicateAssignmentToVariableSniff::CODE_DUPLICATE_ASSIGNMENT, 'Duplicate assignment to variable $a.');
+		self::assertSniffError(
+			$report,
+			3,
+			DuplicateAssignmentToVariableSniff::CODE_DUPLICATE_ASSIGNMENT,
+			'Duplicate assignment to variable $a.'
+		);
 	}
 
 }

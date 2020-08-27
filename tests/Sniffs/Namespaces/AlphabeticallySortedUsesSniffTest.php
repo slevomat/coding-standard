@@ -67,7 +67,11 @@ class AlphabeticallySortedUsesSniffTest extends TestCase
 
 	public function testFixable(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableAlphabeticalSortedUses.php', [], [AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER]);
+		$report = self::checkFile(
+			__DIR__ . '/data/fixableAlphabeticalSortedUses.php',
+			[],
+			[AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER]
+		);
 		self::assertAllFixedInFile($report);
 	}
 

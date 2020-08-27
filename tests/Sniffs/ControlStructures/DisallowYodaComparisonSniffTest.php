@@ -24,7 +24,11 @@ class DisallowYodaComparisonSniffTest extends TestCase
 
 	public function testFixable(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableDisallowYodaComparisons.php', [], [DisallowYodaComparisonSniff::CODE_DISALLOWED_YODA_COMPARISON]);
+		$report = self::checkFile(
+			__DIR__ . '/data/fixableDisallowYodaComparisons.php',
+			[],
+			[DisallowYodaComparisonSniff::CODE_DISALLOWED_YODA_COMPARISON]
+		);
 		self::assertAllFixedInFile($report);
 	}
 

@@ -206,37 +206,61 @@ class ReturnTypeHintSpacingSniffTest extends TestCase
 
 	public function testFixableReturnTypeHintNoSpaceBetweenColonAndType(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableReturnTypeHintNoSpaceBetweenColonAndType.php', [], [ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT]);
+		$report = self::checkFile(
+			__DIR__ . '/data/fixableReturnTypeHintNoSpaceBetweenColonAndType.php',
+			[],
+			[ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT]
+		);
 		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableReturnTypeHintMultipleSpacesBetweenColonAndType(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableReturnTypeHintMultipleSpacesBetweenColonAndType.php', [], [ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT]);
+		$report = self::checkFile(
+			__DIR__ . '/data/fixableReturnTypeHintMultipleSpacesBetweenColonAndType.php',
+			[],
+			[ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_TYPE_HINT]
+		);
 		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableReturnTypeHintNoSpaceBetweenColonAndNullabilitySymbol(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableReturnTypeHintNoSpaceBetweenColonAndNullabilitySymbol.php', [], [ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_NULLABILITY_SYMBOL]);
+		$report = self::checkFile(
+			__DIR__ . '/data/fixableReturnTypeHintNoSpaceBetweenColonAndNullabilitySymbol.php',
+			[],
+			[ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_NULLABILITY_SYMBOL]
+		);
 		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableReturnTypeHintMultipleSpacesBetweenColonAndNullabilitySymbol(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableReturnTypeHintMultipleSpacesBetweenColonAndNullabilitySymbol.php', [], [ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_NULLABILITY_SYMBOL]);
+		$report = self::checkFile(
+			__DIR__ . '/data/fixableReturnTypeHintMultipleSpacesBetweenColonAndNullabilitySymbol.php',
+			[],
+			[ReturnTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_COLON_AND_NULLABILITY_SYMBOL]
+		);
 		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableReturnTypeHintWhitespaceAfterNullabilitySymbol(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableReturnTypeHintWhitespaceAfterNullabilitySymbol.php', [], [ReturnTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL]);
+		$report = self::checkFile(
+			__DIR__ . '/data/fixableReturnTypeHintWhitespaceAfterNullabilitySymbol.php',
+			[],
+			[ReturnTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL]
+		);
 		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableReturnTypeHintWhitespaceBeforeColon(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableReturnTypeHintWhitespaceBeforeColon.php', [], [ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON]);
+		$report = self::checkFile(
+			__DIR__ . '/data/fixableReturnTypeHintWhitespaceBeforeColon.php',
+			[],
+			[ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON]
+		);
 		self::assertAllFixedInFile($report);
 	}
 

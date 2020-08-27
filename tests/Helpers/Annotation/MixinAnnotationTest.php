@@ -13,7 +13,13 @@ class MixinAnnotationTest extends TestCase
 
 	public function testAnnotation(): void
 	{
-		$annotation = new MixinAnnotation('@mixin', 1, 10, 'Description', new MixinTagValueNode(new IdentifierTypeNode('Exception'), 'Description'));
+		$annotation = new MixinAnnotation(
+			'@mixin',
+			1,
+			10,
+			'Description',
+			new MixinTagValueNode(new IdentifierTypeNode('Exception'), 'Description')
+		);
 
 		self::assertSame('@mixin', $annotation->getName());
 		self::assertSame(1, $annotation->getStartPointer());

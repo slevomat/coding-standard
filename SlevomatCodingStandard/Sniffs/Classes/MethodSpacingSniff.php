@@ -109,7 +109,10 @@ class MethodSpacingSniff implements Sniff
 		if ($linesBetween === null) {
 			$phpcsFile->fixer->addContent(
 				$methodEndPointer,
-				$phpcsFile->eolChar . str_repeat($phpcsFile->eolChar, $minExpectedLines) . IndentationHelper::getIndentation($phpcsFile, TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $methodPointer))
+				$phpcsFile->eolChar . str_repeat($phpcsFile->eolChar, $minExpectedLines) . IndentationHelper::getIndentation(
+					$phpcsFile,
+					TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $methodPointer)
+				)
 			);
 
 			for ($i = $methodEndPointer + 1; $i < $nextMethodFirstLinePointer; $i++) {

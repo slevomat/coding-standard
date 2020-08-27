@@ -57,7 +57,11 @@ class RequireNowdocSniff implements Sniff
 
 		foreach ($heredocContentPointers as $heredocContentPointer) {
 			$heredocContent = $tokens[$heredocContentPointer]['content'];
-			$nowdocContent = preg_replace('~\\\\(\\\\[nrtvef]|\$|\\\\|\\\\[0-7]{1,3}|\\\\x[0-9A-Fa-f]{1,2}|\\\\u\{[0-9A-Fa-f]+\})~', '$1', $heredocContent);
+			$nowdocContent = preg_replace(
+				'~\\\\(\\\\[nrtvef]|\$|\\\\|\\\\[0-7]{1,3}|\\\\x[0-9A-Fa-f]{1,2}|\\\\u\{[0-9A-Fa-f]+\})~',
+				'$1',
+				$heredocContent
+			);
 
 			$phpcsFile->fixer->replaceToken($heredocContentPointer, $nowdocContent);
 		}

@@ -74,7 +74,12 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 			}
 
 			$ignoreTokensToSkipTypeHint = array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::$typeHintTokenCodes);
-			$beforeTypeHintPointer = TokenHelper::findPreviousExcluding($phpcsFile, $ignoreTokensToSkipTypeHint, $typeHintPointer - 1, $startPointer);
+			$beforeTypeHintPointer = TokenHelper::findPreviousExcluding(
+				$phpcsFile,
+				$ignoreTokensToSkipTypeHint,
+				$typeHintPointer - 1,
+				$startPointer
+			);
 
 			if ($beforeTypeHintPointer !== null && $tokens[$beforeTypeHintPointer]['code'] === T_NULLABLE) {
 				continue;
@@ -90,7 +95,10 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 				continue;
 			}
 
-			$firstTypehint = TokenHelper::findNextEffective($phpcsFile, $beforeTypeHintPointer === null ? $startPointer : $beforeTypeHintPointer + 1);
+			$firstTypehint = TokenHelper::findNextEffective(
+				$phpcsFile,
+				$beforeTypeHintPointer === null ? $startPointer : $beforeTypeHintPointer + 1
+			);
 
 			$phpcsFile->fixer->beginChangeset();
 			$phpcsFile->fixer->addContent($firstTypehint - 1, '?');

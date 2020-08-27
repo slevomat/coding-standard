@@ -95,7 +95,11 @@ class RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$pointerBeforeInstructionStart = TokenHelper::findPreviousEffective($phpcsFile, $instructionStartPointer - 1);
-		if (!in_array($tokens[$pointerBeforeInstructionStart]['code'], [T_SEMICOLON, T_COLON, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_OPEN_TAG], true)) {
+		if (!in_array(
+			$tokens[$pointerBeforeInstructionStart]['code'],
+			[T_SEMICOLON, T_COLON, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_OPEN_TAG],
+			true
+		)) {
 			return false;
 		}
 

@@ -94,7 +94,10 @@ class DisallowOneLinePropertyDocCommentSniff implements Sniff
 		$phpcsFile->fixer->addContent($docCommentStartPointer, '*');
 
 		if ($docCommentEndPointer - 1 !== $docCommentStartPointer) {
-			$phpcsFile->fixer->replaceToken($docCommentEndPointer - 1, rtrim($phpcsFile->fixer->getTokenContent($docCommentEndPointer - 1), ' '));
+			$phpcsFile->fixer->replaceToken(
+				$docCommentEndPointer - 1,
+				rtrim($phpcsFile->fixer->getTokenContent($docCommentEndPointer - 1), ' ')
+			);
 		}
 
 		$phpcsFile->fixer->addContentBefore($docCommentEndPointer, $indent);

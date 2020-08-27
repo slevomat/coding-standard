@@ -19,10 +19,30 @@ class RequireSingleLineCallSniffTest extends TestCase
 
 		self::assertSame(4, $report->getErrorCount());
 
-		self::assertSniffError($report, 7, RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL, 'Call of method doAnything() should be placed on a single line.');
-		self::assertSniffError($report, 12, RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL, 'Call of function sprintf() should be placed on a single line.');
-		self::assertSniffError($report, 19, RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL, 'Constructor call should be placed on a single line.');
-		self::assertSniffError($report, 25, RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL, 'Call of function printf() should be placed on a single line.');
+		self::assertSniffError(
+			$report,
+			7,
+			RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL,
+			'Call of method doAnything() should be placed on a single line.'
+		);
+		self::assertSniffError(
+			$report,
+			12,
+			RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL,
+			'Call of function sprintf() should be placed on a single line.'
+		);
+		self::assertSniffError(
+			$report,
+			19,
+			RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL,
+			'Constructor call should be placed on a single line.'
+		);
+		self::assertSniffError(
+			$report,
+			25,
+			RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL,
+			'Call of function printf() should be placed on a single line.'
+		);
 
 		self::assertAllFixedInFile($report);
 	}
@@ -48,10 +68,30 @@ class RequireSingleLineCallSniffTest extends TestCase
 
 		self::assertSame(4, $report->getErrorCount());
 
-		self::assertSniffError($report, 7, RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL, 'Call of method doSomething() should be placed on a single line.');
-		self::assertSniffError($report, 16, RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL, 'Call of method doAnything() should be placed on a single line.');
-		self::assertSniffError($report, 20, RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL, 'Constructor call should be placed on a single line.');
-		self::assertSniffError($report, 25, RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL, 'Call of method doWhatever() should be placed on a single line.');
+		self::assertSniffError(
+			$report,
+			7,
+			RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL,
+			'Call of method doSomething() should be placed on a single line.'
+		);
+		self::assertSniffError(
+			$report,
+			16,
+			RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL,
+			'Call of method doAnything() should be placed on a single line.'
+		);
+		self::assertSniffError(
+			$report,
+			20,
+			RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL,
+			'Constructor call should be placed on a single line.'
+		);
+		self::assertSniffError(
+			$report,
+			25,
+			RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL,
+			'Call of method doWhatever() should be placed on a single line.'
+		);
 
 		self::assertAllFixedInFile($report);
 	}

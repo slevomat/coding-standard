@@ -40,7 +40,12 @@ class RequireSingleLineConditionSniff extends AbstractLineCondition
 			return;
 		}
 
-		if (TokenHelper::findNext($phpcsFile, TokenHelper::$inlineCommentTokenCodes, $parenthesisOpenerPointer + 1, $parenthesisCloserPointer) !== null) {
+		if (TokenHelper::findNext(
+			$phpcsFile,
+			TokenHelper::$inlineCommentTokenCodes,
+			$parenthesisOpenerPointer + 1,
+			$parenthesisCloserPointer
+		) !== null) {
 			return;
 		}
 
@@ -49,7 +54,12 @@ class RequireSingleLineConditionSniff extends AbstractLineCondition
 		$lineEnd = $this->getLineEnd($phpcsFile, $parenthesisCloserPointer);
 
 		$lineLength = strlen($lineStart . $condition . $lineEnd);
-		$isSimpleCondition = TokenHelper::findNext($phpcsFile, Tokens::$booleanOperators, $parenthesisOpenerPointer + 1, $parenthesisCloserPointer) === null;
+		$isSimpleCondition = TokenHelper::findNext(
+			$phpcsFile,
+			Tokens::$booleanOperators,
+			$parenthesisOpenerPointer + 1,
+			$parenthesisCloserPointer
+		) === null;
 
 		if (!$this->shouldReportError($lineLength, $isSimpleCondition)) {
 			return;

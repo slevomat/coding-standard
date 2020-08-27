@@ -406,19 +406,31 @@ class ClassStructureSniff implements Sniff
 
 	private function isMemberStatic(File $phpcsFile, int $pointer): bool
 	{
-		$previousPointer = TokenHelper::findPrevious($phpcsFile, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_STATIC], $pointer - 1);
+		$previousPointer = TokenHelper::findPrevious(
+			$phpcsFile,
+			[T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_STATIC],
+			$pointer - 1
+		);
 		return $phpcsFile->getTokens()[$previousPointer]['code'] === T_STATIC;
 	}
 
 	private function isMethodFinal(File $phpcsFile, int $pointer): bool
 	{
-		$previousPointer = TokenHelper::findPrevious($phpcsFile, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_FINAL], $pointer - 1);
+		$previousPointer = TokenHelper::findPrevious(
+			$phpcsFile,
+			[T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_FINAL],
+			$pointer - 1
+		);
 		return $phpcsFile->getTokens()[$previousPointer]['code'] === T_FINAL;
 	}
 
 	private function isMethodAbstract(File $phpcsFile, int $pointer): bool
 	{
-		$previousPointer = TokenHelper::findPrevious($phpcsFile, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_ABSTRACT], $pointer - 1);
+		$previousPointer = TokenHelper::findPrevious(
+			$phpcsFile,
+			[T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_ABSTRACT],
+			$pointer - 1
+		);
 		return $phpcsFile->getTokens()[$previousPointer]['code'] === T_ABSTRACT;
 	}
 

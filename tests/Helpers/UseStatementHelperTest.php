@@ -88,13 +88,19 @@ class UseStatementHelperTest extends TestCase
 		self::assertSame('Lorem\Ipsum', UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $loremIpsumUsePointer));
 
 		$lerdorfIsBarConstantUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $loremIpsumUsePointer + 1);
-		self::assertSame('Lerdorf\IS_BAR', UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $lerdorfIsBarConstantUsePointer));
+		self::assertSame(
+			'Lerdorf\IS_BAR',
+			UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $lerdorfIsBarConstantUsePointer)
+		);
 
 		$rasmusFooConstantUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $lerdorfIsBarConstantUsePointer + 1);
 		self::assertSame('Rasmus\FOO', UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $rasmusFooConstantUsePointer));
 
 		$lerdorfIsBarFunctionUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $rasmusFooConstantUsePointer + 1);
-		self::assertSame('Lerdorf\isBar', UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $lerdorfIsBarFunctionUsePointer));
+		self::assertSame(
+			'Lerdorf\isBar',
+			UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $lerdorfIsBarFunctionUsePointer)
+		);
 
 		$rasmusFooFunctionUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $lerdorfIsBarFunctionUsePointer + 1);
 		self::assertSame('Rasmus\foo', UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $rasmusFooFunctionUsePointer));
@@ -106,14 +112,70 @@ class UseStatementHelperTest extends TestCase
 		$useStatements = UseStatementHelper::getFileUseStatements($phpcsFile)[0];
 		self::assertCount(8, $useStatements);
 		self::assertSame(3, $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Baz')]->getPointer());
-		self::assertUseStatement('Bar\Baz', 'Baz', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Baz')], false, false, null);
-		self::assertUseStatement('Foo', 'Foo', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Foo')], false, false, null);
-		self::assertUseStatement('Lorem\Ipsum', 'LoremIpsum', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'LoremIpsum')], false, false, 'LoremIpsum');
-		self::assertUseStatement('Zero', 'Zero', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Zero')], false, false, null);
-		self::assertUseStatement('Rasmus\FOO', 'FOO', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CONSTANT, 'FOO')], false, true, null);
-		self::assertUseStatement('Rasmus\foo', 'foo', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_FUNCTION, 'foo')], true, false, null);
-		self::assertUseStatement('Lerdorf\IS_BAR', 'IS_BAR', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CONSTANT, 'IS_BAR')], false, true, null);
-		self::assertUseStatement('Lerdorf\isBar', 'isBar', $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_FUNCTION, 'isBar')], true, false, null);
+		self::assertUseStatement(
+			'Bar\Baz',
+			'Baz',
+			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Baz')],
+			false,
+			false,
+			null
+		);
+		self::assertUseStatement(
+			'Foo',
+			'Foo',
+			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Foo')],
+			false,
+			false,
+			null
+		);
+		self::assertUseStatement(
+			'Lorem\Ipsum',
+			'LoremIpsum',
+			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'LoremIpsum')],
+			false,
+			false,
+			'LoremIpsum'
+		);
+		self::assertUseStatement(
+			'Zero',
+			'Zero',
+			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Zero')],
+			false,
+			false,
+			null
+		);
+		self::assertUseStatement(
+			'Rasmus\FOO',
+			'FOO',
+			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CONSTANT, 'FOO')],
+			false,
+			true,
+			null
+		);
+		self::assertUseStatement(
+			'Rasmus\foo',
+			'foo',
+			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_FUNCTION, 'foo')],
+			true,
+			false,
+			null
+		);
+		self::assertUseStatement(
+			'Lerdorf\IS_BAR',
+			'IS_BAR',
+			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CONSTANT, 'IS_BAR')],
+			false,
+			true,
+			null
+		);
+		self::assertUseStatement(
+			'Lerdorf\isBar',
+			'isBar',
+			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_FUNCTION, 'isBar')],
+			true,
+			false,
+			null
+		);
 	}
 
 	private function assertUseStatement(

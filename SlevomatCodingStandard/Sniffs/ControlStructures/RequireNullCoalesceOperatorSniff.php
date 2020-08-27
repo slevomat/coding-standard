@@ -149,14 +149,20 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 			return;
 		}
 
-		$pointerBeforeCondition = TokenHelper::findPreviousEffective($phpcsFile, ($isYodaCondition ? $pointerBeforeIdenticalOperator : $variableStartPointer) - 1);
+		$pointerBeforeCondition = TokenHelper::findPreviousEffective(
+			$phpcsFile,
+			($isYodaCondition ? $pointerBeforeIdenticalOperator : $variableStartPointer) - 1
+		);
 
 		if (in_array($tokens[$pointerBeforeCondition]['code'], Tokens::$booleanOperators, true)) {
 			return;
 		}
 
 		/** @var int $inlineThenPointer */
-		$inlineThenPointer = TokenHelper::findNextEffective($phpcsFile, ($isYodaCondition ? $variableEndPointer : $pointerAfterIdenticalOperator) + 1);
+		$inlineThenPointer = TokenHelper::findNextEffective(
+			$phpcsFile,
+			($isYodaCondition ? $variableEndPointer : $pointerAfterIdenticalOperator) + 1
+		);
 		if ($tokens[$inlineThenPointer]['code'] !== T_INLINE_THEN) {
 			return;
 		}
@@ -164,7 +170,11 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 		$inlineElsePointer = TokenHelper::findNext($phpcsFile, T_INLINE_ELSE, $inlineThenPointer + 1);
 		$inlineElseEndPointer = $inlineElsePointer + 1;
 		while (true) {
-			if (in_array($tokens[$inlineElseEndPointer]['code'], [T_SEMICOLON, T_COMMA, T_DOUBLE_ARROW, T_CLOSE_SHORT_ARRAY, T_COALESCE], true)) {
+			if (in_array(
+				$tokens[$inlineElseEndPointer]['code'],
+				[T_SEMICOLON, T_COMMA, T_DOUBLE_ARROW, T_CLOSE_SHORT_ARRAY, T_COALESCE],
+				true
+			)) {
 				break;
 			}
 
@@ -188,9 +198,15 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 		$variableContent = IdentificatorHelper::getContent($phpcsFile, $variableStartPointer, $variableEndPointer);
 
 		/** @var int $compareToStartPointer */
-		$compareToStartPointer = TokenHelper::findNextEffective($phpcsFile, ($tokens[$identicalOperator]['code'] === T_IS_IDENTICAL ? $inlineElsePointer : $inlineThenPointer) + 1);
+		$compareToStartPointer = TokenHelper::findNextEffective(
+			$phpcsFile,
+			($tokens[$identicalOperator]['code'] === T_IS_IDENTICAL ? $inlineElsePointer : $inlineThenPointer) + 1
+		);
 		/** @var int $compareToEndPointer */
-		$compareToEndPointer = TokenHelper::findPreviousEffective($phpcsFile, ($tokens[$identicalOperator]['code'] === T_IS_IDENTICAL ? $inlineElseEndPointer : $inlineElsePointer) - 1);
+		$compareToEndPointer = TokenHelper::findPreviousEffective(
+			$phpcsFile,
+			($tokens[$identicalOperator]['code'] === T_IS_IDENTICAL ? $inlineElseEndPointer : $inlineElsePointer) - 1
+		);
 
 		$compareToContent = IdentificatorHelper::getContent($phpcsFile, $compareToStartPointer, $compareToEndPointer);
 

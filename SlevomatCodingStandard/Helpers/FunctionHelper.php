@@ -80,7 +80,12 @@ class FunctionHelper
 	public static function getName(File $phpcsFile, int $functionPointer): string
 	{
 		$tokens = $phpcsFile->getTokens();
-		return $tokens[TokenHelper::findNext($phpcsFile, T_STRING, $functionPointer + 1, $tokens[$functionPointer]['parenthesis_opener'])]['content'];
+		return $tokens[TokenHelper::findNext(
+			$phpcsFile,
+			T_STRING,
+			$functionPointer + 1,
+			$tokens[$functionPointer]['parenthesis_opener']
+		)]['content'];
 	}
 
 	public static function getFullyQualifiedName(File $phpcsFile, int $functionPointer): string
@@ -89,13 +94,21 @@ class FunctionHelper
 		$namespace = NamespaceHelper::findCurrentNamespaceName($phpcsFile, $functionPointer);
 
 		if (self::isMethod($phpcsFile, $functionPointer)) {
-			foreach (array_reverse($phpcsFile->getTokens()[$functionPointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
+			foreach (array_reverse(
+				$phpcsFile->getTokens()[$functionPointer]['conditions'],
+				true
+			) as $conditionPointer => $conditionTokenCode) {
 				if ($conditionTokenCode === T_ANON_CLASS) {
 					return sprintf('class@anonymous::%s', $name);
 				}
 
 				if (in_array($conditionTokenCode, [T_CLASS, T_INTERFACE, T_TRAIT], true)) {
-					$name = sprintf('%s%s::%s', NamespaceHelper::NAMESPACE_SEPARATOR, ClassHelper::getName($phpcsFile, $conditionPointer), $name);
+					$name = sprintf(
+						'%s%s::%s',
+						NamespaceHelper::NAMESPACE_SEPARATOR,
+						ClassHelper::getName($phpcsFile, $conditionPointer),
+						$name
+					);
 					break;
 				}
 			}
@@ -187,7 +200,12 @@ class FunctionHelper
 
 			$previousToken = $i;
 			do {
-				$previousToken = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(TokenHelper::$ineffectiveTokenCodes, [T_BITWISE_AND, T_ELLIPSIS]), $previousToken - 1, $tokens[$functionPointer]['parenthesis_opener'] + 1);
+				$previousToken = TokenHelper::findPreviousExcluding(
+					$phpcsFile,
+					array_merge(TokenHelper::$ineffectiveTokenCodes, [T_BITWISE_AND, T_ELLIPSIS]),
+					$previousToken - 1,
+					$tokens[$functionPointer]['parenthesis_opener'] + 1
+				);
 				if ($previousToken !== null) {
 					$isTypeHint = $tokens[$previousToken]['code'] !== T_COMMA && $tokens[$previousToken]['code'] !== T_NULLABLE;
 					if ($tokens[$previousToken]['code'] === T_NULLABLE) {
@@ -254,7 +272,12 @@ class FunctionHelper
 
 		$colonToken = $isAbstract
 			? TokenHelper::findNextLocal($phpcsFile, T_COLON, $tokens[$functionPointer]['parenthesis_closer'] + 1)
-			: TokenHelper::findNext($phpcsFile, T_COLON, $tokens[$functionPointer]['parenthesis_closer'] + 1, $tokens[$functionPointer]['scope_opener'] - 1);
+			: TokenHelper::findNext(
+				$phpcsFile,
+				T_COLON,
+				$tokens[$functionPointer]['parenthesis_closer'] + 1,
+				$tokens[$functionPointer]['scope_opener'] - 1
+			);
 
 		if ($colonToken === null) {
 			return null;
@@ -264,7 +287,12 @@ class FunctionHelper
 
 		$nullableToken = $isAbstract
 			? TokenHelper::findNextLocalExcluding($phpcsFile, $abstractExcludeTokens, $colonToken + 1)
-			: TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$ineffectiveTokenCodes, $colonToken + 1, $tokens[$functionPointer]['scope_opener'] - 1);
+			: TokenHelper::findNextExcluding(
+				$phpcsFile,
+				TokenHelper::$ineffectiveTokenCodes,
+				$colonToken + 1,
+				$tokens[$functionPointer]['scope_opener'] - 1
+			);
 
 		$nullable = $nullableToken !== null && $tokens[$nullableToken]['code'] === T_NULLABLE;
 
@@ -275,7 +303,12 @@ class FunctionHelper
 		do {
 			$nextToken = $isAbstract
 				? TokenHelper::findNextLocalExcluding($phpcsFile, $abstractExcludeTokens, $nextToken + 1)
-				: TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$ineffectiveTokenCodes, $nextToken + 1, $tokens[$functionPointer]['scope_opener']);
+				: TokenHelper::findNextExcluding(
+					$phpcsFile,
+					TokenHelper::$ineffectiveTokenCodes,
+					$nextToken + 1,
+					$tokens[$functionPointer]['scope_opener']
+				);
 
 			$isTypeHint = $nextToken !== null;
 			if (!$isTypeHint) {

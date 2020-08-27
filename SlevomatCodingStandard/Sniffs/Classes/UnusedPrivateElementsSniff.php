@@ -136,7 +136,11 @@ class UnusedPrivateElementsSniff implements Sniff
 			}
 
 			if ($tokens[$referencedNamePointer]['code'] === T_STRING) {
-				$referencedClassName = NamespaceHelper::resolveClassName($phpcsFile, $tokens[$referencedNamePointer]['content'], $referencedNamePointer);
+				$referencedClassName = NamespaceHelper::resolveClassName(
+					$phpcsFile,
+					$tokens[$referencedNamePointer]['content'],
+					$referencedNamePointer
+				);
 				if ($className === $referencedClassName) {
 					return true;
 				}
@@ -236,7 +240,12 @@ class UnusedPrivateElementsSniff implements Sniff
 			return $tokenPointerAfterNextToken + 1;
 		};
 
-		while (($tokenPointer = TokenHelper::findNext($phpcsFile, [T_NEW, T_HEREDOC, T_DOUBLE_QUOTED_STRING, T_DOUBLE_COLON, T_OBJECT_OPERATOR], $findUsagesStartTokenPointer, $classToken['scope_closer'])) !== null) {
+		while (($tokenPointer = TokenHelper::findNext(
+			$phpcsFile,
+			[T_NEW, T_HEREDOC, T_DOUBLE_QUOTED_STRING, T_DOUBLE_COLON, T_OBJECT_OPERATOR],
+			$findUsagesStartTokenPointer,
+			$classToken['scope_closer']
+		)) !== null) {
 			$token = $tokens[$tokenPointer];
 
 			if (in_array($token['code'], [T_HEREDOC, T_DOUBLE_QUOTED_STRING], true)) {
@@ -279,7 +288,10 @@ class UnusedPrivateElementsSniff implements Sniff
 						$findUsagesStartTokenPointer = $checkObjectOperatorUsage($tokenPointer, $variableTokenPointer);
 					} else {
 						$functionPointer = null;
-						foreach (array_reverse($tokens[$variableTokenPointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
+						foreach (array_reverse(
+							$tokens[$variableTokenPointer]['conditions'],
+							true
+						) as $conditionPointer => $conditionTokenCode) {
 							if (in_array($conditionTokenCode, TokenHelper::$functionTokenCodes, true)) {
 								$functionPointer = $conditionPointer;
 								break;
@@ -287,7 +299,13 @@ class UnusedPrivateElementsSniff implements Sniff
 						}
 
 						if ($functionPointer !== null) {
-							$parameterPointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $tokens[$functionPointer]['parenthesis_opener'] + 1, $tokens[$functionPointer]['parenthesis_closer']);
+							$parameterPointer = TokenHelper::findNextContent(
+								$phpcsFile,
+								T_VARIABLE,
+								$variableName,
+								$tokens[$functionPointer]['parenthesis_opener'] + 1,
+								$tokens[$functionPointer]['parenthesis_closer']
+							);
 							if ($parameterPointer !== null) {
 								$typeHintPointer = TokenHelper::findPreviousEffective($phpcsFile, $parameterPointer - 1);
 								if ($isCurrentClass($typeHintPointer)) {
@@ -361,7 +379,11 @@ class UnusedPrivateElementsSniff implements Sniff
 
 		foreach ($reportedProperties as $name => $propertyTokenPointer) {
 			if (isset($writeOnlyProperties[$name])) {
-				if (!SuppressHelper::isSniffSuppressed($phpcsFile, $propertyTokenPointer, $this->getSniffName(self::CODE_WRITE_ONLY_PROPERTY))) {
+				if (!SuppressHelper::isSniffSuppressed(
+					$phpcsFile,
+					$propertyTokenPointer,
+					$this->getSniffName(self::CODE_WRITE_ONLY_PROPERTY)
+				)) {
 					$phpcsFile->addError(sprintf(
 						'Class %s contains write-only property $%s.',
 						$className,
@@ -369,7 +391,11 @@ class UnusedPrivateElementsSniff implements Sniff
 					), $propertyTokenPointer, self::CODE_WRITE_ONLY_PROPERTY);
 				}
 			} else {
-				if (!SuppressHelper::isSniffSuppressed($phpcsFile, $propertyTokenPointer, $this->getSniffName(self::CODE_UNUSED_PROPERTY))) {
+				if (!SuppressHelper::isSniffSuppressed(
+					$phpcsFile,
+					$propertyTokenPointer,
+					$this->getSniffName(self::CODE_UNUSED_PROPERTY)
+				)) {
 					$phpcsFile->addError(sprintf(
 						'Class %s contains unused property $%s.',
 						$className,
@@ -457,7 +483,12 @@ class UnusedPrivateElementsSniff implements Sniff
 		$reportedProperties = [];
 		$findPropertiesStartTokenPointer = $classToken['scope_opener'] + 1;
 		while (true) {
-			$propertyTokenPointer = TokenHelper::findNext($phpcsFile, T_VARIABLE, $findPropertiesStartTokenPointer, $classToken['scope_closer']);
+			$propertyTokenPointer = TokenHelper::findNext(
+				$phpcsFile,
+				T_VARIABLE,
+				$findPropertiesStartTokenPointer,
+				$classToken['scope_closer']
+			);
 			if ($propertyTokenPointer === null) {
 				break;
 			}
@@ -606,7 +637,12 @@ class UnusedPrivateElementsSniff implements Sniff
 		$reportedConstants = [];
 		$findConstantsStartTokenPointer = $classToken['scope_opener'] + 1;
 		while (true) {
-			$constantTokenPointer = TokenHelper::findNext($phpcsFile, T_CONST, $findConstantsStartTokenPointer, $classToken['scope_closer']);
+			$constantTokenPointer = TokenHelper::findNext(
+				$phpcsFile,
+				T_CONST,
+				$findConstantsStartTokenPointer,
+				$classToken['scope_closer']
+			);
 			if ($constantTokenPointer === null) {
 				break;
 			}

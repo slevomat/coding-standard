@@ -112,10 +112,18 @@ class StrictCallSniff implements Sniff
 				return;
 			}
 
-			$phpcsFile->addError(sprintf('Strict parameter should be set to true in %s() call.', $functionName), $stringPointer, self::CODE_NON_STRICT_COMPARISON);
+			$phpcsFile->addError(
+				sprintf('Strict parameter should be set to true in %s() call.', $functionName),
+				$stringPointer,
+				self::CODE_NON_STRICT_COMPARISON
+			);
 
 		} elseif ($parametersCount === self::FUNCTIONS[$functionName] - 1) {
-			$phpcsFile->addError(sprintf('Strict parameter missing in %s() call.', $functionName), $stringPointer, self::CODE_STRICT_PARAMETER_MISSING);
+			$phpcsFile->addError(
+				sprintf('Strict parameter missing in %s() call.', $functionName),
+				$stringPointer,
+				self::CODE_STRICT_PARAMETER_MISSING
+			);
 		}
 	}
 

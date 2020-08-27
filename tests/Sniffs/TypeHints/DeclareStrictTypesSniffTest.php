@@ -209,7 +209,11 @@ class DeclareStrictTypesSniffTest extends TestCase
 
 	public function testFixableMissingIncorrectFormatOneSpace(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatOneSpace.php', [], [DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT]);
+		$report = self::checkFile(
+			__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatOneSpace.php',
+			[],
+			[DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT]
+		);
 		self::assertAllFixedInFile($report);
 	}
 
@@ -231,13 +235,21 @@ class DeclareStrictTypesSniffTest extends TestCase
 
 	public function testFixableMissingWithTicks(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingWithTicks.php', [], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING]);
+		$report = self::checkFile(
+			__DIR__ . '/data/fixableDeclareStrictTypesMissingWithTicks.php',
+			[],
+			[DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING]
+		);
 		self::assertAllFixedInFile($report);
 	}
 
 	public function testFixableDisabled(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesDisabled.php', [], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING]);
+		$report = self::checkFile(
+			__DIR__ . '/data/fixableDeclareStrictTypesDisabled.php',
+			[],
+			[DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING]
+		);
 		self::assertAllFixedInFile($report);
 	}
 

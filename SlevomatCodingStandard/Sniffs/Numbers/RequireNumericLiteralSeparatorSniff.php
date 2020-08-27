@@ -54,12 +54,18 @@ class RequireNumericLiteralSeparatorSniff implements Sniff
 			return;
 		}
 
-		$regexp = '~(?:^\\d{' . SniffSettingsHelper::normalizeInteger($this->minDigitsBeforeDecimalPoint) . '}|\.\\d{' . SniffSettingsHelper::normalizeInteger($this->minDigitsAfterDecimalPoint) . '})~';
+		$regexp = '~(?:^\\d{' . SniffSettingsHelper::normalizeInteger(
+			$this->minDigitsBeforeDecimalPoint
+		) . '}|\.\\d{' . SniffSettingsHelper::normalizeInteger($this->minDigitsAfterDecimalPoint) . '})~';
 		if (preg_match($regexp, $tokens[$numberPointer]['content']) === 0) {
 			return;
 		}
 
-		$phpcsFile->addError('Use of numeric literal separator is required.', $numberPointer, self::CODE_REQUIRED_NUMERIC_LITERAL_SEPARATOR);
+		$phpcsFile->addError(
+			'Use of numeric literal separator is required.',
+			$numberPointer,
+			self::CODE_REQUIRED_NUMERIC_LITERAL_SEPARATOR
+		);
 	}
 
 }

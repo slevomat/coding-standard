@@ -93,7 +93,12 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 		$phpcsFile->fixer->beginChangeset();
 
 		foreach ($parameters as $parameter) {
-			$pointerBeforeParameter = TokenHelper::findPrevious($phpcsFile, T_COMMA, $parameter['token'] - 1, $tokens[$methodPointer]['parenthesis_opener']);
+			$pointerBeforeParameter = TokenHelper::findPrevious(
+				$phpcsFile,
+				T_COMMA,
+				$parameter['token'] - 1,
+				$tokens[$methodPointer]['parenthesis_opener']
+			);
 			if ($pointerBeforeParameter === null) {
 				$pointerBeforeParameter = $tokens[$methodPointer]['parenthesis_opener'];
 			}

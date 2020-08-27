@@ -52,7 +52,11 @@ class UselessInheritDocCommentSniff implements Sniff
 			return;
 		}
 
-		$docCommentOwnerPointer = TokenHelper::findNext($phpcsFile, array_merge(TokenHelper::$functionTokenCodes, TokenHelper::$typeHintTokenCodes), $tokens[$docCommentOpenPointer]['comment_closer'] + 1);
+		$docCommentOwnerPointer = TokenHelper::findNext(
+			$phpcsFile,
+			array_merge(TokenHelper::$functionTokenCodes, TokenHelper::$typeHintTokenCodes),
+			$tokens[$docCommentOpenPointer]['comment_closer'] + 1
+		);
 		if ($docCommentOwnerPointer === null) {
 			return;
 		}
@@ -79,7 +83,11 @@ class UselessInheritDocCommentSniff implements Sniff
 			}
 		}
 
-		$fix = $phpcsFile->addFixableError('Useless documentation comment with @inheritDoc.', $docCommentOpenPointer, self::CODE_USELESS_INHERIT_DOC_COMMENT);
+		$fix = $phpcsFile->addFixableError(
+			'Useless documentation comment with @inheritDoc.',
+			$docCommentOpenPointer,
+			self::CODE_USELESS_INHERIT_DOC_COMMENT
+		);
 
 		if (!$fix) {
 			return;

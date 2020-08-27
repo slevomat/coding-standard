@@ -87,7 +87,11 @@ class DisallowCommentAfterCodeSniff implements Sniff
 		if (
 			$tokens[$firstNonWhiteSpacePointerBeforeComment]['code'] === T_OPEN_CURLY_BRACKET
 			&& array_key_exists('scope_condition', $tokens[$firstNonWhiteSpacePointerBeforeComment])
-			&& in_array($tokens[$tokens[$firstNonWhiteSpacePointerBeforeComment]['scope_condition']]['code'], [T_ELSEIF, T_ELSE, T_CLOSURE], true)
+			&& in_array(
+				$tokens[$tokens[$firstNonWhiteSpacePointerBeforeComment]['scope_condition']]['code'],
+				[T_ELSEIF, T_ELSE, T_CLOSURE],
+				true
+			)
 		) {
 			$phpcsFile->fixer->addContent(
 				$firstNonWhiteSpacePointerBeforeComment,

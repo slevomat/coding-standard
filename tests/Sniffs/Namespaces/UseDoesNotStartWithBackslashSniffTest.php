@@ -26,7 +26,11 @@ class UseDoesNotStartWithBackslashSniffTest extends TestCase
 
 	public function testFixable(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableUseDoesNotStartWithBackslash.php', [], [UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH]);
+		$report = self::checkFile(
+			__DIR__ . '/data/fixableUseDoesNotStartWithBackslash.php',
+			[],
+			[UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH]
+		);
 		self::assertAllFixedInFile($report);
 	}
 

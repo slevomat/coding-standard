@@ -57,7 +57,11 @@ class TrailingCommaInCallSniff implements Sniff
 		}
 
 		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
-		if (!in_array($tokens[$pointerBeforeParenthesisOpener]['code'], [T_STRING, T_VARIABLE, T_ISSET, T_UNSET, T_CLOSE_PARENTHESIS, T_SELF, T_STATIC, T_PARENT], true)) {
+		if (!in_array(
+			$tokens[$pointerBeforeParenthesisOpener]['code'],
+			[T_STRING, T_VARIABLE, T_ISSET, T_UNSET, T_CLOSE_PARENTHESIS, T_SELF, T_STATIC, T_PARENT],
+			true
+		)) {
 			return;
 		}
 

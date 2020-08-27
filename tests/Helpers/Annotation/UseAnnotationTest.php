@@ -19,7 +19,10 @@ class UseAnnotationTest extends TestCase
 			1,
 			10,
 			'Description',
-			new UsesTagValueNode(new GenericTypeNode(new IdentifierTypeNode('Whatever'), [new IdentifierTypeNode('Anything')]), 'Description')
+			new UsesTagValueNode(
+				new GenericTypeNode(new IdentifierTypeNode('Whatever'), [new IdentifierTypeNode('Anything')]),
+				'Description'
+			)
 		);
 
 		self::assertSame('@use', $annotation->getName());

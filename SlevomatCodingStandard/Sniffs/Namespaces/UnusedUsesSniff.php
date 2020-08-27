@@ -166,7 +166,11 @@ class UnusedUsesSniff implements Sniff
 
 						if (
 							!in_array($annotationName, $this->getIgnoredAnnotationNames(), true)
-							&& preg_match('~^@(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=[^-a-z\\d]|$)~i', $annotationName, $matches) !== 0
+							&& preg_match(
+								'~^@(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=[^-a-z\\d]|$)~i',
+								$annotationName,
+								$matches
+							) !== 0
 						) {
 							$allUsedNames[$pointerBeforeUseStatements][$uniqueId] = true;
 
@@ -191,8 +195,16 @@ class UnusedUsesSniff implements Sniff
 							}
 
 							if (
-								preg_match('~(?<=^|[^a-z\\\\])(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=::)~i', $annotation->getParameters(), $matches) === 0
-								&& preg_match('~(?<=@)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=[^\\w])~i', $annotation->getParameters(), $matches) === 0
+								preg_match(
+									'~(?<=^|[^a-z\\\\])(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=::)~i',
+									$annotation->getParameters(),
+									$matches
+								) === 0
+								&& preg_match(
+									'~(?<=@)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=[^\\w])~i',
+									$annotation->getParameters(),
+									$matches
+								) === 0
 							) {
 								continue;
 							}
@@ -242,9 +254,12 @@ class UnusedUsesSniff implements Sniff
 									}
 								}
 								foreach (AnnotationHelper::getAnnotationConstantExpressions($annotation) as $annotationConstantExpression) {
-									$contentsToCheck = array_merge($contentsToCheck, array_map(static function (ConstFetchNode $constFetchNode): string {
-										return $constFetchNode->className;
-									}, AnnotationConstantExpressionHelper::getConstantFetchNodes($annotationConstantExpression)));
+									$contentsToCheck = array_merge(
+										$contentsToCheck,
+										array_map(static function (ConstFetchNode $constFetchNode): string {
+											return $constFetchNode->className;
+										}, AnnotationConstantExpressionHelper::getConstantFetchNodes($annotationConstantExpression))
+									);
 								}
 							} elseif ($annotationName === '@see') {
 								$parts = preg_split('~(\\s+|::)~', $content);
@@ -256,7 +271,11 @@ class UnusedUsesSniff implements Sniff
 							}
 
 							foreach ($contentsToCheck as $contentToCheck) {
-								if (preg_match('~(?<=^|\|)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|\\\\|\||\[|$)~i', $contentToCheck, $matches) === 0) {
+								if (preg_match(
+									'~(?<=^|\|)(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|\\\\|\||\[|$)~i',
+									$contentToCheck,
+									$matches
+								) === 0) {
 									continue;
 								}
 

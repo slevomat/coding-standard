@@ -65,7 +65,10 @@ class AlphabeticallySortedUsesSniff implements Sniff
 					$order = $this->compareUseStatements($useStatement, $lastUse);
 					if ($order < 0) {
 						$fix = $phpcsFile->addFixableError(
-							sprintf('Use statements should be sorted alphabetically. The first wrong one is %s.', $useStatement->getFullyQualifiedTypeName()),
+							sprintf(
+								'Use statements should be sorted alphabetically. The first wrong one is %s.',
+								$useStatement->getFullyQualifiedTypeName()
+							),
 							$useStatement->getPointer(),
 							self::CODE_INCORRECT_ORDER
 						);
@@ -102,18 +105,26 @@ class AlphabeticallySortedUsesSniff implements Sniff
 			return $this->compareUseStatements($a, $b);
 		});
 
-		$phpcsFile->fixer->addContent($firstUseStatement->getPointer(), implode($phpcsFile->eolChar, array_map(static function (UseStatement $useStatement): string {
-			$unqualifiedName = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($useStatement->getFullyQualifiedTypeName());
+		$phpcsFile->fixer->addContent(
+			$firstUseStatement->getPointer(),
+			implode($phpcsFile->eolChar, array_map(static function (UseStatement $useStatement): string {
+				$unqualifiedName = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($useStatement->getFullyQualifiedTypeName());
 
-			$useTypeName = UseStatement::getTypeName($useStatement->getType());
-			$useTypeFormatted = $useTypeName !== null ? sprintf('%s ', $useTypeName) : '';
+				$useTypeName = UseStatement::getTypeName($useStatement->getType());
+				$useTypeFormatted = $useTypeName !== null ? sprintf('%s ', $useTypeName) : '';
 
-			if ($unqualifiedName === $useStatement->getNameAsReferencedInFile()) {
-				return sprintf('use %s%s;', $useTypeFormatted, $useStatement->getFullyQualifiedTypeName());
-			}
+				if ($unqualifiedName === $useStatement->getNameAsReferencedInFile()) {
+					return sprintf('use %s%s;', $useTypeFormatted, $useStatement->getFullyQualifiedTypeName());
+				}
 
-			return sprintf('use %s%s as %s;', $useTypeFormatted, $useStatement->getFullyQualifiedTypeName(), $useStatement->getNameAsReferencedInFile());
-		}, $useStatements)));
+				return sprintf(
+					'use %s%s as %s;',
+					$useTypeFormatted,
+					$useStatement->getFullyQualifiedTypeName(),
+					$useStatement->getNameAsReferencedInFile()
+				);
+			}, $useStatements))
+		);
 		$phpcsFile->fixer->endChangeset();
 	}
 

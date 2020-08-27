@@ -19,12 +19,42 @@ class UnusedInheritedVariablePassedToClosureSniffTest extends TestCase
 
 		self::assertSame(6, $report->getErrorCount());
 
-		self::assertSniffError($report, 3, UnusedInheritedVariablePassedToClosureSniff::CODE_UNUSED_INHERITED_VARIABLE, 'Unused inherited variable $boo passed to closure.');
-		self::assertSniffError($report, 10, UnusedInheritedVariablePassedToClosureSniff::CODE_UNUSED_INHERITED_VARIABLE, 'Unused inherited variable $foo passed to closure.');
-		self::assertSniffError($report, 17, UnusedInheritedVariablePassedToClosureSniff::CODE_UNUSED_INHERITED_VARIABLE, 'Unused inherited variable $doo passed to closure.');
-		self::assertSniffError($report, 23, UnusedInheritedVariablePassedToClosureSniff::CODE_UNUSED_INHERITED_VARIABLE, 'Unused inherited variable $boo passed to closure.');
-		self::assertSniffError($report, 30, UnusedInheritedVariablePassedToClosureSniff::CODE_UNUSED_INHERITED_VARIABLE, 'Unused inherited variable $boo passed to closure.');
-		self::assertSniffError($report, 38, UnusedInheritedVariablePassedToClosureSniff::CODE_UNUSED_INHERITED_VARIABLE, 'Unused inherited variable $output passed to closure.');
+		self::assertSniffError(
+			$report,
+			3,
+			UnusedInheritedVariablePassedToClosureSniff::CODE_UNUSED_INHERITED_VARIABLE,
+			'Unused inherited variable $boo passed to closure.'
+		);
+		self::assertSniffError(
+			$report,
+			10,
+			UnusedInheritedVariablePassedToClosureSniff::CODE_UNUSED_INHERITED_VARIABLE,
+			'Unused inherited variable $foo passed to closure.'
+		);
+		self::assertSniffError(
+			$report,
+			17,
+			UnusedInheritedVariablePassedToClosureSniff::CODE_UNUSED_INHERITED_VARIABLE,
+			'Unused inherited variable $doo passed to closure.'
+		);
+		self::assertSniffError(
+			$report,
+			23,
+			UnusedInheritedVariablePassedToClosureSniff::CODE_UNUSED_INHERITED_VARIABLE,
+			'Unused inherited variable $boo passed to closure.'
+		);
+		self::assertSniffError(
+			$report,
+			30,
+			UnusedInheritedVariablePassedToClosureSniff::CODE_UNUSED_INHERITED_VARIABLE,
+			'Unused inherited variable $boo passed to closure.'
+		);
+		self::assertSniffError(
+			$report,
+			38,
+			UnusedInheritedVariablePassedToClosureSniff::CODE_UNUSED_INHERITED_VARIABLE,
+			'Unused inherited variable $output passed to closure.'
+		);
 
 		self::assertAllFixedInFile($report);
 	}

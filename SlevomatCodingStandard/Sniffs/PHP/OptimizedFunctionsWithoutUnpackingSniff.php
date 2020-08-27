@@ -92,7 +92,11 @@ class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
 		}
 
 		/** @var int $nextTokenAfterSeparatorPointer */
-		$nextTokenAfterSeparatorPointer = TokenHelper::findNextEffective($phpcsFile, $lastArgumentSeparatorPointer + 1, $closeBracketPointer);
+		$nextTokenAfterSeparatorPointer = TokenHelper::findNextEffective(
+			$phpcsFile,
+			$lastArgumentSeparatorPointer + 1,
+			$closeBracketPointer
+		);
 
 		if ($tokens[$nextTokenAfterSeparatorPointer]['code'] !== T_ELLIPSIS) {
 			return;

@@ -403,7 +403,10 @@ class UnusedVariableSniff implements Sniff
 				return true;
 			}
 
-			$pointerBeforeVariableUsedInLoopCondition = TokenHelper::findPreviousEffective($phpcsFile, $variableUsedInLoopConditionPointer - 1);
+			$pointerBeforeVariableUsedInLoopCondition = TokenHelper::findPreviousEffective(
+				$phpcsFile,
+				$variableUsedInLoopConditionPointer - 1
+			);
 			if ($tokens[$pointerBeforeVariableUsedInLoopCondition]['code'] === T_BITWISE_AND) {
 				return true;
 			}
@@ -627,7 +630,11 @@ class UnusedVariableSniff implements Sniff
 			return false;
 		}
 
-		return in_array($tokens[$previousPointer]['code'], array_merge([T_STRING_CONCAT], Tokens::$operators, Tokens::$assignmentTokens, Tokens::$booleanOperators), true);
+		return in_array(
+			$tokens[$previousPointer]['code'],
+			array_merge([T_STRING_CONCAT], Tokens::$operators, Tokens::$assignmentTokens, Tokens::$booleanOperators),
+			true
+		);
 	}
 
 	private function findNestedParenthesisWithOwner(File $phpcsFile, int $pointer): ?int

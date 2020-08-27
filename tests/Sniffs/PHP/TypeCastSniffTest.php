@@ -18,7 +18,12 @@ class TypeCastSniffTest extends TestCase
 
 		self::assertSame(8, $report->getErrorCount());
 
-		self::assertSniffError($report, 3, TypeCastSniff::CODE_FORBIDDEN_CAST_USED, 'Cast "(unset)" is forbidden, use "unset(...)" or assign "null" instead.');
+		self::assertSniffError(
+			$report,
+			3,
+			TypeCastSniff::CODE_FORBIDDEN_CAST_USED,
+			'Cast "(unset)" is forbidden, use "unset(...)" or assign "null" instead.'
+		);
 		self::assertSniffError($report, 4, TypeCastSniff::CODE_FORBIDDEN_CAST_USED, 'Cast "(binary)" is forbidden and has no effect.');
 
 		self::assertSniffError($report, 6, TypeCastSniff::CODE_INVALID_CAST_USED, 'Cast "(boolean)" is forbidden, use "(bool)" instead.');

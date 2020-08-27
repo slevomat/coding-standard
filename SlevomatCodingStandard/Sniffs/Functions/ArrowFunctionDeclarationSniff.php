@@ -76,7 +76,11 @@ class ArrowFunctionDeclarationSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError($this->formatErrorMessage('after "fn" keyword', $requiredSpaces), $arrowFunctionPointer, self::CODE_INCORRECT_SPACES_AFTER_KEYWORD);
+		$fix = $phpcsFile->addFixableError(
+			$this->formatErrorMessage('after "fn" keyword', $requiredSpaces),
+			$arrowFunctionPointer,
+			self::CODE_INCORRECT_SPACES_AFTER_KEYWORD
+		);
 		if (!$fix) {
 			return;
 		}
@@ -101,7 +105,11 @@ class ArrowFunctionDeclarationSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError($this->formatErrorMessage('before =>', $requiredSpaces), $arrowPointer, self::CODE_INCORRECT_SPACES_BEFORE_ARROW);
+		$fix = $phpcsFile->addFixableError(
+			$this->formatErrorMessage('before =>', $requiredSpaces),
+			$arrowPointer,
+			self::CODE_INCORRECT_SPACES_BEFORE_ARROW
+		);
 		if (!$fix) {
 			return;
 		}
@@ -126,7 +134,11 @@ class ArrowFunctionDeclarationSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError($this->formatErrorMessage('after =>', $requiredSpaces), $arrowPointer, self::CODE_INCORRECT_SPACES_AFTER_ARROW);
+		$fix = $phpcsFile->addFixableError(
+			$this->formatErrorMessage('after =>', $requiredSpaces),
+			$arrowPointer,
+			self::CODE_INCORRECT_SPACES_AFTER_ARROW
+		);
 		if (!$fix) {
 			return;
 		}

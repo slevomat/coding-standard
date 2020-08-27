@@ -129,7 +129,10 @@ class InlineDocCommentDeclarationSniff implements Sniff
 			}
 		}
 
-		if (preg_match('~^@var\\s+(?:\\S+?( ?: ?\S+)?(?:<.+>|{.+})?)(?:\\s*[|&]\\s*(?:\\S+(?:<.+>|\{.+\})?))*\\s+\$\\S+(?:\\s+.+)?$~', $commentContent) !== 0) {
+		if (preg_match(
+			'~^@var\\s+(?:\\S+?( ?: ?\S+)?(?:<.+>|{.+})?)(?:\\s*[|&]\\s*(?:\\S+(?:<.+>|\{.+\})?))*\\s+\$\\S+(?:\\s+.+)?$~',
+			$commentContent
+		) !== 0) {
 			return;
 		}
 
@@ -320,7 +323,13 @@ class InlineDocCommentDeclarationSniff implements Sniff
 				} elseif ($tokens[$codePointer]['code'] === T_LIST) {
 					$listParenthesisOpener = TokenHelper::findNextEffective($phpcsFile, $codePointer + 1);
 
-					$variablePointerInList = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $listParenthesisOpener + 1, $tokens[$listParenthesisOpener]['parenthesis_closer']);
+					$variablePointerInList = TokenHelper::findNextContent(
+						$phpcsFile,
+						T_VARIABLE,
+						$variableName,
+						$listParenthesisOpener + 1,
+						$tokens[$listParenthesisOpener]['parenthesis_closer']
+					);
 					if ($variablePointerInList === null) {
 						if ($tryNo === 2) {
 							$phpcsFile->addError(...$missingVariableErrorParameters);
@@ -339,7 +348,13 @@ class InlineDocCommentDeclarationSniff implements Sniff
 						continue;
 					}
 
-					$variablePointerInList = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $codePointer + 1, $tokens[$codePointer]['bracket_closer']);
+					$variablePointerInList = TokenHelper::findNextContent(
+						$phpcsFile,
+						T_VARIABLE,
+						$variableName,
+						$codePointer + 1,
+						$tokens[$codePointer]['bracket_closer']
+					);
 					if ($variablePointerInList === null) {
 						if ($tryNo === 2) {
 							$phpcsFile->addError(...$missingVariableErrorParameters);
@@ -349,7 +364,13 @@ class InlineDocCommentDeclarationSniff implements Sniff
 					}
 
 				} elseif (in_array($tokens[$codePointer]['code'], [T_CLOSURE, T_FN], true)) {
-					$parameterPointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $tokens[$codePointer]['parenthesis_opener'] + 1, $tokens[$codePointer]['parenthesis_closer']);
+					$parameterPointer = TokenHelper::findNextContent(
+						$phpcsFile,
+						T_VARIABLE,
+						$variableName,
+						$tokens[$codePointer]['parenthesis_opener'] + 1,
+						$tokens[$codePointer]['parenthesis_closer']
+					);
 					if ($parameterPointer === null) {
 						if ($tryNo === 2) {
 							$phpcsFile->addError(...$missingVariableErrorParameters);
@@ -360,7 +381,13 @@ class InlineDocCommentDeclarationSniff implements Sniff
 
 				} else {
 					if ($tokens[$codePointer]['code'] === T_WHILE) {
-						$variablePointerInWhile = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $tokens[$codePointer]['parenthesis_opener'] + 1, $tokens[$codePointer]['parenthesis_closer']);
+						$variablePointerInWhile = TokenHelper::findNextContent(
+							$phpcsFile,
+							T_VARIABLE,
+							$variableName,
+							$tokens[$codePointer]['parenthesis_opener'] + 1,
+							$tokens[$codePointer]['parenthesis_closer']
+						);
 						if ($variablePointerInWhile === null) {
 							if ($tryNo === 2) {
 								$phpcsFile->addError(...$missingVariableErrorParameters);
@@ -378,8 +405,19 @@ class InlineDocCommentDeclarationSniff implements Sniff
 							continue;
 						}
 					} else {
-						$asPointer = TokenHelper::findNext($phpcsFile, T_AS, $tokens[$codePointer]['parenthesis_opener'] + 1, $tokens[$codePointer]['parenthesis_closer']);
-						$variablePointerInForeach = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $asPointer + 1, $tokens[$codePointer]['parenthesis_closer']);
+						$asPointer = TokenHelper::findNext(
+							$phpcsFile,
+							T_AS,
+							$tokens[$codePointer]['parenthesis_opener'] + 1,
+							$tokens[$codePointer]['parenthesis_closer']
+						);
+						$variablePointerInForeach = TokenHelper::findNextContent(
+							$phpcsFile,
+							T_VARIABLE,
+							$variableName,
+							$asPointer + 1,
+							$tokens[$codePointer]['parenthesis_closer']
+						);
 						if ($variablePointerInForeach === null) {
 							if ($tryNo === 2) {
 								$phpcsFile->addError(...$missingVariableErrorParameters);

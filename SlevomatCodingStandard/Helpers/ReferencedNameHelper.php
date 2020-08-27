@@ -214,7 +214,12 @@ class ReferencedNameHelper
 					}
 				}
 			}
-			$types[] = new ReferencedName(self::getReferenceName($phpcsFile, $nameStartPointer, $nameEndPointer), $nameStartPointer, $nameEndPointer, $type);
+			$types[] = new ReferencedName(
+				self::getReferenceName($phpcsFile, $nameStartPointer, $nameEndPointer),
+				$nameStartPointer,
+				$nameEndPointer,
+				$type
+			);
 			$beginSearchAtPointer = $nameEndPointer + 1;
 		}
 		return $types;

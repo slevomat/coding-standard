@@ -19,11 +19,36 @@ class UselessParameterDefaultValueSniffTest extends TestCase
 
 		self::assertSame(5, $report->getErrorCount());
 
-		self::assertSniffError($report, 3, UselessParameterDefaultValueSniff::CODE_USELESS_PARAMETER_DEFAULT_VALUE, 'Useless default value of parameter $a.');
-		self::assertSniffError($report, 10, UselessParameterDefaultValueSniff::CODE_USELESS_PARAMETER_DEFAULT_VALUE, 'Useless default value of parameter $bb.');
-		self::assertSniffError($report, 11, UselessParameterDefaultValueSniff::CODE_USELESS_PARAMETER_DEFAULT_VALUE, 'Useless default value of parameter $bbb.');
-		self::assertSniffError($report, 17, UselessParameterDefaultValueSniff::CODE_USELESS_PARAMETER_DEFAULT_VALUE, 'Useless default value of parameter $c.');
-		self::assertSniffError($report, 22, UselessParameterDefaultValueSniff::CODE_USELESS_PARAMETER_DEFAULT_VALUE, 'Useless default value of parameter $d.');
+		self::assertSniffError(
+			$report,
+			3,
+			UselessParameterDefaultValueSniff::CODE_USELESS_PARAMETER_DEFAULT_VALUE,
+			'Useless default value of parameter $a.'
+		);
+		self::assertSniffError(
+			$report,
+			10,
+			UselessParameterDefaultValueSniff::CODE_USELESS_PARAMETER_DEFAULT_VALUE,
+			'Useless default value of parameter $bb.'
+		);
+		self::assertSniffError(
+			$report,
+			11,
+			UselessParameterDefaultValueSniff::CODE_USELESS_PARAMETER_DEFAULT_VALUE,
+			'Useless default value of parameter $bbb.'
+		);
+		self::assertSniffError(
+			$report,
+			17,
+			UselessParameterDefaultValueSniff::CODE_USELESS_PARAMETER_DEFAULT_VALUE,
+			'Useless default value of parameter $c.'
+		);
+		self::assertSniffError(
+			$report,
+			22,
+			UselessParameterDefaultValueSniff::CODE_USELESS_PARAMETER_DEFAULT_VALUE,
+			'Useless default value of parameter $d.'
+		);
 
 		self::assertAllFixedInFile($report);
 	}

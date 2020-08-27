@@ -13,7 +13,13 @@ class VariableAnnotationTest extends TestCase
 
 	public function testAnnotation(): void
 	{
-		$annotation = new VariableAnnotation('@var', 1, 10, 'Description', new VarTagValueNode(new IdentifierTypeNode('string'), '$variable', 'Description'));
+		$annotation = new VariableAnnotation(
+			'@var',
+			1,
+			10,
+			'Description',
+			new VarTagValueNode(new IdentifierTypeNode('string'), '$variable', 'Description')
+		);
 
 		self::assertSame('@var', $annotation->getName());
 		self::assertSame(1, $annotation->getStartPointer());

@@ -151,7 +151,11 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 		$definedClassesIndex = [];
 		foreach (ClassHelper::getAllNames($phpcsFile) as $definedClassPointer => $definedClassName) {
-			$definedClassesIndex[strtolower($definedClassName)] = NamespaceHelper::resolveClassName($phpcsFile, $definedClassName, $definedClassPointer);
+			$definedClassesIndex[strtolower($definedClassName)] = NamespaceHelper::resolveClassName(
+				$phpcsFile,
+				$definedClassName,
+				$definedClassPointer
+			);
 		}
 		$definedFunctionsIndex = array_flip(array_map(static function (string $functionName): string {
 			return strtolower($functionName);
@@ -165,7 +169,12 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 			});
 
 			foreach ($classReferences as $classReference) {
-				$classReferencesIndex[strtolower($classReference->name)] = NamespaceHelper::resolveName($phpcsFile, $classReference->name, $classReference->type, $classReference->startPointer);
+				$classReferencesIndex[strtolower($classReference->name)] = NamespaceHelper::resolveName(
+					$phpcsFile,
+					$classReference->name,
+					$classReference->type,
+					$classReference->startPointer
+				);
 			}
 		}
 
@@ -190,7 +199,9 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 			$isGlobalFunctionFallback = false;
 			if ($reference->isFunction && $isGlobalFallback) {
-				$isGlobalFunctionFallback = !array_key_exists(strtolower($reference->name), $definedFunctionsIndex) && function_exists($reference->name);
+				$isGlobalFunctionFallback = !array_key_exists(strtolower($reference->name), $definedFunctionsIndex) && function_exists(
+					$reference->name
+				);
 			}
 			$isGlobalConstantFallback = false;
 			if ($reference->isConstant && $isGlobalFallback) {
@@ -202,7 +213,9 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 					$lowerCasedUnqualifiedClassName = strtolower($unqualifiedName);
 					if (
 						array_key_exists($lowerCasedUnqualifiedClassName, $definedClassesIndex)
-						&& $canonicalName !== NamespaceHelper::normalizeToCanonicalName($definedClassesIndex[$lowerCasedUnqualifiedClassName])
+						&& $canonicalName !== NamespaceHelper::normalizeToCanonicalName(
+							$definedClassesIndex[$lowerCasedUnqualifiedClassName]
+						)
 					) {
 						continue;
 					}
@@ -216,7 +229,9 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 					if (
 						array_key_exists($lowerCasedUnqualifiedClassName, $useStatements)
-						&& $canonicalName !== NamespaceHelper::normalizeToCanonicalName($useStatements[$lowerCasedUnqualifiedClassName]->getFullyQualifiedTypeName())
+						&& $canonicalName !== NamespaceHelper::normalizeToCanonicalName(
+							$useStatements[$lowerCasedUnqualifiedClassName]->getFullyQualifiedTypeName()
+						)
 					) {
 						continue;
 					}
@@ -247,14 +262,21 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 					continue;
 				}
 
-				$previousKeywordPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(TokenHelper::$nameTokenCodes, [T_WHITESPACE, T_COMMA]), $startPointer - 1);
+				$previousKeywordPointer = TokenHelper::findPreviousExcluding(
+					$phpcsFile,
+					array_merge(TokenHelper::$nameTokenCodes, [T_WHITESPACE, T_COMMA]),
+					$startPointer - 1
+				);
 				if (!in_array($tokens[$previousKeywordPointer]['code'], $this->getFullyQualifiedKeywords(), true)) {
 					if (
 						$isFullyQualified
 						&& !NamespaceHelper::hasNamespace($name)
 						&& $namespacePointers === []
 					) {
-						$label = sprintf($reference->isConstant ? 'Constant %s' : ($reference->isFunction ? 'Function %s()' : 'Class %s'), $name);
+						$label = sprintf(
+							$reference->isConstant ? 'Constant %s' : ($reference->isFunction ? 'Function %s()' : 'Class %s'),
+							$name
+						);
 
 						$fix = $phpcsFile->addFixableError(sprintf(
 							'%s should not be referenced via a fully qualified name, but via an unqualified name without the leading \\, because the file does not have a namespace and the type cannot be put in a use statement.',
@@ -356,11 +378,15 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 			$useStatements = UseStatementHelper::getUseStatementsForPointer($phpcsFile, $reference->startPointer);
 
-			$canBeFixed = array_reduce($alreadyAddedUses[$reference->type], static function (bool $carry, string $use) use ($canonicalName): bool {
-				return NamespaceHelper::getLastNamePart($use) === NamespaceHelper::getLastNamePart($canonicalName)
-					? false
-					: $carry;
-			}, true);
+			$canBeFixed = array_reduce(
+				$alreadyAddedUses[$reference->type],
+				static function (bool $carry, string $use) use ($canonicalName): bool {
+					return NamespaceHelper::getLastNamePart($use) === NamespaceHelper::getLastNamePart($canonicalName)
+						? false
+						: $carry;
+				},
+				true
+			);
 
 			foreach ($useStatements as $useStatement) {
 				if ($useStatement->getType() !== $reference->type) {
@@ -388,7 +414,10 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 				break;
 			}
 
-			$label = sprintf($reference->isConstant ? 'Constant %s' : ($reference->isFunction ? 'Function %s()' : 'Class %s'), $reference->name);
+			$label = sprintf(
+				$reference->isConstant ? 'Constant %s' : ($reference->isFunction ? 'Function %s()' : 'Class %s'),
+				$reference->name
+			);
 			$errorCode = $isGlobalConstantFallback || $isGlobalFunctionFallback
 				? self::CODE_REFERENCE_VIA_FALLBACK_GLOBAL_NAME
 				: self::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME;

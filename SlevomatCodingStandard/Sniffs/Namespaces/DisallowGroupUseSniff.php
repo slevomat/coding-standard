@@ -28,7 +28,11 @@ class DisallowGroupUseSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $usePointer): void
 	{
-		$phpcsFile->addError('Group use declaration is disallowed, use single use for every import.', $usePointer, self::CODE_DISALLOWED_GROUP_USE);
+		$phpcsFile->addError(
+			'Group use declaration is disallowed, use single use for every import.',
+			$usePointer,
+			self::CODE_DISALLOWED_GROUP_USE
+		);
 	}
 
 }

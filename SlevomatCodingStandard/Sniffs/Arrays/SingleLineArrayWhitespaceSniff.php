@@ -190,7 +190,11 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 			return;
 		}
 
-		$error = sprintf('Expected 0 spaces between "%s" and comma, %d found.', $tokens[$comma - 2]['content'], $tokens[$comma - 1]['length']);
+		$error = sprintf(
+			'Expected 0 spaces between "%s" and comma, %d found.',
+			$tokens[$comma - 2]['content'],
+			$tokens[$comma - 1]['length']
+		);
 		$fix = $phpcsFile->addFixableError($error, $comma, self::CODE_SPACE_BEFORE_COMMA);
 		if (!$fix) {
 			return;

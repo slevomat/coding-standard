@@ -75,7 +75,12 @@ class NegationOperatorSpacingSniff implements Sniff
 		}
 
 		$fix = $phpcsFile->addFixableError(
-			sprintf('Expected exactly %d space after "%s", %d found.', $requiredNumberOfSpaces, $tokens[$pointer]['content'], $numberOfSpaces),
+			sprintf(
+				'Expected exactly %d space after "%s", %d found.',
+				$requiredNumberOfSpaces,
+				$tokens[$pointer]['content'],
+				$numberOfSpaces
+			),
 			$pointer,
 			self::CODE_INVALID_SPACE_AFTER_MINUS
 		);

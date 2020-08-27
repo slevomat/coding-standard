@@ -58,7 +58,11 @@ class DisallowReferenceSniff implements Sniff
 			if (array_key_exists('parenthesis_owner', $tokens[$previousParenthesisOpenerPointer])) {
 				$parenthesisOwnerPointer = $tokens[$previousParenthesisOpenerPointer]['parenthesis_owner'];
 				if (in_array($tokens[$parenthesisOwnerPointer]['code'], TokenHelper::$functionTokenCodes, true)) {
-					$phpcsFile->addError('Passing by reference is disallowed.', $referencePointer, self::CODE_DISALLOWED_PASSING_BY_REFERENCE);
+					$phpcsFile->addError(
+						'Passing by reference is disallowed.',
+						$referencePointer,
+						self::CODE_DISALLOWED_PASSING_BY_REFERENCE
+					);
 					return;
 				}
 			}
@@ -68,7 +72,11 @@ class DisallowReferenceSniff implements Sniff
 				$pointerBeforeParenthesisOpener !== null
 				&& $tokens[$pointerBeforeParenthesisOpener]['code'] === T_USE
 			) {
-				$phpcsFile->addError('Inheriting variable by reference is disallowed.', $referencePointer, self::CODE_DISALLOWED_INHERITING_VARIABLE_BY_REFERENCE);
+				$phpcsFile->addError(
+					'Inheriting variable by reference is disallowed.',
+					$referencePointer,
+					self::CODE_DISALLOWED_INHERITING_VARIABLE_BY_REFERENCE
+				);
 				return;
 			}
 		}

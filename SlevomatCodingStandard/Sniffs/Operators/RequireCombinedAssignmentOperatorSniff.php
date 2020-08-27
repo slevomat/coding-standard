@@ -98,7 +98,11 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 		}
 
 		$fix = $phpcsFile->addFixableError(
-			sprintf('Use "%s" operator instead of "=" and "%s".', $operators[$tokens[$operatorPointer]['code']], $tokens[$operatorPointer]['content']),
+			sprintf(
+				'Use "%s" operator instead of "=" and "%s".',
+				$operators[$tokens[$operatorPointer]['code']],
+				$tokens[$operatorPointer]['content']
+			),
 			$equalPointer,
 			self::CODE_REQUIRED_COMBINED_ASSIGMENT_OPERATOR
 		);

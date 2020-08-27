@@ -64,12 +64,23 @@ class StaticClosureSniff implements Sniff
 			}
 		}
 
-		$thisPointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, '$this', $closureScopeOpenerPointer + 1, $closureScopeCloserPointer);
+		$thisPointer = TokenHelper::findNextContent(
+			$phpcsFile,
+			T_VARIABLE,
+			'$this',
+			$closureScopeOpenerPointer + 1,
+			$closureScopeCloserPointer
+		);
 		if ($thisPointer !== null) {
 			return;
 		}
 
-		$stringPointers = TokenHelper::findNextAll($phpcsFile, T_DOUBLE_QUOTED_STRING, $closureScopeOpenerPointer + 1, $closureScopeCloserPointer);
+		$stringPointers = TokenHelper::findNextAll(
+			$phpcsFile,
+			T_DOUBLE_QUOTED_STRING,
+			$closureScopeOpenerPointer + 1,
+			$closureScopeCloserPointer
+		);
 		foreach ($stringPointers as $stringPointer) {
 			if (VariableHelper::isUsedInScopeInString($phpcsFile, '$this', $stringPointer)) {
 				return;
@@ -81,7 +92,11 @@ class StaticClosureSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError('Closure not using "$this" should be declared static.', $closurePointer, self::CODE_CLOSURE_NOT_STATIC);
+		$fix = $phpcsFile->addFixableError(
+			'Closure not using "$this" should be declared static.',
+			$closurePointer,
+			self::CODE_CLOSURE_NOT_STATIC
+		);
 
 		if (!$fix) {
 			return;

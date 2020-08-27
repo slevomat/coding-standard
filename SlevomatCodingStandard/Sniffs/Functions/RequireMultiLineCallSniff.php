@@ -177,7 +177,10 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 				$pointerAfterStringPointerAfter !== null
 				&& $tokens[$pointerAfterStringPointerAfter]['code'] === T_OPEN_PARENTHESIS
 				&& $tokens[$tokens[$pointerAfterStringPointerAfter]['parenthesis_closer']]['line'] === $tokens[$stringPointer]['line']
-				&& $tokens[$pointerAfterStringPointerAfter]['parenthesis_closer'] !== TokenHelper::findNextEffective($phpcsFile, $pointerAfterStringPointerAfter + 1)
+				&& $tokens[$pointerAfterStringPointerAfter]['parenthesis_closer'] !== TokenHelper::findNextEffective(
+					$phpcsFile,
+					$pointerAfterStringPointerAfter + 1
+				)
 			) {
 				return true;
 			}

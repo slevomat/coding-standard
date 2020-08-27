@@ -67,7 +67,11 @@ class ClassMemberSpacingSniff implements Sniff
 		do {
 			$previousMemberPointer = $memberPointer;
 
-			$memberPointer = $this->findNextMember($phpcsFile, $classPointer, $previousMemberPointer ?? $tokens[$classPointer]['scope_opener']);
+			$memberPointer = $this->findNextMember(
+				$phpcsFile,
+				$classPointer,
+				$previousMemberPointer ?? $tokens[$classPointer]['scope_opener']
+			);
 
 			if ($memberPointer === null) {
 				break;

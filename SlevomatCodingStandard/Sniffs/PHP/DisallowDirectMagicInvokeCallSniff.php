@@ -48,7 +48,11 @@ class DisallowDirectMagicInvokeCallSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError('Direct call of __invoke() is disallowed.', $stringPointer, self::CODE_DISALLOWED_DIRECT_MAGIC_INVOKE_CALL);
+		$fix = $phpcsFile->addFixableError(
+			'Direct call of __invoke() is disallowed.',
+			$stringPointer,
+			self::CODE_DISALLOWED_DIRECT_MAGIC_INVOKE_CALL
+		);
 		if (!$fix) {
 			return;
 		}

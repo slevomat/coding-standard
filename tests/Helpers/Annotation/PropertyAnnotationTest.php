@@ -13,7 +13,13 @@ class PropertyAnnotationTest extends TestCase
 
 	public function testAnnotation(): void
 	{
-		$annotation = new PropertyAnnotation('@property', 1, 10, 'Description', new PropertyTagValueNode(new IdentifierTypeNode('string'), '$property', 'Description'));
+		$annotation = new PropertyAnnotation(
+			'@property',
+			1,
+			10,
+			'Description',
+			new PropertyTagValueNode(new IdentifierTypeNode('string'), '$property', 'Description')
+		);
 
 		self::assertSame('@property', $annotation->getName());
 		self::assertSame(1, $annotation->getStartPointer());

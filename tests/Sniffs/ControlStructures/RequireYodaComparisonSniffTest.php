@@ -24,7 +24,11 @@ class RequireYodaComparisonSniffTest extends TestCase
 
 	public function testFixable(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableRequireYodaComparisons.php', [], [RequireYodaComparisonSniff::CODE_REQUIRED_YODA_COMPARISON]);
+		$report = self::checkFile(
+			__DIR__ . '/data/fixableRequireYodaComparisons.php',
+			[],
+			[RequireYodaComparisonSniff::CODE_REQUIRED_YODA_COMPARISON]
+		);
 		self::assertAllFixedInFile($report);
 	}
 

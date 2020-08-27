@@ -97,7 +97,11 @@ class EmptyCommentSniff implements Sniff
 			array_key_exists($whitespacePointerAfterComment, $tokens)
 			&& $tokens[$whitespacePointerAfterComment]['code'] === T_WHITESPACE
 		) {
-			$fixedWhitespaceAfterComment = preg_replace('~^[ \\t]*' . $phpcsFile->eolChar . '~', '', $tokens[$whitespacePointerAfterComment]['content']);
+			$fixedWhitespaceAfterComment = preg_replace(
+				'~^[ \\t]*' . $phpcsFile->eolChar . '~',
+				'',
+				$tokens[$whitespacePointerAfterComment]['content']
+			);
 			$phpcsFile->fixer->replaceToken($whitespacePointerAfterComment, $fixedWhitespaceAfterComment);
 		}
 

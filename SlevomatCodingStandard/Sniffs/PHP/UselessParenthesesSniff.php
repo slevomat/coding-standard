@@ -156,15 +156,27 @@ class UselessParenthesesSniff implements Sniff
 
 		/** @var int $pointerAfterParenthesisOpener */
 		$pointerAfterParenthesisOpener = TokenHelper::findNextEffective($phpcsFile, $parenthesisOpenerPointer + 1);
-		if (in_array($tokens[$pointerAfterParenthesisOpener]['code'], [T_NEW, T_CLONE, T_YIELD, T_YIELD_FROM, T_REQUIRE, T_REQUIRE_ONCE, T_INCLUDE, T_INCLUDE_ONCE], true)) {
+		if (in_array(
+			$tokens[$pointerAfterParenthesisOpener]['code'],
+			[T_NEW, T_CLONE, T_YIELD, T_YIELD_FROM, T_REQUIRE, T_REQUIRE_ONCE, T_INCLUDE, T_INCLUDE_ONCE],
+			true
+		)) {
 			return;
 		}
 
-		if (TokenHelper::findNext($phpcsFile, T_EQUAL, $parenthesisOpenerPointer + 1, $tokens[$parenthesisOpenerPointer]['parenthesis_closer']) !== null) {
+		if (TokenHelper::findNext(
+			$phpcsFile,
+			T_EQUAL,
+			$parenthesisOpenerPointer + 1,
+			$tokens[$parenthesisOpenerPointer]['parenthesis_closer']
+		) !== null) {
 			return;
 		}
 
-		$pointerAfterParenthesisCloser = TokenHelper::findNextEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1);
+		$pointerAfterParenthesisCloser = TokenHelper::findNextEffective(
+			$phpcsFile,
+			$tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1
+		);
 		if (
 			$pointerAfterParenthesisCloser !== null
 			&& $tokens[$pointerAfterParenthesisCloser]['code'] === T_OPEN_PARENTHESIS
@@ -194,7 +206,12 @@ class UselessParenthesesSniff implements Sniff
 			return;
 		}
 
-		if (TokenHelper::findNext($phpcsFile, [T_LOGICAL_AND, T_LOGICAL_OR], $parenthesisOpenerPointer + 1, $parenthesisCloserPointer) !== null) {
+		if (TokenHelper::findNext(
+			$phpcsFile,
+			[T_LOGICAL_AND, T_LOGICAL_OR],
+			$parenthesisOpenerPointer + 1,
+			$parenthesisCloserPointer
+		) !== null) {
 			return;
 		}
 
@@ -212,11 +229,22 @@ class UselessParenthesesSniff implements Sniff
 		}
 
 		if ($this->ignoreComplexTernaryConditions) {
-			if (TokenHelper::findNext($phpcsFile, Tokens::$booleanOperators, $parenthesisOpenerPointer + 1, $parenthesisCloserPointer) !== null) {
+			if (TokenHelper::findNext(
+				$phpcsFile,
+				Tokens::$booleanOperators,
+				$parenthesisOpenerPointer + 1,
+				$parenthesisCloserPointer
+			) !== null) {
 				return;
 			}
 
-			if (TokenHelper::findNextContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $parenthesisOpenerPointer + 1, $parenthesisCloserPointer) !== null) {
+			if (TokenHelper::findNextContent(
+				$phpcsFile,
+				T_WHITESPACE,
+				$phpcsFile->eolChar,
+				$parenthesisOpenerPointer + 1,
+				$parenthesisCloserPointer
+			) !== null) {
 				return;
 			}
 		}
@@ -255,7 +283,10 @@ class UselessParenthesesSniff implements Sniff
 			return;
 		}
 
-		$pointerAfterParenthesisCloser = TokenHelper::findNextEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1);
+		$pointerAfterParenthesisCloser = TokenHelper::findNextEffective(
+			$phpcsFile,
+			$tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1
+		);
 		if ($tokens[$pointerAfterParenthesisCloser]['code'] !== T_COLON) {
 			return;
 		}
@@ -283,7 +314,12 @@ class UselessParenthesesSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$operatorsPointers = TokenHelper::findNextAll($phpcsFile, self::OPERATORS, $parenthesisOpenerPointer + 1, $tokens[$parenthesisOpenerPointer]['parenthesis_closer']);
+		$operatorsPointers = TokenHelper::findNextAll(
+			$phpcsFile,
+			self::OPERATORS,
+			$parenthesisOpenerPointer + 1,
+			$tokens[$parenthesisOpenerPointer]['parenthesis_closer']
+		);
 		if (count($operatorsPointers) !== 0) {
 			return;
 		}
@@ -298,7 +334,10 @@ class UselessParenthesesSniff implements Sniff
 			return;
 		}
 
-		$pointerAfterParenthesisCloser = TokenHelper::findNextEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1);
+		$pointerAfterParenthesisCloser = TokenHelper::findNextEffective(
+			$phpcsFile,
+			$tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1
+		);
 		if (in_array($tokens[$pointerAfterParenthesisCloser]['code'], [T_INLINE_THEN, T_OPEN_PARENTHESIS], true)) {
 			return;
 		}
@@ -317,7 +356,11 @@ class UselessParenthesesSniff implements Sniff
 			$notBooleanNotOperatorPointer = TokenHelper::findNextEffective($phpcsFile, $contentStartPointer + 1);
 		}
 
-		if (in_array($tokens[$notBooleanNotOperatorPointer]['code'], [T_NS_SEPARATOR, T_STRING, T_SELF, T_STATIC, T_PARENT, T_VARIABLE, T_DOLLAR], true)) {
+		if (in_array(
+			$tokens[$notBooleanNotOperatorPointer]['code'],
+			[T_NS_SEPARATOR, T_STRING, T_SELF, T_STATIC, T_PARENT, T_VARIABLE, T_DOLLAR],
+			true
+		)) {
 			$contentEndPointer = IdentificatorHelper::findEndPointer($phpcsFile, $notBooleanNotOperatorPointer);
 
 			if ($contentEndPointer === null && $tokens[$notBooleanNotOperatorPointer]['code'] === T_STRING) {
@@ -403,7 +446,10 @@ class UselessParenthesesSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
-		$pointerAfterParenthesisCloser = TokenHelper::findNextEffective($phpcsFile, $tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1);
+		$pointerAfterParenthesisCloser = TokenHelper::findNextEffective(
+			$phpcsFile,
+			$tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1
+		);
 
 		if ($tokens[$pointerBeforeParenthesisOpener]['code'] === T_MINUS) {
 			$pointerBeforeMinus = TokenHelper::findPreviousEffective($phpcsFile, $pointerBeforeParenthesisOpener - 1);
@@ -424,7 +470,11 @@ class UselessParenthesesSniff implements Sniff
 		while (true) {
 			$pointer = TokenHelper::findNext(
 				$phpcsFile,
-				array_merge(self::OPERATORS, [T_OPEN_PARENTHESIS, T_INLINE_THEN, T_COALESCE, T_BITWISE_AND, T_BITWISE_OR, T_BITWISE_XOR], Tokens::$comparisonTokens),
+				array_merge(
+					self::OPERATORS,
+					[T_OPEN_PARENTHESIS, T_INLINE_THEN, T_COALESCE, T_BITWISE_AND, T_BITWISE_OR, T_BITWISE_XOR],
+					Tokens::$comparisonTokens
+				),
 				$actualStartPointer,
 				$tokens[$parenthesisOpenerPointer]['parenthesis_closer']
 			);

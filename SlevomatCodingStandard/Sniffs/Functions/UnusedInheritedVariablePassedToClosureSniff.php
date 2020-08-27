@@ -51,7 +51,12 @@ class UnusedInheritedVariablePassedToClosureSniff implements Sniff
 
 		$currentPointer = $parenthesisOpenerPointer + 1;
 		do {
-			$variablePointer = TokenHelper::findNext($phpcsFile, T_VARIABLE, $currentPointer, $tokens[$parenthesisOpenerPointer]['parenthesis_closer']);
+			$variablePointer = TokenHelper::findNext(
+				$phpcsFile,
+				T_VARIABLE,
+				$currentPointer,
+				$tokens[$parenthesisOpenerPointer]['parenthesis_closer']
+			);
 			if ($variablePointer === null) {
 				break;
 			}

@@ -56,11 +56,19 @@ class TraitUseDeclarationSniff implements Sniff
 
 		$tokens = $phpcsFile->getTokens();
 		if ($tokens[$endPointer]['code'] === T_OPEN_CURLY_BRACKET) {
-			$phpcsFile->addError('Multiple traits per use statement are forbidden.', $usePointer, self::CODE_MULTIPLE_TRAITS_PER_DECLARATION);
+			$phpcsFile->addError(
+				'Multiple traits per use statement are forbidden.',
+				$usePointer,
+				self::CODE_MULTIPLE_TRAITS_PER_DECLARATION
+			);
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError('Multiple traits per use statement are forbidden.', $usePointer, self::CODE_MULTIPLE_TRAITS_PER_DECLARATION);
+		$fix = $phpcsFile->addFixableError(
+			'Multiple traits per use statement are forbidden.',
+			$usePointer,
+			self::CODE_MULTIPLE_TRAITS_PER_DECLARATION
+		);
 
 		if (!$fix) {
 			return;

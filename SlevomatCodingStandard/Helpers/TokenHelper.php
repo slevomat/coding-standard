@@ -408,12 +408,22 @@ class TokenHelper
 	 */
 	public static function findFirstNonWhitespaceOnPreviousLine(File $phpcsFile, int $pointer): ?int
 	{
-		$newLinePointerOnPreviousLine = self::findPreviousContent($phpcsFile, [T_WHITESPACE, T_DOC_COMMENT_WHITESPACE], $phpcsFile->eolChar, $pointer);
+		$newLinePointerOnPreviousLine = self::findPreviousContent(
+			$phpcsFile,
+			[T_WHITESPACE, T_DOC_COMMENT_WHITESPACE],
+			$phpcsFile->eolChar,
+			$pointer
+		);
 		if ($newLinePointerOnPreviousLine === null) {
 			return null;
 		}
 
-		$newLinePointerBeforePreviousLine = self::findPreviousContent($phpcsFile, [T_WHITESPACE, T_DOC_COMMENT_WHITESPACE], $phpcsFile->eolChar, $newLinePointerOnPreviousLine - 1);
+		$newLinePointerBeforePreviousLine = self::findPreviousContent(
+			$phpcsFile,
+			[T_WHITESPACE, T_DOC_COMMENT_WHITESPACE],
+			$phpcsFile->eolChar,
+			$newLinePointerOnPreviousLine - 1
+		);
 		if ($newLinePointerBeforePreviousLine === null) {
 			return null;
 		}

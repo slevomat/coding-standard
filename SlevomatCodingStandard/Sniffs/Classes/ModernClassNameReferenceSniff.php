@@ -54,7 +54,11 @@ class ModernClassNameReferenceSniff implements Sniff
 
 	private function checkMagicConstant(File $phpcsFile, int $pointer): void
 	{
-		$fix = $phpcsFile->addFixableError('Class name referenced via magic constant.', $pointer, self::CODE_CLASS_NAME_REFERENCED_VIA_MAGIC_CONSTANT);
+		$fix = $phpcsFile->addFixableError(
+			'Class name referenced via magic constant.',
+			$pointer,
+			self::CODE_CLASS_NAME_REFERENCED_VIA_MAGIC_CONSTANT
+		);
 
 		if (!$fix) {
 			return;
@@ -91,7 +95,11 @@ class ModernClassNameReferenceSniff implements Sniff
 			return;
 		}
 
-		$parameterPointer = TokenHelper::findNextEffective($phpcsFile, $openParenthesisPointer + 1, $tokens[$openParenthesisPointer]['parenthesis_closer']);
+		$parameterPointer = TokenHelper::findNextEffective(
+			$phpcsFile,
+			$openParenthesisPointer + 1,
+			$tokens[$openParenthesisPointer]['parenthesis_closer']
+		);
 
 		$isThisParameter = static function () use ($phpcsFile, $tokens, $openParenthesisPointer, $parameterPointer): bool {
 			if ($tokens[$parameterPointer]['code'] !== T_VARIABLE) {
@@ -134,7 +142,11 @@ class ModernClassNameReferenceSniff implements Sniff
 			$fixedContent = 'static::class';
 		}
 
-		$fix = $phpcsFile->addFixableError(sprintf('Class name referenced via call of function %s().', $functionName), $functionPointer, self::CODE_CLASS_NAME_REFERENCED_VIA_FUNCTION_CALL);
+		$fix = $phpcsFile->addFixableError(
+			sprintf('Class name referenced via call of function %s().', $functionName),
+			$functionPointer,
+			self::CODE_CLASS_NAME_REFERENCED_VIA_FUNCTION_CALL
+		);
 
 		if (!$fix) {
 			return;

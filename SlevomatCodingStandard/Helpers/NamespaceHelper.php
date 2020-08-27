@@ -78,7 +78,11 @@ class NamespaceHelper
 	{
 		/** @var int $namespaceNameStartPointer */
 		$namespaceNameStartPointer = TokenHelper::findNextEffective($phpcsFile, $namespacePointer + 1);
-		$namespaceNameEndPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $namespaceNameStartPointer + 1) - 1;
+		$namespaceNameEndPointer = TokenHelper::findNextExcluding(
+			$phpcsFile,
+			TokenHelper::$nameTokenCodes,
+			$namespaceNameStartPointer + 1
+		) - 1;
 
 		return TokenHelper::getContent($phpcsFile, $namespaceNameStartPointer, $namespaceNameEndPointer);
 	}
@@ -151,7 +155,13 @@ class NamespaceHelper
 		$nameParts = self::getNameParts($nameAsReferencedInFile);
 		$firstPartUniqueId = UseStatement::getUniqueId($type, $nameParts[0]);
 		if (count($nameParts) > 1 && isset($useStatements[$firstPartUniqueId])) {
-			return sprintf('%s%s%s%s', self::NAMESPACE_SEPARATOR, $useStatements[$firstPartUniqueId]->getFullyQualifiedTypeName(), self::NAMESPACE_SEPARATOR, implode(self::NAMESPACE_SEPARATOR, array_slice($nameParts, 1)));
+			return sprintf(
+				'%s%s%s%s',
+				self::NAMESPACE_SEPARATOR,
+				$useStatements[$firstPartUniqueId]->getFullyQualifiedTypeName(),
+				self::NAMESPACE_SEPARATOR,
+				implode(self::NAMESPACE_SEPARATOR, array_slice($nameParts, 1))
+			);
 		}
 
 		$name = sprintf('%s%s', self::NAMESPACE_SEPARATOR, $nameAsReferencedInFile);

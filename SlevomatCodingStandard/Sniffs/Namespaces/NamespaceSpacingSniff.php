@@ -98,7 +98,10 @@ class NamespaceSpacingSniff implements Sniff
 		if ($tokens[$pointerBeforeNamespace]['code'] === T_OPEN_TAG) {
 			$phpcsFile->fixer->replaceToken($pointerBeforeNamespace, '<?php');
 		} elseif ($isInlineCommentBefore) {
-			$phpcsFile->fixer->replaceToken($pointerBeforeNamespace, rtrim($tokens[$pointerBeforeNamespace]['content'], $phpcsFile->eolChar));
+			$phpcsFile->fixer->replaceToken(
+				$pointerBeforeNamespace,
+				rtrim($tokens[$pointerBeforeNamespace]['content'], $phpcsFile->eolChar)
+			);
 		}
 
 		for ($i = $pointerBeforeNamespace + 1; $i < $namespacePointer; $i++) {

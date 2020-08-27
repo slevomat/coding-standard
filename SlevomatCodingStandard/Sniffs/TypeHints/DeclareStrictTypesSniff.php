@@ -69,7 +69,10 @@ class DeclareStrictTypesSniff implements Sniff
 			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContent($openTagPointer, sprintf('declare(%s);%s', $this->getStrictTypeDeclaration(), $phpcsFile->eolChar));
+				$phpcsFile->fixer->addContent(
+					$openTagPointer,
+					sprintf('declare(%s);%s', $this->getStrictTypeDeclaration(), $phpcsFile->eolChar)
+				);
 				$phpcsFile->fixer->endChangeset();
 			}
 			return;
@@ -93,7 +96,10 @@ class DeclareStrictTypesSniff implements Sniff
 			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContentBefore($tokens[$declarePointer]['parenthesis_closer'], ', ' . $this->getStrictTypeDeclaration());
+				$phpcsFile->fixer->addContentBefore(
+					$tokens[$declarePointer]['parenthesis_closer'],
+					', ' . $this->getStrictTypeDeclaration()
+				);
 				$phpcsFile->fixer->endChangeset();
 			}
 			return;
@@ -153,7 +159,9 @@ class DeclareStrictTypesSniff implements Sniff
 			$whitespaceBefore .= TokenHelper::getContent($phpcsFile, $pointerBeforeDeclare + 1, $declarePointer - 1);
 		}
 
-		$requiredNewlinesCountBetweenOpenTagAndDeclare = SniffSettingsHelper::normalizeInteger($this->newlinesCountBetweenOpenTagAndDeclare);
+		$requiredNewlinesCountBetweenOpenTagAndDeclare = SniffSettingsHelper::normalizeInteger(
+			$this->newlinesCountBetweenOpenTagAndDeclare
+		);
 		if ($requiredNewlinesCountBetweenOpenTagAndDeclare === 0) {
 			if ($whitespaceBefore !== ' ') {
 				$fix = $phpcsFile->addFixableError(

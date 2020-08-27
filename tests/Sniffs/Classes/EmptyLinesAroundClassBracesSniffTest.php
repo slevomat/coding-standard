@@ -14,7 +14,11 @@ class EmptyLinesAroundClassBracesSniffTest extends TestCase
 
 	public function testNoEmptyLineAfterOpeningBrace(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/classBracesNoEmptyLineAfterOpeningBrace.php', [], [EmptyLinesAroundClassBracesSniff::CODE_NO_EMPTY_LINE_AFTER_OPENING_BRACE]);
+		$report = self::checkFile(
+			__DIR__ . '/data/classBracesNoEmptyLineAfterOpeningBrace.php',
+			[],
+			[EmptyLinesAroundClassBracesSniff::CODE_NO_EMPTY_LINE_AFTER_OPENING_BRACE]
+		);
 
 		self::assertSame(1, $report->getErrorCount());
 
@@ -25,7 +29,11 @@ class EmptyLinesAroundClassBracesSniffTest extends TestCase
 
 	public function testMultipleEmptyLinesAfterOpeningBrace(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/classBracesMultipleEmptyLinesAfterOpeningBrace.php', [], [EmptyLinesAroundClassBracesSniff::CODE_MULTIPLE_EMPTY_LINES_AFTER_OPENING_BRACE]);
+		$report = self::checkFile(
+			__DIR__ . '/data/classBracesMultipleEmptyLinesAfterOpeningBrace.php',
+			[],
+			[EmptyLinesAroundClassBracesSniff::CODE_MULTIPLE_EMPTY_LINES_AFTER_OPENING_BRACE]
+		);
 
 		self::assertSame(1, $report->getErrorCount());
 
@@ -36,7 +44,11 @@ class EmptyLinesAroundClassBracesSniffTest extends TestCase
 
 	public function testNoEmptyLineBeforeClosingBrace(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/classBracesNoEmptyLineBeforeClosingBrace.php', [], [EmptyLinesAroundClassBracesSniff::CODE_NO_EMPTY_LINE_BEFORE_CLOSING_BRACE]);
+		$report = self::checkFile(
+			__DIR__ . '/data/classBracesNoEmptyLineBeforeClosingBrace.php',
+			[],
+			[EmptyLinesAroundClassBracesSniff::CODE_NO_EMPTY_LINE_BEFORE_CLOSING_BRACE]
+		);
 
 		self::assertSame(1, $report->getErrorCount());
 
@@ -47,7 +59,11 @@ class EmptyLinesAroundClassBracesSniffTest extends TestCase
 
 	public function testMultipleEmptyLinesBeforeClosingBrace(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/classBracesMultipleEmptyLinesBeforeClosingBrace.php', [], [EmptyLinesAroundClassBracesSniff::CODE_MULTIPLE_EMPTY_LINES_BEFORE_CLOSING_BRACE]);
+		$report = self::checkFile(
+			__DIR__ . '/data/classBracesMultipleEmptyLinesBeforeClosingBrace.php',
+			[],
+			[EmptyLinesAroundClassBracesSniff::CODE_MULTIPLE_EMPTY_LINES_BEFORE_CLOSING_BRACE]
+		);
 
 		self::assertSame(1, $report->getErrorCount());
 

@@ -241,7 +241,13 @@ class RequireTernaryOperatorSniff implements Sniff
 
 		if ($this->ignoreMultiLine) {
 			$firstContentPointer = TokenHelper::findNextEffective($phpcsFile, $scopeOpenerPointer + 1);
-			if (TokenHelper::findNextContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $firstContentPointer + 1, $semicolonPointer) !== null) {
+			if (TokenHelper::findNextContent(
+				$phpcsFile,
+				T_WHITESPACE,
+				$phpcsFile->eolChar,
+				$firstContentPointer + 1,
+				$semicolonPointer
+			) !== null) {
 				return false;
 			}
 		}

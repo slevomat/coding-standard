@@ -117,13 +117,23 @@ class TokenHelperTest extends TestCase
 	public function testFindPreviousEffectiveWithComment(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/effectiveCodeWithComment.php');
-		self::assertTokenPointer(T_OPEN_TAG, 1, $phpcsFile, TokenHelper::findPreviousEffective($phpcsFile, TokenHelper::findNext($phpcsFile, T_CLASS, 0) - 1));
+		self::assertTokenPointer(
+			T_OPEN_TAG,
+			1,
+			$phpcsFile,
+			TokenHelper::findPreviousEffective($phpcsFile, TokenHelper::findNext($phpcsFile, T_CLASS, 0) - 1)
+		);
 	}
 
 	public function testFindPreviousEffectiveWithDocComment(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/effectiveCodeWithDocComment.php');
-		self::assertTokenPointer(T_OPEN_TAG, 1, $phpcsFile, TokenHelper::findPreviousEffective($phpcsFile, TokenHelper::findNext($phpcsFile, T_CLASS, 0) - 1));
+		self::assertTokenPointer(
+			T_OPEN_TAG,
+			1,
+			$phpcsFile,
+			TokenHelper::findPreviousEffective($phpcsFile, TokenHelper::findNext($phpcsFile, T_CLASS, 0) - 1)
+		);
 	}
 
 	public function testFindNothingPreviousExcluding(): void
@@ -237,7 +247,12 @@ class TokenHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/sampleThree.php');
 		$docBlockTokenPointer = TokenHelper::findNext($phpcsFile, T_DOC_COMMENT_OPEN_TAG, 0);
 		self::assertTokenPointer(T_DOC_COMMENT_OPEN_TAG, 3, $phpcsFile, $docBlockTokenPointer);
-		self::assertTokenPointer(T_DOC_COMMENT_WHITESPACE, 4, $phpcsFile, TokenHelper::findFirstTokenOnNextLine($phpcsFile, $docBlockTokenPointer));
+		self::assertTokenPointer(
+			T_DOC_COMMENT_WHITESPACE,
+			4,
+			$phpcsFile,
+			TokenHelper::findFirstTokenOnNextLine($phpcsFile, $docBlockTokenPointer)
+		);
 	}
 
 	public function testFindFirstTokenOnIndentedNextLine(): void

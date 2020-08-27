@@ -66,13 +66,21 @@ class TypeCastSniff implements Sniff
 		}
 
 		if ($castNameLower === 'unset') {
-			$phpcsFile->addError(sprintf('Cast "%s" is forbidden, use "unset(...)" or assign "null" instead.', $cast), $pointer, self::CODE_FORBIDDEN_CAST_USED);
+			$phpcsFile->addError(
+				sprintf('Cast "%s" is forbidden, use "unset(...)" or assign "null" instead.', $cast),
+				$pointer,
+				self::CODE_FORBIDDEN_CAST_USED
+			);
 
 			return;
 		}
 
 		if ($castNameLower === 'binary') {
-			$fix = $phpcsFile->addFixableError(sprintf('"Cast "%s" is forbidden and has no effect.', $cast), $pointer, self::CODE_FORBIDDEN_CAST_USED);
+			$fix = $phpcsFile->addFixableError(
+				sprintf('"Cast "%s" is forbidden and has no effect.', $cast),
+				$pointer,
+				self::CODE_FORBIDDEN_CAST_USED
+			);
 
 			if (!$fix) {
 				return;

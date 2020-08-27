@@ -111,7 +111,11 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 				continue;
 			}
 
-			$fix = $phpcsFile->addFixableError(sprintf($this->getNotFullyQualifiedMessage(), $tokens[$namePointer]['content']), $namePointer, self::CODE_NON_FULLY_QUALIFIED);
+			$fix = $phpcsFile->addFixableError(
+				sprintf($this->getNotFullyQualifiedMessage(), $tokens[$namePointer]['content']),
+				$namePointer,
+				self::CODE_NON_FULLY_QUALIFIED
+			);
 			if (!$fix) {
 				continue;
 			}

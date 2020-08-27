@@ -194,8 +194,14 @@ class NamespaceHelperTest extends TestCase
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/moreNamespaces.php');
 
-		self::assertSame('\Something\Foo', NamespaceHelper::resolveClassName($phpcsFile, 'Foo', $this->findPointerByLineAndType($phpcsFile, 7, T_STRING)));
-		self::assertSame('\Anything\Foo', NamespaceHelper::resolveClassName($phpcsFile, 'Foo', $this->findPointerByLineAndType($phpcsFile, 16, T_STRING)));
+		self::assertSame(
+			'\Something\Foo',
+			NamespaceHelper::resolveClassName($phpcsFile, 'Foo', $this->findPointerByLineAndType($phpcsFile, 7, T_STRING))
+		);
+		self::assertSame(
+			'\Anything\Foo',
+			NamespaceHelper::resolveClassName($phpcsFile, 'Foo', $this->findPointerByLineAndType($phpcsFile, 16, T_STRING))
+		);
 	}
 
 	/**

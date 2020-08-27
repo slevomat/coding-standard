@@ -77,7 +77,11 @@ class TypeHintHelper
 
 		$tokens = $phpcsFile->getTokens();
 
-		$docCommentOwnerPointer = TokenHelper::findNext($phpcsFile, array_merge([T_FUNCTION], TokenHelper::$typeKeywordTokenCodes), $tokens[$docCommentOpenPointer]['comment_closer'] + 1);
+		$docCommentOwnerPointer = TokenHelper::findNext(
+			$phpcsFile,
+			array_merge([T_FUNCTION], TokenHelper::$typeKeywordTokenCodes),
+			$tokens[$docCommentOpenPointer]['comment_closer'] + 1
+		);
 		if (
 			$docCommentOwnerPointer !== null
 			&& $tokens[$tokens[$docCommentOpenPointer]['comment_closer']]['line'] + 1 === $tokens[$docCommentOwnerPointer]['line']
@@ -207,7 +211,11 @@ class TypeHintHelper
 		string $typeHintInAnnotation
 	): bool
 	{
-		return self::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint) === self::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHintInAnnotation);
+		return self::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint) === self::getFullyQualifiedTypeHint(
+			$phpcsFile,
+			$functionPointer,
+			$typeHintInAnnotation
+		);
 	}
 
 }

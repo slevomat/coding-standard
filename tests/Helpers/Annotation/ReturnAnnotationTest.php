@@ -13,7 +13,13 @@ class ReturnAnnotationTest extends TestCase
 
 	public function testAnnotation(): void
 	{
-		$annotation = new ReturnAnnotation('@return', 1, 10, 'Description', new ReturnTagValueNode(new IdentifierTypeNode('string'), 'Description'));
+		$annotation = new ReturnAnnotation(
+			'@return',
+			1,
+			10,
+			'Description',
+			new ReturnTagValueNode(new IdentifierTypeNode('string'), 'Description')
+		);
 
 		self::assertSame('@return', $annotation->getName());
 		self::assertSame(1, $annotation->getStartPointer());

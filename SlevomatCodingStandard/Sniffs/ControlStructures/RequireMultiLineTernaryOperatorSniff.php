@@ -68,7 +68,11 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 
 		$pointerAfterInlineElseEnd = $inlineElsePointer + 1;
 		while (true) {
-			if (in_array($tokens[$pointerAfterInlineElseEnd]['code'], [T_CLOSE_TAG, T_SEMICOLON, T_COMMA, T_DOUBLE_ARROW, T_CLOSE_SHORT_ARRAY, T_COALESCE], true)) {
+			if (in_array(
+				$tokens[$pointerAfterInlineElseEnd]['code'],
+				[T_CLOSE_TAG, T_SEMICOLON, T_COMMA, T_DOUBLE_ARROW, T_CLOSE_SHORT_ARRAY, T_COALESCE],
+				true
+			)) {
 				break;
 			}
 
@@ -102,7 +106,11 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError('Ternary operator should be reformatted to more lines.', $inlineThenPointer, self::CODE_MULTI_LINE_TERNARY_OPERATOR_NOT_USED);
+		$fix = $phpcsFile->addFixableError(
+			'Ternary operator should be reformatted to more lines.',
+			$inlineThenPointer,
+			self::CODE_MULTI_LINE_TERNARY_OPERATOR_NOT_USED
+		);
 
 		if (!$fix) {
 			return;

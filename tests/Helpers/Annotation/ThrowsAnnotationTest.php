@@ -13,7 +13,13 @@ class ThrowsAnnotationTest extends TestCase
 
 	public function testAnnotation(): void
 	{
-		$annotation = new ThrowsAnnotation('@throws', 1, 10, 'Description', new ThrowsTagValueNode(new IdentifierTypeNode('Exception'), 'Description'));
+		$annotation = new ThrowsAnnotation(
+			'@throws',
+			1,
+			10,
+			'Description',
+			new ThrowsTagValueNode(new IdentifierTypeNode('Exception'), 'Description')
+		);
 
 		self::assertSame('@throws', $annotation->getName());
 		self::assertSame(1, $annotation->getStartPointer());

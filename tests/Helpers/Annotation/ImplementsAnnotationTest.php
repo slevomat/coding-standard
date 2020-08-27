@@ -19,7 +19,10 @@ class ImplementsAnnotationTest extends TestCase
 			1,
 			10,
 			'Description',
-			new ImplementsTagValueNode(new GenericTypeNode(new IdentifierTypeNode('Whatever'), [new IdentifierTypeNode('Anything')]), 'Description')
+			new ImplementsTagValueNode(
+				new GenericTypeNode(new IdentifierTypeNode('Whatever'), [new IdentifierTypeNode('Anything')]),
+				'Description'
+			)
 		);
 
 		self::assertSame('@implements', $annotation->getName());

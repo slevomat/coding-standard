@@ -50,7 +50,11 @@ class SpreadOperatorSpacingSniff implements Sniff
 
 		$errorMessage = $requiredSpacesCountAfterOperator === 0
 			? 'There must be no whitespace after spread operator.'
-			: sprintf('There must be exactly %d whitespace%s after spread operator.', $requiredSpacesCountAfterOperator, $requiredSpacesCountAfterOperator !== 1 ? 's' : '');
+			: sprintf(
+				'There must be exactly %d whitespace%s after spread operator.',
+				$requiredSpacesCountAfterOperator,
+				$requiredSpacesCountAfterOperator !== 1 ? 's' : ''
+			);
 
 		$fix = $phpcsFile->addFixableError($errorMessage, $spreadOperatorPointer, self::CODE_INCORRECT_SPACES_AFTER_OPERATOR);
 

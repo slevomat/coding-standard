@@ -61,13 +61,23 @@ class RequireArrowFunctionSniff implements Sniff
 		$usePointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$closurePointer]['parenthesis_closer'] + 1);
 		if ($tokens[$usePointer]['code'] === T_USE) {
 			$useOpenParenthesisPointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
-			if (TokenHelper::findNext($phpcsFile, T_BITWISE_AND, $useOpenParenthesisPointer + 1, $tokens[$useOpenParenthesisPointer]['parenthesis_closer']) !== null) {
+			if (TokenHelper::findNext(
+				$phpcsFile,
+				T_BITWISE_AND,
+				$useOpenParenthesisPointer + 1,
+				$tokens[$useOpenParenthesisPointer]['parenthesis_closer']
+			) !== null) {
 				return;
 			}
 		}
 
 		if (!$this->allowNested) {
-			$closureOrArrowFunctionPointer = TokenHelper::findNext($phpcsFile, [T_CLOSURE, T_FN], $tokens[$closurePointer]['scope_opener'] + 1, $tokens[$closurePointer]['scope_closer']);
+			$closureOrArrowFunctionPointer = TokenHelper::findNext(
+				$phpcsFile,
+				[T_CLOSURE, T_FN],
+				$tokens[$closurePointer]['scope_opener'] + 1,
+				$tokens[$closurePointer]['scope_closer']
+			);
 			if ($closureOrArrowFunctionPointer !== null) {
 				return;
 			}
@@ -80,13 +90,26 @@ class RequireArrowFunctionSniff implements Sniff
 
 		$pointerAfterReturn = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $returnPointer + 1);
 		$semicolonAfterReturn = $this->findSemicolon($phpcsFile, $returnPointer);
-		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, $tokens[$closurePointer]['parenthesis_closer'] + 1, $tokens[$closurePointer]['scope_opener']);
-		$nonWhitespacePointerBeforeScopeOpener = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $tokens[$closurePointer]['scope_opener'] - 1);
+		$usePointer = TokenHelper::findNext(
+			$phpcsFile,
+			T_USE,
+			$tokens[$closurePointer]['parenthesis_closer'] + 1,
+			$tokens[$closurePointer]['scope_opener']
+		);
+		$nonWhitespacePointerBeforeScopeOpener = TokenHelper::findPreviousExcluding(
+			$phpcsFile,
+			T_WHITESPACE,
+			$tokens[$closurePointer]['scope_opener'] - 1
+		);
 
 		$nonWhitespacePointerAfterUseParanthesisCloser = null;
 		if ($usePointer !== null) {
 			$useParenthesiCloserPointer = TokenHelper::findNext($phpcsFile, T_CLOSE_PARENTHESIS, $usePointer + 1);
-			$nonWhitespacePointerAfterUseParanthesisCloser = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $useParenthesiCloserPointer + 1);
+			$nonWhitespacePointerAfterUseParanthesisCloser = TokenHelper::findNextExcluding(
+				$phpcsFile,
+				T_WHITESPACE,
+				$useParenthesiCloserPointer + 1
+			);
 		}
 
 		$phpcsFile->fixer->beginChangeset();

@@ -20,7 +20,11 @@ class TemplateAnnotation extends Annotation
 
 	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, ?TemplateTagValueNode $contentNode)
 	{
-		if (!in_array($name, ['@template', '@psalm-template', '@phpstan-template', '@template-covariant', '@psalm-template-covariant', '@phpstan-template-covariant'], true)) {
+		if (!in_array(
+			$name,
+			['@template', '@psalm-template', '@phpstan-template', '@template-covariant', '@psalm-template-covariant', '@phpstan-template-covariant'],
+			true
+		)) {
 			throw new InvalidArgumentException(sprintf('Unsupported annotation %s.', $name));
 		}
 

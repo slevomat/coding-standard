@@ -70,7 +70,11 @@ class ReferenceThrowableOnlySniff implements Sniff
 				continue;
 			}
 			if ($tokens[$previousPointer]['code'] === T_BITWISE_OR) {
-				$previousPointer = TokenHelper::findPreviousExcluding($phpcsFile, array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::$nameTokenCodes, [T_BITWISE_OR]), $previousPointer - 1);
+				$previousPointer = TokenHelper::findPreviousExcluding(
+					$phpcsFile,
+					array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::$nameTokenCodes, [T_BITWISE_OR]),
+					$previousPointer - 1
+				);
 			}
 			if ($tokens[$previousPointer]['code'] === T_OPEN_PARENTHESIS) {
 				/** @var int $openParenthesisOpenerPointer */
@@ -83,7 +87,11 @@ class ReferenceThrowableOnlySniff implements Sniff
 					array_key_exists('parenthesis_owner', $tokens[$previousPointer])
 					&& $tokens[$tokens[$previousPointer]['parenthesis_owner']]['code'] === T_FUNCTION
 					&& $tokens[$previousPointer]['parenthesis_closer'] > $referencedName->getStartPointer()
-					&& SuppressHelper::isSniffSuppressed($phpcsFile, $openParenthesisOpenerPointer, sprintf('%s.%s', self::NAME, self::CODE_REFERENCED_GENERAL_EXCEPTION))
+					&& SuppressHelper::isSniffSuppressed(
+						$phpcsFile,
+						$openParenthesisOpenerPointer,
+						sprintf('%s.%s', self::NAME, self::CODE_REFERENCED_GENERAL_EXCEPTION)
+					)
 				) {
 					continue;
 				}

@@ -127,7 +127,13 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 		$variableName = $tokens[$variablePointer]['content'];
 
-		$parameterPointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $tokens[$functionPointer]['parenthesis_opener'] + 1, $tokens[$functionPointer]['parenthesis_closer']);
+		$parameterPointer = TokenHelper::findNextContent(
+			$phpcsFile,
+			T_VARIABLE,
+			$variableName,
+			$tokens[$functionPointer]['parenthesis_opener'] + 1,
+			$tokens[$functionPointer]['parenthesis_closer']
+		);
 		return $parameterPointer !== null;
 	}
 
@@ -136,14 +142,25 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 		$variableName = $tokens[$variablePointer]['content'];
 
-		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, $tokens[$closurePointer]['parenthesis_closer'] + 1, $tokens[$closurePointer]['scope_opener']);
+		$usePointer = TokenHelper::findNext(
+			$phpcsFile,
+			T_USE,
+			$tokens[$closurePointer]['parenthesis_closer'] + 1,
+			$tokens[$closurePointer]['scope_opener']
+		);
 		if ($usePointer === null) {
 			return false;
 		}
 
 		$parenthesisOpenerPointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
 
-		$inheritedVariablePointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, $parenthesisOpenerPointer + 1, $tokens[$parenthesisOpenerPointer]['parenthesis_closer']);
+		$inheritedVariablePointer = TokenHelper::findNextContent(
+			$phpcsFile,
+			T_VARIABLE,
+			$variableName,
+			$parenthesisOpenerPointer + 1,
+			$tokens[$parenthesisOpenerPointer]['parenthesis_closer']
+		);
 		return $inheritedVariablePointer !== null;
 	}
 
@@ -196,7 +213,12 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$parenthesisOpenerPointer = TokenHelper::findPrevious($phpcsFile, [T_OPEN_PARENTHESIS, T_OPEN_SHORT_ARRAY, T_OPEN_SQUARE_BRACKET], $variablePointer - 1, $scopeOpenerPointer);
+		$parenthesisOpenerPointer = TokenHelper::findPrevious(
+			$phpcsFile,
+			[T_OPEN_PARENTHESIS, T_OPEN_SHORT_ARRAY, T_OPEN_SQUARE_BRACKET],
+			$variablePointer - 1,
+			$scopeOpenerPointer
+		);
 		if ($parenthesisOpenerPointer === null) {
 			return false;
 		}

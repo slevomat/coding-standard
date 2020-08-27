@@ -68,7 +68,13 @@ class UselessFunctionDocCommentSniff implements Sniff
 
 		if (
 			$returnAnnotation !== null
-			&& !AnnotationHelper::isAnnotationUseless($phpcsFile, $functionPointer, $returnTypeHint, $returnAnnotation, $this->getTraversableTypeHints())
+			&& !AnnotationHelper::isAnnotationUseless(
+				$phpcsFile,
+				$functionPointer,
+				$returnTypeHint,
+				$returnAnnotation,
+				$this->getTraversableTypeHints()
+			)
 		) {
 			return;
 		}
@@ -81,7 +87,13 @@ class UselessFunctionDocCommentSniff implements Sniff
 				return;
 			}
 
-			if (!AnnotationHelper::isAnnotationUseless($phpcsFile, $functionPointer, $parameterTypeHints[$parameterName], $parameterAnnotation, $this->getTraversableTypeHints())) {
+			if (!AnnotationHelper::isAnnotationUseless(
+				$phpcsFile,
+				$functionPointer,
+				$parameterTypeHints[$parameterName],
+				$parameterAnnotation,
+				$this->getTraversableTypeHints()
+			)) {
 				return;
 			}
 		}
@@ -132,7 +144,11 @@ class UselessFunctionDocCommentSniff implements Sniff
 	{
 		if ($this->normalizedTraversableTypeHints === null) {
 			$this->normalizedTraversableTypeHints = array_map(static function (string $typeHint): string {
-				return NamespaceHelper::isFullyQualifiedName($typeHint) ? $typeHint : sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint);
+				return NamespaceHelper::isFullyQualifiedName($typeHint) ? $typeHint : sprintf(
+					'%s%s',
+					NamespaceHelper::NAMESPACE_SEPARATOR,
+					$typeHint
+				);
 			}, SniffSettingsHelper::normalizeArray($this->traversableTypeHints));
 		}
 		return $this->normalizedTraversableTypeHints;

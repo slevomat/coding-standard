@@ -62,7 +62,11 @@ class DisallowMultiConstantDefinitionSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError('Use of multi constant definition is disallowed.', $constantPointer, self::CODE_DISALLOWED_MULTI_CONSTANT_DEFINITION);
+		$fix = $phpcsFile->addFixableError(
+			'Use of multi constant definition is disallowed.',
+			$constantPointer,
+			self::CODE_DISALLOWED_MULTI_CONSTANT_DEFINITION
+		);
 		if (!$fix) {
 			return;
 		}

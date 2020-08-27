@@ -143,7 +143,10 @@ class TypeHintHelperTest extends TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithReturnTypeHint');
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
-		self::assertSame('\FooNamespace\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()));
+		self::assertSame(
+			'\FooNamespace\FooClass',
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint())
+		);
 	}
 
 	public function testFunctionParameterAnnotationWithNamespace(): void
@@ -155,7 +158,10 @@ class TypeHintHelperTest extends TestCase
 		$parts = preg_split('~\\s+~', $parameterAnnotation->getContent());
 		self::assertIsArray($parts);
 		$parameterTypeHint = $parts[0];
-		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint));
+		self::assertSame(
+			'\Doctrine\Common\Collections\ArrayCollection',
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint)
+		);
 	}
 
 	public function testFunctionParameterTypeHintWithNamespace(): void
@@ -164,7 +170,10 @@ class TypeHintHelperTest extends TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithParameterTypeHint');
 		$parameterTypeHint = FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer)['$parameter'];
-		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()));
+		self::assertSame(
+			'\Doctrine\Common\Collections\ArrayCollection',
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint())
+		);
 	}
 
 	public function testMethodReturnAnnotationWithNamespace(): void
@@ -173,7 +182,10 @@ class TypeHintHelperTest extends TestCase
 
 		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithReturnAnnotation');
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $methodPointer);
-		self::assertSame('\FooNamespace\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $returnAnnotation->getContent()));
+		self::assertSame(
+			'\FooNamespace\FooClass',
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $returnAnnotation->getContent())
+		);
 	}
 
 	public function testMethodReturnTypeHintWithNamespace(): void
@@ -194,7 +206,10 @@ class TypeHintHelperTest extends TestCase
 		$parts = preg_split('~\\s+~', $parameterAnnotation->getContent());
 		self::assertIsArray($parts);
 		$parameterTypeHint = $parts[0];
-		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint));
+		self::assertSame(
+			'\Doctrine\ORM\Mapping\Id',
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint)
+		);
 	}
 
 	public function testMethodParameterTypeHintWithNamespace(): void
@@ -203,7 +218,10 @@ class TypeHintHelperTest extends TestCase
 
 		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithParameterTypeHint');
 		$parameterTypeHint = FunctionHelper::getParametersTypeHints($phpcsFile, $methodPointer)['$parameter'];
-		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint->getTypeHint()));
+		self::assertSame(
+			'\Doctrine\ORM\Mapping\Id',
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint->getTypeHint())
+		);
 	}
 
 	public function testFunctionReturnAnnotationWithoutNamespace(): void
@@ -221,7 +239,10 @@ class TypeHintHelperTest extends TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithReturnTypeHint');
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
-		self::assertSame('\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()));
+		self::assertSame(
+			'\FooClass',
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint())
+		);
 	}
 
 	public function testFunctionParameterAnnotationWithoutNamespace(): void
@@ -233,7 +254,10 @@ class TypeHintHelperTest extends TestCase
 		$parts = preg_split('~\\s+~', $parameterAnnotation->getContent());
 		self::assertIsArray($parts);
 		$parameterTypeHint = $parts[0];
-		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint));
+		self::assertSame(
+			'\Doctrine\Common\Collections\ArrayCollection',
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint)
+		);
 	}
 
 	public function testFunctionParameterTypeHintWithoutNamespace(): void
@@ -242,7 +266,10 @@ class TypeHintHelperTest extends TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithParameterTypeHint');
 		$parameterTypeHint = FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer)['$parameter'];
-		self::assertSame('\Doctrine\Common\Collections\ArrayCollection', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()));
+		self::assertSame(
+			'\Doctrine\Common\Collections\ArrayCollection',
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint())
+		);
 	}
 
 	public function testMethodReturnAnnotationWithoutNamespace(): void
@@ -251,7 +278,10 @@ class TypeHintHelperTest extends TestCase
 
 		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithReturnAnnotation');
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $methodPointer);
-		self::assertSame('\FooClass', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $returnAnnotation->getContent()));
+		self::assertSame(
+			'\FooClass',
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $returnAnnotation->getContent())
+		);
 	}
 
 	public function testMethodReturnTypeHintWithoutNamespace(): void
@@ -272,7 +302,10 @@ class TypeHintHelperTest extends TestCase
 		$parts = preg_split('~\\s+~', $parameterAnnotation->getContent());
 		self::assertIsArray($parts);
 		$parameterTypeHint = $parts[0];
-		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint));
+		self::assertSame(
+			'\Doctrine\ORM\Mapping\Id',
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint)
+		);
 	}
 
 	public function testMethodParameterTypeHintWithoutNamespace(): void
@@ -281,7 +314,10 @@ class TypeHintHelperTest extends TestCase
 
 		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithParameterTypeHint');
 		$parameterTypeHint = FunctionHelper::getParametersTypeHints($phpcsFile, $methodPointer)['$parameter'];
-		self::assertSame('\Doctrine\ORM\Mapping\Id', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint->getTypeHint()));
+		self::assertSame(
+			'\Doctrine\ORM\Mapping\Id',
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint->getTypeHint())
+		);
 	}
 
 	/**

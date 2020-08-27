@@ -47,7 +47,11 @@ class PropertyHelper
 			return false;
 		}
 
-		$functionPointer = TokenHelper::findPrevious($phpcsFile, array_merge(TokenHelper::$functionTokenCodes, [T_SEMICOLON, T_CLOSE_CURLY_BRACKET, T_OPEN_CURLY_BRACKET]), $variablePointer - 1);
+		$functionPointer = TokenHelper::findPrevious(
+			$phpcsFile,
+			array_merge(TokenHelper::$functionTokenCodes, [T_SEMICOLON, T_CLOSE_CURLY_BRACKET, T_OPEN_CURLY_BRACKET]),
+			$variablePointer - 1
+		);
 		if (
 			$functionPointer !== null
 			&& in_array($tokens[$functionPointer]['code'], TokenHelper::$functionTokenCodes, true)
@@ -64,14 +68,28 @@ class PropertyHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$propertyStartPointer = TokenHelper::findPrevious($phpcsFile, [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR, T_STATIC], $propertyPointer - 1);
+		$propertyStartPointer = TokenHelper::findPrevious(
+			$phpcsFile,
+			[T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR, T_STATIC],
+			$propertyPointer - 1
+		);
 
-		$typeHintEndPointer = TokenHelper::findPrevious($phpcsFile, TokenHelper::$typeHintTokenCodes, $propertyPointer - 1, $propertyStartPointer);
+		$typeHintEndPointer = TokenHelper::findPrevious(
+			$phpcsFile,
+			TokenHelper::$typeHintTokenCodes,
+			$propertyPointer - 1,
+			$propertyStartPointer
+		);
 		if ($typeHintEndPointer === null) {
 			return null;
 		}
 
-		$typeHintStartPointer = TokenHelper::findPreviousExcluding($phpcsFile, TokenHelper::$typeHintTokenCodes, $typeHintEndPointer, $propertyStartPointer) + 1;
+		$typeHintStartPointer = TokenHelper::findPreviousExcluding(
+			$phpcsFile,
+			TokenHelper::$typeHintTokenCodes,
+			$typeHintEndPointer,
+			$propertyStartPointer
+		) + 1;
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $typeHintStartPointer - 1, $propertyStartPointer);
 		$nullabilitySymbolPointer = $previousPointer !== null && $tokens[$previousPointer]['code'] === T_NULLABLE ? $previousPointer : null;

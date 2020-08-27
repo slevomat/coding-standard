@@ -74,7 +74,9 @@ class FullyQualifiedExceptionsSniff implements Sniff
 					|| (
 						!StringHelper::endsWith($useStatement->getFullyQualifiedTypeName(), 'Exception')
 						&& $useStatement->getFullyQualifiedTypeName() !== Throwable::class
-						&& (!StringHelper::endsWith($useStatement->getFullyQualifiedTypeName(), 'Error') || NamespaceHelper::hasNamespace($useStatement->getFullyQualifiedTypeName()))
+						&& (!StringHelper::endsWith($useStatement->getFullyQualifiedTypeName(), 'Error') || NamespaceHelper::hasNamespace(
+							$useStatement->getFullyQualifiedTypeName()
+						))
 						&& !in_array($useStatement->getFullyQualifiedTypeName(), $this->getSpecialExceptionNames(), true)
 					)
 				) {

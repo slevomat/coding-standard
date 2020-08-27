@@ -19,7 +19,10 @@ class ExtendsAnnotationTest extends TestCase
 			1,
 			10,
 			'Description',
-			new ExtendsTagValueNode(new GenericTypeNode(new IdentifierTypeNode('Whatever'), [new IdentifierTypeNode('Anything')]), 'Description')
+			new ExtendsTagValueNode(
+				new GenericTypeNode(new IdentifierTypeNode('Whatever'), [new IdentifierTypeNode('Anything')]),
+				'Description'
+			)
 		);
 
 		self::assertSame('@extends', $annotation->getName());
