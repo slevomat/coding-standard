@@ -65,7 +65,9 @@ class InlineDocCommentDeclarationSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$commentClosePointer = $tokens[$commentOpenPointer]['code'] === T_COMMENT ? $commentOpenPointer : $tokens[$commentOpenPointer]['comment_closer'];
+		$commentClosePointer = $tokens[$commentOpenPointer]['code'] === T_COMMENT
+			? $commentOpenPointer
+			: $tokens[$commentOpenPointer]['comment_closer'];
 
 		$pointerAfterCommentClosePointer = TokenHelper::findNextEffective($phpcsFile, $commentClosePointer + 1);
 		if ($pointerAfterCommentClosePointer !== null) {

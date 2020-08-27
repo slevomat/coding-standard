@@ -379,7 +379,9 @@ class AnnotationHelper
 			$annotationTypeNode = $annotation->getType();
 
 			$annotationTypeHintNode = AnnotationTypeHelper::getTypeFromNullableType($annotationTypeNode);
-			$annotationTypeHint = $annotationTypeHintNode instanceof IdentifierTypeNode ? $annotationTypeHintNode->name : (string) $annotationTypeHintNode;
+			$annotationTypeHint = $annotationTypeHintNode instanceof IdentifierTypeNode
+				? $annotationTypeHintNode->name
+				: (string) $annotationTypeHintNode;
 			return TypeHintHelper::typeHintEqualsAnnotation($phpcsFile, $functionPointer, $typeHint->getTypeHint(), $annotationTypeHint);
 		}
 

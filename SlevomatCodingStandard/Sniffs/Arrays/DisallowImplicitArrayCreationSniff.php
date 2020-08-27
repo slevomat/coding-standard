@@ -95,8 +95,12 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 			$scopeOwnerPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $variablePointer - 1);
 		}
 
-		$scopeOpenerPointer = $tokens[$scopeOwnerPointer]['code'] === T_OPEN_TAG ? $scopeOwnerPointer : $tokens[$scopeOwnerPointer]['scope_opener'];
-		$scopeCloserPointer = $tokens[$scopeOwnerPointer]['code'] === T_OPEN_TAG ? count($tokens) - 1 : $tokens[$scopeOwnerPointer]['scope_closer'];
+		$scopeOpenerPointer = $tokens[$scopeOwnerPointer]['code'] === T_OPEN_TAG
+			? $scopeOwnerPointer
+			: $tokens[$scopeOwnerPointer]['scope_opener'];
+		$scopeCloserPointer = $tokens[$scopeOwnerPointer]['code'] === T_OPEN_TAG
+			? count($tokens) - 1
+			: $tokens[$scopeOwnerPointer]['scope_closer'];
 
 		if (in_array($tokens[$scopeOwnerPointer]['code'], TokenHelper::$functionTokenCodes, true)) {
 			if ($this->isParameter($phpcsFile, $scopeOwnerPointer, $variablePointer)) {

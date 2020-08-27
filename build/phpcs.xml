@@ -170,7 +170,7 @@
 	</rule>
 	<rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator">
 		<properties>
-			<property name="lineLengthLimit" value="180"/>
+			<property name="lineLengthLimit" value="140"/>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator"/>

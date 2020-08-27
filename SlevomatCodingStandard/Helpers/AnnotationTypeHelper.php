@@ -589,7 +589,9 @@ class AnnotationTypeHelper
 	 */
 	public static function getTypeFromNullableType(TypeNode $typeNode): TypeNode
 	{
-		return $typeNode->types[0] instanceof IdentifierTypeNode && strtolower($typeNode->types[0]->name) === 'null' ? $typeNode->types[1] : $typeNode->types[0];
+		return $typeNode->types[0] instanceof IdentifierTypeNode && strtolower($typeNode->types[0]->name) === 'null'
+			? $typeNode->types[1]
+			: $typeNode->types[0];
 	}
 
 	/**

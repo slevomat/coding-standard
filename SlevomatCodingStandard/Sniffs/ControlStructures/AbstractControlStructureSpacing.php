@@ -157,7 +157,9 @@ abstract class AbstractControlStructureSpacing implements Sniff
 			$whitespaceBefore .= TokenHelper::getContent($phpcsFile, $pointerBefore + 1, $controlStructureStartPointer - 1);
 		}
 
-		$requiredLinesCountBefore = $isFirstControlStructure ? $this->getLinesCountBeforeFirst($phpcsFile, $controlStructurePointer) : $this->getLinesCountBefore();
+		$requiredLinesCountBefore = $isFirstControlStructure
+			? $this->getLinesCountBeforeFirst($phpcsFile, $controlStructurePointer)
+			: $this->getLinesCountBefore();
 		$actualLinesCountBefore = substr_count($whitespaceBefore, $phpcsFile->eolChar) - 1;
 
 		if ($requiredLinesCountBefore === $actualLinesCountBefore) {

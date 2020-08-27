@@ -398,7 +398,9 @@ class ClassStructureSniff implements Sniff
 		);
 
 		/** @var int $visibilityPointer */
-		$visibilityPointer = in_array($tokens[$previousPointer]['code'], Tokens::$scopeModifiers, true) ? $tokens[$previousPointer]['code'] : T_PUBLIC;
+		$visibilityPointer = in_array($tokens[$previousPointer]['code'], Tokens::$scopeModifiers, true)
+			? $tokens[$previousPointer]['code']
+			: T_PUBLIC;
 		return $visibilityPointer;
 	}
 

@@ -94,7 +94,9 @@ class MethodAnnotation extends Annotation
 	public function export(): string
 	{
 		$static = $this->contentNode->isStatic ? 'static ' : '';
-		$returnType = $this->getMethodReturnType() !== null ? sprintf('%s ', AnnotationTypeHelper::export($this->getMethodReturnType())) : '';
+		$returnType = $this->getMethodReturnType() !== null
+			? sprintf('%s ', AnnotationTypeHelper::export($this->getMethodReturnType()))
+			: '';
 
 		$parameters = [];
 		foreach ($this->getMethodParameters() as $parameter) {

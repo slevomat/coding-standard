@@ -180,7 +180,9 @@ class ConditionHelper
 
 			$negativeCondition = '';
 			for ($i = $conditionBoundaryStartPointer; $i <= $conditionBoundaryEndPointer; $i++) {
-				$negativeCondition .= array_key_exists($tokens[$i]['code'], $comparisonReplacements) ? $comparisonReplacements[$tokens[$i]['code']] : $tokens[$i]['content'];
+				$negativeCondition .= array_key_exists($tokens[$i]['code'], $comparisonReplacements)
+					? $comparisonReplacements[$tokens[$i]['code']]
+					: $tokens[$i]['content'];
 			}
 
 			return $negativeCondition;

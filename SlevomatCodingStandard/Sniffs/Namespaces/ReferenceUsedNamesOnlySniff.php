@@ -298,9 +298,13 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 						$shouldBeUsed = NamespaceHelper::hasNamespace($name);
 						if (!$shouldBeUsed) {
 							if ($reference->isFunction) {
-								$shouldBeUsed = $isFullyQualified ? !$this->allowFullyQualifiedGlobalFunctions : !$this->allowFallbackGlobalFunctions;
+								$shouldBeUsed = $isFullyQualified
+									? !$this->allowFullyQualifiedGlobalFunctions
+									: !$this->allowFallbackGlobalFunctions;
 							} elseif ($reference->isConstant) {
-								$shouldBeUsed = $isFullyQualified ? !$this->allowFullyQualifiedGlobalConstants : !$this->allowFallbackGlobalConstants;
+								$shouldBeUsed = $isFullyQualified
+									? !$this->allowFullyQualifiedGlobalConstants
+									: !$this->allowFallbackGlobalConstants;
 							} else {
 								$shouldBeUsed = !$this->allowFullyQualifiedGlobalClasses;
 							}

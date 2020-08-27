@@ -92,7 +92,9 @@ class ParameterTypeHintSpacingSniff implements Sniff
 			$typeHintStartPointer = TokenHelper::findPreviousExcluding($phpcsFile, TokenHelper::$typeHintTokenCodes, $typeHintEndPointer, $parameterStartPointer) + 1;
 
 			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $typeHintStartPointer - 1, $parameterStartPointer);
-			$nullabilitySymbolPointer = $previousPointer !== null && $tokens[$previousPointer]['code'] === T_NULLABLE ? $previousPointer : null;
+			$nullabilitySymbolPointer = $previousPointer !== null && $tokens[$previousPointer]['code'] === T_NULLABLE
+				? $previousPointer
+				: null;
 
 			if ($nullabilitySymbolPointer === null) {
 				continue;
