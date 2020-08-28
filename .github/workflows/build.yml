@@ -21,6 +21,7 @@ jobs:
           - "7.2"
           - "7.3"
           - "7.4"
+          - "8.0"
 
     steps:
       - name: "Checkout"
@@ -38,6 +39,10 @@ jobs:
           path: "~/.composer/cache"
           key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json') }}"
           restore-keys: "php-${{ matrix.php-version }}-composer-"
+
+      - name: "Reset composer platform"
+        if: matrix.php-version == '7.1' || matrix.php-version == '7.2'
+        run: "composer config --unset platform"
 
       - name: "Install dependencies"
         run: "composer update --prefer-dist --no-interaction --no-progress --no-suggest"
@@ -136,6 +141,10 @@ jobs:
           path: "~/.composer/cache"
           key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json') }}"
           restore-keys: "php-${{ matrix.php-version }}-composer-"
+
+      - name: "Reset composer platform"
+        if: matrix.php-version == '7.1' || matrix.php-version == '7.2'
+        run: "composer config --unset platform"
 
       - name: "Install lowest dependencies"
         if: ${{ matrix.dependencies == 'lowest' }}
