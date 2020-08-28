@@ -12,6 +12,7 @@ use function sprintf;
 use const T_BITWISE_AND;
 use const T_ELLIPSIS;
 use const T_EQUAL;
+use const T_INLINE_THEN;
 use const T_NULL;
 use const T_NULLABLE;
 use const T_VARIABLE;
@@ -46,6 +47,8 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 		$startPointer = $tokens[$functionPointer]['parenthesis_opener'] + 1;
 		$endPointer = $tokens[$functionPointer]['parenthesis_closer'];
 
+		$typeHintTokenCodes = TokenHelper::getTypeHintTokenCodes();
+
 		for ($i = $startPointer; $i < $endPointer; $i++) {
 			if ($tokens[$i]['code'] !== T_VARIABLE) {
 				continue;
@@ -68,12 +71,12 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 
 			if (
 				$typeHintPointer === null
-				|| !in_array($tokens[$typeHintPointer]['code'], TokenHelper::$typeHintTokenCodes, true)
+				|| !in_array($tokens[$typeHintPointer]['code'], $typeHintTokenCodes, true)
 			) {
 				continue;
 			}
 
-			$ignoreTokensToSkipTypeHint = array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::$typeHintTokenCodes);
+			$ignoreTokensToSkipTypeHint = array_merge(TokenHelper::$ineffectiveTokenCodes, $typeHintTokenCodes);
 			$beforeTypeHintPointer = TokenHelper::findPreviousExcluding(
 				$phpcsFile,
 				$ignoreTokensToSkipTypeHint,
@@ -81,7 +84,8 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 				$startPointer
 			);
 
-			if ($beforeTypeHintPointer !== null && $tokens[$beforeTypeHintPointer]['code'] === T_NULLABLE) {
+			// PHPCS reports T_NULLABLE as T_INLINE_THEN in PHP 8
+			if ($beforeTypeHintPointer !== null && in_array($tokens[$beforeTypeHintPointer]['code'], [T_NULLABLE, T_INLINE_THEN], true)) {
 				continue;
 			}
 

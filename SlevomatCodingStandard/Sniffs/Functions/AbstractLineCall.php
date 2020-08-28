@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_merge;
 use function preg_replace;
 use function rtrim;
 use function sprintf;
@@ -15,7 +16,6 @@ use const T_OPEN_PARENTHESIS;
 use const T_PARENT;
 use const T_SELF;
 use const T_STATIC;
-use const T_STRING;
 
 abstract class AbstractLineCall implements Sniff
 {
@@ -25,7 +25,7 @@ abstract class AbstractLineCall implements Sniff
 	 */
 	public function register(): array
 	{
-		return [T_STRING, T_SELF, T_STATIC, T_PARENT];
+		return array_merge(TokenHelper::getOnlyNameTokenCodes(), [T_SELF, T_STATIC, T_PARENT]);
 	}
 
 	protected function isCall(File $phpcsFile, int $stringPointer): bool

@@ -4,7 +4,9 @@ namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use function array_key_exists;
+use function array_merge;
 use function count;
+use function defined;
 use const T_ARRAY_HINT;
 use const T_BREAK;
 use const T_CALLABLE;
@@ -23,6 +25,9 @@ use const T_EXIT;
 use const T_FN;
 use const T_FUNCTION;
 use const T_INTERFACE;
+use const T_NAME_FULLY_QUALIFIED;
+use const T_NAME_QUALIFIED;
+use const T_NAME_RELATIVE;
 use const T_NS_SEPARATOR;
 use const T_PARENT;
 use const T_PHPCS_DISABLE;
@@ -40,7 +45,10 @@ use const T_WHITESPACE;
 class TokenHelper
 {
 
-	/** @var (int|string)[] */
+	/**
+	 * @deprecated Use TokenHelper::getNameTokenCodes()
+	 * @var (int|string)[]
+	 */
 	public static $nameTokenCodes = [
 		T_NS_SEPARATOR,
 		T_STRING,
@@ -81,7 +89,10 @@ class TokenHelper
 		T_PHPCS_SET,
 	];
 
-	/** @var (int|string)[] */
+	/**
+	 * @deprecated Use TokenHelper::getTypeHintTokenCodes()
+	 * @var (int|string)[]
+	 */
 	public static $typeHintTokenCodes = [
 		T_NS_SEPARATOR,
 		T_STRING,
@@ -458,6 +469,72 @@ class TokenHelper
 			throw new EmptyFileException($phpcsFile->getFilename());
 		}
 		return $tokenCount - 1;
+	}
+
+	/**
+	 * @internal
+	 * @return array<int, (int|string)>
+	 */
+	public static function getNameTokenCodes(): array
+	{
+		static $nameTokenCodes = null;
+
+		if ($nameTokenCodes === null) {
+			$nameTokenCodes = self::getOnlyNameTokenCodes();
+			$nameTokenCodes[] = T_NS_SEPARATOR;
+		}
+
+		return $nameTokenCodes;
+	}
+
+	/**
+	 * @internal
+	 * @return array<int, (int|string)>
+	 */
+	public static function getOnlyNameTokenCodes(): array
+	{
+		static $nameTokenCodes = null;
+
+		if ($nameTokenCodes === null) {
+			$nameTokenCodes = [T_STRING];
+
+			if (defined('T_NAME_FULLY_QUALIFIED')) {
+				$nameTokenCodes[] = T_NAME_FULLY_QUALIFIED;
+			}
+
+			if (defined('T_NAME_QUALIFIED')) {
+				$nameTokenCodes[] = T_NAME_QUALIFIED;
+			}
+
+			if (defined('T_NAME_RELATIVE')) {
+				$nameTokenCodes[] = T_NAME_RELATIVE;
+			}
+		}
+
+		return $nameTokenCodes;
+	}
+
+	/**
+	 * @internal
+	 * @return array<int, (int|string)>
+	 */
+	public static function getTypeHintTokenCodes(): array
+	{
+		static $typeHintTokenCodes = null;
+
+		if ($typeHintTokenCodes === null) {
+			$typeHintTokenCodes = array_merge(
+				self::getNameTokenCodes(),
+				[
+					T_SELF,
+					T_PARENT,
+					T_ARRAY_HINT,
+					T_CALLABLE,
+				]
+			);
+		}
+
+		return $typeHintTokenCodes;
 	}
 
 }

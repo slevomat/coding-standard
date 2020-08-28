@@ -12,7 +12,7 @@ class Whatever
 	}
 }
 
-printf('%s', 'very looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong parameter');
+\printf('%s', 'very looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong parameter');
 
 $array = array_merge([], array_map(function (): string {return 'very looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong value';}, []));
 

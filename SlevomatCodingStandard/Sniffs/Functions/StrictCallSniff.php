@@ -8,6 +8,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function count;
 use function in_array;
+use function ltrim;
 use function sprintf;
 use function strtolower;
 use function trim;
@@ -17,7 +18,6 @@ use const T_FUNCTION;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
-use const T_STRING;
 
 class StrictCallSniff implements Sniff
 {
@@ -37,9 +37,7 @@ class StrictCallSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return [
-			T_STRING,
-		];
+		return TokenHelper::getOnlyNameTokenCodes();
 	}
 
 	/**
@@ -58,7 +56,7 @@ class StrictCallSniff implements Sniff
 
 		$parenthesisCloserPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_closer'];
 
-		$functionName = strtolower($tokens[$stringPointer]['content']);
+		$functionName = ltrim(strtolower($tokens[$stringPointer]['content']), '\\');
 
 		if (!array_key_exists($functionName, self::FUNCTIONS)) {
 			return;

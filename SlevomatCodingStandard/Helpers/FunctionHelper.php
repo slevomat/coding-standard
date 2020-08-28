@@ -23,6 +23,7 @@ use const T_COMMA;
 use const T_ELLIPSIS;
 use const T_EQUAL;
 use const T_FUNCTION;
+use const T_INLINE_THEN;
 use const T_INTERFACE;
 use const T_NULLABLE;
 use const T_RETURN;
@@ -207,18 +208,19 @@ class FunctionHelper
 					$tokens[$functionPointer]['parenthesis_opener'] + 1
 				);
 				if ($previousToken !== null) {
-					$isTypeHint = $tokens[$previousToken]['code'] !== T_COMMA && $tokens[$previousToken]['code'] !== T_NULLABLE;
-					if ($tokens[$previousToken]['code'] === T_NULLABLE) {
+					// PHPCS reports T_NULLABLE as T_INLINE_THEN in PHP 8
+					$isTypeHint = !in_array($tokens[$previousToken]['code'], [T_COMMA, T_NULLABLE, T_INLINE_THEN], true);
+					if (in_array($tokens[$previousToken]['code'], [T_NULLABLE, T_INLINE_THEN], true)) {
 						$isNullable = true;
 					}
 				} else {
 					$isTypeHint = false;
 				}
-				if (!$isTypeHint) {
-					continue;
+
+				if ($isTypeHint) {
+					$typeHint = $tokens[$previousToken]['content'] . $typeHint;
 				}
 
-				$typeHint = $tokens[$previousToken]['content'] . $typeHint;
 			} while ($isTypeHint);
 
 			$equalsPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1, $tokens[$functionPointer]['parenthesis_closer']);

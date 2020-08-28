@@ -4,19 +4,18 @@ namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use function array_key_exists;
+use function array_merge;
 use function in_array;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CLOSE_SQUARE_BRACKET;
 use const T_DOLLAR;
 use const T_DOUBLE_COLON;
-use const T_NS_SEPARATOR;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_SQUARE_BRACKET;
 use const T_PARENT;
 use const T_SELF;
 use const T_STATIC;
-use const T_STRING;
 use const T_VARIABLE;
 
 class IdentificatorHelper
@@ -42,7 +41,7 @@ class IdentificatorHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		if ($tokens[$endPointer]['code'] === T_STRING) {
+		if (in_array($tokens[$endPointer]['code'], TokenHelper::getNameTokenCodes(), true)) {
 			/** @var int $previousPointer */
 			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $endPointer - 1);
 			if (in_array($tokens[$previousPointer]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
@@ -67,8 +66,10 @@ class IdentificatorHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		if (in_array($tokens[$startPointer]['code'], TokenHelper::$nameTokenCodes, true)) {
-			$startPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $startPointer + 1) - 1;
+		$nameTokenCodes = TokenHelper::getNameTokenCodes();
+
+		if (in_array($tokens[$startPointer]['code'], $nameTokenCodes, true)) {
+			$startPointer = TokenHelper::findNextExcluding($phpcsFile, $nameTokenCodes, $startPointer + 1) - 1;
 		} elseif ($tokens[$startPointer]['code'] === T_DOLLAR) {
 			$startPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer + 1);
 		}
@@ -77,7 +78,7 @@ class IdentificatorHelper
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer + 1);
 
 		if (
-			in_array($tokens[$startPointer]['code'], [T_STRING, T_SELF, T_STATIC, T_PARENT], true)
+			in_array($tokens[$startPointer]['code'], array_merge([T_SELF, T_STATIC, T_PARENT], $nameTokenCodes), true)
 			&& $tokens[$nextPointer]['code'] === T_DOUBLE_COLON
 		) {
 			return self::getEndPointerAfterOperator($phpcsFile, $nextPointer);
@@ -102,21 +103,23 @@ class IdentificatorHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
+		$nameTokenCodes = TokenHelper::getNameTokenCodes();
+
 		/** @var int $previousPointer */
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $operatorPointer - 1);
 
-		if ($tokens[$previousPointer]['code'] === T_STRING) {
-			$previousPointer = TokenHelper::findPreviousExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $previousPointer - 1) + 1;
+		if (in_array($tokens[$previousPointer]['code'], $nameTokenCodes, true)) {
+			$previousPointer = TokenHelper::findPreviousExcluding($phpcsFile, $nameTokenCodes, $previousPointer - 1) + 1;
 		}
 
 		if (
 			$tokens[$operatorPointer]['code'] === T_DOUBLE_COLON
-			&& in_array($tokens[$previousPointer]['code'], [T_NS_SEPARATOR, T_STRING, T_SELF, T_STATIC, T_PARENT], true)
+			&& in_array($tokens[$previousPointer]['code'], array_merge([T_SELF, T_STATIC, T_PARENT], $nameTokenCodes), true)
 		) {
 			return $previousPointer;
 		}
 
-		if ($tokens[$previousPointer]['code'] === T_STRING) {
+		if (in_array($tokens[$previousPointer]['code'], $nameTokenCodes, true)) {
 			/** @var int $possibleOperatorPointer */
 			$possibleOperatorPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
 			if ($tokens[$possibleOperatorPointer]['code'] === T_OBJECT_OPERATOR) {
@@ -158,7 +161,7 @@ class IdentificatorHelper
 			return self::getStartPointerBeforeVariablePart($phpcsFile, $tokens[$previousPointer]['bracket_opener']);
 		}
 
-		if (in_array($tokens[$previousPointer]['code'], [T_VARIABLE, T_STRING], true)) {
+		if (in_array($tokens[$previousPointer]['code'], array_merge([T_VARIABLE], TokenHelper::getNameTokenCodes()), true)) {
 			return self::getStartPointerBeforeVariablePart($phpcsFile, $previousPointer);
 		}
 

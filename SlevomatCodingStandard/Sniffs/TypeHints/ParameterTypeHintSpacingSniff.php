@@ -43,6 +43,8 @@ class ParameterTypeHintSpacingSniff implements Sniff
 		$parametersStartPointer = $tokens[$functionPointer]['parenthesis_opener'] + 1;
 		$parametersEndPointer = $tokens[$functionPointer]['parenthesis_closer'] - 1;
 
+		$typeHintTokenCodes = TokenHelper::getNameTokenCodes();
+
 		for ($i = $parametersStartPointer; $i <= $parametersEndPointer; $i++) {
 			if ($tokens[$i]['code'] !== T_VARIABLE) {
 				continue;
@@ -61,12 +63,7 @@ class ParameterTypeHintSpacingSniff implements Sniff
 				$parameterEndPointer = $parametersEndPointer;
 			}
 
-			$typeHintEndPointer = TokenHelper::findPrevious(
-				$phpcsFile,
-				TokenHelper::$typeHintTokenCodes,
-				$parameterPointer - 1,
-				$parameterStartPointer
-			);
+			$typeHintEndPointer = TokenHelper::findPrevious($phpcsFile, $typeHintTokenCodes, $parameterPointer - 1, $parameterStartPointer);
 			if ($typeHintEndPointer === null) {
 				continue;
 			}
@@ -115,7 +112,7 @@ class ParameterTypeHintSpacingSniff implements Sniff
 
 			$typeHintStartPointer = TokenHelper::findPreviousExcluding(
 				$phpcsFile,
-				TokenHelper::$typeHintTokenCodes,
+				$typeHintTokenCodes,
 				$typeHintEndPointer,
 				$parameterStartPointer
 			) + 1;

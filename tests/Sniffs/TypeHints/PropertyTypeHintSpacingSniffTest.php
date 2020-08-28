@@ -13,6 +13,11 @@ class PropertyTypeHintSpacingSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	/**
+	 * It's not possible to report CODE_NO_SPACE_BEFORE_TYPE_HINT on PHP 8.
+	 *
+	 * @requires PHP < 8.0
+	 */
 	public function testErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintSpacingErrors.php');

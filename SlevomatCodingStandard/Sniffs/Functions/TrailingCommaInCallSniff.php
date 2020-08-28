@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
+use function array_merge;
 use function in_array;
 use const T_CLOSE_PARENTHESIS;
 use const T_COMMA;
@@ -15,7 +16,6 @@ use const T_OPEN_PARENTHESIS;
 use const T_PARENT;
 use const T_SELF;
 use const T_STATIC;
-use const T_STRING;
 use const T_UNSET;
 use const T_VARIABLE;
 
@@ -59,7 +59,10 @@ class TrailingCommaInCallSniff implements Sniff
 		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
 		if (!in_array(
 			$tokens[$pointerBeforeParenthesisOpener]['code'],
-			[T_STRING, T_VARIABLE, T_ISSET, T_UNSET, T_CLOSE_PARENTHESIS, T_SELF, T_STATIC, T_PARENT],
+			array_merge(
+				TokenHelper::getOnlyNameTokenCodes(),
+				[T_VARIABLE, T_ISSET, T_UNSET, T_CLOSE_PARENTHESIS, T_SELF, T_STATIC, T_PARENT]
+			),
 			true
 		)) {
 			return;

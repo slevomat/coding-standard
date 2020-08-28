@@ -15,10 +15,6 @@ parameters:
 		- "#Offset '(bracket|scope|parenthesis|comment)_(opener|closer)' does not exist#"
 		- "#Offset '(conditions|scope_condition)' does not exist#"
 		-
-			message: '#Unreachable statement - code above always terminates#'
-			count: 1
-			path: %currentWorkingDirectory%/SlevomatCodingStandard/Helpers/FunctionHelper.php
-		-
 			message: '#Anonymous function should return int but return statement is missing#'
 			count: 1
 			path: %currentWorkingDirectory%/SlevomatCodingStandard/Sniffs/Commenting/DocCommentSpacingSniff.php

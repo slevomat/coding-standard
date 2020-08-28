@@ -8,6 +8,7 @@ use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
+use function ltrim;
 use function sprintf;
 use function strtolower;
 use const T_CLASS_C;
@@ -15,7 +16,6 @@ use const T_DOUBLE_COLON;
 use const T_NS_SEPARATOR;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
-use const T_STRING;
 use const T_VARIABLE;
 
 class ModernClassNameReferenceSniff implements Sniff
@@ -29,10 +29,10 @@ class ModernClassNameReferenceSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return [
-			T_CLASS_C,
-			T_STRING,
-		];
+		$tokens = TokenHelper::getOnlyNameTokenCodes();
+		$tokens[] = T_CLASS_C;
+
+		return $tokens;
 	}
 
 	/**
@@ -73,7 +73,7 @@ class ModernClassNameReferenceSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$functionName = strtolower($tokens[$functionPointer]['content']);
+		$functionName = ltrim(strtolower($tokens[$functionPointer]['content']), '\\');
 
 		$functionNames = [
 			'get_class',

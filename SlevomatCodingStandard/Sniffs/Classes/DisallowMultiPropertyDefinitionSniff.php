@@ -92,12 +92,14 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 
 		$indentation = IndentationHelper::getIndentation($phpcsFile, $visibilityPointer);
 
+		$nameTokenCodes = TokenHelper::getNameTokenCodes();
+
 		$typeHint = null;
-		$typeHintStartPointer = TokenHelper::findNext($phpcsFile, TokenHelper::$nameTokenCodes, $visibilityPointer + 1, $propertyPointer);
+		$typeHintStartPointer = TokenHelper::findNext($phpcsFile, $nameTokenCodes, $visibilityPointer + 1, $propertyPointer);
 		$typeHintEndPointer = null;
 		$pointerAfterTypeHint = null;
 		if ($typeHintStartPointer !== null) {
-			$typeHintEndPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $typeHintStartPointer + 1) - 1;
+			$typeHintEndPointer = TokenHelper::findNextExcluding($phpcsFile, $nameTokenCodes, $typeHintStartPointer + 1) - 1;
 			$typeHint = TokenHelper::getContent($phpcsFile, $typeHintStartPointer, $typeHintEndPointer);
 
 			$pointerAfterTypeHint = TokenHelper::findNextEffective($phpcsFile, $typeHintEndPointer + 1);

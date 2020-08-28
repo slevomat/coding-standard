@@ -21,13 +21,15 @@ class CatchHelper
 		/** @var int $catchParenthesisCloserPointer */
 		$catchParenthesisCloserPointer = $catchToken['parenthesis_closer'];
 
+		$nameTokenCodes = TokenHelper::getNameTokenCodes();
+
 		$nameEndPointer = $catchParenthesisOpenerPointer;
 		$tokens = $phpcsFile->getTokens();
 		$catchedTypes = [];
 		do {
 			$nameStartPointer = TokenHelper::findNext(
 				$phpcsFile,
-				array_merge([T_BITWISE_OR], TokenHelper::$nameTokenCodes),
+				array_merge([T_BITWISE_OR], $nameTokenCodes),
 				$nameEndPointer + 1,
 				$catchParenthesisCloserPointer
 			);
@@ -40,7 +42,7 @@ class CatchHelper
 				$nameStartPointer = TokenHelper::findNextEffective($phpcsFile, $nameStartPointer + 1, $catchParenthesisCloserPointer);
 			}
 
-			$pointerAfterNameEndPointer = TokenHelper::findNextExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $nameStartPointer + 1);
+			$pointerAfterNameEndPointer = TokenHelper::findNextExcluding($phpcsFile, $nameTokenCodes, $nameStartPointer + 1);
 			$nameEndPointer = $pointerAfterNameEndPointer === null ? $nameStartPointer : $pointerAfterNameEndPointer - 1;
 
 			$catchedTypes[] = NamespaceHelper::resolveClassName(

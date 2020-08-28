@@ -48,7 +48,6 @@ use const T_MINUS;
 use const T_MODULUS;
 use const T_MULTIPLY;
 use const T_NEW;
-use const T_NS_SEPARATOR;
 use const T_OBJECT_CAST;
 use const T_OPEN_PARENTHESIS;
 use const T_PARENT;
@@ -59,7 +58,6 @@ use const T_REQUIRE_ONCE;
 use const T_SELF;
 use const T_SEMICOLON;
 use const T_STATIC;
-use const T_STRING;
 use const T_STRING_CAST;
 use const T_STRING_CONCAT;
 use const T_UNSET;
@@ -123,34 +121,37 @@ class UselessParenthesesSniff implements Sniff
 
 		/** @var int $pointerBeforeParenthesisOpener */
 		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
-		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], [
-			T_VARIABLE,
-			T_STRING,
-			T_ISSET,
-			T_UNSET,
-			T_EMPTY,
-			T_CLOSURE,
-			T_FN,
-			T_USE,
-			T_ANON_CLASS,
-			T_SELF,
-			T_STATIC,
-			T_EXIT,
-			T_CLOSE_PARENTHESIS,
-			T_EVAL,
-			T_LIST,
-			T_INCLUDE,
-			T_INCLUDE_ONCE,
-			T_REQUIRE,
-			T_REQUIRE_ONCE,
-			T_INT_CAST,
-			T_DOUBLE_CAST,
-			T_STRING_CAST,
-			T_ARRAY_CAST,
-			T_OBJECT_CAST,
-			T_BOOL_CAST,
-			T_UNSET_CAST,
-		], true)) {
+		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], array_merge(
+			TokenHelper::getNameTokenCodes(),
+			[
+				T_VARIABLE,
+				T_ISSET,
+				T_UNSET,
+				T_EMPTY,
+				T_CLOSURE,
+				T_FN,
+				T_USE,
+				T_ANON_CLASS,
+				T_SELF,
+				T_STATIC,
+				T_EXIT,
+				T_CLOSE_PARENTHESIS,
+				T_EVAL,
+				T_LIST,
+				T_INCLUDE,
+				T_INCLUDE_ONCE,
+				T_REQUIRE,
+				T_REQUIRE_ONCE,
+				T_INT_CAST,
+				T_DOUBLE_CAST,
+				T_STRING_CAST,
+				T_ARRAY_CAST,
+				T_OBJECT_CAST,
+				T_BOOL_CAST,
+				T_UNSET_CAST,
+			]
+		), true)
+		) {
 			return;
 		}
 
@@ -358,12 +359,15 @@ class UselessParenthesesSniff implements Sniff
 
 		if (in_array(
 			$tokens[$notBooleanNotOperatorPointer]['code'],
-			[T_NS_SEPARATOR, T_STRING, T_SELF, T_STATIC, T_PARENT, T_VARIABLE, T_DOLLAR],
+			array_merge([T_SELF, T_STATIC, T_PARENT, T_VARIABLE, T_DOLLAR], TokenHelper::getNameTokenCodes()),
 			true
 		)) {
 			$contentEndPointer = IdentificatorHelper::findEndPointer($phpcsFile, $notBooleanNotOperatorPointer);
 
-			if ($contentEndPointer === null && $tokens[$notBooleanNotOperatorPointer]['code'] === T_STRING) {
+			if (
+				$contentEndPointer === null
+				&& in_array($tokens[$notBooleanNotOperatorPointer]['code'], TokenHelper::getNameTokenCodes(), true)
+			) {
 				$nextPointer = TokenHelper::findNextEffective($phpcsFile, $contentStartPointer + 1);
 				if ($tokens[$nextPointer]['code'] === T_OPEN_PARENTHESIS) {
 					$contentEndPointer = $contentStartPointer;

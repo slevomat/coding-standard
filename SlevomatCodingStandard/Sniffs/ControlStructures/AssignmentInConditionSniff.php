@@ -12,7 +12,6 @@ use const T_DO;
 use const T_ELSEIF;
 use const T_EQUAL;
 use const T_IF;
-use const T_STRING;
 use const T_WHILE;
 
 class AssignmentInConditionSniff implements Sniff
@@ -81,7 +80,12 @@ class AssignmentInConditionSniff implements Sniff
 				continue;
 			}
 
-			$functionCall = TokenHelper::findPrevious($phpcsFile, T_STRING, $insideParenthesis, $parenthesisOpener);
+			$functionCall = TokenHelper::findPrevious(
+				$phpcsFile,
+				TokenHelper::getOnlyNameTokenCodes(),
+				$insideParenthesis,
+				$parenthesisOpener
+			);
 			if ($functionCall !== null) {
 				continue;
 			}

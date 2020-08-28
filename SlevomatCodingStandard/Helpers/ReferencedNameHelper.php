@@ -90,7 +90,9 @@ class ReferencedNameHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$nameTokenCodesWithWhitespace = array_merge(TokenHelper::$nameTokenCodes, Tokens::$emptyTokens);
+		$nameTokenCodes = TokenHelper::getNameTokenCodes();
+
+		$nameTokenCodesWithWhitespace = array_merge($nameTokenCodes, Tokens::$emptyTokens);
 
 		$lastNamePointer = $startPointer;
 		for ($i = $startPointer + 1; $i < count($tokens); $i++) {
@@ -98,7 +100,7 @@ class ReferencedNameHelper
 				break;
 			}
 
-			if (!in_array($tokens[$i]['code'], TokenHelper::$nameTokenCodes, true)) {
+			if (!in_array($tokens[$i]['code'], $nameTokenCodes, true)) {
 				continue;
 			}
 
@@ -120,8 +122,10 @@ class ReferencedNameHelper
 		$beginSearchAtPointer = $openTagPointer + 1;
 		$types = [];
 
+		$nameTokenCodes = TokenHelper::getNameTokenCodes();
+
 		while (true) {
-			$nameStartPointer = TokenHelper::findNext($phpcsFile, TokenHelper::$nameTokenCodes, $beginSearchAtPointer);
+			$nameStartPointer = TokenHelper::findNext($phpcsFile, $nameTokenCodes, $beginSearchAtPointer);
 			if ($nameStartPointer === null) {
 				break;
 			}
@@ -129,7 +133,7 @@ class ReferencedNameHelper
 			if (!self::isReferencedName($phpcsFile, $nameStartPointer)) {
 				$beginSearchAtPointer = TokenHelper::findNextExcluding(
 					$phpcsFile,
-					array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::$nameTokenCodes),
+					array_merge(TokenHelper::$ineffectiveTokenCodes, $nameTokenCodes),
 					$nameStartPointer + 1
 				);
 				continue;
@@ -175,7 +179,7 @@ class ReferencedNameHelper
 						if ($tokens[$previousTokenBeforeStartPointer]['code'] === T_COMMA) {
 							$precedingTokenPointer = TokenHelper::findPreviousExcluding(
 								$phpcsFile,
-								array_merge([T_COMMA], TokenHelper::$nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
+								array_merge([T_COMMA], $nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
 								$previousTokenBeforeStartPointer - 1
 							);
 							if (
@@ -193,13 +197,13 @@ class ReferencedNameHelper
 							$exclude = [T_BITWISE_OR, T_OPEN_PARENTHESIS];
 							$catchPointer = TokenHelper::findPreviousExcluding(
 								$phpcsFile,
-								array_merge($exclude, TokenHelper::$nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
+								array_merge($exclude, $nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
 								$previousTokenBeforeStartPointer - 1
 							);
 							$exclude = [T_BITWISE_OR];
 							$openParenthesisPointer = TokenHelper::findPreviousExcluding(
 								$phpcsFile,
-								array_merge($exclude, TokenHelper::$nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
+								array_merge($exclude, $nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
 								$previousTokenBeforeStartPointer
 							);
 							if (

@@ -16,10 +16,8 @@ use const T_COMMA;
 use const T_ELLIPSIS;
 use const T_FUNCTION;
 use const T_NEW;
-use const T_NS_SEPARATOR;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
-use const T_STRING;
 
 class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
 {
@@ -31,7 +29,7 @@ class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return [T_STRING];
+		return TokenHelper::getOnlyNameTokenCodes();
 	}
 
 	/**
@@ -53,7 +51,7 @@ class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
 			return;
 		}
 		/** @var int $tokenBeforeInvocationPointer */
-		$tokenBeforeInvocationPointer = TokenHelper::findPreviousExcluding($phpcsFile, [T_STRING, T_NS_SEPARATOR], $pointer);
+		$tokenBeforeInvocationPointer = TokenHelper::findPreviousExcluding($phpcsFile, TokenHelper::getNameTokenCodes(), $pointer);
 		$invokedName = TokenHelper::getContent($phpcsFile, $tokenBeforeInvocationPointer + 1, $pointer);
 		$useName = sprintf('function %s', $invokedName);
 

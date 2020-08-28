@@ -66,21 +66,18 @@ class PropertyTypeHintSpacingSniff implements Sniff
 			return;
 		}
 
+		$typeHintTokenCodes = TokenHelper::getTypeHintTokenCodes();
+
 		$propertyStartPointer = $visibilityPointer;
 
-		$typeHintEndPointer = TokenHelper::findPrevious(
-			$phpcsFile,
-			TokenHelper::$typeHintTokenCodes,
-			$propertyPointer - 1,
-			$propertyStartPointer
-		);
+		$typeHintEndPointer = TokenHelper::findPrevious($phpcsFile, $typeHintTokenCodes, $propertyPointer - 1, $propertyStartPointer);
 		if ($typeHintEndPointer === null) {
 			return;
 		}
 
 		$typeHintStartPointer = TokenHelper::findPreviousExcluding(
 			$phpcsFile,
-			TokenHelper::$typeHintTokenCodes,
+			$typeHintTokenCodes,
 			$typeHintEndPointer,
 			$propertyStartPointer
 		) + 1;

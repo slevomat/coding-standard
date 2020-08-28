@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_merge;
 use function in_array;
 use function sprintf;
 use function strlen;
@@ -18,7 +19,6 @@ use const T_ENCAPSED_AND_WHITESPACE;
 use const T_LNUMBER;
 use const T_MINUS;
 use const T_NUM_STRING;
-use const T_STRING;
 use const T_VARIABLE;
 use const T_WHITESPACE;
 
@@ -49,18 +49,20 @@ class NegationOperatorSpacingSniff implements Sniff
 
 		$previousEffective = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
 
-		$possibleOperandTypes = [
-			T_CONSTANT_ENCAPSED_STRING,
-			T_CLOSE_PARENTHESIS,
-			T_CLOSE_SHORT_ARRAY,
-			T_CLOSE_SQUARE_BRACKET,
-			T_DNUMBER,
-			T_ENCAPSED_AND_WHITESPACE,
-			T_LNUMBER,
-			T_NUM_STRING,
-			T_STRING,
-			T_VARIABLE,
-		];
+		$possibleOperandTypes = array_merge(
+			TokenHelper::getOnlyNameTokenCodes(),
+			[
+				T_CONSTANT_ENCAPSED_STRING,
+				T_CLOSE_PARENTHESIS,
+				T_CLOSE_SHORT_ARRAY,
+				T_CLOSE_SQUARE_BRACKET,
+				T_DNUMBER,
+				T_ENCAPSED_AND_WHITESPACE,
+				T_LNUMBER,
+				T_NUM_STRING,
+				T_VARIABLE,
+			]
+		);
 
 		if (in_array($tokens[$previousEffective]['code'], $possibleOperandTypes, true)) {
 			return;

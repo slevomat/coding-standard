@@ -7,6 +7,7 @@ use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_reverse;
 use function in_array;
+use function ltrim;
 use function sprintf;
 use function strlen;
 use const T_CLOSURE;
@@ -78,7 +79,7 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 			// Contains inner call
 			foreach (TokenHelper::findNextAll(
 				$phpcsFile,
-				T_STRING,
+				TokenHelper::getOnlyNameTokenCodes(),
 				$parenthesisOpenerPointer + 1,
 				$parenthesisCloserPointer
 			) as $innerStringPointer) {
@@ -104,12 +105,14 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $stringPointer - 1);
 
+		$name = ltrim($tokens[$stringPointer]['content'], '\\');
+
 		if (in_array($tokens[$previousPointer]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
-			$error = sprintf('Call of method %s() should be placed on a single line.', $tokens[$stringPointer]['content']);
+			$error = sprintf('Call of method %s() should be placed on a single line.', $name);
 		} elseif ($tokens[$previousPointer]['code'] === T_NEW) {
 			$error = 'Constructor call should be placed on a single line.';
 		} else {
-			$error = sprintf('Call of function %s() should be placed on a single line.', $tokens[$stringPointer]['content']);
+			$error = sprintf('Call of function %s() should be placed on a single line.', $name);
 		}
 
 		$fix = $phpcsFile->addFixableError($error, $stringPointer, self::CODE_REQUIRED_SINGLE_LINE_CALL);

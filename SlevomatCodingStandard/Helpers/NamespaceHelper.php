@@ -6,12 +6,16 @@ use PHP_CodeSniffer\Files\File;
 use function array_reverse;
 use function array_slice;
 use function count;
+use function defined;
 use function explode;
 use function implode;
+use function in_array;
 use function ltrim;
 use function sprintf;
 use function strpos;
+use const T_NAME_FULLY_QUALIFIED;
 use const T_NAMESPACE;
+use const T_NS_SEPARATOR;
 
 /**
  * Terms "unqualified", "qualified" and "fully qualified" have the same meaning as described here:
@@ -40,6 +44,17 @@ class NamespaceHelper
 	public static function isFullyQualifiedName(string $typeName): bool
 	{
 		return StringHelper::startsWith($typeName, self::NAMESPACE_SEPARATOR);
+	}
+
+	public static function isFullyQualifiedPointer(File $phpcsFile, int $pointer): bool
+	{
+		$fullyQualifiedTokenCodes = [T_NS_SEPARATOR];
+
+		if (defined('T_NAME_FULLY_QUALIFIED')) {
+			$fullyQualifiedTokenCodes[] = T_NAME_FULLY_QUALIFIED;
+		}
+
+		return in_array($phpcsFile->getTokens()[$pointer]['code'], $fullyQualifiedTokenCodes, true);
 	}
 
 	public static function getFullyQualifiedTypeName(string $typeName): string
@@ -80,7 +95,7 @@ class NamespaceHelper
 		$namespaceNameStartPointer = TokenHelper::findNextEffective($phpcsFile, $namespacePointer + 1);
 		$namespaceNameEndPointer = TokenHelper::findNextExcluding(
 			$phpcsFile,
-			TokenHelper::$nameTokenCodes,
+			TokenHelper::getNameTokenCodes(),
 			$namespaceNameStartPointer + 1
 		) - 1;
 

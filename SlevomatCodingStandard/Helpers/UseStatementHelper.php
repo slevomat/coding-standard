@@ -78,7 +78,7 @@ class UseStatementHelper
 		if (in_array($tokens[$nameEndPointer]['code'], TokenHelper::$ineffectiveTokenCodes, true)) {
 			$nameEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $nameEndPointer);
 		}
-		$nameStartPointer = TokenHelper::findPreviousExcluding($phpcsFile, TokenHelper::$nameTokenCodes, $nameEndPointer - 1) + 1;
+		$nameStartPointer = TokenHelper::findPreviousExcluding($phpcsFile, TokenHelper::getNameTokenCodes(), $nameEndPointer - 1) + 1;
 
 		$name = TokenHelper::getContent($phpcsFile, $nameStartPointer, $nameEndPointer);
 

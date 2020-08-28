@@ -9,7 +9,7 @@ class Whatever
 			false
 		);
 
-		if (sprintf(
+		if (\sprintf(
 			'%s',
 			'something',
 		)) {

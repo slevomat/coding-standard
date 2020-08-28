@@ -54,7 +54,7 @@ class UselessInheritDocCommentSniff implements Sniff
 
 		$docCommentOwnerPointer = TokenHelper::findNext(
 			$phpcsFile,
-			array_merge(TokenHelper::$functionTokenCodes, TokenHelper::$typeHintTokenCodes),
+			array_merge(TokenHelper::$functionTokenCodes, TokenHelper::getTypeHintTokenCodes()),
 			$tokens[$docCommentOpenPointer]['comment_closer'] + 1
 		);
 		if ($docCommentOwnerPointer === null) {

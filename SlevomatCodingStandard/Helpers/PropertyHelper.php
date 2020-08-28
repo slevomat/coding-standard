@@ -76,7 +76,7 @@ class PropertyHelper
 
 		$typeHintEndPointer = TokenHelper::findPrevious(
 			$phpcsFile,
-			TokenHelper::$typeHintTokenCodes,
+			TokenHelper::getTypeHintTokenCodes(),
 			$propertyPointer - 1,
 			$propertyStartPointer
 		);
@@ -86,7 +86,7 @@ class PropertyHelper
 
 		$typeHintStartPointer = TokenHelper::findPreviousExcluding(
 			$phpcsFile,
-			TokenHelper::$typeHintTokenCodes,
+			TokenHelper::getTypeHintTokenCodes(),
 			$typeHintEndPointer,
 			$propertyStartPointer
 		) + 1;

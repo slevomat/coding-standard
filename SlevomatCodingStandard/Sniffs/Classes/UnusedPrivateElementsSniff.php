@@ -135,7 +135,7 @@ class UnusedPrivateElementsSniff implements Sniff
 				return true;
 			}
 
-			if ($tokens[$referencedNamePointer]['code'] === T_STRING) {
+			if (in_array($tokens[$referencedNamePointer]['code'], TokenHelper::getNameTokenCodes(), true)) {
 				$referencedClassName = NamespaceHelper::resolveClassName(
 					$phpcsFile,
 					$tokens[$referencedNamePointer]['content'],
@@ -672,10 +672,10 @@ class UnusedPrivateElementsSniff implements Sniff
 
 		$visibilityPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
 
-		if (in_array($tokens[$visibilityPointer]['code'], [T_SELF, T_STRING], true)) {
+		if (in_array($tokens[$visibilityPointer]['code'], array_merge([T_SELF], TokenHelper::getNameTokenCodes()), true)) {
 			$visibilityPointer = TokenHelper::findPreviousExcluding(
 				$phpcsFile,
-				array_merge(TokenHelper::$nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
+				array_merge(TokenHelper::getNameTokenCodes(), TokenHelper::$ineffectiveTokenCodes),
 				$visibilityPointer - 1
 			);
 

@@ -21,7 +21,7 @@ class Whatever
 	}
 }
 
-printf(
+\printf(
 	'%s',
 	'very looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong parameter'
 );

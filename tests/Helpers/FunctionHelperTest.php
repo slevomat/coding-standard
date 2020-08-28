@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Helpers;
 
 use SlevomatCodingStandard\Helpers\Annotation\Annotation;
 use function array_map;
+use const PHP_VERSION_ID;
 use const T_CLOSURE;
 
 class FunctionHelperTest extends TestCase
@@ -334,16 +335,24 @@ class FunctionHelperTest extends TestCase
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 		self::assertSame('\FooNamespace\FooInterface', $returnTypeHint->getTypeHint());
 		self::assertFalse($returnTypeHint->isNullable());
-		self::assertSame($functionPointer + 7, $returnTypeHint->getStartPointer());
-		self::assertSame($functionPointer + 10, $returnTypeHint->getEndPointer());
+
+		// Names are one token in PHP 8
+		if (PHP_VERSION_ID < 80000) {
+			self::assertSame($functionPointer + 7, $returnTypeHint->getStartPointer());
+			self::assertSame($functionPointer + 10, $returnTypeHint->getEndPointer());
+		}
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'withReturnTypeHintNoSpace');
 		self::assertTrue(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 		self::assertSame('\FooNamespace\FooInterface', $returnTypeHint->getTypeHint());
 		self::assertFalse($returnTypeHint->isNullable());
-		self::assertSame($functionPointer + 7, $returnTypeHint->getStartPointer());
-		self::assertSame($functionPointer + 10, $returnTypeHint->getEndPointer());
+
+		// Names are one token in PHP 8
+		if (PHP_VERSION_ID < 80000) {
+			self::assertSame($functionPointer + 7, $returnTypeHint->getStartPointer());
+			self::assertSame($functionPointer + 10, $returnTypeHint->getEndPointer());
+		}
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'withoutReturnTypeHint');
 		self::assertFalse(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
@@ -356,8 +365,12 @@ class FunctionHelperTest extends TestCase
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 		self::assertSame('bool', $returnTypeHint->getTypeHint());
 		self::assertFalse($returnTypeHint->isNullable());
-		self::assertSame($functionPointer + 7, $returnTypeHint->getStartPointer());
-		self::assertSame($functionPointer + 7, $returnTypeHint->getEndPointer());
+
+		// Names are one token in PHP 8
+		if (PHP_VERSION_ID < 80000) {
+			self::assertSame($functionPointer + 7, $returnTypeHint->getStartPointer());
+			self::assertSame($functionPointer + 7, $returnTypeHint->getEndPointer());
+		}
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'abstractWithoutReturnTypeHint');
 		self::assertFalse(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));

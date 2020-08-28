@@ -72,7 +72,7 @@ class ReferenceThrowableOnlySniff implements Sniff
 			if ($tokens[$previousPointer]['code'] === T_BITWISE_OR) {
 				$previousPointer = TokenHelper::findPreviousExcluding(
 					$phpcsFile,
-					array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::$nameTokenCodes, [T_BITWISE_OR]),
+					array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::getNameTokenCodes(), [T_BITWISE_OR]),
 					$previousPointer - 1
 				);
 			}

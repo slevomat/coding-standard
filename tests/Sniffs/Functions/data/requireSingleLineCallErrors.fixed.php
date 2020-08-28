@@ -6,7 +6,7 @@ class Whatever
 	{
 		$this->doAnything('true', false);
 
-		if (sprintf('%s', 'something')) {
+		if (\sprintf('%s', 'something')) {
 
 		}
 

@@ -264,7 +264,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 				$previousKeywordPointer = TokenHelper::findPreviousExcluding(
 					$phpcsFile,
-					array_merge(TokenHelper::$nameTokenCodes, [T_WHITESPACE, T_COMMA]),
+					array_merge(TokenHelper::getNameTokenCodes(), [T_WHITESPACE, T_COMMA]),
 					$startPointer - 1
 				);
 				if (!in_array($tokens[$previousKeywordPointer]['code'], $this->getFullyQualifiedKeywords(), true)) {

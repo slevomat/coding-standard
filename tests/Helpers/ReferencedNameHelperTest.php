@@ -3,6 +3,8 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use function count;
+use const PHP_VERSION_ID;
+use const T_NAME_FULLY_QUALIFIED;
 use const T_NS_SEPARATOR;
 use const T_STRING;
 
@@ -120,9 +122,16 @@ class ReferencedNameHelperTest extends TestCase
 	public function testGetReferencedNameEndPointer(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/referencedName.php');
-		$backslashTokenPointer = TokenHelper::findNext($phpcsFile, T_NS_SEPARATOR, 0);
-		$endTokenPointer = ReferencedNameHelper::getReferencedNameEndPointer($phpcsFile, $backslashTokenPointer);
-		self::assertTokenPointer(T_STRING, 3, $phpcsFile, $endTokenPointer);
+
+		if (PHP_VERSION_ID >= 80000) {
+			$nameTokenPointer = TokenHelper::findNext($phpcsFile, T_NAME_FULLY_QUALIFIED, 0);
+			$endTokenPointer = ReferencedNameHelper::getReferencedNameEndPointer($phpcsFile, $nameTokenPointer);
+			self::assertTokenPointer(T_NAME_FULLY_QUALIFIED, 3, $phpcsFile, $endTokenPointer);
+		} else {
+			$backslashTokenPointer = TokenHelper::findNext($phpcsFile, T_NS_SEPARATOR, 0);
+			$endTokenPointer = ReferencedNameHelper::getReferencedNameEndPointer($phpcsFile, $backslashTokenPointer);
+			self::assertTokenPointer(T_STRING, 3, $phpcsFile, $endTokenPointer);
+		}
 	}
 
 	public function testReturnTypeHint(): void
