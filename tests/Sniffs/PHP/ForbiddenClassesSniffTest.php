@@ -9,7 +9,8 @@ class ForbiddenClassesSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/forbiddenClasses.php'));
+		$report = self::checkFile(__DIR__ . '/data/forbiddenClasses.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void

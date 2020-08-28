@@ -9,7 +9,8 @@ class LongTypeHintsSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/longTypeHintsNoErrors.php'));
+		$report = self::checkFile(__DIR__ . '/data/longTypeHintsNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void

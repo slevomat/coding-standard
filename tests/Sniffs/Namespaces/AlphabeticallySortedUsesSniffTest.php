@@ -62,7 +62,8 @@ class AlphabeticallySortedUsesSniffTest extends TestCase
 
 	public function testPatrikOrder(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/alphabeticalPatrik.php'));
+		$report = self::checkFile(__DIR__ . '/data/alphabeticalPatrik.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testFixable(): void

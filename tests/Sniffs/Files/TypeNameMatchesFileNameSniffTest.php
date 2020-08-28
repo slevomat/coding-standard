@@ -28,26 +28,29 @@ class TypeNameMatchesFileNameSniffTest extends TestCase
 
 	public function testNoError(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/rootNamespace/Foo.php', [
+		$report = self::checkFile(__DIR__ . '/data/rootNamespace/Foo.php', [
 			'rootNamespaces' => ['tests/Sniffs/Files/data/rootNamespace' => 'RootNamespace'],
 			'ignoredNamespaces' => ['IgnoredNamespace'],
-		]));
+		]);
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testSkippedDir(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/rootNamespace/skippedDir/Bar.php', [
+		$report = self::checkFile(__DIR__ . '/data/rootNamespace/skippedDir/Bar.php', [
 			'rootNamespaces' => ['tests/Sniffs/Files/data/rootNamespace' => 'RootNamespace'],
 			'ignoredNamespaces' => ['IgnoredNamespace'],
 			'skipDirs' => ['skippedDir'],
-		]));
+		]);
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testIgnoredNamespace(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/ignoredNamespace.php', [
+		$report = self::checkFile(__DIR__ . '/data/ignoredNamespace.php', [
 			'ignoredNamespaces' => ['IgnoredNamespace'],
-		]));
+		]);
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testNoNamespace(): void
@@ -86,9 +89,10 @@ class TypeNameMatchesFileNameSniffTest extends TestCase
 
 	public function testWithProvidedBasePathAndNestedSameDirName(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/data/Foo/Bar.php', [
+		$report = self::checkFile(__DIR__ . '/data/data/Foo/Bar.php', [
 			'rootNamespaces' => ['data' => 'Data'],
-		], [], ['--basepath=' . __DIR__ . '/data']));
+		], [], ['--basepath=' . __DIR__ . '/data']);
+		self::assertNoSniffErrorInFile($report);
 	}
 
 }

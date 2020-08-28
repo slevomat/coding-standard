@@ -9,7 +9,8 @@ class DisallowOneLinePropertyDocCommentSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/multiLinePropertyDocCommentNoErrors.php'));
+		$report = self::checkFile(__DIR__ . '/data/multiLinePropertyDocCommentNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void

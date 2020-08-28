@@ -9,7 +9,8 @@ class DisallowGroupUseSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/disallowGroupUseNoErrors.php'));
+		$report = self::checkFile(__DIR__ . '/data/disallowGroupUseNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void

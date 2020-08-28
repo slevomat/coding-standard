@@ -9,7 +9,8 @@ class DisallowMultiPropertyDefinitionSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/disallowMultiPropertyDefinitionNoErrors.php'));
+		$report = self::checkFile(__DIR__ . '/data/disallowMultiPropertyDefinitionNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void

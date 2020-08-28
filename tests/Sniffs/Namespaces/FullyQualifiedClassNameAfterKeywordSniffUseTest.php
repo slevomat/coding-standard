@@ -20,10 +20,11 @@ class FullyQualifiedClassNameAfterKeywordSniffUseTest extends TestCase
 
 	public function testIgnoreUseInNamespaceWithParenthesis(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(
+		$report = self::checkFile(
 			__DIR__ . '/data/fullyQualifiedUseNamespaceWithParenthesis.php',
 			['keywordsToCheck' => ['T_USE']]
-		));
+		);
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testNonFullyQualifiedUse(): void

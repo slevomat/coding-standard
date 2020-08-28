@@ -9,7 +9,8 @@ class DisallowIncrementAndDecrementOperatorsSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/disallowIncrementAndDecrementOperatorsNoErrors.php'));
+		$report = self::checkFile(__DIR__ . '/data/disallowIncrementAndDecrementOperatorsNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void

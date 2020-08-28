@@ -9,7 +9,8 @@ class NegationOperatorSpacingSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/negationOperatorSpacingNoErrors.php'));
+		$report = self::checkFile(__DIR__ . '/data/negationOperatorSpacingNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void

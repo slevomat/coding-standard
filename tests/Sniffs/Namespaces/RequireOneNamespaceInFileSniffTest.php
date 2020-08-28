@@ -9,7 +9,8 @@ class RequireOneNamespaceInFileSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/requireOneNamespaceInFileNoErrors.php'));
+		$report = self::checkFile(__DIR__ . '/data/requireOneNamespaceInFileNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void
@@ -24,7 +25,8 @@ class RequireOneNamespaceInFileSniffTest extends TestCase
 
 	public function testNoNamespaceNoError(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/requireOneNamespaceInFileNoNamespaceNoErrors.php'));
+		$report = self::checkFile(__DIR__ . '/data/requireOneNamespaceInFileNoNamespaceNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 }

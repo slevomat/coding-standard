@@ -9,7 +9,8 @@ class DisallowShortTernaryOperatorSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/disallowShortTernaryOperatorNoErrors.php'));
+		$report = self::checkFile(__DIR__ . '/data/disallowShortTernaryOperatorNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void

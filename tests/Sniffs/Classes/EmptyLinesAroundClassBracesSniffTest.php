@@ -9,7 +9,8 @@ class EmptyLinesAroundClassBracesSniffTest extends TestCase
 
 	public function testCorrectCorrectEmptyLines(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/classBracesCorrectEmptyLines.php'));
+		$report = self::checkFile(__DIR__ . '/data/classBracesCorrectEmptyLines.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testNoEmptyLineAfterOpeningBrace(): void

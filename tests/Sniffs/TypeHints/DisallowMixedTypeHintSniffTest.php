@@ -9,7 +9,8 @@ class DisallowMixedTypeHintSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/disallowMixedTypeHintNoErrors.php'));
+		$report = self::checkFile(__DIR__ . '/data/disallowMixedTypeHintNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void

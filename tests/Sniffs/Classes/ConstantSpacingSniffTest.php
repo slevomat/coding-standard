@@ -28,7 +28,8 @@ class ConstantSpacingSniffTest extends TestCase
 
 	public function testInGlobalNamespaceNoErrors(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/constantSpacingInGlobalNamespaceNoErrors.php'));
+		$report = self::checkFile(__DIR__ . '/data/constantSpacingInGlobalNamespaceNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 }

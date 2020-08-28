@@ -9,7 +9,8 @@ class DeclareStrictTypesSniffTest extends TestCase
 
 	public function testMultipleOpenTagsInFile(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/declareStrictTypesMultipleOpenTags.php'));
+		$report = self::checkFile(__DIR__ . '/data/declareStrictTypesMultipleOpenTags.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	/**
@@ -92,10 +93,10 @@ class DeclareStrictTypesSniffTest extends TestCase
 
 	public function testDeclareStrictTwoNewlinesBefore(): void
 	{
-		$file = __DIR__ . '/data/declareStrictTypesTwoNewlinesBefore.php';
-		self::assertNoSniffErrorInFile(self::checkFile($file, [
+		$report = self::checkFile(__DIR__ . '/data/declareStrictTypesTwoNewlinesBefore.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => ' 2  ',
-		]));
+		]);
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testDeclareStrictTwoNewlinesBeforeError(): void
@@ -111,10 +112,10 @@ class DeclareStrictTypesSniffTest extends TestCase
 
 	public function testDeclareStrictTwoNewlinesAfter(): void
 	{
-		$file = __DIR__ . '/data/declareStrictTypesTwoNewlinesAfter.php';
-		self::assertNoSniffErrorInFile(self::checkFile($file, [
+		$report = self::checkFile(__DIR__ . '/data/declareStrictTypesTwoNewlinesAfter.php', [
 			'newlinesCountAfterDeclare' => ' 2  ',
-		], [DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_AFTER_DECLARE]));
+		], [DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_AFTER_DECLARE]);
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testDeclareStrictTwoNewlinesAfterError(): void
@@ -143,7 +144,8 @@ class DeclareStrictTypesSniffTest extends TestCase
 
 	public function testDeclareStrictOneSpace(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/declareStrictTypesOneSpace.php'));
+		$report = self::checkFile(__DIR__ . '/data/declareStrictTypesOneSpace.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testDeclareStrictWithFileCommentAbove(): void
@@ -156,7 +158,8 @@ class DeclareStrictTypesSniffTest extends TestCase
 
 	public function testDeclareStrictWithTicks(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/declareStrictTypesWithTicks.php'));
+		$report = self::checkFile(__DIR__ . '/data/declareStrictTypesWithTicks.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testFixableNoNewLinesBefore(): void

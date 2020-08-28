@@ -9,7 +9,8 @@ class ReturnTypeHintSpacingSniffTest extends TestCase
 
 	public function testCorrectSpacing(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/returnTypeHintsCorrect.php'));
+		$report = self::checkFile(__DIR__ . '/data/returnTypeHintsCorrect.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testIncorrectSpacing(): void
@@ -74,7 +75,8 @@ class ReturnTypeHintSpacingSniffTest extends TestCase
 
 	public function testCorrectSpacingWithNullable(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/returnNullableTypeHintsCorrect.php'));
+		$report = self::checkFile(__DIR__ . '/data/returnNullableTypeHintsCorrect.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testIncorrectSpacingWithNullable(): void

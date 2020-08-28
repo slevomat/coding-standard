@@ -9,7 +9,8 @@ class DisallowArrayTypeHintSyntaxSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/disallowArrayTypeHintSyntaxNoErrors.php'));
+		$report = self::checkFile(__DIR__ . '/data/disallowArrayTypeHintSyntaxNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void

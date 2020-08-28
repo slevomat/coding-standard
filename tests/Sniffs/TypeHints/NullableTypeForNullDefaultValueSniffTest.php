@@ -9,7 +9,8 @@ class NullableTypeForNullDefaultValueSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/nullableTypeForNullDefaultValueNoErrors.php'));
+		$report = self::checkFile(__DIR__ . '/data/nullableTypeForNullDefaultValueNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void

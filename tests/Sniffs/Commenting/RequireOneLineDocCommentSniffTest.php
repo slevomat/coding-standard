@@ -9,7 +9,8 @@ class RequireOneLineDocCommentSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/oneLineDocCommentSniffNoErrors.php'));
+		$report = self::checkFile(__DIR__ . '/data/oneLineDocCommentSniffNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void

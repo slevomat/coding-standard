@@ -135,17 +135,20 @@ class UnusedPrivateElementsSniffTest extends TestCase
 
 	public function testOnlyPublicElements(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/classWithOnlyPublicElements.php'));
+		$report = self::checkFile(__DIR__ . '/data/classWithOnlyPublicElements.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testClassWithSpecialThis(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/classWithSpecialThis.php'));
+		$report = self::checkFile(__DIR__ . '/data/classWithSpecialThis.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testClassWithSpecialSelf(): void
 	{
-		self::assertNoSniffErrorInFile(self::checkFile(__DIR__ . '/data/classWithSpecialSelf.php'));
+		$report = self::checkFile(__DIR__ . '/data/classWithSpecialSelf.php');
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testClassWithPrivateElementsUsedOnSelfInstance(): void
