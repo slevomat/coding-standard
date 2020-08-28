@@ -143,6 +143,9 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 				$phpcsFile->fixer->addContentBefore($i, $phpcsFile->eolChar . $parametersIndentation);
 			} elseif ($tokens[$i]['content'] === $phpcsFile->eolChar) {
 				$phpcsFile->fixer->addContent($i, $oneIndentation);
+			} else {
+				// Create conflict so inner calls are fixed in next loop
+				$phpcsFile->fixer->replaceToken($i, $tokens[$i]['content']);
 			}
 		}
 

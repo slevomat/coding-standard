@@ -36,3 +36,13 @@ function ($phpcsFile, $pointer) {
 	return Whatever::doSomething($phpcsFile, sprintf('annotations-%d', $pointer), static function () use ($phpcsFile, $pointer): array {
 	});
 };
+
+class Nothing
+{
+	public function commit($message, $originalQueueName, $delayedQueueName, $nextAttemptTime)
+	{
+		$this->doNowOrAfterCommit(function () use ($message, $originalQueueName, $delayedQueueName, $nextAttemptTime): void {
+			$this->instantQueueMessageProducer->sendDelayedMessage($message, $originalQueueName, $delayedQueueName, $nextAttemptTime);
+		});
+	}
+}

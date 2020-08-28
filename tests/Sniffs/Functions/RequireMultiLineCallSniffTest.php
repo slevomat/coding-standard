@@ -17,7 +17,7 @@ class RequireMultiLineCallSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireMultiLineCallErrors.php');
 
-		self::assertSame(11, $report->getErrorCount());
+		self::assertSame(13, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -84,6 +84,18 @@ class RequireMultiLineCallSniffTest extends TestCase
 			36,
 			RequireMultiLineCallSniff::CODE_REQUIRED_MULTI_LINE_CALL,
 			'Call of method doSomething() should be splitted to more lines.'
+		);
+		self::assertSniffError(
+			$report,
+			44,
+			RequireMultiLineCallSniff::CODE_REQUIRED_MULTI_LINE_CALL,
+			'Call of method doNowOrAfterCommit() should be splitted to more lines.'
+		);
+		self::assertSniffError(
+			$report,
+			45,
+			RequireMultiLineCallSniff::CODE_REQUIRED_MULTI_LINE_CALL,
+			'Call of method sendDelayedMessage() should be splitted to more lines.'
 		);
 
 		self::assertAllFixedInFile($report);
