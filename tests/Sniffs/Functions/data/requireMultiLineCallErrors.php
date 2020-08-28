@@ -46,3 +46,9 @@ class Nothing
 		});
 	}
 }
+
+function ($text) {
+	return sprintf(_('very looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong parameter'), $text);
+};
+
+$a = _('very loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong parameter');

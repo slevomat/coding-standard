@@ -17,7 +17,7 @@ class RequireMultiLineCallSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireMultiLineCallErrors.php');
 
-		self::assertSame(13, $report->getErrorCount());
+		self::assertSame(15, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -97,6 +97,18 @@ class RequireMultiLineCallSniffTest extends TestCase
 			RequireMultiLineCallSniff::CODE_REQUIRED_MULTI_LINE_CALL,
 			'Call of method sendDelayedMessage() should be splitted to more lines.'
 		);
+		self::assertSniffError(
+			$report,
+			51,
+			RequireMultiLineCallSniff::CODE_REQUIRED_MULTI_LINE_CALL,
+			'Call of function sprintf() should be splitted to more lines.'
+		);
+		self::assertSniffError(
+			$report,
+			54,
+			RequireMultiLineCallSniff::CODE_REQUIRED_MULTI_LINE_CALL,
+			'Call of function _() should be splitted to more lines.'
+		);
 
 		self::assertAllFixedInFile($report);
 	}
@@ -115,9 +127,10 @@ class RequireMultiLineCallSniffTest extends TestCase
 			'minLineLength' => 0,
 		]);
 
-		self::assertSame(1, $report->getErrorCount());
+		self::assertSame(2, $report->getErrorCount());
 
 		self::assertSniffError($report, 7, RequireMultiLineCallSniff::CODE_REQUIRED_MULTI_LINE_CALL);
+		self::assertSniffError($report, 12, RequireMultiLineCallSniff::CODE_REQUIRED_MULTI_LINE_CALL);
 
 		self::assertAllFixedInFile($report);
 	}

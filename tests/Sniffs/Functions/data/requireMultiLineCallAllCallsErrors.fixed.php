@@ -10,3 +10,12 @@ class Whatever
 		);
 	}
 }
+
+function ($text) {
+	return sprintf(
+		_(
+			'very looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong parameter'
+		),
+		$text
+	);
+};

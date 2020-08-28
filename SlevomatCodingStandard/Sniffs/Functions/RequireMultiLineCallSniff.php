@@ -12,6 +12,7 @@ use function count;
 use function in_array;
 use function sprintf;
 use function strlen;
+use function trim;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSE_SHORT_ARRAY;
 use const T_COMMA;
@@ -110,7 +111,17 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 			$lineLength = strlen($lineStart . $lineEnd);
 		}
 
-		if (!$this->shouldReportError($lineLength)) {
+		$firstNonWhitespaceOnLine = TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $stringPointer);
+		$indentation = IndentationHelper::getIndentation($phpcsFile, $firstNonWhitespaceOnLine);
+		$oneIndentation = IndentationHelper::getOneIndentationLevel($indentation);
+
+		if (!$this->shouldReportError(
+			$lineLength,
+			$lineStart,
+			$lineEnd,
+			count($parametersPointers),
+			strlen(IndentationHelper::convertTabsToSpaces($phpcsFile, $oneIndentation))
+		)) {
 			return;
 		}
 
@@ -130,10 +141,7 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 			return;
 		}
 
-		$firstNonWhitespaceOnLine = TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $stringPointer);
-		$indentation = IndentationHelper::getIndentation($phpcsFile, $firstNonWhitespaceOnLine);
 		$parametersIndentation = IndentationHelper::addIndentation($indentation);
-		$oneIndentation = IndentationHelper::getOneIndentationLevel($indentation);
 
 		$phpcsFile->fixer->beginChangeset();
 
@@ -192,7 +200,13 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 		return false;
 	}
 
-	private function shouldReportError(int $lineLength): bool
+	private function shouldReportError(
+		int $lineLength,
+		string $lineStart,
+		string $lineEnd,
+		int $parametersCount,
+		int $indentationLength
+	): bool
 	{
 		$minLineLength = SniffSettingsHelper::normalizeInteger($this->minLineLength);
 
@@ -200,7 +214,15 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 			return true;
 		}
 
-		return $lineLength >= $minLineLength;
+		if ($lineLength < $minLineLength) {
+			return false;
+		}
+
+		if ($parametersCount > 1) {
+			return true;
+		}
+
+		return strlen(trim($lineStart) . trim($lineEnd)) > $indentationLength;
 	}
 
 }
