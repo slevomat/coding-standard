@@ -8,3 +8,11 @@ doSomething(function (string $class) {
 
 	return $foo;
 });
+
+function ($record) {
+	foreach ($record['context']['attachments'] as $attachment) {
+		/** @var Whatever $attachment */
+
+	}
+};
+

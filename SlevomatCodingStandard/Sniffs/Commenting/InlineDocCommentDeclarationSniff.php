@@ -279,7 +279,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 				self::CODE_NO_ASSIGNMENT,
 			];
 
-			if ($this->allowAboveNonAssignment) {
+			if ($this->allowAboveNonAssignment && $firstPointerOnNextLine !== null) {
 				for ($i = $firstPointerOnNextLine; $i < count($tokens); $i++) {
 					if ($tokens[$i]['line'] > $tokens[$firstPointerOnNextLine]['line']) {
 						break;
