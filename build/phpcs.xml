@@ -165,6 +165,7 @@
 	</rule>
 	<rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineCondition">
 		<properties>
+			<property name="minLineLength" value="141"/>
 			<property name="alwaysSplitAllConditionParts" value="true"/>
 		</properties>
 	</rule>
