@@ -4,16 +4,14 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function assert;
 use function is_string;
 use function preg_replace;
-use function preg_replace_callback;
 use function rtrim;
 use function sprintf;
-use function str_repeat;
 use function str_replace;
-use function strlen;
 use const T_FUNCTION;
 use const T_OPEN_CURLY_BRACKET;
 use const T_SEMICOLON;
@@ -65,11 +63,9 @@ abstract class AbstractMethodSignature implements Sniff
 		return $signature;
 	}
 
-	protected function getSignatureWithoutTabs(string $signature): string
+	protected function getSignatureWithoutTabs(File $phpcsFile, string $signature): string
 	{
-		return preg_replace_callback('~^(\t+)~', static function (array $matches): string {
-			return str_repeat('    ', strlen($matches[1]));
-		}, $signature);
+		return IndentationHelper::convertTabsToSpaces($phpcsFile, $signature);
 	}
 
 }

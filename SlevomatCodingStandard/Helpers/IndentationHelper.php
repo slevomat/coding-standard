@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Helpers;
 use PHP_CodeSniffer\Files\File;
 use function in_array;
 use function ltrim;
+use function preg_replace_callback;
 use function rtrim;
 use function str_repeat;
 use function strlen;
@@ -19,6 +20,8 @@ use const T_START_NOWDOC;
  */
 class IndentationHelper
 {
+
+	public const DEFAULT_INDENTATION_WIDTH = 4;
 
 	public const TAB_INDENT = "\t";
 	public const SPACES_INDENT = '    ';
@@ -73,8 +76,8 @@ class IndentationHelper
 					// Nothing
 				} elseif ($content[0] === self::TAB_INDENT) {
 					$content = substr($content, 1);
-				} elseif (substr($content, 0, 4) === self::SPACES_INDENT) {
-					$content = substr($content, 4);
+				} elseif (substr($content, 0, self::DEFAULT_INDENTATION_WIDTH) === self::SPACES_INDENT) {
+					$content = substr($content, self::DEFAULT_INDENTATION_WIDTH);
 				} else {
 					$content = $defaultIndentation . ltrim($content);
 				}
@@ -90,6 +93,17 @@ class IndentationHelper
 		}
 
 		return rtrim($code);
+	}
+
+	public static function convertTabsToSpaces(File $phpcsFile, string $code): string
+	{
+		return preg_replace_callback('~^(\t+)~', static function (array $matches) use ($phpcsFile): string {
+			$indentation = str_repeat(
+				' ',
+				$phpcsFile->config->tabWidth !== 0 ? $phpcsFile->config->tabWidth : self::DEFAULT_INDENTATION_WIDTH
+			);
+			return str_repeat($indentation, strlen($matches[1]));
+		}, $code);
 	}
 
 }

@@ -4,15 +4,13 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
 use function preg_replace;
-use function preg_replace_callback;
 use function rtrim;
 use function sprintf;
-use function str_repeat;
-use function strlen;
 use function trim;
 use const T_ELSEIF;
 use const T_IF;
@@ -100,9 +98,7 @@ abstract class AbstractLineCondition implements Sniff
 	{
 		$firstPointerOnLine = TokenHelper::findFirstTokenOnLine($phpcsFile, $pointer);
 
-		return preg_replace_callback('~^(\t+)~', static function (array $matches): string {
-			return str_repeat('    ', strlen($matches[1]));
-		}, TokenHelper::getContent($phpcsFile, $firstPointerOnLine, $pointer));
+		return IndentationHelper::convertTabsToSpaces($phpcsFile, TokenHelper::getContent($phpcsFile, $firstPointerOnLine, $pointer));
 	}
 
 	protected function getCondition(File $phpcsFile, int $parenthesisOpenerPointer, int $parenthesisCloserPointer): string

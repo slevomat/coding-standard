@@ -60,7 +60,7 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 		}
 
 		$signature = $this->getSignature($phpcsFile, $signatureStartPointer, $signatureEndPointer);
-		$signatureWithoutTabIndentation = $this->getSignatureWithoutTabs($signature);
+		$signatureWithoutTabIndentation = $this->getSignatureWithoutTabs($phpcsFile, $signature);
 		$methodName = FunctionHelper::getName($phpcsFile, $methodPointer);
 
 		if (
