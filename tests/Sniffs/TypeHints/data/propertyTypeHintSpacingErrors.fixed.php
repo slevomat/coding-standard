@@ -11,8 +11,6 @@ class Whatever
 
 	private ?int $noSpaceBeforeNullabilitySymbol;
 
-	private \DateTimeImmutable $noSpaceBeforeTypeHint;
-
 	private ?int $moreSpaceBeforeNullabilitySymbol;
 
 	private int $moreSpaceBeforeTypeHint;

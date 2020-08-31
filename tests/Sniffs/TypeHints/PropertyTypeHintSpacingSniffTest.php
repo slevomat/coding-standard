@@ -13,24 +13,18 @@ class PropertyTypeHintSpacingSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
-	/**
-	 * It's not possible to report CODE_NO_SPACE_BEFORE_TYPE_HINT on PHP 8.
-	 *
-	 * @requires PHP < 8.0
-	 */
 	public function testErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintSpacingErrors.php');
 
-		self::assertSame(7, $report->getErrorCount());
+		self::assertSame(6, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, PropertyTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_TYPE_HINT_AND_PROPERTY);
 		self::assertSniffError($report, 8, PropertyTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PROPERTY);
 		self::assertSniffError($report, 10, PropertyTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL);
 		self::assertSniffError($report, 12, PropertyTypeHintSpacingSniff::CODE_NO_SPACE_BEFORE_NULLABILITY_SYMBOL);
-		self::assertSniffError($report, 14, PropertyTypeHintSpacingSniff::CODE_NO_SPACE_BEFORE_TYPE_HINT);
-		self::assertSniffError($report, 16, PropertyTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BEFORE_NULLABILITY_SYMBOL);
-		self::assertSniffError($report, 18, PropertyTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BEFORE_TYPE_HINT);
+		self::assertSniffError($report, 14, PropertyTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BEFORE_NULLABILITY_SYMBOL);
+		self::assertSniffError($report, 16, PropertyTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BEFORE_TYPE_HINT);
 
 		self::assertAllFixedInFile($report);
 	}
