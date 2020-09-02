@@ -90,6 +90,16 @@ function ($foo) {
 	}
 };
 
+function () {
+	switch (true) {
+		default:
+			switch (true) {
+				default:
+					break;
+			}
+	}
+};
+
 switch ($foo) {
     case 'bar':
 
