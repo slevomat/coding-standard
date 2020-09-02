@@ -377,18 +377,21 @@ abstract class AbstractControlStructureSpacing implements Sniff
 
 		if (in_array($tokens[$controlStructurePointer]['code'], [T_CASE, T_DEFAULT], true)) {
 			$switchPointer = TokenHelper::findPrevious($phpcsFile, T_SWITCH, $controlStructurePointer - 1);
-			$pointerAfterControlStructureEnd = TokenHelper::findNext(
+
+			$pointers = TokenHelper::findNextAll(
 				$phpcsFile,
 				[T_CASE, T_DEFAULT],
 				$controlStructurePointer + 1,
 				$tokens[$switchPointer]['scope_closer']
 			);
 
-			if ($pointerAfterControlStructureEnd === null) {
-				return TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $tokens[$switchPointer]['scope_closer'] - 1);
+			foreach ($pointers as $pointer) {
+				if (TokenHelper::findPrevious($phpcsFile, T_SWITCH, $pointer - 1) === $switchPointer) {
+					return TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $pointer - 1);
+				}
 			}
 
-			return TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $pointerAfterControlStructureEnd - 1);
+			return TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $tokens[$switchPointer]['scope_closer'] - 1);
 		}
 
 		$nextPointer = TokenHelper::findNext(
