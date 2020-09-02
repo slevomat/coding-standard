@@ -498,6 +498,7 @@ class TokenHelper
 		if ($nameTokenCodes === null) {
 			$nameTokenCodes = [T_STRING];
 
+			// @codeCoverageIgnoreStart
 			if (defined('T_NAME_FULLY_QUALIFIED')) {
 				$nameTokenCodes[] = T_NAME_FULLY_QUALIFIED;
 			}
@@ -509,6 +510,7 @@ class TokenHelper
 			if (defined('T_NAME_RELATIVE')) {
 				$nameTokenCodes[] = T_NAME_RELATIVE;
 			}
+			// @codeCoverageIgnoreEnd
 		}
 
 		return $nameTokenCodes;
