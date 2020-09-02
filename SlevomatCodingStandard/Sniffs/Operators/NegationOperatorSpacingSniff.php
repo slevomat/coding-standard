@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Operators;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_merge;
@@ -65,6 +66,11 @@ class NegationOperatorSpacingSniff implements Sniff
 		);
 
 		if (in_array($tokens[$previousEffective]['code'], $possibleOperandTypes, true)) {
+			return;
+		}
+
+		$possibleVariableStartPointer = IdentificatorHelper::findStartPointer($phpcsFile, $previousEffective);
+		if ($possibleVariableStartPointer !== null) {
 			return;
 		}
 
