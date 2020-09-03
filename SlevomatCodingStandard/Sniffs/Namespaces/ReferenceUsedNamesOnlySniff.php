@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
@@ -11,6 +12,7 @@ use SlevomatCodingStandard\Helpers\AnnotationConstantExpressionHelper;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\ClassHelper;
+use SlevomatCodingStandard\Helpers\CommentHelper;
 use SlevomatCodingStandard\Helpers\ConstantHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
@@ -37,6 +39,7 @@ use function defined;
 use function function_exists;
 use function in_array;
 use function sprintf;
+use function strlen;
 use function strtolower;
 use function substr;
 use const T_COMMA;
@@ -572,14 +575,41 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 			return $useStatementPlacePointer;
 		}
 
-		$pointerAfterOpenTagPointer = TokenHelper::findNextEffective($phpcsFile, $openTagPointer + 1);
-		if ($phpcsFile->getTokens()[$pointerAfterOpenTagPointer]['code'] === T_DECLARE) {
-			/** @var int $useStatementPlacePointer */
-			$useStatementPlacePointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $pointerAfterOpenTagPointer + 1);
-			return $useStatementPlacePointer;
+		$tokens = $phpcsFile->getTokens();
+
+		$useStatementPlacePointer = $openTagPointer;
+
+		$nonWhitespacePointerAfterOpenTag = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $openTagPointer + 1);
+		if (in_array($tokens[$nonWhitespacePointerAfterOpenTag]['code'], Tokens::$commentTokens, true)) {
+			$commentEndPointer = CommentHelper::getCommentEndPointer($phpcsFile, $nonWhitespacePointerAfterOpenTag);
+
+			if (substr($tokens[$commentEndPointer]['content'], -strlen($phpcsFile->eolChar)) === $phpcsFile->eolChar) {
+				$useStatementPlacePointer = $commentEndPointer;
+			} else {
+				$newLineAfterComment = $commentEndPointer + 1;
+
+				if (array_key_exists($newLineAfterComment, $tokens) && $tokens[$newLineAfterComment]['content'] === $phpcsFile->eolChar) {
+					$pointerAfterCommentEnd = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $newLineAfterComment + 1);
+
+					if (TokenHelper::findNextContent(
+						$phpcsFile,
+						T_WHITESPACE,
+						$phpcsFile->eolChar,
+						$newLineAfterComment + 1,
+						$pointerAfterCommentEnd
+					) !== null) {
+						$useStatementPlacePointer = $commentEndPointer;
+					}
+				}
+			}
 		}
 
-		return $openTagPointer;
+		$pointerAfter = TokenHelper::findNextEffective($phpcsFile, $useStatementPlacePointer + 1);
+		if ($tokens[$pointerAfter]['code'] === T_DECLARE) {
+			return TokenHelper::findNext($phpcsFile, T_SEMICOLON, $pointerAfter + 1);
+		}
+
+		return $useStatementPlacePointer;
 	}
 
 	private function isRequiredToBeUsed(string $name): bool
