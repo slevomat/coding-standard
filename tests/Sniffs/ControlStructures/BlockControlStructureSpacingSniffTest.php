@@ -384,6 +384,13 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 		self::assertSame(0, $report->getErrorCount());
 	}
 
+	public function testIfWithAlternativeSyntax(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/blockControlStructureSpacingIfWithAlternativeSyntax.php');
+
+		self::assertSame(0, $report->getErrorCount());
+	}
+
 	public function testAtTheEndOfFile(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/blockControlStructureSpacingAtTheEndOfFile.php');

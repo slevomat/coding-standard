@@ -326,6 +326,14 @@ abstract class AbstractControlStructureSpacing implements Sniff
 				throw new Exception('"if" without curly braces is not supported.');
 			}
 
+			$pointerAfterParenthesisCloser = TokenHelper::findNextEffective(
+				$phpcsFile,
+				$tokens[$controlStructurePointer]['parenthesis_closer'] + 1
+			);
+			if ($pointerAfterParenthesisCloser !== null && $tokens[$pointerAfterParenthesisCloser]['code'] === T_COLON) {
+				throw new Exception('"if" without curly braces is not supported.');
+			}
+
 			$controlStructureEndPointer = $tokens[$controlStructurePointer]['scope_closer'];
 			do {
 				$nextPointer = TokenHelper::findNextEffective($phpcsFile, $controlStructureEndPointer + 1);
