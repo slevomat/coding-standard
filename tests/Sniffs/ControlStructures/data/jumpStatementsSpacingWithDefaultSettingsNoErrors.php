@@ -178,3 +178,11 @@ function () {
 	// second comment
 	return $foo + $bar;
 };
+
+function ($bool) {
+	if (!$bool) {
+	    // @codeCoverageIgnoreStart
+	    throw new Exception('Some error');
+	    // @codeCoverageIgnoreEnd
+	}
+};
