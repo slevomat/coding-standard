@@ -160,6 +160,8 @@ $output = (($a and $b) ? 'yes' : 'nope');
 
 $whatever = (null !== $a = $b->call());
 
+$key = ((array) $table->getPrimaryKey())[0];
+
 // Must be last
 return true
 	? 100
