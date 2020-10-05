@@ -159,7 +159,7 @@ class UselessParenthesesSniff implements Sniff
 		$pointerAfterParenthesisOpener = TokenHelper::findNextEffective($phpcsFile, $parenthesisOpenerPointer + 1);
 		if (in_array(
 			$tokens[$pointerAfterParenthesisOpener]['code'],
-			[T_NEW, T_CLONE, T_YIELD, T_YIELD_FROM, T_REQUIRE, T_REQUIRE_ONCE, T_INCLUDE, T_INCLUDE_ONCE],
+			[T_NEW, T_CLONE, T_YIELD, T_YIELD_FROM, T_REQUIRE, T_REQUIRE_ONCE, T_INCLUDE, T_INCLUDE_ONCE, T_ARRAY_CAST],
 			true
 		)) {
 			return;
