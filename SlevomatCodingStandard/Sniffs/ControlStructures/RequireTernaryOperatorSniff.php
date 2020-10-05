@@ -116,6 +116,9 @@ class RequireTernaryOperatorSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 		$phpcsFile->fixer->replaceToken($ifPointer, 'return');
+		if ($ifPointer + 1 === $tokens[$ifPointer]['parenthesis_opener']) {
+			$phpcsFile->fixer->addContent($ifPointer, ' ');
+		}
 		$phpcsFile->fixer->replaceToken($tokens[$ifPointer]['parenthesis_opener'], '');
 		$phpcsFile->fixer->replaceToken($tokens[$ifPointer]['parenthesis_closer'], ' ? ');
 
