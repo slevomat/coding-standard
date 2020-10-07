@@ -6,7 +6,6 @@ use PHP_CodeSniffer\Files\File;
 use function array_key_exists;
 use function array_merge;
 use function count;
-use function defined;
 use const T_ARRAY_HINT;
 use const T_BREAK;
 use const T_CALLABLE;
@@ -477,14 +476,7 @@ class TokenHelper
 	 */
 	public static function getNameTokenCodes(): array
 	{
-		static $nameTokenCodes = null;
-
-		if ($nameTokenCodes === null) {
-			$nameTokenCodes = self::getOnlyNameTokenCodes();
-			$nameTokenCodes[] = T_NS_SEPARATOR;
-		}
-
-		return $nameTokenCodes;
+		return [T_STRING, T_NS_SEPARATOR, T_NAME_FULLY_QUALIFIED, T_NAME_QUALIFIED, T_NAME_RELATIVE];
 	}
 
 	/**
@@ -493,27 +485,7 @@ class TokenHelper
 	 */
 	public static function getOnlyNameTokenCodes(): array
 	{
-		static $nameTokenCodes = null;
-
-		if ($nameTokenCodes === null) {
-			$nameTokenCodes = [T_STRING];
-
-			// @codeCoverageIgnoreStart
-			if (defined('T_NAME_FULLY_QUALIFIED')) {
-				$nameTokenCodes[] = T_NAME_FULLY_QUALIFIED;
-			}
-
-			if (defined('T_NAME_QUALIFIED')) {
-				$nameTokenCodes[] = T_NAME_QUALIFIED;
-			}
-
-			if (defined('T_NAME_RELATIVE')) {
-				$nameTokenCodes[] = T_NAME_RELATIVE;
-			}
-			// @codeCoverageIgnoreEnd
-		}
-
-		return $nameTokenCodes;
+		return [T_STRING, T_NAME_FULLY_QUALIFIED, T_NAME_QUALIFIED, T_NAME_RELATIVE];
 	}
 
 	/**

@@ -6,7 +6,6 @@ use PHP_CodeSniffer\Files\File;
 use function array_reverse;
 use function array_slice;
 use function count;
-use function defined;
 use function explode;
 use function implode;
 use function in_array;
@@ -48,13 +47,7 @@ class NamespaceHelper
 
 	public static function isFullyQualifiedPointer(File $phpcsFile, int $pointer): bool
 	{
-		$fullyQualifiedTokenCodes = [T_NS_SEPARATOR];
-
-		if (defined('T_NAME_FULLY_QUALIFIED')) {
-			$fullyQualifiedTokenCodes[] = T_NAME_FULLY_QUALIFIED;
-		}
-
-		return in_array($phpcsFile->getTokens()[$pointer]['code'], $fullyQualifiedTokenCodes, true);
+		return in_array($phpcsFile->getTokens()[$pointer]['code'], [T_NS_SEPARATOR, T_NAME_FULLY_QUALIFIED], true);
 	}
 
 	public static function getFullyQualifiedTypeName(string $typeName): string
