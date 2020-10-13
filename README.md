@@ -145,6 +145,10 @@ constants, properties, static properties, methods, all public methods, all prote
 
 Disallows late static binding for constants.
 
+#### SlevomatCodingStandard.Classes.ForbiddenPublicProperty
+
+Disallows using public properties.
+
 #### SlevomatCodingStandard.Classes.UselessLateStaticBinding 🔧
 
 Reports useless late static binding.
