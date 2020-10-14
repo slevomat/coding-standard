@@ -246,6 +246,12 @@ Some functions have `$strict` parameter. This sniff reports calls to these funct
 
 Reports closures not using `$this` that are not declared `static`.
 
+#### SlevomatCodingStandard.Functions.FunctionLength 🔧
+
+Disallows long functions. This sniff provides the following setting:
+
+* `maxLinesLength`: specifies max allowed function lines length (default value is 20).
+
 #### SlevomatCodingStandard.PHP.DisallowDirectMagicInvokeCall 🔧
 
 Disallows direct call of `__invoke()`.

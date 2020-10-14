@@ -452,6 +452,21 @@ class FunctionHelper
 		);
 	}
 
+	public static function getFunctionLengthInLines(File $file, int $position): int
+	{
+		$tokens = $file->getTokens();
+		$token = $tokens[$position];
+
+		if (self::isAbstract($file, $position)) {
+			return 0;
+		}
+
+		$firstToken = $tokens[$token['scope_opener']];
+		$lastToken = $tokens[$token['scope_closer']];
+
+		return $lastToken['line'] - $firstToken['line'];
+	}
+
 	/**
 	 * @param File $phpcsFile
 	 * @param int $previousFunctionPointer
