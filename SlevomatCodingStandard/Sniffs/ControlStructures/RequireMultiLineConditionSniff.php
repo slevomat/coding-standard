@@ -77,7 +77,7 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
-				'Condition of "%s" should be splitted to more lines so each condition part is on its own line.',
+				'Condition of "%s" should be split to more lines so each condition part is on its own line.',
 				$this->getControlStructureName($phpcsFile, $controlStructurePointer)
 			),
 			$controlStructurePointer,

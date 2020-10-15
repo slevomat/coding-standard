@@ -82,7 +82,7 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 			return;
 		}
 
-		$error = sprintf('Signature of method "%s" should be splitted to more lines so each parameter is on its own line.', $methodName);
+		$error = sprintf('Signature of method "%s" should be split to more lines so each parameter is on its own line.', $methodName);
 		$fix = $phpcsFile->addFixableError($error, $methodPointer, self::CODE_REQUIRED_MULTI_LINE_SIGNATURE);
 		if (!$fix) {
 			return;
