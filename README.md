@@ -271,6 +271,12 @@ Disallows long functions. This sniff provides the following setting:
 
 * `maxLinesLength`: specifies max allowed function lines length (default value is 20).
 
+#### SlevomatCodingStandard.Functions.MaxNestingLevel 🔧
+
+Control maximum allowed nesting level of a function. This sniff provides the following setting:
+
+* `maxNestingLevel`: specifies max allowed function nesting level (default value is 2).
+
 #### SlevomatCodingStandard.PHP.DisallowDirectMagicInvokeCall 🔧
 
 Disallows direct call of `__invoke()`.
