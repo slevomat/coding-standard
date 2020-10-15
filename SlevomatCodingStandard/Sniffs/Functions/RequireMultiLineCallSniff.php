@@ -130,11 +130,11 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 		$name = ltrim($tokens[$stringPointer]['content'], '\\');
 
 		if (in_array($tokens[$previousPointer]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
-			$error = sprintf('Call of method %s() should be splitted to more lines.', $name);
+			$error = sprintf('Call of method %s() should be split to more lines.', $name);
 		} elseif ($tokens[$previousPointer]['code'] === T_NEW) {
-			$error = 'Constructor call should be splitted to more lines.';
+			$error = 'Constructor call should be split to more lines.';
 		} else {
-			$error = sprintf('Call of function %s() should be splitted to more lines.', $name);
+			$error = sprintf('Call of function %s() should be split to more lines.', $name);
 		}
 
 		$fix = $phpcsFile->addFixableError($error, $stringPointer, self::CODE_REQUIRED_MULTI_LINE_CALL);

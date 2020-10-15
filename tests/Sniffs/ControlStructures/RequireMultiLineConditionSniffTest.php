@@ -23,31 +23,31 @@ class RequireMultiLineConditionSniffTest extends TestCase
 			$report,
 			4,
 			RequireMultiLineConditionSniff::CODE_REQUIRED_MULTI_LINE_CONDITION,
-			'Condition of "if" should be splitted to more lines so each condition part is on its own line.'
+			'Condition of "if" should be split to more lines so each condition part is on its own line.'
 		);
 		self::assertSniffError(
 			$report,
 			6,
 			RequireMultiLineConditionSniff::CODE_REQUIRED_MULTI_LINE_CONDITION,
-			'Condition of "elseif" should be splitted to more lines so each condition part is on its own line.'
+			'Condition of "elseif" should be split to more lines so each condition part is on its own line.'
 		);
 		self::assertSniffError(
 			$report,
 			10,
 			RequireMultiLineConditionSniff::CODE_REQUIRED_MULTI_LINE_CONDITION,
-			'Condition of "while" should be splitted to more lines so each condition part is on its own line.'
+			'Condition of "while" should be split to more lines so each condition part is on its own line.'
 		);
 		self::assertSniffError(
 			$report,
 			18,
 			RequireMultiLineConditionSniff::CODE_REQUIRED_MULTI_LINE_CONDITION,
-			'Condition of "do-while" should be splitted to more lines so each condition part is on its own line.'
+			'Condition of "do-while" should be split to more lines so each condition part is on its own line.'
 		);
 		self::assertSniffError(
 			$report,
 			20,
 			RequireMultiLineConditionSniff::CODE_REQUIRED_MULTI_LINE_CONDITION,
-			'Condition of "if" should be splitted to more lines so each condition part is on its own line.'
+			'Condition of "if" should be split to more lines so each condition part is on its own line.'
 		);
 
 		self::assertAllFixedInFile($report);
