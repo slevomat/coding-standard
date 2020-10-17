@@ -801,6 +801,13 @@ This sniff provides the following setting:
 
 * `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 8.0 or higher.
 
+#### SlevomatCodingStandard.NamingConventions.ElementNameMinimalLength 🔧
+
+Enforces a minimum length for all elements in code. Sniff provides the following settings:
+
+* `minLength`: specifies min allowed element length (default value is 3)
+* `allowedShortNames` (defaults to `true`): specifies a list of allowed short names (default list contains: ["i", "id", "to", "up"]).
+
 #### SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses 🔧
 
 Checks whether uses at the top of a file are alphabetically sorted. Follows natural sorting and takes edge cases with special symbols into consideration. The following code snippet is an example of correctly sorted uses:
