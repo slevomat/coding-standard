@@ -523,6 +523,12 @@ Sniff provides the following settings:
 * `linesCountAfter`: allows to configure the number of lines after parent call.
 * `linesCountAfterLast`: allows to configure the number of lines after last parent call.
 
+#### SlevomatCodingStandard.Classes.PropertyPerClassLimit
+
+Enforces configurable number of properties in a class. This sniff provides the following setting:
+
+* `maxPropertyCount`: specifies max allowed properties count (default value is 10).
+
 #### SlevomatCodingStandard.Classes.PropertySpacing 🔧
 
 Checks that there is a certain number of blank lines between properties.

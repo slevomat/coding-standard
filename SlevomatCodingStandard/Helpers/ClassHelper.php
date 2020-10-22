@@ -3,13 +3,16 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use function array_filter;
 use function array_merge;
 use function array_reverse;
+use function count;
 use function sprintf;
 use const T_ANON_CLASS;
 use const T_FINAL;
 use const T_STRING;
 use const T_USE;
+use const T_VARIABLE;
 
 /**
  * @internal
@@ -105,6 +108,30 @@ class ClassHelper
 		}
 
 		return $useStatements;
+	}
+
+	public static function getPropertiesCount(File $file, int $position): int
+	{
+		return count(self::getProperties($file, $position));
+	}
+
+	/**
+	 * @param File $file
+	 * @param int $position
+	 * @return int[]
+	 */
+	public static function getProperties(File $file, int $position): array
+	{
+		$tokens = $file->getTokens();
+		$token = $tokens[$position];
+		$pointer = $token['scope_opener'];
+
+		return array_filter(
+			TokenHelper::findNextAll($file, T_VARIABLE, $pointer + 1, $token['scope_closer']),
+			static function ($variablePointer) use ($file): bool {
+				return PropertyHelper::isProperty($file, $variablePointer);
+			}
+		);
 	}
 
 	/**
