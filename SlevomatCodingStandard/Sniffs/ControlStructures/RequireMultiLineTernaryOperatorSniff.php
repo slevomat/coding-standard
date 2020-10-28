@@ -73,7 +73,11 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 				[T_CLOSE_TAG, T_SEMICOLON, T_COMMA, T_DOUBLE_ARROW, T_CLOSE_SHORT_ARRAY, T_COALESCE],
 				true
 			)) {
-				break;
+				$parenthesis = $tokens[$pointerAfterInlineElseEnd]['nested_parenthesis'] ?? [];
+				$lastParenthesis = array_slice($parenthesis, -1, 1, true);
+				if (!$lastParenthesis || key($lastParenthesis) < $inlineElsePointer) {
+					break;
+				}
 			}
 
 			if (
