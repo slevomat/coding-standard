@@ -648,6 +648,7 @@ Ternary operator has to be reformatted to more lines when the line length exceed
 Sniff provides the following settings:
 
 * `lineLengthLimit` (defaults to `0`)
+* `expressionsMinLength` (defaults to `null`)
 
 #### SlevomatCodingStandard.ControlStructures.RequireSingleLineCondition 🔧
 
