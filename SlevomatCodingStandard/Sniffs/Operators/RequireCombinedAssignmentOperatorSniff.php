@@ -52,7 +52,10 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 		$variableStartPointer = TokenHelper::findNextEffective($phpcsFile, $equalPointer + 1);
 		$variableEndPointer = IdentificatorHelper::findEndPointer($phpcsFile, $variableStartPointer);
 
-		if ($variableEndPointer === null) {
+		if (
+			$variableEndPointer === null
+			|| $tokens[$variableEndPointer]['code'] === T_CLOSE_SQUARE_BRACKET
+		) {
 			return;
 		}
 
