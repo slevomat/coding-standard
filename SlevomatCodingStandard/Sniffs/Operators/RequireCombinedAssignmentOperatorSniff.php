@@ -12,6 +12,7 @@ use function sprintf;
 use const T_BITWISE_AND;
 use const T_BITWISE_OR;
 use const T_BITWISE_XOR;
+use const T_CLOSE_SQUARE_BRACKET;
 use const T_DIVIDE;
 use const T_EQUAL;
 use const T_MINUS;
@@ -46,6 +47,8 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $equalPointer): void
 	{
+		$tokens = $phpcsFile->getTokens();
+
 		/** @var int $variableStartPointer */
 		$variableStartPointer = TokenHelper::findNextEffective($phpcsFile, $equalPointer + 1);
 		$variableEndPointer = IdentificatorHelper::findEndPointer($phpcsFile, $variableStartPointer);
@@ -55,7 +58,6 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 		}
 
 		$operatorPointer = TokenHelper::findNextEffective($phpcsFile, $variableEndPointer + 1);
-		$tokens = $phpcsFile->getTokens();
 
 		$operators = [
 			T_BITWISE_AND => '&=',
@@ -97,15 +99,22 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError(
-			sprintf(
-				'Use "%s" operator instead of "=" and "%s".',
-				$operators[$tokens[$operatorPointer]['code']],
-				$tokens[$operatorPointer]['content']
-			),
-			$equalPointer,
-			self::CODE_REQUIRED_COMBINED_ASSIGMENT_OPERATOR
+		$errorMessage = sprintf(
+			'Use "%s" operator instead of "=" and "%s".',
+			$operators[$tokens[$operatorPointer]['code']],
+			$tokens[$operatorPointer]['content']
 		);
+
+		// Not fixable with possible string offset
+		$isFixable = $tokens[$variableEndPointer]['code'] !== T_CLOSE_SQUARE_BRACKET;
+
+		if (!$isFixable) {
+			$phpcsFile->addError($errorMessage, $equalPointer, self::CODE_REQUIRED_COMBINED_ASSIGMENT_OPERATOR);
+
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError($errorMessage, $equalPointer, self::CODE_REQUIRED_COMBINED_ASSIGMENT_OPERATOR);
 
 		if (!$fix) {
 			return;

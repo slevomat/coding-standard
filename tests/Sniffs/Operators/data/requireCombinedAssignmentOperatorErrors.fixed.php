@@ -9,7 +9,7 @@ class Whatever extends Something implements Anything
 		static::$a |= 4;
 		self::$$parameter .= '';
 		parent::${'a'} /= 10;
-		self::${'a'}[0] -= 100;
+		self::${'a'}[0]->x -= 100;
 		Anything::$a **= 2;
 		Something\Anything::$a %= 2;
 		\Something\Anything::$a *= 1000;
@@ -22,6 +22,12 @@ class Whatever extends Something implements Anything
 
 		$this
 			->something += 10;
+	}
+
+	public function possibleStringOffsets($a, $b)
+	{
+		$a[0] = $a[0] & '';
+		$b[0] = $b[0] | '';
 	}
 
 }

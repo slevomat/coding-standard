@@ -17,7 +17,7 @@ class RequireCombinedAssignmentOperatorSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireCombinedAssignmentOperatorErrors.php');
 
-		self::assertSame(15, $report->getErrorCount());
+		self::assertSame(17, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -95,6 +95,9 @@ class RequireCombinedAssignmentOperatorSniffTest extends TestCase
 		self::assertSniffError($report, 20, RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGMENT_OPERATOR);
 		self::assertSniffError($report, 21, RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGMENT_OPERATOR);
 		self::assertSniffError($report, 24, RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGMENT_OPERATOR);
+
+		self::assertSniffError($report, 30, RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGMENT_OPERATOR);
+		self::assertSniffError($report, 31, RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGMENT_OPERATOR);
 
 		self::assertAllFixedInFile($report);
 	}
