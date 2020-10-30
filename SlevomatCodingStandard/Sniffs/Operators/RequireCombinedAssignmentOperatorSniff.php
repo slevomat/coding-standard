@@ -46,16 +46,20 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $equalPointer): void
 	{
+		$tokens = $phpcsFile->getTokens();
+
 		/** @var int $variableStartPointer */
 		$variableStartPointer = TokenHelper::findNextEffective($phpcsFile, $equalPointer + 1);
 		$variableEndPointer = IdentificatorHelper::findEndPointer($phpcsFile, $variableStartPointer);
 
-		if ($variableEndPointer === null) {
+		if (
+			$variableEndPointer === null
+			|| $tokens[$variableEndPointer]['code'] === T_CLOSE_SQUARE_BRACKET
+		) {
 			return;
 		}
 
 		$operatorPointer = TokenHelper::findNextEffective($phpcsFile, $variableEndPointer + 1);
-		$tokens = $phpcsFile->getTokens();
 
 		$operators = [
 			T_BITWISE_AND => '&=',

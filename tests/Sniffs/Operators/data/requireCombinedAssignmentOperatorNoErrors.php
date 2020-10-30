@@ -38,5 +38,10 @@ class Whatever
 		$a = $a / $b / $c;
 	}
 
+	public function stringOffsets($a)
+	{
+		$a[0] = $a[0] | '';
+	}
+
 }
 
