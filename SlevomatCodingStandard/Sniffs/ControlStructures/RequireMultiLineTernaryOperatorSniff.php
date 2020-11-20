@@ -4,19 +4,13 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_merge;
 use function in_array;
 use function strlen;
 use function substr;
-use const T_CLOSE_PARENTHESIS;
-use const T_CLOSE_SHORT_ARRAY;
-use const T_CLOSE_SQUARE_BRACKET;
-use const T_CLOSE_TAG;
-use const T_COALESCE;
-use const T_COMMA;
-use const T_DOUBLE_ARROW;
 use const T_INLINE_ELSE;
 use const T_INLINE_THEN;
 use const T_OPEN_TAG;
@@ -66,34 +60,19 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 			return;
 		}
 
-		$pointerAfterInlineElseEnd = $inlineElsePointer + 1;
-		while (true) {
-			if (in_array(
-				$tokens[$pointerAfterInlineElseEnd]['code'],
-				[T_CLOSE_TAG, T_SEMICOLON, T_COMMA, T_DOUBLE_ARROW, T_CLOSE_SHORT_ARRAY, T_COALESCE],
-				true
-			)) {
-				break;
-			}
+		$pointerAfterInlineElseEnd = $inlineElsePointer;
+		do {
+			$pointerAfterInlineElseEnd = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $pointerAfterInlineElseEnd + 1);
 
 			if (
-				$tokens[$pointerAfterInlineElseEnd]['code'] === T_CLOSE_PARENTHESIS
-				&& $tokens[$pointerAfterInlineElseEnd]['parenthesis_opener'] < $inlineElsePointer
+				$pointerAfterInlineElseEnd !== null
+				&& ScopeHelper::isInSameScope($phpcsFile, $inlineElsePointer, $pointerAfterInlineElseEnd)
 			) {
 				break;
 			}
+		} while ($pointerAfterInlineElseEnd !== null);
 
-			if (
-				$tokens[$pointerAfterInlineElseEnd]['code'] === T_CLOSE_SQUARE_BRACKET
-				&& $tokens[$pointerAfterInlineElseEnd]['bracket_opener'] < $inlineElsePointer
-			) {
-				break;
-			}
-
-			$pointerAfterInlineElseEnd++;
-		}
-
-		if ($tokens[$pointerAfterInlineElseEnd]['code'] !== T_SEMICOLON) {
+		if ($pointerAfterInlineElseEnd === null) {
 			return;
 		}
 

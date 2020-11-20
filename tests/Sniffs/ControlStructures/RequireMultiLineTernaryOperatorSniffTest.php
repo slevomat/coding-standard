@@ -21,10 +21,14 @@ class RequireMultiLineTernaryOperatorSniffTest extends TestCase
 			'lineLengthLimit' => 80,
 		]);
 
-		self::assertSame(2, $report->getErrorCount());
+		self::assertSame(6, $report->getErrorCount());
 
 		self::assertSniffError($report, 4, RequireMultiLineTernaryOperatorSniff::CODE_MULTI_LINE_TERNARY_OPERATOR_NOT_USED);
 		self::assertSniffError($report, 7, RequireMultiLineTernaryOperatorSniff::CODE_MULTI_LINE_TERNARY_OPERATOR_NOT_USED);
+		self::assertSniffError($report, 9, RequireMultiLineTernaryOperatorSniff::CODE_MULTI_LINE_TERNARY_OPERATOR_NOT_USED);
+		self::assertSniffError($report, 11, RequireMultiLineTernaryOperatorSniff::CODE_MULTI_LINE_TERNARY_OPERATOR_NOT_USED);
+		self::assertSniffError($report, 13, RequireMultiLineTernaryOperatorSniff::CODE_MULTI_LINE_TERNARY_OPERATOR_NOT_USED);
+		self::assertSniffError($report, 15, RequireMultiLineTernaryOperatorSniff::CODE_MULTI_LINE_TERNARY_OPERATOR_NOT_USED);
 
 		self::assertAllFixedInFile($report);
 	}
