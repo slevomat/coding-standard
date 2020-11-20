@@ -9,13 +9,17 @@ class ModernClassNameReferenceSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/modernClassNameReferenceNoErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/modernClassNameReferenceNoErrors.php', [
+			'enableOnObjects' => false,
+		]);
 		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/modernClassNameReferenceErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/modernClassNameReferenceErrors.php', [
+			'enableOnObjects' => false,
+		]);
 
 		self::assertSame(11, $report->getErrorCount());
 
@@ -80,6 +84,19 @@ class ModernClassNameReferenceSniffTest extends TestCase
 			ModernClassNameReferenceSniff::CODE_CLASS_NAME_REFERENCED_VIA_FUNCTION_CALL,
 			'Class name referenced via call of function get_called_class().'
 		);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testEnabledOnObjectsErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/modernClassNameReferenceEnabledOnObjectsErrors.php', [
+			'enableOnObjects' => true,
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 9, ModernClassNameReferenceSniff::CODE_CLASS_NAME_REFERENCED_VIA_FUNCTION_CALL);
 
 		self::assertAllFixedInFile($report);
 	}
