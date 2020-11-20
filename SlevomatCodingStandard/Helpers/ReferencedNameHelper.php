@@ -8,6 +8,7 @@ use function array_merge;
 use function array_reverse;
 use function array_values;
 use function count;
+use function defined;
 use function in_array;
 use const T_ANON_CLASS;
 use const T_ARRAY;
@@ -146,8 +147,16 @@ class ReferencedNameHelper
 			$type = ReferencedName::TYPE_DEFAULT;
 			if ($nextTokenAfterEndPointer !== null && $previousTokenBeforeStartPointer !== null) {
 				if ($tokens[$nextTokenAfterEndPointer]['code'] === T_OPEN_PARENTHESIS) {
-					if ($tokens[$previousTokenBeforeStartPointer]['code'] !== T_NEW) {
-						$type = ReferencedName::TYPE_FUNCTION;
+					$type = ReferencedName::TYPE_FUNCTION;
+
+					if (
+						$tokens[$previousTokenBeforeStartPointer]['code'] === T_NEW
+						|| (
+							defined('T_ATTRIBUTE')
+							&& $tokens[$previousTokenBeforeStartPointer]['code'] === T_ATTRIBUTE
+						)
+					) {
+						$type = ReferencedName::TYPE_DEFAULT;
 					}
 				} elseif ($tokens[$nextTokenAfterEndPointer]['code'] === T_BITWISE_AND) {
 					$tokenAfterNextToken = TokenHelper::findNextEffective($phpcsFile, $nextTokenAfterEndPointer + 1);
@@ -235,6 +244,12 @@ class ReferencedNameHelper
 
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer + 1);
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $startPointer - 1);
+
+		// @codeCoverageIgnoreStart
+		if (defined('T_ATTRIBUTE') && $tokens[$previousPointer]['code'] === T_ATTRIBUTE) {
+			return true;
+		}
+		// @codeCoverageIgnoreEnd
 
 		if ($tokens[$nextPointer]['code'] === T_DOUBLE_COLON) {
 			return $tokens[$previousPointer]['code'] !== T_OBJECT_OPERATOR;

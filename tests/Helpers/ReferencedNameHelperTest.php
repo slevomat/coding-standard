@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use function count;
+use const PHP_VERSION_ID;
 use const T_NS_SEPARATOR;
 use const T_STRING;
 
@@ -13,7 +14,7 @@ class ReferencedNameHelperTest extends TestCase
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/lotsOfReferencedNames.php');
 
-		$foundTypes = [
+		$expectedTypes = [
 			['\ExtendedClass', false, false],
 			['\ImplementedInterface', false, false],
 			['\SecondImplementedInterface', false, false],
@@ -56,10 +57,16 @@ class ReferencedNameHelperTest extends TestCase
 			['E_NOTICE', false, true],
 		];
 
+		if (PHP_VERSION_ID >= 80000) {
+			$expectedTypes[] = ['Attribute', false, false];
+			$expectedTypes[] = ['Attribute1', false, false];
+			$expectedTypes[] = ['Attribute2', false, false];
+		}
+
 		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
-		self::assertCount(count($foundTypes), $names);
+		self::assertCount(count($expectedTypes), $names);
 		foreach ($names as $i => $referencedName) {
-			[$type, $isFunction, $isConstant] = $foundTypes[$i];
+			[$type, $isFunction, $isConstant] = $expectedTypes[$i];
 
 			self::assertSame($type, $referencedName->getNameAsReferencedInFile());
 			self::assertSame($isFunction, $referencedName->isFunction(), $type);
