@@ -41,4 +41,27 @@ class RequireMultiLineTernaryOperatorSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testNoErrorsWithExpressionMinLength(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireMultiLineTernaryOperatorWithExpressionMinLengthNoErrors.php', [
+			'lineLengthLimit' => 30,
+			'minExpressionsLength' => 10,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testErrorsWithExpressionMinLength(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireMultiLineTernaryOperatorWithExpressionMinLengthErrors.php', [
+			'lineLengthLimit' => 30,
+			'minExpressionsLength' => 10,
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 4, RequireMultiLineTernaryOperatorSniff::CODE_MULTI_LINE_TERNARY_OPERATOR_NOT_USED);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }

@@ -34,6 +34,9 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 	/** @var int */
 	public $lineLengthLimit = 0;
 
+	/** @var int|null */
+	public $minExpressionsLength = null;
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
@@ -110,6 +113,15 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 		$actualLineLength = strlen(TokenHelper::getContent($phpcsFile, $endOfLineBeforeInlineThenPointer + 1, $pointerAfterInlineElseEnd));
 
 		if ($actualLineLength <= $lineLengthLimit) {
+			return;
+		}
+
+		$expressionsLength = strlen(TokenHelper::getContent($phpcsFile, $inlineThenPointer + 1, $pointerAfterInlineElseEnd - 1));
+
+		if (
+			$this->minExpressionsLength !== null
+			&& SniffSettingsHelper::normalizeInteger($this->minExpressionsLength) >= $expressionsLength
+		) {
 			return;
 		}
 
