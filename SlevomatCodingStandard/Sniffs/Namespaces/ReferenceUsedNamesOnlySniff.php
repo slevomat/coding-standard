@@ -386,9 +386,9 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 			$canBeFixed = array_reduce(
 				$alreadyAddedUses[$reference->type],
 				static function (bool $carry, string $use) use ($canonicalName): bool {
-					return strtolower(NamespaceHelper::getLastNamePart($use)) === strtolower(NamespaceHelper::getLastNamePart($canonicalName))
-						? false
-						: $carry;
+					$useLastName = strtolower(NamespaceHelper::getLastNamePart($use));
+					$canonicalLastName = strtolower(NamespaceHelper::getLastNamePart($canonicalName));
+					return $useLastName === $canonicalLastName ? false : $carry;
 				},
 				true
 			);
