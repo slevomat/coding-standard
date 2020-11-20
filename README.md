@@ -206,7 +206,7 @@ Requires use of null coalesce equal operator when possible.
 
 This sniff provides the following setting:
 
-* `enable`: either to enable or no this sniff. By default, it is enabled for PHP versions 7.4 or higher.
+* `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 7.4 or higher.
 
 #### SlevomatCodingStandard.ControlStructures.EarlyExit 🔧
 
@@ -750,7 +750,7 @@ Requires arrow functions.
 Sniff provides the following settings:
 
 * `allowNested` (defaults to `true`)
-* `enable`: either to enable or no this sniff. By default, it is enabled for PHP versions 7.4 or higher.
+* `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 7.4 or higher.
 
 #### SlevomatCodingStandard.Functions.RequireMultiLineCall 🔧
 
@@ -777,7 +777,7 @@ This sniff enforces trailing commas in multi-line calls.
 
 This sniff provides the following setting:
 
-* `enable`: either to enable or no this sniff. By default, it is enabled for PHP versions 7.3 or higher.
+* `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 7.3 or higher.
 
 #### SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses 🔧
 
@@ -844,7 +844,7 @@ Requires use of numeric literal separators.
 
 This sniff provides the following setting:
 
-* `enable`: either to enable or no this sniff. By default, it is enabled for PHP versions 7.4 or higher.
+* `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 7.4 or higher.
 * `minDigitsBeforeDecimalPoint`: the mininum digits before decimal point to require separator.
 * `minDigitsAfterDecimalPoint`: the mininum digits after decimal point to require separator.
 
