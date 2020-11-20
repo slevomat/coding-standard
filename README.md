@@ -85,6 +85,14 @@ Reports useless `@var` annotation (or whole documentation comment) for constants
 
 In PHP 7.0, a [`Throwable` interface was added](https://wiki.php.net/rfc/throwable-interface) that allows catching and handling errors in more cases than `Exception` previously allowed. So, if the catch statement contained `Exception` on PHP 5.x, it means it should probably be rewritten to reference `Throwable` on PHP 7.x. This sniff enforces that.
 
+#### SlevomatCodingStandard.Exceptions.RequireNonCapturingCatch 🔧🚧
+
+Sniff provides the following settings:
+
+* `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 8.0 or higher.
+
+It requires non-capturing catch when the variable with exception is not used.
+
 #### SlevomatCodingStandard.TypeHints.DeclareStrictTypes 🔧
 
 Enforces having `declare(strict_types = 1)` at the top of each PHP file. Allows configuring how many newlines should be between the `<?php` opening tag and the `declare` statement.
