@@ -55,6 +55,9 @@ class ReturnTypeHintSniff implements Sniff
 	/** @var bool|null */
 	public $enableObjectTypeHint = null;
 
+	/** @var bool|null */
+	public $enableStaticTypeHint = null;
+
 	/** @var string[] */
 	public $traversableTypeHints = [];
 
@@ -80,6 +83,7 @@ class ReturnTypeHintSniff implements Sniff
 	public function process(File $phpcsFile, $pointer): void
 	{
 		$this->enableObjectTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableObjectTypeHint, 70200);
+		$this->enableStaticTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableStaticTypeHint, 80000);
 
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $pointer, self::NAME)) {
 			return;
@@ -282,7 +286,7 @@ class ReturnTypeHintSniff implements Sniff
 			return;
 		}
 
-		if (!TypeHintHelper::isValidTypeHint($possibleReturnTypeHint, $this->enableObjectTypeHint)) {
+		if (!TypeHintHelper::isValidTypeHint($possibleReturnTypeHint, $this->enableObjectTypeHint, $this->enableStaticTypeHint)) {
 			return;
 		}
 

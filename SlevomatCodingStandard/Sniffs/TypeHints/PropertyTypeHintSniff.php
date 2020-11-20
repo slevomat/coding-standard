@@ -265,7 +265,7 @@ class PropertyTypeHintSniff implements Sniff
 			return;
 		}
 
-		if (!TypeHintHelper::isValidTypeHint($possibleTypeHint, true)) {
+		if (!TypeHintHelper::isValidTypeHint($possibleTypeHint, true, false)) {
 			return;
 		}
 

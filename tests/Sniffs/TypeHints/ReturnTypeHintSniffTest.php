@@ -19,10 +19,11 @@ class ReturnTypeHintSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/returnTypeHintErrors.php', [
 			'enableObjectTypeHint' => true,
+			'enableStaticTypeHint' => true,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 
-		self::assertSame(40, $report->getErrorCount());
+		self::assertSame(41, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, ReturnTypeHintSniff::CODE_MISSING_ANY_TYPE_HINT);
 		self::assertSniffError($report, 14, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
@@ -66,6 +67,7 @@ class ReturnTypeHintSniffTest extends TestCase
 		self::assertSniffError($report, 238, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 
 		self::assertSniffError($report, 243, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 248, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 
 		self::assertAllFixedInFile($report);
 	}

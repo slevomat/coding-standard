@@ -1,4 +1,4 @@
-<?php // lint >= 7.2
+<?php // lint >= 8.0
 
 abstract class Whatever
 {
@@ -236,6 +236,11 @@ abstract class Whatever
 
 	/** @return class-string */
 	public function classString(): string
+	{
+	}
+
+	/** @return static */
+	public function staticReference(): static
 	{
 	}
 

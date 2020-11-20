@@ -258,6 +258,7 @@
 		<exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint.UselessAnnotation"/>
 		<properties>
 			<property name="enableObjectTypeHint" value="false"/>
+			<property name="enableMixedTypeHint" value="false"/>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
@@ -269,6 +270,7 @@
 		<exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation"/>
 		<properties>
 			<property name="enableObjectTypeHint" value="false"/>
+			<property name="enableMixedTypeHint" value="false"/>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">

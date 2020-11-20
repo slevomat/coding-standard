@@ -247,7 +247,7 @@ class ParameterTypeHintSniff implements Sniff
 				continue;
 			}
 
-			if (!TypeHintHelper::isValidTypeHint($possibleParameterTypeHint, $this->enableObjectTypeHint)) {
+			if (!TypeHintHelper::isValidTypeHint($possibleParameterTypeHint, $this->enableObjectTypeHint, false)) {
 				continue;
 			}
 
