@@ -61,6 +61,9 @@ class PropertyTypeHintSniff implements Sniff
 	/** @var bool|null */
 	public $enableNativeTypeHint = null;
 
+	/** @var bool|null */
+	public $enableMixedTypeHint = null;
+
 	/** @var string[] */
 	public $traversableTypeHints = [];
 
@@ -88,6 +91,9 @@ class PropertyTypeHintSniff implements Sniff
 	public function process(File $phpcsFile, $visibilityPointer): void
 	{
 		$this->enableNativeTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableNativeTypeHint, 70400);
+		$this->enableMixedTypeHint = $this->enableNativeTypeHint
+			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableMixedTypeHint, 80000)
+			: false;
 
 		$tokens = $phpcsFile->getTokens();
 
@@ -265,7 +271,7 @@ class PropertyTypeHintSniff implements Sniff
 			return;
 		}
 
-		if (!TypeHintHelper::isValidTypeHint($possibleTypeHint, true, false)) {
+		if (!TypeHintHelper::isValidTypeHint($possibleTypeHint, true, false, $this->enableMixedTypeHint)) {
 			return;
 		}
 

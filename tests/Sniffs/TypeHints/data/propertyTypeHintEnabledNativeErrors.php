@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.0
 
 class Whatever
 {
@@ -144,5 +144,8 @@ class Whatever
 
 	/** @var class-string */
 	public $classString;
+
+	/** @var mixed */
+	public $mixed;
 
 }

@@ -59,7 +59,7 @@ class Whatever
 	public $twoTypeNoNullOrTraversable;
 
 	/**
-	 * @var mixed
+	 * @var scalar
 	 */
 	public $invalidType;
 

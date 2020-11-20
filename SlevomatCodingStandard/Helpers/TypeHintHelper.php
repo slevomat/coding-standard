@@ -13,7 +13,12 @@ use const T_FUNCTION;
 class TypeHintHelper
 {
 
-	public static function isValidTypeHint(string $typeHint, bool $enableObjectTypeHint, bool $enableStaticTypeHint): bool
+	public static function isValidTypeHint(
+		string $typeHint,
+		bool $enableObjectTypeHint,
+		bool $enableStaticTypeHint,
+		bool $enableMixedTypeHint
+	): bool
 	{
 		if (self::isSimpleTypeHint($typeHint)) {
 			return true;
@@ -25,6 +30,10 @@ class TypeHintHelper
 
 		if ($typeHint === 'static') {
 			return $enableStaticTypeHint;
+		}
+
+		if ($typeHint === 'mixed') {
+			return $enableMixedTypeHint;
 		}
 
 		return !self::isSimpleUnofficialTypeHints($typeHint);

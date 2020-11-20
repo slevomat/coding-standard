@@ -10,6 +10,7 @@ class ParameterTypeHintSniffTest extends TestCase
 	public function testNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/parameterTypeHintNoErrors.php', [
+			'enableMixedTypeHint' => true,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 		self::assertNoSniffErrorInFile($report);
@@ -19,10 +20,11 @@ class ParameterTypeHintSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/parameterTypeHintErrors.php', [
 			'enableObjectTypeHint' => true,
+			'enableMixedTypeHint' => true,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 
-		self::assertSame(38, $report->getErrorCount());
+		self::assertSame(39, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, ParameterTypeHintSniff::CODE_MISSING_ANY_TYPE_HINT);
 		self::assertSniffError($report, 14, ParameterTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
@@ -62,8 +64,8 @@ class ParameterTypeHintSniffTest extends TestCase
 		self::assertSniffError($report, 215, ParameterTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 220, ParameterTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 225, ParameterTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
-
 		self::assertSniffError($report, 230, ParameterTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 235, ParameterTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 
 		self::assertAllFixedInFile($report);
 	}

@@ -96,7 +96,7 @@ class Whatever
 	}
 
 	/**
-	 * @return mixed
+	 * @return scalar
 	 */
 	public function invalidType()
 	{

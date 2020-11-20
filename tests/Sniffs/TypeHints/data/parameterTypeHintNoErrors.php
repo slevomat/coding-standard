@@ -94,7 +94,7 @@ class Whatever
 	}
 
 	/**
-	 * @param mixed $a
+	 * @param scalar $a
 	 */
 	public function invalidType($a): void
 	{

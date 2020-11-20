@@ -244,4 +244,9 @@ abstract class Whatever
 	{
 	}
 
+	/***/
+	public function returnsMixed(): mixed
+	{
+	}
+
 }

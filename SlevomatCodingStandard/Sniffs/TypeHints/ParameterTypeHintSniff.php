@@ -59,6 +59,9 @@ class ParameterTypeHintSniff implements Sniff
 	/** @var bool|null */
 	public $enableObjectTypeHint = null;
 
+	/** @var bool|null */
+	public $enableMixedTypeHint = null;
+
 	/** @var string[] */
 	public $traversableTypeHints = [];
 
@@ -83,6 +86,7 @@ class ParameterTypeHintSniff implements Sniff
 	public function process(File $phpcsFile, $functionPointer): void
 	{
 		$this->enableObjectTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableObjectTypeHint, 70200);
+		$this->enableMixedTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableMixedTypeHint, 80000);
 
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::NAME)) {
 			return;
@@ -247,7 +251,12 @@ class ParameterTypeHintSniff implements Sniff
 				continue;
 			}
 
-			if (!TypeHintHelper::isValidTypeHint($possibleParameterTypeHint, $this->enableObjectTypeHint, false)) {
+			if (!TypeHintHelper::isValidTypeHint(
+				$possibleParameterTypeHint,
+				$this->enableObjectTypeHint,
+				false,
+				$this->enableMixedTypeHint
+			)) {
 				continue;
 			}
 

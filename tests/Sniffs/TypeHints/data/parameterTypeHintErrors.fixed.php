@@ -1,4 +1,4 @@
-<?php // lint >= 7.2
+<?php // lint >= 8.0
 
 class Whatever
 {
@@ -223,6 +223,11 @@ class Whatever
 
 	/** @param class-string $a */
 	public function classString(string $a)
+	{
+	}
+
+	/***/
+	public function mixedType(mixed $a)
 	{
 	}
 

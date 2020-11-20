@@ -249,4 +249,9 @@ abstract class Whatever
 	{
 	}
 
+	/** @return mixed */
+	public function returnsMixed()
+	{
+	}
+
 }
