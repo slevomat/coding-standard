@@ -260,6 +260,10 @@ Disallows direct call of `__invoke()`.
 
 Disallows using loose `==` and `!=` comparison operators. Use `===` and `!==` instead, they are much more secure and predictable.
 
+#### SlevomatCodingStandard.Operators.DisallowNullSafeObjectOperator
+
+Disallows using `?->` operator.
+
 #### SlevomatCodingStandard.Operators.DisallowIncrementAndDecrementOperators
 
 Disallows using `++` and `--` operators.
