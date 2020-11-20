@@ -131,11 +131,7 @@
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Commenting.ForbiddenComments"/>
-	<rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment">
-		<properties>
-			<property name="enableObjectTypeHint" value="false"/>
-		</properties>
-	</rule>
+	<rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment"/>
 	<rule ref="SlevomatCodingStandard.Commenting.UselessInheritDocComment"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing">
