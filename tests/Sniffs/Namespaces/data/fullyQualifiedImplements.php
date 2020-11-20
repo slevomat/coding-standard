@@ -2,7 +2,7 @@
 
 class Foo implements \SomeClass, \Some\OtherClass
 {
-
+	private $version = \PHP_VERSION;
 }
 
 class Ipsum implements /*\Omega, */ Dolor

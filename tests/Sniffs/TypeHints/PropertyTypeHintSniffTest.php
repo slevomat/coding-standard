@@ -19,7 +19,7 @@ class PropertyTypeHintSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintDisabledNativeErrors.php', [
 			'enableNativeTypeHint' => false,
-			'traversableTypeHints' => ['Traversable'],
+			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 
 		self::assertSame(5, $report->getErrorCount());
@@ -37,7 +37,7 @@ class PropertyTypeHintSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintEnabledNativeNoErrors.php', [
 			'enableNativeTypeHint' => true,
-			'traversableTypeHints' => ['Traversable'],
+			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 		self::assertNoSniffErrorInFile($report);
 	}

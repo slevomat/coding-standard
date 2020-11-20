@@ -10,7 +10,7 @@ class UselessFunctionDocCommentSniffTest extends TestCase
 	public function testNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/uselessFunctionDocCommentSniffNoErrors.php', [
-			'traversableTypeHints' => ['Traversable'],
+			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 		self::assertNoSniffErrorInFile($report);
 	}

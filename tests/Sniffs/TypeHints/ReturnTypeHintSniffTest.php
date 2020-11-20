@@ -10,7 +10,7 @@ class ReturnTypeHintSniffTest extends TestCase
 	public function testNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/returnTypeHintNoErrors.php', [
-			'traversableTypeHints' => ['Traversable'],
+			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -19,7 +19,7 @@ class ReturnTypeHintSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/returnTypeHintErrors.php', [
 			'enableObjectTypeHint' => true,
-			'traversableTypeHints' => ['Traversable'],
+			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 
 		self::assertSame(40, $report->getErrorCount());

@@ -10,7 +10,7 @@ class ParameterTypeHintSniffTest extends TestCase
 	public function testNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/parameterTypeHintNoErrors.php', [
-			'traversableTypeHints' => ['Traversable'],
+			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -19,7 +19,7 @@ class ParameterTypeHintSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/parameterTypeHintErrors.php', [
 			'enableObjectTypeHint' => true,
-			'traversableTypeHints' => ['Traversable'],
+			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 
 		self::assertSame(38, $report->getErrorCount());
