@@ -158,7 +158,9 @@ class PropertyTypeHintSniff implements Sniff
 
 			$phpcsFile->addError(
 				sprintf(
-					$this->enableNativeTypeHint ? 'Property %s does not have native type hint nor @var annotation for its value.' : 'Property %s does not have @var annotation for its value.',
+					$this->enableNativeTypeHint
+						? 'Property %s does not have native type hint nor @var annotation for its value.'
+						: 'Property %s does not have @var annotation for its value.',
 					PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer)
 				),
 				$propertyPointer,
@@ -484,11 +486,9 @@ class PropertyTypeHintSniff implements Sniff
 	{
 		if ($this->normalizedTraversableTypeHints === null) {
 			$this->normalizedTraversableTypeHints = array_map(static function (string $typeHint): string {
-				return NamespaceHelper::isFullyQualifiedName($typeHint) ? $typeHint : sprintf(
-					'%s%s',
-					NamespaceHelper::NAMESPACE_SEPARATOR,
-					$typeHint
-				);
+				return NamespaceHelper::isFullyQualifiedName($typeHint)
+					? $typeHint
+					: sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint);
 			}, SniffSettingsHelper::normalizeArray($this->traversableTypeHints));
 		}
 		return $this->normalizedTraversableTypeHints;

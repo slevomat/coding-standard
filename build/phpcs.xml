@@ -172,6 +172,7 @@
 	<rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator">
 		<properties>
 			<property name="lineLengthLimit" value="140"/>
+			<property name="minExpressionsLength" value="50"/>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator"/>

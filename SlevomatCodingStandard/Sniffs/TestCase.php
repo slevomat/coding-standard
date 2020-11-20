@@ -87,7 +87,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 			sprintf(
 				'Expected error %s%s, but none found on line %d.%sErrors found on line %d:%s%s%s',
 				$sniffCode,
-				$message !== null ? sprintf(' with message "%s"', $message) : '',
+				$message !== null
+					? sprintf(' with message "%s"', $message)
+					: '',
 				$line,
 				PHP_EOL . PHP_EOL,
 				$line,

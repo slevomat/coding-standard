@@ -174,7 +174,9 @@ abstract class AbstractControlStructureSpacing implements Sniff
 				$actualLinesCountBefore
 			),
 			$controlStructurePointer,
-			$isFirstControlStructure ? self::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_CONTROL_STRUCTURE : self::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE
+			$isFirstControlStructure
+				? self::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_CONTROL_STRUCTURE
+				: self::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE
 		);
 
 		if (!$fix) {
@@ -270,7 +272,9 @@ abstract class AbstractControlStructureSpacing implements Sniff
 				$actualLinesCountAfter
 			),
 			$controlStructurePointer,
-			$isLastControlStructure ? self::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTROL_STRUCTURE : self::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE
+			$isLastControlStructure
+				? self::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTROL_STRUCTURE
+				: self::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE
 		);
 
 		if (!$fix) {

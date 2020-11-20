@@ -258,11 +258,9 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 	{
 		if ($this->normalizedTraversableTypeHints === null) {
 			$this->normalizedTraversableTypeHints = array_flip(array_map(static function (string $typeHint): string {
-				return NamespaceHelper::isFullyQualifiedName($typeHint) ? $typeHint : sprintf(
-					'%s%s',
-					NamespaceHelper::NAMESPACE_SEPARATOR,
-					$typeHint
-				);
+				return NamespaceHelper::isFullyQualifiedName($typeHint)
+					? $typeHint
+					: sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint);
 			}, SniffSettingsHelper::normalizeArray($this->traversableTypeHints)));
 		}
 		return $this->normalizedTraversableTypeHints;

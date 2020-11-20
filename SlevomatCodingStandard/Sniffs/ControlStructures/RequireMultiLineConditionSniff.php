@@ -90,10 +90,9 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 
 		$controlStructureIndentation = IndentationHelper::getIndentation(
 			$phpcsFile,
-			$conditionStartsOnNewLine ? $conditionStartPointer : TokenHelper::findFirstNonWhitespaceOnLine(
-				$phpcsFile,
-				$parenthesisOpenerPointer
-			)
+			$conditionStartsOnNewLine
+				? $conditionStartPointer
+				: TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $parenthesisOpenerPointer)
 		);
 
 		$conditionIndentation = $conditionStartsOnNewLine

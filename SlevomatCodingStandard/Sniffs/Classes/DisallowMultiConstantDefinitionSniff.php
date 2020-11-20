@@ -112,7 +112,9 @@ class DisallowMultiConstantDefinitionSniff implements Sniff
 				sprintf(
 					';%s%s%s%sconst ',
 					$phpcsFile->eolChar,
-					$docComment !== null ? sprintf('%s%s%s', $indentation, $docComment, $phpcsFile->eolChar) : '',
+					$docComment !== null
+						? sprintf('%s%s%s', $indentation, $docComment, $phpcsFile->eolChar)
+						: '',
 					$indentation,
 					$visibility !== null ? sprintf('%s ', $visibility) : ''
 				)

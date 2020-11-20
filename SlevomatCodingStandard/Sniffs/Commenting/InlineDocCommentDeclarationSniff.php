@@ -161,7 +161,9 @@ class InlineDocCommentDeclarationSniff implements Sniff
 					$commentOpenPointer,
 					sprintf(
 						'%s @var %s %s%s */',
-						$tokens[$commentOpenPointer]['code'] === T_DOC_COMMENT_OPEN_TAG ? '/**' : '/*',
+						$tokens[$commentOpenPointer]['code'] === T_DOC_COMMENT_OPEN_TAG
+							? '/**'
+							: '/*',
 						$matches[2],
 						$matches[1],
 						$matches[3] ?? ''

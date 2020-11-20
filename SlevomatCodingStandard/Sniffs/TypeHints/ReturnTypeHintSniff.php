@@ -139,10 +139,9 @@ class ReturnTypeHintSniff implements Sniff
 		$returnTypeNode = $this->getReturnTypeNode($returnAnnotation);
 		$isAnnotationReturnTypeVoid = $returnTypeNode instanceof IdentifierTypeNode && strtolower($returnTypeNode->name) === 'void';
 		$isAbstract = FunctionHelper::isAbstract($phpcsFile, $functionPointer);
-		$returnsValue = $isAbstract ? ($hasReturnAnnotation && !$isAnnotationReturnTypeVoid) : FunctionHelper::returnsValue(
-			$phpcsFile,
-			$functionPointer
-		);
+		$returnsValue = $isAbstract
+			? ($hasReturnAnnotation && !$isAnnotationReturnTypeVoid)
+			: FunctionHelper::returnsValue($phpcsFile, $functionPointer);
 
 		if ($returnsValue && !$hasReturnAnnotation) {
 			if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::getSniffName(self::CODE_MISSING_ANY_TYPE_HINT))) {
@@ -549,11 +548,9 @@ class ReturnTypeHintSniff implements Sniff
 	{
 		if ($this->normalizedTraversableTypeHints === null) {
 			$this->normalizedTraversableTypeHints = array_map(static function (string $typeHint): string {
-				return NamespaceHelper::isFullyQualifiedName($typeHint) ? $typeHint : sprintf(
-					'%s%s',
-					NamespaceHelper::NAMESPACE_SEPARATOR,
-					$typeHint
-				);
+				return NamespaceHelper::isFullyQualifiedName($typeHint)
+					? $typeHint
+					: sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint);
 			}, SniffSettingsHelper::normalizeArray($this->traversableTypeHints));
 		}
 		return $this->normalizedTraversableTypeHints;
