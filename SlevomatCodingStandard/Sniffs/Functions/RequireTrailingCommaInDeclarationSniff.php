@@ -9,7 +9,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_COMMA;
 use const T_WHITESPACE;
 
-class TrailingCommaInDeclarationSniff implements Sniff
+class RequireTrailingCommaInDeclarationSniff implements Sniff
 {
 
 	public const CODE_MISSING_TRAILING_COMMA = 'MissingTrailingComma';
