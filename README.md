@@ -769,6 +769,10 @@ Sniff provides the following settings:
 * `maxLineLength`: specifies max allowed line length. If call would fit on it, it's enforced. Use 0 value to enforce for all calls, regardless of length.
 * `ignoreWithComplexParameter` (defaults to `true`): ignores calls with arrays, closures, arrow functions and nested calls.
 
+#### SlevomatCodingStandard.Functions.DisallowNamedArgumentsSniff
+
+This sniff disallows usage of named arguments.
+
 #### SlevomatCodingStandard.Functions.DisallowTrailingCommaInCall 🔧
 
 This sniff disallows trailing commas in multi-line calls.
