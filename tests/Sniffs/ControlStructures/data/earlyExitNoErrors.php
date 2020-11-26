@@ -218,3 +218,37 @@ function oneConditionWithoutEarlyExitWithElse()
 		throw new \Exception('');
 	}
 };
+
+function functionInElse()
+{
+	if (rand(0, 1)) {
+		function test()
+		{
+			echo 1;
+		}
+
+		return;
+	} else {
+		function test()
+		{
+			echo 0;
+		}
+	}
+};
+
+function functionInElseIf()
+{
+	if (rand(0, 1)) {
+		function test()
+		{
+			echo 1;
+		}
+
+		return;
+	} elseif (false) {
+		function test()
+		{
+			echo 0;
+		}
+	}
+};

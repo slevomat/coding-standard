@@ -93,6 +93,15 @@ class EarlyExitSniff implements Sniff
 			return;
 		}
 
+		if (TokenHelper::findNext(
+			$phpcsFile,
+			T_FUNCTION,
+			$tokens[$elsePointer]['scope_opener'] + 1,
+			$tokens[$elsePointer]['scope_closer']
+		) !== null) {
+			return;
+		}
+
 		$ifPointer = $allConditionsPointers[0];
 		$ifEarlyExitPointer = null;
 		$elseEarlyExitPointer = null;
@@ -217,6 +226,15 @@ class EarlyExitSniff implements Sniff
 			$allConditionsPointers = $this->getAllConditionsPointers($phpcsFile, $elseIfPointer);
 		} catch (Throwable $e) {
 			// Elseif without curly braces is not supported.
+			return;
+		}
+
+		if (TokenHelper::findNext(
+			$phpcsFile,
+			T_FUNCTION,
+			$tokens[$elseIfPointer]['scope_opener'] + 1,
+			$tokens[$elseIfPointer]['scope_closer']
+		) !== null) {
 			return;
 		}
 
