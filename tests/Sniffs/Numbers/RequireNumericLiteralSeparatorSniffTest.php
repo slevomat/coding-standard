@@ -60,7 +60,6 @@ class RequireNumericLiteralSeparatorSniffTest extends TestCase
 			'enable' => false,
 		]);
 
-		self::assertSame(0, $report->getErrorCount());
 		self::assertNoSniffErrorInFile($report);
 	}
 

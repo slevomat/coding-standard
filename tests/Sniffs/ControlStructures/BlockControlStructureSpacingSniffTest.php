@@ -373,22 +373,19 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 	public function testIfWithoutCurlyBraces(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/blockControlStructureSpacingIfWithoutCurlyBraces.php');
-
-		self::assertSame(0, $report->getErrorCount());
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testElseWithoutCurlyBraces(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/blockControlStructureSpacingElseWithoutCurlyBraces.php');
-
-		self::assertSame(0, $report->getErrorCount());
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testIfWithAlternativeSyntax(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/blockControlStructureSpacingIfWithAlternativeSyntax.php');
-
-		self::assertSame(0, $report->getErrorCount());
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testAtTheEndOfFile(): void

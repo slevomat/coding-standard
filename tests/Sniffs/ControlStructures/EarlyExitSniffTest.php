@@ -41,43 +41,37 @@ class EarlyExitSniffTest extends TestCase
 	public function testIfWithoutCurlyBraces(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/earlyExitIfWithoutCurlyBraces.php', [], [EarlyExitSniff::CODE_EARLY_EXIT_NOT_USED]);
-
-		self::assertSame(0, $report->getErrorCount());
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testElseifWithoutCurlyBraces(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/earlyExitElseifWithoutCurlyBraces.php', [], [EarlyExitSniff::CODE_USELESS_ELSEIF]);
-
-		self::assertSame(0, $report->getErrorCount());
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testElseifWithSpace(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/earlyExitElseifWithSpace.php', [], [EarlyExitSniff::CODE_USELESS_ELSEIF]);
-
-		self::assertSame(0, $report->getErrorCount());
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testElseWithoutCurlyBraces(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/earlyExitElseWithoutCurlyBraces.php', [], [EarlyExitSniff::CODE_USELESS_ELSE]);
-
-		self::assertSame(0, $report->getErrorCount());
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testInvalidElseif(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/earlyExitInvalidElseif.php', [], [EarlyExitSniff::CODE_USELESS_ELSEIF]);
-
-		self::assertSame(0, $report->getErrorCount());
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testAlternativeSyntax(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/earlyExitAlternativeSyntax.php', [], [EarlyExitSniff::CODE_USELESS_ELSEIF]);
-
-		self::assertSame(0, $report->getErrorCount());
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testIgnoredStandaloneIfInScopeNoErrors(): void

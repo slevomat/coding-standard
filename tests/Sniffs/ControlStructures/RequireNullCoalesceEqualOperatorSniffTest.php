@@ -40,7 +40,6 @@ class RequireNullCoalesceEqualOperatorSniffTest extends TestCase
 			[RequireNullCoalesceEqualOperatorSniff::CODE_REQUIRED_NULL_COALESCE_EQUAL_OPERATOR]
 		);
 
-		self::assertSame(0, $report->getErrorCount());
 		self::assertNoSniffErrorInFile($report);
 	}
 

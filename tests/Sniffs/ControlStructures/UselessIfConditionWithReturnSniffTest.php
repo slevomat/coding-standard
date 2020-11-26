@@ -55,15 +55,13 @@ class UselessIfConditionWithReturnSniffTest extends TestCase
 	public function testIfWithoutCurlyBraces(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/uselessIfConditionWithReturnIfWithoutCurlyBraces.php');
-
-		self::assertSame(0, $report->getErrorCount());
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testElseWithoutCurlyBraces(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/uselessIfConditionWithReturnElseWithoutCurlyBraces.php');
-
-		self::assertSame(0, $report->getErrorCount());
+		self::assertNoSniffErrorInFile($report);
 	}
 
 }

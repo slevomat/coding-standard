@@ -56,15 +56,13 @@ class RequireTernaryOperatorSniffTest extends TestCase
 	public function testIfWithoutCurlyBraces(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireTernaryOperatorIfWithoutCurlyBraces.php');
-
-		self::assertSame(0, $report->getErrorCount());
+		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testElseWithoutCurlyBraces(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireTernaryOperatorElseWithoutCurlyBraces.php');
-
-		self::assertSame(0, $report->getErrorCount());
+		self::assertNoSniffErrorInFile($report);
 	}
 
 }
