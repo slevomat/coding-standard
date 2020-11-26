@@ -106,7 +106,7 @@ class StrictCallSniff implements Sniff
 				($hasTrailingComma ? $lastCommaPointer : $parenthesisCloserPointer) - 1
 			);
 
-			if (strtolower(trim($strictParameterValue)) === 'true') {
+			if (strtolower(trim($strictParameterValue)) !== 'false') {
 				return;
 			}
 
