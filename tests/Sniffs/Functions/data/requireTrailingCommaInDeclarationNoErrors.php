@@ -24,4 +24,4 @@ function (
 		$a,
 		$b,
 	) => true;
-}
+};
