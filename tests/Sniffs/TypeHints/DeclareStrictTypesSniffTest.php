@@ -105,7 +105,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 		self::assertSniffError(
 			$report,
 			3,
-			DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE,
+			DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE,
 			'There must be a single space between the PHP open tag and declare statement.'
 		);
 	}
@@ -137,8 +137,8 @@ class DeclareStrictTypesSniffTest extends TestCase
 		self::assertSniffError(
 			$report,
 			1,
-			DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE,
-			'Expected 2 newlines between PHP open tag and declare statement, found 0.'
+			DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE,
+			'Expected 2 newlines before declare statement, found 0.'
 		);
 	}
 
@@ -166,7 +166,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesNoNewLinesBefore.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 0,
-		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE]);
+		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE]);
 		self::assertAllFixedInFile($report);
 	}
 
@@ -174,7 +174,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingNoNewLines.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 0,
-		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE]);
+		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE]);
 		self::assertAllFixedInFile($report);
 	}
 
@@ -182,7 +182,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesOneNewLineBefore.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 1,
-		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE]);
+		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE]);
 		self::assertAllFixedInFile($report);
 	}
 
@@ -190,7 +190,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingOneNewLine.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 1,
-		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE]);
+		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE]);
 		self::assertAllFixedInFile($report);
 	}
 
@@ -198,7 +198,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMoreNewLinesBefore.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 4,
-		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE]);
+		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE]);
 		self::assertAllFixedInFile($report);
 	}
 
@@ -206,7 +206,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingMoreNewLines.php', [
 			'newlinesCountBetweenOpenTagAndDeclare' => 4,
-		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE]);
+		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE]);
 		self::assertAllFixedInFile($report);
 	}
 

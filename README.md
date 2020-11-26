@@ -99,7 +99,7 @@ Enforces having `declare(strict_types = 1)` at the top of each PHP file. Allows 
 
 Sniff provides the following settings:
 
-* `newlinesCountBetweenOpenTagAndDeclare`: allows to set 0 to N newlines to be between `<?php` and `declare`
+* `newlinesCountBeforeDeclare`: allows to set 0 to N newlines to be between `<?php` and `declare`
 * `newlinesCountAfterDeclare`: allows to set 0 to N newlines to be between `declare` and next statement
 * `spacesCountAroundEqualsSign`: allows to set number of required spaces around the `=` operator
 

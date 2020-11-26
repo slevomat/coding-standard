@@ -24,7 +24,7 @@ class DeclareStrictTypesSniff implements Sniff
 
 	public const CODE_INCORRECT_STRICT_TYPES_FORMAT = 'IncorrectStrictTypesFormat';
 
-	public const CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE = 'IncorrectWhitespaceBetweenOpenTagAndDeclare';
+	public const CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE = 'IncorrectWhitespaceBeforeDeclare';
 
 	public const CODE_INCORRECT_WHITESPACE_AFTER_DECLARE = 'IncorrectWhitespaceAfterDeclare';
 
@@ -167,7 +167,7 @@ class DeclareStrictTypesSniff implements Sniff
 				$fix = $phpcsFile->addFixableError(
 					'There must be a single space between the PHP open tag and declare statement.',
 					$declarePointer,
-					self::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE
+					self::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE
 				);
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
@@ -183,12 +183,12 @@ class DeclareStrictTypesSniff implements Sniff
 			if ($newlinesCountBefore !== $requiredNewlinesCountBetweenOpenTagAndDeclare) {
 				$fix = $phpcsFile->addFixableError(
 					sprintf(
-						'Expected %d newlines between PHP open tag and declare statement, found %d.',
+						'Expected %d newlines before declare statement, found %d.',
 						$requiredNewlinesCountBetweenOpenTagAndDeclare,
 						$newlinesCountBefore
 					),
 					$declarePointer,
-					self::CODE_INCORRECT_WHITESPACE_BETWEEN_OPEN_TAG_AND_DECLARE
+					self::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE
 				);
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
