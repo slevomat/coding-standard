@@ -19,7 +19,7 @@ use const T_STATIC;
 use const T_UNSET;
 use const T_VARIABLE;
 
-class TrailingCommaInCallSniff implements Sniff
+class RequireTrailingCommaInCallSniff implements Sniff
 {
 
 	public const CODE_MISSING_TRAILING_COMMA = 'MissingTrailingComma';
