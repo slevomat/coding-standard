@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
-use SlevomatCodingStandard\Sniffs\Namespaces\UndefinedKeywordTokenException;
 use SlevomatCodingStandard\Sniffs\TestCase;
 
 class BlockControlStructureSpacingSniffTest extends TestCase
@@ -187,13 +186,13 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 			'linesCountBeforeFirstControlStructure' => 1,
 			'linesCountAfterControlStructure' => 0,
 			'linesCountAfterLastControlStructure' => 3,
-			'tokensToCheck' => [
-				'T_DO',
-				'T_WHILE',
-				'T_FOR',
-				'T_FOREACH',
-				'T_SWITCH',
-				'T_TRY',
+			'controlStructures' => [
+				'do',
+				'while',
+				'for',
+				'foreach',
+				'switch',
+				'try',
 			],
 		]);
 		self::assertNoSniffErrorInFile($report);
@@ -206,13 +205,13 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 			'linesCountBeforeFirstControlStructure' => 1,
 			'linesCountAfterControlStructure' => 0,
 			'linesCountAfterLastControlStructure' => 3,
-			'tokensToCheck' => [
-				'T_DO',
-				'T_WHILE',
-				'T_FOR',
-				'T_FOREACH',
-				'T_SWITCH',
-				'T_TRY',
+			'controlStructures' => [
+				'do',
+				'while',
+				'for',
+				'foreach',
+				'switch',
+				'try',
 			],
 		]);
 		self::assertSame(12, $report->getErrorCount());
@@ -296,9 +295,9 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 	public function testSwitchErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/blockControlStructureSpacingSwitchErrors.php', [
-			'tokensToCheck' => [
-				'T_CASE',
-				'T_DEFAULT',
+			'controlStructures' => [
+				'case',
+				'default',
 			],
 		]);
 		self::assertSame(6, $report->getErrorCount());
@@ -348,25 +347,11 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 		try {
 			self::checkFile(
 				__DIR__ . '/data/blockControlStructureSpacingWithDefaultSettingsNoErrors.php',
-				['tokensToCheck' => ['T_FOO']]
+				['controlStructures' => ['whatever']]
 			);
 			self::fail();
-		} catch (UndefinedKeywordTokenException $e) {
-			self::assertStringContainsString('T_FOO', $e->getMessage());
-			self::assertSame('T_FOO', $e->getKeyword());
-		}
-	}
-
-	public function testThrowExceptionForUnsupportedToken(): void
-	{
-		try {
-			self::checkFile(
-				__DIR__ . '/data/blockControlStructureSpacingWithDefaultSettingsNoErrors.php',
-				['tokensToCheck' => ['T_RETURN']]
-			);
-			self::fail();
-		} catch (UnsupportedTokenException $e) {
-			self::assertStringContainsString('T_RETURN', $e->getMessage());
+		} catch (UnsupportedKeywordException $e) {
+			self::assertSame('"whatever" is not supported.', $e->getMessage());
 		}
 	}
 

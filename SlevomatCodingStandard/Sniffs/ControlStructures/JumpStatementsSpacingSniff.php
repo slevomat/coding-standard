@@ -9,16 +9,12 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use function abs;
 use function array_key_exists;
 use function in_array;
-use const T_BREAK;
 use const T_CASE;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_COLON;
-use const T_CONTINUE;
 use const T_DEFAULT;
-use const T_GOTO;
 use const T_RETURN;
 use const T_SWITCH;
-use const T_THROW;
 use const T_YIELD;
 use const T_YIELD_FROM;
 
@@ -50,7 +46,7 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 	public $allowSingleLineYieldStacking = true;
 
 	/** @var string[] */
-	public $tokensToCheck = [];
+	public $jumpStatements = [];
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
@@ -67,27 +63,27 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 	}
 
 	/**
-	 * @return int[]
+	 * @return string[]
 	 */
-	protected function getSupportedTokens(): array
+	protected function getSupportedKeywords(): array
 	{
 		return [
-			T_GOTO,
-			T_BREAK,
-			T_CONTINUE,
-			T_RETURN,
-			T_THROW,
-			T_YIELD,
-			T_YIELD_FROM,
+			self::KEYWORD_GOTO,
+			self::KEYWORD_BREAK,
+			self::KEYWORD_CONTINUE,
+			self::KEYWORD_RETURN,
+			self::KEYWORD_THROW,
+			self::KEYWORD_YIELD,
+			self::KEYWORD_YIELD_FROM,
 		];
 	}
 
 	/**
 	 * @return string[]
 	 */
-	protected function getTokensToCheck(): array
+	protected function getKeywordsToCheck(): array
 	{
-		return $this->tokensToCheck;
+		return $this->jumpStatements;
 	}
 
 	protected function getLinesCountBefore(): int

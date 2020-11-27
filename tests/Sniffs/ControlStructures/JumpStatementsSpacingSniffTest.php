@@ -204,13 +204,13 @@ class JumpStatementsSpacingSniffTest extends TestCase
 			'linesCountBeforeFirstControlStructure' => 1,
 			'linesCountAfterControlStructure' => 0,
 			'linesCountAfterLastControlStructure' => 3,
-			'tokensToCheck' => [
-				'T_BREAK',
-				'T_CONTINUE',
-				'T_RETURN',
-				'T_THROW',
-				'T_YIELD',
-				'T_YIELD_FROM',
+			'jumpStatements' => [
+				'break',
+				'continue',
+				'return',
+				'throw',
+				'yield',
+				'yield_from',
 			],
 		]);
 		self::assertNoSniffErrorInFile($report);
@@ -223,13 +223,13 @@ class JumpStatementsSpacingSniffTest extends TestCase
 			'linesCountBeforeFirstControlStructure' => 1,
 			'linesCountAfterControlStructure' => 0,
 			'linesCountAfterLastControlStructure' => 3,
-			'tokensToCheck' => [
-				'T_BREAK',
-				'T_CONTINUE',
-				'T_RETURN',
-				'T_THROW',
-				'T_YIELD',
-				'T_YIELD_FROM',
+			'jumpStatements' => [
+				'break',
+				'continue',
+				'return',
+				'throw',
+				'yield',
+				'yield_from',
 			],
 		]);
 		self::assertSame(9, $report->getErrorCount());

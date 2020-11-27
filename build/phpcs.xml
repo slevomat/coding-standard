@@ -136,9 +136,9 @@
 	<rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing">
 		<properties>
-			<property name="tokensToCheck" type="array">
-			    <element value="T_SWITCH"/>
-			    <element value="T_TRY"/>
+			<property name="controlStructures" type="array">
+			    <element value="switch"/>
+			    <element value="try"/>
 			</property>
 		</properties>
 	</rule>
@@ -151,11 +151,11 @@
 	</rule>
 	<rule ref="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing">
 		<properties>
-			<property name="tokensToCheck" type="array">
-			    <element value="T_GOTO"/>
-			    <element value="T_THROW"/>
-			    <element value="T_YIELD"/>
-			    <element value="T_YIELD_FROM"/>
+			<property name="jumpStatements" type="array">
+			    <element value="goto"/>
+			    <element value="throw"/>
+			    <element value="yield"/>
+			    <element value="yield_from"/>
 			</property>
 		</properties>
 	</rule>

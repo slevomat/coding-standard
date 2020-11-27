@@ -587,16 +587,16 @@ Sniff provides the following settings:
 * `linesCountBeforeFirstControlStructure`: allows to configure the number of lines before first control structure.
 * `linesCountAfterControlStructure`: allows to configure the number of lines after control structure.
 * `linesCountAfterLastControlStructure`: allows to configure the number of lines after last control structure.
-* `tokensToCheck`: allows to narrow the list of checked tokens.
+* `controlStructures`: allows to narrow the list of checked control structures.
 
-For example, with the following setting, only `if` and `switch` tokens are checked.
+For example, with the following setting, only `if` and `switch` keywords are checked.
 
 ```xml
 <rule ref="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing">
 	<properties>
-		<property name="tokensToCheck" type="array">
-			<element value="T_IF"/>
-			<element value="T_SWITCH"/>
+		<property name="controlStructures" type="array">
+			<element value="if"/>
+			<element value="switch"/>
 		</property>
 	</properties>
 </rule>
@@ -616,16 +616,16 @@ Sniff provides the following settings:
 * `linesCountAfterLastControlStructure`: allows to configure the number of lines after last jump statement.
 * `linesCountAfterWhenLastInCaseOrDefault`: allows to configure the number of lines after jump statement that is last in `case` or `default`
 * `linesCountAfterWhenLastInLastCaseOrDefault`: allows to configure the number of lines after jump statement that is last in last `case` or `default`
-* `tokensToCheck`: allows to narrow the list of checked tokens.
+* `jumpStatements`: allows to narrow the list of checked jump statements.
 
-For example, with the following setting, only `continue` and `break` tokens are checked.
+For example, with the following setting, only `continue` and `break` keywords are checked.
 
 ```xml
 <rule ref="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing">
 	<properties>
-		<property name="tokensToCheck" type="array">
-			<element value="T_CONTINUE"/>
-			<element value="T_BREAK"/>
+		<property name="jumpStatements" type="array">
+			<element value="continue"/>
+			<element value="break"/>
 		</property>
 	</properties>
 </rule>
