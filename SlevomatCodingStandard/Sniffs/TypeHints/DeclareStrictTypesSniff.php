@@ -28,11 +28,14 @@ class DeclareStrictTypesSniff implements Sniff
 
 	public const CODE_INCORRECT_WHITESPACE_AFTER_DECLARE = 'IncorrectWhitespaceAfterDeclare';
 
-	/** @var int */
-	public $newlinesCountBeforeDeclare = 0;
+	/** @var bool */
+	public $declareOnFirstLine = false;
 
 	/** @var int */
-	public $newlinesCountAfterDeclare = 2;
+	public $linesCountBeforeDeclare = 1;
+
+	/** @var int */
+	public $linesCountAfterDeclare = 1;
 
 	/** @var int */
 	public $spacesCountAroundEqualsSign = 1;
@@ -159,8 +162,8 @@ class DeclareStrictTypesSniff implements Sniff
 			$whitespaceBefore .= TokenHelper::getContent($phpcsFile, $pointerBeforeDeclare + 1, $declarePointer - 1);
 		}
 
-		$requiredNewlinesCountBeforeDeclare = SniffSettingsHelper::normalizeInteger($this->newlinesCountBeforeDeclare);
-		if ($requiredNewlinesCountBeforeDeclare === 0) {
+		$requiredLinesCountBeforeDeclare = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeDeclare);
+		if ($this->declareOnFirstLine) {
 			if ($whitespaceBefore !== ' ') {
 				$fix = $phpcsFile->addFixableError(
 					'There must be a single space between the PHP open tag and declare statement.',
@@ -177,13 +180,14 @@ class DeclareStrictTypesSniff implements Sniff
 				}
 			}
 		} else {
-			$newlinesCountBefore = substr_count($whitespaceBefore, $phpcsFile->eolChar);
-			if ($newlinesCountBefore !== $requiredNewlinesCountBeforeDeclare) {
+			$newLinesCountBefore = substr_count($whitespaceBefore, $phpcsFile->eolChar);
+			$linesCountBefore = $newLinesCountBefore > 0 ? $newLinesCountBefore - 1 : 0;
+			if ($linesCountBefore !== $requiredLinesCountBeforeDeclare) {
 				$fix = $phpcsFile->addFixableError(
 					sprintf(
-						'Expected %d newlines before declare statement, found %d.',
-						$requiredNewlinesCountBeforeDeclare,
-						$newlinesCountBefore
+						'Expected %d lines before declare statement, found %d.',
+						$requiredLinesCountBeforeDeclare,
+						$linesCountBefore
 					),
 					$declarePointer,
 					self::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE
@@ -198,7 +202,7 @@ class DeclareStrictTypesSniff implements Sniff
 					for ($i = $pointerBeforeDeclare + 1; $i < $declarePointer; $i++) {
 						$phpcsFile->fixer->replaceToken($i, '');
 					}
-					for ($i = 0; $i < $requiredNewlinesCountBeforeDeclare; $i++) {
+					for ($i = 0; $i <= $requiredLinesCountBeforeDeclare; $i++) {
 						$phpcsFile->fixer->addNewline($pointerBeforeDeclare);
 					}
 					$phpcsFile->fixer->endChangeset();
@@ -215,18 +219,19 @@ class DeclareStrictTypesSniff implements Sniff
 
 		$whitespaceAfter = TokenHelper::getContent($phpcsFile, $declareSemicolonPointer + 1, $pointerAfterWhitespaceEnd - 1);
 
-		$requiredNewlinesCountAfter = SniffSettingsHelper::normalizeInteger($this->newlinesCountAfterDeclare);
-		$newlinesCountAfter = substr_count($whitespaceAfter, $phpcsFile->eolChar);
+		$requiredLinesCountAfter = SniffSettingsHelper::normalizeInteger($this->linesCountAfterDeclare);
+		$newLinesAfter = substr_count($whitespaceAfter, $phpcsFile->eolChar);
+		$linesCountAfter = $newLinesAfter > 0 ? $newLinesAfter - 1 : 0;
 
-		if ($newlinesCountAfter === $requiredNewlinesCountAfter) {
+		if ($linesCountAfter === $requiredLinesCountAfter) {
 			return;
 		}
 
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
-				'Expected %d newlines after declare statement, found %d.',
-				$requiredNewlinesCountAfter,
-				$newlinesCountAfter
+				'Expected %d lines after declare statement, found %d.',
+				$requiredLinesCountAfter,
+				$linesCountAfter
 			),
 			$declarePointer,
 			self::CODE_INCORRECT_WHITESPACE_AFTER_DECLARE
@@ -239,7 +244,7 @@ class DeclareStrictTypesSniff implements Sniff
 		for ($i = $declareSemicolonPointer + 1; $i < $pointerAfterWhitespaceEnd; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
-		for ($i = 0; $i < $requiredNewlinesCountAfter; $i++) {
+		for ($i = 0; $i <= $requiredLinesCountAfter; $i++) {
 			$phpcsFile->fixer->addNewline($declareSemicolonPointer);
 		}
 		$phpcsFile->fixer->endChangeset();

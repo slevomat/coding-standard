@@ -279,7 +279,7 @@
 	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
 		<properties>
-			<property name="newlinesCountBeforeDeclare" value="0"/>
+			<property name="declareOnFirstLine" value="true"/>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint">
