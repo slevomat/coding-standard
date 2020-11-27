@@ -280,4 +280,12 @@ class DeclareStrictTypesSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testFixableCommentBefore(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesCommentBefore.php', [
+			'newlinesCountBeforeDeclare' => 2,
+		], [DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE]);
+		self::assertAllFixedInFile($report);
+	}
+
 }

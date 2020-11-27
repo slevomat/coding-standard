@@ -190,12 +190,16 @@ class DeclareStrictTypesSniff implements Sniff
 				);
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
-					$phpcsFile->fixer->replaceToken($openTagPointer, '<?php');
-					for ($i = $openTagPointer + 1; $i < $declarePointer; $i++) {
+
+					if ($pointerBeforeDeclare === $openTagPointer) {
+						$phpcsFile->fixer->replaceToken($openTagPointer, '<?php');
+					}
+
+					for ($i = $pointerBeforeDeclare + 1; $i < $declarePointer; $i++) {
 						$phpcsFile->fixer->replaceToken($i, '');
 					}
 					for ($i = 0; $i < $requiredNewlinesCountBeforeDeclare; $i++) {
-						$phpcsFile->fixer->addNewline($openTagPointer);
+						$phpcsFile->fixer->addNewline($pointerBeforeDeclare);
 					}
 					$phpcsFile->fixer->endChangeset();
 				}
