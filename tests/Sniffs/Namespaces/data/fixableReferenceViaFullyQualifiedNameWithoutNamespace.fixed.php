@@ -21,7 +21,7 @@ function bar(\Some\Exception $e)
 	}
 }
 
-class Lorem implements \Dolor, \Amet
+class Lorem implements Dolor, Amet
 {
 
 }

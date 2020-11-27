@@ -341,22 +341,6 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param string[] $ignoredNames
 	 */
-	public function testAllowFullyQualifiedImplementsWithMultipleInterfaces(array $ignoredNames): void
-	{
-		$report = self::checkFile(
-			__DIR__ . '/data/multipleFullyQualifiedImplements.php',
-			[
-				'fullyQualifiedKeywords' => ['T_IMPLEMENTS'],
-				'ignoredNames' => $ignoredNames,
-			]
-		);
-		self::assertNoSniffErrorInFile($report);
-	}
-
-	/**
-	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
-	 */
 	public function testDisallowFullyQualifiedImplementsWithMultipleInterfaces(array $ignoredNames): void
 	{
 		$report = self::checkFile(
@@ -485,17 +469,6 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
-	public function testThrowExceptionForUndefinedKeyword(): void
-	{
-		$this->expectException(UndefinedKeywordTokenException::class);
-		$this->expectExceptionMessage('Value for keyword token not found, constant "T_FOO" is not defined');
-
-		self::checkFile(
-			__DIR__ . '/data/unknownKeyword.php',
-			['fullyQualifiedKeywords' => ['T_FOO']]
-		);
-	}
-
 	public function testAllowingFullyQualifiedGlobalClasses(): void
 	{
 		$report = self::checkFile(
@@ -538,7 +511,6 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	public function testFixableReferenceViaFullyQualifiedOrGlobalFallbackName(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableReferenceViaFullyQualifiedName.php', [
-			'fullyQualifiedKeywords' => ['T_EXTENDS'],
 			'allowFullyQualifiedExceptions' => true,
 			'allowFallbackGlobalFunctions' => false,
 			'allowFallbackGlobalConstants' => false,
@@ -566,34 +538,9 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
-	public function testFixableReferenceViaFullyQualifiedNameNoUseStatements(): void
-	{
-		$report = self::checkFile(__DIR__ . '/data/fixableReferenceViaFullyQualifiedNameNoUseStatements.php', [
-			'fullyQualifiedKeywords' => ['T_EXTENDS', 'T_IMPLEMENTS'],
-		], [ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME]);
-		self::assertAllFixedInFile($report);
-	}
-
-	public function testFixableReferenceViaFullyQualifiedNameNoUseStatementsAndNoNamespace(): void
-	{
-		$report = self::checkFile(__DIR__ . '/data/fixableReferenceViaFullyQualifiedNameNoUseStatementsAndNoNamespace.php', [
-			'fullyQualifiedKeywords' => ['T_EXTENDS', 'T_IMPLEMENTS'],
-		], [ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME]);
-		self::assertAllFixedInFile($report);
-	}
-
-	public function testFixableReferenceViaFullyQualifiedNameNoUseStatementsAndNoNamespaceAndDeclare(): void
-	{
-		$report = self::checkFile(__DIR__ . '/data/fixableReferenceViaFullyQualifiedNameNoUseStatementsAndNoNamespaceAndDeclare.php', [
-			'fullyQualifiedKeywords' => ['T_EXTENDS', 'T_IMPLEMENTS'],
-		], [ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME]);
-		self::assertAllFixedInFile($report);
-	}
-
 	public function testFixableReferenceViaFullyQualifiedNameWithoutNamespace(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableReferenceViaFullyQualifiedNameWithoutNamespace.php', [
-			'fullyQualifiedKeywords' => ['T_IMPLEMENTS'],
 			'allowFullyQualifiedExceptions' => false,
 			'specialExceptionNames' => [
 				'BarErrorX',

@@ -224,7 +224,6 @@
 	<rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
 		<properties>
 			<property name="searchAnnotations" value="true"/>
-			<property name="fullyQualifiedKeywords" type="array"/>
 			<property name="allowFallbackGlobalFunctions" value="false"/>
 			<property name="allowFallbackGlobalConstants" value="false"/>
 			<property name="allowFullyQualifiedExceptions" value="false"/>

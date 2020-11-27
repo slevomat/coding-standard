@@ -105,11 +105,6 @@
 		<properties>
 			<property name="allowFullyQualifiedExceptions" value="true"/>
 			<property name="allowPartialUses" value="false"/>
-			<property name="fullyQualifiedKeywords" type="array">
-			    <element value="T_EXTENDS"/>
-			    <element value="T_IMPLEMENTS"/>
-			    <element value="T_USE"/>
-			</property>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Namespaces.RequireOneNamespaceInFile"/>
