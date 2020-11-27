@@ -342,7 +342,7 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
-	public function testThrowExceptionForUndefinedConstant(): void
+	public function testThrowExceptionForUnsupportedKeyword(): void
 	{
 		try {
 			self::checkFile(
