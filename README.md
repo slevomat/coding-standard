@@ -583,10 +583,10 @@ Enforces configurable number of lines around block control structures (if, forea
 
 Sniff provides the following settings:
 
-* `linesCountBeforeControlStructure`: allows to configure the number of lines before control structure.
-* `linesCountBeforeFirstControlStructure`: allows to configure the number of lines before first control structure.
-* `linesCountAfterControlStructure`: allows to configure the number of lines after control structure.
-* `linesCountAfterLastControlStructure`: allows to configure the number of lines after last control structure.
+* `linesCountBefore`: allows to configure the number of lines before control structure.
+* `linesCountBeforeFirst`: allows to configure the number of lines before first control structure.
+* `linesCountAfter`: allows to configure the number of lines after control structure.
+* `linesCountAfterLast`: allows to configure the number of lines after last control structure.
 * `controlStructures`: allows to narrow the list of checked control structures.
 
 For example, with the following setting, only `if` and `switch` keywords are checked.

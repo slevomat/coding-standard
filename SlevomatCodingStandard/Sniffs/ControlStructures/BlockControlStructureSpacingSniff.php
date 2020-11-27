@@ -14,16 +14,16 @@ class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacing
 {
 
 	/** @var int */
-	public $linesCountBeforeControlStructure = 1;
+	public $linesCountBefore = 1;
 
 	/** @var int */
-	public $linesCountBeforeFirstControlStructure = 0;
+	public $linesCountBeforeFirst = 0;
 
 	/** @var int */
-	public $linesCountAfterControlStructure = 1;
+	public $linesCountAfter = 1;
 
 	/** @var int */
-	public $linesCountAfterLastControlStructure = 0;
+	public $linesCountAfterLast = 0;
 
 	/** @var string[] */
 	public $controlStructures = [];
@@ -70,7 +70,7 @@ class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacing
 
 	protected function getLinesCountBefore(): int
 	{
-		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeControlStructure);
+		return SniffSettingsHelper::normalizeInteger($this->linesCountBefore);
 	}
 
 	/**
@@ -81,12 +81,12 @@ class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacing
 	 */
 	protected function getLinesCountBeforeFirst(File $phpcsFile, int $controlStructurePointer): int
 	{
-		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirstControlStructure);
+		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirst);
 	}
 
 	protected function getLinesCountAfter(): int
 	{
-		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterControlStructure);
+		return SniffSettingsHelper::normalizeInteger($this->linesCountAfter);
 	}
 
 	/**
@@ -98,7 +98,7 @@ class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacing
 	 */
 	protected function getLinesCountAfterLast(File $phpcsFile, int $controlStructurePointer, int $controlStructureEndPointer): int
 	{
-		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterLastControlStructure);
+		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterLast);
 	}
 
 	private function isWhilePartOfDo(File $phpcsFile, int $controlStructurePointer): bool

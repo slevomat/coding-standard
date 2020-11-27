@@ -182,10 +182,10 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 	public function testModifiedSettingsNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/blockControlStructureSpacingWithModifiedSettingsNoErrors.php', [
-			'linesCountBeforeControlStructure' => 0,
-			'linesCountBeforeFirstControlStructure' => 1,
-			'linesCountAfterControlStructure' => 0,
-			'linesCountAfterLastControlStructure' => 3,
+			'linesCountBefore' => 0,
+			'linesCountBeforeFirst' => 1,
+			'linesCountAfter' => 0,
+			'linesCountAfterLast' => 3,
 			'controlStructures' => [
 				'do',
 				'while',
@@ -201,10 +201,10 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 	public function testModifiedSettingsErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/blockControlStructureSpacingWithModifiedSettingsErrors.php', [
-			'linesCountBeforeControlStructure' => 0,
-			'linesCountBeforeFirstControlStructure' => 1,
-			'linesCountAfterControlStructure' => 0,
-			'linesCountAfterLastControlStructure' => 3,
+			'linesCountBefore' => 0,
+			'linesCountBeforeFirst' => 1,
+			'linesCountAfter' => 0,
+			'linesCountAfterLast' => 3,
 			'controlStructures' => [
 				'do',
 				'while',
