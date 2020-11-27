@@ -131,7 +131,7 @@
 	<rule ref="SlevomatCodingStandard.Namespaces.UseFromSameNamespace"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
 		<properties>
-			<property name="newlinesCountBetweenOpenTagAndDeclare" value="2"/>
+			<property name="newlinesCountBeforeDeclare" value="2"/>
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>

@@ -29,7 +29,7 @@ class DeclareStrictTypesSniff implements Sniff
 	public const CODE_INCORRECT_WHITESPACE_AFTER_DECLARE = 'IncorrectWhitespaceAfterDeclare';
 
 	/** @var int */
-	public $newlinesCountBetweenOpenTagAndDeclare = 0;
+	public $newlinesCountBeforeDeclare = 0;
 
 	/** @var int */
 	public $newlinesCountAfterDeclare = 2;
@@ -159,10 +159,8 @@ class DeclareStrictTypesSniff implements Sniff
 			$whitespaceBefore .= TokenHelper::getContent($phpcsFile, $pointerBeforeDeclare + 1, $declarePointer - 1);
 		}
 
-		$requiredNewlinesCountBetweenOpenTagAndDeclare = SniffSettingsHelper::normalizeInteger(
-			$this->newlinesCountBetweenOpenTagAndDeclare
-		);
-		if ($requiredNewlinesCountBetweenOpenTagAndDeclare === 0) {
+		$requiredNewlinesCountBeforeDeclare = SniffSettingsHelper::normalizeInteger($this->newlinesCountBeforeDeclare);
+		if ($requiredNewlinesCountBeforeDeclare === 0) {
 			if ($whitespaceBefore !== ' ') {
 				$fix = $phpcsFile->addFixableError(
 					'There must be a single space between the PHP open tag and declare statement.',
@@ -180,11 +178,11 @@ class DeclareStrictTypesSniff implements Sniff
 			}
 		} else {
 			$newlinesCountBefore = substr_count($whitespaceBefore, $phpcsFile->eolChar);
-			if ($newlinesCountBefore !== $requiredNewlinesCountBetweenOpenTagAndDeclare) {
+			if ($newlinesCountBefore !== $requiredNewlinesCountBeforeDeclare) {
 				$fix = $phpcsFile->addFixableError(
 					sprintf(
 						'Expected %d newlines before declare statement, found %d.',
-						$requiredNewlinesCountBetweenOpenTagAndDeclare,
+						$requiredNewlinesCountBeforeDeclare,
 						$newlinesCountBefore
 					),
 					$declarePointer,
@@ -196,7 +194,7 @@ class DeclareStrictTypesSniff implements Sniff
 					for ($i = $openTagPointer + 1; $i < $declarePointer; $i++) {
 						$phpcsFile->fixer->replaceToken($i, '');
 					}
-					for ($i = 0; $i < $requiredNewlinesCountBetweenOpenTagAndDeclare; $i++) {
+					for ($i = 0; $i < $requiredNewlinesCountBeforeDeclare; $i++) {
 						$phpcsFile->fixer->addNewline($openTagPointer);
 					}
 					$phpcsFile->fixer->endChangeset();
