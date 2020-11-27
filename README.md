@@ -501,10 +501,10 @@ Enforces configurable number of lines around parent method call.
 
 Sniff provides the following settings:
 
-* `linesCountBeforeParentCall`: allows to configure the number of lines before parent call.
-* `linesCountBeforeFirstParentCall`: allows to configure the number of lines before first parent call.
-* `linesCountAfterParentCall`: allows to configure the number of lines after parent call.
-* `linesCountAfterLastParentCall`: allows to configure the number of lines after last parent call.
+* `linesCountBefore`: allows to configure the number of lines before parent call.
+* `linesCountBeforeFirst`: allows to configure the number of lines before first parent call.
+* `linesCountAfter`: allows to configure the number of lines after parent call.
+* `linesCountAfterLast`: allows to configure the number of lines after last parent call.
 
 #### SlevomatCodingStandard.Classes.PropertySpacing 🔧
 

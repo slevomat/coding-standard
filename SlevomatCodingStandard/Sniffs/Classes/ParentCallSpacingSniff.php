@@ -24,16 +24,16 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 {
 
 	/** @var int */
-	public $linesCountBeforeParentCall = 1;
+	public $linesCountBefore = 1;
 
 	/** @var int */
-	public $linesCountBeforeFirstParentCall = 0;
+	public $linesCountBeforeFirst = 0;
 
 	/** @var int */
-	public $linesCountAfterParentCall = 1;
+	public $linesCountAfter = 1;
 
 	/** @var int */
-	public $linesCountAfterLastParentCall = 0;
+	public $linesCountAfterLast = 0;
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
@@ -84,7 +84,7 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 
 	protected function getLinesCountBefore(): int
 	{
-		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeParentCall);
+		return SniffSettingsHelper::normalizeInteger($this->linesCountBefore);
 	}
 
 	/**
@@ -95,12 +95,12 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 	 */
 	protected function getLinesCountBeforeFirst(File $phpcsFile, int $parentPointer): int
 	{
-		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirstParentCall);
+		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirst);
 	}
 
 	protected function getLinesCountAfter(): int
 	{
-		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterParentCall);
+		return SniffSettingsHelper::normalizeInteger($this->linesCountAfter);
 	}
 
 	/**
@@ -112,7 +112,7 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 	 */
 	protected function getLinesCountAfterLast(File $phpcsFile, int $parentPointer, int $parentEndPointer): int
 	{
-		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterLastParentCall);
+		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterLast);
 	}
 
 }
