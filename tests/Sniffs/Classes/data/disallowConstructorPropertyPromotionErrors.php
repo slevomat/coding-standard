@@ -1,0 +1,24 @@
+<?php // lint >= 8.0
+
+class Whatever
+{
+
+	public function __construct(public int $a, private float $b)
+	{
+
+	}
+
+}
+
+class Anything
+{
+
+	public function __construct(
+		public int $a,
+		private float $b,
+	)
+	{
+
+	}
+
+}

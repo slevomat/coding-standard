@@ -153,6 +153,10 @@ constants, properties, static properties, methods, all public methods, all prote
 </rule>
 ```
 
+#### SlevomatCodingStandard.Classes.DisallowConstructorPropertyPromotion
+
+Disallows usage of constructor property promotion.
+
 #### SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants 🔧
 
 Disallows late static binding for constants.
