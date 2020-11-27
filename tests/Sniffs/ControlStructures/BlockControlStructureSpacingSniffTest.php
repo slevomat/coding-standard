@@ -339,6 +339,11 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 			'Expected 0 lines after "default", found 1.'
 		);
 
+		self::assertNoSniffError($report, 21);
+		self::assertNoSniffError($report, 22);
+		self::assertNoSniffError($report, 27);
+		self::assertNoSniffError($report, 28);
+
 		self::assertAllFixedInFile($report);
 	}
 

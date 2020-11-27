@@ -130,6 +130,13 @@ abstract class AbstractControlStructureSpacing implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
+		if (in_array($tokens[$controlStructurePointer]['code'], [T_CASE, T_DEFAULT], true)) {
+			$pointerBefore = TokenHelper::findPreviousEffective($phpcsFile, $controlStructurePointer - 1);
+			if ($tokens[$pointerBefore]['code'] === T_COLON) {
+				return;
+			}
+		}
+
 		$nonWhitespacePointerBefore = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $controlStructurePointer - 1);
 
 		$controlStructureStartPointer = $controlStructurePointer;
@@ -154,16 +161,6 @@ abstract class AbstractControlStructureSpacing implements Sniff
 		}
 
 		$isFirstControlStructure = in_array($tokens[$pointerToCheckFirst]['code'], [T_OPEN_CURLY_BRACKET, T_COLON], true);
-
-		if (
-			$isFirstControlStructure
-			&& in_array($tokens[$controlStructurePointer]['code'], [T_CASE, T_DEFAULT], true)
-			&& array_key_exists('scope_condition', $tokens[$pointerBefore])
-			&& in_array($tokens[$tokens[$pointerBefore]['scope_condition']]['code'], [T_CASE, T_DEFAULT], true)
-		) {
-			$isFirstControlStructure = false;
-		}
-
 		$whitespaceBefore = '';
 
 		if ($tokens[$pointerBefore]['code'] === T_OPEN_TAG) {
@@ -234,6 +231,15 @@ abstract class AbstractControlStructureSpacing implements Sniff
 	protected function checkLinesAfter(File $phpcsFile, int $controlStructurePointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
+
+		if (in_array($tokens[$controlStructurePointer]['code'], [T_CASE, T_DEFAULT], true)) {
+			$colonPointer = TokenHelper::findNext($phpcsFile, T_COLON, $controlStructurePointer + 1);
+			$pointerAfterColon = TokenHelper::findNextEffective($phpcsFile, $colonPointer + 1);
+
+			if (in_array($tokens[$pointerAfterColon]['code'], [T_CASE, T_DEFAULT], true)) {
+				return;
+			}
+		}
 
 		$controlStructureEndPointer = $this->findControlStructureEnd($phpcsFile, $controlStructurePointer);
 

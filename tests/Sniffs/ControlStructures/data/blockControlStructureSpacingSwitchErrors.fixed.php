@@ -14,3 +14,15 @@ switch ($condition)
 
 		throw new InvalidArgumentException('...');
 }
+
+switch (true) {
+	default:
+	case 1:
+		echo 2;
+}
+
+switch (true) {
+	case 1:
+	default:
+		echo 2;
+}
