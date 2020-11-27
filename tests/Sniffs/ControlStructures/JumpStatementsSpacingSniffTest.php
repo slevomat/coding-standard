@@ -200,10 +200,10 @@ class JumpStatementsSpacingSniffTest extends TestCase
 	public function testModifiedSettingsNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/jumpStatementsSpacingWithModifiedSettingsNoErrors.php', [
-			'linesCountBeforeControlStructure' => 0,
-			'linesCountBeforeFirstControlStructure' => 1,
-			'linesCountAfterControlStructure' => 0,
-			'linesCountAfterLastControlStructure' => 3,
+			'linesCountBefore' => 0,
+			'linesCountBeforeFirst' => 1,
+			'linesCountAfter' => 0,
+			'linesCountAfterLast' => 3,
 			'jumpStatements' => [
 				'break',
 				'continue',
@@ -219,10 +219,10 @@ class JumpStatementsSpacingSniffTest extends TestCase
 	public function testModifiedSettingsErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/jumpStatementsSpacingWithModifiedSettingsErrors.php', [
-			'linesCountBeforeControlStructure' => 0,
-			'linesCountBeforeFirstControlStructure' => 1,
-			'linesCountAfterControlStructure' => 0,
-			'linesCountAfterLastControlStructure' => 3,
+			'linesCountBefore' => 0,
+			'linesCountBeforeFirst' => 1,
+			'linesCountAfter' => 0,
+			'linesCountAfterLast' => 3,
 			'jumpStatements' => [
 				'break',
 				'continue',

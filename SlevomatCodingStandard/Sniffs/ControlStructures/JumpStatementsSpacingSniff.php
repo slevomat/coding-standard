@@ -22,19 +22,19 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 {
 
 	/** @var int */
-	public $linesCountBeforeControlStructure = 1;
+	public $linesCountBefore = 1;
 
 	/** @var int */
-	public $linesCountBeforeFirstControlStructure = 0;
+	public $linesCountBeforeFirst = 0;
 
 	/** @var int|null */
 	public $linesCountBeforeWhenFirstInCaseOrDefault = null;
 
 	/** @var int */
-	public $linesCountAfterControlStructure = 1;
+	public $linesCountAfter = 1;
 
 	/** @var int */
-	public $linesCountAfterLastControlStructure = 0;
+	public $linesCountAfterLast = 0;
 
 	/** @var int|null */
 	public $linesCountAfterWhenLastInCaseOrDefault = null;
@@ -88,7 +88,7 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 
 	protected function getLinesCountBefore(): int
 	{
-		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeControlStructure);
+		return SniffSettingsHelper::normalizeInteger($this->linesCountBefore);
 	}
 
 	protected function getLinesCountBeforeFirst(File $phpcsFile, int $jumpStatementPointer): int
@@ -100,12 +100,12 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 			return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeWhenFirstInCaseOrDefault);
 		}
 
-		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirstControlStructure);
+		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirst);
 	}
 
 	protected function getLinesCountAfter(): int
 	{
-		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterControlStructure);
+		return SniffSettingsHelper::normalizeInteger($this->linesCountAfter);
 	}
 
 	/**
@@ -131,7 +131,7 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 			return SniffSettingsHelper::normalizeInteger($this->linesCountAfterWhenLastInCaseOrDefault);
 		}
 
-		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterLastControlStructure);
+		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterLast);
 	}
 
 	protected function checkLinesBefore(File $phpcsFile, int $jumpStatementPointer): void
