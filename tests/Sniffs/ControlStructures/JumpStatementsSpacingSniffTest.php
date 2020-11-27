@@ -346,4 +346,10 @@ class JumpStatementsSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testThrowExpressionNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/jumpStatementsThrowExpressionNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
 }

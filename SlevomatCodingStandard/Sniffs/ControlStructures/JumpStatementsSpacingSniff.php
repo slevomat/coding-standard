@@ -13,8 +13,12 @@ use const T_CASE;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_COLON;
 use const T_DEFAULT;
+use const T_OPEN_CURLY_BRACKET;
+use const T_OPEN_TAG;
 use const T_RETURN;
+use const T_SEMICOLON;
 use const T_SWITCH;
+use const T_THROW;
 use const T_YIELD;
 use const T_YIELD_FROM;
 
@@ -143,6 +147,10 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 			return;
 		}
 
+		if ($this->isThrowExpression($phpcsFile, $jumpStatementPointer)) {
+			return;
+		}
+
 		parent::checkLinesBefore($phpcsFile, $jumpStatementPointer);
 	}
 
@@ -152,6 +160,10 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 			$this->allowSingleLineYieldStacking
 			&& $this->isStackedSingleLineYield($phpcsFile, $jumpStatementPointer, false)
 		) {
+			return;
+		}
+
+		if ($this->isThrowExpression($phpcsFile, $jumpStatementPointer)) {
 			return;
 		}
 
@@ -198,6 +210,23 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 
 		return $adjoiningYieldPointer !== null
 			&& abs($tokens[$adjoiningYieldPointer]['line'] - $tokens[$jumpStatementPointer]['line']) === 1;
+	}
+
+	private function isThrowExpression(File $phpcsFile, int $jumpStatementPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		if ($tokens[$jumpStatementPointer]['code'] !== T_THROW) {
+			return false;
+		}
+
+		$pointerBefore = TokenHelper::findPreviousEffective($phpcsFile, $jumpStatementPointer - 1);
+
+		return !in_array(
+			$tokens[$pointerBefore]['code'],
+			[T_SEMICOLON, T_COLON, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_OPEN_TAG],
+			true
+		);
 	}
 
 	private function isFirstInCaseOrDefault(File $phpcsFile, int $jumpStatementPointer): bool
