@@ -8,19 +8,24 @@ use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
+use function array_key_exists;
 use function array_map;
 use function count;
 use function end;
 use function explode;
 use function implode;
+use function in_array;
 use function min;
 use function reset;
 use function sprintf;
 use function strcasecmp;
 use function strcmp;
+use function strlen;
+use function substr;
 use function uasort;
 use const T_OPEN_TAG;
 use const T_SEMICOLON;
+use const T_WHITESPACE;
 
 class AlphabeticallySortedUsesSniff implements Sniff
 {
@@ -96,29 +101,59 @@ class AlphabeticallySortedUsesSniff implements Sniff
 		/** @var UseStatement $lastUseStatement */
 		$lastUseStatement = end($useStatements);
 		$lastSemicolonPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $lastUseStatement->getPointer());
-		$phpcsFile->fixer->beginChangeset();
-		for ($i = $firstUseStatement->getPointer(); $i <= $lastSemicolonPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
+
+		$firstPointer = $firstUseStatement->getPointer();
+
+		$tokens = $phpcsFile->getTokens();
+
+		$commentsBefore = [];
+		foreach ($useStatements as $useStatement) {
+			$pointerBeforeUseStatement = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $useStatement->getPointer() - 1);
+
+			if (!in_array($tokens[$pointerBeforeUseStatement]['code'], TokenHelper::$inlineCommentTokenCodes, true)) {
+				continue;
+			}
+
+			$commentsBefore[$useStatement->getPointer()] = $tokens[$pointerBeforeUseStatement]['content'];
+
+			if ($firstPointer === $useStatement->getPointer()) {
+				$firstPointer = $pointerBeforeUseStatement;
+			}
 		}
 
 		uasort($useStatements, function (UseStatement $a, UseStatement $b): int {
 			return $this->compareUseStatements($a, $b);
 		});
 
+		$phpcsFile->fixer->beginChangeset();
+
+		for ($i = $firstPointer; $i <= $lastSemicolonPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+
 		$phpcsFile->fixer->addContent(
-			$firstUseStatement->getPointer(),
-			implode($phpcsFile->eolChar, array_map(static function (UseStatement $useStatement): string {
+			$firstPointer,
+			implode($phpcsFile->eolChar, array_map(static function (UseStatement $useStatement) use ($phpcsFile, $commentsBefore): string {
 				$unqualifiedName = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($useStatement->getFullyQualifiedTypeName());
 
 				$useTypeName = UseStatement::getTypeName($useStatement->getType());
 				$useTypeFormatted = $useTypeName !== null ? sprintf('%s ', $useTypeName) : '';
 
+				$commentBefore = '';
+				if (array_key_exists($useStatement->getPointer(), $commentsBefore)) {
+					$commentBefore = $commentsBefore[$useStatement->getPointer()];
+					if (substr($commentBefore, -strlen($phpcsFile->eolChar)) !== $phpcsFile->eolChar) {
+						$commentBefore .= $phpcsFile->eolChar;
+					}
+				}
+
 				if ($unqualifiedName === $useStatement->getNameAsReferencedInFile()) {
-					return sprintf('use %s%s;', $useTypeFormatted, $useStatement->getFullyQualifiedTypeName());
+					return sprintf('%suse %s%s;', $commentBefore, $useTypeFormatted, $useStatement->getFullyQualifiedTypeName());
 				}
 
 				return sprintf(
-					'use %s%s as %s;',
+					'%suse %s%s as %s;',
+					$commentBefore,
 					$useTypeFormatted,
 					$useStatement->getFullyQualifiedTypeName(),
 					$useStatement->getNameAsReferencedInFile()
