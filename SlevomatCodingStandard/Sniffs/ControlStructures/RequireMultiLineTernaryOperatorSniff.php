@@ -4,20 +4,15 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
+use SlevomatCodingStandard\Helpers\TernaryOperatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_merge;
 use function in_array;
 use function strlen;
 use function substr;
-use const T_CLOSE_PARENTHESIS;
-use const T_CLOSE_SHORT_ARRAY;
-use const T_COMMA;
 use const T_INLINE_ELSE;
 use const T_INLINE_THEN;
-use const T_OPEN_PARENTHESIS;
-use const T_OPEN_SHORT_ARRAY;
 use const T_OPEN_TAG;
 use const T_OPEN_TAG_WITH_ECHO;
 use const T_SEMICOLON;
@@ -61,47 +56,14 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 			return;
 		}
 
-		/** @var int $inlineElsePointer */
-		$inlineElsePointer = TokenHelper::findNext($phpcsFile, T_INLINE_ELSE, $inlineThenPointer + 1);
+		$inlineElsePointer = TernaryOperatorHelper::getElsePointer($phpcsFile, $inlineThenPointer);
 
 		if ($tokens[$inlineThenPointer]['line'] !== $tokens[$inlineElsePointer]['line']) {
 			return;
 		}
 
-		$pointerAfterInlineElseEnd = $inlineElsePointer;
-		do {
-			$pointerAfterInlineElseEnd = TokenHelper::findNext(
-				$phpcsFile,
-				[T_SEMICOLON, T_COMMA, T_CLOSE_PARENTHESIS, T_CLOSE_SHORT_ARRAY],
-				$pointerAfterInlineElseEnd + 1
-			);
-
-			if ($pointerAfterInlineElseEnd === null) {
-				continue;
-			}
-
-			if ($tokens[$pointerAfterInlineElseEnd]['code'] === T_CLOSE_PARENTHESIS) {
-				if ($tokens[$pointerAfterInlineElseEnd]['parenthesis_opener'] < $inlineThenPointer) {
-					break;
-				}
-			} elseif ($tokens[$pointerAfterInlineElseEnd]['code'] === T_CLOSE_SHORT_ARRAY) {
-				if ($tokens[$pointerAfterInlineElseEnd]['bracket_opener'] < $inlineThenPointer) {
-					break;
-				}
-			} elseif ($tokens[$pointerAfterInlineElseEnd]['code'] === T_COMMA) {
-				$previousPointer = TokenHelper::findPrevious(
-					$phpcsFile,
-					[T_OPEN_PARENTHESIS, T_OPEN_SHORT_ARRAY],
-					$pointerAfterInlineElseEnd - 1,
-					$inlineThenPointer
-				);
-				if ($previousPointer === null) {
-					break;
-				}
-			} elseif (ScopeHelper::isInSameScope($phpcsFile, $inlineElsePointer, $pointerAfterInlineElseEnd)) {
-				break;
-			}
-		} while ($pointerAfterInlineElseEnd !== null);
+		$inlineElseEndPointer = TernaryOperatorHelper::getEndPointer($phpcsFile, $inlineThenPointer, $inlineElsePointer);
+		$pointerAfterInlineElseEnd = TokenHelper::findNextEffective($phpcsFile, $inlineElseEndPointer + 1);
 
 		if ($pointerAfterInlineElseEnd === null || $tokens[$pointerAfterInlineElseEnd]['code'] !== T_SEMICOLON) {
 			return;

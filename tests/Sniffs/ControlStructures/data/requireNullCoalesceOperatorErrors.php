@@ -37,6 +37,9 @@ $o[$something === null ? true : $something] = true;
 
 $p = doSomething()() === null ? false : doSomething()();
 
+$q[$something === null ? ($anything !== null ? $anything : 'default') : $something] = true;
+$r[$something === null ? ($anything !== false ? $anything : 'default') : $something] = true;
+
 function ($options) {
 	return (int) isset($options['value']) ? $options['value'] : 1;
 };

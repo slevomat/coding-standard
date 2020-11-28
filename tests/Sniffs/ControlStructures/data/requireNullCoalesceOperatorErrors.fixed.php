@@ -31,6 +31,9 @@ $o[$something ?? true] = true;
 
 $p = doSomething()() ?? false;
 
+$q[$something ?? ($anything ?? 'default')] = true;
+$r[$something ?? ($anything !== false ? $anything : 'default')] = true;
+
 function ($options) {
 	return $options['value'] ?? 1;
 };

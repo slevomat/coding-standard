@@ -5,22 +5,15 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use SlevomatCodingStandard\Helpers\TernaryOperatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
 use function sprintf;
 use function strlen;
 use function trim;
 use const T_BOOLEAN_NOT;
-use const T_CLOSE_PARENTHESIS;
-use const T_CLOSE_SHORT_ARRAY;
-use const T_CLOSE_SQUARE_BRACKET;
-use const T_CLOSE_TAG;
-use const T_COALESCE;
-use const T_COMMA;
-use const T_DOUBLE_ARROW;
 use const T_INLINE_ELSE;
 use const T_INLINE_THEN;
-use const T_SEMICOLON;
 
 class RequireShortTernaryOperatorSniff implements Sniff
 {
@@ -52,34 +45,8 @@ class RequireShortTernaryOperatorSniff implements Sniff
 			return;
 		}
 
-		$inlineElsePointer = TokenHelper::findNext($phpcsFile, T_INLINE_ELSE, $inlineThenPointer + 1);
-
-		$inlineElseEndPointer = $inlineElsePointer + 1;
-		while (true) {
-			if (in_array(
-				$tokens[$inlineElseEndPointer]['code'],
-				[T_SEMICOLON, T_COMMA, T_DOUBLE_ARROW, T_CLOSE_SHORT_ARRAY, T_COALESCE, T_CLOSE_TAG],
-				true
-			)) {
-				break;
-			}
-
-			if (
-				$tokens[$inlineElseEndPointer]['code'] === T_CLOSE_PARENTHESIS
-				&& $tokens[$inlineElseEndPointer]['parenthesis_opener'] < $inlineElsePointer
-			) {
-				break;
-			}
-
-			if (
-				$tokens[$inlineElseEndPointer]['code'] === T_CLOSE_SQUARE_BRACKET
-				&& $tokens[$inlineElseEndPointer]['bracket_opener'] < $inlineElsePointer
-			) {
-				break;
-			}
-
-			$inlineElseEndPointer++;
-		}
+		$inlineElsePointer = TernaryOperatorHelper::getElsePointer($phpcsFile, $inlineThenPointer);
+		$inlineElseEndPointer = TernaryOperatorHelper::getEndPointer($phpcsFile, $inlineThenPointer, $inlineElsePointer);
 
 		$findConditionStartPointer = static function (int $conditionEndPointer, string $contentToFind) use ($tokens): int {
 			$content = $tokens[$conditionEndPointer]['content'];
@@ -94,7 +61,7 @@ class RequireShortTernaryOperatorSniff implements Sniff
 		};
 
 		$thenContent = trim(TokenHelper::getContent($phpcsFile, $inlineThenPointer + 1, $inlineElsePointer - 1));
-		$elseContent = trim(TokenHelper::getContent($phpcsFile, $inlineElsePointer + 1, $inlineElseEndPointer - 1));
+		$elseContent = trim(TokenHelper::getContent($phpcsFile, $inlineElsePointer + 1, $inlineElseEndPointer));
 
 		$conditionEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $inlineThenPointer - 1);
 		$conditionStartPointerBasedOnThenContent = $findConditionStartPointer($conditionEndPointer, $thenContent);
@@ -138,8 +105,6 @@ class RequireShortTernaryOperatorSniff implements Sniff
 			return;
 		}
 
-		$pointerBeforeInlineElseEnd = TokenHelper::findPreviousEffective($phpcsFile, $inlineElseEndPointer - 1);
-
 		$phpcsFile->fixer->beginChangeset();
 
 		if ($tokens[$pointerBeforeCondition]['code'] === T_BOOLEAN_NOT) {
@@ -147,7 +112,7 @@ class RequireShortTernaryOperatorSniff implements Sniff
 				$phpcsFile->fixer->replaceToken($i, '');
 			}
 
-			for ($i = $inlineThenPointer + 1; $i <= $pointerBeforeInlineElseEnd; $i++) {
+			for ($i = $inlineThenPointer + 1; $i <= $inlineElseEndPointer; $i++) {
 				$phpcsFile->fixer->replaceToken($i, '');
 			}
 

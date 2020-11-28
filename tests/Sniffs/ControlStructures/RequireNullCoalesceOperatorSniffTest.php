@@ -21,9 +21,9 @@ class RequireNullCoalesceOperatorSniffTest extends TestCase
 			[RequireNullCoalesceOperatorSniff::CODE_NULL_COALESCE_OPERATOR_NOT_USED]
 		);
 
-		self::assertSame(17, $report->getErrorCount());
+		self::assertSame(20, $report->getErrorCount());
 
-		foreach ([3, 5, 7, 9, 10, 12, 13, 15, 17, 18, 23, 30, 32, 34, 36, 38, 41] as $line) {
+		foreach ([3, 5, 7, 9, 10, 12, 13, 15, 17, 18, 23, 30, 32, 34, 36, 38, 40, 41, 44] as $line) {
 			self::assertSniffError($report, $line, RequireNullCoalesceOperatorSniff::CODE_NULL_COALESCE_OPERATOR_NOT_USED);
 		}
 
