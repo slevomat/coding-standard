@@ -487,7 +487,7 @@ function nestedIfWhenOneBranchDoesNotHaveEarlyExit($a, $b)
 
 		throw new \Exception('anything');
 	}
-};
+}
 
 function conditionWithNullCoalesceOperator()
 {
@@ -496,7 +496,7 @@ function conditionWithNullCoalesceOperator()
 			yield $item;
 		}
 	}
-};
+}
 
 function conditionWithShortTernaryOperator()
 {
@@ -505,7 +505,7 @@ function conditionWithShortTernaryOperator()
 			yield $item;
 		}
 	}
-};
+}
 
 // Simple else - needs to be last
 if (true) {

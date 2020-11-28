@@ -206,7 +206,7 @@ function nestedIfWhenOneBranchDoesNotHaveEarlyExit($a, $b)
 	} else {
 		doElse();
 	}
-};
+}
 
 function oneConditionWithoutEarlyExitWithElse()
 {
@@ -217,7 +217,7 @@ function oneConditionWithoutEarlyExitWithElse()
 	} else {
 		throw new \Exception('');
 	}
-};
+}
 
 function functionInElse()
 {
@@ -234,7 +234,7 @@ function functionInElse()
 			echo 0;
 		}
 	}
-};
+}
 
 function functionInElseIf()
 {
@@ -251,4 +251,4 @@ function functionInElseIf()
 			echo 0;
 		}
 	}
-};
+}
