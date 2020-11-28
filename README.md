@@ -660,6 +660,14 @@ Sniff provides the following settings:
 * `lineLengthLimit` (defaults to `0`)
 * `minExpressionsLength` (defaults to `null`): when the expressions after `?` are shorter than this length, the ternary operator does not has to be reformatted.
 
+#### SlevomatCodingStandard.ControlStructures.RequireNullSafeObjectOperator
+
+Requires using `?->` operator.
+
+Sniff provides the following settings:
+
+* `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 8.0 or higher.
+
 #### SlevomatCodingStandard.ControlStructures.RequireSingleLineCondition 🔧
 
 Enforces conditions of `if`, `elseif`, `while` and `do-while` to be on a single line.

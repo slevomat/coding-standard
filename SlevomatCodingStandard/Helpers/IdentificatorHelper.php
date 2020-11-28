@@ -7,9 +7,11 @@ use function array_key_exists;
 use function array_merge;
 use function in_array;
 use const T_CLOSE_CURLY_BRACKET;
+use const T_CLOSE_PARENTHESIS;
 use const T_CLOSE_SQUARE_BRACKET;
 use const T_DOLLAR;
 use const T_DOUBLE_COLON;
+use const T_NULLSAFE_OBJECT_OPERATOR;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_SQUARE_BRACKET;
@@ -44,8 +46,11 @@ class IdentificatorHelper
 		if (in_array($tokens[$endPointer]['code'], TokenHelper::getNameTokenCodes(), true)) {
 			/** @var int $previousPointer */
 			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $endPointer - 1);
-			if (in_array($tokens[$previousPointer]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
-				return self::getStartPointerBeforeOperator($phpcsFile, $previousPointer);
+			if (in_array($tokens[$previousPointer]['code'], [T_OBJECT_OPERATOR, T_NULLSAFE_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
+				$pointerBeforeOperator = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
+				if ($tokens[$pointerBeforeOperator]['code'] !== T_CLOSE_PARENTHESIS) {
+					return self::getStartPointerBeforeOperator($phpcsFile, $previousPointer);
+				}
 			}
 
 			return $endPointer;
@@ -85,7 +90,7 @@ class IdentificatorHelper
 		}
 
 		if ($tokens[$startPointer]['code'] === T_VARIABLE) {
-			if (in_array($tokens[$nextPointer]['code'], [T_DOUBLE_COLON, T_OBJECT_OPERATOR], true)) {
+			if (in_array($tokens[$nextPointer]['code'], [T_DOUBLE_COLON, T_OBJECT_OPERATOR, T_NULLSAFE_OBJECT_OPERATOR], true)) {
 				return self::getEndPointerAfterOperator($phpcsFile, $nextPointer);
 			}
 
@@ -122,7 +127,7 @@ class IdentificatorHelper
 		if (in_array($tokens[$previousPointer]['code'], $nameTokenCodes, true)) {
 			/** @var int $possibleOperatorPointer */
 			$possibleOperatorPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
-			if ($tokens[$possibleOperatorPointer]['code'] === T_OBJECT_OPERATOR) {
+			if (in_array($tokens[$possibleOperatorPointer]['code'], [T_OBJECT_OPERATOR, T_NULLSAFE_OBJECT_OPERATOR], true)) {
 				return self::getStartPointerBeforeOperator($phpcsFile, $possibleOperatorPointer);
 			}
 		}
@@ -146,7 +151,7 @@ class IdentificatorHelper
 			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
 		}
 
-		if (in_array($tokens[$previousPointer]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
+		if (in_array($tokens[$previousPointer]['code'], [T_OBJECT_OPERATOR, T_NULLSAFE_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
 			return self::getStartPointerBeforeOperator($phpcsFile, $previousPointer);
 		}
 
@@ -194,7 +199,7 @@ class IdentificatorHelper
 		/** @var int $nextPointer */
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $variablePartPointer + 1);
 
-		if (in_array($tokens[$nextPointer]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
+		if (in_array($tokens[$nextPointer]['code'], [T_OBJECT_OPERATOR, T_NULLSAFE_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
 			return self::getEndPointerAfterOperator($phpcsFile, $nextPointer);
 		}
 
