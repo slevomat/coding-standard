@@ -17,17 +17,17 @@ class EarlyExitSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/earlyExitErrors.php');
 
-		self::assertSame(65, $report->getErrorCount());
+		self::assertSame(69, $report->getErrorCount());
 
 		foreach ([6, 15, 24, 33, 42, 50, 58, 66, 74, 82, 90, 98, 108, 149, 157, 165, 191, 199, 207] as $line) {
 			self::assertSniffError($report, $line, EarlyExitSniff::CODE_EARLY_EXIT_NOT_USED, 'Use early exit instead of "else".');
 		}
 
-		foreach ([115, 122, 129, 135, 141, 213, 222, 229, 235, 241, 247, 256, 262, 271, 287, 305, 361, 368, 380, 407, 417, 442, 495, 504] as $line) {
+		foreach ([115, 122, 129, 135, 141, 213, 222, 229, 235, 241, 247, 256, 262, 271, 287, 305, 361, 368, 380, 407, 417, 442, 495, 504, 519, 528, 535] as $line) {
 			self::assertSniffError($report, $line, EarlyExitSniff::CODE_EARLY_EXIT_NOT_USED, 'Use early exit to reduce code nesting.');
 		}
 
-		foreach ([173, 182, 328, 353, 390, 432, 454, 467, 513] as $line) {
+		foreach ([173, 182, 328, 353, 390, 432, 454, 467, 544] as $line) {
 			self::assertSniffError($report, $line, EarlyExitSniff::CODE_USELESS_ELSE, 'Remove useless "else" to reduce code nesting.');
 		}
 

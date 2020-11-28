@@ -507,6 +507,37 @@ function conditionWithShortTernaryOperator()
 	}
 }
 
+function callInIf($a, $b)
+{
+	if ($a !== $b && foo($a !== $b)) {
+		var_dump(1);
+	}
+}
+
+function callInIfViaVariable($a, $b, $foo)
+{
+	if ($a !== $b && $foo($a !== $b)) {
+		var_dump(1);
+	}
+}
+
+class Anything
+{
+	public function __construct($a, $b)
+	{
+		if ($a !== $b && $this->foo($a !== $b)) {
+			var_dump(1);
+		}
+	}
+
+	public function doSomething($a, $b)
+	{
+		if ($a !== $b && self::foo($a !== $b)) {
+			var_dump(1);
+		}
+	}
+}
+
 // Simple else - needs to be last
 if (true) {
 	return true;
