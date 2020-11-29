@@ -102,8 +102,9 @@ class UseSpacingSniff implements Sniff
 
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
-				'Expected %d lines before first use statement, found %d.',
+				'Expected %d line%s before first use statement, found %d.',
 				$requiredLinesCountBeforeFirstUse,
+				$requiredLinesCountBeforeFirstUse === 1 ? '' : 's',
 				$actualLinesCountBeforeFirstUse
 			),
 			$firstUse->getPointer(),
@@ -164,8 +165,9 @@ class UseSpacingSniff implements Sniff
 
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
-				'Expected %d lines after last use statement, found %d.',
+				'Expected %d line%s after last use statement, found %d.',
 				$requiredLinesCountAfterLastUse,
+				$requiredLinesCountAfterLastUse === 1 ? '' : 's',
 				$actualLinesCountAfterLastUse
 			),
 			$lastUse->getPointer(),
@@ -241,8 +243,7 @@ class UseSpacingSniff implements Sniff
 
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
-					'Expected %d lines between same types of use statement, found %d.',
-					$requiredLinesCountBetweenUses,
+					'Expected 0 lines between same types of use statement, found %d.',
 					$actualLinesCountAfterPreviousUse
 				),
 				$use->getPointer(),
@@ -317,8 +318,9 @@ class UseSpacingSniff implements Sniff
 
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
-					'Expected %d lines between different types of use statement, found %d.',
+					'Expected %d line%s between different types of use statement, found %d.',
 					$requiredLinesCountBetweenUseTypes,
+					$requiredLinesCountBetweenUseTypes === 1 ? '' : 's',
 					$actualLinesCountAfterPreviousUse
 				),
 				$use->getPointer(),

@@ -188,8 +188,9 @@ abstract class AbstractControlStructureSpacing implements Sniff
 
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
-				'Expected %d lines before "%s", found %d.',
+				'Expected %d line%s before "%s", found %d.',
 				$requiredLinesCountBefore,
+				$requiredLinesCountBefore === 1 ? '' : 's',
 				$tokens[$controlStructurePointer]['content'],
 				$actualLinesCountBefore
 			),
@@ -295,8 +296,9 @@ abstract class AbstractControlStructureSpacing implements Sniff
 
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
-				'Expected %d lines after "%s", found %d.',
+				'Expected %d line%s after "%s", found %d.',
 				$requiredLinesCountAfter,
+				$requiredLinesCountAfter === 1 ? '' : 's',
 				$tokens[$controlStructurePointer]['content'],
 				$actualLinesCountAfter
 			),

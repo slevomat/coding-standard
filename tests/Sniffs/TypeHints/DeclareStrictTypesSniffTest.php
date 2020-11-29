@@ -131,7 +131,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 			$report,
 			3,
 			DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_AFTER_DECLARE,
-			'Expected 1 lines after declare statement, found 0.'
+			'Expected 1 line after declare statement, found 0.'
 		);
 	}
 
@@ -144,7 +144,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 			$report,
 			1,
 			DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE,
-			'Expected 1 lines before declare statement, found 0.'
+			'Expected 1 line before declare statement, found 0.'
 		);
 	}
 

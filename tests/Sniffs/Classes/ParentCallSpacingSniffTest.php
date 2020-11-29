@@ -23,13 +23,13 @@ class ParentCallSpacingSniffTest extends TestCase
 			$report,
 			6,
 			ParentCallSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "parent", found 0.'
+			'Expected 1 line after "parent", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			12,
 			ParentCallSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "parent", found 0.'
+			'Expected 1 line before "parent", found 0.'
 		);
 
 		self::assertAllFixedInFile($report);

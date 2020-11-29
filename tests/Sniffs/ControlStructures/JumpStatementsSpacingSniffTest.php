@@ -23,7 +23,7 @@ class JumpStatementsSpacingSniffTest extends TestCase
 			$report,
 			10,
 			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "break", found 0.'
+			'Expected 1 line before "break", found 0.'
 		);
 		self::assertSniffError(
 			$report,
@@ -65,19 +65,19 @@ class JumpStatementsSpacingSniffTest extends TestCase
 			$report,
 			32,
 			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "goto", found 0.'
+			'Expected 1 line before "goto", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			32,
 			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "goto", found 2.'
+			'Expected 1 line after "goto", found 2.'
 		);
 		self::assertSniffError(
 			$report,
 			37,
 			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "yield from", found 0.'
+			'Expected 1 line before "yield from", found 0.'
 		);
 		self::assertSniffError(
 			$report,
@@ -95,13 +95,13 @@ class JumpStatementsSpacingSniffTest extends TestCase
 			$report,
 			44,
 			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "yield", found 0.'
+			'Expected 1 line after "yield", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			45,
 			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "return", found 0.'
+			'Expected 1 line before "return", found 0.'
 		);
 		self::assertSniffError(
 			$report,
@@ -113,7 +113,7 @@ class JumpStatementsSpacingSniffTest extends TestCase
 			$report,
 			49,
 			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "yield", found 0.'
+			'Expected 1 line before "yield", found 0.'
 		);
 		self::assertSniffError(
 			$report,
@@ -125,7 +125,7 @@ class JumpStatementsSpacingSniffTest extends TestCase
 			$report,
 			60,
 			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "return", found 0.'
+			'Expected 1 line before "return", found 0.'
 		);
 		self::assertSniffError(
 			$report,
@@ -167,31 +167,31 @@ class JumpStatementsSpacingSniffTest extends TestCase
 			$report,
 			126,
 			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "yield", found 0.'
+			'Expected 1 line after "yield", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			127,
 			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "return", found 0.'
+			'Expected 1 line before "return", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			127,
 			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "return", found 0.'
+			'Expected 1 line after "return", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			128,
 			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "yield", found 0.'
+			'Expected 1 line before "yield", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			139,
 			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "return", found 2.'
+			'Expected 1 line before "return", found 2.'
 		);
 
 		self::assertAllFixedInFile($report);
@@ -262,7 +262,7 @@ class JumpStatementsSpacingSniffTest extends TestCase
 			$report,
 			48,
 			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_CONTROL_STRUCTURE,
-			'Expected 1 lines before "yield", found 2.'
+			'Expected 1 line before "yield", found 2.'
 		);
 		self::assertSniffError(
 			$report,
@@ -328,13 +328,13 @@ class JumpStatementsSpacingSniffTest extends TestCase
 			$report,
 			7,
 			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTROL_STRUCTURE,
-			'Expected 1 lines after "throw", found 0.'
+			'Expected 1 line after "throw", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			17,
 			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTROL_STRUCTURE,
-			'Expected 1 lines after "break", found 0.'
+			'Expected 1 line after "break", found 0.'
 		);
 		self::assertSniffError(
 			$report,

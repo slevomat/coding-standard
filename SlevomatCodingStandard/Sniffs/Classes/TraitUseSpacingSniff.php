@@ -110,8 +110,9 @@ class TraitUseSpacingSniff implements Sniff
 
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
-				'Expected %d lines before first use statement, found %d.',
+				'Expected %d line%s before first use statement, found %d.',
 				$requiredLinesCountBeforeFirstUse,
+				$requiredLinesCountBeforeFirstUse === 1 ? '' : 's',
 				$actualLinesCountBeforeFirstUse
 			),
 			$firstUsePointer,
@@ -181,8 +182,9 @@ class TraitUseSpacingSniff implements Sniff
 
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
-				'Expected %d lines after last use statement, found %d.',
+				'Expected %d line%s after last use statement, found %d.',
 				$requiredLinesCountAfterLastUse,
+				$requiredLinesCountAfterLastUse === 1 ? '' : 's',
 				$actualLinesCountAfterLastUse
 			),
 			$lastUsePointer,
@@ -251,8 +253,9 @@ class TraitUseSpacingSniff implements Sniff
 
 			$errorParameters = [
 				sprintf(
-					'Expected %d lines between same types of use statement, found %d.',
+					'Expected %d line%s between same types of use statement, found %d.',
 					$requiredLinesCountBetweenUses,
+					$requiredLinesCountBetweenUses === 1 ? '' : 's',
 					$actualLinesCountAfterPreviousUse
 				),
 				$usePointer,

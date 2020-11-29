@@ -23,55 +23,55 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 			$report,
 			4,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "if", found 2.'
+			'Expected 1 line before "if", found 2.'
 		);
 		self::assertSniffError(
 			$report,
 			4,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "if", found 0.'
+			'Expected 1 line after "if", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			9,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "if", found 0.'
+			'Expected 1 line before "if", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			9,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "if", found 3.'
+			'Expected 1 line after "if", found 3.'
 		);
 		self::assertSniffError(
 			$report,
 			15,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "if", found 3.'
+			'Expected 1 line before "if", found 3.'
 		);
 		self::assertSniffError(
 			$report,
 			15,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "if", found 0.'
+			'Expected 1 line after "if", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			20,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "while", found 0.'
+			'Expected 1 line before "while", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			20,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "while", found 0.'
+			'Expected 1 line after "while", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			23,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "do", found 0.'
+			'Expected 1 line before "do", found 0.'
 		);
 		self::assertSniffError(
 			$report,
@@ -95,13 +95,13 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 			$report,
 			32,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "if", found 0.'
+			'Expected 1 line after "if", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			36,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "if", found 0.'
+			'Expected 1 line before "if", found 0.'
 		);
 		self::assertSniffError(
 			$report,
@@ -125,55 +125,55 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 			$report,
 			53,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "if", found 0.'
+			'Expected 1 line after "if", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			59,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "if", found 0.'
+			'Expected 1 line before "if", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			59,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "if", found 0.'
+			'Expected 1 line after "if", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			62,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "try", found 0.'
+			'Expected 1 line before "try", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			72,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "if", found 0.'
+			'Expected 1 line before "if", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			81,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "if", found 2.'
+			'Expected 1 line before "if", found 2.'
 		);
 		self::assertSniffError(
 			$report,
 			87,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "if", found 0.'
+			'Expected 1 line after "if", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			94,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "if", found 2.'
+			'Expected 1 line after "if", found 2.'
 		);
 		self::assertSniffError(
 			$report,
 			106,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "foreach", found 0.'
+			'Expected 1 line before "foreach", found 0.'
 		);
 
 		self::assertAllFixedInFile($report);
@@ -244,7 +244,7 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 			$report,
 			30,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_CONTROL_STRUCTURE,
-			'Expected 1 lines before "for", found 0.'
+			'Expected 1 line before "for", found 0.'
 		);
 		self::assertSniffError(
 			$report,
@@ -256,7 +256,7 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 			$report,
 			43,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_CONTROL_STRUCTURE,
-			'Expected 1 lines before "foreach", found 0.'
+			'Expected 1 line before "foreach", found 0.'
 		);
 		self::assertSniffError(
 			$report,
@@ -313,25 +313,25 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 			$report,
 			6,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "case", found 2.'
+			'Expected 1 line after "case", found 2.'
 		);
 		self::assertSniffError(
 			$report,
 			11,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "case", found 2.'
+			'Expected 1 line before "case", found 2.'
 		);
 		self::assertSniffError(
 			$report,
 			11,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "case", found 0.'
+			'Expected 1 line after "case", found 0.'
 		);
 		self::assertSniffError(
 			$report,
 			14,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "default", found 0.'
+			'Expected 1 line before "default", found 0.'
 		);
 		self::assertSniffError(
 			$report,
@@ -349,13 +349,13 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 			$report,
 			33,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
-			'Expected 1 lines after "case", found 2.'
+			'Expected 1 line after "case", found 2.'
 		);
 		self::assertSniffError(
 			$report,
 			38,
 			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
-			'Expected 1 lines before "case", found 2.'
+			'Expected 1 line before "case", found 2.'
 		);
 
 		self::assertAllFixedInFile($report);

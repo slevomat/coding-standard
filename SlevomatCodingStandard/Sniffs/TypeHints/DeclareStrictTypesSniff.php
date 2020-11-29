@@ -185,8 +185,9 @@ class DeclareStrictTypesSniff implements Sniff
 			if ($linesCountBefore !== $requiredLinesCountBeforeDeclare) {
 				$fix = $phpcsFile->addFixableError(
 					sprintf(
-						'Expected %d lines before declare statement, found %d.',
+						'Expected %d line%s before declare statement, found %d.',
 						$requiredLinesCountBeforeDeclare,
+						$requiredLinesCountBeforeDeclare === 1 ? '' : 's',
 						$linesCountBefore
 					),
 					$declarePointer,
@@ -229,8 +230,9 @@ class DeclareStrictTypesSniff implements Sniff
 
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
-				'Expected %d lines after declare statement, found %d.',
+				'Expected %d line%s after declare statement, found %d.',
 				$requiredLinesCountAfter,
+				$requiredLinesCountAfter === 1 ? '' : 's',
 				$linesCountAfter
 			),
 			$declarePointer,
