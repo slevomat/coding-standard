@@ -324,7 +324,10 @@ abstract class AbstractControlStructureSpacing implements Sniff
 				$phpcsFile->fixer->addNewline($notWhitespacePointerAfter);
 			}
 		} else {
-			for ($i = 0; $i <= $requiredLinesCountAfter; $i++) {
+			$linesToAdd = substr($tokens[$controlStructureEndPointer]['content'], -strlen($phpcsFile->eolChar)) === $phpcsFile->eolChar
+				? $requiredLinesCountAfter - 1
+				: $requiredLinesCountAfter;
+			for ($i = 0; $i <= $linesToAdd; $i++) {
 				$phpcsFile->fixer->addNewline($controlStructureEndPointer);
 			}
 		}

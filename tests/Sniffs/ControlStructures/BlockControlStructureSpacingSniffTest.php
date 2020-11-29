@@ -300,7 +300,8 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 				'default',
 			],
 		]);
-		self::assertSame(6, $report->getErrorCount());
+
+		self::assertSame(8, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -343,6 +344,19 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 		self::assertNoSniffError($report, 22);
 		self::assertNoSniffError($report, 27);
 		self::assertNoSniffError($report, 28);
+
+		self::assertSniffError(
+			$report,
+			33,
+			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
+			'Expected 1 lines after "case", found 2.'
+		);
+		self::assertSniffError(
+			$report,
+			38,
+			BlockControlStructureSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
+			'Expected 1 lines before "case", found 2.'
+		);
 
 		self::assertAllFixedInFile($report);
 	}

@@ -28,3 +28,13 @@ switch (true) {
 	default:
 		echo 2;
 }
+
+switch ($foo) {
+    case 1:
+        return 1;
+        // comment and two following empty lines
+
+
+    case 2:
+        return 2;
+}
