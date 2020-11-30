@@ -536,6 +536,27 @@ class Anything
 			var_dump(1);
 		}
 	}
+
+	public function bar(int $a, int $b, bool $c): void
+	{
+		if ($a !== $b && $c == foo($a !== $b)) {
+			var_dump(1);
+		}
+	}
+
+	public function foo(int $a, int $b, bool $c, $foo): void
+	{
+		if ($a !== $b && $c == $foo($a !== $b)) {
+			var_dump(1);
+		}
+	}
+
+	public function selfFoo(int $a, int $b, bool $c): void
+	{
+		if ($a !== $b && $c == self::foo($a !== $b)) {
+			var_dump(1);
+		}
+	}
 }
 
 // Simple else - needs to be last

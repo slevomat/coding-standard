@@ -235,6 +235,13 @@ class ConditionHelper
 
 			$negativeCondition = '';
 			for ($i = $conditionBoundaryStartPointer; $i <= $conditionBoundaryEndPointer; $i++) {
+				// Skip calls()
+				if ($tokens[$i]['code'] === T_OPEN_PARENTHESIS) {
+					$negativeCondition .= TokenHelper::getContent($phpcsFile, $i, $tokens[$i]['parenthesis_closer']);
+					$i = $tokens[$i]['parenthesis_closer'];
+					continue;
+				}
+
 				$negativeCondition .= array_key_exists($tokens[$i]['code'], $comparisonReplacements)
 					? $comparisonReplacements[$tokens[$i]['code']]
 					: $tokens[$i]['content'];
