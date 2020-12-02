@@ -952,6 +952,15 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testWithFileCommentBelowDeclare(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/referenceUsedNamesOnlyWithFileCommentBelowDeclare.php');
+
+		self::assertSniffError($report, 14, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testWithInlineFileComment(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/referenceUsedNamesOnlyWithInlineFileComment.php');
