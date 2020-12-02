@@ -277,10 +277,6 @@ Disallows direct call of `__invoke()`.
 
 Disallows using loose `==` and `!=` comparison operators. Use `===` and `!==` instead, they are much more secure and predictable.
 
-#### SlevomatCodingStandard.Operators.DisallowNullSafeObjectOperator
-
-Disallows using `?->` operator.
-
 #### SlevomatCodingStandard.Operators.DisallowIncrementAndDecrementOperators
 
 Disallows using `++` and `--` operators.
@@ -642,6 +638,10 @@ Requires `new` with parentheses.
 #### SlevomatCodingStandard.ControlStructures.NewWithoutParentheses 🔧
 
 Reports `new` with useless parentheses.
+
+#### SlevomatCodingStandard.ControlStructures.DisallowNullSafeObjectOperator
+
+Disallows using `?->` operator.
 
 #### SlevomatCodingStandard.ControlStructures.DisallowShortTernaryOperator 🔧
 
