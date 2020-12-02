@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\CommentHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
@@ -114,10 +115,24 @@ class AlphabeticallySortedUsesSniff implements Sniff
 				continue;
 			}
 
-			$commentsBefore[$useStatement->getPointer()] = $tokens[$pointerBeforeUseStatement]['content'];
+			$commentAndWhitespace = TokenHelper::getContent($phpcsFile, $pointerBeforeUseStatement, $useStatement->getPointer() - 1);
+			if (substr(
+				$commentAndWhitespace,
+				-strlen($phpcsFile->eolChar . $phpcsFile->eolChar)
+			) === $phpcsFile->eolChar . $phpcsFile->eolChar) {
+				continue;
+			}
+
+			$commentStartPointer = CommentHelper::getMultilineCommentStartPointer($phpcsFile, $pointerBeforeUseStatement);
+
+			$commentsBefore[$useStatement->getPointer()] = TokenHelper::getContent(
+				$phpcsFile,
+				$commentStartPointer,
+				$pointerBeforeUseStatement
+			);
 
 			if ($firstPointer === $useStatement->getPointer()) {
-				$firstPointer = $pointerBeforeUseStatement;
+				$firstPointer = $commentStartPointer;
 			}
 		}
 

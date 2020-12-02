@@ -2,11 +2,14 @@
 
 namespace Abc;
 
-// Comment before
+// Comment to ignore
+
 use function X\foo;
 use const X\FOO;
-/* Comment */
 use \A;
+/*
+ * Comment
+ */
 use \H\I\K;
 use \H\I\J;
 use const PHP_OS;
@@ -16,6 +19,7 @@ use const X\BOO;
 use L\m\O as Ooo;
 use function strpos;
 // Comment
+// Second comment
 use D\E\F;
 use \U\V\X\Y;
 use function X\boo;
