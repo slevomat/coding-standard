@@ -283,6 +283,8 @@ class ConditionHelper
 		$actualPointer = $conditionBoundaryStartPointer;
 		$parenthesesLevel = 0;
 
+		$operatorsOnLevel = [];
+
 		do {
 			$actualPointer = TokenHelper::findNext(
 				$phpcsFile,
@@ -317,6 +319,15 @@ class ConditionHelper
 				$actualPointer++;
 				continue;
 			}
+
+			if (
+				array_key_exists($parenthesesLevel, $operatorsOnLevel)
+				&& $operatorsOnLevel[$parenthesesLevel] !== $tokens[$actualPointer]['code']
+			) {
+				return sprintf('!(%s)', TokenHelper::getContent($phpcsFile, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer));
+			}
+
+			$operatorsOnLevel[$parenthesesLevel] = $tokens[$actualPointer]['code'];
 
 			$negativeCondition .= self::getNegativeCondition($phpcsFile, $nestedConditionStartPointer, $actualPointer - 1, true);
 			$negativeCondition .= $booleanOperatorReplacements[$tokens[$actualPointer]['code']];

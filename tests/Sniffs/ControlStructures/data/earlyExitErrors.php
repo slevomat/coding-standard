@@ -559,6 +559,13 @@ class Anything
 	}
 }
 
+function booleanOperatorPriorities(bool $a, bool $b, bool $c): void
+{
+	if ($a || $b && ! $c) {
+		echo 'OK';
+	}
+}
+
 // Simple else - needs to be last
 if (true) {
 	return true;
