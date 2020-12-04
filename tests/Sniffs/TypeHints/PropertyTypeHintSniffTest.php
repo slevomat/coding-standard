@@ -38,6 +38,7 @@ class PropertyTypeHintSniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintEnabledNativeNoErrors.php', [
 			'enableNativeTypeHint' => true,
 			'enableMixedTypeHint' => true,
+			'enableUnionTypeHint' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 		self::assertNoSniffErrorInFile($report);
@@ -48,6 +49,7 @@ class PropertyTypeHintSniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintEnabledNativeErrors.php', [
 			'enableNativeTypeHint' => true,
 			'enableMixedTypeHint' => true,
+			'enableUnionTypeHint' => false,
 			'traversableTypeHints' => ['Traversable'],
 		]);
 
@@ -94,6 +96,40 @@ class PropertyTypeHintSniffTest extends TestCase
 		self::assertSniffError($report, 143, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 146, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 149, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testEnabledNativeWithUnionNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintEnabledNativeWithUnionNoErrors.php', [
+			'enableNativeTypeHint' => true,
+			'enableMixedTypeHint' => true,
+			'enableUnionTypeHint' => true,
+			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testEnabledNativeWithUnionErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintEnabledNativeWithUnionErrors.php', [
+			'enableNativeTypeHint' => true,
+			'enableMixedTypeHint' => true,
+			'enableUnionTypeHint' => true,
+			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
+		]);
+
+		self::assertSame(8, $report->getErrorCount());
+
+		self::assertSniffError($report, 7, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 10, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 13, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 16, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 19, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 22, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 25, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 28, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 
 		self::assertAllFixedInFile($report);
 	}

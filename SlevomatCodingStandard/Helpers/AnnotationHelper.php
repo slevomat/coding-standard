@@ -366,6 +366,7 @@ class AnnotationHelper
 	 * @param ReturnTypeHint|ParameterTypeHint|PropertyTypeHint|null $typeHint
 	 * @param ReturnAnnotation|ParameterAnnotation|VariableAnnotation $annotation
 	 * @param array<int, string> $traversableTypeHints
+	 * @param bool $enableUnionTypeHint
 	 * @return bool
 	 */
 	public static function isAnnotationUseless(
@@ -373,7 +374,8 @@ class AnnotationHelper
 		int $functionPointer,
 		$typeHint,
 		Annotation $annotation,
-		array $traversableTypeHints
+		array $traversableTypeHints,
+		bool $enableUnionTypeHint = false
 	): bool
 	{
 		if ($annotation->isInvalid()) {
@@ -407,6 +409,11 @@ class AnnotationHelper
 			$annotationTypeHint = $annotationTypeHintNode instanceof IdentifierTypeNode
 				? $annotationTypeHintNode->name
 				: (string) $annotationTypeHintNode;
+			return TypeHintHelper::typeHintEqualsAnnotation($phpcsFile, $functionPointer, $typeHint->getTypeHint(), $annotationTypeHint);
+		}
+
+		if ($enableUnionTypeHint && $annotation->getType() instanceof UnionTypeNode) {
+			$annotationTypeHint = AnnotationTypeHelper::export($annotation->getType());
 			return TypeHintHelper::typeHintEqualsAnnotation($phpcsFile, $functionPointer, $typeHint->getTypeHint(), $annotationTypeHint);
 		}
 

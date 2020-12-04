@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use function sprintf;
 use const T_VARIABLE;
 
 class PropertyHelperTest extends TestCase
@@ -49,6 +50,26 @@ class PropertyHelperTest extends TestCase
 				'$typedPropertyAfterMethod',
 				true,
 			],
+			[
+				'$propertyWithUnionTypeHint',
+				true,
+			],
+			[
+				'$nullableWithNullOnStart',
+				true,
+			],
+			[
+				'$nullableWithNullInTheMiddle',
+				true,
+			],
+			[
+				'$nullableWithNullAtTheEnds',
+				true,
+			],
+			[
+				'$unionWithSpaces',
+				true,
+			],
 		];
 	}
 
@@ -63,6 +84,92 @@ class PropertyHelperTest extends TestCase
 
 		$variablePointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, 0);
 		self::assertSame($isProperty, PropertyHelper::isProperty($phpcsFile, $variablePointer));
+	}
+
+	/**
+	 * @return mixed[][]
+	 */
+	public function dataFindTypeHint(): array
+	{
+		return [
+			[
+				'$boolean',
+				null,
+				null,
+			],
+			[
+				'$string',
+				null,
+				null,
+			],
+			[
+				'$weirdDefinition',
+				null,
+				null,
+			],
+			[
+				'$withTypeHint',
+				'\Whatever\Anything',
+				true,
+			],
+			[
+				'$withSimpleTypeHint',
+				'int',
+				false,
+			],
+			[
+				'$typedPropertyAfterMethod',
+				'string',
+				false,
+			],
+			[
+				'$propertyWithUnionTypeHint',
+				'string|int',
+				false,
+			],
+			[
+				'$nullableWithNullOnStart',
+				'null|int',
+				true,
+			],
+			[
+				'$nullableWithNullInTheMiddle',
+				'string|null|int',
+				true,
+			],
+			[
+				'$nullableWithNullAtTheEnds',
+				'string|null',
+				true,
+			],
+			[
+				'$unionWithSpaces',
+				'string | int | false | null',
+				true,
+			],
+		];
+	}
+
+	/**
+	 * @dataProvider dataFindTypeHint
+	 * @param string $propertyName
+	 * @param string|null $typeHint
+	 * @param bool|null $isNullable
+	 */
+	public function testFindTypeHint(string $propertyName, ?string $typeHint, ?bool $isNullable): void
+	{
+		$phpcsFile = $this->getTestedCodeSnifferFile();
+
+		$propertyPointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $propertyName, 0);
+
+		$propertyTypeHint = PropertyHelper::findTypeHint($phpcsFile, $propertyPointer);
+
+		if ($typeHint === null) {
+			self::assertNull($propertyTypeHint);
+		} else {
+			self::assertSame($typeHint, $propertyTypeHint->getTypeHint());
+			self::assertSame($isNullable, $propertyTypeHint->isNullable(), sprintf('Property %s', $propertyName));
+		}
 	}
 
 	public function testNameWithNamespace(): void

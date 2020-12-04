@@ -9,6 +9,7 @@ use function array_merge;
 use function in_array;
 use function sprintf;
 use const T_FUNCTION;
+use const T_WHITESPACE;
 
 class TypeHintHelper
 {
@@ -229,6 +230,16 @@ class TypeHintHelper
 			$functionPointer,
 			$typeHintInAnnotation
 		);
+	}
+
+	public static function getStartPointer(File $phpcsFile, int $endPointer): int
+	{
+		$previousPointer = TokenHelper::findPreviousExcluding(
+			$phpcsFile,
+			array_merge([T_WHITESPACE], TokenHelper::getTypeHintTokenCodes()),
+			$endPointer - 1
+		);
+		return TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $previousPointer + 1);
 	}
 
 }

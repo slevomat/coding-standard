@@ -19,6 +19,7 @@ use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use function array_filter;
 use function array_merge;
 use function count;
 use function in_array;
@@ -615,9 +616,10 @@ class AnnotationTypeHelper
 
 	/**
 	 * @param CallableTypeNode|GenericTypeNode|IdentifierTypeNode|ThisTypeNode|ArrayTypeNode|ArrayShapeNode|ConstTypeNode $typeNode
+	 * @param bool $enableUnionTypeHint
 	 * @return string
 	 */
-	public static function getTypeHintFromOneType(TypeNode $typeNode): string
+	public static function getTypeHintFromOneType(TypeNode $typeNode, bool $enableUnionTypeHint = false): string
 	{
 		if ($typeNode instanceof GenericTypeNode) {
 			return $typeNode->type->name;
@@ -629,7 +631,7 @@ class AnnotationTypeHelper
 			}
 
 			if (strtolower($typeNode->name) === 'false') {
-				return 'bool';
+				return $enableUnionTypeHint ? 'false' : 'bool';
 			}
 
 			if (in_array(strtolower($typeNode->name), ['class-string', 'trait-string', 'callable-string', 'numeric-string'], true)) {
@@ -673,16 +675,18 @@ class AnnotationTypeHelper
 	 * @param File $phpcsFile
 	 * @param int $pointer
 	 * @param array<int, string> $traversableTypeHints
-	 * @return string|null
+	 * @param bool $enableUnionTypeHint
+	 * @return string[]
 	 */
-	public static function getTraversableTypeHintFromType(
+	public static function getTraversableTypeHintsFromType(
 		TypeNode $typeNode,
 		File $phpcsFile,
 		int $pointer,
-		array $traversableTypeHints
-	): ?string
+		array $traversableTypeHints,
+		bool $enableUnionTypeHint = false
+	): array
 	{
-		$typeHint = null;
+		$typeHints = [];
 
 		foreach ($typeNode->types as $type) {
 			if (
@@ -690,17 +694,20 @@ class AnnotationTypeHelper
 				|| $type instanceof ThisTypeNode
 				|| $type instanceof IdentifierTypeNode
 			) {
-				$typeHint = self::getTypeHintFromOneType($type);
-				break;
+				$typeHints[] = self::getTypeHintFromOneType($type);
 			}
 		}
 
-		return $typeHint !== null && TypeHintHelper::isTraversableType(
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeHint),
-			$traversableTypeHints
-		)
-			? $typeHint
-			: null;
+		if (!$enableUnionTypeHint && count($typeHints) > 1) {
+			return [];
+		}
+
+		return array_filter($typeHints, static function (string $typeHint) use ($phpcsFile, $pointer, $traversableTypeHints): bool {
+			return TypeHintHelper::isTraversableType(
+				TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeHint),
+				$traversableTypeHints
+			);
+		});
 	}
 
 	/**

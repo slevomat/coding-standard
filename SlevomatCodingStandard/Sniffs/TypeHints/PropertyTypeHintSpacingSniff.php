@@ -5,6 +5,8 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\TypeHintHelper;
+use function count;
 use const T_AS;
 use const T_CONST;
 use const T_FUNCTION;
@@ -30,6 +32,8 @@ class PropertyTypeHintSpacingSniff implements Sniff
 	public const CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PROPERTY = 'MultipleSpacesBetweenTypeHintAndProperty';
 
 	public const CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL = 'WhitespaceAfterNullabilitySymbol';
+
+	public const CODE_WHITESPACE_IN_UNION_TYPE_HINT = 'WhitespaceInUnionTypeHint';
 
 	/**
 	 * @return array<int, (int|string)>
@@ -64,21 +68,41 @@ class PropertyTypeHintSpacingSniff implements Sniff
 			return;
 		}
 
-		$typeHintTokenCodes = TokenHelper::getTypeHintTokenCodes();
-
 		$propertyStartPointer = $visibilityPointer;
 
-		$typeHintEndPointer = TokenHelper::findPrevious($phpcsFile, $typeHintTokenCodes, $propertyPointer - 1, $propertyStartPointer);
+		$typeHintEndPointer = TokenHelper::findPrevious(
+			$phpcsFile,
+			TokenHelper::getTypeHintTokenCodes(),
+			$propertyPointer - 1,
+			$propertyStartPointer
+		);
 		if ($typeHintEndPointer === null) {
 			return;
 		}
 
-		$typeHintStartPointer = TokenHelper::findPreviousExcluding(
+		$typeHintStartPointer = TypeHintHelper::getStartPointer($phpcsFile, $typeHintEndPointer);
+
+		$whitespacePointersInUnionTypeHint = TokenHelper::findNextAll(
 			$phpcsFile,
-			$typeHintTokenCodes,
-			$typeHintEndPointer,
-			$propertyStartPointer
-		) + 1;
+			T_WHITESPACE,
+			$typeHintStartPointer,
+			$typeHintEndPointer + 1
+		);
+
+		if (count($whitespacePointersInUnionTypeHint) > 0) {
+			$fix = $phpcsFile->addFixableError(
+				'Whitespace in union type hint.',
+				$typeHintStartPointer,
+				self::CODE_WHITESPACE_IN_UNION_TYPE_HINT
+			);
+			if ($fix) {
+				$phpcsFile->fixer->beginChangeset();
+				foreach ($whitespacePointersInUnionTypeHint as $whitespacePointer) {
+					$phpcsFile->fixer->replaceToken($whitespacePointer, '');
+				}
+				$phpcsFile->fixer->endChangeset();
+			}
+		}
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $typeHintStartPointer - 1, $propertyStartPointer);
 		$nullabilitySymbolPointer = $previousPointer !== null && $tokens[$previousPointer]['code'] === T_NULLABLE ? $previousPointer : null;

@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.0
 
 class Foo
 {
@@ -8,7 +8,7 @@ class Foo
 	 */
 	public $boolean = true;
 
-	private $string = 'string';
+	private static $string = 'string';
 
 	public function __construct($boo)
 	{
@@ -27,5 +27,13 @@ class Foo
 	}
 
 	private string $typedPropertyAfterMethod;
+
+	private string|int $propertyWithUnionTypeHint;
+
+	private null|int $nullableWithNullOnStart;
+	private string|null|int $nullableWithNullInTheMiddle;
+	private string|null $nullableWithNullAtTheEnds;
+
+	private string | int | false | null $unionWithSpaces;
 
 }

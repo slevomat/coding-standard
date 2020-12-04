@@ -7,6 +7,7 @@ use function array_key_exists;
 use function array_merge;
 use function count;
 use const T_ARRAY_HINT;
+use const T_BITWISE_OR;
 use const T_BREAK;
 use const T_CALLABLE;
 use const T_CLASS;
@@ -21,6 +22,7 @@ use const T_DOC_COMMENT_STRING;
 use const T_DOC_COMMENT_TAG;
 use const T_DOC_COMMENT_WHITESPACE;
 use const T_EXIT;
+use const T_FALSE;
 use const T_FN;
 use const T_FUNCTION;
 use const T_INTERFACE;
@@ -28,6 +30,7 @@ use const T_NAME_FULLY_QUALIFIED;
 use const T_NAME_QUALIFIED;
 use const T_NAME_RELATIVE;
 use const T_NS_SEPARATOR;
+use const T_NULL;
 use const T_PARENT;
 use const T_PHPCS_DISABLE;
 use const T_PHPCS_ENABLE;
@@ -491,6 +494,9 @@ class TokenHelper
 					T_PARENT,
 					T_ARRAY_HINT,
 					T_CALLABLE,
+					T_FALSE,
+					T_NULL,
+					T_BITWISE_OR,
 				]
 			);
 		}

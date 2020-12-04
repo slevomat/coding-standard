@@ -28,6 +28,7 @@ use function array_map;
 use function array_unique;
 use function array_values;
 use function count;
+use function implode;
 use function in_array;
 use function sprintf;
 use function strtolower;
@@ -64,6 +65,9 @@ class PropertyTypeHintSniff implements Sniff
 	/** @var bool|null */
 	public $enableMixedTypeHint = null;
 
+	/** @var bool|null */
+	public $enableUnionTypeHint = null;
+
 	/** @var string[] */
 	public $traversableTypeHints = [];
 
@@ -93,6 +97,9 @@ class PropertyTypeHintSniff implements Sniff
 		$this->enableNativeTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableNativeTypeHint, 70400);
 		$this->enableMixedTypeHint = $this->enableNativeTypeHint
 			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableMixedTypeHint, 80000)
+			: false;
+		$this->enableUnionTypeHint = $this->enableNativeTypeHint
+			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableUnionTypeHint, 80000)
 			: false;
 
 		$tokens = $phpcsFile->getTokens();
@@ -190,7 +197,10 @@ class PropertyTypeHintSniff implements Sniff
 			$typeNode = $typeNode->type;
 		}
 
+		$canTryUnionTypeHint = $this->enableUnionTypeHint && $typeNode instanceof UnionTypeNode;
+
 		$typeHints = [];
+		$traversableTypeHints = [];
 		$nullableTypeHint = false;
 
 		if (AnnotationTypeHelper::containsOneType($typeNode)) {
@@ -208,7 +218,7 @@ class PropertyTypeHintSniff implements Sniff
 				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $innerTypeNode */
 				$innerTypeNode = $innerTypeNode;
 
-				$typeHint = AnnotationTypeHelper::getTypeHintFromOneType($innerTypeNode);
+				$typeHint = AnnotationTypeHelper::getTypeHintFromOneType($innerTypeNode, $canTryUnionTypeHint);
 
 				if (strtolower($typeHint) === 'null') {
 					$nullableTypeHint = true;
@@ -219,10 +229,6 @@ class PropertyTypeHintSniff implements Sniff
 					TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $propertyPointer, $typeHint),
 					$this->getTraversableTypeHints()
 				);
-
-				if (!$isTraversable && count($traversableTypeHints) > 0) {
-					return;
-				}
 
 				if (
 					!$innerTypeNode instanceof ArrayTypeNode
@@ -236,43 +242,51 @@ class PropertyTypeHintSniff implements Sniff
 			}
 
 			$traversableTypeHints = array_values(array_unique($traversableTypeHints));
-			if (count($traversableTypeHints) > 1) {
+			if (count($traversableTypeHints) > 1 && !$canTryUnionTypeHint) {
 				return;
 			}
 		}
 
 		$typeHints = array_values(array_unique($typeHints));
 
-		if (count($typeHints) === 1) {
-			$possibleTypeHint = $typeHints[0];
-		} elseif (count($typeHints) === 2) {
+		if (count($traversableTypeHints) > 0) {
 			/** @var UnionTypeNode|IntersectionTypeNode $typeNode */
 			$typeNode = $typeNode;
 
 			$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($typeNode);
-			if ($itemsSpecificationTypeHint === null) {
-				return;
-			}
+			if ($itemsSpecificationTypeHint !== null) {
+				$possibleTypeHints = AnnotationTypeHelper::getTraversableTypeHintsFromType(
+					$typeNode,
+					$phpcsFile,
+					$propertyPointer,
+					$this->getTraversableTypeHints(),
+					$this->enableUnionTypeHint
+				);
 
-			$possibleTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType(
-				$typeNode,
-				$phpcsFile,
-				$propertyPointer,
-				$this->getTraversableTypeHints()
-			);
-			if ($possibleTypeHint === null) {
-				return;
+				if (count($possibleTypeHints) > 0) {
+					$typeHints = $possibleTypeHints;
+				}
 			}
-		} else {
+		}
+
+		if (count($typeHints) > 1 && !$canTryUnionTypeHint) {
 			return;
 		}
 
-		if ($possibleTypeHint === 'callable') {
-			return;
-		}
+		foreach ($typeHints as $typeHintNo => $typeHint) {
+			if ($typeHint === 'callable') {
+				return;
+			}
 
-		if (!TypeHintHelper::isValidTypeHint($possibleTypeHint, true, false, $this->enableMixedTypeHint)) {
-			return;
+			if ($canTryUnionTypeHint && $typeHint === 'false') {
+				continue;
+			}
+
+			if (!TypeHintHelper::isValidTypeHint($typeHint, true, false, $this->enableMixedTypeHint)) {
+				return;
+			}
+
+			$typeHints[$typeHintNo] = TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
 		}
 
 		if ($originalTypeNode instanceof NullableTypeNode) {
@@ -292,9 +306,14 @@ class PropertyTypeHintSniff implements Sniff
 			return;
 		}
 
-		$propertyTypeHint = TypeHintHelper::isSimpleTypeHint($possibleTypeHint)
-			? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleTypeHint)
-			: $possibleTypeHint;
+		$propertyTypeHint = implode('|', $typeHints);
+		if ($nullableTypeHint) {
+			if (count($typeHints) > 1) {
+				$propertyTypeHint .= '|null';
+			} else {
+				$propertyTypeHint = '?' . $propertyTypeHint;
+			}
+		}
 
 		$propertyStartPointer = TokenHelper::findPrevious(
 			$phpcsFile,
@@ -310,7 +329,7 @@ class PropertyTypeHintSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->addContent($propertyStartPointer, sprintf(' %s%s', ($nullableTypeHint ? '?' : ''), $propertyTypeHint));
+		$phpcsFile->fixer->addContent($propertyStartPointer, sprintf(' %s', $propertyTypeHint));
 
 		if (
 			$pointerAfterProperty !== null
@@ -417,7 +436,8 @@ class PropertyTypeHintSniff implements Sniff
 			$propertyPointer,
 			$propertyTypeHint,
 			$propertyAnnotation,
-			$this->getTraversableTypeHints()
+			$this->getTraversableTypeHints(),
+			$this->enableUnionTypeHint
 		)) {
 			return;
 		}

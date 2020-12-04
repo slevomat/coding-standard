@@ -277,15 +277,17 @@ class ReturnTypeHintSniff implements Sniff
 				return;
 			}
 
-			$possibleReturnTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType(
+			$possibleReturnTypeHints = AnnotationTypeHelper::getTraversableTypeHintsFromType(
 				$returnTypeNode,
 				$phpcsFile,
 				$functionPointer,
 				$this->getTraversableTypeHints()
 			);
-			if ($possibleReturnTypeHint === null) {
+			if (count($possibleReturnTypeHints) === 0) {
 				return;
 			}
+
+			$possibleReturnTypeHint = $possibleReturnTypeHints[0];
 		} else {
 			return;
 		}

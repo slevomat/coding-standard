@@ -238,15 +238,17 @@ class ParameterTypeHintSniff implements Sniff
 					continue;
 				}
 
-				$possibleParameterTypeHint = AnnotationTypeHelper::getTraversableTypeHintFromType(
+				$possibleParameterTypeHints = AnnotationTypeHelper::getTraversableTypeHintsFromType(
 					$parameterTypeNode,
 					$phpcsFile,
 					$functionPointer,
 					$this->getTraversableTypeHints()
 				);
-				if ($possibleParameterTypeHint === null) {
+				if (count($possibleParameterTypeHints) === 0) {
 					continue;
 				}
+
+				$possibleParameterTypeHint = $possibleParameterTypeHints[0];
 			} else {
 				continue;
 			}

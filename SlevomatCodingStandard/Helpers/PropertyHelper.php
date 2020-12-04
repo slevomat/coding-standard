@@ -11,6 +11,7 @@ use function array_reverse;
 use function array_values;
 use function count;
 use function in_array;
+use function preg_match;
 use function sprintf;
 use const T_ANON_CLASS;
 use const T_CLOSE_CURLY_BRACKET;
@@ -84,22 +85,18 @@ class PropertyHelper
 			return null;
 		}
 
-		$typeHintStartPointer = TokenHelper::findPreviousExcluding(
-			$phpcsFile,
-			TokenHelper::getTypeHintTokenCodes(),
-			$typeHintEndPointer,
-			$propertyStartPointer
-		) + 1;
+		$typeHintStartPointer = TypeHintHelper::getStartPointer($phpcsFile, $typeHintEndPointer);
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $typeHintStartPointer - 1, $propertyStartPointer);
 		$nullabilitySymbolPointer = $previousPointer !== null && $tokens[$previousPointer]['code'] === T_NULLABLE ? $previousPointer : null;
+		$typeHint = TokenHelper::getContent($phpcsFile, $typeHintStartPointer, $typeHintEndPointer);
 
-		return new PropertyTypeHint(
-			TokenHelper::getContent($phpcsFile, $typeHintStartPointer, $typeHintEndPointer),
-			$nullabilitySymbolPointer !== null,
-			$nullabilitySymbolPointer ?? $typeHintStartPointer,
-			$typeHintEndPointer
-		);
+		$nullable = $nullabilitySymbolPointer !== null;
+		if (!$nullable) {
+			$nullable = preg_match('~(?:^|\|\s*)null(?:\s*\||$)~i', $typeHint) === 1;
+		}
+
+		return new PropertyTypeHint($typeHint, $nullable, $nullabilitySymbolPointer ?? $typeHintStartPointer, $typeHintEndPointer);
 	}
 
 	public static function getFullyQualifiedName(File $phpcsFile, int $propertyPointer): string
