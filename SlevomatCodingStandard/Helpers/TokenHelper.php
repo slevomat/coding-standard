@@ -88,19 +88,6 @@ class TokenHelper
 		T_PHPCS_SET,
 	];
 
-	/**
-	 * @deprecated Use TokenHelper::getTypeHintTokenCodes()
-	 * @var (int|string)[]
-	 */
-	public static $typeHintTokenCodes = [
-		T_NS_SEPARATOR,
-		T_STRING,
-		T_SELF,
-		T_PARENT,
-		T_ARRAY_HINT,
-		T_CALLABLE,
-	];
-
 	/** @var (int|string)[] */
 	public static $earlyExitTokenCodes = [
 		T_RETURN,
