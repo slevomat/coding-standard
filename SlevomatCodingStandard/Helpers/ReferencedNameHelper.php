@@ -252,16 +252,6 @@ class ReferencedNameHelper
 						// Union return type hint
 						goto reference;
 					}
-
-					if (in_array($tokens[$previousPointer]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_STATIC], true)) {
-						// Property with union type hint
-						goto reference;
-					}
-
-					if ($tokens[$previousPointer]['code'] === T_OPEN_PARENTHESIS) {
-						// Parameter with union type hint
-						goto reference;
-					}
 				}
 
 				$type = ReferencedName::TYPE_CONSTANT;
