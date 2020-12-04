@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use function count;
+use function sprintf;
 use const PHP_VERSION_ID;
 use const T_NS_SEPARATOR;
 use const T_STRING;
@@ -161,6 +162,35 @@ class ReferencedNameHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/goto.php');
 		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
 		self::assertCount(0, $names);
+	}
+
+	public function testUnionTypeHints(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/unionTypeHints.php');
+
+		$expectedNames = [
+			'IntClass',
+			'IntInterface',
+			'StringClass',
+			'StringInterface',
+			'Anything',
+			'Nothing',
+			'DateTimeImmutable',
+			'Something',
+			'DateTime',
+		];
+
+		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
+
+		self::assertCount(count($expectedNames), $names);
+
+		foreach ($expectedNames as $no => $expectedName) {
+			self::assertSame($expectedName, $names[$no]->getNameAsReferencedInFile());
+			self::assertTrue(
+				$names[$no]->isClass(),
+				sprintf('%s should be class, but %s found', $names[$no]->getNameAsReferencedInFile(), $names[$no]->getType())
+			);
+		}
 	}
 
 }
