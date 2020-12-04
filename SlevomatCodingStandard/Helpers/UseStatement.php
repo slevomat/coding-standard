@@ -11,7 +11,7 @@ use function strtolower;
 class UseStatement
 {
 
-	public const TYPE_DEFAULT = ReferencedName::TYPE_DEFAULT;
+	public const TYPE_DEFAULT = ReferencedName::TYPE_CLASS;
 	public const TYPE_FUNCTION = ReferencedName::TYPE_FUNCTION;
 	public const TYPE_CONSTANT = ReferencedName::TYPE_CONSTANT;
 

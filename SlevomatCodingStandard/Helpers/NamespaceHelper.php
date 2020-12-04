@@ -143,7 +143,7 @@ class NamespaceHelper
 
 	public static function resolveClassName(File $phpcsFile, string $nameAsReferencedInFile, int $currentPointer): string
 	{
-		return self::resolveName($phpcsFile, $nameAsReferencedInFile, ReferencedName::TYPE_DEFAULT, $currentPointer);
+		return self::resolveName($phpcsFile, $nameAsReferencedInFile, ReferencedName::TYPE_CLASS, $currentPointer);
 	}
 
 	public static function resolveName(File $phpcsFile, string $nameAsReferencedInFile, string $type, int $currentPointer): string

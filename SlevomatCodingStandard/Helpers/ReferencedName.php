@@ -8,7 +8,7 @@ namespace SlevomatCodingStandard\Helpers;
 class ReferencedName
 {
 
-	public const TYPE_DEFAULT = 'default';
+	public const TYPE_CLASS = 'class';
 	public const TYPE_FUNCTION = 'function';
 	public const TYPE_CONSTANT = 'constant';
 
@@ -54,7 +54,7 @@ class ReferencedName
 
 	public function isClass(): bool
 	{
-		return $this->type === self::TYPE_DEFAULT;
+		return $this->type === self::TYPE_CLASS;
 	}
 
 	public function isConstant(): bool

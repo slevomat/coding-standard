@@ -150,7 +150,7 @@ class ReferencedNameHelper
 			$nextTokenAfterEndPointer = TokenHelper::findNextEffective($phpcsFile, $nameEndPointer + 1);
 			$previousTokenBeforeStartPointer = TokenHelper::findPreviousEffective($phpcsFile, $nameStartPointer - 1);
 
-			$type = ReferencedName::TYPE_DEFAULT;
+			$type = ReferencedName::TYPE_CLASS;
 			if ($nextTokenAfterEndPointer !== null && $previousTokenBeforeStartPointer !== null) {
 				if ($tokens[$nextTokenAfterEndPointer]['code'] === T_OPEN_PARENTHESIS) {
 					$type = ReferencedName::TYPE_FUNCTION;
@@ -162,7 +162,7 @@ class ReferencedNameHelper
 							&& $tokens[$previousTokenBeforeStartPointer]['code'] === T_ATTRIBUTE
 						)
 					) {
-						$type = ReferencedName::TYPE_DEFAULT;
+						$type = ReferencedName::TYPE_CLASS;
 					}
 
 					goto reference;
@@ -172,7 +172,7 @@ class ReferencedNameHelper
 					$tokenAfterNextToken = TokenHelper::findNextEffective($phpcsFile, $nextTokenAfterEndPointer + 1);
 
 					$type = in_array($tokens[$tokenAfterNextToken]['code'], [T_VARIABLE, T_ELLIPSIS], true)
-						? ReferencedName::TYPE_DEFAULT
+						? ReferencedName::TYPE_CLASS
 						: ReferencedName::TYPE_CONSTANT;
 
 					goto reference;
@@ -223,7 +223,7 @@ class ReferencedNameHelper
 						T_EXTENDS,
 						T_USE,
 					], true)
-						? ReferencedName::TYPE_DEFAULT
+						? ReferencedName::TYPE_CLASS
 						: ReferencedName::TYPE_CONSTANT;
 
 					goto reference;

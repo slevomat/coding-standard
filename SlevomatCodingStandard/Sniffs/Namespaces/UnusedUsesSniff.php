@@ -103,7 +103,7 @@ class UnusedUsesSniff implements Sniff
 			$nameReferencedWithoutSubNamespace = count($nameParts) === 1;
 			$uniqueId = $nameReferencedWithoutSubNamespace
 				? UseStatement::getUniqueId($referencedName->getType(), $nameAsReferencedInFile)
-				: UseStatement::getUniqueId(ReferencedName::TYPE_DEFAULT, $nameAsReferencedInFile);
+				: UseStatement::getUniqueId(ReferencedName::TYPE_CLASS, $nameAsReferencedInFile);
 			if (
 				NamespaceHelper::isFullyQualifiedName($name)
 				|| !array_key_exists($pointerBeforeUseStatements, $fileUnusedNames)

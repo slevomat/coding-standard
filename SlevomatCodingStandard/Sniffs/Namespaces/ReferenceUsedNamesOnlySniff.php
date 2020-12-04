@@ -665,7 +665,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 							$reference->annotation = $annotation;
 							$reference->nameNode = $typeHintNode;
 							$reference->name = $typeHint;
-							$reference->type = ReferencedName::TYPE_DEFAULT;
+							$reference->type = ReferencedName::TYPE_CLASS;
 							$reference->startPointer = $annotation->getStartPointer();
 							$reference->endPointer = $annotation->getEndPointer();
 							$reference->isClass = true;
@@ -684,7 +684,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 							$reference->annotation = $annotation;
 							$reference->constantFetchNode = $constantFetchNode;
 							$reference->name = $constantFetchNode->className;
-							$reference->type = ReferencedName::TYPE_DEFAULT;
+							$reference->type = ReferencedName::TYPE_CLASS;
 							$reference->startPointer = $annotation->getStartPointer();
 							$reference->endPointer = $annotation->getEndPointer();
 							$reference->isClass = true;
