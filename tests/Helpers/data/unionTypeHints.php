@@ -5,7 +5,7 @@ class Whatever
 
 	private float|int|false|IntClass|IntInterface $a;
 
-	private StringClass|StringInterface $a;
+	private StringClass|StringInterface $b;
 
 	public function doSomething(bool|int|false|Anything|Nothing $a): int|false|DateTimeImmutable
 	{
