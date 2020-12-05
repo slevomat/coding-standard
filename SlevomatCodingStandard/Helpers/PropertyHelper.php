@@ -12,6 +12,7 @@ use function array_values;
 use function count;
 use function in_array;
 use function preg_match;
+use function preg_replace;
 use function sprintf;
 use const T_ANON_CLASS;
 use const T_CLOSE_CURLY_BRACKET;
@@ -95,6 +96,9 @@ class PropertyHelper
 		if (!$nullable) {
 			$nullable = preg_match('~(?:^|\|\s*)null(?:\s*\||$)~i', $typeHint) === 1;
 		}
+
+		/** @var string $typeHint */
+		$typeHint = preg_replace('~\s+~', '', $typeHint);
 
 		return new PropertyTypeHint($typeHint, $nullable, $nullabilitySymbolPointer ?? $typeHintStartPointer, $typeHintEndPointer);
 	}

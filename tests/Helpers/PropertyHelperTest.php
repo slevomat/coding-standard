@@ -144,7 +144,7 @@ class PropertyHelperTest extends TestCase
 			],
 			[
 				'$unionWithSpaces',
-				'string | int | false | null',
+				'string|int|false|null',
 				true,
 			],
 		];
