@@ -264,7 +264,7 @@ Some functions have `$strict` parameter. This sniff reports calls to these funct
 
 Reports closures not using `$this` that are not declared `static`.
 
-#### SlevomatCodingStandard.Functions.FunctionLength 🔧
+#### SlevomatCodingStandard.Functions.FunctionLength
 
 Disallows long functions. This sniff provides the following setting:
 
@@ -661,7 +661,7 @@ Sniff provides the following settings:
 * `lineLengthLimit` (defaults to `0`)
 * `minExpressionsLength` (defaults to `null`): when the expressions after `?` are shorter than this length, the ternary operator does not has to be reformatted.
 
-#### SlevomatCodingStandard.ControlStructures.RequireNullSafeObjectOperator
+#### SlevomatCodingStandard.ControlStructures.RequireNullSafeObjectOperator 🔧
 
 Requires using `?->` operator.
 
@@ -723,7 +723,7 @@ Sniff provides the following settings:
 * `ignoreComments`: whether or not to ignore line length of comments
 * `ignoreImports`: whether or not to ignore line length of import (use) statements
 
-#### SlevomatCodingStandard.Functions.ArrowFunctionDeclaration
+#### SlevomatCodingStandard.Functions.ArrowFunctionDeclaration 🔧
 
 Checks `fn` declaration.
 
