@@ -13,6 +13,8 @@ use function array_reverse;
 use function count;
 use function in_array;
 use function iterator_to_array;
+use function preg_match;
+use function preg_replace;
 use function sprintf;
 use const T_ANON_CLASS;
 use const T_BITWISE_AND;
@@ -297,6 +299,13 @@ class FunctionHelper
 		$typeHintEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointerAfterTypeHint - 1);
 
 		$typeHint = TokenHelper::getContent($phpcsFile, $typeHintStartPointer, $typeHintEndPointer);
+
+		/** @var string $typeHint */
+		$typeHint = preg_replace('~\s+~', '', $typeHint);
+
+		if (!$nullable) {
+			$nullable = preg_match('~(?:^|\|)null(?:\||$)~i', $typeHint) === 1;
+		}
 
 		return new ReturnTypeHint($typeHint, $nullable, $typeHintStartPointer, $typeHintEndPointer);
 	}

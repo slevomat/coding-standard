@@ -375,6 +375,16 @@ class FunctionHelperTest extends TestCase
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'abstractWithoutReturnTypeHint');
 		self::assertFalse(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
 		self::assertNull(FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer));
+
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'unionReturnTypeHint');
+		self::assertTrue(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
+		self::assertSame('string|int', $returnTypeHint->getTypeHint());
+
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'unionReturnTypeHintWithWhitespace');
+		self::assertTrue(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
+		self::assertSame('string|int|bool', $returnTypeHint->getTypeHint());
 	}
 
 	public function testReturnNullableTypeHint(): void
@@ -391,6 +401,12 @@ class FunctionHelperTest extends TestCase
 		self::assertTrue(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 		self::assertSame('bool', $returnTypeHint->getTypeHint());
+		self::assertTrue($returnTypeHint->isNullable());
+
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'unionWithNull');
+		self::assertTrue(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
+		self::assertSame('null|string', $returnTypeHint->getTypeHint());
 		self::assertTrue($returnTypeHint->isNullable());
 	}
 

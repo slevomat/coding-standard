@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.0
 
 function foo(): Foo
 {
@@ -50,6 +50,11 @@ class FooBar implements Foo
 	}
 
 	public function noReturnTypeHint()
+	{
+
+	}
+
+	public function unionReturnTypeHint(): int|bool
 	{
 
 	}

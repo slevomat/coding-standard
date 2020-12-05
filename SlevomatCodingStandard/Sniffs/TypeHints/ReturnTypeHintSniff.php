@@ -31,6 +31,7 @@ use function array_map;
 use function array_unique;
 use function array_values;
 use function count;
+use function implode;
 use function lcfirst;
 use function sprintf;
 use function strtolower;
@@ -61,6 +62,9 @@ class ReturnTypeHintSniff implements Sniff
 	/** @var bool|null */
 	public $enableMixedTypeHint = null;
 
+	/** @var bool|null */
+	public $enableUnionTypeHint = null;
+
 	/** @var string[] */
 	public $traversableTypeHints = [];
 
@@ -88,6 +92,7 @@ class ReturnTypeHintSniff implements Sniff
 		$this->enableObjectTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableObjectTypeHint, 70200);
 		$this->enableStaticTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableStaticTypeHint, 80000);
 		$this->enableMixedTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableMixedTypeHint, 80000);
+		$this->enableUnionTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableUnionTypeHint, 80000);
 
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $pointer, self::NAME)) {
 			return;
@@ -208,7 +213,10 @@ class ReturnTypeHintSniff implements Sniff
 			return;
 		}
 
+		$canTryUnionTypeHint = $this->enableUnionTypeHint && $returnTypeNode instanceof UnionTypeNode;
+
 		$typeHints = [];
+		$traversableTypeHints = [];
 		$nullableReturnTypeHint = false;
 
 		$originalReturnTypeNode = $returnTypeNode;
@@ -231,7 +239,7 @@ class ReturnTypeHintSniff implements Sniff
 				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $typeNode */
 				$typeNode = $typeNode;
 
-				$typeHint = AnnotationTypeHelper::getTypeHintFromOneType($typeNode);
+				$typeHint = AnnotationTypeHelper::getTypeHintFromOneType($typeNode, $canTryUnionTypeHint);
 
 				if (strtolower($typeHint) === 'null') {
 					$nullableReturnTypeHint = true;
@@ -242,10 +250,6 @@ class ReturnTypeHintSniff implements Sniff
 					TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint),
 					$this->getTraversableTypeHints()
 				);
-
-				if (!$isTraversable && count($traversableTypeHints) > 0) {
-					return;
-				}
 
 				if (
 					!$typeNode instanceof ArrayTypeNode
@@ -259,46 +263,52 @@ class ReturnTypeHintSniff implements Sniff
 			}
 
 			$traversableTypeHints = array_values(array_unique($traversableTypeHints));
-			if (count($traversableTypeHints) > 1) {
+			if (count($traversableTypeHints) > 1 && !$canTryUnionTypeHint) {
 				return;
 			}
 		}
 
 		$typeHints = array_values(array_unique($typeHints));
 
-		if (count($typeHints) === 1) {
-			$possibleReturnTypeHint = $typeHints[0];
-		} elseif (count($typeHints) === 2) {
+		if (count($traversableTypeHints) > 0) {
 			/** @var UnionTypeNode|IntersectionTypeNode $returnTypeNode */
 			$returnTypeNode = $returnTypeNode;
 
 			$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($returnTypeNode);
-			if ($itemsSpecificationTypeHint === null) {
-				return;
-			}
+			if ($itemsSpecificationTypeHint !== null) {
+				$possibleReturnTypeHints = AnnotationTypeHelper::getTraversableTypeHintsFromType(
+					$returnTypeNode,
+					$phpcsFile,
+					$functionPointer,
+					$this->getTraversableTypeHints(),
+					$canTryUnionTypeHint
+				);
 
-			$possibleReturnTypeHints = AnnotationTypeHelper::getTraversableTypeHintsFromType(
-				$returnTypeNode,
-				$phpcsFile,
-				$functionPointer,
-				$this->getTraversableTypeHints()
-			);
-			if (count($possibleReturnTypeHints) === 0) {
-				return;
+				if (count($possibleReturnTypeHints) > 0) {
+					$typeHints = $possibleReturnTypeHints;
+				}
 			}
+		}
 
-			$possibleReturnTypeHint = $possibleReturnTypeHints[0];
-		} else {
+		if (count($typeHints) > 1 && !$canTryUnionTypeHint) {
 			return;
 		}
 
-		if (!TypeHintHelper::isValidTypeHint(
-			$possibleReturnTypeHint,
-			$this->enableObjectTypeHint,
-			$this->enableStaticTypeHint,
-			$this->enableMixedTypeHint
-		)) {
-			return;
+		foreach ($typeHints as $typeHintNo => $typeHint) {
+			if ($canTryUnionTypeHint && $typeHint === 'false') {
+				continue;
+			}
+
+			if (!TypeHintHelper::isValidTypeHint(
+				$typeHint,
+				$this->enableObjectTypeHint,
+				$this->enableStaticTypeHint,
+				$this->enableMixedTypeHint
+			)) {
+				return;
+			}
+
+			$typeHints[$typeHintNo] = TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
 		}
 
 		if ($originalReturnTypeNode instanceof NullableTypeNode) {
@@ -319,14 +329,19 @@ class ReturnTypeHintSniff implements Sniff
 			return;
 		}
 
-		$returnTypeHint = TypeHintHelper::isSimpleTypeHint($possibleReturnTypeHint)
-			? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleReturnTypeHint)
-			: $possibleReturnTypeHint;
+		$returnTypeHint = implode('|', $typeHints);
+		if ($nullableReturnTypeHint) {
+			if (count($typeHints) > 1) {
+				$returnTypeHint .= '|null';
+			} else {
+				$returnTypeHint = '?' . $returnTypeHint;
+			}
+		}
 
 		$phpcsFile->fixer->beginChangeset();
 		$phpcsFile->fixer->addContent(
 			$phpcsFile->getTokens()[$functionPointer]['parenthesis_closer'],
-			sprintf(': %s%s', ($nullableReturnTypeHint ? '?' : ''), $returnTypeHint)
+			sprintf(': %s', $returnTypeHint)
 		);
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -436,7 +451,8 @@ class ReturnTypeHintSniff implements Sniff
 			$functionPointer,
 			$returnTypeHint,
 			$returnAnnotation,
-			$this->getTraversableTypeHints()
+			$this->getTraversableTypeHints(),
+			$this->enableUnionTypeHint
 		)) {
 			return;
 		}

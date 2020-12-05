@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.0
 
 function foo():Foo
 {
@@ -137,3 +137,11 @@ class FooBar implements Foo
 $callback = fn ($a):Foo => $a;
 $callback = fn ():  Foo => $a;
 $callback = fn () :Foo => $a;
+
+$callback = function ($a):int|bool {
+	return $a;
+};
+
+$callback = function ($a): int | bool {
+	return $a;
+};

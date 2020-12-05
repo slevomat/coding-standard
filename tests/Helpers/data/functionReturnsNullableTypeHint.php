@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.0
 
 abstract class FooClass
 {
@@ -9,5 +9,9 @@ abstract class FooClass
 	}
 
 	abstract public function abstractWithReturnNullableTypeHint(): ?bool;
+
+	public function unionWithNull(): null|string
+	{
+	}
 
 }
