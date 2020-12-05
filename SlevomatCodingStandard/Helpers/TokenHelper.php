@@ -202,20 +202,6 @@ class TokenHelper
 
 	/**
 	 * @param File $phpcsFile
-	 * @param (int|string)|(int|string)[] $types
-	 * @param int $startPointer
-	 * @param int|null $endPointer
-	 * @return int|null
-	 */
-	public static function findNextLocalExcluding(File $phpcsFile, $types, int $startPointer, ?int $endPointer = null): ?int
-	{
-		/** @var int|false $token */
-		$token = $phpcsFile->findNext($types, $startPointer, $endPointer, true, null, true);
-		return $token === false ? null : $token;
-	}
-
-	/**
-	 * @param File $phpcsFile
 	 * @param int $startPointer search starts at this token, inclusive
 	 * @param int|null $endPointer search ends at this token, exclusive
 	 * @return int|null

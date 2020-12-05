@@ -30,6 +30,7 @@ use const T_RETURN;
 use const T_SEMICOLON;
 use const T_STRING;
 use const T_TRAIT;
+use const T_USE;
 use const T_VARIABLE;
 use const T_YIELD;
 use const T_YIELD_FROM;
@@ -270,63 +271,34 @@ class FunctionHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$isAbstract = self::isAbstract($phpcsFile, $functionPointer);
+		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$functionPointer]['parenthesis_closer'] + 1);
 
-		$colonToken = $isAbstract
-			? TokenHelper::findNextLocal($phpcsFile, T_COLON, $tokens[$functionPointer]['parenthesis_closer'] + 1)
-			: TokenHelper::findNext(
-				$phpcsFile,
-				T_COLON,
-				$tokens[$functionPointer]['parenthesis_closer'] + 1,
-				$tokens[$functionPointer]['scope_opener'] - 1
-			);
+		if ($tokens[$nextPointer]['code'] === T_USE) {
+			$useParenthesisOpener = TokenHelper::findNextEffective($phpcsFile, $nextPointer + 1);
+			$colonPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$useParenthesisOpener]['parenthesis_closer'] + 1);
+		} else {
+			$colonPointer = $nextPointer;
+		}
 
-		if ($colonToken === null) {
+		if ($tokens[$colonPointer]['code'] !== T_COLON) {
 			return null;
 		}
 
-		$abstractExcludeTokens = array_merge(TokenHelper::$ineffectiveTokenCodes, [T_SEMICOLON]);
+		$typeHintStartPointer = TokenHelper::findNextEffective($phpcsFile, $colonPointer + 1);
+		$nullable = $tokens[$typeHintStartPointer]['code'] === T_NULLABLE;
+		if ($nullable) {
+			$typeHintStartPointer = TokenHelper::findNextEffective($phpcsFile, $typeHintStartPointer + 1);
+		}
 
-		$nullableToken = $isAbstract
-			? TokenHelper::findNextLocalExcluding($phpcsFile, $abstractExcludeTokens, $colonToken + 1)
-			: TokenHelper::findNextExcluding(
-				$phpcsFile,
-				TokenHelper::$ineffectiveTokenCodes,
-				$colonToken + 1,
-				$tokens[$functionPointer]['scope_opener'] - 1
-			);
+		$pointerAfterTypeHint = self::isAbstract($phpcsFile, $functionPointer)
+			? TokenHelper::findNext($phpcsFile, T_SEMICOLON, $typeHintStartPointer + 1)
+			: $tokens[$functionPointer]['scope_opener'];
 
-		$nullable = $nullableToken !== null && $tokens[$nullableToken]['code'] === T_NULLABLE;
+		$typeHintEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointerAfterTypeHint - 1);
 
-		$typeHint = '';
-		$typeHintStartPointer = null;
-		$typeHintEndPointer = null;
-		$nextToken = $nullable ? $nullableToken : $colonToken;
-		do {
-			$nextToken = $isAbstract
-				? TokenHelper::findNextLocalExcluding($phpcsFile, $abstractExcludeTokens, $nextToken + 1)
-				: TokenHelper::findNextExcluding(
-					$phpcsFile,
-					TokenHelper::$ineffectiveTokenCodes,
-					$nextToken + 1,
-					$tokens[$functionPointer]['scope_opener']
-				);
+		$typeHint = TokenHelper::getContent($phpcsFile, $typeHintStartPointer, $typeHintEndPointer);
 
-			$isTypeHint = $nextToken !== null;
-			if (!$isTypeHint) {
-				break;
-			}
-
-			$typeHint .= $tokens[$nextToken]['content'];
-			if ($typeHintStartPointer === null) {
-				/** @var int $typeHintStartPointer */
-				$typeHintStartPointer = $nextToken;
-			}
-			/** @var int $typeHintEndPointer */
-			$typeHintEndPointer = $nextToken;
-		} while ($isTypeHint);
-
-		return $typeHint !== '' ? new ReturnTypeHint($typeHint, $nullable, $typeHintStartPointer, $typeHintEndPointer) : null;
+		return new ReturnTypeHint($typeHint, $nullable, $typeHintStartPointer, $typeHintEndPointer);
 	}
 
 	public static function hasReturnTypeHint(File $phpcsFile, int $functionPointer): bool
