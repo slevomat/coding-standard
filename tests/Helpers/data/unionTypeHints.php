@@ -7,7 +7,7 @@ class Whatever
 
 	private StringClass|StringInterface $b;
 
-	public function doSomething(bool|int|false|Anything|Nothing $a): int|false|DateTimeImmutable
+	public function doSomething(int|false|Anything|Nothing $a): int|false|DateTimeImmutable
 	{
 	}
 
