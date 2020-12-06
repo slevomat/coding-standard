@@ -264,6 +264,14 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @return \Foo::INTEGER
+	 */
+	public function constTypeNode()
+	{
+
+	}
+
 }
 
 /**
