@@ -229,6 +229,13 @@ class FunctionHelper
 			$equalsPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1, $tokens[$functionPointer]['parenthesis_closer']);
 			$isOptional = $equalsPointer !== null && $tokens[$equalsPointer]['code'] === T_EQUAL;
 
+			/** @var string $typeHint */
+			$typeHint = preg_replace('~\s+~', '', $typeHint);
+
+			if (!$isNullable) {
+				$isNullable = preg_match('~(?:^|\|)null(?:\||$)~i', $typeHint) === 1;
+			}
+
 			$parametersTypeHints[$parameterName] = $typeHint !== '' ? new ParameterTypeHint($typeHint, $isNullable, $isOptional) : null;
 		}
 

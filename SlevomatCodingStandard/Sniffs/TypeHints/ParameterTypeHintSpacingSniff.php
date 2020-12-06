@@ -5,7 +5,9 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_keys;
+use function count;
 use function sprintf;
 use const T_BITWISE_AND;
 use const T_COMMA;
@@ -22,6 +24,8 @@ class ParameterTypeHintSpacingSniff implements Sniff
 	public const CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PARAMETER = 'MultipleSpacesBetweenTypeHintAndParameter';
 
 	public const CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL = 'WhitespaceAfterNullabilitySymbol';
+
+	public const CODE_WHITESPACE_IN_UNION_TYPE_HINT = 'WhitespaceInUnionTypeHint';
 
 	/**
 	 * @return array<int, (int|string)>
@@ -43,7 +47,7 @@ class ParameterTypeHintSpacingSniff implements Sniff
 		$parametersStartPointer = $tokens[$functionPointer]['parenthesis_opener'] + 1;
 		$parametersEndPointer = $tokens[$functionPointer]['parenthesis_closer'] - 1;
 
-		$typeHintTokenCodes = TokenHelper::getNameTokenCodes();
+		$typeHintTokenCodes = TokenHelper::getTypeHintTokenCodes();
 
 		for ($i = $parametersStartPointer; $i <= $parametersEndPointer; $i++) {
 			if ($tokens[$i]['code'] !== T_VARIABLE) {
@@ -66,6 +70,30 @@ class ParameterTypeHintSpacingSniff implements Sniff
 			$typeHintEndPointer = TokenHelper::findPrevious($phpcsFile, $typeHintTokenCodes, $parameterPointer - 1, $parameterStartPointer);
 			if ($typeHintEndPointer === null) {
 				continue;
+			}
+
+			$typeHintStartPointer = TypeHintHelper::getStartPointer($phpcsFile, $typeHintEndPointer);
+
+			$whitespacePointersInUnionTypeHint = TokenHelper::findNextAll(
+				$phpcsFile,
+				T_WHITESPACE,
+				$typeHintStartPointer,
+				$typeHintEndPointer + 1
+			);
+
+			if (count($whitespacePointersInUnionTypeHint) > 0) {
+				$fix = $phpcsFile->addFixableError(
+					'Whitespace in union type hint.',
+					$typeHintStartPointer,
+					self::CODE_WHITESPACE_IN_UNION_TYPE_HINT
+				);
+				if ($fix) {
+					$phpcsFile->fixer->beginChangeset();
+					foreach ($whitespacePointersInUnionTypeHint as $whitespacePointer) {
+						$phpcsFile->fixer->replaceToken($whitespacePointer, '');
+					}
+					$phpcsFile->fixer->endChangeset();
+				}
 			}
 
 			$nextTokenNames = [
@@ -109,13 +137,6 @@ class ParameterTypeHintSpacingSniff implements Sniff
 					$phpcsFile->fixer->endChangeset();
 				}
 			}
-
-			$typeHintStartPointer = TokenHelper::findPreviousExcluding(
-				$phpcsFile,
-				$typeHintTokenCodes,
-				$typeHintEndPointer,
-				$parameterStartPointer
-			) + 1;
 
 			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $typeHintStartPointer - 1, $parameterStartPointer);
 			$nullabilitySymbolPointer = $previousPointer !== null && $tokens[$previousPointer]['code'] === T_NULLABLE

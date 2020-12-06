@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Helpers;
 
 use SlevomatCodingStandard\Helpers\Annotation\Annotation;
 use function array_map;
+use function sprintf;
 use const PHP_VERSION_ID;
 use const T_CLOSURE;
 
@@ -166,6 +167,15 @@ class FunctionHelperTest extends TestCase
 					'$object' => new ParameterTypeHint('\FooNamespace\FooClass', false, false),
 				],
 			],
+			[
+				'unionTypeHints',
+				[
+					'$a' => new ParameterTypeHint('string|int', false, false),
+					'$b' => new ParameterTypeHint('int|false', false, false),
+					'$c' => new ParameterTypeHint('null|int', true, false),
+					'$d' => new ParameterTypeHint('string|int|float', false, false),
+				],
+			],
 		];
 	}
 
@@ -232,9 +242,21 @@ class FunctionHelperTest extends TestCase
 				self::assertNull($parameterTypeHint);
 			} else {
 				self::assertNotNull($parameterTypeHint);
-				self::assertSame($expectedParameterTypeHint->getTypeHint(), $parameterTypeHint->getTypeHint());
-				self::assertSame($expectedParameterTypeHint->isNullable(), $parameterTypeHint->isNullable());
-				self::assertSame($expectedParameterTypeHint->isOptional(), $parameterTypeHint->isOptional());
+				self::assertSame(
+					$expectedParameterTypeHint->getTypeHint(),
+					$parameterTypeHint->getTypeHint(),
+					sprintf('Parameter %s', $expectedParameterName)
+				);
+				self::assertSame(
+					$expectedParameterTypeHint->isNullable(),
+					$parameterTypeHint->isNullable(),
+					sprintf('Nullable parameter %s', $expectedParameterName)
+				);
+				self::assertSame(
+					$expectedParameterTypeHint->isOptional(),
+					$parameterTypeHint->isOptional(),
+					sprintf('Optional parameter %s', $expectedParameterName)
+				);
 			}
 		}
 	}

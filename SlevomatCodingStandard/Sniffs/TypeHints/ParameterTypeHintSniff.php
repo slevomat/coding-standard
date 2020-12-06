@@ -32,6 +32,7 @@ use function array_map;
 use function array_unique;
 use function array_values;
 use function count;
+use function implode;
 use function in_array;
 use function lcfirst;
 use function sprintf;
@@ -62,6 +63,9 @@ class ParameterTypeHintSniff implements Sniff
 	/** @var bool|null */
 	public $enableMixedTypeHint = null;
 
+	/** @var bool|null */
+	public $enableUnionTypeHint = null;
+
 	/** @var string[] */
 	public $traversableTypeHints = [];
 
@@ -87,6 +91,7 @@ class ParameterTypeHintSniff implements Sniff
 	{
 		$this->enableObjectTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableObjectTypeHint, 70200);
 		$this->enableMixedTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableMixedTypeHint, 80000);
+		$this->enableUnionTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableUnionTypeHint, 80000);
 
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::NAME)) {
 			return;
@@ -171,7 +176,10 @@ class ParameterTypeHintSniff implements Sniff
 				$parameterTypeNode = $parameterTypeNode->type;
 			}
 
+			$canTryUnionTypeHint = $this->enableUnionTypeHint && $parameterTypeNode instanceof UnionTypeNode;
+
 			$typeHints = [];
+			$traversableTypeHints = [];
 			$nullableParameterTypeHint = false;
 
 			if (AnnotationTypeHelper::containsOneType($parameterTypeNode)) {
@@ -192,7 +200,7 @@ class ParameterTypeHintSniff implements Sniff
 					/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode|ConstTypeNode $typeNode */
 					$typeNode = $typeNode;
 
-					$typeHint = AnnotationTypeHelper::getTypeHintFromOneType($typeNode);
+					$typeHint = AnnotationTypeHelper::getTypeHintFromOneType($typeNode, $canTryUnionTypeHint);
 
 					if (strtolower($typeHint) === 'null') {
 						$nullableParameterTypeHint = true;
@@ -203,10 +211,6 @@ class ParameterTypeHintSniff implements Sniff
 						TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint),
 						$this->getTraversableTypeHints()
 					);
-
-					if (!$isTraversable && count($traversableTypeHints) > 0) {
-						continue 2;
-					}
 
 					if (
 						!$typeNode instanceof ArrayTypeNode
@@ -220,46 +224,56 @@ class ParameterTypeHintSniff implements Sniff
 				}
 
 				$traversableTypeHints = array_values(array_unique($traversableTypeHints));
-				if (count($traversableTypeHints) > 1) {
+				if (count($traversableTypeHints) > 1 && !$canTryUnionTypeHint) {
 					continue;
 				}
 			}
 
 			$typeHints = array_values(array_unique($typeHints));
 
-			if (count($typeHints) === 1) {
-				$possibleParameterTypeHint = $typeHints[0];
-			} elseif (count($typeHints) === 2) {
+			if (count($traversableTypeHints) > 0) {
 				/** @var UnionTypeNode|IntersectionTypeNode $parameterTypeNode */
 				$parameterTypeNode = $parameterTypeNode;
 
 				$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($parameterTypeNode);
-				if ($itemsSpecificationTypeHint === null) {
-					continue;
-				}
+				if ($itemsSpecificationTypeHint !== null) {
+					$possibleParameterTypeHints = AnnotationTypeHelper::getTraversableTypeHintsFromType(
+						$parameterTypeNode,
+						$phpcsFile,
+						$functionPointer,
+						$this->getTraversableTypeHints(),
+						$canTryUnionTypeHint
+					);
 
-				$possibleParameterTypeHints = AnnotationTypeHelper::getTraversableTypeHintsFromType(
-					$parameterTypeNode,
-					$phpcsFile,
-					$functionPointer,
-					$this->getTraversableTypeHints()
-				);
-				if (count($possibleParameterTypeHints) === 0) {
-					continue;
+					if (count($possibleParameterTypeHints) > 0) {
+						$typeHints = $possibleParameterTypeHints;
+					}
 				}
+			}
 
-				$possibleParameterTypeHint = $possibleParameterTypeHints[0];
-			} else {
+			if (count($typeHints) === 0) {
 				continue;
 			}
 
-			if (!TypeHintHelper::isValidTypeHint(
-				$possibleParameterTypeHint,
-				$this->enableObjectTypeHint,
-				false,
-				$this->enableMixedTypeHint
-			)) {
+			if (count($typeHints) > 1 && !$canTryUnionTypeHint) {
 				continue;
+			}
+
+			foreach ($typeHints as $typeHintNo => $typeHint) {
+				if ($canTryUnionTypeHint && $typeHint === 'false') {
+					continue;
+				}
+
+				if (!TypeHintHelper::isValidTypeHint(
+					$typeHint,
+					$this->enableObjectTypeHint,
+					false,
+					$this->enableMixedTypeHint
+				)) {
+					continue 2;
+				}
+
+				$typeHints[$typeHintNo] = TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
 			}
 
 			if ($originalParameterTypeNode instanceof NullableTypeNode) {
@@ -281,9 +295,14 @@ class ParameterTypeHintSniff implements Sniff
 				continue;
 			}
 
-			$parameterTypeHint = TypeHintHelper::isSimpleTypeHint($possibleParameterTypeHint)
-				? TypeHintHelper::convertLongSimpleTypeHintToShort($possibleParameterTypeHint)
-				: $possibleParameterTypeHint;
+			$parameterTypeHint = implode('|', $typeHints);
+			if ($nullableParameterTypeHint) {
+				if (count($typeHints) > 1) {
+					$parameterTypeHint .= '|null';
+				} else {
+					$parameterTypeHint = '?' . $parameterTypeHint;
+				}
+			}
 
 			$tokens = $phpcsFile->getTokens();
 			/** @var int $parameterPointer */
@@ -316,7 +335,7 @@ class ParameterTypeHintSniff implements Sniff
 			$phpcsFile->fixer->beginChangeset();
 			$phpcsFile->fixer->addContentBefore(
 				$beforeParameterPointer,
-				sprintf('%s%s ', ($nullableParameterTypeHint ? '?' : ''), $parameterTypeHint)
+				sprintf('%s ', $parameterTypeHint)
 			);
 			$phpcsFile->fixer->endChangeset();
 		}
@@ -446,7 +465,8 @@ class ParameterTypeHintSniff implements Sniff
 				$functionPointer,
 				$parameterTypeHint,
 				$parameterAnnotation,
-				$this->getTraversableTypeHints()
+				$this->getTraversableTypeHints(),
+				$this->enableUnionTypeHint
 			)) {
 				continue;
 			}

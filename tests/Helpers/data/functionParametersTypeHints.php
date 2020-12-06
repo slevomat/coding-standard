@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.0
 
 namespace FooNamespace;
 
@@ -18,5 +18,8 @@ abstract class FooClass
 	abstract public function someParametersWithoutTypeHints(string $string, $int, bool $bool = true, $float, callable $callable, $array = [], \FooNamespace\FooClass $object);
 
 	abstract public function parametersWithWeirdDefinition(string$string,$int,bool$bool=true,$float,callable$callable,$array=[],\FooNamespace\FooClass$object);
+
+	public function unionTypeHints(string|int $a, int|false $b, null|int $c, string | int | float $d)
+	{}
 
 }
