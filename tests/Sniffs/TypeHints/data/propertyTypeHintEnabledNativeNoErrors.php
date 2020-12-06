@@ -164,4 +164,7 @@ class Whatever
 	/** @var class-string */
 	public string $classString;
 
+	/** @var \Foo::INTEGER $a */
+	public $constTypeNode;
+
 }

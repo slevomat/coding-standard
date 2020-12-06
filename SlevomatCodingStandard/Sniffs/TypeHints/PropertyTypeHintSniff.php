@@ -269,6 +269,10 @@ class PropertyTypeHintSniff implements Sniff
 			}
 		}
 
+		if (count($typeHints) === 0) {
+			return;
+		}
+
 		if (count($typeHints) > 1 && !$canTryUnionTypeHint) {
 			return;
 		}
