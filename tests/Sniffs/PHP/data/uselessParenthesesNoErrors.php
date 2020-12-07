@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.0
 
 function doSomething($parameter) {
 
@@ -161,6 +161,11 @@ $output = (($a and $b) ? 'yes' : 'nope');
 $whatever = (null !== $a = $b->call());
 
 $key = ((array) $table->getPrimaryKey())[0];
+
+match ($code) {
+    1 => 'one',
+    2 => 'owo',
+};
 
 // Must be last
 return true

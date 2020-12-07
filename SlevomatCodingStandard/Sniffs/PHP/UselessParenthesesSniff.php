@@ -11,6 +11,7 @@ use function array_key_exists;
 use function array_map;
 use function array_merge;
 use function count;
+use function defined;
 use function in_array;
 use const T_ANON_CLASS;
 use const T_ARRAY_CAST;
@@ -149,7 +150,8 @@ class UselessParenthesesSniff implements Sniff
 				T_OBJECT_CAST,
 				T_BOOL_CAST,
 				T_UNSET_CAST,
-			]
+			],
+			defined('T_MATCH') ? [T_MATCH] : []
 		), true)
 		) {
 			return;
