@@ -203,6 +203,14 @@ Disallows use of `continue` without integer operand in `switch` because it emits
 
 Disallows use of `empty()`.
 
+#### SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion
+
+Requires use of constructor property promotion.
+
+This sniff provides the following setting:
+
+* `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 8.0 or higher.
+
 #### SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator 🔧
 
 Requires use of null coalesce operator when possible.
