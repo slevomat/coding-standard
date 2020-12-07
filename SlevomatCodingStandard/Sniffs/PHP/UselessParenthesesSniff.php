@@ -45,6 +45,7 @@ use const T_LIST;
 use const T_LNUMBER;
 use const T_LOGICAL_AND;
 use const T_LOGICAL_OR;
+use const T_MATCH;
 use const T_MINUS;
 use const T_MODULUS;
 use const T_MULTIPLY;

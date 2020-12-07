@@ -13,6 +13,7 @@ use function in_array;
 use const T_ANON_CLASS;
 use const T_ARRAY;
 use const T_AS;
+use const T_ATTRIBUTE;
 use const T_BITWISE_AND;
 use const T_BITWISE_OR;
 use const T_CATCH;

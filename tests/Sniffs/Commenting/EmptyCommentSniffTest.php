@@ -3,7 +3,6 @@
 namespace SlevomatCodingStandard\Sniffs\Commenting;
 
 use SlevomatCodingStandard\Sniffs\TestCase;
-use const PHP_VERSION_ID;
 
 class EmptyCommentSniffTest extends TestCase
 {
@@ -24,10 +23,7 @@ class EmptyCommentSniffTest extends TestCase
 			self::assertSniffError($report, $line, EmptyCommentSniff::CODE_EMPTY_COMMENT);
 		}
 
-		// Fixer creates more empty lines on PHP 8
-		if (PHP_VERSION_ID < 80000) {
-			self::assertAllFixedInFile($report);
-		}
+		self::assertAllFixedInFile($report);
 	}
 
 }
