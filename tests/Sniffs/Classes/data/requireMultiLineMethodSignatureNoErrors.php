@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.0
 
 function justFunction() {
 }
@@ -51,4 +51,6 @@ interface B
 	public function multiLineMethodWithPrecisely120CharsOnSingleline(
 		$someHugeVariableNameJustToFillTheSpaceBlah
 	) : void;
+
+	public function unionTypeHint(int|float $a);
 }

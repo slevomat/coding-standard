@@ -1,16 +1,16 @@
-<?php
+<?php // lint >= 8.0
 
 class A
 {
-	public function someMethod(
-		int $abc,
-		string $efg,
+	public function __construct(
+		public int $abc,
+		protected string $efg,
 		bool $aaaaa,
 		int $bbbbb,
 		string $ccccc,
 		float $ddddd,
 		array $eeeee
-	) : void {
+	) {
 	}
 
 	public function someMethodWithNoReturnType(
@@ -44,6 +44,6 @@ interface B
 		int $bbbbb,
 		string $ccccc,
 		float $ddddd,
-		array $eeeee
+		array|false $eeeee
 	);
 }
