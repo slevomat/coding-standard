@@ -105,7 +105,7 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 			$pointerAfterTypeHint = TokenHelper::findNextEffective($phpcsFile, $typeHintEndPointer + 1);
 		}
 
-		$docCommentPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $propertyPointer);
+		$docCommentPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $propertyPointer);
 		$docComment = $docCommentPointer !== null
 			? trim(TokenHelper::getContent($phpcsFile, $docCommentPointer, $tokens[$docCommentPointer]['comment_closer']))
 			: null;

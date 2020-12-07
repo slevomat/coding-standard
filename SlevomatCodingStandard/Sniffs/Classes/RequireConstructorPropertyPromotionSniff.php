@@ -144,7 +144,7 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 				$visibilityPointer = TokenHelper::findPrevious($phpcsFile, Tokens::$scopeModifiers, $propertyPointer - 1);
 				$visibility = $tokens[$visibilityPointer]['content'];
 
-				$propertyDocCommentOpenerPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $propertyPointer);
+				$propertyDocCommentOpenerPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $propertyPointer);
 				$pointerBeforeProperty = TokenHelper::findFirstTokenOnLine(
 					$phpcsFile,
 					$propertyDocCommentOpenerPointer ?? $propertyPointer

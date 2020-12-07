@@ -215,7 +215,7 @@ class AnnotationHelper
 			static function () use ($phpcsFile, $pointer): array {
 				$annotations = [];
 
-				$docCommentOpenToken = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $pointer);
+				$docCommentOpenToken = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $pointer);
 				if ($docCommentOpenToken === null) {
 					return $annotations;
 				}

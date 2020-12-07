@@ -125,7 +125,7 @@ class TypeHintHelper
 			return false;
 		}
 
-		$classDocCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $classPointer);
+		$classDocCommentOpenPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $classPointer);
 		if ($classDocCommentOpenPointer === null) {
 			return false;
 		}

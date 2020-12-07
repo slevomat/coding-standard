@@ -38,7 +38,7 @@ class UselessConstantTypeHintSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $constantPointer);
+		$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $constantPointer);
 		if ($docCommentOpenPointer === null) {
 			return;
 		}

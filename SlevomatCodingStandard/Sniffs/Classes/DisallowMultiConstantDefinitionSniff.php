@@ -82,7 +82,7 @@ class DisallowMultiConstantDefinitionSniff implements Sniff
 
 		$indentation = IndentationHelper::getIndentation($phpcsFile, $visibilityPointer ?? $constantPointer);
 
-		$docCommentPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $constantPointer);
+		$docCommentPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $constantPointer);
 		$docComment = $docCommentPointer !== null
 			? trim(TokenHelper::getContent($phpcsFile, $docCommentPointer, $tokens[$docCommentPointer]['comment_closer']))
 			: null;

@@ -475,7 +475,7 @@ class ReturnTypeHintSniff implements Sniff
 			return;
 		}
 
-		$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $functionPointer);
+		$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $functionPointer);
 		$starPointer = TokenHelper::findPrevious(
 			$phpcsFile,
 			T_DOC_COMMENT_STAR,

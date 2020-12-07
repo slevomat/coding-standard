@@ -502,7 +502,7 @@ class ClassStructureSniff implements Sniff
 
 	private function findGroupStartPointer(File $phpcsFile, int $memberPointer, ?int $previousMemberEndPointer = null): int
 	{
-		$startPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $memberPointer - 1);
+		$startPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $memberPointer - 1);
 		if ($startPointer === null) {
 			if ($previousMemberEndPointer === null) {
 				$previousMemberEndPointer = $this->findPreviousMemberEndPointer($phpcsFile, $memberPointer);

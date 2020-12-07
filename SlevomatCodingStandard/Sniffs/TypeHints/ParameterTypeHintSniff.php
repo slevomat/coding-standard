@@ -480,7 +480,7 @@ class ParameterTypeHintSniff implements Sniff
 				continue;
 			}
 
-			$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $functionPointer);
+			$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $functionPointer);
 			$starPointer = TokenHelper::findPrevious(
 				$phpcsFile,
 				T_DOC_COMMENT_STAR,

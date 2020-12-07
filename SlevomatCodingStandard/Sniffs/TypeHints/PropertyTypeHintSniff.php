@@ -461,7 +461,7 @@ class PropertyTypeHintSniff implements Sniff
 
 		if ($this->isDocCommentUseless($phpcsFile, $propertyPointer)) {
 			/** @var int $docCommentOpenPointer */
-			$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $propertyPointer);
+			$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $propertyPointer);
 			$docCommentClosePointer = $phpcsFile->getTokens()[$docCommentOpenPointer]['comment_closer'];
 
 			$changeStart = $docCommentOpenPointer;

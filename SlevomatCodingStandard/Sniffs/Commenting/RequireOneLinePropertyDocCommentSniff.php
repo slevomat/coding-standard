@@ -32,7 +32,7 @@ class RequireOneLinePropertyDocCommentSniff extends AbstractRequireOneLineDocCom
 		}
 
 		// Check that doc comment belongs to the found property
-		$propertyDocCommentStartPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $propertyPointer);
+		$propertyDocCommentStartPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $propertyPointer);
 		if ($propertyDocCommentStartPointer !== $docCommentStartPointer) {
 			return;
 		}

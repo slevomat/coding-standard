@@ -60,7 +60,7 @@ class MethodSpacingSniff implements Sniff
 			return;
 		}
 
-		$nextMethodDocCommentStartPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $nextMethodPointer);
+		$nextMethodDocCommentStartPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $nextMethodPointer);
 		if (
 			$nextMethodDocCommentStartPointer !== null
 			&& $tokens[$tokens[$nextMethodDocCommentStartPointer]['comment_closer']]['line'] + 1 !== $tokens[$nextMethodPointer]['line']

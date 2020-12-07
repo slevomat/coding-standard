@@ -118,7 +118,7 @@ class UselessFunctionDocCommentSniff implements Sniff
 		}
 
 		/** @var int $docCommentOpenPointer */
-		$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $functionPointer);
+		$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $functionPointer);
 		$docCommentClosePointer = $phpcsFile->getTokens()[$docCommentOpenPointer]['comment_closer'];
 
 		$changeStart = $docCommentOpenPointer;

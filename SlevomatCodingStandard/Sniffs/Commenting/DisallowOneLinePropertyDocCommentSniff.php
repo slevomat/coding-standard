@@ -45,7 +45,7 @@ class DisallowOneLinePropertyDocCommentSniff implements Sniff
 		}
 
 		/** @var int $docCommentStartPointer */
-		$docCommentStartPointer = DocCommentHelper::findDocCommentOpenToken($phpcsFile, $propertyPointer);
+		$docCommentStartPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $propertyPointer);
 		$docCommentEndPointer = $tokens[$docCommentStartPointer]['comment_closer'];
 		$lineDifference = $tokens[$docCommentEndPointer]['line'] - $tokens[$docCommentStartPointer]['line'];
 
