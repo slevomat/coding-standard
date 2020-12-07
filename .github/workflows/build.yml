@@ -171,15 +171,15 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           coverage: "pcov"
-          php-version: "8.0"
+          php-version: "7.4"
           tools: pecl
 
       - name: "Cache dependencies"
         uses: "actions/cache@v2"
         with:
           path: "~/.composer/cache"
-          key: "php-8.0-composer-${{ hashFiles('**/composer.json') }}"
-          restore-keys: "php-8.0-composer-"
+          key: "php-7.4-composer-${{ hashFiles('**/composer.json') }}"
+          restore-keys: "php-7.4-composer-"
 
       - name: "Install dependencies"
         run: "composer update --prefer-dist --no-interaction --no-progress --no-suggest"
