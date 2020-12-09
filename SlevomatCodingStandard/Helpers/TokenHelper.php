@@ -6,7 +6,9 @@ use PHP_CodeSniffer\Files\File;
 use function array_key_exists;
 use function array_merge;
 use function count;
+use const PHP_VERSION_ID;
 use const T_ARRAY_HINT;
+use const T_ATTRIBUTE;
 use const T_BITWISE_OR;
 use const T_BREAK;
 use const T_CALLABLE;
@@ -491,6 +493,11 @@ class TokenHelper
 		}
 
 		return $typeHintTokenCodes;
+	}
+
+	public static function getAttributeTokenCode(): int
+	{
+		return PHP_VERSION_ID >= 80000 ? T_ATTRIBUTE : T_COMMENT;
 	}
 
 }

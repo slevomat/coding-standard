@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Helpers;
 
 use function count;
 use function sprintf;
-use const PHP_VERSION_ID;
 use const T_NS_SEPARATOR;
 use const T_STRING;
 
@@ -57,12 +56,6 @@ class ReferencedNameHelperTest extends TestCase
 			['E_ALL', false, true],
 			['E_NOTICE', false, true],
 		];
-
-		if (PHP_VERSION_ID >= 80000) {
-			$expectedTypes[] = ['Attribute', false, false];
-			$expectedTypes[] = ['Attribute1', false, false];
-			$expectedTypes[] = ['Attribute2', false, false];
-		}
 
 		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
 		self::assertCount(count($expectedTypes), $names);
@@ -190,6 +183,35 @@ class ReferencedNameHelperTest extends TestCase
 				$names[$no]->isClass(),
 				sprintf('%s should be class, but %s found', $names[$no]->getNameAsReferencedInFile(), $names[$no]->getType())
 			);
+		}
+	}
+
+	public function testGetAllReferencedNamesInAttributes(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/referencedNamesFromAttributes.php');
+
+		$expectedTypes = [
+			['Something', false],
+			['Anything', false],
+			['\Whatever\Anything', false],
+			['PHP_VERSION', true],
+			['Nothing', false],
+			['\Doctrine\Column', false],
+			['\Doctrine\Column\Properties', false],
+			['Attribute1', false],
+			['Attribute2', false],
+			['\Nette\DI\Attributes\Inject', false],
+		];
+
+		$names = ReferencedNameHelper::getAllReferencedNamesInAttributes($phpcsFile, 0);
+
+		self::assertCount(count($expectedTypes), $names);
+
+		foreach ($names as $i => $referencedName) {
+			[$type, $isConstant] = $expectedTypes[$i];
+
+			self::assertSame($type, $referencedName->getNameAsReferencedInFile());
+			self::assertSame($isConstant, $referencedName->isConstant(), $type);
 		}
 	}
 

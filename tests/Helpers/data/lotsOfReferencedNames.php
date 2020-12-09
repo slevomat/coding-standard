@@ -126,8 +126,3 @@ function whatever($flags)
 }
 
 echo E_ALL & ~E_NOTICE;
-
-#[Attribute(Attribute1::TARGET_CLASS | Attribute2::IS_REPEATABLE)]
-final class AttributeOverride
-{
-}

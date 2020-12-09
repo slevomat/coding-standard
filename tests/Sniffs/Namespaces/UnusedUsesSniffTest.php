@@ -407,6 +407,12 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testUsesInAttributes(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/usesInAttributes.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
 	private function getFileReport(): File
 	{
 		return self::checkFile(__DIR__ . '/data/unusedUses.php');

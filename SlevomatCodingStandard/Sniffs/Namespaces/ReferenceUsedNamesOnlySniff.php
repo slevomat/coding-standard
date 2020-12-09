@@ -36,6 +36,8 @@ use function count;
 use function defined;
 use function function_exists;
 use function in_array;
+use function preg_quote;
+use function preg_replace;
 use function sprintf;
 use function strlen;
 use function strtolower;
@@ -62,6 +64,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	private const SOURCE_CODE = 1;
 	private const SOURCE_ANNOTATION = 2;
 	private const SOURCE_ANNOTATION_CONSTANT_FETCH = 3;
+	private const SOURCE_ATTRIBUTE = 4;
 
 	/** @var bool */
 	public $searchAnnotations = false;
@@ -476,6 +479,14 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 					new ConstFetchNode($nameToReference, $reference->constantFetchNode->name)
 				);
 				$phpcsFile->fixer->replaceToken($startPointer, $fixedAnnotationContent);
+			} elseif ($reference->source === self::SOURCE_ATTRIBUTE) {
+				$attributeContent = TokenHelper::getContent($phpcsFile, $startPointer, $reference->endPointer);
+				$fixedAttributeContent = preg_replace(
+					'~(?<=\W)' . preg_quote($reference->name, '~') . '(?=\W)~',
+					$nameToReference,
+					$attributeContent
+				);
+				$phpcsFile->fixer->replaceToken($startPointer, $fixedAttributeContent);
 			} else {
 				$phpcsFile->fixer->replaceToken($startPointer, $nameToReference);
 			}
@@ -613,6 +624,20 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 		foreach (ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer) as $referencedName) {
 			$reference = new stdClass();
 			$reference->source = self::SOURCE_CODE;
+			$reference->name = $referencedName->getNameAsReferencedInFile();
+			$reference->type = $referencedName->getType();
+			$reference->startPointer = $referencedName->getStartPointer();
+			$reference->endPointer = $referencedName->getEndPointer();
+			$reference->isClass = $referencedName->isClass();
+			$reference->isConstant = $referencedName->isConstant();
+			$reference->isFunction = $referencedName->isFunction();
+
+			$references[] = $reference;
+		}
+
+		foreach (ReferencedNameHelper::getAllReferencedNamesInAttributes($phpcsFile, $openTagPointer) as $referencedName) {
+			$reference = new stdClass();
+			$reference->source = self::SOURCE_ATTRIBUTE;
 			$reference->name = $referencedName->getNameAsReferencedInFile();
 			$reference->type = $referencedName->getType();
 			$reference->startPointer = $referencedName->getStartPointer();
