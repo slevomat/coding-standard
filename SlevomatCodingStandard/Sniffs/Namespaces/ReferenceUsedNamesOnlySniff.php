@@ -39,7 +39,6 @@ use function in_array;
 use function preg_quote;
 use function preg_replace;
 use function sprintf;
-use function strlen;
 use function strtolower;
 use function substr;
 use const T_DECLARE;
@@ -565,7 +564,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 		if (in_array($tokens[$nonWhitespacePointerAfterOpenTag]['code'], Tokens::$commentTokens, true)) {
 			$commentEndPointer = CommentHelper::getCommentEndPointer($phpcsFile, $nonWhitespacePointerAfterOpenTag);
 
-			if (substr($tokens[$commentEndPointer]['content'], -strlen($phpcsFile->eolChar)) === $phpcsFile->eolChar) {
+			if (StringHelper::endsWith($tokens[$commentEndPointer]['content'], $phpcsFile->eolChar)) {
 				$useStatementPlacePointer = $commentEndPointer;
 			} else {
 				$newLineAfterComment = $commentEndPointer + 1;

@@ -5,11 +5,11 @@ namespace SlevomatCodingStandard\Sniffs\Commenting;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\CommentHelper;
+use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function preg_match;
 use function preg_replace;
-use function strlen;
 use function substr;
 use const T_COMMENT;
 use const T_DOC_COMMENT_OPEN_TAG;
@@ -90,7 +90,7 @@ class EmptyCommentSniff implements Sniff
 		$whitespacePointerAfterComment = $commentEndPointer + 1;
 
 		if ($tokens[$pointerBeforeWhitespaceBeforeComment]['line'] === $tokens[$commentStartPointer]['line']) {
-			if (substr($tokens[$commentEndPointer]['content'], -strlen($phpcsFile->eolChar)) === $phpcsFile->eolChar) {
+			if (StringHelper::endsWith($tokens[$commentEndPointer]['content'], $phpcsFile->eolChar)) {
 				$phpcsFile->fixer->addNewline($commentEndPointer);
 			}
 		} elseif (

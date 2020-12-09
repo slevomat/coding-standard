@@ -9,6 +9,7 @@ use SlevomatCodingStandard\Helpers\CommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
+use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use function array_key_exists;
@@ -16,8 +17,6 @@ use function array_merge;
 use function in_array;
 use function sprintf;
 use function str_repeat;
-use function strlen;
-use function substr;
 use const T_ABSTRACT;
 use const T_ANON_CLASS;
 use const T_AS;
@@ -99,7 +98,7 @@ class ClassMemberSpacingSniff implements Sniff
 			) {
 				$previousMemberEndPointer = CommentHelper::getCommentEndPointer($phpcsFile, $commentPointerAfterPreviousMember);
 
-				if (substr($tokens[$commentPointerAfterPreviousMember]['content'], -strlen($phpcsFile->eolChar)) === $phpcsFile->eolChar) {
+				if (StringHelper::endsWith($tokens[$commentPointerAfterPreviousMember]['content'], $phpcsFile->eolChar)) {
 					$hasCommentWithNewLineAfterPreviousMember = true;
 				}
 			}

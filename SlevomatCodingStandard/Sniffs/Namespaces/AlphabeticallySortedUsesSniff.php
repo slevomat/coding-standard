@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\CommentHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
+use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
@@ -21,8 +22,6 @@ use function reset;
 use function sprintf;
 use function strcasecmp;
 use function strcmp;
-use function strlen;
-use function substr;
 use function uasort;
 use const T_OPEN_TAG;
 use const T_SEMICOLON;
@@ -116,10 +115,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 			}
 
 			$commentAndWhitespace = TokenHelper::getContent($phpcsFile, $pointerBeforeUseStatement, $useStatement->getPointer() - 1);
-			if (substr(
-				$commentAndWhitespace,
-				-strlen($phpcsFile->eolChar . $phpcsFile->eolChar)
-			) === $phpcsFile->eolChar . $phpcsFile->eolChar) {
+			if (StringHelper::endsWith($commentAndWhitespace, $phpcsFile->eolChar . $phpcsFile->eolChar)) {
 				continue;
 			}
 
@@ -157,7 +153,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 				$commentBefore = '';
 				if (array_key_exists($useStatement->getPointer(), $commentsBefore)) {
 					$commentBefore = $commentsBefore[$useStatement->getPointer()];
-					if (substr($commentBefore, -strlen($phpcsFile->eolChar)) !== $phpcsFile->eolChar) {
+					if (!StringHelper::endsWith($commentBefore, $phpcsFile->eolChar)) {
 						$commentBefore .= $phpcsFile->eolChar;
 					}
 				}
