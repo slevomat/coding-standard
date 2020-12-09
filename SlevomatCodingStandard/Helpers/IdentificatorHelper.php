@@ -20,6 +20,9 @@ use const T_SELF;
 use const T_STATIC;
 use const T_VARIABLE;
 
+/**
+ * @internal
+ */
 class IdentificatorHelper
 {
 

@@ -18,6 +18,9 @@ use const T_SEMICOLON;
 use const T_STRING;
 use const T_USE;
 
+/**
+ * @internal
+ */
 class UseStatementHelper
 {
 

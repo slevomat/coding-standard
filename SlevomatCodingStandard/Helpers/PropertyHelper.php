@@ -25,6 +25,9 @@ use const T_SEMICOLON;
 use const T_STATIC;
 use const T_VAR;
 
+/**
+ * @internal
+ */
 class PropertyHelper
 {
 

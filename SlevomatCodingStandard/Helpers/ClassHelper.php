@@ -11,6 +11,9 @@ use const T_FINAL;
 use const T_STRING;
 use const T_USE;
 
+/**
+ * @internal
+ */
 class ClassHelper
 {
 

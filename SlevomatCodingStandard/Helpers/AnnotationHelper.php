@@ -49,6 +49,9 @@ use const T_DOC_COMMENT_STRING;
 use const T_DOC_COMMENT_TAG;
 use const T_DOC_COMMENT_WHITESPACE;
 
+/**
+ * @internal
+ */
 class AnnotationHelper
 {
 

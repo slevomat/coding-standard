@@ -17,6 +17,9 @@ use const T_OPEN_SHORT_ARRAY;
 use const T_OPEN_SQUARE_BRACKET;
 use const T_SEMICOLON;
 
+/**
+ * @internal
+ */
 class TernaryOperatorHelper
 {
 

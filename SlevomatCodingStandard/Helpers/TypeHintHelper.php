@@ -11,6 +11,9 @@ use function sprintf;
 use const T_FUNCTION;
 use const T_WHITESPACE;
 
+/**
+ * @internal
+ */
 class TypeHintHelper
 {
 

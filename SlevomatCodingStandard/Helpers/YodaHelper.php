@@ -60,6 +60,9 @@ use const T_UNSET_CAST;
 use const T_VARIABLE;
 use const T_WHITESPACE;
 
+/**
+ * @internal
+ */
 class YodaHelper
 {
 

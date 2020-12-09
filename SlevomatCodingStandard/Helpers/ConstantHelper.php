@@ -13,6 +13,9 @@ use const T_CONST;
 use const T_NAMESPACE;
 use const T_STRING;
 
+/**
+ * @internal
+ */
 class ConstantHelper
 {
 

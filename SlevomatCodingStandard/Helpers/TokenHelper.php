@@ -44,6 +44,9 @@ use const T_THROW;
 use const T_TRAIT;
 use const T_WHITESPACE;
 
+/**
+ * @internal
+ */
 class TokenHelper
 {
 

@@ -37,6 +37,9 @@ use const T_VARIABLE;
 use const T_YIELD;
 use const T_YIELD_FROM;
 
+/**
+ * @internal
+ */
 class FunctionHelper
 {
 

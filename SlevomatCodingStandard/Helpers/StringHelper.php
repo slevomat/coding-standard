@@ -6,6 +6,9 @@ use function strlen;
 use function strpos;
 use function substr;
 
+/**
+ * @internal
+ */
 class StringHelper
 {
 

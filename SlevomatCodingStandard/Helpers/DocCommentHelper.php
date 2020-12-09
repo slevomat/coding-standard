@@ -29,6 +29,9 @@ use const T_STATIC;
 use const T_TRAIT;
 use const T_WHITESPACE;
 
+/**
+ * @internal
+ */
 class DocCommentHelper
 {
 

@@ -21,6 +21,8 @@ use const T_NS_SEPARATOR;
  * http://php.net/manual/en/language.namespaces.rules.php
  *
  * "Canonical" is a fully qualified name without the leading backslash.
+ *
+ * @internal
  */
 class NamespaceHelper
 {

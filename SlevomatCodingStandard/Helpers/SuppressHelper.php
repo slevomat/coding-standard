@@ -8,6 +8,9 @@ use function array_reduce;
 use function sprintf;
 use function strpos;
 
+/**
+ * @internal
+ */
 class SuppressHelper
 {
 

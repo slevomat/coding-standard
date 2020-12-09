@@ -6,6 +6,9 @@ use Exception;
 use Throwable;
 use function sprintf;
 
+/**
+ * @internal
+ */
 class EmptyFileException extends Exception
 {
 

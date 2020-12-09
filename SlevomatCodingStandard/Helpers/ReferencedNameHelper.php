@@ -59,6 +59,8 @@ use const T_VARIABLE;
  * - type name in a use statement
  * - class name in a class definition
  * - method name alias imported from trait
+ *
+ * @internal
  */
 class ReferencedNameHelper
 {

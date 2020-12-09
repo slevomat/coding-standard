@@ -38,6 +38,9 @@ use const T_STATIC;
 use const T_STRING;
 use const T_VARIABLE;
 
+/**
+ * @internal
+ */
 class ConditionHelper
 {
 
