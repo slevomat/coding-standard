@@ -45,21 +45,6 @@ use const T_USE;
 use const T_VARIABLE;
 
 /**
- * Following type name occurrences are considered as a referenced name:
- *
- * - extending a class, implementing an interface
- * - typehinting a class or an interface
- * - creating new instance of a class
- * - class whose static method or a property is accessed
- * - thrown and caught exception names
- *
- * Following occurrences are not considered as a referenced name:
- *
- * - namespace name
- * - type name in a use statement
- * - class name in a class definition
- * - method name alias imported from trait
- *
  * @internal
  */
 class ReferencedNameHelper
