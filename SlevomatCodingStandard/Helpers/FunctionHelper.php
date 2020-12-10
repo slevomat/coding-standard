@@ -218,6 +218,9 @@ class FunctionHelper
 			$pointerBeforeTypeHint = TokenHelper::findPreviousEffective($phpcsFile, $typeHintStartPointer - 1);
 			// PHPCS reports T_NULLABLE as T_INLINE_THEN in PHP 8
 			$isNullable = in_array($tokens[$pointerBeforeTypeHint]['code'], [T_NULLABLE, T_INLINE_THEN], true);
+			if ($isNullable) {
+				$typeHintStartPointer = $pointerBeforeTypeHint;
+			}
 
 			$typeHint = TokenHelper::getContent($phpcsFile, $typeHintStartPointer, $typeHintEndPointer);
 
@@ -287,9 +290,6 @@ class FunctionHelper
 
 		$typeHintStartPointer = TokenHelper::findNextEffective($phpcsFile, $colonPointer + 1);
 		$nullable = $tokens[$typeHintStartPointer]['code'] === T_NULLABLE;
-		if ($nullable) {
-			$typeHintStartPointer = TokenHelper::findNextEffective($phpcsFile, $typeHintStartPointer + 1);
-		}
 
 		$pointerAfterTypeHint = self::isAbstract($phpcsFile, $functionPointer)
 			? TokenHelper::findNext($phpcsFile, T_SEMICOLON, $typeHintStartPointer + 1)

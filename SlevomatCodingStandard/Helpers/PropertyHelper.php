@@ -92,10 +92,14 @@ class PropertyHelper
 		$typeHintStartPointer = TypeHintHelper::getStartPointer($phpcsFile, $typeHintEndPointer);
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $typeHintStartPointer - 1, $propertyStartPointer);
-		$nullabilitySymbolPointer = $previousPointer !== null && $tokens[$previousPointer]['code'] === T_NULLABLE ? $previousPointer : null;
+		$nullable = $previousPointer !== null && $tokens[$previousPointer]['code'] === T_NULLABLE;
+
+		if ($nullable) {
+			$typeHintStartPointer = $previousPointer;
+		}
+
 		$typeHint = TokenHelper::getContent($phpcsFile, $typeHintStartPointer, $typeHintEndPointer);
 
-		$nullable = $nullabilitySymbolPointer !== null;
 		if (!$nullable) {
 			$nullable = preg_match('~(?:^|\|\s*)null(?:\s*\||$)~i', $typeHint) === 1;
 		}
@@ -103,7 +107,7 @@ class PropertyHelper
 		/** @var string $typeHint */
 		$typeHint = preg_replace('~\s+~', '', $typeHint);
 
-		return new TypeHint($typeHint, $nullable, $nullabilitySymbolPointer ?? $typeHintStartPointer, $typeHintEndPointer);
+		return new TypeHint($typeHint, $nullable, $typeHintStartPointer, $typeHintEndPointer);
 	}
 
 	public static function getFullyQualifiedName(File $phpcsFile, int $propertyPointer): string

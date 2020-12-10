@@ -543,7 +543,11 @@ class PropertyTypeHintSniff implements Sniff
 		if (
 			$propertyTypeHint !== null
 			&& TypeHintHelper::isTraversableType(
-				TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $propertyPointer, $propertyTypeHint->getTypeHint()),
+				TypeHintHelper::getFullyQualifiedTypeHint(
+					$phpcsFile,
+					$propertyPointer,
+					$propertyTypeHint->getTypeHintWithoutNullabilitySymbol()
+				),
 				$this->getTraversableTypeHints()
 			)
 		) {

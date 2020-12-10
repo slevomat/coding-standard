@@ -83,6 +83,16 @@ This sniff can cause an error if you're overriding or implementing a parent meth
 
 Reports useless `@var` annotation (or whole documentation comment) for constants because the type of constant is always clear.
 
+#### SlevomatCodingStandard.TypeHints.UnionTypeHintFormat 🔧
+
+Checks format of union type hint format.
+
+Sniff provides the following settings:
+
+* `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 8.0 or higher.
+* `shortNullable`: `yes` requires usage of `?` for nullable type hint, `no` disallows it. None is set by default so both are enabled.
+* `nullPosition`: `first` requires `null` on first position in the type hint, `last` requires last position. None is set by default so `null` can be everywhere.
+
 #### SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly 🔧🚧
 
 In PHP 7.0, a [`Throwable` interface was added](https://wiki.php.net/rfc/throwable-interface) that allows catching and handling errors in more cases than `Exception` previously allowed. So, if the catch statement contained `Exception` on PHP 5.x, it means it should probably be rewritten to reference `Throwable` on PHP 7.x. This sniff enforces that.

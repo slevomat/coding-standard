@@ -2,6 +2,9 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use function strpos;
+use function substr;
+
 /**
  * @internal
  */
@@ -31,6 +34,11 @@ class TypeHint
 	public function getTypeHint(): string
 	{
 		return $this->typeHint;
+	}
+
+	public function getTypeHintWithoutNullabilitySymbol(): string
+	{
+		return strpos($this->typeHint, '?') === 0 ? substr($this->typeHint, 1) : $this->typeHint;
 	}
 
 	public function isNullable(): bool

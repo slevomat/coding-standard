@@ -7,7 +7,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use function array_merge;
 use function sprintf;
 use function str_repeat;
 use const T_CLOSE_PARENTHESIS;
@@ -60,16 +59,9 @@ class ReturnTypeHintSpacingSniff implements Sniff
 		$typeHintStartPointer = $typeHint->getStartPointer();
 
 		/** @var int $colonPointer */
-		$colonPointer = TokenHelper::findPreviousExcluding(
-			$phpcsFile,
-			array_merge([T_NULLABLE], TokenHelper::$ineffectiveTokenCodes),
-			$typeHintStartPointer - 1
-		);
+		$colonPointer = TokenHelper::findPreviousEffective($phpcsFile, $typeHintStartPointer - 1);
 
-		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $colonPointer + 1);
-		$nullabilitySymbolPointer = $nextPointer !== null && $tokens[$nextPointer]['code'] === T_NULLABLE ? $nextPointer : null;
-
-		if ($nullabilitySymbolPointer === null) {
+		if ($tokens[$typeHintStartPointer]['code'] !== T_NULLABLE) {
 			if ($tokens[$colonPointer + 1]['code'] !== T_WHITESPACE) {
 				$fix = $phpcsFile->addFixableError(
 					'There must be exactly one space between return type hint colon and return type hint.',
@@ -118,7 +110,7 @@ class ReturnTypeHintSpacingSniff implements Sniff
 				}
 			}
 
-			if ($nullabilitySymbolPointer + 1 !== $typeHintStartPointer) {
+			if ($tokens[$typeHintStartPointer + 1]['code'] === T_WHITESPACE) {
 				$fix = $phpcsFile->addFixableError(
 					'There must be no whitespace between return type hint nullability symbol and return type hint.',
 					$typeHintStartPointer,
@@ -126,7 +118,7 @@ class ReturnTypeHintSpacingSniff implements Sniff
 				);
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
-					$phpcsFile->fixer->replaceToken($nullabilitySymbolPointer + 1, '');
+					$phpcsFile->fixer->replaceToken($typeHintStartPointer + 1, '');
 					$phpcsFile->fixer->endChangeset();
 				}
 			}

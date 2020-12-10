@@ -554,7 +554,11 @@ class ReturnTypeHintSniff implements Sniff
 		if (
 			$returnTypeHint !== null
 			&& TypeHintHelper::isTraversableType(
-				TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()),
+				TypeHintHelper::getFullyQualifiedTypeHint(
+					$phpcsFile,
+					$functionPointer,
+					$returnTypeHint->getTypeHintWithoutNullabilitySymbol()
+				),
 				$this->getTraversableTypeHints()
 			)
 		) {

@@ -470,10 +470,9 @@ class TokenHelper
 	}
 
 	/**
-	 * @internal
 	 * @return array<int, (int|string)>
 	 */
-	public static function getTypeHintTokenCodes(): array
+	public static function getOnlyTypeHintTokenCodes(): array
 	{
 		static $typeHintTokenCodes = null;
 
@@ -487,8 +486,24 @@ class TokenHelper
 					T_CALLABLE,
 					T_FALSE,
 					T_NULL,
-					T_BITWISE_OR,
 				]
+			);
+		}
+
+		return $typeHintTokenCodes;
+	}
+
+	/**
+	 * @return array<int, (int|string)>
+	 */
+	public static function getTypeHintTokenCodes(): array
+	{
+		static $typeHintTokenCodes = null;
+
+		if ($typeHintTokenCodes === null) {
+			$typeHintTokenCodes = array_merge(
+				self::getOnlyTypeHintTokenCodes(),
+				[T_BITWISE_OR]
 			);
 		}
 

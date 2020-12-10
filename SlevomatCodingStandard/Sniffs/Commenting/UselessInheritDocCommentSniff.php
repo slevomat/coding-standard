@@ -67,7 +67,7 @@ class UselessInheritDocCommentSniff implements Sniff
 				return;
 			}
 
-			if (TypeHintHelper::isSimpleIterableTypeHint($returnTypeHint->getTypeHint())) {
+			if (TypeHintHelper::isSimpleIterableTypeHint($returnTypeHint->getTypeHintWithoutNullabilitySymbol())) {
 				return;
 			}
 

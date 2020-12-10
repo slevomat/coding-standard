@@ -109,7 +109,7 @@ class PropertyHelperTest extends TestCase
 			],
 			[
 				'$withTypeHint',
-				'\Whatever\Anything',
+				'?\Whatever\Anything',
 				true,
 			],
 			[

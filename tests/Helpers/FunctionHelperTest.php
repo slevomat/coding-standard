@@ -187,37 +187,37 @@ class FunctionHelperTest extends TestCase
 			[
 				'allParametersWithNullableTypeHints',
 				[
-					'$string' => new TypeHint('string', true, 0, 0),
-					'$int' => new TypeHint('int', true, 0, 0),
-					'$bool' => new TypeHint('bool', true, 0, 0),
-					'$float' => new TypeHint('float', true, 0, 0),
-					'$callable' => new TypeHint('callable', true, 0, 0),
-					'$array' => new TypeHint('array', true, 0, 0),
-					'$object' => new TypeHint('\FooNamespace\FooClass', true, 0, 0),
+					'$string' => new TypeHint('?string', true, 0, 0),
+					'$int' => new TypeHint('?int', true, 0, 0),
+					'$bool' => new TypeHint('?bool', true, 0, 0),
+					'$float' => new TypeHint('?float', true, 0, 0),
+					'$callable' => new TypeHint('?callable', true, 0, 0),
+					'$array' => new TypeHint('?array', true, 0, 0),
+					'$object' => new TypeHint('?\FooNamespace\FooClass', true, 0, 0),
 				],
 			],
 			[
 				'someParametersWithNullableTypeHints',
 				[
-					'$string' => new TypeHint('string', true, 0, 0),
+					'$string' => new TypeHint('?string', true, 0, 0),
 					'$int' => new TypeHint('int', false, 0, 0),
-					'$bool' => new TypeHint('bool', true, 0, 0),
+					'$bool' => new TypeHint('?bool', true, 0, 0),
 					'$float' => new TypeHint('float', false, 0, 0),
-					'$callable' => new TypeHint('callable', true, 0, 0),
+					'$callable' => new TypeHint('?callable', true, 0, 0),
 					'$array' => new TypeHint('array', false, 0, 0),
-					'$object' => new TypeHint('\FooNamespace\FooClass', true, 0, 0),
+					'$object' => new TypeHint('?\FooNamespace\FooClass', true, 0, 0),
 				],
 			],
 			[
 				'parametersWithWeirdDefinition',
 				[
-					'$string' => new TypeHint('string', true, 0, 0),
+					'$string' => new TypeHint('?string', true, 0, 0),
 					'$int' => new TypeHint('int', false, 0, 0),
-					'$bool' => new TypeHint('bool', true, 0, 0),
+					'$bool' => new TypeHint('?bool', true, 0, 0),
 					'$float' => new TypeHint('float', false, 0, 0),
-					'$callable' => new TypeHint('callable', true, 0, 0),
+					'$callable' => new TypeHint('?callable', true, 0, 0),
 					'$array' => new TypeHint('array', false, 0, 0),
-					'$object' => new TypeHint('\FooNamespace\FooClass', true, 0, 0),
+					'$object' => new TypeHint('?\FooNamespace\FooClass', true, 0, 0),
 				],
 			],
 		];
@@ -397,13 +397,13 @@ class FunctionHelperTest extends TestCase
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'withReturnNullableTypeHint');
 		self::assertTrue(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
-		self::assertSame('\FooNamespace\FooInterface', $returnTypeHint->getTypeHint());
+		self::assertSame('?\FooNamespace\FooInterface', $returnTypeHint->getTypeHint());
 		self::assertTrue($returnTypeHint->isNullable());
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'abstractWithReturnNullableTypeHint');
 		self::assertTrue(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
-		self::assertSame('bool', $returnTypeHint->getTypeHint());
+		self::assertSame('?bool', $returnTypeHint->getTypeHint());
 		self::assertTrue($returnTypeHint->isNullable());
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'unionWithNull');

@@ -394,7 +394,7 @@ class AnnotationHelper
 		}
 
 		if (TypeHintHelper::isTraversableType(
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint->getTypeHint()),
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint->getTypeHintWithoutNullabilitySymbol()),
 			$traversableTypeHints
 		)) {
 			return false;
@@ -412,12 +412,22 @@ class AnnotationHelper
 			$annotationTypeHint = $annotationTypeHintNode instanceof IdentifierTypeNode
 				? $annotationTypeHintNode->name
 				: (string) $annotationTypeHintNode;
-			return TypeHintHelper::typeHintEqualsAnnotation($phpcsFile, $functionPointer, $typeHint->getTypeHint(), $annotationTypeHint);
+			return TypeHintHelper::typeHintEqualsAnnotation(
+				$phpcsFile,
+				$functionPointer,
+				$typeHint->getTypeHintWithoutNullabilitySymbol(),
+				$annotationTypeHint
+			);
 		}
 
 		if ($enableUnionTypeHint && $annotation->getType() instanceof UnionTypeNode) {
 			$annotationTypeHint = AnnotationTypeHelper::export($annotation->getType());
-			return TypeHintHelper::typeHintEqualsAnnotation($phpcsFile, $functionPointer, $typeHint->getTypeHint(), $annotationTypeHint);
+			return TypeHintHelper::typeHintEqualsAnnotation(
+				$phpcsFile,
+				$functionPointer,
+				$typeHint->getTypeHintWithoutNullabilitySymbol(),
+				$annotationTypeHint
+			);
 		}
 
 		if (!AnnotationTypeHelper::containsOneType($annotation->getType())) {
@@ -451,7 +461,12 @@ class AnnotationHelper
 		}
 
 		$annotationTypeHint = AnnotationTypeHelper::getTypeHintFromOneType($annotationTypeNode);
-		return TypeHintHelper::typeHintEqualsAnnotation($phpcsFile, $functionPointer, $typeHint->getTypeHint(), $annotationTypeHint);
+		return TypeHintHelper::typeHintEqualsAnnotation(
+			$phpcsFile,
+			$functionPointer,
+			$typeHint->getTypeHintWithoutNullabilitySymbol(),
+			$annotationTypeHint
+		);
 	}
 
 	/**

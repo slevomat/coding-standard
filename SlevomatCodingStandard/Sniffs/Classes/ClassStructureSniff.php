@@ -440,7 +440,7 @@ class ClassStructureSniff implements Sniff
 
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $pointer);
 		if ($returnTypeHint !== null) {
-			return in_array($returnTypeHint->getTypeHint(), ['self', $parentClassName], true);
+			return in_array($returnTypeHint->getTypeHintWithoutNullabilitySymbol(), ['self', $parentClassName], true);
 		}
 
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $pointer);

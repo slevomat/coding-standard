@@ -7,9 +7,9 @@ class PropertyTypeHintTest extends TestCase
 
 	public function test(): void
 	{
-		$propertyTypeHint = new TypeHint('string', true, 1, 6);
+		$propertyTypeHint = new TypeHint('?string', true, 1, 6);
 
-		self::assertSame('string', $propertyTypeHint->getTypeHint());
+		self::assertSame('?string', $propertyTypeHint->getTypeHint());
 		self::assertTrue($propertyTypeHint->isNullable());
 		self::assertSame(1, $propertyTypeHint->getStartPointer());
 		self::assertSame(6, $propertyTypeHint->getEndPointer());
