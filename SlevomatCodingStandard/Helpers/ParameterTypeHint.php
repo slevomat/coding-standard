@@ -14,14 +14,10 @@ class ParameterTypeHint
 	/** @var bool */
 	private $nullable;
 
-	/** @var bool */
-	private $optional;
-
-	public function __construct(string $typeHint, bool $nullable, bool $optional)
+	public function __construct(string $typeHint, bool $nullable)
 	{
 		$this->typeHint = $typeHint;
 		$this->nullable = $nullable;
-		$this->optional = $optional;
 	}
 
 	public function getTypeHint(): string
@@ -32,11 +28,6 @@ class ParameterTypeHint
 	public function isNullable(): bool
 	{
 		return $this->nullable;
-	}
-
-	public function isOptional(): bool
-	{
-		return $this->optional;
 	}
 
 }

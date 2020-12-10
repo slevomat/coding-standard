@@ -23,7 +23,6 @@ use const T_CLOSURE;
 use const T_COLON;
 use const T_COMMA;
 use const T_ELLIPSIS;
-use const T_EQUAL;
 use const T_FUNCTION;
 use const T_INLINE_THEN;
 use const T_INTERFACE;
@@ -229,9 +228,6 @@ class FunctionHelper
 
 			} while ($isTypeHint);
 
-			$equalsPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1, $tokens[$functionPointer]['parenthesis_closer']);
-			$isOptional = $equalsPointer !== null && $tokens[$equalsPointer]['code'] === T_EQUAL;
-
 			/** @var string $typeHint */
 			$typeHint = preg_replace('~\s+~', '', $typeHint);
 
@@ -239,7 +235,7 @@ class FunctionHelper
 				$isNullable = preg_match('~(?:^|\|)null(?:\||$)~i', $typeHint) === 1;
 			}
 
-			$parametersTypeHints[$parameterName] = $typeHint !== '' ? new ParameterTypeHint($typeHint, $isNullable, $isOptional) : null;
+			$parametersTypeHints[$parameterName] = $typeHint !== '' ? new ParameterTypeHint($typeHint, $isNullable) : null;
 		}
 
 		return $parametersTypeHints;
