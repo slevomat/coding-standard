@@ -69,7 +69,7 @@ class PropertyHelper
 		return in_array($conditionCode, Tokens::$ooScopeTokens, true);
 	}
 
-	public static function findTypeHint(File $phpcsFile, int $propertyPointer): ?PropertyTypeHint
+	public static function findTypeHint(File $phpcsFile, int $propertyPointer): ?TypeHint
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -103,7 +103,7 @@ class PropertyHelper
 		/** @var string $typeHint */
 		$typeHint = preg_replace('~\s+~', '', $typeHint);
 
-		return new PropertyTypeHint($typeHint, $nullable, $nullabilitySymbolPointer ?? $typeHintStartPointer, $typeHintEndPointer);
+		return new TypeHint($typeHint, $nullable, $nullabilitySymbolPointer ?? $typeHintStartPointer, $typeHintEndPointer);
 	}
 
 	public static function getFullyQualifiedName(File $phpcsFile, int $propertyPointer): string

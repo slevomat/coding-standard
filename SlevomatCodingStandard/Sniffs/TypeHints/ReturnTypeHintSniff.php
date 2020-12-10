@@ -21,10 +21,10 @@ use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
-use SlevomatCodingStandard\Helpers\ReturnTypeHint;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\TypeHint;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_key_exists;
 use function array_map;
@@ -127,14 +127,14 @@ class ReturnTypeHintSniff implements Sniff
 	/**
 	 * @param File $phpcsFile
 	 * @param int $functionPointer
-	 * @param ReturnTypeHint|null $returnTypeHint
+	 * @param TypeHint|null $returnTypeHint
 	 * @param ReturnAnnotation|null $returnAnnotation
 	 * @param ReturnAnnotation[] $prefixedReturnAnnotations
 	 */
 	private function checkFunctionTypeHint(
 		File $phpcsFile,
 		int $functionPointer,
-		?ReturnTypeHint $returnTypeHint,
+		?TypeHint $returnTypeHint,
 		?ReturnAnnotation $returnAnnotation,
 		array $prefixedReturnAnnotations
 	): void
@@ -358,14 +358,14 @@ class ReturnTypeHintSniff implements Sniff
 	/**
 	 * @param File $phpcsFile
 	 * @param int $functionPointer
-	 * @param ReturnTypeHint|null $returnTypeHint
+	 * @param TypeHint|null $returnTypeHint
 	 * @param ReturnAnnotation|null $returnAnnotation
 	 * @param ReturnAnnotation[] $prefixedReturnAnnotations
 	 */
 	private function checkFunctionTraversableTypeHintSpecification(
 		File $phpcsFile,
 		int $functionPointer,
-		?ReturnTypeHint $returnTypeHint,
+		?TypeHint $returnTypeHint,
 		?ReturnAnnotation $returnAnnotation,
 		array $prefixedReturnAnnotations
 	): void
@@ -443,7 +443,7 @@ class ReturnTypeHintSniff implements Sniff
 	private function checkFunctionUselessAnnotation(
 		File $phpcsFile,
 		int $functionPointer,
-		?ReturnTypeHint $returnTypeHint,
+		?TypeHint $returnTypeHint,
 		?ReturnAnnotation $returnAnnotation
 	): void
 	{
@@ -547,7 +547,7 @@ class ReturnTypeHintSniff implements Sniff
 	private function hasTraversableTypeHint(
 		File $phpcsFile,
 		int $functionPointer,
-		?ReturnTypeHint $returnTypeHint,
+		?TypeHint $returnTypeHint,
 		?ReturnAnnotation $returnAnnotation
 	): bool
 	{

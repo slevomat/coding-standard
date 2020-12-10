@@ -1,9 +1,6 @@
 <?php
 
 use Doctrine\Common\Collections\ArrayCollection;
-use SlevomatCodingStandard\Helpers\ParameterTypeHint;
-use SlevomatCodingStandard\Helpers\PropertyTypeHint;
-use SlevomatCodingStandard\Helpers\ReturnTypeHint;
 
 class Whatever
 {

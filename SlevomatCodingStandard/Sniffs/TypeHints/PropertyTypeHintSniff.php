@@ -19,10 +19,10 @@ use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
-use SlevomatCodingStandard\Helpers\PropertyTypeHint;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\TypeHint;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_map;
 use function array_unique;
@@ -144,14 +144,14 @@ class PropertyTypeHintSniff implements Sniff
 	/**
 	 * @param File $phpcsFile
 	 * @param int $propertyPointer
-	 * @param PropertyTypeHint|null $propertyTypeHint
+	 * @param TypeHint|null $propertyTypeHint
 	 * @param VariableAnnotation|null $propertyAnnotation
 	 * @param VariableAnnotation[] $prefixedPropertyAnnotations
 	 */
 	private function checkTypeHint(
 		File $phpcsFile,
 		int $propertyPointer,
-		?PropertyTypeHint $propertyTypeHint,
+		?TypeHint $propertyTypeHint,
 		?VariableAnnotation $propertyAnnotation,
 		array $prefixedPropertyAnnotations
 	): void
@@ -352,14 +352,14 @@ class PropertyTypeHintSniff implements Sniff
 	/**
 	 * @param File $phpcsFile
 	 * @param int $propertyPointer
-	 * @param PropertyTypeHint|null $propertyTypeHint
+	 * @param TypeHint|null $propertyTypeHint
 	 * @param VariableAnnotation|null $propertyAnnotation
 	 * @param VariableAnnotation[] $prefixedPropertyAnnotations
 	 */
 	private function checkTraversableTypeHintSpecification(
 		File $phpcsFile,
 		int $propertyPointer,
-		?PropertyTypeHint $propertyTypeHint,
+		?TypeHint $propertyTypeHint,
 		?VariableAnnotation $propertyAnnotation,
 		array $prefixedPropertyAnnotations
 	): void
@@ -427,7 +427,7 @@ class PropertyTypeHintSniff implements Sniff
 	private function checkUselessAnnotation(
 		File $phpcsFile,
 		int $propertyPointer,
-		?PropertyTypeHint $propertyTypeHint,
+		?TypeHint $propertyTypeHint,
 		?VariableAnnotation $propertyAnnotation
 	): void
 	{
@@ -536,7 +536,7 @@ class PropertyTypeHintSniff implements Sniff
 	private function hasTraversableTypeHint(
 		File $phpcsFile,
 		int $propertyPointer,
-		?PropertyTypeHint $propertyTypeHint,
+		?TypeHint $propertyTypeHint,
 		?VariableAnnotation $propertyAnnotation
 	): bool
 	{

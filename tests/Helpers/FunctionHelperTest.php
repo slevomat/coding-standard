@@ -121,13 +121,13 @@ class FunctionHelperTest extends TestCase
 			[
 				'allParametersWithTypeHints',
 				[
-					'$string' => new ParameterTypeHint('string', false),
-					'$int' => new ParameterTypeHint('int', false),
-					'$bool' => new ParameterTypeHint('bool', false),
-					'$float' => new ParameterTypeHint('float', false),
-					'$callable' => new ParameterTypeHint('callable', false),
-					'$array' => new ParameterTypeHint('array', false),
-					'$object' => new ParameterTypeHint('\FooNamespace\FooClass', false),
+					'$string' => new TypeHint('string', false, 0, 0),
+					'$int' => new TypeHint('int', false, 0, 0),
+					'$bool' => new TypeHint('bool', false, 0, 0),
+					'$float' => new TypeHint('float', false, 0, 0),
+					'$callable' => new TypeHint('callable', false, 0, 0),
+					'$array' => new TypeHint('array', false, 0, 0),
+					'$object' => new TypeHint('\FooNamespace\FooClass', false, 0, 0),
 				],
 			],
 			[
@@ -145,34 +145,34 @@ class FunctionHelperTest extends TestCase
 			[
 				'someParametersWithoutTypeHints',
 				[
-					'$string' => new ParameterTypeHint('string', false),
+					'$string' => new TypeHint('string', false, 0, 0),
 					'$int' => null,
-					'$bool' => new ParameterTypeHint('bool', false),
+					'$bool' => new TypeHint('bool', false, 0, 0),
 					'$float' => null,
-					'$callable' => new ParameterTypeHint('callable', false),
+					'$callable' => new TypeHint('callable', false, 0, 0),
 					'$array' => null,
-					'$object' => new ParameterTypeHint('\FooNamespace\FooClass', false),
+					'$object' => new TypeHint('\FooNamespace\FooClass', false, 0, 0),
 				],
 			],
 			[
 				'parametersWithWeirdDefinition',
 				[
-					'$string' => new ParameterTypeHint('string', false),
+					'$string' => new TypeHint('string', false, 0, 0),
 					'$int' => null,
-					'$bool' => new ParameterTypeHint('bool', false),
+					'$bool' => new TypeHint('bool', false, 0, 0),
 					'$float' => null,
-					'$callable' => new ParameterTypeHint('callable', false),
+					'$callable' => new TypeHint('callable', false, 0, 0),
 					'$array' => null,
-					'$object' => new ParameterTypeHint('\FooNamespace\FooClass', false),
+					'$object' => new TypeHint('\FooNamespace\FooClass', false, 0, 0),
 				],
 			],
 			[
 				'unionTypeHints',
 				[
-					'$a' => new ParameterTypeHint('string|int', false),
-					'$b' => new ParameterTypeHint('int|false', false),
-					'$c' => new ParameterTypeHint('null|int', true),
-					'$d' => new ParameterTypeHint('string|int|float', false),
+					'$a' => new TypeHint('string|int', false, 0, 0),
+					'$b' => new TypeHint('int|false', false, 0, 0),
+					'$c' => new TypeHint('null|int', true, 0, 0),
+					'$d' => new TypeHint('string|int|float', false, 0, 0),
 				],
 			],
 		];
@@ -187,37 +187,37 @@ class FunctionHelperTest extends TestCase
 			[
 				'allParametersWithNullableTypeHints',
 				[
-					'$string' => new ParameterTypeHint('string', true),
-					'$int' => new ParameterTypeHint('int', true),
-					'$bool' => new ParameterTypeHint('bool', true),
-					'$float' => new ParameterTypeHint('float', true),
-					'$callable' => new ParameterTypeHint('callable', true),
-					'$array' => new ParameterTypeHint('array', true),
-					'$object' => new ParameterTypeHint('\FooNamespace\FooClass', true),
+					'$string' => new TypeHint('string', true, 0, 0),
+					'$int' => new TypeHint('int', true, 0, 0),
+					'$bool' => new TypeHint('bool', true, 0, 0),
+					'$float' => new TypeHint('float', true, 0, 0),
+					'$callable' => new TypeHint('callable', true, 0, 0),
+					'$array' => new TypeHint('array', true, 0, 0),
+					'$object' => new TypeHint('\FooNamespace\FooClass', true, 0, 0),
 				],
 			],
 			[
 				'someParametersWithNullableTypeHints',
 				[
-					'$string' => new ParameterTypeHint('string', true),
-					'$int' => new ParameterTypeHint('int', false),
-					'$bool' => new ParameterTypeHint('bool', true),
-					'$float' => new ParameterTypeHint('float', false),
-					'$callable' => new ParameterTypeHint('callable', true),
-					'$array' => new ParameterTypeHint('array', false),
-					'$object' => new ParameterTypeHint('\FooNamespace\FooClass', true),
+					'$string' => new TypeHint('string', true, 0, 0),
+					'$int' => new TypeHint('int', false, 0, 0),
+					'$bool' => new TypeHint('bool', true, 0, 0),
+					'$float' => new TypeHint('float', false, 0, 0),
+					'$callable' => new TypeHint('callable', true, 0, 0),
+					'$array' => new TypeHint('array', false, 0, 0),
+					'$object' => new TypeHint('\FooNamespace\FooClass', true, 0, 0),
 				],
 			],
 			[
 				'parametersWithWeirdDefinition',
 				[
-					'$string' => new ParameterTypeHint('string', true),
-					'$int' => new ParameterTypeHint('int', false),
-					'$bool' => new ParameterTypeHint('bool', true),
-					'$float' => new ParameterTypeHint('float', false),
-					'$callable' => new ParameterTypeHint('callable', true),
-					'$array' => new ParameterTypeHint('array', false),
-					'$object' => new ParameterTypeHint('\FooNamespace\FooClass', true),
+					'$string' => new TypeHint('string', true, 0, 0),
+					'$int' => new TypeHint('int', false, 0, 0),
+					'$bool' => new TypeHint('bool', true, 0, 0),
+					'$float' => new TypeHint('float', false, 0, 0),
+					'$callable' => new TypeHint('callable', true, 0, 0),
+					'$array' => new TypeHint('array', false, 0, 0),
+					'$object' => new TypeHint('\FooNamespace\FooClass', true, 0, 0),
 				],
 			],
 		];
@@ -226,7 +226,7 @@ class FunctionHelperTest extends TestCase
 	/**
 	 * @dataProvider dataParametersTypeHints
 	 * @param string $functionName
-	 * @param (ParameterTypeHint|null)[] $expectedParametersTypeHints
+	 * @param (TypeHint|null)[] $expectedParametersTypeHints
 	 */
 	public function testParametersTypeHints(string $functionName, array $expectedParametersTypeHints): void
 	{
@@ -258,7 +258,7 @@ class FunctionHelperTest extends TestCase
 	/**
 	 * @dataProvider dataParametersNullableTypeHints
 	 * @param string $functionName
-	 * @param (ParameterTypeHint|null)[] $expectedParametersTypeHints
+	 * @param (TypeHint|null)[] $expectedParametersTypeHints
 	 */
 	public function testParametersNullableTypeHints(string $functionName, array $expectedParametersTypeHints): void
 	{
@@ -368,7 +368,7 @@ class FunctionHelperTest extends TestCase
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'abstractWithReturnTypeHint');
 		self::assertTrue(FunctionHelper::hasReturnTypeHint($phpcsFile, $functionPointer));
 
-		/** @var ReturnTypeHint $returnTypeHint */
+		/** @var TypeHint $returnTypeHint */
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 		self::assertSame('bool', $returnTypeHint->getTypeHint());
 		self::assertFalse($returnTypeHint->isNullable());

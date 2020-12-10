@@ -20,10 +20,10 @@ use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
-use SlevomatCodingStandard\Helpers\ParameterTypeHint;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\TypeHint;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_filter;
 use function array_key_exists;
@@ -119,7 +119,7 @@ class ParameterTypeHintSniff implements Sniff
 	/**
 	 * @param File $phpcsFile
 	 * @param int $functionPointer
-	 * @param (ParameterTypeHint|null)[] $parametersTypeHints
+	 * @param (TypeHint|null)[] $parametersTypeHints
 	 * @param ParameterAnnotation[] $parametersAnnotations
 	 * @param ParameterAnnotation[] $prefixedParametersAnnotations
 	 */
@@ -132,7 +132,7 @@ class ParameterTypeHintSniff implements Sniff
 	): void
 	{
 		$parametersWithoutTypeHint = array_keys(
-			array_filter($parametersTypeHints, static function (?ParameterTypeHint $parameterTypeHint = null): bool {
+			array_filter($parametersTypeHints, static function (?TypeHint $parameterTypeHint = null): bool {
 				return $parameterTypeHint === null;
 			})
 		);
@@ -343,7 +343,7 @@ class ParameterTypeHintSniff implements Sniff
 	/**
 	 * @param File $phpcsFile
 	 * @param int $functionPointer
-	 * @param (ParameterTypeHint|null)[] $parametersTypeHints
+	 * @param (TypeHint|null)[] $parametersTypeHints
 	 * @param ParameterAnnotation[] $parametersAnnotations
 	 * @param ParameterAnnotation[] $prefixedParametersAnnotations
 	 */
@@ -438,7 +438,7 @@ class ParameterTypeHintSniff implements Sniff
 	/**
 	 * @param File $phpcsFile
 	 * @param int $functionPointer
-	 * @param (ParameterTypeHint|null)[] $parametersTypeHints
+	 * @param (TypeHint|null)[] $parametersTypeHints
 	 * @param ParameterAnnotation[] $parametersAnnotations
 	 */
 	private function checkUselessAnnotations(

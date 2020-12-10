@@ -366,7 +366,7 @@ class AnnotationHelper
 	/**
 	 * @param File $phpcsFile
 	 * @param int $functionPointer
-	 * @param ReturnTypeHint|ParameterTypeHint|PropertyTypeHint|null $typeHint
+	 * @param TypeHint|null $typeHint
 	 * @param ReturnAnnotation|ParameterAnnotation|VariableAnnotation $annotation
 	 * @param array<int, string> $traversableTypeHints
 	 * @param bool $enableUnionTypeHint
@@ -375,7 +375,7 @@ class AnnotationHelper
 	public static function isAnnotationUseless(
 		File $phpcsFile,
 		int $functionPointer,
-		$typeHint,
+		?TypeHint $typeHint,
 		Annotation $annotation,
 		array $traversableTypeHints,
 		bool $enableUnionTypeHint = false

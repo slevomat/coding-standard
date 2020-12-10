@@ -21,7 +21,6 @@ use const T_BITWISE_AND;
 use const T_CLASS;
 use const T_CLOSURE;
 use const T_COLON;
-use const T_COMMA;
 use const T_ELLIPSIS;
 use const T_FUNCTION;
 use const T_INLINE_THEN;
@@ -188,7 +187,7 @@ class FunctionHelper
 	/**
 	 * @param File $phpcsFile
 	 * @param int $functionPointer
-	 * @return (ParameterTypeHint|null)[]
+	 * @return (TypeHint|null)[]
 	 */
 	public static function getParametersTypeHints(File $phpcsFile, int $functionPointer): array
 	{
@@ -201,32 +200,26 @@ class FunctionHelper
 			}
 
 			$parameterName = $tokens[$i]['content'];
-			$typeHint = '';
-			$isNullable = false;
 
-			$previousToken = $i;
-			do {
-				$previousToken = TokenHelper::findPreviousExcluding(
-					$phpcsFile,
-					array_merge(TokenHelper::$ineffectiveTokenCodes, [T_BITWISE_AND, T_ELLIPSIS]),
-					$previousToken - 1,
-					$tokens[$functionPointer]['parenthesis_opener'] + 1
-				);
-				if ($previousToken !== null) {
-					// PHPCS reports T_NULLABLE as T_INLINE_THEN in PHP 8
-					$isTypeHint = !in_array($tokens[$previousToken]['code'], [T_COMMA, T_NULLABLE, T_INLINE_THEN], true);
-					if (in_array($tokens[$previousToken]['code'], [T_NULLABLE, T_INLINE_THEN], true)) {
-						$isNullable = true;
-					}
-				} else {
-					$isTypeHint = false;
-				}
+			$pointerBeforeVariable = TokenHelper::findPreviousExcluding(
+				$phpcsFile,
+				array_merge(TokenHelper::$ineffectiveTokenCodes, [T_BITWISE_AND, T_ELLIPSIS]),
+				$i - 1
+			);
 
-				if ($isTypeHint) {
-					$typeHint = $tokens[$previousToken]['content'] . $typeHint;
-				}
+			if (!in_array($tokens[$pointerBeforeVariable]['code'], TokenHelper::getTypeHintTokenCodes(), true)) {
+				$parametersTypeHints[$parameterName] = null;
+				continue;
+			}
 
-			} while ($isTypeHint);
+			$typeHintEndPointer = $pointerBeforeVariable;
+			$typeHintStartPointer = TypeHintHelper::getStartPointer($phpcsFile, $typeHintEndPointer);
+
+			$pointerBeforeTypeHint = TokenHelper::findPreviousEffective($phpcsFile, $typeHintStartPointer - 1);
+			// PHPCS reports T_NULLABLE as T_INLINE_THEN in PHP 8
+			$isNullable = in_array($tokens[$pointerBeforeTypeHint]['code'], [T_NULLABLE, T_INLINE_THEN], true);
+
+			$typeHint = TokenHelper::getContent($phpcsFile, $typeHintStartPointer, $typeHintEndPointer);
 
 			/** @var string $typeHint */
 			$typeHint = preg_replace('~\s+~', '', $typeHint);
@@ -235,7 +228,7 @@ class FunctionHelper
 				$isNullable = preg_match('~(?:^|\|)null(?:\||$)~i', $typeHint) === 1;
 			}
 
-			$parametersTypeHints[$parameterName] = $typeHint !== '' ? new ParameterTypeHint($typeHint, $isNullable) : null;
+			$parametersTypeHints[$parameterName] = new TypeHint($typeHint, $isNullable, $typeHintStartPointer, $typeHintEndPointer);
 		}
 
 		return $parametersTypeHints;
@@ -275,7 +268,7 @@ class FunctionHelper
 		return false;
 	}
 
-	public static function findReturnTypeHint(File $phpcsFile, int $functionPointer): ?ReturnTypeHint
+	public static function findReturnTypeHint(File $phpcsFile, int $functionPointer): ?TypeHint
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -313,7 +306,7 @@ class FunctionHelper
 			$nullable = preg_match('~(?:^|\|)null(?:\||$)~i', $typeHint) === 1;
 		}
 
-		return new ReturnTypeHint($typeHint, $nullable, $typeHintStartPointer, $typeHintEndPointer);
+		return new TypeHint($typeHint, $nullable, $typeHintStartPointer, $typeHintEndPointer);
 	}
 
 	public static function hasReturnTypeHint(File $phpcsFile, int $functionPointer): bool

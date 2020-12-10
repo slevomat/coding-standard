@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Helpers;
 /**
  * @internal
  */
-class ReturnTypeHint
+class TypeHint
 {
 
 	/** @var string */
