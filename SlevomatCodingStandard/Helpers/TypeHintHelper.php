@@ -245,14 +245,4 @@ class TypeHintHelper
 		return TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $previousPointer + 1);
 	}
 
-	public static function getEndPointer(File $phpcsFile, int $startPointer): int
-	{
-		$nextPointer = TokenHelper::findNextExcluding(
-			$phpcsFile,
-			array_merge([T_WHITESPACE], TokenHelper::getTypeHintTokenCodes()),
-			$startPointer + 1
-		);
-		return TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $nextPointer - 1);
-	}
-
 }

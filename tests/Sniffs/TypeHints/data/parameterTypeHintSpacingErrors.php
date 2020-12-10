@@ -15,4 +15,4 @@ function b(
 
 fn (? bool$a, ?   string   &$b, ?   int    ...$c) => $a;
 
-fn (int|false  $a, null | string $b) => $a;
+fn (int|false  $a, null|string $b) => $a;

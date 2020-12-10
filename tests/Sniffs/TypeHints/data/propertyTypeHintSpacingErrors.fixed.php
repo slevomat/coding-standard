@@ -21,6 +21,4 @@ class Whatever
 
 	private false|int $unionWithFalse = false;
 
-	private false|int $unionWithSpaces = false;
-
 }

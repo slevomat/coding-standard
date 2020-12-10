@@ -7,9 +7,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_merge;
-use function count;
 use function sprintf;
 use function str_repeat;
 use const T_CLOSE_PARENTHESIS;
@@ -32,8 +30,6 @@ class ReturnTypeHintSpacingSniff implements Sniff
 	public const CODE_INCORRECT_SPACES_BEFORE_COLON = 'IncorrectWhitespaceBeforeColon';
 
 	public const CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL = 'WhitespaceAfterNullabilitySymbol';
-
-	public const CODE_WHITESPACE_IN_UNION_TYPE_HINT = 'WhitespaceInUnionTypeHint';
 
 	/** @var int */
 	public $spacesCountBeforeColon = 0;
@@ -62,29 +58,6 @@ class ReturnTypeHintSpacingSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$typeHintStartPointer = $typeHint->getStartPointer();
-		$typeHintEndPointer = TypeHintHelper::getEndPointer($phpcsFile, $typeHintStartPointer);
-
-		$whitespacePointersInUnionTypeHint = TokenHelper::findNextAll(
-			$phpcsFile,
-			T_WHITESPACE,
-			$typeHintStartPointer,
-			$typeHintEndPointer + 1
-		);
-
-		if (count($whitespacePointersInUnionTypeHint) > 0) {
-			$fix = $phpcsFile->addFixableError(
-				'Whitespace in union type hint.',
-				$typeHintStartPointer,
-				self::CODE_WHITESPACE_IN_UNION_TYPE_HINT
-			);
-			if ($fix) {
-				$phpcsFile->fixer->beginChangeset();
-				foreach ($whitespacePointersInUnionTypeHint as $whitespacePointer) {
-					$phpcsFile->fixer->replaceToken($whitespacePointer, '');
-				}
-				$phpcsFile->fixer->endChangeset();
-			}
-		}
 
 		/** @var int $colonPointer */
 		$colonPointer = TokenHelper::findPreviousExcluding(

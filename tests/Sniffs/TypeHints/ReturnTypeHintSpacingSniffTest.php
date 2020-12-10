@@ -50,7 +50,6 @@ class ReturnTypeHintSpacingSniffTest extends TestCase
 		self::assertSniffError($report, 139, ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON);
 
 		self::assertSniffError($report, 141, ReturnTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_COLON_AND_TYPE_HINT);
-		self::assertSniffError($report, 145, ReturnTypeHintSpacingSniff::CODE_WHITESPACE_IN_UNION_TYPE_HINT);
 	}
 
 	public function testIncorrectSpacingInInterface(): void
@@ -275,16 +274,6 @@ class ReturnTypeHintSpacingSniffTest extends TestCase
 			__DIR__ . '/data/fixableReturnTypeHintWhitespaceBeforeColonWithSpace.php',
 			['spacesCountBeforeColon' => 1],
 			[ReturnTypeHintSpacingSniff::CODE_WHITESPACE_BEFORE_COLON, ReturnTypeHintSpacingSniff::CODE_INCORRECT_SPACES_BEFORE_COLON]
-		);
-		self::assertAllFixedInFile($report);
-	}
-
-	public function testFixableReturnTypeHintWhitespaceInUnionTypeHint(): void
-	{
-		$report = self::checkFile(
-			__DIR__ . '/data/fixableReturnTypeHintWhitespaceInUnionTypeHint.php',
-			[],
-			[ReturnTypeHintSpacingSniff::CODE_WHITESPACE_IN_UNION_TYPE_HINT]
 		);
 		self::assertAllFixedInFile($report);
 	}

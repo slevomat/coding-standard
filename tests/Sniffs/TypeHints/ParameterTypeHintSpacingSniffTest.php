@@ -17,7 +17,7 @@ class ParameterTypeHintSpacingSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/parameterTypeHintSpacingErrors.php');
 
-		self::assertSame(14, $report->getErrorCount());
+		self::assertSame(13, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -92,14 +92,6 @@ class ParameterTypeHintSpacingSniffTest extends TestCase
 			ParameterTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PARAMETER,
 			'There must be exactly one space between parameter type hint and varadic parameter $c.'
 		);
-
-		self::assertSniffError(
-			$report,
-			18,
-			ParameterTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PARAMETER,
-			'There must be exactly one space between parameter type hint and parameter $a.'
-		);
-		self::assertSniffError($report, 18, ParameterTypeHintSpacingSniff::CODE_WHITESPACE_IN_UNION_TYPE_HINT);
 	}
 
 	public function testFixableParameterTypeHintSpacingNoSpaceBetweenTypeHintAndParameter(): void
@@ -128,16 +120,6 @@ class ParameterTypeHintSpacingSniffTest extends TestCase
 			__DIR__ . '/data/fixableParameterTypeHintSpacingWhitespaceAfterNullabilitySymbol.php',
 			[],
 			[ParameterTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL]
-		);
-		self::assertAllFixedInFile($report);
-	}
-
-	public function testFixableParameterTypeHintWhitespaceInUnionTypeHint(): void
-	{
-		$report = self::checkFile(
-			__DIR__ . '/data/fixableParameterTypeHintWhitespaceInUnionTypeHint.php',
-			[],
-			[ParameterTypeHintSpacingSniff::CODE_WHITESPACE_IN_UNION_TYPE_HINT]
 		);
 		self::assertAllFixedInFile($report);
 	}
