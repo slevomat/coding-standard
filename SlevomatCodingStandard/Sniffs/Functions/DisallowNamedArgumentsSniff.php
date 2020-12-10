@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Functions;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function array_merge;
@@ -77,6 +78,10 @@ class DisallowNamedArgumentsSniff implements Sniff
 
 		foreach ($colonPointers as $colonPointer) {
 			if ($tokens[$colonPointer]['code'] === T_COLON) {
+				if (!ScopeHelper::isInSameScope($phpcsFile, $parenthesisOpenerPointer, $colonPointer)) {
+					continue;
+				}
+
 				$argumentPointer = TokenHelper::findPreviousEffective($phpcsFile, $colonPointer - 1);
 
 				if ($tokens[$argumentPointer]['code'] === T_CLOSE_PARENTHESIS) {

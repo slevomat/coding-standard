@@ -60,3 +60,14 @@ return array_map(static function ($a): string {
 doSomething([
 	$a
 ]);
+
+doSomething(static function (int $number): int {
+	switch ($number) {
+		case 1:
+			return 1;
+		case 2:
+			return 2;
+		default:
+			return 0;
+	}
+});
