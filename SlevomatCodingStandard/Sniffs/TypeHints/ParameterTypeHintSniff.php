@@ -290,12 +290,16 @@ class ParameterTypeHintSniff implements Sniff
 				continue;
 			}
 
-			$parameterTypeHint = implode('|', $typeHints);
-			if ($nullableParameterTypeHint) {
-				if (count($typeHints) > 1) {
-					$parameterTypeHint .= '|null';
-				} else {
-					$parameterTypeHint = '?' . $parameterTypeHint;
+			if (in_array('mixed', $typeHints, true)) {
+				$parameterTypeHint = 'mixed';
+			} else {
+				$parameterTypeHint = implode('|', $typeHints);
+				if ($nullableParameterTypeHint) {
+					if (count($typeHints) > 1) {
+						$parameterTypeHint .= '|null';
+					} else {
+						$parameterTypeHint = '?' . $parameterTypeHint;
+					}
 				}
 			}
 

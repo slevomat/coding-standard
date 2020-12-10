@@ -254,4 +254,9 @@ abstract class Whatever
 	{
 	}
 
+	/** @return mixed|null */
+	public function returnsNullableMixed()
+	{
+	}
+
 }

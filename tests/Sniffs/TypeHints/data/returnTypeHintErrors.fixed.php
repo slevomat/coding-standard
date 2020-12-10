@@ -249,4 +249,9 @@ abstract class Whatever
 	{
 	}
 
+	/***/
+	public function returnsNullableMixed(): mixed
+	{
+	}
+
 }

@@ -231,4 +231,9 @@ class Whatever
 	{
 	}
 
+	/***/
+	public function nullableMixedType(mixed $a)
+	{
+	}
+
 }

@@ -236,4 +236,9 @@ class Whatever
 	{
 	}
 
+	/** @param mixed|null $a */
+	public function nullableMixedType($a)
+	{
+	}
+
 }

@@ -310,12 +310,16 @@ class PropertyTypeHintSniff implements Sniff
 			return;
 		}
 
-		$propertyTypeHint = implode('|', $typeHints);
-		if ($nullableTypeHint) {
-			if (count($typeHints) > 1) {
-				$propertyTypeHint .= '|null';
-			} else {
-				$propertyTypeHint = '?' . $propertyTypeHint;
+		if (in_array('mixed', $typeHints, true)) {
+			$propertyTypeHint = 'mixed';
+		} else {
+			$propertyTypeHint = implode('|', $typeHints);
+			if ($nullableTypeHint) {
+				if (count($typeHints) > 1) {
+					$propertyTypeHint .= '|null';
+				} else {
+					$propertyTypeHint = '?' . $propertyTypeHint;
+				}
 			}
 		}
 

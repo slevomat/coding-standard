@@ -148,4 +148,7 @@ class Whatever
 	/** @var mixed */
 	public $mixed;
 
+	/** @var mixed|null */
+	public $nullableMixed;
+
 }

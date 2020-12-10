@@ -32,6 +32,7 @@ use function array_unique;
 use function array_values;
 use function count;
 use function implode;
+use function in_array;
 use function lcfirst;
 use function sprintf;
 use function strtolower;
@@ -333,12 +334,16 @@ class ReturnTypeHintSniff implements Sniff
 			return;
 		}
 
-		$returnTypeHint = implode('|', $typeHints);
-		if ($nullableReturnTypeHint) {
-			if (count($typeHints) > 1) {
-				$returnTypeHint .= '|null';
-			} else {
-				$returnTypeHint = '?' . $returnTypeHint;
+		if (in_array('mixed', $typeHints, true)) {
+			$returnTypeHint = 'mixed';
+		} else {
+			$returnTypeHint = implode('|', $typeHints);
+			if ($nullableReturnTypeHint) {
+				if (count($typeHints) > 1) {
+					$returnTypeHint .= '|null';
+				} else {
+					$returnTypeHint = '?' . $returnTypeHint;
+				}
 			}
 		}
 

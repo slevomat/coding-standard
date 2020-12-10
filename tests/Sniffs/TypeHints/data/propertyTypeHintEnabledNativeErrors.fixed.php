@@ -134,4 +134,6 @@ class Whatever
 
 	public mixed $mixed;
 
+	public mixed $nullableMixed = null;
+
 }
