@@ -13,3 +13,11 @@ $d = $a !== null && $a->getB() !== null && $a->getB()->getC() !== null ? $a->get
 $d = $a === null || $a->getB() === null || $a->getB()->getC() === null ? null : $a->getB()->getC()->getD();
 
 $e = $a !== null && $b->getC() !== null && $b->getC()->getD() !== null ? true : false;
+
+function ($product) {
+	$limitedCategories = $product->getProductCashback() !== null
+		? $product->getProductCashback()->getLimitedCategories()->map(static fn (ProductCategory $category): int => $category->getId())->getValues()
+		: [];
+
+	return $limitedCategories;
+};

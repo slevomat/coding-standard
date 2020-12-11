@@ -9,14 +9,13 @@ use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TernaryOperatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
-use function array_slice;
 use function count;
-use function implode;
 use function in_array;
 use function min;
 use function preg_split;
 use function sprintf;
 use function strtolower;
+use function substr_count;
 use function trim;
 use const PREG_SPLIT_DELIM_CAPTURE;
 use const T_BOOLEAN_AND;
@@ -123,11 +122,11 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$nullInElse = $tokens[$identicalPointer]['code'] === T_IS_NOT_IDENTICAL;
+		$defaultInElse = $tokens[$identicalPointer]['code'] === T_IS_NOT_IDENTICAL;
 		$inlineElsePointer = TernaryOperatorHelper::getElsePointer($phpcsFile, $inlineThenPointer);
 		$inlineElseEndPointer = TernaryOperatorHelper::getEndPointer($phpcsFile, $inlineThenPointer, $inlineElsePointer);
 
-		if ($nullInElse) {
+		if ($defaultInElse) {
 			$nextIdentificatorPointers = $this->getNextIdentificator($phpcsFile, $inlineThenPointer);
 
 			if ($nextIdentificatorPointers === null) {
@@ -146,7 +145,12 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 				return;
 			}
 
-			$identificatorDifference = $this->getIdentificatorDifference($identificator, $nextIdentificator);
+			$identificatorDifference = $this->getIdentificatorDifference(
+				$phpcsFile,
+				$identificator,
+				$nextIdentificatorStartPointer,
+				$nextIdentificatorEndPointer
+			);
 
 			$firstPointerInElse = TokenHelper::findNextEffective($phpcsFile, $inlineElsePointer + 1);
 
@@ -183,7 +187,12 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 				return;
 			}
 
-			$identificatorDifference = $this->getIdentificatorDifference($identificator, $nextIdentificator);
+			$identificatorDifference = $this->getIdentificatorDifference(
+				$phpcsFile,
+				$identificator,
+				$nextIdentificatorStartPointer,
+				$nextIdentificatorEndPointer
+			);
 
 			$defaultContent = trim(TokenHelper::getContent($phpcsFile, $inlineThenPointer + 1, $inlineElsePointer - 1));
 
@@ -233,7 +242,12 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 			return;
 		}
 
-		$identificatorDifference = $this->getIdentificatorDifference($identificator, $nextIdentificator);
+		$identificatorDifference = $this->getIdentificatorDifference(
+			$phpcsFile,
+			$identificator,
+			$nextIdentificatorStartPointer,
+			$nextIdentificatorEndPointer
+		);
 
 		$fix = $phpcsFile->addFixableError('Operator ?-> is required.', $identicalPointer, self::CODE_REQUIRED_NULL_SAFE_OBJECT_OPERATOR);
 
@@ -351,14 +365,31 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 		return array_key_exists($minPartsCount, $secondParts) && $secondParts[$minPartsCount] === '->';
 	}
 
-	private function getIdentificatorDifference(string $first, string $second): string
+	private function getIdentificatorDifference(
+		File $phpcsFile,
+		string $identificator,
+		int $nextIdentificatorStartPointer,
+		int $nextIdentificatorEndPointer
+	): string
 	{
-		/** @var string[] $firstParts */
-		$firstParts = preg_split(self::OPERATOR_REGEXP, $first, -1, PREG_SPLIT_DELIM_CAPTURE);
-		/** @var string[] $secondParts */
-		$secondParts = preg_split(self::OPERATOR_REGEXP, $second, -1, PREG_SPLIT_DELIM_CAPTURE);
+		$objectOperatorsCountInIdentificator = substr_count($identificator, '->');
 
-		return implode('', array_slice($secondParts, count($firstParts)));
+		$tokens = $phpcsFile->getTokens();
+
+		$objectOperatorsCountInNextIdentificator = 0;
+		$differencePointer = $nextIdentificatorStartPointer;
+		for ($i = $nextIdentificatorStartPointer; $i <= $nextIdentificatorEndPointer; $i++) {
+			if (in_array($tokens[$i]['code'], [T_OBJECT_OPERATOR, T_NULLSAFE_OBJECT_OPERATOR], true)) {
+				$objectOperatorsCountInNextIdentificator++;
+			}
+
+			if ($objectOperatorsCountInNextIdentificator > $objectOperatorsCountInIdentificator) {
+				$differencePointer = $i;
+				break;
+			}
+		}
+
+		return TokenHelper::getContent($phpcsFile, $differencePointer, $nextIdentificatorEndPointer);
 	}
 
 }
