@@ -23,7 +23,6 @@ use const T_CLOSURE;
 use const T_COLON;
 use const T_ELLIPSIS;
 use const T_FUNCTION;
-use const T_INLINE_THEN;
 use const T_INTERFACE;
 use const T_NULLABLE;
 use const T_RETURN;
@@ -216,8 +215,7 @@ class FunctionHelper
 			$typeHintStartPointer = TypeHintHelper::getStartPointer($phpcsFile, $typeHintEndPointer);
 
 			$pointerBeforeTypeHint = TokenHelper::findPreviousEffective($phpcsFile, $typeHintStartPointer - 1);
-			// PHPCS reports T_NULLABLE as T_INLINE_THEN in PHP 8
-			$isNullable = in_array($tokens[$pointerBeforeTypeHint]['code'], [T_NULLABLE, T_INLINE_THEN], true);
+			$isNullable = $tokens[$pointerBeforeTypeHint]['code'] === T_NULLABLE;
 			if ($isNullable) {
 				$typeHintStartPointer = $pointerBeforeTypeHint;
 			}

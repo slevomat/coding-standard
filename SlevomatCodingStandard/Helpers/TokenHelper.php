@@ -9,7 +9,6 @@ use function count;
 use const PHP_VERSION_ID;
 use const T_ARRAY_HINT;
 use const T_ATTRIBUTE;
-use const T_BITWISE_OR;
 use const T_BREAK;
 use const T_CALLABLE;
 use const T_CLASS;
@@ -44,6 +43,7 @@ use const T_SELF;
 use const T_STRING;
 use const T_THROW;
 use const T_TRAIT;
+use const T_TYPE_UNION;
 use const T_WHITESPACE;
 
 /**
@@ -494,7 +494,7 @@ class TokenHelper
 		if ($typeHintTokenCodes === null) {
 			$typeHintTokenCodes = array_merge(
 				self::getOnlyTypeHintTokenCodes(),
-				[T_BITWISE_OR]
+				[T_TYPE_UNION]
 			);
 		}
 

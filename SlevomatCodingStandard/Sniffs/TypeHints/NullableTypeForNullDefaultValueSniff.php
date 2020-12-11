@@ -16,7 +16,6 @@ use function substr_count;
 use const T_BITWISE_AND;
 use const T_ELLIPSIS;
 use const T_EQUAL;
-use const T_INLINE_THEN;
 use const T_NULL;
 use const T_NULLABLE;
 use const T_VARIABLE;
@@ -94,8 +93,7 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 				$tokens[$functionPointer]['parenthesis_opener']
 			);
 
-			// PHPCS reports T_NULLABLE as T_INLINE_THEN in PHP 8
-			if ($nullableSymbolPointer !== null && in_array($tokens[$nullableSymbolPointer]['code'], [T_NULLABLE, T_INLINE_THEN], true)) {
+			if ($nullableSymbolPointer !== null && $tokens[$nullableSymbolPointer]['code'] === T_NULLABLE) {
 				continue;
 			}
 

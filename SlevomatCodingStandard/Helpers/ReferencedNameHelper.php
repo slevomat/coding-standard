@@ -46,6 +46,7 @@ use const T_PROTECTED;
 use const T_PUBLIC;
 use const T_STATIC;
 use const T_TRAIT;
+use const T_TYPE_UNION;
 use const T_USE;
 use const T_VARIABLE;
 
@@ -262,10 +263,10 @@ class ReferencedNameHelper
 			}
 		}
 
-		if ($tokens[$previousTokenBeforeStartPointer]['code'] === T_BITWISE_OR) {
+		if ($tokens[$previousTokenBeforeStartPointer]['code'] === T_TYPE_UNION) {
 			$previousPointer = TokenHelper::findPreviousExcluding(
 				$phpcsFile,
-				array_merge([T_BITWISE_OR], $nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
+				array_merge([T_TYPE_UNION], $nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
 				$previousTokenBeforeStartPointer - 1
 			);
 
