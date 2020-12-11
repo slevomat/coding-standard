@@ -85,7 +85,7 @@ Reports useless `@var` annotation (or whole documentation comment) for constants
 
 #### SlevomatCodingStandard.TypeHints.UnionTypeHintFormat 🔧
 
-Checks format of union type hint format.
+Checks format of union type hints.
 
 Sniff provides the following settings:
 
@@ -509,7 +509,7 @@ Class names should be referenced via `::class` constant when possible.
 
 Sniff provides the following settings:
 
-* `enableOnObjects`: Enabled `::class` on all objects. It's on by default if you're on PHP 8.0+
+* `enableOnObjects`: Enable `::class` on all objects. It's on by default if you're on PHP 8.0+
 
 #### SlevomatCodingStandard.Classes.ParentCallSpacing 🔧
 
