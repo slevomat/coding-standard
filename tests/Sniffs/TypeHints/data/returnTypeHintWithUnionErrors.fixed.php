@@ -35,4 +35,8 @@ class Whatever
 	private function moreTraversable(): Traversable|ArrayIterator
 	{}
 
+	/***/
+	private function unionWithShortNullable(): ?string
+	{}
+
 }

@@ -6,8 +6,13 @@ use PHP_CodeSniffer\Files\File;
 use SlevomatCodingStandard\Helpers\Annotation\TemplateAnnotation;
 use function array_key_exists;
 use function array_merge;
+use function count;
+use function explode;
+use function implode;
 use function in_array;
+use function sort;
 use function sprintf;
+use function substr;
 use const T_FUNCTION;
 use const T_WHITESPACE;
 
@@ -228,11 +233,24 @@ class TypeHintHelper
 		string $typeHintInAnnotation
 	): bool
 	{
-		return self::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint) === self::getFullyQualifiedTypeHint(
-			$phpcsFile,
-			$functionPointer,
-			$typeHintInAnnotation
-		);
+		$typeHintParts = explode('|', self::normalize($typeHint));
+		$typeHintInAnnotationParts = explode('|', self::normalize($typeHintInAnnotation));
+
+		if (count($typeHintParts) !== count($typeHintInAnnotationParts)) {
+			return false;
+		}
+
+		for ($i = 0; $i < count($typeHintParts); $i++) {
+			if (self::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHintParts[$i]) !== self::getFullyQualifiedTypeHint(
+				$phpcsFile,
+				$functionPointer,
+				$typeHintInAnnotationParts[$i]
+			)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	public static function getStartPointer(File $phpcsFile, int $endPointer): int
@@ -243,6 +261,23 @@ class TypeHintHelper
 			$endPointer - 1
 		);
 		return TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $previousPointer + 1);
+	}
+
+	private static function normalize(string $typeHint): string
+	{
+		if (StringHelper::startsWith($typeHint, '?')) {
+			$typeHint = substr($typeHint, 1) . '|null';
+		}
+
+		$parts = explode('|', $typeHint);
+
+		if (in_array('mixed', $parts, true)) {
+			return 'mixed';
+		}
+
+		sort($parts);
+
+		return implode('|', $parts);
 	}
 
 }

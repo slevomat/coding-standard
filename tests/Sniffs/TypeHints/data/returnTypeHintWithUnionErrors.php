@@ -35,4 +35,8 @@ class Whatever
 	private function moreTraversable()
 	{}
 
+	/** @return string|null */
+	private function unionWithShortNullable(): ?string
+	{}
+
 }

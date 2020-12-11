@@ -361,25 +361,6 @@ class AnnotationTypeHelper
 		return clone $masterTypeNode;
 	}
 
-	/**
-	 * @param UnionTypeNode|IntersectionTypeNode $typeNode
-	 * @return bool
-	 */
-	public static function containsNullType(TypeNode $typeNode): bool
-	{
-		foreach ($typeNode->types as $innerTypeNode) {
-			if (!$innerTypeNode instanceof IdentifierTypeNode) {
-				continue;
-			}
-
-			if (strtolower($innerTypeNode->name) === 'null') {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	public static function containsStaticOrThisType(TypeNode $typeNode): bool
 	{
 		if ($typeNode instanceof ThisTypeNode) {
@@ -457,17 +438,6 @@ class AnnotationTypeHelper
 		}
 
 		return count($typeNode->types) === 2;
-	}
-
-	public static function isCompoundOfNull(TypeNode $typeNode): bool
-	{
-		if (!self::containsJustTwoTypes($typeNode)) {
-			return false;
-		}
-
-		/** @var UnionTypeNode|IntersectionTypeNode $typeNode */
-		$typeNode = $typeNode;
-		return self::containsNullType($typeNode);
 	}
 
 	/**
@@ -601,17 +571,6 @@ class AnnotationTypeHelper
 		}
 
 		return false;
-	}
-
-	/**
-	 * @param UnionTypeNode|IntersectionTypeNode $typeNode
-	 * @return TypeNode
-	 */
-	public static function getTypeFromNullableType(TypeNode $typeNode): TypeNode
-	{
-		return $typeNode->types[0] instanceof IdentifierTypeNode && strtolower($typeNode->types[0]->name) === 'null'
-			? $typeNode->types[1]
-			: $typeNode->types[0];
 	}
 
 	/**

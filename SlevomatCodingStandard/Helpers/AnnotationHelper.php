@@ -404,28 +404,18 @@ class AnnotationHelper
 			return false;
 		}
 
-		if (AnnotationTypeHelper::isCompoundOfNull($annotation->getType())) {
-			/** @var UnionTypeNode $annotationTypeNode */
-			$annotationTypeNode = $annotation->getType();
-
-			$annotationTypeHintNode = AnnotationTypeHelper::getTypeFromNullableType($annotationTypeNode);
-			$annotationTypeHint = $annotationTypeHintNode instanceof IdentifierTypeNode
-				? $annotationTypeHintNode->name
-				: (string) $annotationTypeHintNode;
-			return TypeHintHelper::typeHintEqualsAnnotation(
-				$phpcsFile,
-				$functionPointer,
-				$typeHint->getTypeHintWithoutNullabilitySymbol(),
-				$annotationTypeHint
-			);
-		}
-
-		if ($enableUnionTypeHint && $annotation->getType() instanceof UnionTypeNode) {
+		if (
+			AnnotationTypeHelper::containsJustTwoTypes($annotation->getType())
+			|| (
+				$enableUnionTypeHint
+				&& $annotation->getType() instanceof UnionTypeNode
+			)
+		) {
 			$annotationTypeHint = AnnotationTypeHelper::export($annotation->getType());
 			return TypeHintHelper::typeHintEqualsAnnotation(
 				$phpcsFile,
 				$functionPointer,
-				$typeHint->getTypeHintWithoutNullabilitySymbol(),
+				$typeHint->getTypeHint(),
 				$annotationTypeHint
 			);
 		}
