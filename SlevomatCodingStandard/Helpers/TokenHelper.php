@@ -52,15 +52,6 @@ use const T_WHITESPACE;
 class TokenHelper
 {
 
-	/**
-	 * @deprecated Use TokenHelper::getNameTokenCodes()
-	 * @var (int|string)[]
-	 */
-	public static $nameTokenCodes = [
-		T_NS_SEPARATOR,
-		T_STRING,
-	];
-
 	/** @var (int|string)[] */
 	public static $typeKeywordTokenCodes = [
 		T_CLASS,
