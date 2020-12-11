@@ -186,3 +186,14 @@ function ($bool) {
 	    // @codeCoverageIgnoreEnd
 	}
 };
+
+abstract class Test
+{
+	final protected function createToken(): callable
+	{
+		$configuration = self::$container->get(Configuration::class);
+		assert($configuration instanceof Configuration);
+
+		return static fn () => $configuration;
+	}
+}
