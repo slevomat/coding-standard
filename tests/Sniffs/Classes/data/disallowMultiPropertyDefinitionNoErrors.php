@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.0
 
 class Foo
 {
@@ -16,6 +16,10 @@ class Foo
 		'b',
 		'c',
 	];
+
+	public function __construct(private string $propertyPromotion, private int $propertyPromotion2)
+	{
+	}
 
 	public function anything()
 	{

@@ -48,6 +48,11 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 			return;
 		}
 
+		$constructorPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $visibilityPointer - 1);
+		if ($constructorPointer !== null && $tokens[$constructorPointer]['parenthesis_closer'] > $visibilityPointer) {
+			return;
+		}
+
 		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION], $visibilityPointer + 1);
 		if ($propertyPointer === null || $tokens[$propertyPointer]['code'] === T_FUNCTION) {
 			return;
