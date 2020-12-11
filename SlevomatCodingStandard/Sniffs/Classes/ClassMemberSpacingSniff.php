@@ -167,6 +167,11 @@ class ClassMemberSpacingSniff implements Sniff
 					continue;
 				}
 
+				$constructorPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $memberPointer - 1);
+				if ($constructorPointer !== null && $tokens[$constructorPointer]['parenthesis_closer'] > $memberPointer) {
+					continue;
+				}
+
 				$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION, T_CONST], $memberPointer + 1);
 				if ($propertyPointer === null || $tokens[$propertyPointer]['code'] !== T_VARIABLE) {
 					continue;

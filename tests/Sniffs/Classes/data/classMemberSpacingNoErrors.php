@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.0
 
 class EmptyClass
 {
@@ -103,6 +103,10 @@ abstract class WithoutErrors
 	 Invalid comment
 	*/
 	public function fifth()
+	{
+	}
+
+	public function __construct(private $propertyPromotion)
 	{
 	}
 
