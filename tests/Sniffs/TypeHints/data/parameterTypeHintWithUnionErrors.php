@@ -35,4 +35,7 @@ class Whatever
 	private function moreTraversable($a)
 	{}
 
+	/** @param string|mixed[] $a */
+	private function unionWithMixedArray($a = null)
+	{}
 }
