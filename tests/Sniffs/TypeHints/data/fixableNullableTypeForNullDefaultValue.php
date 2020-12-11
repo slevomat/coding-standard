@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.0
 
 class FooBar
 {
@@ -40,6 +40,10 @@ class FooBar
 	)
 	{
 
+	}
+
+	public function unionTypeHint(string|int $union = null)
+	{
 	}
 
 }

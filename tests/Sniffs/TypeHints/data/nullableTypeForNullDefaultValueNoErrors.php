@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.0
 
 function foo(?\DateTimeImmutable & $dateTime = null)
 {
@@ -70,6 +70,14 @@ class FooBar extends \stdClass
 	public function reference(?float & $ref = null, ...$test)
 	{
 
+	}
+
+	public function mixedTypeHint(mixed $mixed = null)
+	{
+	}
+
+	public function unionTypeHint(string|null $union = null)
+	{
 	}
 
 }

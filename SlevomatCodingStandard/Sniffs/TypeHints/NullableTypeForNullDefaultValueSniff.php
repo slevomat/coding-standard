@@ -9,7 +9,10 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_merge;
 use function in_array;
+use function preg_match;
 use function sprintf;
+use function strtolower;
+use function substr_count;
 use const T_BITWISE_AND;
 use const T_ELLIPSIS;
 use const T_EQUAL;
@@ -48,7 +51,7 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 		$startPointer = $tokens[$functionPointer]['parenthesis_opener'] + 1;
 		$endPointer = $tokens[$functionPointer]['parenthesis_closer'];
 
-		$typeHintTokenCodes = TokenHelper::getTypeHintTokenCodes();
+		$typeHintTokenCodes = TokenHelper::getOnlyTypeHintTokenCodes();
 
 		for ($i = $startPointer; $i < $endPointer; $i++) {
 			if ($tokens[$i]['code'] !== T_VARIABLE) {
@@ -79,14 +82,24 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 
 			$typeHintStartPointer = TypeHintHelper::getStartPointer($phpcsFile, $typeHintEndPointer);
 
-			$pointerBeforeTypeHint = TokenHelper::findPreviousEffective(
+			$typeHint = TokenHelper::getContent($phpcsFile, $typeHintStartPointer, $typeHintEndPointer);
+
+			if (strtolower($typeHint) === 'mixed') {
+				continue;
+			}
+
+			$nullableSymbolPointer = TokenHelper::findPreviousEffective(
 				$phpcsFile,
 				$typeHintStartPointer - 1,
 				$tokens[$functionPointer]['parenthesis_opener']
 			);
 
 			// PHPCS reports T_NULLABLE as T_INLINE_THEN in PHP 8
-			if ($pointerBeforeTypeHint !== null && in_array($tokens[$pointerBeforeTypeHint]['code'], [T_NULLABLE, T_INLINE_THEN], true)) {
+			if ($nullableSymbolPointer !== null && in_array($tokens[$nullableSymbolPointer]['code'], [T_NULLABLE, T_INLINE_THEN], true)) {
+				continue;
+			}
+
+			if (preg_match('~(?:^|\|)null(?:\||$)~i', $typeHint) === 1) {
 				continue;
 			}
 
@@ -100,13 +113,14 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 				continue;
 			}
 
-			$firstTypehint = TokenHelper::findNextEffective(
-				$phpcsFile,
-				$pointerBeforeTypeHint === null ? $startPointer : $pointerBeforeTypeHint + 1
-			);
-
 			$phpcsFile->fixer->beginChangeset();
-			$phpcsFile->fixer->addContent($firstTypehint - 1, '?');
+
+			if (substr_count($typeHint, '|') > 0) {
+				$phpcsFile->fixer->addContent($typeHintEndPointer, '|null');
+			} else {
+				$phpcsFile->fixer->addContentBefore($typeHintStartPointer, '?');
+			}
+
 			$phpcsFile->fixer->endChangeset();
 		}
 	}

@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.0
 
 function foo(\DateTimeImmutable & $dateTime = null)
 {
@@ -64,6 +64,10 @@ class FooBar extends Anything
 	public function weirdDefinition(float&$ref=null)
 	{
 
+	}
+
+	public function unionTypeHint(string|int $union = null)
+	{
 	}
 
 }
