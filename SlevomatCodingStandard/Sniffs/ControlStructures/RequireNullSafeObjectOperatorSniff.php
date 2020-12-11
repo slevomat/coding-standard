@@ -8,6 +8,7 @@ use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TernaryOperatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_key_exists;
 use function array_slice;
 use function count;
 use function implode;
@@ -347,7 +348,7 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 			}
 		}
 
-		return $secondParts[$minPartsCount] === '->';
+		return array_key_exists($minPartsCount, $secondParts) && $secondParts[$minPartsCount] === '->';
 	}
 
 	private function getIdentificatorDifference(string $first, string $second): string

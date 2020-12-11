@@ -28,3 +28,7 @@ $a = $b === null ? null : $b->getC() === false;
 $a = $b === null ? null : $bb->getC();
 
 $a = $b !== null && [] === false ? true : false;
+
+if ($a !== null && $a === 0) {
+	// Something
+}
