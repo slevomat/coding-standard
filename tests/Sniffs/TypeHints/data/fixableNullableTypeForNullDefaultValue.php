@@ -46,4 +46,8 @@ class FooBar
 	{
 	}
 
+	public function unionWithArray(string|array $destination = null)
+	{
+	}
+
 }

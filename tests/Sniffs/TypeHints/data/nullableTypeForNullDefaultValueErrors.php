@@ -70,4 +70,8 @@ class FooBar extends Anything
 	{
 	}
 
+	public function unionWithArray(string|array $destination = null)
+	{
+	}
+
 }
