@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.0
 
 namespace FooNamespace;
 
@@ -126,3 +126,11 @@ function whatever($flags)
 }
 
 echo E_ALL & ~E_NOTICE;
+
+function ($barcodeSettings) {
+	if ($barcodeSettings?->getType()) {
+		return true;
+	}
+
+	return false;
+};

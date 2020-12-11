@@ -36,6 +36,7 @@ use const T_INSTANCEOF;
 use const T_NAMESPACE;
 use const T_NEW;
 use const T_NULLABLE;
+use const T_NULLSAFE_OBJECT_OPERATOR;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
@@ -285,7 +286,7 @@ class ReferencedNameHelper
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $startPointer - 1);
 
 		if ($nextPointer !== null && $tokens[$nextPointer]['code'] === T_DOUBLE_COLON) {
-			return $tokens[$previousPointer]['code'] !== T_OBJECT_OPERATOR;
+			return !in_array($tokens[$previousPointer]['code'], [T_OBJECT_OPERATOR, T_NULLSAFE_OBJECT_OPERATOR], true);
 		}
 
 		if (
@@ -303,6 +304,7 @@ class ReferencedNameHelper
 			T_AS,
 			T_DOUBLE_COLON,
 			T_OBJECT_OPERATOR,
+			T_NULLSAFE_OBJECT_OPERATOR,
 			T_NAMESPACE,
 			T_CONST,
 		];
