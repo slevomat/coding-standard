@@ -84,9 +84,25 @@ class TernaryOperatorHelper
 					$pointerAfterInlineElseEnd - 1,
 					$inlineThenPointer
 				);
+
 				if ($previousPointer === null) {
 					break;
 				}
+
+				if (
+					$tokens[$previousPointer]['code'] === T_OPEN_PARENTHESIS
+					&& $tokens[$previousPointer]['parenthesis_closer'] < $pointerAfterInlineElseEnd
+				) {
+					break;
+				}
+
+				if (
+					$tokens[$previousPointer]['code'] === T_OPEN_SHORT_ARRAY
+					&& $tokens[$previousPointer]['bracket_closer'] < $pointerAfterInlineElseEnd
+				) {
+					break;
+				}
+
 			} elseif ($tokens[$pointerAfterInlineElseEnd]['code'] === T_DOUBLE_ARROW) {
 				$previousPointer = TokenHelper::findPrevious(
 					$phpcsFile,

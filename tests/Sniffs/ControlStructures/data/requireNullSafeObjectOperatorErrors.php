@@ -21,3 +21,11 @@ function ($product) {
 
 	return $limitedCategories;
 };
+
+function ($gatewayData, $response) {
+	$gatewayData->setResponseData(
+		$response->getPaymentStatus() !== null ? $response->getPaymentStatus()->getValue() : null,
+		$response->getResultCode()->getValue(),
+		$this->getSerializedResponse($response),
+	);
+};
