@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 function ($values) {
 	foreach ($values as $value) {
