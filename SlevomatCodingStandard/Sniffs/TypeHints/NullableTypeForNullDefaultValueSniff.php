@@ -23,7 +23,7 @@ use const T_VARIABLE;
 class NullableTypeForNullDefaultValueSniff implements Sniff
 {
 
-	public const CODE_NULLABILITY_SYMBOL_REQUIRED = 'NullabilitySymbolRequired';
+	public const CODE_NULLABILITY_TYPE_MISSING = 'NullabilityTypeMissing';
 
 	private const NAME = 'SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue';
 
@@ -104,7 +104,7 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				sprintf('Parameter %s has null default value, but is not marked as nullable.', $parameterName),
 				$i,
-				self::CODE_NULLABILITY_SYMBOL_REQUIRED
+				self::CODE_NULLABILITY_TYPE_MISSING
 			);
 
 			if (!$fix) {

@@ -19,7 +19,7 @@ class NullableTypeForNullDefaultValueSniffTest extends TestCase
 
 		self::assertSame(15, $report->getErrorCount());
 
-		$code = NullableTypeForNullDefaultValueSniff::CODE_NULLABILITY_SYMBOL_REQUIRED;
+		$code = NullableTypeForNullDefaultValueSniff::CODE_NULLABILITY_TYPE_MISSING;
 		self::assertSniffError($report, 3, $code);
 		self::assertSniffError($report, 8, $code);
 		self::assertSniffError($report, 12, $code);
@@ -42,7 +42,7 @@ class NullableTypeForNullDefaultValueSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/fixableNullableTypeForNullDefaultValue.php',
 			[],
-			[NullableTypeForNullDefaultValueSniff::CODE_NULLABILITY_SYMBOL_REQUIRED]
+			[NullableTypeForNullDefaultValueSniff::CODE_NULLABILITY_TYPE_MISSING]
 		);
 		self::assertAllFixedInFile($report);
 	}
