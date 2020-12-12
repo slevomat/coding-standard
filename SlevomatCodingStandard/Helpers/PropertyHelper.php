@@ -16,6 +16,7 @@ use function preg_replace;
 use function sprintf;
 use const T_ANON_CLASS;
 use const T_CLOSE_CURLY_BRACKET;
+use const T_FUNCTION;
 use const T_NULLABLE;
 use const T_OPEN_CURLY_BRACKET;
 use const T_PRIVATE;
@@ -42,7 +43,8 @@ class PropertyHelper
 		}
 
 		if (in_array($tokens[$previousPointer]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_VAR], true)) {
-			return true;
+			$constructorPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $previousPointer - 1);
+			return $constructorPointer === null || $tokens[$constructorPointer]['parenthesis_closer'] < $previousPointer;
 		}
 
 		if (

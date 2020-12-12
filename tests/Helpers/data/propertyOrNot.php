@@ -10,7 +10,7 @@ class Foo
 
 	private static $string = 'string';
 
-	public function __construct($boo)
+	public function __construct(private $propertyPromotion, $boo)
 	{
 		$hoo = $boo;
 	}

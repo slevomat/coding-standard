@@ -27,6 +27,10 @@ class PropertyHelperTest extends TestCase
 				true,
 			],
 			[
+				'$propertyPromotion',
+				false,
+			],
+			[
 				'$boo',
 				false,
 			],
