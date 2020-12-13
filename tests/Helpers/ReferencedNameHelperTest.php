@@ -55,6 +55,8 @@ class ReferencedNameHelperTest extends TestCase
 			['STREAM_URL_STAT_QUIET', false, true],
 			['E_ALL', false, true],
 			['E_NOTICE', false, true],
+			['DateTimeImmutable', false, false],
+			['DateTime', false, false],
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);

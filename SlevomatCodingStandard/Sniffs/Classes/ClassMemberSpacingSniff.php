@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\CommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
+use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
@@ -167,13 +168,12 @@ class ClassMemberSpacingSniff implements Sniff
 					continue;
 				}
 
-				$constructorPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $memberPointer - 1);
-				if ($constructorPointer !== null && $tokens[$constructorPointer]['parenthesis_closer'] > $memberPointer) {
-					continue;
-				}
-
 				$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION, T_CONST], $memberPointer + 1);
-				if ($propertyPointer === null || $tokens[$propertyPointer]['code'] !== T_VARIABLE) {
+				if (
+					$propertyPointer === null
+					|| $tokens[$propertyPointer]['code'] !== T_VARIABLE
+					|| !PropertyHelper::isProperty($phpcsFile, $propertyPointer)
+				) {
 					continue;
 				}
 

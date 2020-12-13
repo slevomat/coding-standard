@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.0
 
 $var = 'foo';
 switch ($var) {
@@ -93,6 +93,10 @@ class TestClass
 	use TestTrait;
 
 	public $bar = 'bar';
+
+	public function __construct(private $propertyPromotion, public $propertyPromotion2)
+	{
+	}
 
 	const WHATEVER = 'whatever';
 }

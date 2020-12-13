@@ -25,4 +25,8 @@ class Whatever
 
 	private false|int $unionWithFalse = false;
 
+	public function __construct(private  int  $propertyPromotion)
+	{
+	}
+
 }

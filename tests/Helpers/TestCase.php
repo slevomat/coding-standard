@@ -15,10 +15,6 @@ use const T_CLASS;
 use const T_CONST;
 use const T_FUNCTION;
 use const T_INTERFACE;
-use const T_PRIVATE;
-use const T_PROTECTED;
-use const T_PUBLIC;
-use const T_STATIC;
 use const T_STRING;
 use const T_TRAIT;
 use const T_VARIABLE;
@@ -93,8 +89,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 				continue;
 			}
 
-			$propertyPointer = TokenHelper::findPrevious($phpcsFile, [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_STATIC], $i - 1);
-			if ($propertyPointer === null) {
+			if (!PropertyHelper::isProperty($phpcsFile, $i)) {
 				continue;
 			}
 

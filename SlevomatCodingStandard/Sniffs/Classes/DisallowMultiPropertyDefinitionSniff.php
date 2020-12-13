@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
+use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function count;
 use function sprintf;
@@ -48,13 +49,12 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 			return;
 		}
 
-		$constructorPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $visibilityPointer - 1);
-		if ($constructorPointer !== null && $tokens[$constructorPointer]['parenthesis_closer'] > $visibilityPointer) {
-			return;
-		}
-
 		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION], $visibilityPointer + 1);
-		if ($propertyPointer === null || $tokens[$propertyPointer]['code'] === T_FUNCTION) {
+		if (
+			$propertyPointer === null
+			|| $tokens[$propertyPointer]['code'] !== T_VARIABLE
+			|| !PropertyHelper::isProperty($phpcsFile, $propertyPointer)
+		) {
 			return;
 		}
 

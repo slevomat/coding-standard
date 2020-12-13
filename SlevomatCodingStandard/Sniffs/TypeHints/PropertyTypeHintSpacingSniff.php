@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use const T_AS;
@@ -62,6 +63,10 @@ class PropertyTypeHintSpacingSniff implements Sniff
 		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $visibilityPointer + 1);
 
 		if ($tokens[$propertyPointer]['code'] !== T_VARIABLE) {
+			return;
+		}
+
+		if (!PropertyHelper::isProperty($phpcsFile, $propertyPointer)) {
 			return;
 		}
 

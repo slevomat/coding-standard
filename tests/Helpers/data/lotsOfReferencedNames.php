@@ -2,6 +2,8 @@
 
 namespace FooNamespace;
 
+use _HumbugBoxfb21822734fc\Nette\Utils\DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use UsedNamespace\UsedNameFooBar as UsedNameFooBarBaz;
 use function DI\string;
@@ -134,3 +136,12 @@ function ($barcodeSettings) {
 
 	return false;
 };
+
+class PropertyPromotion
+{
+
+	public function __construct(private DateTimeImmutable $dateTimeImmutable, public DateTime $dateTime)
+	{
+	}
+
+}

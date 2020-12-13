@@ -115,6 +115,10 @@ class PropertyTypeHintSniff implements Sniff
 			return;
 		}
 
+		if (!PropertyHelper::isProperty($phpcsFile, $propertyPointer)) {
+			return;
+		}
+
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, self::NAME)) {
 			return;
 		}
