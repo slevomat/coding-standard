@@ -479,9 +479,15 @@ abstract class AbstractControlStructureSpacing implements Sniff
 			return $nextPointer;
 		}
 
-		$nextPointer = $tokens[$nextPointer]['code'] === T_OPEN_SHORT_ARRAY
-			? (int) TokenHelper::findNext($phpcsFile, T_SEMICOLON, $tokens[$nextPointer]['bracket_closer'] + 1)
-			: (int) TokenHelper::findNext($phpcsFile, T_SEMICOLON, $tokens[$nextPointer]['scope_closer'] + 1);
+		$scopeCloserPointer = $tokens[$nextPointer]['code'] === T_OPEN_SHORT_ARRAY
+			? $tokens[$nextPointer]['bracket_closer']
+			: $tokens[$nextPointer]['scope_closer'];
+
+		if ($tokens[$scopeCloserPointer]['code'] === T_SEMICOLON) {
+			return $scopeCloserPointer;
+		}
+
+		$nextPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $scopeCloserPointer + 1);
 
 		$level = $tokens[$controlStructurePointer]['level'];
 		while ($level !== $tokens[$nextPointer]['level']) {
