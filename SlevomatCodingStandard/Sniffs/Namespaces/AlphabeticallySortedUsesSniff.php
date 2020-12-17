@@ -178,7 +178,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 	{
 		if (!$a->hasSameType($b)) {
 			$order = [
-				UseStatement::TYPE_DEFAULT => 1,
+				UseStatement::TYPE_CLASS => 1,
 				UseStatement::TYPE_FUNCTION => $this->psr12Compatible ? 2 : 3,
 				UseStatement::TYPE_CONSTANT => $this->psr12Compatible ? 3 : 2,
 			];

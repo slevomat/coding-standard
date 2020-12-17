@@ -350,7 +350,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 		}
 
 		$alreadyAddedUses = [
-			UseStatement::TYPE_DEFAULT => [],
+			UseStatement::TYPE_CLASS => [],
 			UseStatement::TYPE_FUNCTION => [],
 			UseStatement::TYPE_CONSTANT => [],
 		];

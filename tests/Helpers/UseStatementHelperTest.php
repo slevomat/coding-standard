@@ -111,11 +111,11 @@ class UseStatementHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/useStatements.php');
 		$useStatements = UseStatementHelper::getFileUseStatements($phpcsFile)[0];
 		self::assertCount(8, $useStatements);
-		self::assertSame(3, $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Baz')]->getPointer());
+		self::assertSame(3, $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CLASS, 'Baz')]->getPointer());
 		self::assertUseStatement(
 			'Bar\Baz',
 			'Baz',
-			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Baz')],
+			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CLASS, 'Baz')],
 			false,
 			false,
 			null
@@ -123,7 +123,7 @@ class UseStatementHelperTest extends TestCase
 		self::assertUseStatement(
 			'Foo',
 			'Foo',
-			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Foo')],
+			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CLASS, 'Foo')],
 			false,
 			false,
 			null
@@ -131,7 +131,7 @@ class UseStatementHelperTest extends TestCase
 		self::assertUseStatement(
 			'Lorem\Ipsum',
 			'LoremIpsum',
-			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'LoremIpsum')],
+			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CLASS, 'LoremIpsum')],
 			false,
 			false,
 			'LoremIpsum'
@@ -139,7 +139,7 @@ class UseStatementHelperTest extends TestCase
 		self::assertUseStatement(
 			'Zero',
 			'Zero',
-			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_DEFAULT, 'Zero')],
+			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CLASS, 'Zero')],
 			false,
 			false,
 			null
