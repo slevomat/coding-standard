@@ -158,6 +158,10 @@ class UnusedUsesSniff implements Sniff
 				}
 
 				foreach ($fileUnusedNames[$pointerBeforeUseStatements] as $useStatement) {
+					if (!$useStatement->isClass()) {
+						continue;
+					}
+
 					$nameAsReferencedInFile = $useStatement->getNameAsReferencedInFile();
 					$uniqueId = UseStatement::getUniqueId($useStatement->getType(), $nameAsReferencedInFile);
 

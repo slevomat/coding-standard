@@ -26,6 +26,8 @@ use Param;
 use Throws;
 use Property;
 use Method;
+use Anything;
+use function anything;
 
 new bar();
 
@@ -110,3 +112,10 @@ class Fooo
 {
 
 }
+
+/**
+ * @return Anything
+ */
+function () {
+    return anything();
+};
