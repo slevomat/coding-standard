@@ -251,6 +251,14 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @param int   $a )
+	 * @param int[] $b
+	 */
+	public function brokenParameterDescription(int $a, array $b)
+	{
+	}
+
 }
 
 /**

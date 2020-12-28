@@ -37,6 +37,7 @@ use function array_key_exists;
 use function array_merge;
 use function get_class;
 use function in_array;
+use function max;
 use function preg_match;
 use function preg_match_all;
 use function preg_replace;
@@ -237,10 +238,11 @@ class AnnotationHelper
 					$annotationEndPointer = $i;
 
 					// Fix for wrong PHPCS parsing
-					$parenthesesLevel = (int) preg_match_all('~[({]~', $tokens[$i]['content']) - (int) preg_match_all(
+					$parenthesesLevel = max((int) preg_match_all('~[({]~', $tokens[$i]['content']) - (int) preg_match_all(
 						'~[)}]~',
 						$tokens[$i]['content']
-					);
+					), 0);
+
 					$annotationCode = $tokens[$i]['content'];
 
 					for ($j = $i + 1; $j <= $tokens[$docCommentOpenToken]['comment_closer']; $j++) {
@@ -273,6 +275,10 @@ class AnnotationHelper
 							'~[)}]~',
 							$tokens[$j]['content']
 						);
+						if ($parenthesesLevel < 0) {
+							$parenthesesLevel = 0;
+						}
+
 						$annotationCode .= $tokens[$j]['content'];
 					}
 
