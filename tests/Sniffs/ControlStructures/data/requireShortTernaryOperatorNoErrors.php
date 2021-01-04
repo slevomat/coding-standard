@@ -62,3 +62,7 @@ class Whatever
 	}
 
 }
+
+function ($someString) {
+	return $someString === 'empty' || !$someString ? [] : $someString;
+};
