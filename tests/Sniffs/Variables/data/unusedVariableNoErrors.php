@@ -339,6 +339,24 @@ function ($c) {
 	return $b;
 };
 
+function () {
+	$a = 1;
+	for ($i = 1; $i < 1000; $i++) {
+		if (++$a > 5) {
+			return;
+		}
+	}
+};
+
+function () {
+	$a = 1;
+	for ($i = 1; $i < 1000; $i++) {
+		if ($a++ > 5) {
+			return;
+		}
+	}
+};
+
 function ($i) {
 	$result = [];
 	foreach ([] as $key => $item) {
