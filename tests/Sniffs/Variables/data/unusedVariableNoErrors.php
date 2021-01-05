@@ -357,6 +357,21 @@ function () {
 	}
 };
 
+function () {
+	$attempts = 10;
+	WRITE_BLOCK:
+	try {
+		bar();
+	} catch (Throwable $exception) {
+		if ($attempts-- > 0) {
+			usleep(10);
+			goto WRITE_BLOCK;
+		}
+
+		throw $exception;
+	}
+};
+
 function ($i) {
 	$result = [];
 	foreach ([] as $key => $item) {
