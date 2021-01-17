@@ -787,7 +787,7 @@ Sniff provides the following settings:
 * `maxLineLength`: specifies max allowed line length. If call would fit on it, it's enforced. Use 0 value to enforce for all calls, regardless of length.
 * `ignoreWithComplexParameter` (defaults to `true`): ignores calls with arrays, closures, arrow functions and nested calls.
 
-#### SlevomatCodingStandard.Functions.DisallowNamedArgumentsSniff
+#### SlevomatCodingStandard.Functions.DisallowNamedArguments
 
 This sniff disallows usage of named arguments.
 
@@ -1153,7 +1153,7 @@ Sniff provides the following settings:
 
 Enforces fully qualified names of classes and interfaces in phpDocs - in annotations. This results in unambiguous phpDocs.
 
-#### SlevomatCodingStandard.Commenting.DeprecatedAnnotationDeclarationSniff
+#### SlevomatCodingStandard.Commenting.DeprecatedAnnotationDeclaration
 
 Reports `@deprecated` annotations without description.
 
