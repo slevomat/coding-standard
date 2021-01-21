@@ -4,24 +4,8 @@ namespace SlevomatCodingStandard\Sniffs\Functions;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\ScopeHelper;
-use SlevomatCodingStandard\Helpers\TokenHelper;
-use function array_key_exists;
-use function array_merge;
-use function count;
-use function in_array;
-use function rtrim;
 use function sprintf;
-use const T_CLOSE_PARENTHESIS;
-use const T_COLON;
-use const T_GOTO_LABEL;
-use const T_ISSET;
-use const T_OPEN_PARENTHESIS;
-use const T_PARENT;
-use const T_SELF;
-use const T_STATIC;
-use const T_UNSET;
-use const T_VARIABLE;
+use const T_PARAM_NAME;
 
 class DisallowNamedArgumentsSniff implements Sniff
 {
@@ -34,72 +18,24 @@ class DisallowNamedArgumentsSniff implements Sniff
 	public function register(): array
 	{
 		return [
-			T_OPEN_PARENTHESIS,
+			T_PARAM_NAME,
 		];
 	}
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 * @param File $phpcsFile
-	 * @param int $parenthesisOpenerPointer
+	 * @param int $argumentNamePointer
 	 */
-	public function process(File $phpcsFile, $parenthesisOpenerPointer): void
+	public function process(File $phpcsFile, $argumentNamePointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		if (array_key_exists('parenthesis_owner', $tokens[$parenthesisOpenerPointer])) {
-			return;
-		}
-
-		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
-		if (!in_array(
-			$tokens[$pointerBeforeParenthesisOpener]['code'],
-			array_merge(
-				TokenHelper::getOnlyNameTokenCodes(),
-				[T_VARIABLE, T_ISSET, T_UNSET, T_CLOSE_PARENTHESIS, T_SELF, T_STATIC, T_PARENT]
-			),
-			true
-		)) {
-			return;
-		}
-
-		$parenthesisCloserPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_closer'];
-
-		$colonPointers = TokenHelper::findNextAll(
-			$phpcsFile,
-			[T_GOTO_LABEL, T_COLON],
-			$parenthesisOpenerPointer + 1,
-			$parenthesisCloserPointer
+		$phpcsFile->addError(
+			sprintf('Named arguments are disallowed, usage of named argument "%s" found.', $tokens[$argumentNamePointer]['content']),
+			$argumentNamePointer,
+			self::CODE_DISALLOWED_NAMED_ARGUMENT
 		);
-
-		if (count($colonPointers) === 0) {
-			return;
-		}
-
-		foreach ($colonPointers as $colonPointer) {
-			if ($tokens[$colonPointer]['code'] === T_COLON) {
-				if (!ScopeHelper::isInSameScope($phpcsFile, $parenthesisOpenerPointer, $colonPointer)) {
-					continue;
-				}
-
-				$argumentPointer = TokenHelper::findPreviousEffective($phpcsFile, $colonPointer - 1);
-
-				if ($tokens[$argumentPointer]['code'] === T_CLOSE_PARENTHESIS) {
-					continue;
-				}
-
-				$argumentName = $tokens[$argumentPointer]['content'];
-			} else {
-				$argumentPointer = $colonPointer;
-				$argumentName = rtrim($tokens[$colonPointer]['content'], ':');
-			}
-
-			$phpcsFile->addError(
-				sprintf('Named arguments are disallowed, usage of named argument "%s" found.', $argumentName),
-				$argumentPointer,
-				self::CODE_DISALLOWED_NAMED_ARGUMENT
-			);
-		}
 	}
 
 }
