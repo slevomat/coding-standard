@@ -73,6 +73,9 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 		$types = [T_COMMENT, T_DOC_COMMENT_OPEN_TAG, T_CONST, T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_USE];
 		$nextPointer = TokenHelper::findNext($phpcsFile, $types, $firstOnLinePointer + 1, $tokens[$classPointer]['scope_closer']);
 
+		if ($nextPointer === null) {
+			return 0;
+		}
 		if (!$this->isNextMemberValid($phpcsFile, $nextPointer)) {
 			return $nextPointer;
 		}
