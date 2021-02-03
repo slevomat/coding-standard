@@ -12,7 +12,7 @@ parameters:
 	excludes_analyse:
 		- %currentWorkingDirectory%/tests/*/data/*
 	ignoreErrors:
-		- "#Offset '(bracket|scope|parenthesis|comment)_(opener|closer)' does not exist#"
+		- "#Offset '(bracket|scope|parenthesis|comment|attribute)_(opener|closer)' does not exist#"
 		- "#Offset '(conditions|scope_condition)' does not exist#"
 		-
 			message: '#Offset ''nested_parenthesis'' does not exist on array#'
