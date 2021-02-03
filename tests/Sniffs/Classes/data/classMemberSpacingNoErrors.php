@@ -56,6 +56,7 @@ abstract class WithoutErrors
 	/** @var string|null */
 	private $two;
 
+	#[AttributeBeforeComment]
 	/**
 	 * @return object
 	 */
@@ -82,7 +83,11 @@ abstract class WithoutErrors
 
 	public $third;
 
-	abstract public function third();
+	/**
+	 * @return mixed
+	 */
+	#[SomeAttribute]
+	abstract public function thirdWithAttributeAndDocDomment();
 
 	/**
 	 * @codingStandardsIgnoreStart
@@ -92,7 +97,9 @@ abstract class WithoutErrors
 	protected $forth;
 	// @codingStandardsIgnoreEnd
 
-	public function forth()
+	#[SomeAttribute]
+	#[JustAnotherAttribute]
+	public function forthWithAttribute()
 	{
 	}
 
