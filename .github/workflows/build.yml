@@ -45,7 +45,7 @@ jobs:
         run: "composer config --unset platform"
 
       - name: "Install dependencies"
-        run: "composer update --prefer-dist --no-interaction --no-progress --no-suggest"
+        run: "composer update --prefer-dist --no-interaction --no-progress"
 
       - name: "Lint"
         run: "bin/phing lint"
@@ -73,7 +73,7 @@ jobs:
           restore-keys: "php-8.0-composer-"
 
       - name: "Install dependencies"
-        run: "composer update --prefer-dist --no-interaction --no-progress --no-suggest"
+        run: "composer update --prefer-dist --no-interaction --no-progress"
 
       - name: "Lint"
         run: "bin/phing lint"
@@ -104,7 +104,7 @@ jobs:
           restore-keys: "php-8.0-composer-"
 
       - name: "Install dependencies"
-        run: "composer update --prefer-dist --no-interaction --no-progress --no-suggest"
+        run: "composer update --prefer-dist --no-interaction --no-progress"
 
       - name: "PHPStan"
         run: "bin/phing phpstan"
@@ -149,11 +149,11 @@ jobs:
 
       - name: "Install lowest dependencies"
         if: ${{ matrix.dependencies == 'lowest' }}
-        run: "composer update --prefer-lowest --prefer-dist --no-interaction --no-progress --no-suggest"
+        run: "composer update --prefer-lowest --prefer-dist --no-interaction --no-progress"
 
       - name: "Install highest dependencies"
         if: ${{ matrix.dependencies == 'highest' }}
-        run: "composer update --prefer-dist --no-interaction --no-progress --no-suggest"
+        run: "composer update --prefer-dist --no-interaction --no-progress"
 
       - name: "Tests"
         run: "bin/phing tests-without-code-coverage"
@@ -182,7 +182,7 @@ jobs:
           restore-keys: "php-7.4-composer-"
 
       - name: "Install dependencies"
-        run: "composer update --prefer-dist --no-interaction --no-progress --no-suggest"
+        run: "composer update --prefer-dist --no-interaction --no-progress"
 
       - name: "Tests"
         run: bin/phing tests
