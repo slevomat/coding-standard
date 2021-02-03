@@ -80,6 +80,8 @@ class GetTokenDynamicReturnTypeExtension implements DynamicMethodReturnTypeExten
 			$arrayBuilder->setOffsetValueType(new ConstantStringType('bracket_closer'), $integerType);
 			$arrayBuilder->setOffsetValueType(new ConstantStringType('comment_opener'), $integerType);
 			$arrayBuilder->setOffsetValueType(new ConstantStringType('comment_closer'), $integerType);
+			$arrayBuilder->setOffsetValueType(new ConstantStringType('attribute_opener'), $integerType);
+			$arrayBuilder->setOffsetValueType(new ConstantStringType('attribute_closer'), $integerType);
 
 			$this->arrayType = new ArrayType($integerType, TypeCombinator::union($baseArrayBuilder->getArray(), $arrayBuilder->getArray()));
 		}
