@@ -21,6 +21,7 @@ use function str_repeat;
 use const T_ABSTRACT;
 use const T_ANON_CLASS;
 use const T_AS;
+use const T_ATTRIBUTE_END;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CONST;
 use const T_FINAL;
@@ -194,19 +195,31 @@ class ClassMemberSpacingSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$memberFirstCodePointer = $this->getMemberFirstCodePointer($phpcsFile, $memberPointer);
-		$pointerBefore = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $memberFirstCodePointer - 1);
 
-		if (
-			in_array($tokens[$pointerBefore]['code'], Tokens::$commentTokens, true)
-			&& $tokens[$pointerBefore]['line'] + 1 === $tokens[$memberFirstCodePointer]['line']
-		) {
-			$pointerBeforeComment = TokenHelper::findPreviousEffective($phpcsFile, $pointerBefore - 1);
-			if ($tokens[$pointerBeforeComment]['line'] !== $tokens[$pointerBefore]['line']) {
-				return array_key_exists('comment_opener', $tokens[$pointerBefore])
-					? $tokens[$pointerBefore]['comment_opener']
-					: CommentHelper::getMultilineCommentStartPointer($phpcsFile, $pointerBefore);
+		do {
+			$pointerBefore = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $memberFirstCodePointer - 1);
+
+			if ($tokens[$pointerBefore]['code'] === T_ATTRIBUTE_END) {
+				$memberFirstCodePointer = $tokens[$pointerBefore]['attribute_opener'];
+				continue;
 			}
-		}
+
+			if (
+				in_array($tokens[$pointerBefore]['code'], Tokens::$commentTokens, true)
+				&& $tokens[$pointerBefore]['line'] + 1 === $tokens[$memberFirstCodePointer]['line']
+			) {
+				$pointerBeforeComment = TokenHelper::findPreviousEffective($phpcsFile, $pointerBefore - 1);
+				if ($tokens[$pointerBeforeComment]['line'] !== $tokens[$pointerBefore]['line']) {
+					$memberFirstCodePointer = array_key_exists('comment_opener', $tokens[$pointerBefore])
+						? $tokens[$pointerBefore]['comment_opener']
+						: CommentHelper::getMultilineCommentStartPointer($phpcsFile, $pointerBefore);
+					continue;
+				}
+			}
+
+			break;
+
+		} while (true);
 
 		return $memberFirstCodePointer;
 	}
