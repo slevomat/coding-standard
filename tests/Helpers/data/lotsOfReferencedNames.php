@@ -99,6 +99,10 @@ final class SomeClass
 		return $this->someClass2::get();
 	}
 
+	public function unionTypes(LoremClass|IpsumClass $param)
+	{
+	}
+
 }
 
 class OpenSsl

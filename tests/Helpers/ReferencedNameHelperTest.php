@@ -47,6 +47,8 @@ class ReferencedNameHelperTest extends TestCase
 			['\SecondExtendedInterface', false, false],
 			['\ThirdExtendedInterface', false, false],
 			['SomeTrait', false, false],
+			['LoremClass', false, false],
+			['IpsumClass', false, false],
 			['OPENSSL_ALGO_SHA256', false, true],
 			['OPENSSL_ALGO_SHA512', false, true],
 			['SomeTrait', false, false],

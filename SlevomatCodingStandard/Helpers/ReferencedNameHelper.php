@@ -276,6 +276,10 @@ class ReferencedNameHelper
 			}
 		}
 
+		if ($tokens[$nextTokenAfterEndPointer]['code'] === T_TYPE_UNION) {
+			return ReferencedName::TYPE_CLASS;
+		}
+
 		return ReferencedName::TYPE_CONSTANT;
 	}
 
