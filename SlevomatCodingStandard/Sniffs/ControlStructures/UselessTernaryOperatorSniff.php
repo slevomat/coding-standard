@@ -85,7 +85,6 @@ class UselessTernaryOperatorSniff implements Sniff
 			return;
 		}
 
-		$negativeCondition = ConditionHelper::getNegativeCondition($phpcsFile, $conditionStartPointer, $conditionEndPointer);
 		$inlineElseEndPointer = TernaryOperatorHelper::getEndPointer($phpcsFile, $inlineThenPointer, $inlineElsePointer);
 
 		$pointerAfterTernaryOperator = TokenHelper::findNextEffective($phpcsFile, $inlineElseEndPointer + 1);
@@ -93,6 +92,8 @@ class UselessTernaryOperatorSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		if ($tokens[$pointerAfterInlineThen]['code'] === T_FALSE) {
+			$negativeCondition = ConditionHelper::getNegativeCondition($phpcsFile, $conditionStartPointer, $conditionEndPointer);
+
 			$phpcsFile->fixer->replaceToken($conditionStartPointer, $negativeCondition);
 			for ($i = $conditionStartPointer + 1; $i <= $conditionEndPointer; $i++) {
 				$phpcsFile->fixer->replaceToken($i, '');
