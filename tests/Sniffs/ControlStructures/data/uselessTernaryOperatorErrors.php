@@ -58,3 +58,11 @@ function () {
 function () {
 	return false ?: true;
 };
+
+function ($request) {
+	$withFiles = \count($request->request->all()) !== 0
+		&& \array_key_exists('with_files', $request->request->get('form'))
+		&& $request->request->get('form')['with_files'] === '1' ? true : false;
+
+	return $withFiles;
+};
