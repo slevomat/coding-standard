@@ -28,7 +28,6 @@ use const T_DECLARE;
 use const T_DOUBLE_COLON;
 use const T_ELLIPSIS;
 use const T_EXTENDS;
-use const T_FALSE;
 use const T_FUNCTION;
 use const T_GOTO;
 use const T_IMPLEMENTS;
@@ -41,10 +40,6 @@ use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_OPEN_TAG;
-use const T_PRIVATE;
-use const T_PROTECTED;
-use const T_PUBLIC;
-use const T_STATIC;
 use const T_TRAIT;
 use const T_TYPE_UNION;
 use const T_USE;
@@ -194,6 +189,13 @@ class ReferencedNameHelper
 				: ReferencedName::TYPE_FUNCTION;
 		}
 
+		if (
+			$tokens[$previousTokenBeforeStartPointer]['code'] === T_TYPE_UNION
+			|| $tokens[$nextTokenAfterEndPointer]['code'] === T_TYPE_UNION
+		) {
+			return ReferencedName::TYPE_CLASS;
+		}
+
 		if ($tokens[$nextTokenAfterEndPointer]['code'] === T_BITWISE_AND) {
 			$tokenAfterNextToken = TokenHelper::findNextEffective($phpcsFile, $nextTokenAfterEndPointer + 1);
 
@@ -230,11 +232,6 @@ class ReferencedNameHelper
 			return ReferencedName::TYPE_CLASS;
 		}
 
-		if (in_array($tokens[$previousTokenBeforeStartPointer]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_STATIC], true)) {
-			// Property with union type hint
-			return ReferencedName::TYPE_CLASS;
-		}
-
 		if ($tokens[$previousTokenBeforeStartPointer]['code'] === T_COMMA) {
 			$previousTokenPointer = TokenHelper::findPreviousExcluding(
 				$phpcsFile,
@@ -259,19 +256,6 @@ class ReferencedNameHelper
 			);
 
 			if ($tokens[$catchPointer]['code'] === T_CATCH) {
-				return ReferencedName::TYPE_CLASS;
-			}
-		}
-
-		if ($tokens[$previousTokenBeforeStartPointer]['code'] === T_TYPE_UNION) {
-			$previousPointer = TokenHelper::findPreviousExcluding(
-				$phpcsFile,
-				array_merge([T_TYPE_UNION], $nameTokenCodes, TokenHelper::$ineffectiveTokenCodes),
-				$previousTokenBeforeStartPointer - 1
-			);
-
-			if (in_array($tokens[$previousPointer]['code'], [T_COLON, T_FALSE], true)) {
-				// Union return type hint
 				return ReferencedName::TYPE_CLASS;
 			}
 		}

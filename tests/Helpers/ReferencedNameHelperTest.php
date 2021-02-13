@@ -57,6 +57,12 @@ class ReferencedNameHelperTest extends TestCase
 			['E_NOTICE', false, true],
 			['DateTimeImmutable', false, false],
 			['DateTime', false, false],
+			['UnionType', false, false],
+			['\Union\UnionType2', false, false],
+			['UnionType3', false, false],
+			['\Union\UnionType4', false, false],
+			['UnionType5', false, false],
+			['UnionType6', false, false],
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);

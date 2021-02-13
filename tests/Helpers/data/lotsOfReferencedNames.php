@@ -2,7 +2,7 @@
 
 namespace FooNamespace;
 
-use _HumbugBoxfb21822734fc\Nette\Utils\DateTime;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use UsedNamespace\UsedNameFooBar as UsedNameFooBarBaz;
@@ -141,6 +141,22 @@ class PropertyPromotion
 {
 
 	public function __construct(private DateTimeImmutable $dateTimeImmutable, public DateTime $dateTime)
+	{
+	}
+
+}
+
+class WithUnion
+{
+
+	private UnionType|\Union\UnionType2|bool $union;
+	private bool|UnionType3 $union2;
+
+	public function call(\Union\UnionType4|UnionType5|bool $union)
+	{
+	}
+
+	public function call2(bool|UnionType6 $union)
 	{
 	}
 

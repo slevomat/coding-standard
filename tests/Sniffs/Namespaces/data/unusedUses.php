@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.0
 
 namespace Foo;
 
@@ -21,6 +21,8 @@ use My\PartialClass;
 use My\PartialFunction;
 use My\PartialConstant;
 use PartialNamespace;
+use UnionType;
+use UnionType2;
 
 class TestClass implements FirstInterface, SecondInterface
 {
@@ -43,6 +45,10 @@ class TestClass implements FirstInterface, SecondInterface
 		new PartialNamespace\UsedClass();
 
 		return new NewObject();
+	}
+
+	protected function withUnion(UnionType|UnionType2|bool $union)
+	{
 	}
 
 }
