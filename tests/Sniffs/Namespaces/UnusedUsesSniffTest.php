@@ -10,37 +10,14 @@ class UnusedUsesSniffTest extends TestCase
 
 	public function testUnusedUse(): void
 	{
-		self::assertEquals(5, $this->getFileReport()->getErrorCount());
-		self::assertSniffError(
-			$this->getFileReport(),
-			5,
-			UnusedUsesSniff::CODE_UNUSED_USE,
-			'First\ObjectPrototype'
-		);
-		self::assertSniffError(
-			$this->getFileReport(),
-			8,
-			UnusedUsesSniff::CODE_UNUSED_USE,
-			'My\ObjectPrototype (as MyObject)'
-		);
-		self::assertSniffError(
-			$this->getFileReport(),
-			12,
-			UnusedUsesSniff::CODE_UNUSED_USE,
-			'FooBar\UnusedFunction'
-		);
-		self::assertSniffError(
-			$this->getFileReport(),
-			14,
-			UnusedUsesSniff::CODE_UNUSED_USE,
-			'FooBar\UNUSED_CONSTANT'
-		);
-		self::assertSniffError(
-			$this->getFileReport(),
-			16,
-			UnusedUsesSniff::CODE_UNUSED_USE,
-			'X'
-		);
+		$report = $this->getFileReport();
+
+		self::assertEquals(5, $report->getErrorCount());
+		self::assertSniffError($report, 5, UnusedUsesSniff::CODE_UNUSED_USE, 'First\ObjectPrototype');
+		self::assertSniffError($report, 8, UnusedUsesSniff::CODE_UNUSED_USE, 'My\ObjectPrototype (as MyObject)');
+		self::assertSniffError($report, 12, UnusedUsesSniff::CODE_UNUSED_USE, 'FooBar\UnusedFunction');
+		self::assertSniffError($report, 14, UnusedUsesSniff::CODE_UNUSED_USE, 'FooBar\UNUSED_CONSTANT');
+		self::assertSniffError($report, 16, UnusedUsesSniff::CODE_UNUSED_USE, 'X');
 	}
 
 	public function testUnusedUseWithMultipleNamespaces(): void
