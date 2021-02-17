@@ -159,19 +159,17 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 		$definedConstantsIndex = array_flip(ConstantHelper::getAllNames($phpcsFile));
 
 		$classReferencesIndex = [];
-		if ($this->allowFullyQualifiedNameForCollidingClasses) {
-			$classReferences = array_filter($references, static function (stdClass $reference): bool {
-				return $reference->source === self::SOURCE_CODE && $reference->isClass;
-			});
+		$classReferences = array_filter($references, static function (stdClass $reference): bool {
+			return $reference->source === self::SOURCE_CODE && $reference->isClass;
+		});
 
-			foreach ($classReferences as $classReference) {
-				$classReferencesIndex[strtolower($classReference->name)] = NamespaceHelper::resolveName(
-					$phpcsFile,
-					$classReference->name,
-					$classReference->type,
-					$classReference->startPointer
-				);
-			}
+		foreach ($classReferences as $classReference) {
+			$classReferencesIndex[strtolower($classReference->name)] = NamespaceHelper::resolveName(
+				$phpcsFile,
+				$classReference->name,
+				$classReference->type,
+				$classReference->startPointer
+			);
 		}
 
 		$namespacePointers = NamespaceHelper::getAllNamespacesPointers($phpcsFile);
@@ -379,6 +377,23 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 				true
 			);
 
+			if (
+				(
+					$reference->isClass
+					&& array_key_exists($canonicalNameToReference, $definedClassesIndex)
+					&& $canonicalName !== NamespaceHelper::normalizeToCanonicalName($definedClassesIndex[$canonicalNameToReference])
+				)
+				|| (
+					$reference->isClass
+					&& array_key_exists($canonicalNameToReference, $classReferencesIndex)
+					&& $canonicalName !== NamespaceHelper::normalizeToCanonicalName($classReferencesIndex[$canonicalNameToReference])
+				)
+				|| ($reference->isFunction && array_key_exists($canonicalNameToReference, $definedFunctionsIndex))
+				|| ($reference->isConstant && array_key_exists($canonicalNameToReference, $definedConstantsIndex))
+			) {
+				$canBeFixed = false;
+			}
+
 			foreach ($useStatements as $useStatement) {
 				if ($useStatement->getType() !== $reference->type) {
 					continue;
@@ -388,16 +403,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 					continue;
 				}
 
-				if (!(
-					$useStatement->getCanonicalNameAsReferencedInFile() === $canonicalNameToReference
-					|| (
-						$reference->isClass
-						&& array_key_exists($canonicalNameToReference, $definedClassesIndex)
-						&& $canonicalName !== NamespaceHelper::normalizeToCanonicalName($definedClassesIndex[$canonicalNameToReference])
-					)
-					|| ($reference->isFunction && array_key_exists($canonicalNameToReference, $definedFunctionsIndex))
-					|| ($reference->isConstant && array_key_exists($canonicalNameToReference, $definedConstantsIndex))
-				)) {
+				if ($useStatement->getCanonicalNameAsReferencedInFile() !== $canonicalNameToReference) {
 					continue;
 				}
 
