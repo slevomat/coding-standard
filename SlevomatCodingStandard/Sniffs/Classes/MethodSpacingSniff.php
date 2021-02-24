@@ -54,6 +54,9 @@ class MethodSpacingSniff implements Sniff
 			: TokenHelper::findNext($phpcsFile, T_SEMICOLON, $methodPointer + 1);
 
 		$classPointer = ClassHelper::getClassPointer($phpcsFile, $methodPointer);
+		if ($classPointer === null) {
+			return;
+		}
 
 		$nextMethodPointer = TokenHelper::findNext($phpcsFile, T_FUNCTION, $methodEndPointer + 1, $tokens[$classPointer]['scope_closer']);
 		if ($nextMethodPointer === null) {
