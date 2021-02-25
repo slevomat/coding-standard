@@ -179,6 +179,14 @@ Disallows late static binding for constants.
 
 Disallows using public properties.
 
+#### SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion 🔧
+
+Requires use of constructor property promotion.
+
+This sniff provides the following setting:
+
+* `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 8.0 or higher.
+
 #### SlevomatCodingStandard.Classes.UselessLateStaticBinding 🔧
 
 Reports useless late static binding.
@@ -213,14 +221,6 @@ Disallows use of `continue` without integer operand in `switch` because it emits
 #### SlevomatCodingStandard.ControlStructures.DisallowEmpty
 
 Disallows use of `empty()`.
-
-#### SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion
-
-Requires use of constructor property promotion.
-
-This sniff provides the following setting:
-
-* `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 8.0 or higher.
 
 #### SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator 🔧
 
