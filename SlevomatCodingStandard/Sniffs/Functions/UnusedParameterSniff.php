@@ -15,6 +15,7 @@ class UnusedParameterSniff implements Sniff
 {
 
 	public const CODE_UNUSED_PARAMETER = 'UnusedParameter';
+	public const CODE_USELESS_SUPPRESS = 'UselessSuppress';
 
 	private const NAME = 'SlevomatCodingStandard.Functions.UnusedParameter';
 

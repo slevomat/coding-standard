@@ -291,7 +291,9 @@ class YodaHelper
 		}
 
 		$phpcsFile->fixer->addContent($firstOldPointer, implode('', array_map(static function (array $token): string {
-			return $token['content'];
+			/** @var string $content */
+			$content = $token['content'];
+			return $content;
 		}, $newTokens)));
 	}
 
