@@ -10,11 +10,14 @@ use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHint;
 use function array_merge;
+use function explode;
+use function implode;
 use function sprintf;
 use function strpos;
 use function strtolower;
 use function substr;
 use function substr_count;
+use const T_TYPE_UNION;
 use const T_VARIABLE;
 use const T_WHITESPACE;
 
@@ -22,6 +25,7 @@ class UnionTypeHintFormatSniff implements Sniff
 {
 
 	public const CODE_DISALLOWED_WHITESPACE = 'DisallowedWhitespace';
+	public const CODE_REQUIRED_WHITESPACE = 'RequiredWhitespace';
 	public const CODE_REQUIRED_SHORT_NULLABLE = 'RequiredShortNullable';
 	public const CODE_DISALLOWED_SHORT_NULLABLE = 'DisallowedShortNullable';
 	public const CODE_NULL_TYPE_HINT_NOT_ON_FIRST_POSITION = 'NullTypeHintNotOnFirstPosition';
@@ -35,6 +39,9 @@ class UnionTypeHintFormatSniff implements Sniff
 
 	/** @var bool|null */
 	public $enable = null;
+
+	/** @var string|null */
+	public $withSpaces = null;
 
 	/** @var string|null */
 	public $shortNullable = null;
@@ -95,24 +102,58 @@ class UnionTypeHintFormatSniff implements Sniff
 
 	private function checkTypeHint(File $phpcsFile, TypeHint $typeHint): void
 	{
+		$tokens = $phpcsFile->getTokens();
+
 		$typeHintsCount = substr_count($typeHint->getTypeHint(), '|') + 1;
 
 		if ($typeHintsCount > 1) {
-			$whitespacePointer = TokenHelper::findNext(
-				$phpcsFile,
-				T_WHITESPACE,
-				$typeHint->getStartPointer() + 1,
-				$typeHint->getEndPointer()
-			);
-			if ($whitespacePointer !== null) {
-				$originalTypeHint = TokenHelper::getContent($phpcsFile, $typeHint->getStartPointer(), $typeHint->getEndPointer());
-				$fix = $phpcsFile->addFixableError(
-					sprintf('Whitespace in type hint "%s" is disallowed.', $originalTypeHint),
-					$typeHint->getStartPointer(),
-					self::CODE_DISALLOWED_WHITESPACE
+			if ($this->withSpaces === self::NO) {
+				$whitespacePointer = TokenHelper::findNext(
+					$phpcsFile,
+					T_WHITESPACE,
+					$typeHint->getStartPointer() + 1,
+					$typeHint->getEndPointer()
 				);
-				if ($fix) {
-					$this->fixTypeHint($phpcsFile, $typeHint, $typeHint->getTypeHint());
+				if ($whitespacePointer !== null) {
+					$originalTypeHint = TokenHelper::getContent($phpcsFile, $typeHint->getStartPointer(), $typeHint->getEndPointer());
+					$fix = $phpcsFile->addFixableError(
+						sprintf('Spaces in type hint "%s" are disallowed.', $originalTypeHint),
+						$typeHint->getStartPointer(),
+						self::CODE_DISALLOWED_WHITESPACE
+					);
+					if ($fix) {
+						$this->fixTypeHint($phpcsFile, $typeHint, $typeHint->getTypeHint());
+					}
+				}
+			} elseif ($this->withSpaces === self::YES) {
+				$error = false;
+				foreach (TokenHelper::findNextAll(
+					$phpcsFile,
+					[T_TYPE_UNION],
+					$typeHint->getStartPointer(),
+					$typeHint->getEndPointer()
+				) as $unionSeparator) {
+					if ($tokens[$unionSeparator - 1]['content'] !== ' ') {
+						$error = true;
+						break;
+					}
+					if ($tokens[$unionSeparator + 1]['content'] !== ' ') {
+						$error = true;
+						break;
+					}
+				}
+
+				if ($error) {
+					$originalTypeHint = TokenHelper::getContent($phpcsFile, $typeHint->getStartPointer(), $typeHint->getEndPointer());
+					$fix = $phpcsFile->addFixableError(
+						sprintf('One space required before and after each "|" in type hint "%s".', $originalTypeHint),
+						$typeHint->getStartPointer(),
+						self::CODE_REQUIRED_WHITESPACE
+					);
+					if ($fix) {
+						$fixedTypeHint = implode(' | ', explode('|', $typeHint->getTypeHint()));
+						$this->fixTypeHint($phpcsFile, $typeHint, $fixedTypeHint);
+					}
 				}
 			}
 		}
@@ -147,8 +188,6 @@ class UnionTypeHintFormatSniff implements Sniff
 		if ($hasShortNullable || ($this->shortNullable === self::YES && $typeHintsCount === 2)) {
 			return;
 		}
-
-		$tokens = $phpcsFile->getTokens();
 
 		if ($this->nullPosition === self::FIRST && strtolower($tokens[$typeHint->getStartPointer()]['content']) !== 'null') {
 			$fix = $phpcsFile->addFixableError(

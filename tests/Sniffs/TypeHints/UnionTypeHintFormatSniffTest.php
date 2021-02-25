@@ -7,18 +7,28 @@ use SlevomatCodingStandard\Sniffs\TestCase;
 class UnionTypeHintFormatSniffTest extends TestCase
 {
 
-	public function testDisallowedWhitespaceNoErrors(): void
+	public function testWhitespaceNotSetNoErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/unionTypeHintFormatDisallowedWhitespaceNoErrors.php', [
+		$report = self::checkFile(__DIR__ . '/data/unionTypeHintFormatWhitespaceNotSetNoErrors.php', [
 			'enable' => true,
 		]);
 		self::assertNoSniffErrorInFile($report);
 	}
 
-	public function testDisallowedWhitespaceErrors(): void
+	public function testWhitespaceDisallowedNoErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/unionTypeHintFormatDisallowedWhitespaceErrors.php', [
+		$report = self::checkFile(__DIR__ . '/data/unionTypeHintFormatWhitespaceDisallowedNoErrors.php', [
 			'enable' => true,
+			'withSpaces' => 'no',
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testWhitespaceDisallowedErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/unionTypeHintFormatWhitespaceDisallowedErrors.php', [
+			'enable' => true,
+			'withSpaces' => 'no',
 		]);
 
 		self::assertSame(3, $report->getErrorCount());
@@ -28,13 +38,53 @@ class UnionTypeHintFormatSniffTest extends TestCase
 			$report,
 			8,
 			UnionTypeHintFormatSniff::CODE_DISALLOWED_WHITESPACE,
-			'Whitespace in type hint "int| false" is disallowed.'
+			'Spaces in type hint "int| false" are disallowed.'
 		);
 		self::assertSniffError(
 			$report,
 			8,
 			UnionTypeHintFormatSniff::CODE_DISALLOWED_WHITESPACE,
-			'Whitespace in type hint "int  | string |  bool" is disallowed.'
+			'Spaces in type hint "int  | string |  bool" are disallowed.'
+		);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testWhitespaceEnabledNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/unionTypeHintFormatWhitespaceEnabledNoErrors.php', [
+			'enable' => true,
+			'withSpaces' => 'yes',
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testWhitespaceEnabledErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/unionTypeHintFormatWhitespaceEnabledErrors.php', [
+			'enable' => true,
+			'withSpaces' => 'yes',
+		]);
+
+		self::assertSame(3, $report->getErrorCount());
+
+		self::assertSniffError(
+			$report,
+			6,
+			UnionTypeHintFormatSniff::CODE_REQUIRED_WHITESPACE,
+			'One space required before and after each "|" in type hint "int|string".'
+		);
+		self::assertSniffError(
+			$report,
+			8,
+			UnionTypeHintFormatSniff::CODE_REQUIRED_WHITESPACE,
+			'One space required before and after each "|" in type hint "int| false".'
+		);
+		self::assertSniffError(
+			$report,
+			8,
+			UnionTypeHintFormatSniff::CODE_REQUIRED_WHITESPACE,
+			'One space required before and after each "|" in type hint "int  |    string |bool".'
 		);
 
 		self::assertAllFixedInFile($report);
