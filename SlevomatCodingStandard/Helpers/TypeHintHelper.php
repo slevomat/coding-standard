@@ -205,8 +205,8 @@ class TypeHintHelper
 		if ($templateAnnotationNames === null) {
 			foreach (['template', 'template-covariant'] as $annotationName) {
 				$templateAnnotationNames[] = sprintf('@%s', $annotationName);
-				foreach (AnnotationHelper::PREFIXES as $prefixAnnotatioName) {
-					$templateAnnotationNames[] = sprintf('@%s-%s', $prefixAnnotatioName, $annotationName);
+				foreach (AnnotationHelper::PREFIXES as $prefixAnnotationName) {
+					$templateAnnotationNames[] = sprintf('@%s-%s', $prefixAnnotationName, $annotationName);
 				}
 			}
 		}
