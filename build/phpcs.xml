@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Slevomat Coding Standard" xsi:noNamespaceSchemaLocation="../vendor/squizlabs/php_codesniffer/phpcs.xsd">
+	<config name="php_version" value="70100"/>
 	<arg name="extensions" value="php"/>
 	<arg name="tab-width" value="4"/>
 	<arg name="cache" value="./../temp/phpcs"/>
@@ -250,11 +251,7 @@
 	<rule ref="SlevomatCodingStandard.Classes.DisallowMultiPropertyDefinition"/>
 	<rule ref="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces"/>
 	<rule ref="SlevomatCodingStandard.Classes.MethodSpacing"/>
-	<rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference">
-		<properties>
-			<property name="enableOnObjects" value="false"/>
-		</properties>
-	</rule>
+	<rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference"/>
 	<rule ref="SlevomatCodingStandard.Classes.ParentCallSpacing"/>
 	<rule ref="SlevomatCodingStandard.Classes.PropertySpacing"/>
 	<rule ref="SlevomatCodingStandard.Classes.RequireSingleLineMethodSignature">
@@ -479,25 +476,11 @@
 	<rule ref="SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint">
 		<exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint.UselessAnnotation"/>
-		<properties>
-			<property name="enableObjectTypeHint" value="false"/>
-			<property name="enableMixedTypeHint" value="false"/>
-			<property name="enableUnionTypeHint" value="false"/>
-		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
-	<rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
-		<properties>
-			<property name="enableNativeTypeHint" value="false"/>
-		</properties>
-	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint">
 		<exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation"/>
-		<properties>
-			<property name="enableObjectTypeHint" value="false"/>
-			<property name="enableMixedTypeHint" value="false"/>
-			<property name="enableUnionTypeHint" value="false"/>
-		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.UselessConstantTypeHint"/>
