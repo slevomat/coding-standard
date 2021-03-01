@@ -5,7 +5,7 @@ class Whatever
 
 	public int|string $property;
 
-	public function method(int| false $parameter): int  |    string |bool
+	public function method(int| false $parameter, string |false $parameter2): int  |    string |bool
 	{
 	}
 

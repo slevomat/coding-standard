@@ -66,7 +66,7 @@ class UnionTypeHintFormatSniffTest extends TestCase
 			'withSpaces' => 'yes',
 		]);
 
-		self::assertSame(3, $report->getErrorCount());
+		self::assertSame(4, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -79,6 +79,12 @@ class UnionTypeHintFormatSniffTest extends TestCase
 			8,
 			UnionTypeHintFormatSniff::CODE_REQUIRED_WHITESPACE,
 			'One space required before and after each "|" in type hint "int| false".'
+		);
+		self::assertSniffError(
+			$report,
+			8,
+			UnionTypeHintFormatSniff::CODE_REQUIRED_WHITESPACE,
+			'One space required before and after each "|" in type hint "string |false".'
 		);
 		self::assertSniffError(
 			$report,
