@@ -268,6 +268,10 @@ class ParameterTypeHintSniff implements Sniff
 					continue 2;
 				}
 
+				if (TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $functionPointer, $typeHint)) {
+					continue 2;
+				}
+
 				$typeHints[$typeHintNo] = TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
 			}
 

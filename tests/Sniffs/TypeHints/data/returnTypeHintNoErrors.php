@@ -280,3 +280,34 @@ class Whatever
 function arrayShape(): array
 {
 }
+
+/**
+ * @phpstan-type SomeAlias1 int|false
+ * @phpstan-import-type SomeAlias2 from \SomeClass
+ * @phpstan-import-type SomeAlias4 from \SomeClass as SomeAlias3
+ */
+class Aliases
+{
+
+	/**
+	 * @return SomeAlias1
+	 */
+	public function withAlias1()
+	{
+	}
+
+	/**
+	 * @return SomeAlias2
+	 */
+	public function withAlias2()
+	{
+	}
+
+	/**
+	 * @return SomeAlias3
+	 */
+	public function withAlias3()
+	{
+	}
+
+}

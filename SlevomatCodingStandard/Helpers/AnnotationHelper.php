@@ -31,6 +31,8 @@ use SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\TemplateAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation\TypeAliasAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation\TypeImportAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\UseAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use function array_key_exists;
@@ -60,7 +62,7 @@ class AnnotationHelper
 
 	/**
 	 * @internal
-	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation $annotation
+	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|TypeAliasAnnotation|TypeImportAnnotation $annotation
 	 * @return TypeNode[]
 	 */
 	public static function getAnnotationTypes(Annotation $annotation): array
@@ -82,6 +84,8 @@ class AnnotationHelper
 			if ($annotation->getBound() !== null) {
 				$annotationTypes[] = $annotation->getBound();
 			}
+		} elseif ($annotation instanceof TypeImportAnnotation) {
+			$annotationTypes[] = $annotation->getImportedFrom();
 		} else {
 			$annotationTypes[] = $annotation->getType();
 		}
@@ -336,6 +340,10 @@ class AnnotationHelper
 						'@use' => UseAnnotation::class,
 						'@template-use' => UseAnnotation::class,
 						'@phpstan-use' => UseAnnotation::class,
+						'@psalm-type' => TypeAliasAnnotation::class,
+						'@phpstan-type' => TypeAliasAnnotation::class,
+						'@psalm-import-type' => TypeImportAnnotation::class,
+						'@phpstan-import-type' => TypeImportAnnotation::class,
 						'@mixin' => MixinAnnotation::class,
 					];
 
@@ -466,7 +474,7 @@ class AnnotationHelper
 	}
 
 	/**
-	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation $annotation
+	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|TypeAliasAnnotation|TypeImportAnnotation $annotation
 	 * @param TypeNode $typeNode
 	 * @param TypeNode $fixedTypeNode
 	 * @return Annotation
@@ -494,6 +502,11 @@ class AnnotationHelper
 		} elseif ($annotation instanceof TemplateAnnotation) {
 			$fixedContentNode = clone $annotation->getContentNode();
 			$fixedContentNode->bound = AnnotationTypeHelper::change($annotation->getBound(), $typeNode, $fixedTypeNode);
+		} elseif ($annotation instanceof TypeImportAnnotation) {
+			$fixedContentNode = clone $annotation->getContentNode();
+			/** @var IdentifierTypeNode $fixedType */
+			$fixedType = AnnotationTypeHelper::change($annotation->getImportedFrom(), $typeNode, $fixedTypeNode);
+			$fixedContentNode->importedFrom = $fixedType;
 		} elseif (
 			$annotation instanceof ExtendsAnnotation
 			|| $annotation instanceof ImplementsAnnotation

@@ -323,7 +323,7 @@ class TypeHintHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataIsTemplate(): array
+	public function dataIsTypeDefinedInAnnotation(): array
 	{
 		return [
 			['Whatever', false],
@@ -331,19 +331,19 @@ class TypeHintHelperTest extends TestCase
 	}
 
 	/**
-	 * @dataProvider dataIsTemplate
+	 * @dataProvider dataIsTypeDefinedInAnnotation
 	 * @param string $typeHintName
 	 * @param bool $isTemplate
 	 */
-	public function testIsTemplate(string $typeHintName, bool $isTemplate): void
+	public function testIsTypeDefinedInAnnotation(string $typeHintName, bool $isTemplate): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintTemplates.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintsDefinedInAnnotation.php');
 
 		$docCommentOpenPointer = $this->findPointerByLineAndType($phpcsFile, 3, T_DOC_COMMENT_OPEN_TAG);
 
 		self::assertNotNull($docCommentOpenPointer);
 
-		self::assertSame($isTemplate, TypeHintHelper::isTemplate($phpcsFile, $docCommentOpenPointer, $typeHintName));
+		self::assertSame($isTemplate, TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $docCommentOpenPointer, $typeHintName));
 	}
 
 }

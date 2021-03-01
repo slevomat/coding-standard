@@ -313,6 +313,10 @@ class ReturnTypeHintSniff implements Sniff
 				return;
 			}
 
+			if (TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $functionPointer, $typeHint)) {
+				return;
+			}
+
 			$typeHints[$typeHintNo] = TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
 		}
 

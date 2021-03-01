@@ -59,7 +59,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 							TypeHintHelper::isSimpleTypeHint($lowercasedTypeHint)
 							|| TypeHintHelper::isSimpleUnofficialTypeHints($lowercasedTypeHint)
 							|| !TypeHelper::isTypeName($typeHint)
-							|| TypeHintHelper::isTemplate($phpcsFile, $docCommentOpenPointer, $typeHint)
+							|| TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $docCommentOpenPointer, $typeHint)
 						) {
 							continue;
 						}

@@ -294,6 +294,10 @@ class PropertyTypeHintSniff implements Sniff
 				return;
 			}
 
+			if (TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $propertyPointer, $typeHint)) {
+				return;
+			}
+
 			$typeHints[$typeHintNo] = TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
 		}
 

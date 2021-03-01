@@ -267,3 +267,22 @@ class Whatever
 function arrayShape(array $a)
 {
 }
+
+/**
+ * @phpstan-type SomeAlias1 int|false
+ * @phpstan-import-type SomeAlias2 from \SomeClass
+ * @phpstan-import-type SomeAlias4 from \SomeClass as SomeAlias3
+ */
+class Aliases
+{
+
+	/**
+	 * @param SomeAlias1 $withAlias1
+	 * @param SomeAlias2 $withAlias2
+	 * @param SomeAlias3 $withAlias3
+	 */
+	public function withAlias($withAlias1, $withAlias2, $withAlias3)
+	{
+	}
+
+}

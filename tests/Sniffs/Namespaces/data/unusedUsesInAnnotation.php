@@ -64,6 +64,10 @@ use ArrayShape2;
 use ConstantExpression1;
 use ConstantExpression2;
 use ConstantExpression3;
+use TypeAlias1;
+use TypeAlias2;
+use SomeImportFrom1;
+use SomeImportFrom2;
 
 /**
  * @ORM\Entity()
@@ -236,5 +240,25 @@ $arrayShape2 = [];
  */
 class ConstantExpression
 {
+
+}
+
+/**
+ * @phpstan-type SomeTypeAlias TypeAlias1|TypeAlias2
+ * @psalm-import-type SomeImportedType from SomeImportFrom1
+ * @phpstan-import-type AnotherImportedType from SomeImportFrom2 as AnotherImportedType2
+ */
+class TypeAliasAndImportes
+{
+
+	/**
+	 * @param SomeImportedType $a
+	 * @param AnotherImportedType2 $b
+	 * @return SomeTypeAlias
+	 */
+	public function types($a, $b)
+	{
+
+	}
 
 }

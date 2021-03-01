@@ -140,3 +140,23 @@ class Mixin
 {
 
 }
+
+/**
+ * @phpstan-type SomeTypeAlias \TypeAlias1|\TypeAlias2
+ * @psalm-import-type SomeImportedType from \SomeImportFrom1
+ * @phpstan-import-type AnotherImportedType from \SomeImportFrom2 as AnotherImportedType2
+ */
+class TypeAliasAndImportes
+{
+
+	/**
+	 * @param SomeImportedType $a
+	 * @param AnotherImportedType2 $b
+	 * @return SomeTypeAlias
+	 */
+	public function types($a, $b)
+	{
+
+	}
+
+}

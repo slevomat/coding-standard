@@ -172,3 +172,26 @@ class Whatever
 	}
 
 }
+
+/**
+ * @phpstan-type SomeAlias1 int|false
+ * @phpstan-import-type SomeAlias2 from \SomeClass
+ * @phpstan-import-type SomeAlias4 from \SomeClass as SomeAlias3
+ */
+class Aliases
+{
+
+	/**
+	 * @var SomeAlias1
+	 */
+	public $withAlias1;
+
+	/** @var SomeAlias2 */
+	protected $withAlias2;
+
+	/**
+	 * @var SomeAlias3
+	 */
+	private static $withAlias3;
+
+}
