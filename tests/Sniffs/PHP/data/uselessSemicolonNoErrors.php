@@ -27,3 +27,10 @@ new class extends Whatever {
 };
 
 $fooPropertyValue = $foo->{$fooProperty};
+
+function witMatch($a)
+{
+	return match ($a) {
+		'foo' => 'bar',
+	};
+}
