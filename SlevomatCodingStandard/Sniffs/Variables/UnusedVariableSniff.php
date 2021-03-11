@@ -59,6 +59,7 @@ use const T_USE;
 use const T_VARIABLE;
 use const T_WHILE;
 use const T_XOR_EQUAL;
+use const T_YIELD;
 
 class UnusedVariableSniff implements Sniff
 {
@@ -129,6 +130,7 @@ class UnusedVariableSniff implements Sniff
 			T_SL_EQUAL,
 			T_SR_EQUAL,
 			T_CONCAT_EQUAL,
+			T_YIELD,
 		], true)) {
 			return;
 		}

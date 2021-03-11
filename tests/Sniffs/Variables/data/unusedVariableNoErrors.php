@@ -379,3 +379,12 @@ function ($i) {
 	}
 	return $result;
 };
+
+function (): Generator {
+	$index = 0;
+	$items = [1,2,3];
+
+	foreach ($items as $item) {
+		yield $index++ => $item;
+	}
+};
