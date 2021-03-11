@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.0
 
 use Foo\{ Boo, Doo };
 
