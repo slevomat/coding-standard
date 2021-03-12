@@ -136,4 +136,34 @@ class Whatever
 
 	public mixed $nullableMixed = null;
 
+	/**
+	 * @var string[]
+	 */
+	private array $uselessSuppressOfUselessAnnotation;
+
+	/**
+	 * @var string[]
+	 */
+	private array $uselessSuppressOfMissingTraversableTypeHintSpecification;
+
+	/**
+	 * @phpstan-var class-string
+	 */
+	private $uselessSuppressOfMissingAnyTypeHint;
+
+	/**
+	 * @phpstan-var class-string
+	 */
+	private string $uselessSuppressOfMissingAnyTypeHintWithTypeHint;
+
+	/**
+	 * @phpstan-var class-string
+	 */
+	private string $uselessSuppressOfMissingNativeTypeHintWithTypeHint;
+
+	/**
+	 * @var callable
+	 */
+	private $uselessSuppressOfMissingNativeTypeHint;
+
 }

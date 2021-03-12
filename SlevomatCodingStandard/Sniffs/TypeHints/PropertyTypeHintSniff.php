@@ -57,6 +57,8 @@ class PropertyTypeHintSniff implements Sniff
 
 	public const CODE_USELESS_ANNOTATION = 'UselessAnnotation';
 
+	public const CODE_USELESS_SUPPRESS = 'UselessSuppress';
+
 	private const NAME = 'SlevomatCodingStandard.TypeHints.PropertyTypeHint';
 
 	/** @var bool|null */
@@ -160,38 +162,41 @@ class PropertyTypeHintSniff implements Sniff
 		array $prefixedPropertyAnnotations
 	): void
 	{
+		$suppressNameAnyTypeHint = $this->getSniffName(self::CODE_MISSING_ANY_TYPE_HINT);
+		$isSuppressedAnyTypeHint = SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, $suppressNameAnyTypeHint);
+
+		$suppressNameNativeTypeHint = $this->getSniffName(self::CODE_MISSING_NATIVE_TYPE_HINT);
+		$isSuppressedNativeTypeHint = SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, $suppressNameNativeTypeHint);
+
 		if ($propertyTypeHint !== null) {
+			$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressedAnyTypeHint, $suppressNameAnyTypeHint);
+			$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 			return;
 		}
 
 		if (!$this->hasAnnotation($propertyAnnotation)) {
-			if (SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, self::getSniffName(self::CODE_MISSING_ANY_TYPE_HINT))) {
-				return;
-			}
-
 			if (count($prefixedPropertyAnnotations) !== 0) {
+				$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressedAnyTypeHint, $suppressNameAnyTypeHint);
 				return;
 			}
 
-			$phpcsFile->addError(
-				sprintf(
-					$this->enableNativeTypeHint
-						? 'Property %s does not have native type hint nor @var annotation for its value.'
-						: 'Property %s does not have @var annotation for its value.',
-					PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer)
-				),
-				$propertyPointer,
-				self::CODE_MISSING_ANY_TYPE_HINT
-			);
+			if (!$isSuppressedAnyTypeHint) {
+				$phpcsFile->addError(
+					sprintf(
+						$this->enableNativeTypeHint
+							? 'Property %s does not have native type hint nor @var annotation for its value.'
+							: 'Property %s does not have @var annotation for its value.',
+						PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer)
+					),
+					$propertyPointer,
+					self::CODE_MISSING_ANY_TYPE_HINT
+				);
+			}
 
 			return;
 		}
 
 		if (!$this->enableNativeTypeHint) {
-			return;
-		}
-
-		if (SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, self::getSniffName(self::CODE_MISSING_NATIVE_TYPE_HINT))) {
 			return;
 		}
 
@@ -216,6 +221,7 @@ class PropertyTypeHintSniff implements Sniff
 			$traversableTypeHints = [];
 			foreach ($typeNode->types as $innerTypeNode) {
 				if (!AnnotationTypeHelper::containsOneType($innerTypeNode)) {
+					$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 					return;
 				}
 
@@ -247,6 +253,7 @@ class PropertyTypeHintSniff implements Sniff
 
 			$traversableTypeHints = array_values(array_unique($traversableTypeHints));
 			if (count($traversableTypeHints) > 1 && !$canTryUnionTypeHint) {
+				$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 				return;
 			}
 		}
@@ -274,15 +281,18 @@ class PropertyTypeHintSniff implements Sniff
 		}
 
 		if (count($typeHints) === 0) {
+			$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 			return;
 		}
 
 		if (count($typeHints) > 1 && !$canTryUnionTypeHint) {
+			$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 			return;
 		}
 
 		foreach ($typeHints as $typeHintNo => $typeHint) {
 			if ($typeHint === 'callable') {
+				$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 				return;
 			}
 
@@ -291,10 +301,12 @@ class PropertyTypeHintSniff implements Sniff
 			}
 
 			if (!TypeHintHelper::isValidTypeHint($typeHint, true, false, $this->enableMixedTypeHint)) {
+				$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 				return;
 			}
 
 			if (TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $propertyPointer, $typeHint)) {
+				$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 				return;
 			}
 
@@ -303,6 +315,10 @@ class PropertyTypeHintSniff implements Sniff
 
 		if ($originalTypeNode instanceof NullableTypeNode) {
 			$nullableTypeHint = true;
+		}
+
+		if ($isSuppressedNativeTypeHint) {
+			return;
 		}
 
 		$fix = $phpcsFile->addFixableError(
@@ -372,35 +388,31 @@ class PropertyTypeHintSniff implements Sniff
 		array $prefixedPropertyAnnotations
 	): void
 	{
-		if (SuppressHelper::isSniffSuppressed(
-			$phpcsFile,
-			$propertyPointer,
-			$this->getSniffName(self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION)
-		)) {
-			return;
-		}
+		$suppressName = $this->getSniffName(self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION);
+		$isSuppressed = SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, $suppressName);
 
 		$hasTraversableTypeHint = $this->hasTraversableTypeHint($phpcsFile, $propertyPointer, $propertyTypeHint, $propertyAnnotation);
 		$hasAnnotation = $this->hasAnnotation($propertyAnnotation);
 
-		if ($hasTraversableTypeHint && !$hasAnnotation) {
-			if (count($prefixedPropertyAnnotations) !== 0) {
-				return;
+		if (!$hasAnnotation) {
+			if ($hasTraversableTypeHint) {
+				if (count($prefixedPropertyAnnotations) !== 0) {
+					$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressed, $suppressName);
+					return;
+				}
+
+				if (!$isSuppressed) {
+					$phpcsFile->addError(
+						sprintf(
+							'@var annotation of property %s does not specify type hint for its items.',
+							PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer)
+						),
+						$propertyPointer,
+						self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION
+					);
+				}
 			}
 
-			$phpcsFile->addError(
-				sprintf(
-					'@var annotation of property %s does not specify type hint for its items.',
-					PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer)
-				),
-				$propertyPointer,
-				self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION
-			);
-
-			return;
-		}
-
-		if (!$hasAnnotation) {
 			return;
 		}
 
@@ -410,6 +422,7 @@ class PropertyTypeHintSniff implements Sniff
 			!$hasTraversableTypeHint
 			&& !AnnotationTypeHelper::containsTraversableType($typeNode, $phpcsFile, $propertyPointer, $this->getTraversableTypeHints())
 		) {
+			$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressed, $suppressName);
 			return;
 		}
 
@@ -419,6 +432,11 @@ class PropertyTypeHintSniff implements Sniff
 			$propertyPointer,
 			$this->getTraversableTypeHints()
 		)) {
+			$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressed, $suppressName);
+			return;
+		}
+
+		if ($isSuppressed) {
 			return;
 		}
 
@@ -443,9 +461,8 @@ class PropertyTypeHintSniff implements Sniff
 			return;
 		}
 
-		if (SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, self::getSniffName(self::CODE_USELESS_ANNOTATION))) {
-			return;
-		}
+		$suppressName = self::getSniffName(self::CODE_USELESS_ANNOTATION);
+		$isSuppressed = SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, $suppressName);
 
 		if (!AnnotationHelper::isAnnotationUseless(
 			$phpcsFile,
@@ -455,6 +472,11 @@ class PropertyTypeHintSniff implements Sniff
 			$this->getTraversableTypeHints(),
 			$this->enableUnionTypeHint
 		)) {
+			$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressed, $suppressName);
+			return;
+		}
+
+		if ($isSuppressed) {
 			return;
 		}
 
@@ -514,6 +536,23 @@ class PropertyTypeHintSniff implements Sniff
 		unset($annotations['@var']);
 
 		return count($annotations) === 0;
+	}
+
+	private function reportUselessSuppress(File $phpcsFile, int $pointer, bool $isSuppressed, string $suppressName): void
+	{
+		if (!$isSuppressed) {
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError(
+			sprintf('Useless %s %s', SuppressHelper::ANNOTATION, $suppressName),
+			$pointer,
+			self::CODE_USELESS_SUPPRESS
+		);
+
+		if ($fix) {
+			SuppressHelper::removeSuppressAnnotation($phpcsFile, $pointer, $suppressName);
+		}
 	}
 
 	private function getSniffName(string $sniffName): string

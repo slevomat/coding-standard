@@ -151,4 +151,40 @@ class Whatever
 	/** @var mixed|null */
 	public $nullableMixed;
 
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.UselessAnnotation
+	 * @var string[]
+	 */
+	private array $uselessSuppressOfUselessAnnotation;
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification
+	 * @var string[]
+	 */
+	private array $uselessSuppressOfMissingTraversableTypeHintSpecification;
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
+	 * @phpstan-var class-string
+	 */
+	private $uselessSuppressOfMissingAnyTypeHint;
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
+	 * @phpstan-var class-string
+	 */
+	private string $uselessSuppressOfMissingAnyTypeHintWithTypeHint;
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
+	 * @phpstan-var class-string
+	 */
+	private string $uselessSuppressOfMissingNativeTypeHintWithTypeHint;
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
+	 * @var callable
+	 */
+	private $uselessSuppressOfMissingNativeTypeHint;
+
 }
