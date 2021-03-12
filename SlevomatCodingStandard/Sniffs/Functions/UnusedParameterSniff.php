@@ -75,7 +75,7 @@ class UnusedParameterSniff implements Sniff
 		}
 
 		$phpcsFile->addError(
-			sprintf('Useless @phpcsSuppress %s', self::NAME),
+			sprintf('Useless %s %s', SuppressHelper::ANNOTATION, self::NAME),
 			$functionPointer,
 			self::CODE_USELESS_SUPPRESS
 		);
