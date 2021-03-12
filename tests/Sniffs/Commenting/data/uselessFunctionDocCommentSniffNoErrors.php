@@ -9,22 +9,6 @@ class Whatever
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Commenting.UselessFunctionDocComment
-	 */
-	public function isSniffSuppressed()
-	{
-
-	}
-
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.Commenting.UselessFunctionDocComment.UselessDocComment
-	 */
-	public function isSniffCodeSuppressed()
-	{
-
-	}
-
-	/**
 	 * {@inheritdoc}
 	 */
 	public function hasInheritdocAnnotation()

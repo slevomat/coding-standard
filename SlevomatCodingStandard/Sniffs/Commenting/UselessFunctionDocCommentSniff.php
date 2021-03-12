@@ -9,7 +9,6 @@ use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
-use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function array_map;
@@ -21,8 +20,6 @@ class UselessFunctionDocCommentSniff implements Sniff
 {
 
 	public const CODE_USELESS_DOC_COMMENT = 'UselessDocComment';
-
-	private const NAME = 'SlevomatCodingStandard.Commenting.UselessFunctionDocComment';
 
 	/** @var string[] */
 	public $traversableTypeHints = [];
@@ -48,10 +45,6 @@ class UselessFunctionDocCommentSniff implements Sniff
 	public function process(File $phpcsFile, $functionPointer): void
 	{
 		if (!DocCommentHelper::hasDocComment($phpcsFile, $functionPointer)) {
-			return;
-		}
-
-		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_USELESS_DOC_COMMENT))) {
 			return;
 		}
 
@@ -130,11 +123,6 @@ class UselessFunctionDocCommentSniff implements Sniff
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 		$phpcsFile->fixer->endChangeset();
-	}
-
-	private function getSniffName(string $sniffName): string
-	{
-		return sprintf('%s.%s', self::NAME, $sniffName);
 	}
 
 	/**

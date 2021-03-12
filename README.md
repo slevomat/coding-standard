@@ -1247,7 +1247,7 @@ Requires comments with single-line content to be written as one-liners.
 
 Requires comments with single-line content to be written as multi-liners.
 
-#### SlevomatCodingStandard.Commenting.UselessFunctionDocComment 🔧🚧
+#### SlevomatCodingStandard.Commenting.UselessFunctionDocComment 🔧
 
 * Checks for useless doc comments. If the native method declaration contains everything and the phpDoc does not add anything useful, it's reported as useless and can optionally be automatically removed with `phpcbf`.
 * Some phpDocs might still be useful even if they do not add any typehint information. They can contain textual descriptions of code elements and also some meaningful annotations like `@expectException` or `@dataProvider`.
