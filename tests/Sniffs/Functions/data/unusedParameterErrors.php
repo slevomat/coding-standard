@@ -56,3 +56,11 @@ function sameNameParameterInAnotherScope($a)
 		return $a;
 	};
 }
+
+/**
+ * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+ */
+function uselessSuppress($a)
+{
+	return $a;
+}

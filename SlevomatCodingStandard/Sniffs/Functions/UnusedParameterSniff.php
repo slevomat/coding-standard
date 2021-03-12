@@ -38,9 +38,8 @@ class UnusedParameterSniff implements Sniff
 			return;
 		}
 
-		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_UNUSED_PARAMETER))) {
-			return;
-		}
+		$isSuppressed = SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $this->getSniffName(self::CODE_UNUSED_PARAMETER));
+		$suppressUseless = true;
 
 		$tokens = $phpcsFile->getTokens();
 
@@ -57,15 +56,29 @@ class UnusedParameterSniff implements Sniff
 			}
 
 			if (!VariableHelper::isUsedInScope($phpcsFile, $functionPointer, $parameterPointer)) {
-				$phpcsFile->addError(
-					sprintf('Unused parameter %s.', $tokens[$parameterPointer]['content']),
-					$parameterPointer,
-					self::CODE_UNUSED_PARAMETER
-				);
+				if (!$isSuppressed) {
+					$phpcsFile->addError(
+						sprintf('Unused parameter %s.', $tokens[$parameterPointer]['content']),
+						$parameterPointer,
+						self::CODE_UNUSED_PARAMETER
+					);
+				} else {
+					$suppressUseless = false;
+				}
 			}
 
 			$currentPointer = $parameterPointer + 1;
 		}
+
+		if (!$isSuppressed || !$suppressUseless) {
+			return;
+		}
+
+		$phpcsFile->addError(
+			sprintf('Useless @phpcsSuppress %s', self::NAME),
+			$functionPointer,
+			self::CODE_USELESS_SUPPRESS
+		);
 	}
 
 	private function getSniffName(string $sniffName): string
