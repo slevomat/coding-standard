@@ -39,4 +39,24 @@ class Whatever
 	private function unionWithShortNullable(): ?string
 	{}
 
+	/** @return scalar */
+	private function scalar()
+	{}
+
+	/** @return scalar|null */
+	private function scalarNullable()
+	{}
+
+	/** @return numeric */
+	private function numeric()
+	{}
+
+	/** @return numeric|null */
+	private function numericNullable()
+	{}
+
+	/** @return scalar|numeric|null */
+	private function scalarAndnumericNullable()
+	{}
+
 }

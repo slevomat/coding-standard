@@ -39,4 +39,24 @@ class Whatever
 	private function unionWithShortNullable(): ?string
 	{}
 
+	/***/
+	private function scalar(): string|int|float|bool
+	{}
+
+	/***/
+	private function scalarNullable(): string|int|float|bool|null
+	{}
+
+	/***/
+	private function numeric(): int|float
+	{}
+
+	/***/
+	private function numericNullable(): int|float|null
+	{}
+
+	/***/
+	private function scalarAndnumericNullable(): string|int|float|bool|null
+	{}
+
 }

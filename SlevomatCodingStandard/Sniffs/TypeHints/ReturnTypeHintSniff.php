@@ -28,6 +28,7 @@ use SlevomatCodingStandard\Helpers\TypeHint;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_key_exists;
 use function array_map;
+use function array_merge;
 use function array_unique;
 use function array_values;
 use function count;
@@ -305,12 +306,26 @@ class ReturnTypeHintSniff implements Sniff
 			return;
 		}
 
-		if (count($typeHints) > 1 && !$canTryUnionTypeHint) {
+		$typeHintsWithConvertedUnion = [];
+		foreach ($typeHints as $typeHint) {
+			if ($this->enableUnionTypeHint && TypeHintHelper::isUnofficialUnionTypeHint($typeHint)) {
+				$canTryUnionTypeHint = true;
+				$typeHintsWithConvertedUnion = array_merge(
+					$typeHintsWithConvertedUnion,
+					TypeHintHelper::convertUnofficialUnionTypeHintToOfficialTypeHints($typeHint)
+				);
+			} else {
+				$typeHintsWithConvertedUnion[] = $typeHint;
+			}
+		}
+		$typeHintsWithConvertedUnion = array_unique($typeHintsWithConvertedUnion);
+
+		if (count($typeHintsWithConvertedUnion) > 1 && !$canTryUnionTypeHint) {
 			$this->reportUselessSuppress($phpcsFile, $functionPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 			return;
 		}
 
-		foreach ($typeHints as $typeHintNo => $typeHint) {
+		foreach ($typeHintsWithConvertedUnion as $typeHintNo => $typeHint) {
 			if ($canTryUnionTypeHint && $typeHint === 'false') {
 				continue;
 			}
@@ -330,7 +345,7 @@ class ReturnTypeHintSniff implements Sniff
 				return;
 			}
 
-			$typeHints[$typeHintNo] = TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
+			$typeHintsWithConvertedUnion[$typeHintNo] = TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
 		}
 
 		if ($originalReturnTypeNode instanceof NullableTypeNode) {
@@ -355,12 +370,12 @@ class ReturnTypeHintSniff implements Sniff
 			return;
 		}
 
-		if (in_array('mixed', $typeHints, true)) {
+		if (in_array('mixed', $typeHintsWithConvertedUnion, true)) {
 			$returnTypeHint = 'mixed';
 		} else {
-			$returnTypeHint = implode('|', $typeHints);
+			$returnTypeHint = implode('|', $typeHintsWithConvertedUnion);
 			if ($nullableReturnTypeHint) {
-				if (count($typeHints) > 1) {
+				if (count($typeHintsWithConvertedUnion) > 1) {
 					$returnTypeHint .= '|null';
 				} else {
 					$returnTypeHint = '?' . $returnTypeHint;
