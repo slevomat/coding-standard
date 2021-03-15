@@ -38,4 +38,25 @@ class Whatever
 	/** @param string|mixed[] $a */
 	private function unionWithMixedArray($a = null)
 	{}
+
+	/** @param scalar $a */
+	private function scalar($a)
+	{}
+
+	/** @param scalar|null $a */
+	private function scalarNullable($a)
+	{}
+
+	/** @param numeric $a */
+	private function numeric($a)
+	{}
+
+	/** @param numeric|null $a */
+	private function numericNullable($a)
+	{}
+
+	/** @param scalar|numeric|null $a */
+	private function scalarAndnumericNullable($a)
+	{}
+
 }

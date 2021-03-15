@@ -29,6 +29,7 @@ use function array_filter;
 use function array_key_exists;
 use function array_keys;
 use function array_map;
+use function array_merge;
 use function array_unique;
 use function array_values;
 use function count;
@@ -255,11 +256,25 @@ class ParameterTypeHintSniff implements Sniff
 				continue;
 			}
 
-			if (count($typeHints) > 1 && !$canTryUnionTypeHint) {
+			$typeHintsWithConvertedUnion = [];
+			foreach ($typeHints as $typeHint) {
+				if ($this->enableUnionTypeHint && TypeHintHelper::isUnofficialUnionTypeHint($typeHint)) {
+					$canTryUnionTypeHint = true;
+					$typeHintsWithConvertedUnion = array_merge(
+						$typeHintsWithConvertedUnion,
+						TypeHintHelper::convertUnofficialUnionTypeHintToOfficialTypeHints($typeHint)
+					);
+				} else {
+					$typeHintsWithConvertedUnion[] = $typeHint;
+				}
+			}
+			$typeHintsWithConvertedUnion = array_unique($typeHintsWithConvertedUnion);
+
+			if (count($typeHintsWithConvertedUnion) > 1 && !$canTryUnionTypeHint) {
 				continue;
 			}
 
-			foreach ($typeHints as $typeHintNo => $typeHint) {
+			foreach ($typeHintsWithConvertedUnion as $typeHintNo => $typeHint) {
 				if ($canTryUnionTypeHint && $typeHint === 'false') {
 					continue;
 				}
@@ -272,7 +287,7 @@ class ParameterTypeHintSniff implements Sniff
 					continue 2;
 				}
 
-				$typeHints[$typeHintNo] = TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
+				$typeHintsWithConvertedUnion[$typeHintNo] = TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
 			}
 
 			if ($originalParameterTypeNode instanceof NullableTypeNode) {
@@ -294,12 +309,12 @@ class ParameterTypeHintSniff implements Sniff
 				continue;
 			}
 
-			if (in_array('mixed', $typeHints, true)) {
+			if (in_array('mixed', $typeHintsWithConvertedUnion, true)) {
 				$parameterTypeHint = 'mixed';
 			} else {
-				$parameterTypeHint = implode('|', $typeHints);
+				$parameterTypeHint = implode('|', $typeHintsWithConvertedUnion);
 				if ($nullableParameterTypeHint) {
-					if (count($typeHints) > 1) {
+					if (count($typeHintsWithConvertedUnion) > 1) {
 						$parameterTypeHint .= '|null';
 					} else {
 						$parameterTypeHint = '?' . $parameterTypeHint;
