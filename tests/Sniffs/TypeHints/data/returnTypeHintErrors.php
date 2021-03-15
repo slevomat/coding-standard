@@ -259,4 +259,44 @@ abstract class Whatever
 	{
 	}
 
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation
+	 * @return string[]
+	 */
+	public function uselessSuppressOfUselessAnnotation(): array
+	{
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification
+	 * @return string[]
+	 */
+	public function uselessSuppressOfMissingTraversableTypeHintSpecification(): array
+	{
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
+	 * @phpstan-return class-string
+	 */
+	public function uselessSuppressOfMissingAnyTypeHintWithTypeHint(): string
+	{
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
+	 * @phpstan-return class-string
+	 */
+	public function uselessSuppressOfMissingNativeTypeHintWithTypeHint(): string
+	{
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
+	 * @return scalar
+	 */
+	public function uselessSuppressOfMissingNativeTypeHint()
+	{
+	}
+
 }

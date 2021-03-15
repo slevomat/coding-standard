@@ -254,4 +254,39 @@ abstract class Whatever
 	{
 	}
 
+	/**
+	 * @return string[]
+	 */
+	public function uselessSuppressOfUselessAnnotation(): array
+	{
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public function uselessSuppressOfMissingTraversableTypeHintSpecification(): array
+	{
+	}
+
+	/**
+	 * @phpstan-return class-string
+	 */
+	public function uselessSuppressOfMissingAnyTypeHintWithTypeHint(): string
+	{
+	}
+
+	/**
+	 * @phpstan-return class-string
+	 */
+	public function uselessSuppressOfMissingNativeTypeHintWithTypeHint(): string
+	{
+	}
+
+	/**
+	 * @return scalar
+	 */
+	public function uselessSuppressOfMissingNativeTypeHint()
+	{
+	}
+
 }
