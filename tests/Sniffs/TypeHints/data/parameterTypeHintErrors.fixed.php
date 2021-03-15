@@ -236,4 +236,39 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @param string[] $a
+	 */
+	public function uselessSuppressOfUselessAnnotation(array $a)
+	{
+	}
+
+	/**
+	 * @param string[] $a
+	 */
+	public function uselessSuppressOfMissingTraversableTypeHintSpecification(array $a)
+	{
+	}
+
+	/**
+	 * @phpstan-param class-string $a
+	 */
+	public function uselessSuppressOfMissingAnyTypeHintWithTypeHint(string $a)
+	{
+	}
+
+	/**
+	 * @phpstan-param class-string $a
+	 */
+	public function uselessSuppressOfMissingNativeTypeHintWithTypeHint(string $a)
+	{
+	}
+
+	/**
+	 * @param scalar $a
+	 */
+	public function uselessSuppressOfMissingNativeTypeHint($a)
+	{
+	}
+
 }

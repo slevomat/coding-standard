@@ -56,6 +56,8 @@ class ParameterTypeHintSniff implements Sniff
 
 	public const CODE_USELESS_ANNOTATION = 'UselessAnnotation';
 
+	public const CODE_USELESS_SUPPRESS = 'UselessSuppress';
+
 	private const NAME = 'SlevomatCodingStandard.TypeHints.ParameterTypeHint';
 
 	/** @var bool|null */
@@ -132,6 +134,14 @@ class ParameterTypeHintSniff implements Sniff
 		array $prefixedParametersAnnotations
 	): void
 	{
+		$suppressNameAnyTypeHint = self::getSniffName(self::CODE_MISSING_ANY_TYPE_HINT);
+		$isSuppressedAnyTypeHint = SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $suppressNameAnyTypeHint);
+
+		$suppressNameNativeTypeHint = $this->getSniffName(self::CODE_MISSING_NATIVE_TYPE_HINT);
+		$isSuppressedNativeTypeHint = SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $suppressNameNativeTypeHint);
+
+		$suppressedErrors = 0;
+
 		$parametersWithoutTypeHint = array_keys(
 			array_filter($parametersTypeHints, static function (?TypeHint $parameterTypeHint = null): bool {
 				return $parameterTypeHint === null;
@@ -144,7 +154,8 @@ class ParameterTypeHintSniff implements Sniff
 					continue;
 				}
 
-				if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::getSniffName(self::CODE_MISSING_ANY_TYPE_HINT))) {
+				if ($isSuppressedAnyTypeHint) {
+					$suppressedErrors++;
 					continue;
 				}
 
@@ -159,10 +170,6 @@ class ParameterTypeHintSniff implements Sniff
 					self::CODE_MISSING_ANY_TYPE_HINT
 				);
 
-				continue;
-			}
-
-			if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::getSniffName(self::CODE_MISSING_NATIVE_TYPE_HINT))) {
 				continue;
 			}
 
@@ -294,6 +301,11 @@ class ParameterTypeHintSniff implements Sniff
 				$nullableParameterTypeHint = true;
 			}
 
+			if ($isSuppressedNativeTypeHint) {
+				$suppressedErrors++;
+				continue;
+			}
+
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
 					'%s %s() does not have native type hint for its parameter %s but it should be possible to add it based on @param annotation "%s".',
@@ -357,6 +369,18 @@ class ParameterTypeHintSniff implements Sniff
 			);
 			$phpcsFile->fixer->endChangeset();
 		}
+
+		if ($suppressedErrors > 0) {
+			return;
+		}
+
+		if ($isSuppressedAnyTypeHint) {
+			$this->reportUselessSuppress($phpcsFile, $functionPointer, $suppressNameAnyTypeHint);
+		}
+
+		if ($isSuppressedNativeTypeHint) {
+			$this->reportUselessSuppress($phpcsFile, $functionPointer, $suppressNameNativeTypeHint);
+		}
 	}
 
 	/**
@@ -374,13 +398,9 @@ class ParameterTypeHintSniff implements Sniff
 		array $prefixedParametersAnnotations
 	): void
 	{
-		if (SuppressHelper::isSniffSuppressed(
-			$phpcsFile,
-			$functionPointer,
-			self::getSniffName(self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION)
-		)) {
-			return;
-		}
+		$suppressName = self::getSniffName(self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION);
+		$isSniffSuppressed = SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $suppressName);
+		$suppressUseless = true;
 
 		foreach ($parametersTypeHints as $parameterName => $parameterTypeHint) {
 			if (array_key_exists($parameterName, $prefixedParametersAnnotations)) {
@@ -409,48 +429,70 @@ class ParameterTypeHintSniff implements Sniff
 			}
 
 			if ($hasTraversableTypeHint && !array_key_exists($parameterName, $parametersAnnotations)) {
-				$phpcsFile->addError(
-					sprintf(
-						'%s %s() does not have @param annotation for its traversable parameter %s.',
-						FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
-						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-						$parameterName
-					),
-					$functionPointer,
-					self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION
-				);
-			} elseif (array_key_exists($parameterName, $parametersAnnotations)) {
-				$parameterTypeNode = $parametersAnnotations[$parameterName]->getType();
+				$suppressUseless = false;
 
-				if (
-					(
-						$hasTraversableTypeHint
-						|| AnnotationTypeHelper::containsTraversableType(
-							$parameterTypeNode,
-							$phpcsFile,
-							$functionPointer,
-							$this->getTraversableTypeHints()
-						)
-					)
-					&& !AnnotationTypeHelper::containsItemsSpecificationForTraversable(
+				if (!$isSniffSuppressed) {
+					$phpcsFile->addError(
+						sprintf(
+							'%s %s() does not have @param annotation for its traversable parameter %s.',
+							FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
+							FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
+							$parameterName
+						),
+						$functionPointer,
+						self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION
+					);
+				}
+
+				continue;
+			}
+
+			if (!array_key_exists($parameterName, $parametersAnnotations)) {
+				continue;
+			}
+
+			$parameterTypeNode = $parametersAnnotations[$parameterName]->getType();
+
+			if (
+				(
+					!$hasTraversableTypeHint
+					&& !AnnotationTypeHelper::containsTraversableType(
 						$parameterTypeNode,
 						$phpcsFile,
 						$functionPointer,
 						$this->getTraversableTypeHints()
 					)
-				) {
-					$phpcsFile->addError(
-						sprintf(
-							'@param annotation of %s %s() does not specify type hint for items of its traversable parameter %s.',
-							lcfirst(FunctionHelper::getTypeLabel($phpcsFile, $functionPointer)),
-							FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-							$parameterName
-						),
-						$parametersAnnotations[$parameterName]->getStartPointer(),
-						self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION
-					);
-				}
+				)
+				|| AnnotationTypeHelper::containsItemsSpecificationForTraversable(
+					$parameterTypeNode,
+					$phpcsFile,
+					$functionPointer,
+					$this->getTraversableTypeHints()
+				)
+			) {
+				continue;
 			}
+
+			$suppressUseless = false;
+
+			if ($isSniffSuppressed) {
+				continue;
+			}
+
+			$phpcsFile->addError(
+				sprintf(
+					'@param annotation of %s %s() does not specify type hint for items of its traversable parameter %s.',
+					lcfirst(FunctionHelper::getTypeLabel($phpcsFile, $functionPointer)),
+					FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
+					$parameterName
+				),
+				$parametersAnnotations[$parameterName]->getStartPointer(),
+				self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION
+			);
+		}
+
+		if ($isSniffSuppressed && $suppressUseless) {
+			$this->reportUselessSuppress($phpcsFile, $functionPointer, $suppressName);
 		}
 	}
 
@@ -467,9 +509,9 @@ class ParameterTypeHintSniff implements Sniff
 		array $parametersAnnotations
 	): void
 	{
-		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::getSniffName(self::CODE_USELESS_ANNOTATION))) {
-			return;
-		}
+		$suppressName = self::getSniffName(self::CODE_USELESS_ANNOTATION);
+		$isSniffSuppressed = SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, $suppressName);
+		$suppressUseless = true;
 
 		foreach ($parametersTypeHints as $parameterName => $parameterTypeHint) {
 			if (!array_key_exists($parameterName, $parametersAnnotations)) {
@@ -486,6 +528,12 @@ class ParameterTypeHintSniff implements Sniff
 				$this->getTraversableTypeHints(),
 				$this->enableUnionTypeHint
 			)) {
+				continue;
+			}
+
+			$suppressUseless = false;
+
+			if ($isSniffSuppressed) {
 				continue;
 			}
 
@@ -523,6 +571,23 @@ class ParameterTypeHintSniff implements Sniff
 				$phpcsFile->fixer->replaceToken($i, '');
 			}
 			$phpcsFile->fixer->endChangeset();
+		}
+
+		if ($isSniffSuppressed && $suppressUseless) {
+			$this->reportUselessSuppress($phpcsFile, $functionPointer, $suppressName);
+		}
+	}
+
+	private function reportUselessSuppress(File $phpcsFile, int $pointer, string $suppressName): void
+	{
+		$fix = $phpcsFile->addFixableError(
+			sprintf('Useless %s %s', SuppressHelper::ANNOTATION, $suppressName),
+			$pointer,
+			self::CODE_USELESS_SUPPRESS
+		);
+
+		if ($fix) {
+			SuppressHelper::removeSuppressAnnotation($phpcsFile, $pointer, $suppressName);
 		}
 	}
 

@@ -241,4 +241,44 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.UselessAnnotation
+	 * @param string[] $a
+	 */
+	public function uselessSuppressOfUselessAnnotation(array $a)
+	{
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingTraversableTypeHintSpecification
+	 * @param string[] $a
+	 */
+	public function uselessSuppressOfMissingTraversableTypeHintSpecification(array $a)
+	{
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint
+	 * @phpstan-param class-string $a
+	 */
+	public function uselessSuppressOfMissingAnyTypeHintWithTypeHint(string $a)
+	{
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+	 * @phpstan-param class-string $a
+	 */
+	public function uselessSuppressOfMissingNativeTypeHintWithTypeHint(string $a)
+	{
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+	 * @param scalar $a
+	 */
+	public function uselessSuppressOfMissingNativeTypeHint($a)
+	{
+	}
+
 }
