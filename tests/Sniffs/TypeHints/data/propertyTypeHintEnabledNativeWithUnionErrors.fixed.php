@@ -23,4 +23,14 @@ class Whatever
 	/** @var int[]|Traversable|ArrayIterator */
 	private Traversable|ArrayIterator $moreTraversable;
 
+	private string|int|float|bool $scalar;
+
+	private string|int|float|bool|null $scalarNullable = null;
+
+	private int|float $numeric;
+
+	private int|float|null $numericNullable = null;
+
+	private string|int|float|bool|null $scalarAndnumericNullable = null;
+
 }

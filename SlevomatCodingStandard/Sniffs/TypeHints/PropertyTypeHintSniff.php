@@ -25,6 +25,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHint;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_map;
+use function array_merge;
 use function array_unique;
 use function array_values;
 use function count;
@@ -285,12 +286,26 @@ class PropertyTypeHintSniff implements Sniff
 			return;
 		}
 
-		if (count($typeHints) > 1 && !$canTryUnionTypeHint) {
+		$typeHintsWithConvertedUnion = [];
+		foreach ($typeHints as $typeHint) {
+			if ($this->enableUnionTypeHint && TypeHintHelper::isUnofficialUnionTypeHint($typeHint)) {
+				$canTryUnionTypeHint = true;
+				$typeHintsWithConvertedUnion = array_merge(
+					$typeHintsWithConvertedUnion,
+					TypeHintHelper::convertUnofficialUnionTypeHintToOfficialTypeHints($typeHint)
+				);
+			} else {
+				$typeHintsWithConvertedUnion[] = $typeHint;
+			}
+		}
+		$typeHintsWithConvertedUnion = array_unique($typeHintsWithConvertedUnion);
+
+		if (count($typeHintsWithConvertedUnion) > 1 && !$canTryUnionTypeHint) {
 			$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 			return;
 		}
 
-		foreach ($typeHints as $typeHintNo => $typeHint) {
+		foreach ($typeHintsWithConvertedUnion as $typeHintNo => $typeHint) {
 			if ($typeHint === 'callable') {
 				$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 				return;
@@ -310,7 +325,7 @@ class PropertyTypeHintSniff implements Sniff
 				return;
 			}
 
-			$typeHints[$typeHintNo] = TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
+			$typeHintsWithConvertedUnion[$typeHintNo] = TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
 		}
 
 		if ($originalTypeNode instanceof NullableTypeNode) {
@@ -334,12 +349,12 @@ class PropertyTypeHintSniff implements Sniff
 			return;
 		}
 
-		if (in_array('mixed', $typeHints, true)) {
+		if (in_array('mixed', $typeHintsWithConvertedUnion, true)) {
 			$propertyTypeHint = 'mixed';
 		} else {
-			$propertyTypeHint = implode('|', $typeHints);
+			$propertyTypeHint = implode('|', $typeHintsWithConvertedUnion);
 			if ($nullableTypeHint) {
-				if (count($typeHints) > 1) {
+				if (count($typeHintsWithConvertedUnion) > 1) {
 					$propertyTypeHint .= '|null';
 				} else {
 					$propertyTypeHint = '?' . $propertyTypeHint;

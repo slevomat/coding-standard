@@ -27,4 +27,19 @@ class Whatever
 	/** @var int[]|Traversable|ArrayIterator */
 	private $moreTraversable;
 
+	/** @var scalar */
+	private $scalar;
+
+	/** @var scalar|null */
+	private $scalarNullable;
+
+	/** @var numeric */
+	private $numeric;
+
+	/** @var numeric|null */
+	private $numericNullable;
+
+	/** @var scalar|numeric|null */
+	private $scalarAndnumericNullable;
+
 }

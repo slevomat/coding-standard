@@ -8,6 +8,7 @@ use SlevomatCodingStandard\Helpers\Annotation\TypeAliasAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\TypeImportAnnotation;
 use function array_key_exists;
 use function array_merge;
+use function array_unique;
 use function count;
 use function explode;
 use function implode;
@@ -67,6 +68,25 @@ class TypeHintHelper
 			'boolean' => 'bool',
 		];
 		return array_key_exists($typeHint, $longToShort) ? $longToShort[$typeHint] : $typeHint;
+	}
+
+	public static function isUnofficialUnionTypeHint(string $typeHint): bool
+	{
+		return in_array($typeHint, ['scalar', 'numeric'], true);
+	}
+
+	/**
+	 * @param string $typeHint
+	 * @return string[]
+	 */
+	public static function convertUnofficialUnionTypeHintToOfficialTypeHints(string $typeHint): array
+	{
+		$conversion = [
+			'scalar' => ['string', 'int', 'float', 'bool'],
+			'numeric' => ['int', 'float'],
+		];
+
+		return $conversion[$typeHint];
 	}
 
 	public static function isTypeDefinedInAnnotation(File $phpcsFile, int $pointer, string $typeHint): bool
@@ -324,9 +344,20 @@ class TypeHintHelper
 			return 'mixed';
 		}
 
-		sort($parts);
+		$convertedParts = [];
+		foreach ($parts as $part) {
+			if (self::isUnofficialUnionTypeHint($part)) {
+				$convertedParts = array_merge($convertedParts, self::convertUnofficialUnionTypeHintToOfficialTypeHints($part));
+			} else {
+				$convertedParts[] = $part;
+			}
+		}
 
-		return implode('|', $parts);
+		$convertedParts = array_unique($convertedParts);
+
+		sort($convertedParts);
+
+		return implode('|', $convertedParts);
 	}
 
 }

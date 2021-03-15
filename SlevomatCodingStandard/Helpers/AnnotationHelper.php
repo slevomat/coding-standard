@@ -422,7 +422,13 @@ class AnnotationHelper
 			AnnotationTypeHelper::containsJustTwoTypes($annotation->getType())
 			|| (
 				$enableUnionTypeHint
-				&& $annotation->getType() instanceof UnionTypeNode
+				&& (
+					$annotation->getType() instanceof UnionTypeNode
+					|| (
+						$annotation->getType() instanceof IdentifierTypeNode
+						&& TypeHintHelper::isUnofficialUnionTypeHint($annotation->getType()->name)
+					)
+				)
 			)
 		) {
 			$annotationTypeHint = AnnotationTypeHelper::export($annotation->getType());
