@@ -201,6 +201,15 @@ function () {
 	} while (--$i > 0);
 };
 
+function () {
+	$i = 0;
+	$a = 0;
+	do {
+		echo ++$i;
+		$a = $a + 1;
+	} while ($a <= 10);
+};
+
 function ($data) {
 	$i = 0;
 	$c = '';
