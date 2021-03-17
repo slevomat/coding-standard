@@ -30,6 +30,7 @@ use const T_DO;
 use const T_DOUBLE_ARROW;
 use const T_DOUBLE_COLON;
 use const T_DOUBLE_QUOTED_STRING;
+use const T_ECHO;
 use const T_ELSEIF;
 use const T_EQUAL;
 use const T_FOR;
@@ -634,7 +635,7 @@ class UnusedVariableSniff implements Sniff
 
 		return in_array(
 			$tokens[$previousPointer]['code'],
-			array_merge([T_STRING_CONCAT], Tokens::$operators, Tokens::$assignmentTokens, Tokens::$booleanOperators),
+			array_merge([T_STRING_CONCAT, T_ECHO], Tokens::$operators, Tokens::$assignmentTokens, Tokens::$booleanOperators),
 			true
 		);
 	}
