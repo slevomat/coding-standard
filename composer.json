@@ -20,11 +20,11 @@
 	"require-dev": {
 		"phing/phing": "2.16.4",
 		"php-parallel-lint/php-parallel-lint": "1.2.0",
-		"phpstan/phpstan": "0.12.81",
+		"phpstan/phpstan": "0.12.82",
 		"phpstan/phpstan-deprecation-rules": "0.12.6",
 		"phpstan/phpstan-phpunit": "0.12.18",
 		"phpstan/phpstan-strict-rules": "0.12.9",
-		"phpunit/phpunit": "7.5.20|8.5.5|9.5.2"
+		"phpunit/phpunit": "7.5.20|8.5.5|9.5.3"
 	},
 	"autoload": {
 		"psr-4": {
