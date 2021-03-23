@@ -53,7 +53,22 @@ class Nothing
 
 	private $d;
 
-	public function __construct($a, $c, $d)
+	/** @ORM\Column(type="string") */
+	private string $e;
+
+	/** Description */
+	private string $f;
+
+	/** @var string Description */
+	private $g;
+
+	/**
+	 * @var string
+	 * @phpstan-var class-string
+	 */
+	private string $h;
+
+	public function __construct($a, $c, $d, $e, $f, $g, $h)
 	{
 		$phpVersion = phpversion();
 
@@ -66,6 +81,14 @@ class Nothing
 		$this->c = $a;
 
 		$this->d = $d + $c;
+
+		$this->e = $e;
+
+		$this->f = $f;
+
+		$this->g = $g;
+
+		$this->h = $h;
 	}
 
 }

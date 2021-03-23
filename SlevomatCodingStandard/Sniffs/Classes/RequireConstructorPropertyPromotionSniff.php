@@ -5,6 +5,8 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
+use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
@@ -123,6 +125,10 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 				$propertyName = $tokens[$propertyPointer]['content'];
 
 				if ($parameterName !== $propertyName) {
+					continue;
+				}
+
+				if ($this->isPropertyDocCommentUseful($phpcsFile, $propertyPointer)) {
 					continue;
 				}
 
@@ -268,6 +274,28 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 				return PropertyHelper::isProperty($phpcsFile, $variablePointer);
 			}
 		);
+	}
+
+	private function isPropertyDocCommentUseful(File $phpcsFile, int $propertyPointer): bool
+	{
+		if (DocCommentHelper::hasDocCommentDescription($phpcsFile, $propertyPointer)) {
+			return true;
+		}
+
+		foreach (AnnotationHelper::getAnnotations($phpcsFile, $propertyPointer) as $annotationType => $annotations) {
+			if ($annotationType !== '@var') {
+				return true;
+			}
+
+			/** @var VariableAnnotation $annotation */
+			foreach ($annotations as $annotation) {
+				if ($annotation->hasDescription()) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 }

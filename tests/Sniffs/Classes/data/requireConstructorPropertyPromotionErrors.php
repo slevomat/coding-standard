@@ -6,8 +6,6 @@ class Whatever
 	public string $a;
 
 	/**
-	 * Description
-	 *
 	 * @var int|null
 	 */
 	protected int|null $b = null;

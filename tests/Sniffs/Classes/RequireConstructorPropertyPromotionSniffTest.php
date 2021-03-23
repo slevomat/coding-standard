@@ -31,13 +31,13 @@ class RequireConstructorPropertyPromotionSniffTest extends TestCase
 		);
 		self::assertSniffError(
 			$report,
-			13,
+			11,
 			RequireConstructorPropertyPromotionSniff::CODE_REQUIRED_CONSTRUCTOR_PROPERTY_PROMOTION,
 			'Required promotion of property $b.'
 		);
 		self::assertSniffError(
 			$report,
-			15,
+			13,
 			RequireConstructorPropertyPromotionSniff::CODE_REQUIRED_CONSTRUCTOR_PROPERTY_PROMOTION,
 			'Required promotion of property $c.'
 		);
