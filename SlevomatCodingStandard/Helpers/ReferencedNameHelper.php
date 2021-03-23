@@ -374,23 +374,25 @@ class ReferencedNameHelper
 		$possibleAttributePointers = TokenHelper::findNextAll($phpcsFile, $attributeTokenCode, $openTagPointer + 1);
 
 		foreach ($possibleAttributePointers as $possibleAttributePointer) {
+			// @codeCoverageIgnoreStart
 			if (!StringHelper::startsWith($tokens[$possibleAttributePointer]['content'], '#[')) {
 				continue;
 			}
+			// @codeCoverageIgnoreEnd
 
 			$attributeStartPointer = $possibleAttributePointer;
 			$attributeEndPointer = self::getAttributeEndPointer($phpcsFile, $attributeStartPointer);
 
 			if ($tokens[$attributeStartPointer]['code'] === T_COMMENT) {
+				// @codeCoverageIgnoreStart
 				$attributePhpcsFile = self::getFakeAttributePhpcsFile($phpcsFile, $attributeStartPointer, $attributeEndPointer);
 				$searchStartPointer = 0;
 				$searchEndPointer = count($attributePhpcsFile->getTokens());
+				// @codeCoverageIgnoreEnd
 			} else {
-				// @codeCoverageIgnoreStart
 				$attributePhpcsFile = $phpcsFile;
 				$searchStartPointer = $attributeStartPointer + 1;
 				$searchEndPointer = $attributeEndPointer;
-				// @codeCoverageIgnoreEnd
 			}
 
 			$attributeTokens = $attributePhpcsFile->getTokens();
@@ -444,6 +446,13 @@ class ReferencedNameHelper
 		return $referencedNames;
 	}
 
+	/**
+	 * @codeCoverageIgnore
+	 * @param File $phpcsFile
+	 * @param int $commentAttributeStartPointer
+	 * @param int $commentAttributeEndPointer
+	 * @return File
+	 */
 	private static function getFakeAttributePhpcsFile(
 		File $phpcsFile,
 		int $commentAttributeStartPointer,
@@ -459,6 +468,12 @@ class ReferencedNameHelper
 		return $attributePhpcsFile;
 	}
 
+	/**
+	 * @codeCoverageIgnore
+	 * @param File $phpcsFile
+	 * @param int $attributeStartPointer
+	 * @return int
+	 */
 	private static function getAttributeEndPointer(File $phpcsFile, int $attributeStartPointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
