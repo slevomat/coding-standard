@@ -678,11 +678,15 @@ class DocCommentSpacingSniff implements Sniff
 							return $expectedAnnotationsGroupOrder[$annotationName];
 						}
 
+						$order = null;
 						foreach ($expectedAnnotationsGroupOrder as $expectedAnnotationName => $expectedAnnotationOrder) {
 							if ($this->isAnnotationNameInAnnotationNamespace($expectedAnnotationName, $annotationName)) {
-								return $expectedAnnotationOrder;
+								$order = $expectedAnnotationOrder;
+								break;
 							}
 						}
+
+						return $order;
 					};
 
 					$expectedOrder = $getExpectedOrder($firstAnnotation->getName()) <=> $getExpectedOrder($secondAnnotation->getName());

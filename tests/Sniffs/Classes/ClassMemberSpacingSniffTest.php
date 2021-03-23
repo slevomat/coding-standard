@@ -28,4 +28,15 @@ class ClassMemberSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testErrorsWithModifiedLinecCount(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/classMemberSpacingErrors.php', [
+			'linesCountBetweenMembers' => 2,
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 21, ClassMemberSpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_BETWEEN_MEMBERS);
+	}
+
 }

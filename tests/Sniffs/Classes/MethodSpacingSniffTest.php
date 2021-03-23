@@ -53,6 +53,41 @@ class MethodSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testErrorsDifferentSettingsAndSameLinesCount(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/methodSpacingErrors.php', [
+			'minLinesCount' => 2,
+			'maxLinesCount' => 2,
+		]);
+
+		self::assertSame(4, $report->getErrorCount());
+
+		self::assertSniffError(
+			$report,
+			6,
+			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
+			'Expected 2 blank lines after method, found 0.'
+		);
+		self::assertSniffError(
+			$report,
+			16,
+			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
+			'Expected 2 blank lines after method, found 0.'
+		);
+		self::assertSniffError(
+			$report,
+			19,
+			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
+			'Expected 2 blank lines after method, found 1.'
+		);
+		self::assertSniffError(
+			$report,
+			24,
+			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
+			'Expected 2 blank lines after method, found 0.'
+		);
+	}
+
 	public function testWithDifferentSettingsNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/methodSpacingWithDifferentSettingsNoErrors.php', [
