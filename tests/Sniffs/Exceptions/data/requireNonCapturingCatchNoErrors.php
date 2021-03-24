@@ -11,3 +11,8 @@ try {
 } catch (Throwable $e) {
 	rollback($e);
 }
+
+try {
+} catch (\ErrorException $exception) {
+	echo "Exception message: {$exception->getMessage()}";
+}

@@ -8,7 +8,11 @@ use SlevomatCodingStandard\Helpers\ParameterHelper;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\VariableHelper;
+use function in_array;
 use const T_CATCH;
+use const T_DOUBLE_QUOTED_STRING;
+use const T_HEREDOC;
 use const T_VARIABLE;
 
 class RequireNonCapturingCatchSniff implements Sniff
@@ -54,20 +58,25 @@ class RequireNonCapturingCatchSniff implements Sniff
 			return;
 		}
 
+		$variableName = $tokens[$variablePointer]['content'];
+
 		for ($i = $tokens[$catchPointer]['scope_opener'] + 1; $i < $tokens[$catchPointer]['scope_closer']; $i++) {
-			if ($tokens[$i]['code'] !== T_VARIABLE) {
-				continue;
-			}
+			if ($tokens[$i]['code'] === T_VARIABLE) {
+				if (ParameterHelper::isParameter($phpcsFile, $i)) {
+					continue;
+				}
 
-			if (ParameterHelper::isParameter($phpcsFile, $i)) {
-				continue;
-			}
+				if (!ScopeHelper::isInSameScope($phpcsFile, $tokens[$catchPointer]['scope_opener'] + 1, $i)) {
+					continue;
+				}
 
-			if (!ScopeHelper::isInSameScope($phpcsFile, $tokens[$catchPointer]['scope_opener'] + 1, $i)) {
-				continue;
-			}
-
-			if ($tokens[$i]['content'] === $tokens[$variablePointer]['content']) {
+				if ($tokens[$i]['content'] === $variableName) {
+					return;
+				}
+			} elseif (
+				in_array($tokens[$i]['code'], [T_DOUBLE_QUOTED_STRING, T_HEREDOC], true)
+				&& VariableHelper::isUsedInScopeInString($phpcsFile, $variableName, $i)
+			) {
 				return;
 			}
 		}
