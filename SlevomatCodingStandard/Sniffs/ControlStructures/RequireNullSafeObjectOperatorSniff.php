@@ -29,6 +29,7 @@ use const T_NULL;
 use const T_NULLSAFE_OBJECT_OPERATOR;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
+use const T_SEMICOLON;
 use const T_STRING;
 
 class RequireNullSafeObjectOperatorSniff implements Sniff
@@ -239,6 +240,17 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 		$nextIdentificator = IdentificatorHelper::getContent($phpcsFile, $nextIdentificatorStartPointer, $nextIdentificatorEndPointer);
 
 		if (!$this->areIdentificatorsCompatible($identificator, $nextIdentificator)) {
+			return;
+		}
+
+		$pointerAfterNexIdentificator = TokenHelper::findNextEffective($phpcsFile, $nextIdentificatorEndPointer + 1);
+
+		$tokens = $phpcsFile->getTokens();
+
+		if (
+			$tokens[$pointerAfterNexIdentificator]['code'] !== $tokens[$identicalPointer]['code']
+			&& !in_array($tokens[$pointerAfterNexIdentificator]['code'], [T_INLINE_THEN, T_SEMICOLON], true)
+		) {
 			return;
 		}
 

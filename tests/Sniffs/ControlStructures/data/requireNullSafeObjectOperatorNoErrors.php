@@ -32,3 +32,7 @@ $a = $b !== null && [] === false ? true : false;
 if ($a !== null && $a === 0) {
 	// Something
 }
+
+if ($a === null || $a->property) {
+	// Something
+}
