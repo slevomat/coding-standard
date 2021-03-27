@@ -17,7 +17,7 @@ class UnusedParameterSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/unusedParameterErrors.php');
 
-		self::assertSame(12, $report->getErrorCount());
+		self::assertSame(13, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, UnusedParameterSniff::CODE_UNUSED_PARAMETER, 'Unused parameter $a.');
 		self::assertSniffError($report, 3, UnusedParameterSniff::CODE_UNUSED_PARAMETER, 'Unused parameter $b.');
@@ -30,10 +30,11 @@ class UnusedParameterSniffTest extends TestCase
 		self::assertSniffError($report, 47, UnusedParameterSniff::CODE_UNUSED_PARAMETER, 'Unused parameter $a.');
 		self::assertSniffError($report, 51, UnusedParameterSniff::CODE_UNUSED_PARAMETER, 'Unused parameter $a.');
 		self::assertSniffError($report, 53, UnusedParameterSniff::CODE_UNUSED_PARAMETER, 'Unused parameter $a.');
+		self::assertSniffError($report, 66, UnusedParameterSniff::CODE_UNUSED_PARAMETER, 'Unused parameter $b.');
 
 		self::assertSniffError(
 			$report,
-			63,
+			77,
 			UnusedParameterSniff::CODE_USELESS_SUPPRESS,
 			'Useless @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter'
 		);

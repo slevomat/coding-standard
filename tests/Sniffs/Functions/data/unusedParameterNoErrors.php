@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.0
 
 function noParameter()
 {
@@ -86,6 +86,18 @@ abstract class Whatever
 	private static function staticMethodCallViaVariable(string $methodName): ?self
 	{
 		return self::$methodName();
+	}
+
+}
+
+class PropertyPromotion
+{
+
+	public function __construct(
+		public $a,
+		private string $b
+	) {
+
 	}
 
 }
