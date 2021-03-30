@@ -90,6 +90,8 @@ abstract class Whatever
 
 }
 
+$found = in_array_callback($needle, $haystack, fn ($array, $needle) => $array === $needle);
+
 class PropertyPromotion
 {
 
