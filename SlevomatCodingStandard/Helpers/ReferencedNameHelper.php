@@ -136,7 +136,7 @@ class ReferencedNameHelper
 			}
 
 			// Attributes are parsed in specific method
-			$attributeStartPointerBefore = TokenHelper::findPrevious($phpcsFile, T_ATTRIBUTE, $nameStartPointer - 1);
+			$attributeStartPointerBefore = TokenHelper::findPrevious($phpcsFile, T_ATTRIBUTE, $nameStartPointer - 1, $beginSearchAtPointer);
 			if ($attributeStartPointerBefore !== null) {
 				if ($tokens[$attributeStartPointerBefore]['attribute_closer'] > $nameStartPointer) {
 					$beginSearchAtPointer = $tokens[$attributeStartPointerBefore]['attribute_closer'] + 1;
