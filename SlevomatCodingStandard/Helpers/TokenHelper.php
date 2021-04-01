@@ -5,7 +5,12 @@ namespace SlevomatCodingStandard\Helpers;
 use PHP_CodeSniffer\Files\File;
 use function array_key_exists;
 use function array_merge;
+use function array_slice;
 use function count;
+use function implode;
+use function is_int;
+use function is_string;
+use function sort;
 use const T_ARRAY_HINT;
 use const T_BREAK;
 use const T_CALLABLE;
@@ -124,20 +129,7 @@ class TokenHelper
 	 */
 	public static function findNextAll(File $phpcsFile, $types, int $startPointer, ?int $endPointer = null): array
 	{
-		$pointers = [];
-
-		$actualStartPointer = $startPointer;
-		while (true) {
-			$pointer = self::findNext($phpcsFile, $types, $actualStartPointer, $endPointer);
-			if ($pointer === null) {
-				break;
-			}
-
-			$pointers[] = $pointer;
-			$actualStartPointer = $pointer + 1;
-		}
-
-		return $pointers;
+		return self::findNextAllBatch($phpcsFile, $types, $startPointer, $endPointer);
 	}
 
 	/**
@@ -497,6 +489,122 @@ class TokenHelper
 		}
 
 		return $typeHintTokenCodes;
+	}
+
+	/**
+	 * @param File $phpcsFile
+	 * @param (int|string)|(int|string)[] $types
+	 * @param int $startPointer
+	 * @param int|null $endPointer
+	 * @return int[]
+	 */
+	private static function findNextAllBatch(File $phpcsFile, $types, int $startPointer, ?int $endPointer = null): array
+	{
+		if (is_int($types) || is_string($types)) {
+			$types = [$types];
+		}
+		sort($types);
+		$key = __FUNCTION__ . implode('|', $types);
+		$lazy = static function () use ($phpcsFile, $types): array {
+			return TokenHelper::findNextAllSlow($phpcsFile, $types, 0);
+		};
+		$pointers = SniffLocalCache::getAndSetIfNotCached($phpcsFile, $key, $lazy);
+
+		return self::slice($pointers, $startPointer, $endPointer);
+	}
+
+	/**
+	 * @param array<int> $pointers
+	 * @param int $startPointer
+	 * @param int|null $endPointer
+	 * @return array<int>
+	 */
+	private static function slice(array $pointers, int $startPointer, ?int $endPointer): array
+	{
+		$from = self::firstPointerAfter($pointers, $startPointer);
+		if ($from === null) {
+			return [];
+		}
+
+		if ($endPointer === null) {
+			return array_slice($pointers, $from);
+		}
+
+		$to = self::firstPointBefore($pointers, $endPointer, $from);
+		if ($to === null) {
+			return [];
+		}
+
+		$length = $to - $from + 1;
+
+		return array_slice($pointers, $from, $length);
+	}
+
+	/**
+	 * @param array<int> $pointers
+	 * @param int $endPointer
+	 * @return int|null
+	 */
+	private static function firstPointerAfter(array $pointers, int $endPointer): ?int
+	{
+		if ($endPointer === 0) {
+			return 0;
+		}
+
+		foreach ($pointers as $index => $pointer) {
+			if ($pointer >= $endPointer) {
+				return $index;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param array<int> $pointers
+	 * @param int $endPointer
+	 * @param int $from
+	 * @return int|null
+	 */
+	private static function firstPointBefore(array $pointers, int $endPointer, int $from): ?int
+	{
+		$candidate = null;
+		$length = count($pointers);
+		for ($i = $from; $i < $length; $i++) {
+			$pointer = $pointers[$i ];
+			if ($pointer >= $endPointer) {
+				return $candidate;
+			}
+
+			$candidate = $i;
+		}
+
+		return $candidate;
+	}
+
+	/**
+	 * @param File $phpcsFile
+	 * @param (int|string)|(int|string)[] $types
+	 * @param int $startPointer
+	 * @param int|null $endPointer
+	 * @return int[]
+	 */
+	private static function findNextAllSlow(File $phpcsFile, $types, int $startPointer, ?int $endPointer = null): array
+	{
+		$pointers = [];
+
+		$actualStartPointer = $startPointer;
+		while (true) {
+			$pointer = self::findNext($phpcsFile, $types, $actualStartPointer, $endPointer);
+			if ($pointer === null) {
+				break;
+			}
+
+			$pointers[] = $pointer;
+			$actualStartPointer = $pointer + 1;
+		}
+
+		return $pointers;
 	}
 
 }
