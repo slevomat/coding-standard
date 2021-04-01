@@ -313,16 +313,26 @@ class EarlyExitSniff implements Sniff
 			$pointerBeforeScopeCloser = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$ifPointer]['scope_closer'] - 1);
 			if ($tokens[$pointerBeforeScopeCloser]['code'] === T_SEMICOLON) {
 				$ignore = true;
-				foreach (TokenHelper::findNextAll(
-					$phpcsFile,
-					T_SEMICOLON,
-					$tokens[$ifPointer]['scope_opener'] + 1,
-					$pointerBeforeScopeCloser
-				) as $anotherSemicolonPointer) {
+
+				$searchStartPointer = $tokens[$ifPointer]['scope_opener'] + 1;
+
+				while (true) {
+					$anotherSemicolonPointer = TokenHelper::findNext(
+						$phpcsFile,
+						T_SEMICOLON,
+						$searchStartPointer,
+						$pointerBeforeScopeCloser
+					);
+					if ($anotherSemicolonPointer === null) {
+						break;
+					}
+
 					if (ScopeHelper::isInSameScope($phpcsFile, $anotherSemicolonPointer, $pointerBeforeScopeCloser)) {
 						$ignore = false;
 						break;
 					}
+
+					$searchStartPointer = $anotherSemicolonPointer + 1;
 				}
 
 				if ($ignore) {
@@ -417,21 +427,19 @@ class EarlyExitSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$ifPointers = TokenHelper::findNextAll($phpcsFile, T_IF, $startPointer + 1, $endPointer);
-		if ($ifPointers !== []) {
-			foreach ($ifPointers as $ifPointer) {
-				if ($tokens[$ifPointer]['level'] - 1 !== $tokens[$startPointer]['level']) {
-					continue;
-				}
+		foreach ($ifPointers as $ifPointer) {
+			if ($tokens[$ifPointer]['level'] - 1 !== $tokens[$startPointer]['level']) {
+				continue;
+			}
 
-				$conditionPointers = $this->getAllConditionsPointers($phpcsFile, $ifPointer);
-				foreach ($conditionPointers as $conditionPointer) {
-					if ($this->findEarlyExitInScope(
-						$phpcsFile,
-						$tokens[$conditionPointer]['scope_opener'],
-						$tokens[$conditionPointer]['scope_closer']
-					) === null) {
-						return null;
-					}
+			$conditionPointers = $this->getAllConditionsPointers($phpcsFile, $ifPointer);
+			foreach ($conditionPointers as $conditionPointer) {
+				if ($this->findEarlyExitInScope(
+					$phpcsFile,
+					$tokens[$conditionPointer]['scope_opener'],
+					$tokens[$conditionPointer]['scope_closer']
+				) === null) {
+					return null;
 				}
 			}
 		}
