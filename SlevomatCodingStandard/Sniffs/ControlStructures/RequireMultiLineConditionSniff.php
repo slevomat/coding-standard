@@ -51,9 +51,8 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 			$parenthesisOpenerPointer + 1,
 			$parenthesisCloserPointer
 		);
-		$booleanOperatorPointersCount = count($booleanOperatorPointers);
 
-		if ($booleanOperatorPointersCount === 0) {
+		if ($booleanOperatorPointers === []) {
 			return;
 		}
 
@@ -71,7 +70,7 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 		$lineLength = strlen($lineStart . $condition . $lineEnd);
 		$conditionLinesCount = $tokens[$conditionEndPointer]['line'] - $tokens[$conditionStartPointer]['line'] + 1;
 
-		if (!$this->shouldReportError($lineLength, $conditionLinesCount, $booleanOperatorPointersCount)) {
+		if (!$this->shouldReportError($lineLength, $conditionLinesCount, count($booleanOperatorPointers))) {
 			return;
 		}
 

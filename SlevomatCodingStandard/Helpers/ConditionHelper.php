@@ -158,7 +158,7 @@ class ConditionHelper
 		if ($tokens[$pointerAfterConditionStart]['code'] === T_BOOLEAN_NOT) {
 			$pointerAfterBooleanNot = TokenHelper::findNextEffective($phpcsFile, $pointerAfterConditionStart + 1);
 			if ($tokens[$pointerAfterBooleanNot]['code'] === T_OPEN_PARENTHESIS) {
-				if ($nested && count($booleanPointers) > 0) {
+				if ($nested && $booleanPointers !== []) {
 					return self::removeBooleanNot($condition);
 				}
 

@@ -323,7 +323,7 @@ class UselessParenthesesSniff implements Sniff
 			$parenthesisOpenerPointer + 1,
 			$tokens[$parenthesisOpenerPointer]['parenthesis_closer']
 		);
-		if (count($operatorsPointers) !== 0) {
+		if ($operatorsPointers !== []) {
 			return;
 		}
 

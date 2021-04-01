@@ -6,7 +6,6 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use function count;
 use function sprintf;
 use function strtolower;
 use const T_FUNCTION;
@@ -47,7 +46,7 @@ class DisallowConstructorPropertyPromotionSniff implements Sniff
 			$tokens[$functionPointer]['parenthesis_closer']
 		);
 
-		if (count($visibilityPointers) === 0) {
+		if ($visibilityPointers === []) {
 			return;
 		}
 
