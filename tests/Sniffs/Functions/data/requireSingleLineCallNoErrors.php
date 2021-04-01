@@ -7,6 +7,7 @@ class Whatever
 		$this->doAnything('true', false);
 
 		$this->doAnything(
+			Nothing::class,
 			'true',
 			false,
 			'very looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong parameter'

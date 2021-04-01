@@ -77,12 +77,19 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 			}
 
 			// Contains inner call
-			foreach (TokenHelper::findNextAll(
-				$phpcsFile,
-				TokenHelper::getOnlyNameTokenCodes(),
-				$parenthesisOpenerPointer + 1,
-				$parenthesisCloserPointer
-			) as $innerStringPointer) {
+			$callSearchStartPointer = $parenthesisOpenerPointer + 1;
+			$nameTokenCodes = TokenHelper::getOnlyNameTokenCodes();
+			while (true) {
+				$innerStringPointer = TokenHelper::findNext(
+					$phpcsFile,
+					$nameTokenCodes,
+					$callSearchStartPointer,
+					$parenthesisCloserPointer
+				);
+				if ($innerStringPointer === null) {
+					break;
+				}
+
 				$pointerAfterInnerString = TokenHelper::findNextEffective($phpcsFile, $innerStringPointer + 1);
 				if (
 					$pointerAfterInnerString !== null
@@ -90,6 +97,8 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 				) {
 					return;
 				}
+
+				$callSearchStartPointer = $innerStringPointer + 1;
 			}
 		}
 
