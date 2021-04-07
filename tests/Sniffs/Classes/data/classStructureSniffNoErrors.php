@@ -218,3 +218,14 @@ abstract class WithAbstract
 	}
 
 }
+
+class WithArrowFunction extends Something
+{
+
+	public function findBySlug(string $slug)
+	{
+		return (new Something())
+			->first(static fn ($distinction) => $distinction->getSlug() === $slug);
+	}
+
+}

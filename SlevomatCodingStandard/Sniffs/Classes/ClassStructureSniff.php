@@ -275,7 +275,7 @@ class ClassStructureSniff implements Sniff
 			$currentTokenPointer = TokenHelper::findNext(
 				$phpcsFile,
 				$groupTokenTypes,
-				$currentToken['scope_closer'] ?? $currentTokenPointer + 1,
+				($currentToken['scope_closer'] ?? $currentTokenPointer) + 1,
 				$rootScopeToken['scope_closer']
 			);
 			if ($currentTokenPointer === null) {
