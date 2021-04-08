@@ -132,8 +132,12 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 					continue;
 				}
 
-				$assignment = $this->getAssignment($phpcsFile, $functionPointer, $parameterName);
-				if ($assignment === null) {
+				$assignmentPointer = $this->getAssignment($phpcsFile, $functionPointer, $parameterName);
+				if ($assignmentPointer === null) {
+					continue;
+				}
+
+				if ($this->isParameterModifiedBeforeAssigment($phpcsFile, $functionPointer, $parameterName, $assignmentPointer)) {
 					continue;
 				}
 
@@ -174,8 +178,8 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 				$parameterEqualPointer = TokenHelper::findNextEffective($phpcsFile, $parameterPointer + 1);
 				$parameterHasDefaultValue = $tokens[$parameterEqualPointer]['code'] === T_EQUAL;
 
-				$pointerBeforeAssignment = TokenHelper::findFirstTokenOnLine($phpcsFile, $assignment - 1);
-				$pointerAfterAssignment = TokenHelper::findLastTokenOnLine($phpcsFile, $assignment);
+				$pointerBeforeAssignment = TokenHelper::findFirstTokenOnLine($phpcsFile, $assignmentPointer - 1);
+				$pointerAfterAssignment = TokenHelper::findLastTokenOnLine($phpcsFile, $assignmentPointer);
 
 				$phpcsFile->fixer->beginChangeset();
 
@@ -292,6 +296,33 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 				if ($annotation->hasDescription()) {
 					return true;
 				}
+			}
+		}
+
+		return false;
+	}
+
+	private function isParameterModifiedBeforeAssigment(
+		File $phpcsFile,
+		int $functionPointer,
+		string $parameterName,
+		int $assigmentPointer
+	): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		for ($i = $assigmentPointer - 1; $i > $tokens[$functionPointer]['scope_opener']; $i--) {
+			if ($tokens[$i]['code'] !== T_VARIABLE) {
+				continue;
+			}
+
+			if ($tokens[$i]['content'] !== $parameterName) {
+				continue;
+			}
+
+			$nextPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
+			if (in_array($tokens[$nextPointer]['code'], Tokens::$assignmentTokens, true)) {
+				return true;
 			}
 		}
 

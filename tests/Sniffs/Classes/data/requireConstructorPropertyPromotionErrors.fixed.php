@@ -8,3 +8,18 @@ class Whatever
 	}
 
 }
+
+class DontKnow
+{
+
+	private bool $active;
+
+	public function __construct(bool $active = false, private ?DateTimeImmutable $from = null)
+	{
+		if ($from !== null) {
+			$active = true;
+		}
+		$this->active = $active;
+	}
+
+}

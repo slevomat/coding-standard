@@ -20,3 +20,21 @@ class Whatever
 	}
 
 }
+
+class DontKnow
+{
+
+	private bool $active;
+
+	private ?DateTimeImmutable $from = null;
+
+	public function __construct(bool $active = false, ?DateTimeImmutable $from = null)
+	{
+		if ($from !== null) {
+			$active = true;
+		}
+		$this->active = $active;
+		$this->from = $from;
+	}
+
+}
