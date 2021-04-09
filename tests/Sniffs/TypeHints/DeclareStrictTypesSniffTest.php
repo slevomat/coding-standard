@@ -196,6 +196,14 @@ class DeclareStrictTypesSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testFixableOneNewLineBeforeWithDeclareOnFirstLine(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesOneNewLineBeforeWithDeclareOnFirstLine.php', [
+			'linesCountBeforeDeclare' => 0,
+		], [DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING, DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE]);
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testFixableMissingOneNewLine(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesMissingOneNewLine.php', [

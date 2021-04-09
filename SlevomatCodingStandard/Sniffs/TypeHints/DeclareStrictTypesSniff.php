@@ -180,9 +180,9 @@ class DeclareStrictTypesSniff implements Sniff
 				}
 			}
 		} else {
-			$newLinesCountBefore = substr_count($whitespaceBefore, $phpcsFile->eolChar);
-			$linesCountBefore = $newLinesCountBefore > 0 ? $newLinesCountBefore - 1 : 0;
-			if ($linesCountBefore !== $requiredLinesCountBeforeDeclare) {
+			$declareOnFirstLine = $tokens[$declarePointer]['line'] === $tokens[$openTagPointer]['line'];
+			$linesCountBefore = $declareOnFirstLine ? 0 : substr_count($whitespaceBefore, $phpcsFile->eolChar) - 1;
+			if ($declareOnFirstLine || $linesCountBefore !== $requiredLinesCountBeforeDeclare) {
 				$fix = $phpcsFile->addFixableError(
 					sprintf(
 						'Expected %d line%s before declare statement, found %d.',
