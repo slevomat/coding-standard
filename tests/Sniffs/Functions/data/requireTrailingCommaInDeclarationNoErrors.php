@@ -25,3 +25,11 @@ function (
 		$b,
 	) => true;
 };
+
+function (
+	$a,
+	$b, // Comment
+)
+{
+
+};

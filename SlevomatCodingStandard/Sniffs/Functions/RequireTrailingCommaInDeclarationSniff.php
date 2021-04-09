@@ -7,7 +7,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_COMMA;
-use const T_WHITESPACE;
 
 class RequireTrailingCommaInDeclarationSniff implements Sniff
 {
@@ -47,9 +46,8 @@ class RequireTrailingCommaInDeclarationSniff implements Sniff
 			return;
 		}
 
-		$pointerBeforeParenthesisCloser = TokenHelper::findPreviousExcluding(
+		$pointerBeforeParenthesisCloser = TokenHelper::findPreviousEffective(
 			$phpcsFile,
-			T_WHITESPACE,
 			$parenthesisCloserPointer - 1,
 			$parenthesisOpenerPointer
 		);
