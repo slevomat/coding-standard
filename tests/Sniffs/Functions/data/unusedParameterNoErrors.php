@@ -92,6 +92,8 @@ abstract class Whatever
 
 $found = in_array_callback($needle, $haystack, fn ($array, $needle) => $array === $needle);
 
+$found = in_array_callback($needle, $haystack, fn ($array, $needle) => $array[2] === $needle);
+
 class PropertyPromotion
 {
 

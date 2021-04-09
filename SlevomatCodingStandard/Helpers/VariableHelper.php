@@ -12,6 +12,7 @@ use function strtolower;
 use function substr;
 use const T_DOUBLE_COLON;
 use const T_DOUBLE_QUOTED_STRING;
+use const T_FN;
 use const T_HEREDOC;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_TAG;
@@ -108,12 +109,21 @@ class VariableHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$scopeCloserPointer = $tokens[$scopeOwnerPointer]['code'] === T_OPEN_TAG
-			? count($tokens) - 1
-			: $tokens[$scopeOwnerPointer]['scope_closer'] - 1;
-		$firstPointerInScope = $tokens[$scopeOwnerPointer]['code'] === T_OPEN_TAG
-			? $scopeOwnerPointer + 1
-			: $tokens[$scopeOwnerPointer]['scope_opener'] + 1;
+		if ($tokens[$scopeOwnerPointer]['code'] === T_OPEN_TAG) {
+			$scopeCloserPointer = count($tokens) - 1;
+		} elseif ($tokens[$scopeOwnerPointer]['code'] === T_FN) {
+			$scopeCloserPointer = $tokens[$scopeOwnerPointer]['scope_closer'];
+		} else {
+			$scopeCloserPointer = $tokens[$scopeOwnerPointer]['scope_closer'] - 1;
+		}
+
+		if ($tokens[$scopeOwnerPointer]['code'] === T_OPEN_TAG) {
+			$firstPointerInScope = $scopeOwnerPointer + 1;
+		} elseif ($tokens[$scopeOwnerPointer]['code'] === T_FN) {
+			$firstPointerInScope = $tokens[$scopeOwnerPointer]['scope_opener'];
+		} else {
+			$firstPointerInScope = $tokens[$scopeOwnerPointer]['scope_opener'] + 1;
+		}
 
 		if ($startCheckPointer === null) {
 			$startCheckPointer = $firstPointerInScope;
