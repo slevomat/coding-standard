@@ -97,7 +97,7 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 				continue;
 			}
 
-			if (preg_match('~(?:^|\|)null(?:\||$)~i', $typeHint) === 1) {
+			if (preg_match('~(?:^|(?:\|\s*))null(?:(?:\s*\|)|$)~i', $typeHint) === 1) {
 				continue;
 			}
 

@@ -80,6 +80,14 @@ class FooBar extends \stdClass
 	{
 	}
 
+	public function unionTypeHintWithSpace(string | null $union = null)
+	{
+	}
+
+	public function unionTypeHintWithSpaceInTheMiddle(string|null |int $union = null)
+	{
+	}
+
 }
 
 array_map(
