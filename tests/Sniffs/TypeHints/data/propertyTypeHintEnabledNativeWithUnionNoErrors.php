@@ -8,4 +8,9 @@ class Whatever
 	/** @var string|true */
 	private string|bool $withTrue;
 
+	/**
+	 * @var ArrayHash|array|mixed[]
+	 */
+	protected $arrayAndArrayHash;
+
 }

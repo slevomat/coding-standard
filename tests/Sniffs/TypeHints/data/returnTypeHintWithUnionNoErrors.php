@@ -12,4 +12,11 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @return ArrayHash|array|mixed[]
+	 */
+	public function arrayAndArrayHash()
+	{
+	}
+
 }

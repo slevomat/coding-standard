@@ -14,4 +14,11 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @param ArrayHash|array|mixed[] $a
+	 */
+	public function arrayAndArrayHash($a)
+	{
+	}
+
 }

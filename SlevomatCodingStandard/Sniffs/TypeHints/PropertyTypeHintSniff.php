@@ -267,17 +267,13 @@ class PropertyTypeHintSniff implements Sniff
 
 			$itemsSpecificationTypeHint = AnnotationTypeHelper::getItemsSpecificationTypeFromType($typeNode);
 			if ($itemsSpecificationTypeHint !== null) {
-				$possibleTypeHints = AnnotationTypeHelper::getTraversableTypeHintsFromType(
+				$typeHints = AnnotationTypeHelper::getTraversableTypeHintsFromType(
 					$typeNode,
 					$phpcsFile,
 					$propertyPointer,
 					$this->getTraversableTypeHints(),
 					$this->enableUnionTypeHint
 				);
-
-				if (count($possibleTypeHints) > 0) {
-					$typeHints = $possibleTypeHints;
-				}
 			}
 		}
 

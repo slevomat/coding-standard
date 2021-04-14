@@ -19,7 +19,6 @@ use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use function array_filter;
 use function array_merge;
 use function count;
 use function in_array;
@@ -661,12 +660,16 @@ class AnnotationTypeHelper
 			return [];
 		}
 
-		return array_filter($typeHints, static function (string $typeHint) use ($phpcsFile, $pointer, $traversableTypeHints): bool {
-			return TypeHintHelper::isTraversableType(
+		foreach ($typeHints as $typeHint) {
+			if (!TypeHintHelper::isTraversableType(
 				TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $pointer, $typeHint),
 				$traversableTypeHints
-			);
-		});
+			)) {
+				return [];
+			}
+		}
+
+		return $typeHints;
 	}
 
 	/**
