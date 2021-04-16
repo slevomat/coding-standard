@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.0
 
 function dummyFunctionWithPerlLikeComment()
 {
@@ -47,6 +47,10 @@ abstract class DummyClass
 	public function dummyMethodWithSomeBody()
 	{
 		return 4;
+	}
+
+	public function __construct(private $a, public $b)
+	{
 	}
 
 }
