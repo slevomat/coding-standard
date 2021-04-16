@@ -463,7 +463,19 @@ abstract class AbstractControlStructureSpacing implements Sniff
 
 			foreach ($pointers as $pointer) {
 				if (TokenHelper::findPrevious($phpcsFile, T_SWITCH, $pointer - 1) === $switchPointer) {
-					return TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $pointer - 1);
+					$pointerBeforeCaseOrDefault = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $pointer - 1);
+					if (
+						in_array($tokens[$pointerBeforeCaseOrDefault]['code'], Tokens::$commentTokens, true)
+						&& $tokens[$pointerBeforeCaseOrDefault]['line'] + 1 === $tokens[$pointer]['line']
+					) {
+						$pointerBeforeCaseOrDefault = TokenHelper::findPreviousExcluding(
+							$phpcsFile,
+							T_WHITESPACE,
+							$pointerBeforeCaseOrDefault - 1
+						);
+					}
+
+					return $pointerBeforeCaseOrDefault;
 				}
 			}
 

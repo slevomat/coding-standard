@@ -35,3 +35,16 @@ switch ($foo) {
     case 2:
         return 2;
 }
+
+switch ($foo) {
+	case 1:
+	case 2:
+		echo 'Group 1';
+		break;
+
+	// Group 2
+	case 3:
+	case 4:
+		echo 'Group 2';
+		break;
+}

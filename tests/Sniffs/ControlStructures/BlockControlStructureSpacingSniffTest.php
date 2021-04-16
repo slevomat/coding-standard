@@ -358,6 +358,8 @@ class BlockControlStructureSpacingSniffTest extends TestCase
 			'Expected 1 line before "case", found 2.'
 		);
 
+		self::assertNoSniffError($report, 44);
+
 		self::assertAllFixedInFile($report);
 	}
 

@@ -101,13 +101,13 @@ function () {
 };
 
 switch ($foo) {
-    case 'bar':
+	case 'bar':
 
-    case 'baz':
-        return true;
+	case 'baz':
+		return true;
 
-    case 'lorem':
-        return false;
+	case 'lorem':
+		return false;
 }
 
 if (true) {
