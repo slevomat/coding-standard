@@ -13,3 +13,12 @@ try {
 		return $e;
 	}, 'something');
 }
+
+try {
+
+} catch (
+	InvalidArgumentException
+	| OutOfBoundsException
+) {
+
+}

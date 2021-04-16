@@ -14,6 +14,7 @@ use const T_CATCH;
 use const T_DOUBLE_QUOTED_STRING;
 use const T_HEREDOC;
 use const T_VARIABLE;
+use const T_WHITESPACE;
 
 class RequireNonCapturingCatchSniff implements Sniff
 {
@@ -88,10 +89,20 @@ class RequireNonCapturingCatchSniff implements Sniff
 		}
 
 		$pointerBeforeVariable = TokenHelper::findPreviousEffective($phpcsFile, $variablePointer - 1);
+		$fixEndPointer = TokenHelper::findNextContent(
+			$phpcsFile,
+			T_WHITESPACE,
+			$phpcsFile->eolChar,
+			$variablePointer + 1,
+			$tokens[$catchPointer]['parenthesis_closer']
+		);
+		if ($fixEndPointer === null) {
+			$fixEndPointer = $tokens[$catchPointer]['parenthesis_closer'];
+		}
 
 		$phpcsFile->fixer->beginChangeset();
 
-		for ($i = $pointerBeforeVariable + 1; $i < $tokens[$catchPointer]['parenthesis_closer']; $i++) {
+		for ($i = $pointerBeforeVariable + 1; $i < $fixEndPointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 

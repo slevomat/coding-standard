@@ -21,10 +21,11 @@ class RequireNonCapturingCatchSniffTest extends TestCase
 			'enable' => true,
 		]);
 
-		self::assertSame(2, $report->getErrorCount());
+		self::assertSame(3, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, RequireNonCapturingCatchSniff::CODE_NON_CAPTURING_CATCH_REQUIRED);
 		self::assertSniffError($report, 11, RequireNonCapturingCatchSniff::CODE_NON_CAPTURING_CATCH_REQUIRED);
+		self::assertSniffError($report, 19, RequireNonCapturingCatchSniff::CODE_NON_CAPTURING_CATCH_REQUIRED);
 
 		self::assertAllFixedInFile($report);
 	}
