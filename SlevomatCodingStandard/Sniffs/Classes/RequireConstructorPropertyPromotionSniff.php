@@ -13,6 +13,7 @@ use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_filter;
+use function array_reverse;
 use function count;
 use function in_array;
 use function sprintf;
@@ -23,11 +24,15 @@ use const T_BITWISE_AND;
 use const T_CALLABLE;
 use const T_COMMA;
 use const T_ELLIPSIS;
+use const T_ELSE;
+use const T_ELSEIF;
 use const T_EQUAL;
 use const T_FUNCTION;
+use const T_IF;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
 use const T_SEMICOLON;
+use const T_SWITCH;
 use const T_VARIABLE;
 use const T_WHITESPACE;
 
@@ -234,9 +239,17 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 			}
 
 			$semicolonPointer = TokenHelper::findNextEffective($phpcsFile, $variablePointer + 1);
-			if ($tokens[$semicolonPointer]['code'] === T_SEMICOLON) {
-				return $i;
+			if ($tokens[$semicolonPointer]['code'] !== T_SEMICOLON) {
+				continue;
 			}
+
+			foreach (array_reverse($tokens[$semicolonPointer]['conditions']) as $conditionTokenCode) {
+				if (in_array($conditionTokenCode, [T_IF, T_ELSEIF, T_ELSE, T_SWITCH], true)) {
+					return null;
+				}
+			}
+
+			return $i;
 		}
 
 		return null;

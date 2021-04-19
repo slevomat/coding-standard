@@ -92,3 +92,23 @@ class Nothing
 	}
 
 }
+
+class Foo
+{
+
+	private ?SimpleXMLElement $openingHours = null;
+
+	private ?string $formattedOpeningHours;
+
+	public function __construct(SimpleXMLElement|string|null $openingHours)
+	{
+		if ($openingHours instanceof SimpleXMLElement) {
+			$this->openingHours = $openingHours;
+		} elseif ($openingHours === null) {
+			$this->openingHours = null;
+		} else {
+			$this->formattedOpeningHours = $openingHours;
+		}
+	}
+
+}
