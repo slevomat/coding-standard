@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TernaryOperatorHelper;
@@ -122,6 +123,36 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 	): void
 	{
 		$tokens = $phpcsFile->getTokens();
+
+		$ternaryOperatorStartPointer = TernaryOperatorHelper::getStartPointer($phpcsFile, $inlineThenPointer);
+
+		$searchStartPointer = $ternaryOperatorStartPointer;
+		do {
+			$booleanOperatorPointer = TokenHelper::findNext($phpcsFile, Tokens::$booleanOperators, $searchStartPointer, $inlineThenPointer);
+			if ($booleanOperatorPointer === null) {
+				break;
+			}
+
+			$identicalPointer = TokenHelper::findNext(
+				$phpcsFile,
+				[T_IS_IDENTICAL, T_IS_NOT_IDENTICAL],
+				$searchStartPointer,
+				$booleanOperatorPointer
+			);
+
+			if ($identicalPointer === null) {
+				return;
+			}
+
+			$pointerAfterIdentical = TokenHelper::findNextEffective($phpcsFile, $identicalPointer + 1);
+
+			if ($tokens[$pointerAfterIdentical]['code'] !== T_NULL) {
+				return;
+			}
+
+			$searchStartPointer = $booleanOperatorPointer + 1;
+
+		} while (true);
 
 		$defaultInElse = $tokens[$identicalPointer]['code'] === T_IS_NOT_IDENTICAL;
 		$inlineElsePointer = TernaryOperatorHelper::getElsePointer($phpcsFile, $inlineThenPointer);

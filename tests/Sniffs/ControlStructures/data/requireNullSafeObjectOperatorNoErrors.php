@@ -40,3 +40,7 @@ if ($a === null || $a->property) {
 $a = $b !== null && $b->something !== $bb->isSomething()
 	? true
 	: false;
+
+$a = $b && $c->getD() !== null ? $c->getD()->getValue() : null;
+
+$a = $b !== false && $c->getD() !== null ? $c->getD()->getValue() : null;

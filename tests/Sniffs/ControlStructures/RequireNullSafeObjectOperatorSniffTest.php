@@ -27,8 +27,8 @@ class RequireNullSafeObjectOperatorSniffTest extends TestCase
 			self::assertSniffError($report, $line, RequireNullSafeObjectOperatorSniff::CODE_REQUIRED_NULL_SAFE_OBJECT_OPERATOR);
 		}
 
-		self::assertCount(3, $report->getErrors()[12]);
-		self::assertCount(3, $report->getErrors()[13]);
+		self::assertCount(2, $report->getErrors()[12]);
+		self::assertCount(2, $report->getErrors()[13]);
 
 		self::assertAllFixedInFile($report);
 	}
