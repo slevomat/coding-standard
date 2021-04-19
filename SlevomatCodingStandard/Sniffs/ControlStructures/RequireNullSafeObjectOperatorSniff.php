@@ -254,6 +254,13 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 			return;
 		}
 
+		if ($tokens[$pointerAfterNexIdentificator]['code'] === T_IS_NOT_IDENTICAL) {
+			$pointerAfterNotIdentical = TokenHelper::findNextEffective($phpcsFile, $pointerAfterNexIdentificator + 1);
+			if ($tokens[$pointerAfterNotIdentical]['code'] !== T_NULL) {
+				return;
+			}
+		}
+
 		$identificatorDifference = $this->getIdentificatorDifference(
 			$phpcsFile,
 			$identificator,

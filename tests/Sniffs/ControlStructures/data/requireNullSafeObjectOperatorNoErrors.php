@@ -36,3 +36,7 @@ if ($a !== null && $a === 0) {
 if ($a === null || $a->property) {
 	// Something
 }
+
+$a = $b !== null && $b->something !== $bb->isSomething()
+	? true
+	: false;
