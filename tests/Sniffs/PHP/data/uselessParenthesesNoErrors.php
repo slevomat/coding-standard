@@ -167,6 +167,8 @@ match ($code) {
     2 => 'owo',
 };
 
+$char = (0xF0 & ord('1')) >> 4;
+
 // Must be last
 return true
 	? 100

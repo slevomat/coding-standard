@@ -58,6 +58,7 @@ use const T_REQUIRE;
 use const T_REQUIRE_ONCE;
 use const T_SELF;
 use const T_SEMICOLON;
+use const T_SR;
 use const T_STATIC;
 use const T_STRING_CAST;
 use const T_STRING_CONCAT;
@@ -341,7 +342,7 @@ class UselessParenthesesSniff implements Sniff
 			$phpcsFile,
 			$tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1
 		);
-		if (in_array($tokens[$pointerAfterParenthesisCloser]['code'], [T_INLINE_THEN, T_OPEN_PARENTHESIS], true)) {
+		if (in_array($tokens[$pointerAfterParenthesisCloser]['code'], [T_INLINE_THEN, T_OPEN_PARENTHESIS, T_SR], true)) {
 			return;
 		}
 
