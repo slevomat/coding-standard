@@ -21,9 +21,9 @@ class RequireNullSafeObjectOperatorSniffTest extends TestCase
 			'enable' => true,
 		]);
 
-		self::assertSame(15, $report->getErrorCount());
+		self::assertSame(16, $report->getErrorCount());
 
-		foreach ([3, 4, 6, 7, 9, 10, 12, 13, 15, 18, 27] as $line) {
+		foreach ([3, 4, 6, 7, 9, 10, 12, 13, 15, 18, 27, 34] as $line) {
 			self::assertSniffError($report, $line, RequireNullSafeObjectOperatorSniff::CODE_REQUIRED_NULL_SAFE_OBJECT_OPERATOR);
 		}
 

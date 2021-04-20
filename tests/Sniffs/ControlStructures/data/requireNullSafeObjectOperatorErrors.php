@@ -29,3 +29,8 @@ function ($gatewayData, $response) {
 		$this->getSerializedResponse($response),
 	);
 };
+
+// Must be last
+if ($b->getC() !== null && $b->getC()->getD() !== null) {
+
+}

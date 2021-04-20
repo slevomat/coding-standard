@@ -44,3 +44,7 @@ $a = $b !== null && $b->something !== $bb->isSomething()
 $a = $b && $c->getD() !== null ? $c->getD()->getValue() : null;
 
 $a = $b !== false && $c->getD() !== null ? $c->getD()->getValue() : null;
+
+function ($something): bool {
+	return $something->getA() !== null && $something->getA()->isBoolean();
+};

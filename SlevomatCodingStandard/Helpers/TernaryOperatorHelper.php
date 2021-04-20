@@ -15,6 +15,7 @@ use const T_COMMA;
 use const T_DOUBLE_ARROW;
 use const T_EQUAL;
 use const T_INLINE_ELSE;
+use const T_INLINE_THEN;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_OPEN_SQUARE_BRACKET;
@@ -29,6 +30,19 @@ use const T_THROW;
  */
 class TernaryOperatorHelper
 {
+
+	public static function isConditionOfTernaryOperator(File $phpcsFile, int $pointer): bool
+	{
+		$inlineThenPointer = TokenHelper::findNext($phpcsFile, T_INLINE_THEN, $pointer + 1);
+
+		if ($inlineThenPointer === null) {
+			return false;
+		}
+
+		$startPointer = self::getStartPointer($phpcsFile, $inlineThenPointer);
+
+		return $startPointer <= $pointer;
+	}
 
 	public static function getElsePointer(File $phpcsFile, int $inlineThenPointer): int
 	{
