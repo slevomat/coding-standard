@@ -1,10 +1,14 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.0
 
 class Foo
 {
 
 	/** @var string */
 	private $foo;
+
+	/** @var string */
+	#[Assert\NotBlank]
+	private $foo2;
 
 	/** @var string */
 	static public $static1;

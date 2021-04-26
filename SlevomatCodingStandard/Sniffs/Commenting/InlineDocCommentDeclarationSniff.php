@@ -14,6 +14,7 @@ use function sprintf;
 use function substr;
 use function trim;
 use const T_AS;
+use const T_ATTRIBUTE;
 use const T_CLOSURE;
 use const T_COMMENT;
 use const T_DOC_COMMENT_OPEN_TAG;
@@ -71,6 +72,13 @@ class InlineDocCommentDeclarationSniff implements Sniff
 
 		$pointerAfterCommentClosePointer = TokenHelper::findNextEffective($phpcsFile, $commentClosePointer + 1);
 		if ($pointerAfterCommentClosePointer !== null) {
+			if ($tokens[$pointerAfterCommentClosePointer]['code'] === T_ATTRIBUTE) {
+				$pointerAfterCommentClosePointer = TokenHelper::findNextEffective(
+					$phpcsFile,
+					$tokens[$pointerAfterCommentClosePointer]['attribute_closer'] + 1
+				);
+			}
+
 			if (in_array($tokens[$pointerAfterCommentClosePointer]['code'], [T_PRIVATE, T_PROTECTED, T_PUBLIC], true)) {
 				return;
 			}
