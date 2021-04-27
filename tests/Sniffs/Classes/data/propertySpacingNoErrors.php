@@ -41,10 +41,11 @@ abstract class Bar {
 	// strange but yeah, whatever
 	public $foo = 'bar';
 
+	#[MyAttribute]
 	/** @var string */
 	protected  $bar = 'foo';
 
-	/** @var int */
+	#[MyAttribute]
 	private $lvl = 9001;
 	/**
 	 * whatever
