@@ -51,6 +51,7 @@ abstract class Whatever
 	/**
 	 * With Comment
 	 */
+	#[MyAttribute]
 	public function thirdMethod()
 	{
 

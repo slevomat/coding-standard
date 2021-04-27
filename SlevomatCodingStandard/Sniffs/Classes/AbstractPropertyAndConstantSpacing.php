@@ -10,6 +10,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use function assert;
 use function in_array;
 use function str_repeat;
+use const T_ATTRIBUTE;
 use const T_COMMENT;
 use const T_CONST;
 use const T_DOC_COMMENT_OPEN_TAG;
@@ -70,7 +71,7 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 			return $nextFunctionPointer ?? $firstOnLinePointer;
 		}
 
-		$types = [T_COMMENT, T_DOC_COMMENT_OPEN_TAG, T_CONST, T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_USE];
+		$types = [T_COMMENT, T_DOC_COMMENT_OPEN_TAG, T_ATTRIBUTE, T_CONST, T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_USE];
 		$nextPointer = TokenHelper::findNext($phpcsFile, $types, $firstOnLinePointer + 1, $tokens[$classPointer]['scope_closer']);
 
 		if (!$this->isNextMemberValid($phpcsFile, $nextPointer)) {
@@ -78,7 +79,7 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 		}
 
 		$linesBetween = $tokens[$nextPointer]['line'] - $tokens[$semicolonPointer]['line'] - 1;
-		if (in_array($tokens[$nextPointer]['code'], [T_DOC_COMMENT_OPEN_TAG, T_COMMENT], true)) {
+		if (in_array($tokens[$nextPointer]['code'], [T_DOC_COMMENT_OPEN_TAG, T_COMMENT, T_ATTRIBUTE], true)) {
 			$minExpectedLines = SniffSettingsHelper::normalizeInteger($this->minLinesCountBeforeWithComment);
 			$maxExpectedLines = SniffSettingsHelper::normalizeInteger($this->maxLinesCountBeforeWithComment);
 		} else {
