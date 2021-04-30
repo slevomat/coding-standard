@@ -494,6 +494,14 @@ Disallows multi constant definition.
 
 Disallows multi property definition.
 
+#### SlevomatCodingStandard.Classes.MethodPerClassLimit
+
+Enforces a configurable limit to the number of methods in a class, trait, interface or anonymous class.
+
+Sniff provides the following setting:
+
+* `maxMethodCount`: maximum number of allowed methods (defaults to `10`).
+
 #### SlevomatCodingStandard.Classes.MethodSpacing 🔧
 
 Checks that there is a certain number of blank lines between methods.
