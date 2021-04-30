@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function sprintf;
 use const T_ANON_CLASS;
@@ -42,7 +43,7 @@ class MethodPerClassLimitSniff implements Sniff
 		$numberOfMethods = 0;
 		$acceptedLevel = $tokens[$scopeOpenerPointer]['level'] + 1;
 		foreach (TokenHelper::findNextAll($phpcsFile, T_FUNCTION, $scopeOpenerPointer + 1, $scopeCloserPointer) as $functionPointer) {
-			if ($tokens[$functionPointer]['level'] === $acceptedLevel) {
+			if (FunctionHelper::isMethod($phpcsFile, $functionPointer) && ($tokens[$functionPointer]['level'] === $acceptedLevel)) {
 				$numberOfMethods++;
 			}
 		}
