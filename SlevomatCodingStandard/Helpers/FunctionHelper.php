@@ -442,7 +442,7 @@ class FunctionHelper
 		$firstToken = $tokens[$token['scope_opener']];
 		$lastToken = $tokens[$token['scope_closer']];
 
-		return $lastToken['line'] - $firstToken['line'];
+		return $lastToken['line'] - $firstToken['line'] - 1;
 	}
 
 	/**
