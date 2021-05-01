@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ClassHelper;
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use function count;
 use function sprintf;
 use const T_ANON_CLASS;
@@ -35,15 +36,16 @@ class MethodPerClassLimitSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $classPointer): void
 	{
+		$maxMethodCount = SniffSettingsHelper::normalizeInteger($this->maxMethodCount);
 		$numberOfMethods = count(ClassHelper::getMethodPointers($phpcsFile, $classPointer));
-		if ($numberOfMethods <= $this->maxMethodCount) {
+		if ($numberOfMethods <= $maxMethodCount) {
 			return;
 		}
 		$errorMessage = sprintf(
 			'%s has too many methods: %d. Can be up to %d methods.',
 			$phpcsFile->getTokens()[$classPointer]['content'],
 			$numberOfMethods,
-			$this->maxMethodCount
+			$maxMethodCount
 		);
 		$phpcsFile->addError($errorMessage, $classPointer, self::CODE_METHOD_PER_CLASS_LIMIT);
 	}
