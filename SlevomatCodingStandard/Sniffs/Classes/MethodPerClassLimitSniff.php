@@ -43,7 +43,7 @@ class MethodPerClassLimitSniff implements Sniff
 		$numberOfMethods = 0;
 		$acceptedLevel = $tokens[$scopeOpenerPointer]['level'] + 1;
 		foreach (TokenHelper::findNextAll($phpcsFile, T_FUNCTION, $scopeOpenerPointer + 1, $scopeCloserPointer) as $functionPointer) {
-			if (FunctionHelper::isMethod($phpcsFile, $functionPointer) && ($tokens[$functionPointer]['level'] === $acceptedLevel)) {
+			if (($tokens[$functionPointer]['level'] === $acceptedLevel) && FunctionHelper::isMethod($phpcsFile, $functionPointer)) {
 				$numberOfMethods++;
 			}
 		}
