@@ -2,13 +2,10 @@
 
 namespace SlevomatCodingStandard\Sniffs\Files;
 
-use SlevomatCodingStandard\Sniffs\Functions\FunctionLengthSniff as BaseFunctionLengthSniff;
-
 /**
- * phpcs:disable
- *
  * @codeCoverageIgnore
  */
-final class FunctionLengthSniff extends BaseFunctionLengthSniff
+final class FunctionLengthSniff extends \SlevomatCodingStandard\Sniffs\Functions\FunctionLengthSniff
 {
+
 }
