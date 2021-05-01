@@ -59,4 +59,8 @@ class Whatever
 	private function scalarAndnumericNullable(): string|int|float|bool|null
 	{}
 
+	/***/
+	private function objectAndVoid(): object|null
+	{}
+
 }

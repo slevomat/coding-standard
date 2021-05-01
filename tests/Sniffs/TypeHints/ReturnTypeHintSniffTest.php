@@ -87,6 +87,7 @@ class ReturnTypeHintSniffTest extends TestCase
 	public function testWithUnionNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/returnTypeHintWithUnionNoErrors.php', [
+			'enableObjectTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => true,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
@@ -97,12 +98,13 @@ class ReturnTypeHintSniffTest extends TestCase
 	public function testWithUnionErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/returnTypeHintWithUnionErrors.php', [
+			'enableObjectTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => true,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 
-		self::assertSame(14, $report->getErrorCount());
+		self::assertSame(15, $report->getErrorCount());
 
 		self::assertSniffError($report, 7, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 11, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
@@ -119,6 +121,7 @@ class ReturnTypeHintSniffTest extends TestCase
 		self::assertSniffError($report, 51, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 55, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 59, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 63, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 
 		self::assertAllFixedInFile($report);
 	}

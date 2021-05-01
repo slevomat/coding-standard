@@ -341,7 +341,9 @@ class ReturnTypeHintSniff implements Sniff
 				return;
 			}
 
-			$typeHintsWithConvertedUnion[$typeHintNo] = TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
+			$typeHintsWithConvertedUnion[$typeHintNo] = $typeHint === 'void'
+				? 'null'
+				: TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
 		}
 
 		if ($originalReturnTypeNode instanceof NullableTypeNode) {

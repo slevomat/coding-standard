@@ -7,6 +7,7 @@ use SlevomatCodingStandard\Helpers\Annotation\TemplateAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\TypeAliasAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\TypeImportAnnotation;
 use function array_key_exists;
+use function array_map;
 use function array_merge;
 use function array_unique;
 use function count;
@@ -354,6 +355,12 @@ class TypeHintHelper
 		}
 
 		$convertedParts = array_unique($convertedParts);
+
+		if (count($convertedParts) > 1) {
+			$convertedParts = array_map(static function (string $part): string {
+				return $part === 'void' ? 'null' : $part;
+			}, $convertedParts);
+		}
 
 		sort($convertedParts);
 

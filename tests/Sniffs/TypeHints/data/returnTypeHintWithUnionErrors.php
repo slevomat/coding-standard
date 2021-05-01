@@ -59,4 +59,8 @@ class Whatever
 	private function scalarAndnumericNullable()
 	{}
 
+	/** @return object|void */
+	private function objectAndVoid()
+	{}
+
 }
