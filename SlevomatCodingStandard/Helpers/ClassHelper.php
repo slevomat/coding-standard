@@ -8,6 +8,7 @@ use function array_reverse;
 use function sprintf;
 use const T_ANON_CLASS;
 use const T_FINAL;
+use const T_FUNCTION;
 use const T_STRING;
 use const T_USE;
 
@@ -105,6 +106,27 @@ class ClassHelper
 		}
 
 		return $useStatements;
+	}
+
+	/**
+	 * @param File $phpcsFile
+	 * @param int $classPointer
+	 * @return int[]
+	 */
+	public static function getMethodPointers(File $phpcsFile, int $classPointer): array
+	{
+		$tokens = $phpcsFile->getTokens();
+		$token = $tokens[$classPointer];
+		$scopeOpenerPointer = $token['scope_opener'];
+		$scopeCloserPointer = $token['scope_closer'];
+		$acceptedLevel = $tokens[$scopeOpenerPointer]['level'] + 1;
+		$methodPointers = [];
+		foreach (TokenHelper::findNextAll($phpcsFile, T_FUNCTION, $scopeOpenerPointer + 1, $scopeCloserPointer) as $functionPointer) {
+			if (($tokens[$functionPointer]['level'] === $acceptedLevel) && FunctionHelper::isMethod($phpcsFile, $functionPointer)) {
+				$methodPointers[] = $functionPointer;
+			}
+		}
+		return $methodPointers;
 	}
 
 	/**
