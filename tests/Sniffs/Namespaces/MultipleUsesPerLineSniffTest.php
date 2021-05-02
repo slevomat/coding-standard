@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-use PHP_CodeSniffer\Files\File;
 use SlevomatCodingStandard\Sniffs\TestCase;
 
 class MultipleUsesPerLineSniffTest extends TestCase
@@ -10,21 +9,12 @@ class MultipleUsesPerLineSniffTest extends TestCase
 
 	public function testMultipleUsesPerLine(): void
 	{
-		self::assertSniffError(
-			$this->getFileReport(),
-			5,
-			MultipleUsesPerLineSniff::CODE_MULTIPLE_USES_PER_LINE
-		);
-	}
+		$report = self::checkFile(__DIR__ . '/data/multipleUsesPerLine.php');
 
-	public function testIgnoreCommasInClosureUse(): void
-	{
-		self::assertNoSniffError($this->getFileReport(), 7);
-	}
+		self::assertSniffError($report, 5, MultipleUsesPerLineSniff::CODE_MULTIPLE_USES_PER_LINE);
 
-	private function getFileReport(): File
-	{
-		return self::checkFile(__DIR__ . '/data/multipleUsesPerLine.php');
+		// Ignore commas in closure use
+		self::assertNoSniffError($report, 7);
 	}
 
 }
