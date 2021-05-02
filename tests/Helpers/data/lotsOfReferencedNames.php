@@ -9,6 +9,7 @@ use UsedNamespace\UsedNameFooBar as UsedNameFooBarBaz;
 use function DI\string;
 use function doSomething;
 use function stream_wrapper_restore;
+use const STR_PAD_RIGHT;
 use const STREAM_URL_STAT_QUIET;
 
 class FooClass extends \ExtendedClass implements \ImplementedInterface, \SecondImplementedInterface, \ThirdImplementedInterface
@@ -161,3 +162,5 @@ class WithUnion
 	}
 
 }
+
+echo str_pad('123', 1, pad_type: STR_PAD_RIGHT);

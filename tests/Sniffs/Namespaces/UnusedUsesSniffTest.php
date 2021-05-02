@@ -83,6 +83,7 @@ class UnusedUsesSniffTest extends TestCase
 	public function testUsedConstant(): void
 	{
 		self::assertNoSniffError($this->getFileReport(), 15);
+		self::assertNoSniffError($this->getFileReport(), 26);
 	}
 
 	public function testUsedClassesInImplements(): void
