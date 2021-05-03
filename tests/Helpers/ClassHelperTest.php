@@ -141,7 +141,7 @@ class ClassHelperTest extends TestCase
 		self::assertSame([$anonymousClassMethodPointer], ClassHelper::getMethodPointers($phpcsFile, $anonymousClassPointer));
 	}
 
-	public function testGetMethodPointersWithClassWithAnonymousFunction(): void
+	public function testGetMethodPointersWithClassWithNestedFunction(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithNestedFunction.php');
 

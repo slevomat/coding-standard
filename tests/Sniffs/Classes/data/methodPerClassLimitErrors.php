@@ -50,9 +50,12 @@ class methodPerClassLimitNoErrors
 		};
 	}
 
-	private function selfMethod(): self
+	private function nonClassMethodFunctionMethod()
 	{
-		return $this;
+		function nonClassMethodFunction()
+		{
+		}
+		return nonClassMethodFunction();
 	}
 
 	function untypedMethod($x)
