@@ -211,7 +211,10 @@ class ReferencedNameHelper
 		if ($tokens[$previousTokenBeforeStartPointer]['code'] === T_COLON) {
 			$previousTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousTokenBeforeStartPointer - 1);
 
-			if ($tokens[$previousTokenPointer]['code'] === T_PARAM_NAME) {
+			if (
+				$tokens[$previousTokenPointer]['code'] === T_PARAM_NAME
+				&& $tokens[$nextTokenAfterEndPointer]['code'] !== T_DOUBLE_COLON
+			) {
 				return ReferencedName::TYPE_CONSTANT;
 			}
 
