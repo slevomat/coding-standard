@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-use PHP_CodeSniffer\Files\File;
 use SlevomatCodingStandard\Sniffs\TestCase;
 use Throwable;
 use TypeError;
@@ -10,65 +9,33 @@ use TypeError;
 class FullyQualifiedExceptionsSniffTest extends TestCase
 {
 
-	public function testNonFullyQualifiedExceptionInTypeHint(): void
+	public function test(): void
 	{
-		self::assertSniffError(
-			$this->getFileReport(),
-			3,
-			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
-			'FooException'
-		);
-	}
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedExceptionNames.php');
 
-	public function testNonFullyQualifiedExceptionInThrow(): void
-	{
-		self::assertSniffError(
-			$this->getFileReport(),
-			6,
-			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
-			'FooException'
-		);
-	}
+		// Not fully qualified exception in type hint
+		self::assertSniffError($report, 3, FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION, 'FooException');
 
-	public function testNonFullyQualifiedExceptionInCatch(): void
-	{
-		self::assertSniffError(
-			$this->getFileReport(),
-			7,
-			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
-			'BarException'
-		);
-		self::assertSniffError(
-			$this->getFileReport(),
-			9,
-			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
-			Throwable::class
-		);
-		self::assertSniffError(
-			$this->getFileReport(),
-			11,
-			FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION,
-			TypeError::class
-		);
-	}
+		// Not fully qualified exception in throw
+		self::assertSniffError($report, 6, FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION, 'FooException');
 
-	public function testFullyQualifiedExceptionInTypeHint(): void
-	{
-		self::assertNoSniffError($this->getFileReport(), 16);
-	}
+		// Not fully qualified exception in catch
+		self::assertSniffError($report, 7, FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION, 'BarException');
+		self::assertSniffError($report, 9, FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION, Throwable::class);
+		self::assertSniffError($report, 11, FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION, TypeError::class);
 
-	public function testFullyQualifiedExceptionInThrow(): void
-	{
-		self::assertNoSniffError($this->getFileReport(), 19);
-	}
+		// Fully qualified exception in type hint
+		self::assertNoSniffError($report, 16);
 
-	public function testFullyQualifiedExceptionInCatch(): void
-	{
-		self::assertNoSniffError($this->getFileReport(), 20);
-		self::assertNoSniffError($this->getFileReport(), 22);
-		self::assertNoSniffError($this->getFileReport(), 24);
-		self::assertNoSniffError($this->getFileReport(), 26);
-		self::assertNoSniffError($this->getFileReport(), 28);
+		// Fully qualified exception in throw
+		self::assertNoSniffError($report, 19);
+
+		// Fully qualified exception in catch
+		self::assertNoSniffError($report, 20);
+		self::assertNoSniffError($report, 22);
+		self::assertNoSniffError($report, 24);
+		self::assertNoSniffError($report, 26);
+		self::assertNoSniffError($report, 28);
 	}
 
 	public function testClassSuffixedErrorOrExceptionIsNotAnExceptionButReported(): void
@@ -117,9 +84,32 @@ class FullyQualifiedExceptionsSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
-	private function getFileReport(): File
+	public function testWithSpecialExceptionNames(): void
 	{
-		return self::checkFile(__DIR__ . '/data/fullyQualifiedExceptionNames.php');
+		$report = self::checkFile(
+			__DIR__ . '/data/fullyQualifiedSpecialExceptionNames.php',
+			[
+				'specialExceptionNames' => [
+					'Foo\SomeError',
+					'Lorem\Ipsum\SomeOtherError',
+				],
+			]
+		);
+
+		// Throwing used exception
+		self::assertSniffError($report, 12, FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION, 'FooError');
+
+		// Catching partially used exception
+		self::assertSniffError($report, 13, FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION, 'Foo\SomeException');
+
+		// Throwing exception from same namespace
+		self::assertSniffError($report, 18, FullyQualifiedExceptionsSniff::CODE_NON_FULLY_QUALIFIED_EXCEPTION, 'SomeOtherError');
+
+		// Catching fully qualified exception
+		self::assertNoSniffError($report, 15);
+
+		// Catching fully qualified exception from same namespace
+		self::assertNoSniffError($report, 17);
 	}
 
 }

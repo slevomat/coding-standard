@@ -37,6 +37,7 @@ use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_OPEN_TAG;
+use const T_PARAM_NAME;
 use const T_TRAIT;
 use const T_TYPE_UNION;
 use const T_USE;
@@ -207,6 +208,17 @@ class ReferencedNameHelper
 			return ReferencedName::TYPE_CLASS;
 		}
 
+		if ($tokens[$previousTokenBeforeStartPointer]['code'] === T_COLON) {
+			$previousTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousTokenBeforeStartPointer - 1);
+
+			if ($tokens[$previousTokenPointer]['code'] === T_PARAM_NAME) {
+				return ReferencedName::TYPE_CONSTANT;
+			}
+
+			// Return type hint
+			return ReferencedName::TYPE_CLASS;
+		}
+
 		if (
 			in_array($tokens[$previousTokenBeforeStartPointer]['code'], [
 				T_EXTENDS,
@@ -215,8 +227,6 @@ class ReferencedNameHelper
 				// Trait
 				T_USE,
 				T_NEW,
-				// Return type hint
-				T_COLON,
 				// Nullable type hint
 				T_NULLABLE,
 			], true)

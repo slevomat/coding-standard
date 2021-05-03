@@ -23,6 +23,7 @@ use My\PartialConstant;
 use PartialNamespace;
 use UnionType;
 use UnionType2;
+use const STR_PAD_RIGHT;
 
 class TestClass implements FirstInterface, SecondInterface
 {
@@ -43,6 +44,8 @@ class TestClass implements FirstInterface, SecondInterface
 		PartialFunction\usedFunction();
 		PartialConstant\USED_CONSTANT;
 		new PartialNamespace\UsedClass();
+
+		echo str_pad('123', 1, pad_type: STR_PAD_RIGHT);
 
 		return new NewObject();
 	}

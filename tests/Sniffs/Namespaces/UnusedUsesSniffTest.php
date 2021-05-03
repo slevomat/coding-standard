@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
-use PHP_CodeSniffer\Files\File;
 use SlevomatCodingStandard\Sniffs\TestCase;
 
 class UnusedUsesSniffTest extends TestCase
@@ -10,14 +9,56 @@ class UnusedUsesSniffTest extends TestCase
 
 	public function testUnusedUse(): void
 	{
-		$report = $this->getFileReport();
+		$report = self::checkFile(__DIR__ . '/data/unusedUses.php');
 
 		self::assertEquals(5, $report->getErrorCount());
+
 		self::assertSniffError($report, 5, UnusedUsesSniff::CODE_UNUSED_USE, 'First\ObjectPrototype');
+
+		// Partial namespace use
+		self::assertNoSniffError($report, 6);
+
+		// Used partial subnamespace
+		self::assertNoSniffError($report, 7);
+
 		self::assertSniffError($report, 8, UnusedUsesSniff::CODE_UNUSED_USE, 'My\ObjectPrototype (as MyObject)');
+
+		// Use with "as" part
+		self::assertNoSniffError($report, 9);
+
+		// Used in type hint
+		self::assertNoSniffError($report, 10);
+
+		// Static method call
+		self::assertNoSniffError($report, 11);
+
 		self::assertSniffError($report, 12, UnusedUsesSniff::CODE_UNUSED_USE, 'FooBar\UnusedFunction');
+
+		// Used function
+		self::assertNoSniffError($report, 13);
+
 		self::assertSniffError($report, 14, UnusedUsesSniff::CODE_UNUSED_USE, 'FooBar\UNUSED_CONSTANT');
+
+		// Used constant
+		self::assertNoSniffError($report, 15);
+
 		self::assertSniffError($report, 16, UnusedUsesSniff::CODE_UNUSED_USE, 'X');
+
+		// Classes in implements
+		self::assertNoSniffError($report, 17);
+		self::assertNoSniffError($report, 18);
+
+		// Return type hint
+		self::assertNoSniffError($report, 19);
+
+		// Partial uses
+		self::assertNoSniffError($report, 20);
+		self::assertNoSniffError($report, 21);
+		self::assertNoSniffError($report, 22);
+		self::assertNoSniffError($report, 23);
+
+		// Used constant as named parameter
+		self::assertNoSniffError($report, 26);
 	}
 
 	public function testUnusedUseWithMultipleNamespaces(): void
@@ -38,70 +79,6 @@ class UnusedUsesSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/unusedUsesNoNamespaceNoErrors.php');
 		self::assertNoSniffErrorInFile($report);
-	}
-
-	public function testUnusedUseWithAsPart(): void
-	{
-		self::assertSniffError(
-			$this->getFileReport(),
-			8,
-			UnusedUsesSniff::CODE_UNUSED_USE,
-			'My\ObjectPrototype (as MyObject)'
-		);
-	}
-
-	public function testUsedPartialNamespaceUse(): void
-	{
-		self::assertNoSniffError($this->getFileReport(), 6);
-	}
-
-	public function testUsedPartialSubnamespaceUse(): void
-	{
-		self::assertNoSniffError($this->getFileReport(), 7);
-	}
-
-	public function testUsedUseWithAsPart(): void
-	{
-		self::assertNoSniffError($this->getFileReport(), 9);
-	}
-
-	public function testUsedUseInTypeHint(): void
-	{
-		self::assertNoSniffError($this->getFileReport(), 10);
-	}
-
-	public function testUsedUseWithStaticMethodCall(): void
-	{
-		self::assertNoSniffError($this->getFileReport(), 11);
-	}
-
-	public function testUsedFunction(): void
-	{
-		self::assertNoSniffError($this->getFileReport(), 13);
-	}
-
-	public function testUsedConstant(): void
-	{
-		self::assertNoSniffError($this->getFileReport(), 15);
-	}
-
-	public function testUsedClassesInImplements(): void
-	{
-		self::assertNoSniffError($this->getFileReport(), 17);
-		self::assertNoSniffError($this->getFileReport(), 18);
-	}
-
-	public function testReturnTypeHint(): void
-	{
-		self::assertNoSniffError($this->getFileReport(), 19);
-	}
-
-	public function testPartialUses(): void
-	{
-		self::assertNoSniffError($this->getFileReport(), 20);
-		self::assertNoSniffError($this->getFileReport(), 21);
-		self::assertNoSniffError($this->getFileReport(), 22);
-		self::assertNoSniffError($this->getFileReport(), 23);
 	}
 
 	public function testUsedUseInAnnotationWithDisabledSearchAnnotations(): void
@@ -395,11 +372,6 @@ class UnusedUsesSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/usesInAttributes.php');
 		self::assertNoSniffErrorInFile($report);
-	}
-
-	private function getFileReport(): File
-	{
-		return self::checkFile(__DIR__ . '/data/unusedUses.php');
 	}
 
 }
