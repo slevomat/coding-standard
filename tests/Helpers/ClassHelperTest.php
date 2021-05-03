@@ -115,4 +115,39 @@ class ClassHelperTest extends TestCase
 		self::assertSame(28, ClassHelper::getClassPointer($phpcsFile, $methodInBarPointer));
 	}
 
+	public function testGetMethodPointersWithMultipleClasses(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/multipleClasses.php');
+
+		$fooPointer = $this->findClassPointerByName($phpcsFile, 'Foo');
+		$methodInFooPointer = $this->findFunctionPointerByName($phpcsFile, 'methodInFoo');
+		self::assertSame([$methodInFooPointer], ClassHelper::getMethodPointers($phpcsFile, $fooPointer));
+
+		$barPointer = $this->findClassPointerByName($phpcsFile, 'Bar');
+		$methodInBarPointer = $this->findFunctionPointerByName($phpcsFile, 'methodInBar');
+		self::assertSame([$methodInBarPointer], ClassHelper::getMethodPointers($phpcsFile, $barPointer));
+	}
+
+	public function testGetMethodPointersWithClassWithNestedAnonymousClass(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithNestedAnonymousClass.php');
+
+		$fooPointer = $this->findClassPointerByName($phpcsFile, 'Foo');
+		$classMethodPointer = $this->findFunctionPointerByName($phpcsFile, 'classMethod');
+		self::assertSame([$classMethodPointer], ClassHelper::getMethodPointers($phpcsFile, $fooPointer));
+
+		$anonymousClassPointer = $this->findPointerByLineAndType($phpcsFile, 8, T_ANON_CLASS);
+		$anonymousClassMethodPointer = $this->findFunctionPointerByName($phpcsFile, 'anonymousClassMethod');
+		self::assertSame([$anonymousClassMethodPointer], ClassHelper::getMethodPointers($phpcsFile, $anonymousClassPointer));
+	}
+
+	public function testGetMethodPointersWithClassWithAnonymousFunction(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithNestedFunction.php');
+
+		$fooPointer = $this->findClassPointerByName($phpcsFile, 'Foo');
+		$classMethodPointer = $this->findFunctionPointerByName($phpcsFile, 'classMethod');
+		self::assertSame([$classMethodPointer], ClassHelper::getMethodPointers($phpcsFile, $fooPointer));
+	}
+
 }
