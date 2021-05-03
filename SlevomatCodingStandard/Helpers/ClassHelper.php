@@ -115,16 +115,18 @@ class ClassHelper
 	 */
 	public static function getMethodPointers(File $phpcsFile, int $classPointer): array
 	{
-		$tokens = $phpcsFile->getTokens();
-		$token = $tokens[$classPointer];
-		$scopeOpenerPointer = $token['scope_opener'];
-		$scopeCloserPointer = $token['scope_closer'];
-		$acceptedLevel = $tokens[$scopeOpenerPointer]['level'] + 1;
+		$classToken = $phpcsFile->getTokens()[$classPointer];
+		$scopeOpenerPointer = $classToken['scope_opener'];
+		$scopeCloserPointer = $classToken['scope_closer'];
 		$methodPointers = [];
 		foreach (TokenHelper::findNextAll($phpcsFile, T_FUNCTION, $scopeOpenerPointer + 1, $scopeCloserPointer) as $functionPointer) {
-			if (($tokens[$functionPointer]['level'] === $acceptedLevel) && FunctionHelper::isMethod($phpcsFile, $functionPointer)) {
-				$methodPointers[] = $functionPointer;
+			if (!FunctionHelper::isMethod($phpcsFile, $functionPointer)) {
+				continue;
 			}
+			if (FunctionHelper::findClassPointer($phpcsFile, $functionPointer) !== $classPointer) {
+				continue;
+			}
+			$methodPointers[] = $functionPointer;
 		}
 		return $methodPointers;
 	}
