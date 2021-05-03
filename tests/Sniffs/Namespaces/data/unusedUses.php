@@ -24,6 +24,7 @@ use PartialNamespace;
 use UnionType;
 use UnionType2;
 use const STR_PAD_RIGHT;
+use EnumClass;
 
 class TestClass implements FirstInterface, SecondInterface
 {
@@ -46,6 +47,10 @@ class TestClass implements FirstInterface, SecondInterface
 		new PartialNamespace\UsedClass();
 
 		echo str_pad('123', 1, pad_type: STR_PAD_RIGHT);
+
+		new Foo(
+			enum_type: EnumClass::VALUE(),
+		);
 
 		return new NewObject();
 	}

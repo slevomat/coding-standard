@@ -65,6 +65,7 @@ class ReferencedNameHelperTest extends TestCase
 			['UnionType6', false, false],
 			['str_pad', true, false],
 			['STR_PAD_RIGHT', false, true],
+			['EnumType', false, false],
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);

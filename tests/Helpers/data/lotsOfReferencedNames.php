@@ -163,4 +163,4 @@ class WithUnion
 
 }
 
-echo str_pad('123', 1, pad_type: STR_PAD_RIGHT);
+echo str_pad('123', 1, pad_type: STR_PAD_RIGHT, enum_type: EnumType::VALUE());

@@ -64,6 +64,7 @@ class FunctionHelperTest extends TestCase
 		self::assertTrue(FunctionHelper::isMethod($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod')));
 		self::assertFalse(FunctionHelper::isMethod($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooFunction')));
 		self::assertFalse(FunctionHelper::isMethod($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooFunctionInCondition')));
+		self::assertFalse(FunctionHelper::isMethod($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooFunctionInFooMethod')));
 	}
 
 	/**
