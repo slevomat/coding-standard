@@ -17,7 +17,11 @@ class FooClass
 
 	public function fooMethod()
 	{
+		function fooFunctionInFooMethod()
+		{
 
+		}
+		fooFunctionInCondition();
 	}
 
 }

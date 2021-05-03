@@ -9,6 +9,7 @@ use SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation;
 use function array_filter;
 use function array_map;
 use function array_merge;
+use function array_pop;
 use function array_reverse;
 use function count;
 use function in_array;
@@ -132,15 +133,12 @@ class FunctionHelper
 
 	public static function isMethod(File $phpcsFile, int $functionPointer): bool
 	{
-		foreach (array_reverse($phpcsFile->getTokens()[$functionPointer]['conditions']) as $conditionTokenCode) {
-			if (!in_array($conditionTokenCode, [T_CLASS, T_INTERFACE, T_TRAIT, T_ANON_CLASS], true)) {
-				continue;
-			}
-
-			return true;
+		$functionPointerConditions = $phpcsFile->getTokens()[$functionPointer]['conditions'];
+		if ($functionPointerConditions === []) {
+			return false;
 		}
-
-		return false;
+		$lastFunctionPointerCondition = array_pop($functionPointerConditions);
+		return in_array($lastFunctionPointerCondition, [T_CLASS, T_INTERFACE, T_TRAIT, T_ANON_CLASS], true);
 	}
 
 	public static function findClassPointer(File $phpcsFile, int $functionPointer): ?int
