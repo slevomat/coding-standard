@@ -72,12 +72,16 @@ class InlineDocCommentDeclarationSniff implements Sniff
 
 		$pointerAfterCommentClosePointer = TokenHelper::findNextEffective($phpcsFile, $commentClosePointer + 1);
 		if ($pointerAfterCommentClosePointer !== null) {
-			if ($tokens[$pointerAfterCommentClosePointer]['code'] === T_ATTRIBUTE) {
+			do {
+				if ($tokens[$pointerAfterCommentClosePointer]['code'] !== T_ATTRIBUTE) {
+					break;
+				}
+
 				$pointerAfterCommentClosePointer = TokenHelper::findNextEffective(
 					$phpcsFile,
 					$tokens[$pointerAfterCommentClosePointer]['attribute_closer'] + 1
 				);
-			}
+			} while (true);
 
 			if (in_array($tokens[$pointerAfterCommentClosePointer]['code'], [T_PRIVATE, T_PROTECTED, T_PUBLIC], true)) {
 				return;

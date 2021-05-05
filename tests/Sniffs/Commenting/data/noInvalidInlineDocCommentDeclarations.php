@@ -11,6 +11,12 @@ class Foo
 	private $foo2;
 
 	/** @var string */
+	#[Assert\NotBlank]
+	#[Assert\String]
+	#[Assert\Whatever]
+	private $foo3;
+
+	/** @var string */
 	static public $static1;
 
 	/** @var string */
