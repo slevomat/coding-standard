@@ -63,4 +63,8 @@ class Whatever
 	private function objectAndVoid()
 	{}
 
+	/** @return mixed|void */
+	private function mixedAndVoid()
+	{}
+
 }

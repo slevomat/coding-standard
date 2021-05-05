@@ -63,4 +63,8 @@ class Whatever
 	private function objectAndVoid(): object|null
 	{}
 
+	/***/
+	private function mixedAndVoid(): mixed
+	{}
+
 }
