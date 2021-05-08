@@ -242,7 +242,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 			}
 
 			if ($isFullyQualified || $isGlobalFunctionFallback || $isGlobalConstantFallback) {
-				if ($isFullyQualified && !$this->isRequiredToBeUsed($name)) {
+				if ($isFullyQualified && !$this->isRequiredToBeUsed($reference)) {
 					continue;
 				}
 
@@ -599,10 +599,27 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 		return $useStatementPlacePointer;
 	}
 
-	private function isRequiredToBeUsed(string $name): bool
+	private function isRequiredToBeUsed(stdClass $reference): bool
 	{
 		if (count($this->namespacesRequiredToUse) === 0) {
 			return true;
+		}
+
+		$name = $reference->name;
+
+		// Reference is in global namespace
+		if (!NamespaceHelper::hasNamespace($name)) {
+			if ($reference->isClass && !$this->allowFullyQualifiedGlobalClasses) {
+				return true;
+			}
+
+			if ($reference->isFunction && !$this->allowFullyQualifiedGlobalFunctions) {
+				return true;
+			}
+
+			if ($reference->isConstant && !$this->allowFullyQualifiedGlobalConstants) {
+				return true;
+			}
 		}
 
 		foreach ($this->getNamespacesRequiredToUse() as $namespace) {

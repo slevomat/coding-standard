@@ -329,12 +329,55 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 					'Foo',
 				],
 				'ignoredNames' => $ignoredNames,
+				'allowFullyQualifiedGlobalClasses' => true,
+				'allowFullyQualifiedGlobalFunctions' => true,
+				'allowFullyQualifiedGlobalConstants' => true,
 			]
 		);
 
 		self::assertSniffError($report, 3, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Foo\Bar');
 		self::assertNoSniffError($report, 4);
 		self::assertNoSniffError($report, 5);
+		self::assertNoSniffError($report, 6);
+		self::assertNoSniffError($report, 7);
+		self::assertNoSniffError($report, 8);
+	}
+
+	/**
+	 * @dataProvider dataIgnoredNamesForIrrelevantTests
+	 * @param string[] $ignoredNames
+	 */
+	public function testUseOnlyWhitelistedNamespacesAndGlobalNamespace(array $ignoredNames): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/whitelistedNamespaces.php',
+			[
+				'namespacesRequiredToUse' => [
+					'Foo',
+				],
+				'ignoredNames' => $ignoredNames,
+				'allowFullyQualifiedGlobalClasses' => false,
+				'allowFullyQualifiedGlobalFunctions' => false,
+				'allowFullyQualifiedGlobalConstants' => false,
+			]
+		);
+
+		self::assertSniffError($report, 3, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Foo\Bar');
+		self::assertNoSniffError($report, 4);
+		self::assertNoSniffError($report, 5);
+		self::assertSniffError(
+			$report,
+			6,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE,
+			'\DateTimeImmutable'
+		);
+		self::assertSniffError($report, 7, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE, '\min');
+		self::assertSniffError(
+			$report,
+			8,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE,
+			'\PHP_VERSION'
+		);
 	}
 
 	/**
