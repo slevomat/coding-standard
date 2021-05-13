@@ -5,6 +5,7 @@ namespace FooNamespace;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use UrlGeneratorInterface;
 use UsedNamespace\UsedNameFooBar as UsedNameFooBarBaz;
 use function DI\string;
 use function doSomething;
@@ -164,3 +165,14 @@ class WithUnion
 }
 
 echo str_pad('123', 1, pad_type: STR_PAD_RIGHT, enum_type: EnumType::VALUE());
+
+
+class SomeController
+{
+    public function generateRoute($router): string
+    {
+        return $router->generate('login_password_set', [
+            'resetCode' => 'somecode',
+        ], referenceType: UrlGeneratorInterface::RELATIVE_PATH);
+    }
+}
