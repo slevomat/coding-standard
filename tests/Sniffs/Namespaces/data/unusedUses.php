@@ -25,6 +25,8 @@ use UnionType;
 use UnionType2;
 use const STR_PAD_RIGHT;
 use EnumClass;
+use ReferenceClass;
+use ClassWithStaticVariable;
 
 class TestClass implements FirstInterface, SecondInterface
 {
@@ -49,7 +51,9 @@ class TestClass implements FirstInterface, SecondInterface
 		echo str_pad('123', 1, pad_type: STR_PAD_RIGHT);
 
 		new Foo(
+			ClassWithStaticVariable::$variable,
 			enum_type: EnumClass::VALUE(),
+			reference_type: ReferenceClass::SOME_CONSTANT
 		);
 
 		return new NewObject();

@@ -60,8 +60,12 @@ class UnusedUsesSniffTest extends TestCase
 		// Used constant as named parameter
 		self::assertNoSniffError($report, 26);
 
-		// Used class::cosntant as named parameter
+		// Used class::constant as named parameter
 		self::assertNoSniffError($report, 27);
+		self::assertNoSniffError($report, 28);
+
+		// Used class with static variable
+		self::assertNoSniffError($report, 29);
 	}
 
 	public function testUnusedUseWithMultipleNamespaces(): void
