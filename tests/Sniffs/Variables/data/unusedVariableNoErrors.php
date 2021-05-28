@@ -397,3 +397,15 @@ function () {
 		$a = $a + 1;
 	} while ($a <= 10);
 };
+
+function () {
+	$map = [];
+	$index = 0;
+
+	foreach ([] as $variable) {
+		$name = (string) $index++;
+		$map[$name] = $variable;
+	}
+
+	return $map;
+};
