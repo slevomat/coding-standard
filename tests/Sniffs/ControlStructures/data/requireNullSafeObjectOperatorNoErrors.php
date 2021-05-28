@@ -48,3 +48,9 @@ $a = $b !== false && $c->getD() !== null ? $c->getD()->getValue() : null;
 function ($something): bool {
 	return $something->getA() !== null && $something->getA()->isBoolean();
 };
+
+if ($a === null || $a->size === 0) {
+}
+
+if ($a === null || $a->size() === 0) {
+}
