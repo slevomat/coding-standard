@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.0
 
 /**
  *
@@ -56,6 +56,14 @@ class NoErrors
 	 * {@inheritdoc}
 	 */
 	public function iterableReturnType(): array
+	{
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	#[SomeAttribute]
+	public function iterableReturnTypeWithAttribute(): array
 	{
 	}
 
