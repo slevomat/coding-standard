@@ -75,4 +75,9 @@ class X extends Whatever
 		return true ?: parent::foo();
 	}
 
+	public function p()
+	{
+		return @parent::foo();
+	}
+
 }

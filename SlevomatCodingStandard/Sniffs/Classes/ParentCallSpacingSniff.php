@@ -10,6 +10,7 @@ use SlevomatCodingStandard\Sniffs\ControlStructures\AbstractControlStructureSpac
 use function array_key_exists;
 use function array_merge;
 use function in_array;
+use const T_ASPERAND;
 use const T_COALESCE;
 use const T_COLON;
 use const T_INLINE_ELSE;
@@ -49,7 +50,7 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 		}
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $parentPointer - 1);
-		if (in_array($tokens[$previousPointer]['code'], Tokens::$castTokens, true)) {
+		if (in_array($tokens[$previousPointer]['code'], array_merge(Tokens::$castTokens, [T_ASPERAND]), true)) {
 			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
 		}
 
