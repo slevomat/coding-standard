@@ -269,6 +269,13 @@ function arrayShape(array $a)
 }
 
 /**
+ * @param array{params: array{video_id: int}, type: "http", url: string} $a
+ */
+function arrayShape2(array $a)
+{
+}
+
+/**
  * @phpstan-type SomeAlias1 int|false
  * @phpstan-import-type SomeAlias2 from \SomeClass
  * @phpstan-import-type SomeAlias4 from \SomeClass as SomeAlias3
