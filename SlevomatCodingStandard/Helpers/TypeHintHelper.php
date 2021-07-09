@@ -76,6 +76,11 @@ class TypeHintHelper
 		return in_array($typeHint, ['scalar', 'numeric'], true);
 	}
 
+	public static function isVoidTypeHint(string $typeHint): bool
+	{
+		return in_array($typeHint, ['void', 'never', 'never-return', 'never-returns', 'no-return'], true);
+	}
+
 	/**
 	 * @param string $typeHint
 	 * @return string[]
@@ -358,7 +363,7 @@ class TypeHintHelper
 
 		if (count($convertedParts) > 1) {
 			$convertedParts = array_map(static function (string $part): string {
-				return $part === 'void' ? 'null' : $part;
+				return TypeHintHelper::isVoidTypeHint($part) ? 'null' : $part;
 			}, $convertedParts);
 		}
 

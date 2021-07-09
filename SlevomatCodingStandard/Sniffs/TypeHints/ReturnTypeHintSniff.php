@@ -164,7 +164,9 @@ class ReturnTypeHintSniff implements Sniff
 
 		$hasReturnAnnotation = $this->hasReturnAnnotation($returnAnnotation);
 		$returnTypeNode = $this->getReturnTypeNode($returnAnnotation);
-		$isAnnotationReturnTypeVoid = $returnTypeNode instanceof IdentifierTypeNode && strtolower($returnTypeNode->name) === 'void';
+		$isAnnotationReturnTypeVoid = $returnTypeNode instanceof IdentifierTypeNode && TypeHintHelper::isVoidTypeHint(
+			strtolower($returnTypeNode->name)
+		);
 		$isAbstract = FunctionHelper::isAbstract($phpcsFile, $functionPointer);
 		$returnsValue = $isAbstract
 			? ($hasReturnAnnotation && !$isAnnotationReturnTypeVoid)
@@ -353,7 +355,7 @@ class ReturnTypeHintSniff implements Sniff
 				return;
 			}
 
-			$typeHintsWithConvertedUnion[$typeHintNo] = $typeHint === 'void'
+			$typeHintsWithConvertedUnion[$typeHintNo] = TypeHintHelper::isVoidTypeHint($typeHint)
 				? 'null'
 				: TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
 		}

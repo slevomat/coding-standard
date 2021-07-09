@@ -307,4 +307,11 @@ abstract class Whatever
 		return true;
 	}
 
+	/**
+	 * @return no-return
+	 */
+	public function noReturnTypeHint()
+	{
+	}
+
 }
