@@ -27,16 +27,23 @@ use const STR_PAD_RIGHT;
 use EnumClass;
 use ReferenceClass;
 use ClassWithStaticVariable;
+use ItemOfArray;
 
 class TestClass implements FirstInterface, SecondInterface
 {
 
+	/** @var array<string, ItemOfArray> */
+	public array $arrayShaped;
+	
 	public function test(S $s): Rasmus
 	{
 		new \Test\Foo\Bar();
 		$date = T::today();
 		new Framework\FooObject();
 		new Subnamespace\BarObject();
+		
+		
+		$array = [];
 
 		$functionNameAsClass = new UnusedFunction();
 		$unusedConstant = new UNUSED_CONSTANT();
