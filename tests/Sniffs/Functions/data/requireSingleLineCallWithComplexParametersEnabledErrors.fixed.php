@@ -11,5 +11,7 @@ class Whatever
 		return new self([true, false]);
 
 		self::doWhatever(self::doAnything(true, false));
+
+		$this->doNothing('[test]', '{test}', '(test)');
 	}
 }

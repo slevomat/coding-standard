@@ -262,9 +262,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 					&& $namespacePointers === []
 				) {
 					$label = sprintf(
-						$reference->isConstant
-							? 'Constant %s'
-							: ($reference->isFunction ? 'Function %s()' : 'Class %s'),
+						$reference->isConstant ? 'Constant %s' : ($reference->isFunction ? 'Function %s()' : 'Class %s'),
 						$name
 					);
 

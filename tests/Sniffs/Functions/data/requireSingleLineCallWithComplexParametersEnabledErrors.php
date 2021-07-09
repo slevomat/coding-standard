@@ -25,5 +25,11 @@ class Whatever
 		self::doWhatever(
 			self::doAnything(true, false)
 		);
+
+		$this->doNothing(
+			'[test]',
+			'{test}',
+			'(test)',
+		);
 	}
 }

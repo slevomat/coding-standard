@@ -7,15 +7,16 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_merge;
-use function preg_replace;
 use function rtrim;
-use function sprintf;
 use function trim;
+use const T_CLOSE_PARENTHESIS;
+use const T_COMMA;
 use const T_FUNCTION;
 use const T_OPEN_PARENTHESIS;
 use const T_PARENT;
 use const T_SELF;
 use const T_STATIC;
+use const T_WHITESPACE;
 
 abstract class AbstractLineCall implements Sniff
 {
@@ -52,13 +53,41 @@ abstract class AbstractLineCall implements Sniff
 
 	protected function getCall(File $phpcsFile, int $parenthesisOpenerPointer, int $parenthesisCloserPointer): string
 	{
-		$call = TokenHelper::getContent($phpcsFile, $parenthesisOpenerPointer + 1, $parenthesisCloserPointer - 1);
+		$tokens = $phpcsFile->getTokens();
 
-		$call = preg_replace(sprintf('~%s[ \t]*~', $phpcsFile->eolChar), ' ', $call);
-		$call = preg_replace('~([({[])\s+~', '$1', $call);
-		$call = preg_replace('~\s+([)}\]])~', '$1', $call);
-		$call = preg_replace('~,\s*\)~', ')', $call);
-		$call = preg_replace('~,\s*$~', '', $call);
+		$pointerBeforeParenthesisCloser = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisCloserPointer - 1);
+
+		$endPointer = $tokens[$pointerBeforeParenthesisCloser]['code'] === T_COMMA
+			? $pointerBeforeParenthesisCloser
+			: $parenthesisCloserPointer;
+
+		$call = '';
+
+		for ($i = $parenthesisOpenerPointer + 1; $i < $endPointer; $i++) {
+			if ($tokens[$i]['code'] === T_COMMA) {
+				$nextPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
+				if ($tokens[$nextPointer]['code'] === T_CLOSE_PARENTHESIS) {
+					$i = $nextPointer - 1;
+					continue;
+				}
+			}
+
+			if ($tokens[$i]['code'] === T_WHITESPACE) {
+				if ($tokens[$i]['content'] === $phpcsFile->eolChar) {
+					if ($tokens[$i - 1]['code'] === T_COMMA) {
+						$call .= ' ';
+					}
+
+					continue;
+
+				} if ($tokens[$i]['column'] === 1) {
+					// Nothing
+					continue;
+				}
+			}
+
+			$call .= $tokens[$i]['content'];
+		}
 
 		return trim($call);
 	}

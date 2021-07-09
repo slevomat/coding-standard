@@ -66,7 +66,7 @@ class RequireSingleLineCallSniffTest extends TestCase
 			'ignoreWithComplexParameter' => false,
 		]);
 
-		self::assertSame(4, $report->getErrorCount());
+		self::assertSame(5, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -91,6 +91,12 @@ class RequireSingleLineCallSniffTest extends TestCase
 			25,
 			RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL,
 			'Call of method doWhatever() should be placed on a single line.'
+		);
+		self::assertSniffError(
+			$report,
+			29,
+			RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL,
+			'Call of method doNothing() should be placed on a single line.'
 		);
 
 		self::assertAllFixedInFile($report);
