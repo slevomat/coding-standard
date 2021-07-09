@@ -94,7 +94,7 @@ class UnusedUsesSniffTest extends TestCase
 			'searchAnnotations' => false,
 		]);
 
-		self::assertSame(66, $report->getErrorCount());
+		self::assertSame(67, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Assert is not used in this file.');
 		self::assertSniffError(
@@ -186,6 +186,7 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertSniffError($report, 68, UnusedUsesSniff::CODE_UNUSED_USE, 'Type TypeAlias2 is not used in this file.');
 		self::assertSniffError($report, 69, UnusedUsesSniff::CODE_UNUSED_USE, 'Type SomeImportFrom1 is not used in this file.');
 		self::assertSniffError($report, 70, UnusedUsesSniff::CODE_UNUSED_USE, 'Type SomeImportFrom2 is not used in this file.');
+		self::assertSniffError($report, 71, UnusedUsesSniff::CODE_UNUSED_USE, 'Type ArrayValue is not used in this file.');
 	}
 
 	public function testUsedUseInAnnotationWithEnabledSearchAnnotations(): void

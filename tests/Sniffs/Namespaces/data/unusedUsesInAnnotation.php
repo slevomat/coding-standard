@@ -68,6 +68,7 @@ use TypeAlias1;
 use TypeAlias2;
 use SomeImportFrom1;
 use SomeImportFrom2;
+use ArrayValue;
 
 /**
  * @ORM\Entity()
@@ -233,6 +234,9 @@ $arrayShape1 = [];
 
 /** @var array{int: ArrayShape2} $arrayShape2 */
 $arrayShape2 = [];
+
+/** @var array<int, ArrayValue> $array */
+$array = [];
 
 /**
  * @method method1(string $parameter = ConstantExpression1::class)
