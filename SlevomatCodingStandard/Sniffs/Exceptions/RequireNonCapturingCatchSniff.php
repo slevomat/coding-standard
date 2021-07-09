@@ -4,11 +4,15 @@ namespace SlevomatCodingStandard\Sniffs\Exceptions;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\CatchHelper;
 use SlevomatCodingStandard\Helpers\ParameterHelper;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\VariableHelper;
+use function array_keys;
+use function array_reverse;
+use function count;
 use function in_array;
 use const T_CATCH;
 use const T_DOUBLE_QUOTED_STRING;
@@ -61,25 +65,26 @@ class RequireNonCapturingCatchSniff implements Sniff
 
 		$variableName = $tokens[$variablePointer]['content'];
 
-		for ($i = $tokens[$catchPointer]['scope_opener'] + 1; $i < $tokens[$catchPointer]['scope_closer']; $i++) {
-			if ($tokens[$i]['code'] === T_VARIABLE) {
-				if (ParameterHelper::isParameter($phpcsFile, $i)) {
-					continue;
-				}
+		if ($this->isVariableUsedInCodePart(
+			$phpcsFile,
+			$tokens[$catchPointer]['scope_opener'],
+			$tokens[$catchPointer]['scope_closer'],
+			$variableName
+		)) {
+			return;
+		}
 
-				if (!ScopeHelper::isInSameScope($phpcsFile, $tokens[$catchPointer]['scope_opener'] + 1, $i)) {
-					continue;
-				}
+		$tryEndPointer = CatchHelper::getTryEndPointer($phpcsFile, $catchPointer);
 
-				if ($tokens[$i]['content'] === $variableName) {
-					return;
-				}
-			} elseif (
-				in_array($tokens[$i]['code'], [T_DOUBLE_QUOTED_STRING, T_HEREDOC], true)
-				&& VariableHelper::isUsedInScopeInString($phpcsFile, $variableName, $i)
-			) {
-				return;
-			}
+		if ($tokens[$tryEndPointer]['conditions'] !== []) {
+			$lastConditionPointer = array_reverse(array_keys($tokens[$tryEndPointer]['conditions']))[0];
+			$nextScopeEnd = $tokens[$lastConditionPointer]['scope_closer'];
+		} else {
+			$nextScopeEnd = count($tokens) - 1;
+		}
+
+		if ($this->isVariableUsedInCodePart($phpcsFile, $tryEndPointer, $nextScopeEnd, $variableName)) {
+			return;
 		}
 
 		$fix = $phpcsFile->addFixableError('Non capturing catch is required.', $catchPointer, self::CODE_NON_CAPTURING_CATCH_REQUIRED);
@@ -107,6 +112,46 @@ class RequireNonCapturingCatchSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->endChangeset();
+	}
+
+	private function isVariableUsedInCodePart(File $phpcsFile, int $codeStartPointer, int $codeEndPointer, string $variableName): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$firstPointerInCode = $codeStartPointer + 1;
+
+		for ($i = $firstPointerInCode; $i <= $codeEndPointer; $i++) {
+			if ($tokens[$i]['code'] === T_VARIABLE) {
+				if (ParameterHelper::isParameter($phpcsFile, $i)) {
+					continue;
+				}
+
+				if (!ScopeHelper::isInSameScope($phpcsFile, $firstPointerInCode, $i)) {
+					continue;
+				}
+
+				if ($tokens[$i]['content'] !== $variableName) {
+					continue;
+				}
+
+				$catchPointer = TokenHelper::findPrevious($phpcsFile, T_CATCH, $i - 1, $firstPointerInCode);
+				if ($catchPointer === null) {
+					return true;
+				}
+
+				if ($tokens[$catchPointer]['parenthesis_closer'] < $i) {
+					return true;
+				}
+
+			} elseif (
+				in_array($tokens[$i]['code'], [T_DOUBLE_QUOTED_STRING, T_HEREDOC], true)
+				&& VariableHelper::isUsedInScopeInString($phpcsFile, $variableName, $i)
+			) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }
