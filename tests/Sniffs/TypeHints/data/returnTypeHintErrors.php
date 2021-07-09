@@ -299,4 +299,12 @@ abstract class Whatever
 	{
 	}
 
+	/**
+	 * @return void
+	 */
+	public function voidButReturnsValue()
+	{
+		return true;
+	}
+
 }
