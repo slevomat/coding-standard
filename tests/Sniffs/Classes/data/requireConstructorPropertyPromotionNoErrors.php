@@ -68,7 +68,9 @@ class Nothing
 	 */
 	private string $h;
 
-	public function __construct($a, $c, $d, $e, $f, $g, $h)
+	private ?string $i;
+
+	public function __construct($a, $c, $d, $e, $f, $g, $h, string $i)
 	{
 		$phpVersion = phpversion();
 
@@ -89,6 +91,8 @@ class Nothing
 		$this->g = $g;
 
 		$this->h = $h;
+
+		$this->i = $i;
 	}
 
 }
@@ -96,7 +100,7 @@ class Nothing
 class Foo
 {
 
-	private ?SimpleXMLElement $openingHours = null;
+	private SimpleXMLElement|string|null $openingHours = null;
 
 	private ?string $formattedOpeningHours;
 

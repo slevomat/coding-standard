@@ -12,6 +12,7 @@ use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\TypeHint;
 use function array_filter;
 use function array_reverse;
 use function count;
@@ -134,6 +135,12 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 				}
 
 				if ($this->isPropertyDocCommentUseful($phpcsFile, $propertyPointer)) {
+					continue;
+				}
+
+				$propertyTypeHint = PropertyHelper::findTypeHint($phpcsFile, $propertyPointer);
+				$parameterTypeHint = FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer)[$parameterName];
+				if (!$this->areTypeHintEqual($parameterTypeHint, $propertyTypeHint)) {
 					continue;
 				}
 
@@ -313,6 +320,15 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 		}
 
 		return false;
+	}
+
+	private function areTypeHintEqual(?TypeHint $parameterTypeHint, ?TypeHint $propertyTypeHint): bool
+	{
+		if ($parameterTypeHint === null && $propertyTypeHint === null) {
+			return true;
+		}
+
+		return $parameterTypeHint->getTypeHint() === $propertyTypeHint->getTypeHint();
 	}
 
 	private function isParameterModifiedBeforeAssigment(
