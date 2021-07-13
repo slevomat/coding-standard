@@ -158,8 +158,8 @@ jobs:
       - name: "Tests"
         run: "bin/phing tests-without-code-coverage"
 
-  code-coverage:
-    name: "Code coverage"
+  upload-code-coverage:
+    name: "Upload code coverage"
 
     runs-on: "ubuntu-latest"
 
@@ -188,6 +188,9 @@ jobs:
         run: bin/phing tests
 
       - name: "Upload to Codecov.io"
-        env:
-          CODECOV_TOKEN: "${{ secrets.CODECOV }}"
-        run: "bash <(curl -s https://codecov.io/bash) -f temp/coverage.xml"
+        uses: codecov/codecov-action@v1
+        with:
+          token: "${{ secrets.CODECOV }}"
+          files: temp/coverage.xml
+          flags: unittests
+          fail_ci_if_error: true
