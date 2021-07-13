@@ -70,7 +70,9 @@ class Nothing
 
 	private ?string $i;
 
-	public function __construct($a, $c, $d, $e, $f, $g, $h, string $i)
+	private $j;
+
+	public function __construct($a, $c, $d, $e, $f, $g, $h, string $i, string $j)
 	{
 		$phpVersion = phpversion();
 
@@ -93,6 +95,8 @@ class Nothing
 		$this->h = $h;
 
 		$this->i = $i;
+
+		$this->j = $j;
 	}
 
 }

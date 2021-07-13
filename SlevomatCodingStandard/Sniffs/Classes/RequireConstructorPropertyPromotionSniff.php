@@ -328,6 +328,10 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 			return true;
 		}
 
+		if ($parameterTypeHint === null || $propertyTypeHint === null) {
+			return false;
+		}
+
 		return $parameterTypeHint->getTypeHint() === $propertyTypeHint->getTypeHint();
 	}
 
