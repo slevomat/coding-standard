@@ -27,6 +27,7 @@ use const STR_PAD_RIGHT;
 use EnumClass;
 use ReferenceClass;
 use ClassWithStaticVariable;
+use ClassInString;
 
 class TestClass implements FirstInterface, SecondInterface
 {
@@ -55,6 +56,8 @@ class TestClass implements FirstInterface, SecondInterface
 			enum_type: EnumClass::VALUE(),
 			reference_type: ReferenceClass::SOME_CONSTANT
 		);
+
+		$string = "String interpolation:{$this->getParameter(ClassInString::PARAM_NAME)}";
 
 		return new NewObject();
 	}
