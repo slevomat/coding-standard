@@ -12,11 +12,18 @@ class Whatever
 
 	private ?bool $c = null;
 
-	public function __construct(string $a, int|null $b = 0, ?bool $c)
+	#[SomeAttribute]
+	private $d;
+
+	private $e;
+
+	public function __construct(string $a, int|null $b = 0, ?bool $c, $d, $e)
 	{
 		$this->a = $a;
 		$this->b = $b;
 		$this->c = $c;
+		$this->d = $d;
+		$this->e = $e;
 	}
 
 }

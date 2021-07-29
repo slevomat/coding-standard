@@ -21,7 +21,7 @@ class RequireConstructorPropertyPromotionSniffTest extends TestCase
 			'enable' => true,
 		]);
 
-		self::assertSame(4, $report->getErrorCount());
+		self::assertSame(5, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -43,7 +43,13 @@ class RequireConstructorPropertyPromotionSniffTest extends TestCase
 		);
 		self::assertSniffError(
 			$report,
-			29,
+			18,
+			RequireConstructorPropertyPromotionSniff::CODE_REQUIRED_CONSTRUCTOR_PROPERTY_PROMOTION,
+			'Required promotion of property $e.'
+		);
+		self::assertSniffError(
+			$report,
+			36,
 			RequireConstructorPropertyPromotionSniff::CODE_REQUIRED_CONSTRUCTOR_PROPERTY_PROMOTION,
 			'Required promotion of property $from.'
 		);

@@ -21,8 +21,10 @@ use function sprintf;
 use function strtolower;
 use function substr;
 use function trim;
+use const T_ATTRIBUTE_END;
 use const T_BITWISE_AND;
 use const T_CALLABLE;
+use const T_CLOSE_CURLY_BRACKET;
 use const T_COMMA;
 use const T_ELLIPSIS;
 use const T_ELSE;
@@ -31,6 +33,7 @@ use const T_EQUAL;
 use const T_FUNCTION;
 use const T_IF;
 use const T_OBJECT_OPERATOR;
+use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_PARENTHESIS;
 use const T_SEMICOLON;
 use const T_SWITCH;
@@ -135,6 +138,10 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 				}
 
 				if ($this->isPropertyDocCommentUseful($phpcsFile, $propertyPointer)) {
+					continue;
+				}
+
+				if ($this->isPropertyWithAttribute($phpcsFile, $propertyPointer)) {
 					continue;
 				}
 
@@ -320,6 +327,19 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 		}
 
 		return false;
+	}
+
+	private function isPropertyWithAttribute(File $phpcsFile, int $propertyPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$previousPointer = TokenHelper::findPrevious(
+			$phpcsFile,
+			[T_ATTRIBUTE_END, T_SEMICOLON, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET],
+			$propertyPointer - 1
+		);
+
+		return $tokens[$previousPointer]['code'] === T_ATTRIBUTE_END;
 	}
 
 	private function areTypeHintEqual(?TypeHint $parameterTypeHint, ?TypeHint $propertyTypeHint): bool

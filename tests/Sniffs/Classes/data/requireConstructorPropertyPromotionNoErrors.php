@@ -72,7 +72,10 @@ class Nothing
 
 	private $j;
 
-	public function __construct($a, $c, $d, $e, $f, $g, $h, string $i, string $j)
+	#[SomeAttribute]
+	private $k;
+
+	public function __construct($a, $c, $d, $e, $f, $g, $h, string $i, string $j, $k)
 	{
 		$phpVersion = phpversion();
 
@@ -97,6 +100,8 @@ class Nothing
 		$this->i = $i;
 
 		$this->j = $j;
+
+		$this->k = $k;
 	}
 
 }

@@ -3,8 +3,12 @@
 class Whatever
 {
 
-	public function __construct(public string $a, protected int|null $b = 0, private ?bool $c = null)
+	#[SomeAttribute]
+	private $d;
+
+	public function __construct(public string $a, protected int|null $b = 0, private ?bool $c = null, $d, private $e)
 	{
+		$this->d = $d;
 	}
 
 }
