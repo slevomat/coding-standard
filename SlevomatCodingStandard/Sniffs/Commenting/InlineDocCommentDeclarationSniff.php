@@ -319,7 +319,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 				}
 
 				if ($tokens[$codePointer]['code'] === T_VARIABLE) {
-					if (!$this->isAssignment($phpcsFile, $codePointer)) {
+					if ($tokens[$codePointer]['content'] !== '$this' && !$this->isAssignment($phpcsFile, $codePointer)) {
 						if ($tryNo === 2) {
 							$phpcsFile->addError(...$noAssignmentErrorParameters);
 						}

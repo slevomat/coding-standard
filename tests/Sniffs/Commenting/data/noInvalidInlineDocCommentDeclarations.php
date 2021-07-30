@@ -131,6 +131,11 @@ class Foo
 		$callable2 = static function(string $x) : int{return 1;};
 		/** @var callable(string):int $callable3 */
 		$callable3 = static function(string $x) : int{return 1;};
+
+		$callback = function () {
+			/** @var Whatever $this */
+			$this->anything();
+		};
 	}
 
 	public function get()

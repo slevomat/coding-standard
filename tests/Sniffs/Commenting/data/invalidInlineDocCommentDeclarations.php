@@ -41,6 +41,11 @@ class Foo
 
 		/** @var $l string */
 		[$l] = ['l'];
+
+		$m = function () {
+			/** @var $this Whatever */
+			$this->anything();
+		};
 	}
 
 	public function get()
