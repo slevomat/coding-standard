@@ -139,8 +139,11 @@ class ReferencedNameHelper
 			}
 
 			if ($tokens[$nameStartPointer]['code'] === T_DOUBLE_QUOTED_STRING) {
-				if (preg_match('~(' . TypeHelper::REGEXP . ')::~', $tokens[$nameStartPointer]['content'], $matches) === 1) {
-					$referencedNames[] = new ReferencedName($matches[1], $nameStartPointer, $nameStartPointer, ReferencedName::TYPE_CLASS);
+				if (
+					preg_match('~(\$)?(' . TypeHelper::REGEXP . ')::~', $tokens[$nameStartPointer]['content'], $matches) === 1
+					&& $matches[1] === ''
+				) {
+					$referencedNames[] = new ReferencedName($matches[2], $nameStartPointer, $nameStartPointer, ReferencedName::TYPE_CLASS);
 				}
 
 				$beginSearchAtPointer = $nameStartPointer + 1;

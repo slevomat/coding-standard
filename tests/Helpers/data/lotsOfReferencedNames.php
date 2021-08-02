@@ -182,7 +182,10 @@ class InString
 
 	public function doSomething()
 	{
-		return "String interpolation:{$this->getParameter(ClassInString::PARAM_NAME)}";
+		$a = "String interpolation:{$this->getParameter(ClassInString::PARAM_NAME)}";
+		$b = "String interpolation:{$this->getParameter($noClassInString::PARAM_NAME)}";
+
+		return $a . $b;
 	}
 
 }
