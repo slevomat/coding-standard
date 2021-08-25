@@ -94,6 +94,10 @@ Sniff provides the following settings:
 * `shortNullable`: `yes` requires usage of `?` for nullable type hint, `no` disallows it. None is set by default so both are enabled.
 * `nullPosition`: `first` requires `null` on first position in the type hint, `last` requires last position. None is set by default so `null` can be everywhere.
 
+#### SlevomatCodingStandard.Exceptions.DisallowNonCapturingCatch
+
+This sniff forbids use of non-capturing catch introduced in PHP 8.0 [PHP RFC: non-capturing catches](https://wiki.php.net/rfc/non-capturing_catches).
+
 #### SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly 🔧🚧
 
 In PHP 7.0, a [`Throwable` interface was added](https://wiki.php.net/rfc/throwable-interface) that allows catching and handling errors in more cases than `Exception` previously allowed. So, if the catch statement contained `Exception` on PHP 5.x, it means it should probably be rewritten to reference `Throwable` on PHP 7.x. This sniff enforces that.
