@@ -176,16 +176,3 @@ class SomeController
         ], referenceType: UrlGeneratorInterface::RELATIVE_PATH);
     }
 }
-
-class InString
-{
-
-	public function doSomething()
-	{
-		$a = "String interpolation:{$this->getParameter(ClassInString::PARAM_NAME)}";
-		$b = "String interpolation:{$this->getParameter($noClassInString::PARAM_NAME)}";
-
-		return $a . $b;
-	}
-
-}

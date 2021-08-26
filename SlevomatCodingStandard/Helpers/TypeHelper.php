@@ -12,8 +12,6 @@ use function preg_match;
 class TypeHelper
 {
 
-	public const REGEXP = '\\\\?([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)(\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*';
-
 	/**
 	 * Validates type name according to the allowed characters in type names + namespaces
 	 *
@@ -24,7 +22,11 @@ class TypeHelper
 	public static function isTypeName(string $typeName): bool
 	{
 		$matches = [];
-		$result = preg_match('~^' . self::REGEXP . '$~', $typeName, $matches);
+		$result = preg_match(
+			'~^\\\\?([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)(\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*$~',
+			$typeName,
+			$matches
+		);
 		if ($result === false) {
 			// @codeCoverageIgnoreStart
 			throw new Exception('PREG error ' . preg_last_error());

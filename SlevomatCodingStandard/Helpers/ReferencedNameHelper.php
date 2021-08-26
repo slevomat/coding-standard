@@ -9,7 +9,6 @@ use function array_reverse;
 use function array_values;
 use function count;
 use function in_array;
-use function preg_match;
 use const T_ANON_CLASS;
 use const T_ARRAY;
 use const T_AS;
@@ -24,7 +23,6 @@ use const T_COMMA;
 use const T_CONST;
 use const T_DECLARE;
 use const T_DOUBLE_COLON;
-use const T_DOUBLE_QUOTED_STRING;
 use const T_ELLIPSIS;
 use const T_EXTENDS;
 use const T_FUNCTION;
@@ -129,25 +127,13 @@ class ReferencedNameHelper
 		$referencedNames = [];
 
 		$beginSearchAtPointer = $openTagPointer + 1;
-		$nameTokenCodes = array_merge([T_DOUBLE_QUOTED_STRING], TokenHelper::getNameTokenCodes());
+		$nameTokenCodes = TokenHelper::getNameTokenCodes();
 		$tokens = $phpcsFile->getTokens();
 
 		while (true) {
 			$nameStartPointer = TokenHelper::findNext($phpcsFile, $nameTokenCodes, $beginSearchAtPointer);
 			if ($nameStartPointer === null) {
 				break;
-			}
-
-			if ($tokens[$nameStartPointer]['code'] === T_DOUBLE_QUOTED_STRING) {
-				if (
-					preg_match('~(\$)?(' . TypeHelper::REGEXP . ')::~', $tokens[$nameStartPointer]['content'], $matches) === 1
-					&& $matches[1] === ''
-				) {
-					$referencedNames[] = new ReferencedName($matches[2], $nameStartPointer, $nameStartPointer, ReferencedName::TYPE_CLASS);
-				}
-
-				$beginSearchAtPointer = $nameStartPointer + 1;
-				continue;
 			}
 
 			// Attributes are parsed in specific method
