@@ -100,7 +100,6 @@ class Whatever
 	/** @var array<string>|array<int>|array<bool>|null */
 	public ?array $unionWithSameNullableBase = null;
 
-	/** @var ?int */
 	public ?int $nullable = null;
 
 	/**
@@ -165,5 +164,7 @@ class Whatever
 	 * @var callable
 	 */
 	private $uselessSuppressOfMissingNativeTypeHint;
+
+	private ?int $uselessAnnotationWithShortNullable;
 
 }

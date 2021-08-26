@@ -168,7 +168,6 @@ class Whatever
 	}
 
 	/**
-	 * @param ?int $a
 	 */
 	public function nullable(?int $a)
 	{
@@ -268,6 +267,12 @@ class Whatever
 	 * @param scalar $a
 	 */
 	public function uselessSuppressOfMissingNativeTypeHint($a)
+	{
+	}
+
+	/**
+	 */
+	public function uselessAnnotationWithShortNullable(?int $a)
 	{
 	}
 

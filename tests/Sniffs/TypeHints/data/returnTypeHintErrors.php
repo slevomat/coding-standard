@@ -314,4 +314,12 @@ abstract class Whatever
 	{
 	}
 
+	/**
+	 * @return ?int
+	 */
+	public function uselessAnnotationWithShortNullable(): ?int
+	{
+		return 0;
+	}
+
 }

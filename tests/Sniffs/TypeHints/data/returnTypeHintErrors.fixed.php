@@ -181,7 +181,6 @@ abstract class Whatever
 	}
 
 	/**
-	 * @return ?int
 	 */
 	public function nullable(): ?int
 	{
@@ -302,6 +301,13 @@ abstract class Whatever
 	 */
 	public function noReturnTypeHint(): void
 	{
+	}
+
+	/**
+	 */
+	public function uselessAnnotationWithShortNullable(): ?int
+	{
+		return 0;
 	}
 
 }

@@ -440,10 +440,6 @@ class AnnotationHelper
 			);
 		}
 
-		if (!AnnotationTypeHelper::containsOneType($annotation->getType())) {
-			return false;
-		}
-
 		if ($annotation->getType() instanceof ConstTypeNode) {
 			return false;
 		}

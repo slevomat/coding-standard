@@ -281,4 +281,11 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @param ?int $a
+	 */
+	public function uselessAnnotationWithShortNullable(?int $a)
+	{
+	}
+
 }

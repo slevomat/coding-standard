@@ -187,4 +187,7 @@ class Whatever
 	 */
 	private $uselessSuppressOfMissingNativeTypeHint;
 
+	/** @var ?int */
+	private ?int $uselessAnnotationWithShortNullable;
+
 }

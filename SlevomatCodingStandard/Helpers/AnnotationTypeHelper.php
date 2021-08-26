@@ -429,6 +429,10 @@ class AnnotationTypeHelper
 
 	public static function containsJustTwoTypes(TypeNode $typeNode): bool
 	{
+		if ($typeNode instanceof NullableTypeNode && self::containsOneType($typeNode->type)) {
+			return true;
+		}
+
 		if (
 			!$typeNode instanceof UnionTypeNode
 			&& !$typeNode instanceof IntersectionTypeNode
