@@ -87,7 +87,7 @@ class RequireNonCapturingCatchSniff implements Sniff
 			return;
 		}
 
-		$fix = $phpcsFile->addFixableError('Non capturing catch is required.', $catchPointer, self::CODE_NON_CAPTURING_CATCH_REQUIRED);
+		$fix = $phpcsFile->addFixableError('Non-capturing catch is required.', $catchPointer, self::CODE_NON_CAPTURING_CATCH_REQUIRED);
 
 		if (!$fix) {
 			return;
