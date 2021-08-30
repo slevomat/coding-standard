@@ -168,6 +168,8 @@ class ClassStructureSniff implements Sniff
 		'__unset' => self::GROUP_MAGIC_METHODS,
 		'__sleep' => self::GROUP_MAGIC_METHODS,
 		'__wakeup' => self::GROUP_MAGIC_METHODS,
+		'__serialize' => self::GROUP_MAGIC_METHODS,
+		'__unserialize' => self::GROUP_MAGIC_METHODS,
 		'__tostring' => self::GROUP_MAGIC_METHODS,
 		'__invoke' => self::GROUP_MAGIC_METHODS,
 		'__set_state' => self::GROUP_MAGIC_METHODS,
