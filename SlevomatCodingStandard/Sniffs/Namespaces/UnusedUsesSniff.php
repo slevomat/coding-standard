@@ -268,7 +268,7 @@ class UnusedUsesSniff implements Sniff
 										}, AnnotationConstantExpressionHelper::getConstantFetchNodes($annotationConstantExpression))
 									);
 								}
-							} elseif ($annotationName === '@see') {
+							} elseif ($annotationName === '@see' || $annotationName === '@covers') {
 								$parts = preg_split('~(\\s+|::)~', $content);
 								if ($parts !== false) {
 									$contentsToCheck[] = $parts[0];
