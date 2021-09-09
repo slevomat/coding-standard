@@ -13,3 +13,5 @@
 (string ) 123;
 ( string ) 123;
 
+b"\xEF\xBB\xBF";
+
