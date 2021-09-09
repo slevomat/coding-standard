@@ -45,6 +45,17 @@ class UseSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testDefaultSettingsWithComments2Errors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/useSpacingWithDefaultSettingsWithComments2Errors.php');
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 3, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_USE);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testDefaultSettingsWithInlineCommentsNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/useSpacingWithDefaultSettingsWithInlineCommentsNoErrors.php');
