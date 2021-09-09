@@ -26,12 +26,14 @@ use const T_BITWISE_AND;
 use const T_CALLABLE;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_COMMA;
+use const T_DEC;
 use const T_ELLIPSIS;
 use const T_ELSE;
 use const T_ELSEIF;
 use const T_EQUAL;
 use const T_FUNCTION;
 use const T_IF;
+use const T_INC;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_PARENTHESIS;
@@ -375,6 +377,15 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 
 			$nextPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
 			if (in_array($tokens[$nextPointer]['code'], Tokens::$assignmentTokens, true)) {
+				return true;
+			}
+
+			if ($tokens[$nextPointer]['code'] === T_INC) {
+				return true;
+			}
+
+			$previousPointer = TokenHelper::findNextEffective($phpcsFile, $i - 1);
+			if ($tokens[$previousPointer]['code'] === T_DEC) {
 				return true;
 			}
 		}
