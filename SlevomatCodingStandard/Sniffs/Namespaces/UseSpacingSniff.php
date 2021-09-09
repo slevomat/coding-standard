@@ -15,6 +15,7 @@ use function array_values;
 use function count;
 use function in_array;
 use function sprintf;
+use const T_DOC_COMMENT_OPEN_TAG;
 use const T_OPEN_TAG;
 use const T_SEMICOLON;
 use const T_WHITESPACE;
@@ -143,14 +144,13 @@ class UseSpacingSniff implements Sniff
 
 		if (
 			in_array($tokens[$pointerAfterWhitespaceEnd]['code'], Tokens::$commentTokens, true)
+			&& $tokens[$pointerAfterWhitespaceEnd]['code'] !== T_DOC_COMMENT_OPEN_TAG
 			&& (
 				$tokens[$useEndPointer]['line'] === $tokens[$pointerAfterWhitespaceEnd]['line']
 				|| $tokens[$useEndPointer]['line'] + 1 === $tokens[$pointerAfterWhitespaceEnd]['line']
 			)
 		) {
-			$useEndPointer = array_key_exists('comment_closer', $tokens[$pointerAfterWhitespaceEnd])
-				? $tokens[$pointerAfterWhitespaceEnd]['comment_closer']
-				: CommentHelper::getMultilineCommentEndPointer($phpcsFile, $pointerAfterWhitespaceEnd);
+			$useEndPointer = CommentHelper::getMultilineCommentEndPointer($phpcsFile, $pointerAfterWhitespaceEnd);
 			/** @var int $pointerAfterWhitespaceEnd */
 			$pointerAfterWhitespaceEnd = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $useEndPointer + 1);
 		}
@@ -183,7 +183,7 @@ class UseSpacingSniff implements Sniff
 		}
 
 		$linesToAdd = $requiredLinesCountAfterLastUse;
-		if (in_array($tokens[$useEndPointer]['code'], TokenHelper::$inlineCommentTokenCodes, true)) {
+		if (CommentHelper::isLineComment($phpcsFile, $useEndPointer)) {
 			$linesToAdd--;
 		}
 

@@ -13,10 +13,10 @@ use const PHP_VERSION;
  * Anything
  */
 use const PHP_VERSION_ID;
+
 /**
  * Nothing
  */
-
 class Whatever
 {
 
