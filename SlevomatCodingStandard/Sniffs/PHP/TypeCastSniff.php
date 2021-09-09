@@ -58,6 +58,10 @@ class TypeCastSniff implements Sniff
 
 		preg_match('~^\(\s*(\S+)\s*\)\z~i', $cast, $matches);
 
+		if (!array_key_exists(1, $matches)) {
+			return;
+		}
+
 		$castName = $matches[1];
 		$castNameLower = strtolower($castName);
 
