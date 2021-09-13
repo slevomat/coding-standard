@@ -707,7 +707,17 @@ class DocCommentSpacingSniff implements Sniff
 
 	private function isAnnotationNameInAnnotationNamespace(string $annotationNamespace, string $annotationName): bool
 	{
-		return in_array(substr($annotationNamespace, -1), ['\\', '-', ':'], true) && strpos($annotationName, $annotationNamespace) === 0;
+		return $this->isAnnotationStartedFrom($annotationNamespace, $annotationName)
+			|| (
+				in_array(substr($annotationNamespace, -1), ['\\', '-', ':'], true)
+				&& strpos($annotationName, $annotationNamespace) === 0
+			);
+	}
+
+	private function isAnnotationStartedFrom(string $annotationNamespace, string $annotationName): bool
+	{
+		return substr($annotationNamespace, -1) === '*'
+			&& strpos($annotationName, substr($annotationNamespace, 0, -1)) === 0;
 	}
 
 	private function isAnnotationMatched(Annotation $annotation, string $annotationName): bool

@@ -10,6 +10,9 @@ class Whatever
 	 * Description
 	 *
 	 * @var string
+	 *
+	 * @FooAliasBar()
+	 * @FooAliasBaz()
 	 */
 	private $property;
 
