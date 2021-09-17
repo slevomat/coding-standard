@@ -69,6 +69,7 @@ use TypeAlias2;
 use SomeImportFrom1;
 use SomeImportFrom2;
 use ArrayValue;
+use TypeAliasWithConstant;
 
 /**
  * @ORM\Entity()
@@ -248,7 +249,7 @@ class ConstantExpression
 }
 
 /**
- * @phpstan-type SomeTypeAlias TypeAlias1|TypeAlias2
+ * @phpstan-type SomeTypeAlias TypeAlias1|TypeAlias2|TypeAliasWithConstant::SOME_CONSTANT
  * @psalm-import-type SomeImportedType from SomeImportFrom1
  * @phpstan-import-type AnotherImportedType from SomeImportFrom2 as AnotherImportedType2
  */
