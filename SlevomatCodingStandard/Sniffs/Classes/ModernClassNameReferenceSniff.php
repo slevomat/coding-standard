@@ -14,6 +14,7 @@ use function sprintf;
 use function strtolower;
 use const T_CLASS_C;
 use const T_DOUBLE_COLON;
+use const T_FUNCTION;
 use const T_NS_SEPARATOR;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
@@ -97,7 +98,7 @@ class ModernClassNameReferenceSniff implements Sniff
 		}
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $functionPointer - 1);
-		if (in_array($tokens[$previousPointer]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
+		if (in_array($tokens[$previousPointer]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON, T_FUNCTION], true)) {
 			return;
 		}
 
