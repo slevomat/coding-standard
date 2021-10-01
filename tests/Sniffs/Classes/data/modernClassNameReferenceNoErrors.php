@@ -54,4 +54,13 @@ class Whatever
 		return get_parent_class($this);
 	}
 
+	/*
+	 * Prevent false positives for methods called get_class(), get_parent_class(), get_called_class().
+	 */
+
+	public function get_class() {}
+
+	public function get_parent_class() {}
+
+	public function get_called_class() {}
 }
