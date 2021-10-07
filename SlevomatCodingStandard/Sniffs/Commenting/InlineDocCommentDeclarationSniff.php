@@ -16,6 +16,7 @@ use function trim;
 use const T_AS;
 use const T_ATTRIBUTE;
 use const T_CLOSURE;
+use const T_COALESCE_EQUAL;
 use const T_COMMENT;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_EQUAL;
@@ -458,7 +459,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 			return $tokens[$pointerBeforeVariable]['code'] === T_STATIC;
 		}
 
-		return $tokens[$pointerAfterVariable]['code'] === T_EQUAL;
+		return in_array($tokens[$pointerAfterVariable]['code'], [T_EQUAL, T_COALESCE_EQUAL], true);
 	}
 
 }
