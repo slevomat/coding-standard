@@ -176,3 +176,17 @@ class SomeController
         ], referenceType: UrlGeneratorInterface::RELATIVE_PATH);
     }
 }
+
+"foo {$db->quote(ClassInDoubleQuote::SOME_CONSTANT)}";
+"foo $db->quote(FakeClassInDoubleQuote::SOME_CONSTANT)";
+
+$script .= "// @see \Foo\Bar::func()
+                \$hasDefaultValue = $hasDefaultValue;
+                /** @var \Foo\Test\Bla\Whatever */
+";
+return "
+	/** @var \\Generated\\Test\\Ide\\AutoCompletion \$locator */
+ 	\$locator = \\Foo\\Test\\Kernel\\Locator::getInstance();
+                $objName = \$locator->"
+	. '()->entity'
+	. $this->getObjectClassName() . '();';
