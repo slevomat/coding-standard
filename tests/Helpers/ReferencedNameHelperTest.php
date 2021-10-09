@@ -67,6 +67,7 @@ class ReferencedNameHelperTest extends TestCase
 			['STR_PAD_RIGHT', false, true],
 			['EnumType', false, false],
 			['UrlGeneratorInterface', false, false],
+			['ClassInDoubleQuote', false, false],
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);

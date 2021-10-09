@@ -66,6 +66,8 @@ class UnusedUsesSniffTest extends TestCase
 
 		// Used class with static variable
 		self::assertNoSniffError($report, 29);
+
+		self::assertNoSniffError($report, 30);
 	}
 
 	public function testUnusedUseWithMultipleNamespaces(): void
