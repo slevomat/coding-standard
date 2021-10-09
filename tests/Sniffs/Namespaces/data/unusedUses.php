@@ -27,6 +27,7 @@ use const STR_PAD_RIGHT;
 use EnumClass;
 use ReferenceClass;
 use ClassWithStaticVariable;
+use ClassWithConstant;
 
 class TestClass implements FirstInterface, SecondInterface
 {
@@ -55,6 +56,8 @@ class TestClass implements FirstInterface, SecondInterface
 			enum_type: EnumClass::VALUE(),
 			reference_type: ReferenceClass::SOME_CONSTANT
 		);
+
+		echo "test {$wrapper->escape(ClassWithConstant::FOO)}";
 
 		return new NewObject();
 	}

@@ -9,6 +9,8 @@ use function array_reverse;
 use function array_values;
 use function count;
 use function in_array;
+use function is_array;
+use function token_get_all;
 use const T_ANON_CLASS;
 use const T_ARRAY;
 use const T_AS;
@@ -23,14 +25,17 @@ use const T_COMMA;
 use const T_CONST;
 use const T_DECLARE;
 use const T_DOUBLE_COLON;
+use const T_DOUBLE_QUOTED_STRING;
 use const T_ELLIPSIS;
 use const T_EXTENDS;
 use const T_FUNCTION;
 use const T_GOTO;
+use const T_HEREDOC;
 use const T_IMPLEMENTS;
 use const T_INSTANCEOF;
 use const T_NAMESPACE;
 use const T_NEW;
+use const T_NS_SEPARATOR;
 use const T_NULLABLE;
 use const T_NULLSAFE_OBJECT_OPERATOR;
 use const T_OBJECT_OPERATOR;
@@ -38,6 +43,7 @@ use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_OPEN_TAG;
 use const T_PARAM_NAME;
+use const T_STRING;
 use const T_TRAIT;
 use const T_TYPE_UNION;
 use const T_USE;
@@ -128,12 +134,30 @@ class ReferencedNameHelper
 
 		$beginSearchAtPointer = $openTagPointer + 1;
 		$nameTokenCodes = TokenHelper::getNameTokenCodes();
-		$tokens = $phpcsFile->getTokens();
+		$nameTokenCodes[] = T_DOUBLE_QUOTED_STRING;
 
+		$tokens = $phpcsFile->getTokens();
 		while (true) {
 			$nameStartPointer = TokenHelper::findNext($phpcsFile, $nameTokenCodes, $beginSearchAtPointer);
 			if ($nameStartPointer === null) {
 				break;
+			}
+
+			// Find referenced names inside double quotes string
+			if (self::isNeedParsedContent($tokens[$nameStartPointer]['code'])) {
+				$content = $tokens[$nameStartPointer]['content'];
+				if (self::isNeedParsedContent($tokens[$nameStartPointer - 1]['code'])) {
+					$content = '"' . $content;
+				}
+				if (self::isNeedParsedContent($tokens[$nameStartPointer + 1]['code'])) {
+					$content .= '"';
+				}
+				$names = self::getReferencedNamesFromString($content);
+				foreach ($names as $name) {
+					$referencedNames[] = new ReferencedName($name, $nameStartPointer, $nameStartPointer, ReferencedName::TYPE_CLASS);
+				}
+				$beginSearchAtPointer = $nameStartPointer + 1;
+				continue;
 			}
 
 			// Attributes are parsed in specific method
@@ -430,6 +454,44 @@ class ReferencedNameHelper
 				$searchPointer = $referencedNameEndPointer + 1;
 
 			} while (true);
+		}
+
+		return $referencedNames;
+	}
+
+	/**
+	 * @param int|string $code
+	 * @return bool
+	 */
+	private static function isNeedParsedContent($code): bool
+	{
+		return in_array($code, [T_DOUBLE_QUOTED_STRING, T_HEREDOC], true);
+	}
+
+	/**
+	 * @param string $content
+	 * @return string[]
+	 */
+	private static function getReferencedNamesFromString(string $content): array
+	{
+		$referencedNames = [];
+		$subTokens = token_get_all('<?php ' . $content);
+
+		foreach ($subTokens as $position => $token) {
+			if (is_array($token) && $token[0] === T_DOUBLE_COLON) {
+				$referencedName = '';
+				$tmpPosition = $position - 1;
+				while (true) {
+					if (!is_array($subTokens[$tmpPosition]) || !in_array($subTokens[$tmpPosition][0], [T_NS_SEPARATOR, T_STRING], true)) {
+						break;
+					}
+
+					$referencedName = $subTokens[$tmpPosition][1] . $referencedName;
+					$tmpPosition--;
+				}
+
+				$referencedNames[] = $referencedName;
+			}
 		}
 
 		return $referencedNames;
