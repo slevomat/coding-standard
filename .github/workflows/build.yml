@@ -22,6 +22,7 @@ jobs:
           - "7.3"
           - "7.4"
           - "8.0"
+          - "8.1"
 
     steps:
       - name: "Checkout"
@@ -123,6 +124,7 @@ jobs:
           - "7.3"
           - "7.4"
           - "8.0"
+          - "8.1"
         operating-system: ["ubuntu-latest", "windows-latest"]
 
     steps:
@@ -144,7 +146,7 @@ jobs:
           restore-keys: "php-${{ matrix.php-version }}-composer-"
 
       - name: "Reset composer platform"
-        if: matrix.php-version == '7.1' || matrix.php-version == '7.2'
+        if: matrix.php-version == '7.1' || matrix.php-version == '7.2' || matrix.php-version == '8.1'
         run: "composer config --unset platform"
 
       - name: "Install lowest dependencies"
