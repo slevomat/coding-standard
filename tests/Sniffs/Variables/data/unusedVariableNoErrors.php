@@ -306,19 +306,6 @@ function ($result) {
 };
 
 function () {
-	$GLOBALS = [];
-	$_SERVER = [];
-	$_GET = [];
-	$_POST = [];
-	$_FILES = [];
-	$_COOKIE = [];
-	$_SESSION = [];
-	$_REQUEST = [];
-	$_ENV = [];
-};
-
-
-function () {
 	$a = 1;
 	return get_defined_vars();
 };
