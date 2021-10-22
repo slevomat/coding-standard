@@ -56,3 +56,5 @@ if (new stdClass()) {
 $aaa = [
 	(string) new stdClass() => new stdClass()
 ];
+
+$aaaa = new (stdClass::class)();
