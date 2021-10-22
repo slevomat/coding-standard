@@ -48,6 +48,10 @@ class NewWithParenthesesSniff implements Sniff
 			return;
 		}
 
+		if ($tokens[$nextPointer]['code'] === T_OPEN_PARENTHESIS) {
+			$nextPointer = $tokens[$nextPointer]['parenthesis_closer'];
+		}
+
 		$shouldBeOpenParenthesisPointer = $nextPointer + 1;
 		do {
 			$shouldBeOpenParenthesisPointer = TokenHelper::findNext(
