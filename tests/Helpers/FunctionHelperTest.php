@@ -440,6 +440,29 @@ class FunctionHelperTest extends TestCase
 		self::assertSame(['foo', 'boo'], FunctionHelper::getAllFunctionNames($phpcsFile));
 	}
 
+	public function testGetFunctionLengthInLines(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionLength.php');
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'countMe');
+
+		self::assertSame(2, FunctionHelper::getFunctionLengthInLines($phpcsFile, $functionPointer));
+		self::assertSame(7, FunctionHelper::getFunctionLengthInLines(
+			$phpcsFile,
+			$functionPointer,
+			FunctionHelper::LINE_INCLUDE_COMMENT
+		));
+		self::assertSame(3, FunctionHelper::getFunctionLengthInLines(
+			$phpcsFile,
+			$functionPointer,
+			FunctionHelper::LINE_INCLUDE_WHITESPACE
+		));
+		self::assertSame(8, FunctionHelper::getFunctionLengthInLines(
+			$phpcsFile,
+			$functionPointer,
+			FunctionHelper::LINE_INCLUDE_COMMENT | FunctionHelper::LINE_INCLUDE_WHITESPACE
+		));
+	}
+
 	public function testFindClassPointer(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionNames.php');
