@@ -43,4 +43,12 @@ class UseFromSameNamespaceSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testUseFromRootNamespaceInFileWithoutNamespace(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/useFromRootNamespaceWithoutNamespace.php');
+
+		self::assertSniffError($report, 3, UseFromSameNamespaceSniff::CODE_USE_FROM_SAME_NAMESPACE, 'Foo');
+		self::assertNoSniffError($report, 4);
+	}
+
 }
