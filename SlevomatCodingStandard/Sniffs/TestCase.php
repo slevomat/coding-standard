@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Config;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Files\LocalFile;
 use PHP_CodeSniffer\Runner;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use ReflectionClass;
 use function array_map;
 use function array_merge;
@@ -44,20 +45,22 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$codeSniffer->init();
 
 		if (count($sniffProperties) > 0) {
-			$codeSniffer->ruleset->ruleset[static::getSniffName()]['properties'] = $sniffProperties;
+			$codeSniffer->ruleset->ruleset[self::getSniffName()]['properties'] = $sniffProperties;
 		}
 
-		$sniffClassName = static::getSniffClassName();
+		$sniffClassName = self::getSniffClassName();
+		/** @var Sniff $sniff */
+		$sniff = new $sniffClassName();
 
-		$codeSniffer->ruleset->sniffs = [$sniffClassName => new $sniffClassName()];
+		$codeSniffer->ruleset->sniffs = [$sniffClassName => $sniff];
 
 		if (count($codesToCheck) > 0) {
-			foreach (static::getSniffClassReflection()->getConstants() as $constantName => $constantValue) {
+			foreach (self::getSniffClassReflection()->getConstants() as $constantName => $constantValue) {
 				if (strpos($constantName, 'CODE_') !== 0 || in_array($constantValue, $codesToCheck, true)) {
 					continue;
 				}
 
-				$codeSniffer->ruleset->ruleset[sprintf('%s.%s', static::getSniffName(), $constantValue)]['severity'] = 0;
+				$codeSniffer->ruleset->ruleset[sprintf('%s.%s', self::getSniffName(), $constantValue)]['severity'] = 0;
 			}
 		}
 
@@ -80,7 +83,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$errors = $phpcsFile->getErrors();
 		self::assertTrue(isset($errors[$line]), sprintf('Expected error on line %s, but none found.', $line));
 
-		$sniffCode = sprintf('%s.%s', static::getSniffName(), $code);
+		$sniffCode = sprintf('%s.%s', self::getSniffName(), $code);
 
 		self::assertTrue(
 			self::hasError($errors[$line], $sniffCode, $message),
@@ -135,21 +138,26 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 				'',
 				'',
 			],
-			static::getSniffClassName()
+			self::getSniffClassName()
 		);
 	}
 
+	/**
+	 * @return class-string
+	 */
 	private static function getSniffClassName(): string
 	{
-		return substr(static::class, 0, -strlen('Test'));
+		/** @var class-string $sniffClassName */
+		$sniffClassName = substr(static::class, 0, -strlen('Test'));
+
+		return $sniffClassName;
 	}
 
 	private static function getSniffClassReflection(): ReflectionClass
 	{
 		static $reflections = [];
 
-		/** @phpstan-var class-string $className */
-		$className = static::getSniffClassName();
+		$className = self::getSniffClassName();
 
 		return $reflections[$className] ?? $reflections[$className] = new ReflectionClass($className);
 	}

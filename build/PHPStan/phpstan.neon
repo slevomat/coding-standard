@@ -9,7 +9,7 @@ parameters:
 	bootstrapFiles:
 		- %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/autoload.php
 		- %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/src/Util/Tokens.php
-	excludes_analyse:
+	excludePaths:
 		- %currentWorkingDirectory%/tests/*/data/*
 	ignoreErrors:
 		- "#Offset '(bracket|scope|parenthesis|comment|attribute)_(opener|closer)' does not exist#"
