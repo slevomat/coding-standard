@@ -64,3 +64,10 @@ $array[
 doSomething([
 	$a,
 ]);
+
+doSomething( $a,
+	$b );
+
+doSomething( doSomething(
+	$foo,
+) );

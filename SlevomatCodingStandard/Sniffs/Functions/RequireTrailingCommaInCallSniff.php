@@ -79,7 +79,7 @@ class RequireTrailingCommaInCallSniff implements Sniff
 			return;
 		}
 
-		if ($pointerBeforeParenthesisCloser + 1 === $parenthesisCloserPointer) {
+		if ($tokens[$parenthesisCloserPointer]['line'] === $tokens[$pointerBeforeParenthesisCloser]['line']) {
 			return;
 		}
 
