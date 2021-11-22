@@ -184,6 +184,10 @@ Disallows late static binding for constants.
 
 Disallows using public properties.
 
+#### SlevomatCodingStandard.Classes.RequireAbstractOrFinal 🔧
+
+Requires the class to be declared either as abstract or as final.
+
 #### SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion 🔧
 
 Requires use of constructor property promotion.
