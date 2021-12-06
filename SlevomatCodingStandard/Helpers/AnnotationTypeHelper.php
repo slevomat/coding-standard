@@ -23,6 +23,7 @@ use function array_merge;
 use function count;
 use function in_array;
 use function preg_replace;
+use function sprintf;
 use function strtolower;
 use function substr;
 
@@ -271,6 +272,10 @@ class AnnotationTypeHelper
 			|| $typeNode instanceof IntersectionTypeNode
 		) {
 			$exportedTypeNode = substr($exportedTypeNode, 1, -1);
+		}
+
+		if ($typeNode instanceof ArrayTypeNode && $typeNode->type instanceof CallableTypeNode) {
+			$exportedTypeNode = sprintf('(%s)[]', substr($exportedTypeNode, 0, -2));
 		}
 
 		return $exportedTypeNode;
