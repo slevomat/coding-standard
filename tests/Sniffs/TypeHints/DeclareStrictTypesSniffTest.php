@@ -239,7 +239,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 	public function testFixableMissingIncorrectFormatOneSpace(): void
 	{
 		$report = self::checkFile(
-			__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatOneSpace.php',
+			__DIR__ . '/data/fixableDeclareStrictTypesIncorrectFormatOneSpace.php',
 			[],
 			[DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT]
 		);
@@ -248,7 +248,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 
 	public function testFixableMissingIncorrectFormatNoSpaces(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatNoSpaces.php', [
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrectFormatNoSpaces.php', [
 			'spacesCountAroundEqualsSign' => 0,
 		], [DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT]);
 		self::assertAllFixedInFile($report);
@@ -256,7 +256,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 
 	public function testFixableMissingIncorrectFormatMoreSpaces(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrentFormatMoreSpaces.php', [
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesIncorrectFormatMoreSpaces.php', [
 			'spacesCountAroundEqualsSign' => 4,
 		], [DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT]);
 		self::assertAllFixedInFile($report);
