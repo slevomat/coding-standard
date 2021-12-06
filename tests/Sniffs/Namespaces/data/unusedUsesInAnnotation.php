@@ -70,6 +70,7 @@ use SomeImportFrom1;
 use SomeImportFrom2;
 use ArrayValue;
 use TypeAliasWithConstant;
+use CustomAssert;
 
 /**
  * @ORM\Entity()
@@ -266,4 +267,11 @@ class TypeAliasAndImportes
 
 	}
 
+}
+
+/**
+ * @CustomAssert\NotBlank(message=CustomAssert\AbstractConstraint::VIOLATION_IS_REQUIRED)
+ */
+class PartlyUsedAliasInGenericAnnotation
+{
 }
