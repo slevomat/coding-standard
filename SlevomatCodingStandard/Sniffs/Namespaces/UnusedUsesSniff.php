@@ -203,7 +203,7 @@ class UnusedUsesSniff implements Sniff
 
 							if (
 								preg_match(
-									'~(?<=^|[^a-z\\\\])(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=::)~i',
+									'~(?<=^|[^a-z\\\\])(' . preg_quote($nameAsReferencedInFile, '~') . ')(\\\\\\w+)*(?=::)~i',
 									$annotation->getParameters(),
 									$matches
 								) === 0
