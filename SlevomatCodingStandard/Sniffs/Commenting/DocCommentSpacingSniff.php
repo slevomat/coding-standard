@@ -575,7 +575,7 @@ class DocCommentSpacingSniff implements Sniff
 				}
 
 				$fix = $phpcsFile->addFixableError(
-					'Incorrent order of annotations in group.',
+					'Incorrect order of annotations in group.',
 					$annotation->getStartPointer(),
 					self::CODE_INCORRECT_ORDER_OF_ANNOTATIONS_IN_GROUP
 				);
