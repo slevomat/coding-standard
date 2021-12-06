@@ -11,7 +11,7 @@ class ClassConstantVisibilitySniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/classWithConstants.php');
 
-		self::assertSame(2, $report->getErrorCount());
+		self::assertSame(3, $report->getErrorCount());
 
 		self::assertNoSniffError($report, 7);
 		self::assertNoSniffError($report, 9);
@@ -30,6 +30,16 @@ class ClassConstantVisibilitySniffTest extends TestCase
 			ClassConstantVisibilitySniff::CODE_MISSING_CONSTANT_VISIBILITY,
 			'Constant class@anonymous::PUBLIC_FOO visibility missing.'
 		);
+
+		self::assertSniffError(
+			$report,
+			25,
+			ClassConstantVisibilitySniff::CODE_MISSING_CONSTANT_VISIBILITY,
+			'Constant class@anonymous::FINAL_WITHOUT_VISIBILITY visibility missing.'
+		);
+
+		self::assertNoSniffError($report, 26);
+		self::assertNoSniffError($report, 27);
 	}
 
 	public function testNoClassConstants(): void

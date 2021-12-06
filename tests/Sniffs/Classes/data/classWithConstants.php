@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.1
 
 class ClassWithConstants
 {
@@ -22,4 +22,7 @@ $class = new class ()
 
 	const PUBLIC_FOO = 'public';
 
+	final const FINAL_WITHOUT_VISIBILITY = 'finalWithoutVisibility';
+	public final const FINAL_WITH_VISIBILITY = 'finalWithVisibility';
+	final public const FINAL_WITH_VISIBILITY2 = 'finalWithVisibility2';
 };
