@@ -139,3 +139,9 @@ class Whatever
 	private $anythingDifferent;
 
 }
+
+class CallableInArray
+{
+	/** @var (callable(): \Foo\Anything)[] */
+	private array $callableInArray;
+}

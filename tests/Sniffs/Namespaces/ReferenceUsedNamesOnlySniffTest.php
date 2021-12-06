@@ -727,7 +727,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			]
 		);
 
-		self::assertSame(31, $report->getErrorCount());
+		self::assertSame(32, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -917,6 +917,13 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 		);
 
 		self::assertNoSniffError($report, 138);
+
+		self::assertSniffError(
+			$report,
+			145,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\Anything should not be referenced via a fully qualified name, but via a use statement.'
+		);
 
 		self::assertAllFixedInFile($report);
 	}
