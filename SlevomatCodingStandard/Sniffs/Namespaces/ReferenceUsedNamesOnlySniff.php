@@ -599,7 +599,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 	private function isRequiredToBeUsed(string $name): bool
 	{
-		if (count($this->namespacesRequiredToUse) === 0) {
+		if ($this->namespacesRequiredToUse === null || $this->namespacesRequiredToUse === []) {
 			return true;
 		}
 
