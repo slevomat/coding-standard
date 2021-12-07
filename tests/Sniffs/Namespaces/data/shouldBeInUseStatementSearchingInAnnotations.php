@@ -143,5 +143,5 @@ class Whatever
 class CallableInArray
 {
 	/** @var (callable(): \Foo\Anything)[] */
-	private array $callableInArray;
+	private $callableInArray;
 }

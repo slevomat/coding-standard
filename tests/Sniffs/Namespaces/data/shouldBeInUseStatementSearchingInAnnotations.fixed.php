@@ -147,5 +147,5 @@ class Whatever
 class CallableInArray
 {
 	/** @var (callable(): Anything)[] */
-	private array $callableInArray;
+	private $callableInArray;
 }
