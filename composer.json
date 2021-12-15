@@ -18,7 +18,7 @@
 		"php": "^7.1 || ^8.0",
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.6.2 || ^0.7",
 		"phpstan/phpdoc-parser": "^1.0.0",
-		"squizlabs/php_codesniffer": "^3.6.1"
+		"squizlabs/php_codesniffer": "^3.6.2"
 	},
 	"require-dev": {
 		"phing/phing": "2.17.0",
