@@ -1,4 +1,4 @@
-<?php // lint >= 7.3
+<?php // lint >= 7.4
 
 max(0, 1);
 
