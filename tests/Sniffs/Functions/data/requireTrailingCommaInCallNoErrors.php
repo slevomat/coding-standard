@@ -72,7 +72,8 @@ doSomething( doSomething(
 	$foo,
 ) );
 
-usort([], static fn ($a, $b): int
+$array = [];
+usort($array, static fn ($a, $b): int
 	=> (int) $b->getType() <=> (int) $a->getType()
 		?: $a->getId() <=> $b->getId()
 );
