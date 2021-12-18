@@ -44,6 +44,7 @@ Sniff provides the following settings:
 
 * `enableObjectTypeHint`: enforces to transform `@param object` into native `object` typehint. It's on by default if you're on PHP 7.2+
 * `enableMixedTypeHint`: enforces to transform `@param mixed` into native `mixed` typehint. It's on by default if you're on PHP 8.0+
+* `enableUnionTypeHint`: enforces to transform `@param string|int` into native `string|int` typehint. It's on by default if you're on PHP 8.0+
 * `traversableTypeHints`: enforces which typehints must have specified contained type. E. g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
 
 This sniff can cause an error if you're overriding or implementing a parent method which does not have typehints. In such cases add `@phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint` annotation to the method to have this sniff skip it.
@@ -74,7 +75,7 @@ Sniff provides the following settings:
 * `enableObjectTypeHint`: enforces to transform `@return object` into native `object` typehint. It's on by default if you're on PHP 7.2+
 * `enableStaticTypeHint`: enforces to transform `@return static` into native `static` typehint. It's on by default if you're on PHP 8.0+
 * `enableMixedTypeHint`: enforces to transform `@return mixed` into native `mixed` typehint. It's on by default if you're on PHP 8.0+
-* `enableUnionTypeHint`: enforces to transform `@var string|int` into native `string|int` typehint. It's on by default if you're on PHP 8.0+.
+* `enableUnionTypeHint`: enforces to transform `@return string|int` into native `string|int` typehint. It's on by default if you're on PHP 8.0+.
 * `traversableTypeHints`: enforces which typehints must have specified contained type. E. g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
 
 This sniff can cause an error if you're overriding or implementing a parent method which does not have typehints. In such cases add `@phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint` annotation to the method to have this sniff skip it.
@@ -90,7 +91,7 @@ Checks format of union type hints.
 Sniff provides the following settings:
 
 * `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 8.0 or higher.
-* `withSpaces`: `yes` requires spaces arount `|`, `no` requires no space around `|`. None is set by default so both is enabled.
+* `withSpaces`: `yes` requires spaces around `|`, `no` requires no space around `|`. None is set by default so both is enabled.
 * `shortNullable`: `yes` requires usage of `?` for nullable type hint, `no` disallows it. None is set by default so both are enabled.
 * `nullPosition`: `first` requires `null` on first position in the type hint, `last` requires last position. None is set by default so `null` can be everywhere.
 
