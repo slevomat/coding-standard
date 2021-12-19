@@ -98,10 +98,10 @@ class PropertyTypeHintSniff implements Sniff
 	public function process(File $phpcsFile, $visibilityPointer): void
 	{
 		$this->enableNativeTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableNativeTypeHint, 70400);
-		$this->enableMixedTypeHint = $this->enableMixedTypeHint
+		$this->enableMixedTypeHint = $this->enableNativeTypeHint
 			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableMixedTypeHint, 80000)
 			: false;
-		$this->enableUnionTypeHint = $this->enableUnionTypeHint
+		$this->enableUnionTypeHint = $this->enableNativeTypeHint
 			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableUnionTypeHint, 80000)
 			: false;
 
