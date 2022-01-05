@@ -21,13 +21,12 @@ class RequireNumericLiteralSeparatorSniffTest extends TestCase
 			'enable' => true,
 		]);
 
-		self::assertSame(5, $report->getErrorCount());
+		self::assertSame(4, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, RequireNumericLiteralSeparatorSniff::CODE_REQUIRED_NUMERIC_LITERAL_SEPARATOR);
 		self::assertSniffError($report, 4, RequireNumericLiteralSeparatorSniff::CODE_REQUIRED_NUMERIC_LITERAL_SEPARATOR);
 		self::assertSniffError($report, 5, RequireNumericLiteralSeparatorSniff::CODE_REQUIRED_NUMERIC_LITERAL_SEPARATOR);
 		self::assertSniffError($report, 6, RequireNumericLiteralSeparatorSniff::CODE_REQUIRED_NUMERIC_LITERAL_SEPARATOR);
-		self::assertSniffError($report, 7, RequireNumericLiteralSeparatorSniff::CODE_REQUIRED_NUMERIC_LITERAL_SEPARATOR);
 	}
 
 	public function testModifiedSettingsNoErrors(): void
@@ -36,6 +35,7 @@ class RequireNumericLiteralSeparatorSniffTest extends TestCase
 			'enable' => true,
 			'minDigitsBeforeDecimalPoint' => 7,
 			'minDigitsAfterDecimalPoint' => 6,
+			'ignoreOctalNumbers' => false,
 		]);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -46,12 +46,14 @@ class RequireNumericLiteralSeparatorSniffTest extends TestCase
 			'enable' => true,
 			'minDigitsBeforeDecimalPoint' => 7,
 			'minDigitsAfterDecimalPoint' => 6,
+			'ignoreOctalNumbers' => false,
 		]);
 
-		self::assertSame(2, $report->getErrorCount());
+		self::assertSame(3, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, RequireNumericLiteralSeparatorSniff::CODE_REQUIRED_NUMERIC_LITERAL_SEPARATOR);
 		self::assertSniffError($report, 4, RequireNumericLiteralSeparatorSniff::CODE_REQUIRED_NUMERIC_LITERAL_SEPARATOR);
+		self::assertSniffError($report, 5, RequireNumericLiteralSeparatorSniff::CODE_REQUIRED_NUMERIC_LITERAL_SEPARATOR);
 	}
 
 	public function testShouldNotReportIfSniffIsDisabled(): void

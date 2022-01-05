@@ -24,6 +24,9 @@ class RequireNumericLiteralSeparatorSniff implements Sniff
 	/** @var int */
 	public $minDigitsAfterDecimalPoint = 4;
 
+	/** @var bool */
+	public $ignoreOctalNumbers = true;
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
@@ -49,15 +52,24 @@ class RequireNumericLiteralSeparatorSniff implements Sniff
 		}
 
 		$tokens = $phpcsFile->getTokens();
+		$number = $tokens[$numberPointer]['content'];
 
 		if (strpos($tokens[$numberPointer]['content'], '_') !== false) {
+			return;
+		}
+
+		if (
+			$this->ignoreOctalNumbers
+			&& preg_match('~^0[0-7]+$~', $number) === 1
+		) {
 			return;
 		}
 
 		$regexp = '~(?:^\\d{' . SniffSettingsHelper::normalizeInteger(
 			$this->minDigitsBeforeDecimalPoint
 		) . '}|\.\\d{' . SniffSettingsHelper::normalizeInteger($this->minDigitsAfterDecimalPoint) . '})~';
-		if (preg_match($regexp, $tokens[$numberPointer]['content']) === 0) {
+
+		if (preg_match($regexp, $number) === 0) {
 			return;
 		}
 
