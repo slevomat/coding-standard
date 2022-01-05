@@ -642,6 +642,10 @@ class UnusedVariableSniff implements Sniff
 			return false;
 		}
 
+		if ($tokens[$previousPointer]['code'] === T_OPEN_PARENTHESIS) {
+			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
+		}
+
 		return in_array(
 			$tokens[$previousPointer]['code'],
 			array_merge([T_STRING_CONCAT, T_ECHO], Tokens::$operators, Tokens::$assignmentTokens, Tokens::$booleanOperators),

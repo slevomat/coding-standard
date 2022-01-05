@@ -396,3 +396,13 @@ function () {
 
 	return $map;
 };
+
+function ($path, $name) {
+	$count = 0;
+
+	while (is_file($path . '/' . $name)) {
+		$name = $name . '-' . (++$count) . '.php';
+	}
+
+	return $name;
+};
