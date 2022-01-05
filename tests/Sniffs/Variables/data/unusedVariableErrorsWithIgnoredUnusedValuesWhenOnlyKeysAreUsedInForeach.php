@@ -14,3 +14,7 @@ while ($used) {
 foreach (range(0, 5) as $otherKey => $otherValue) {
 	echo $otherKey;
 }
+
+foreach (range(0, 5) as $someKey => $someValue) {
+	// Key and value are not used
+}

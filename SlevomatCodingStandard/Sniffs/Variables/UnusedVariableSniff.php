@@ -511,14 +511,21 @@ class UnusedVariableSniff implements Sniff
 
 	private function isValueInForeachAndErrorIsIgnored(File $phpcsFile, int $variablePointer): bool
 	{
-		if (!$this->ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach) {
-			return false;
-		}
-
 		$tokens = $phpcsFile->getTokens();
 
 		$parenthesisOwnerPointer = $this->findNestedParenthesisWithOwner($phpcsFile, $variablePointer);
-		return $parenthesisOwnerPointer !== null && $tokens[$parenthesisOwnerPointer]['code'] === T_FOREACH;
+		$isInForeach = $parenthesisOwnerPointer !== null && $tokens[$parenthesisOwnerPointer]['code'] === T_FOREACH;
+
+		if (!$isInForeach) {
+			return false;
+		}
+
+		$pointerAfterVariable = TokenHelper::findNextEffective($phpcsFile, $variablePointer + 1);
+		if ($pointerAfterVariable !== null && $tokens[$pointerAfterVariable]['code'] === T_DOUBLE_ARROW) {
+			return false;
+		}
+
+		return $this->ignoreUnusedValuesWhenOnlyKeysAreUsedInForeach;
 	}
 
 	private function isStaticOrGlobalVariable(File $phpcsFile, int $functionPointer, string $variableName): bool
