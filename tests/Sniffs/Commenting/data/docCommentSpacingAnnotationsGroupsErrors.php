@@ -112,4 +112,11 @@ class Whatever
 		return false;
 	}
 
+	/** @phpstan-return array<string, string>
+	* @return array<string, string> */
+	public function phpstanReturnAndReturnAnnotations()
+	{
+		return [];
+	}
+
 }
