@@ -43,6 +43,7 @@ use const T_LNUMBER;
 use const T_LOGICAL_AND;
 use const T_LOGICAL_OR;
 use const T_LOGICAL_XOR;
+use const T_MATCH_ARROW;
 use const T_MINUS;
 use const T_NS_SEPARATOR;
 use const T_NULL;
@@ -349,9 +350,11 @@ class YodaHelper
 				T_RETURN => true,
 				T_COMMA => true,
 				T_CLOSE_CURLY_BRACKET => true,
+				T_MATCH_ARROW => true,
 			];
 
 			$stopTokenCodes += array_fill_keys(array_keys(Tokens::$assignmentTokens), true);
+			$stopTokenCodes += array_fill_keys(array_keys(Tokens::$commentTokens), true);
 		}
 
 		return $stopTokenCodes;

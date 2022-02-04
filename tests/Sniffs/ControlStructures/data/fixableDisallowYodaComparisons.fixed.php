@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.0
 
 $foo === 123;
 $foo === true;
@@ -69,3 +69,10 @@ $param === A::TYPE_A xor $param === A::TYPE_B;
 if (null === $env = $parameters['env']) {
 	// ...
 }
+
+function ($condition, $actual) {
+	return match ($condition) {
+		'anything' => $actual === 1,
+		default => false,
+	};
+};
