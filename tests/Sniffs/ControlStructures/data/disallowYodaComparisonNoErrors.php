@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.0
 
 $foo === $bar;
 $foo === 123;
@@ -72,3 +72,10 @@ $x = $username === [$a, $b, $c];
 $param === A::TYPE_A and $param === A::TYPE_B;
 $param === A::TYPE_A or $param === A::TYPE_B;
 $param === A::TYPE_A xor $param === A::TYPE_B;
+
+function ($condition, $actual) {
+	return match ($condition) {
+		'anything' => $actual === 1,
+		default => false,
+	};
+};

@@ -17,9 +17,12 @@ class DisallowYodaComparisonSniffTest extends TestCase
 	public function testErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/disallowYodaComparisonErrors.php');
+
 		foreach (range(3, 37) as $lineNumber) {
 			self::assertSniffError($report, $lineNumber, DisallowYodaComparisonSniff::CODE_DISALLOWED_YODA_COMPARISON);
 		}
+
+		self::assertSniffError($report, 41, DisallowYodaComparisonSniff::CODE_DISALLOWED_YODA_COMPARISON);
 	}
 
 	public function testFixable(): void
