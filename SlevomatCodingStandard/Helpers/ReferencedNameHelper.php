@@ -135,6 +135,7 @@ class ReferencedNameHelper
 		$beginSearchAtPointer = $openTagPointer + 1;
 		$nameTokenCodes = TokenHelper::getNameTokenCodes();
 		$nameTokenCodes[] = T_DOUBLE_QUOTED_STRING;
+		$nameTokenCodes[] = T_HEREDOC;
 
 		$tokens = $phpcsFile->getTokens();
 		while (true) {

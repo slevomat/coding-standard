@@ -177,6 +177,10 @@ class SomeController
 	}
 }
 
+<<<XML
+	<string>Hello world and {$this->wrap(ClassInHeredoc::EXAMPLE)}</string>
+XML;
+
 "foo {$db->quote(ClassInDoubleQuote::SOME_CONSTANT)}";
 "foo $db->quote(FakeClassInDoubleQuote::SOME_CONSTANT)";
 
