@@ -246,6 +246,10 @@ class TypeHintHelper
 
 				/** @var TemplateAnnotation $templateAnnotation */
 				foreach ($annotations[$templateAnnotationName] as $templateAnnotation) {
+					if ($templateAnnotation->isInvalid()) {
+						continue;
+					}
+
 					if ($templateAnnotation->getTemplateName() === $typeHint) {
 						return true;
 					}
@@ -329,6 +333,10 @@ class TypeHintHelper
 
 			/** @var TypeAliasAnnotation|TypeImportAnnotation $aliasAnnotation */
 			foreach ($annotations[$aliasAnnotationName] as $aliasAnnotation) {
+				if ($aliasAnnotation->isInvalid()) {
+					continue;
+				}
+
 				if ($aliasAnnotation->getAlias() === $typeHint) {
 					return true;
 				}

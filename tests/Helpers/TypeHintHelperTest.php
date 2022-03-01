@@ -346,4 +346,31 @@ class TypeHintHelperTest extends TestCase
 		self::assertSame($isTemplate, TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $docCommentOpenPointer, $typeHintName));
 	}
 
+	/**
+	 * @return mixed[][]
+	 */
+	public function dataIsTypeDefinedInAnnotationWhenAnnotationIsInvalid(): array
+	{
+		return [
+			[22, 'Alias'],
+			[29, 'Template'],
+		];
+	}
+
+	/**
+	 * @dataProvider dataIsTypeDefinedInAnnotationWhenAnnotationIsInvalid
+	 * @param int $line
+	 * @param string $type
+	 */
+	public function testIsTypeDefinedInAnnotationWhenAnnotationIsInvalid(int $line, string $type): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintsDefinedInAnnotation.php');
+
+		$docCommentOpenPointer = $this->findPointerByLineAndType($phpcsFile, $line, T_DOC_COMMENT_OPEN_TAG);
+
+		self::assertNotNull($docCommentOpenPointer);
+
+		self::assertFalse(TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $docCommentOpenPointer, $type));
+	}
+
 }
