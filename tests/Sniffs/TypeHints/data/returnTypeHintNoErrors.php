@@ -317,4 +317,11 @@ class Aliases
 	{
 	}
 
+	/**
+	 * @return SomeAlias3
+	 */
+	public function withArrayAlias(): array
+	{
+	}
+
 }

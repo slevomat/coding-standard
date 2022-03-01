@@ -449,6 +449,10 @@ class ReturnTypeHintSniff implements Sniff
 
 		$returnTypeNode = $this->getReturnTypeNode($returnAnnotation);
 
+		if (TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $functionPointer, (string) $returnTypeNode)) {
+			return;
+		}
+
 		if (
 			!$hasTraversableTypeHint
 			&& !AnnotationTypeHelper::containsTraversableType(
