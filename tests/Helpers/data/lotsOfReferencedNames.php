@@ -169,24 +169,24 @@ echo str_pad('123', 1, pad_type: STR_PAD_RIGHT, enum_type: EnumType::VALUE());
 
 class SomeController
 {
-    public function generateRoute($router): string
-    {
-        return $router->generate('login_password_set', [
-            'resetCode' => 'somecode',
-        ], referenceType: UrlGeneratorInterface::RELATIVE_PATH);
-    }
+	public function generateRoute($router): string
+	{
+		return $router->generate('login_password_set', [
+			'resetCode' => 'somecode',
+		], referenceType: UrlGeneratorInterface::RELATIVE_PATH);
+	}
 }
 
 "foo {$db->quote(ClassInDoubleQuote::SOME_CONSTANT)}";
 "foo $db->quote(FakeClassInDoubleQuote::SOME_CONSTANT)";
 
 $script .= "// @see \Foo\Bar::func()
-                \$hasDefaultValue = $hasDefaultValue;
-                /** @var \Foo\Test\Bla\Whatever */
+		\$hasDefaultValue = $hasDefaultValue;
+		/** @var \Foo\Test\Bla\Whatever */
 ";
 return "
 	/** @var \\Generated\\Test\\Ide\\AutoCompletion \$locator */
- 	\$locator = \\Foo\\Test\\Kernel\\Locator::getInstance();
-                $objName = \$locator->"
+	\$locator = \\Foo\\Test\\Kernel\\Locator::getInstance();
+		$objName = \$locator->"
 	. '()->entity'
 	. $this->getObjectClassName() . '();';
