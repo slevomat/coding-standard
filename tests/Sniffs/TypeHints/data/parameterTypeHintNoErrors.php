@@ -292,4 +292,11 @@ class Aliases
 	{
 	}
 
+	/**
+	 * @param SomeAlias1 $array
+	 */
+	public function withArrayAlias(array $array)
+	{
+	}
+
 }
