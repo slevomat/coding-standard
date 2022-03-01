@@ -194,4 +194,8 @@ class Aliases
 	 */
 	private static $withAlias3;
 
+	/**
+	 * @var SomeAlias3
+	 */
+	private array $withArrayAlias4;
 }
