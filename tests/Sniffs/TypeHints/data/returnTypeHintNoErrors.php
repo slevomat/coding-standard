@@ -1,6 +1,6 @@
 <?php
 
-class Whatever
+abstract class Whatever
 {
 
 	public function __construct()
@@ -39,6 +39,12 @@ class Whatever
 	{
 		return 0;
 	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
+	 * @return void
+	 */
+	abstract public function isSniffCodeMissingNativeTypeHintSuppressedWithVoid();
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification
