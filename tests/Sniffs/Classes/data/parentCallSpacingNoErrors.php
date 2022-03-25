@@ -43,7 +43,7 @@ class X extends Whatever
 	}
 
 	function i() {
-		return [parent::f()];
+		return [...parent::f()];
 	}
 
 	function j() {

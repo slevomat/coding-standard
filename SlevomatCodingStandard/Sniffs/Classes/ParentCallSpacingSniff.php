@@ -58,9 +58,14 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 			Tokens::$assignmentTokens,
 			Tokens::$equalityTokens,
 			Tokens::$booleanOperators,
-			[T_RETURN, T_YIELD, T_YIELD_FROM, T_OPEN_SHORT_ARRAY, T_COLON, T_STRING_CONCAT, T_INLINE_THEN, T_INLINE_ELSE, T_COALESCE]
+			[T_RETURN, T_YIELD, T_YIELD_FROM, T_COLON, T_STRING_CONCAT, T_INLINE_THEN, T_INLINE_ELSE, T_COALESCE]
 		);
 		if (in_array($tokens[$previousPointer]['code'], $tokensToIgnore, true)) {
+			return;
+		}
+
+		$previousShortArrayOpenerPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_SHORT_ARRAY, $parentPointer - 1);
+		if ($previousShortArrayOpenerPointer !== null && $tokens[$previousShortArrayOpenerPointer]['bracket_closer'] > $parentPointer) {
 			return;
 		}
 
