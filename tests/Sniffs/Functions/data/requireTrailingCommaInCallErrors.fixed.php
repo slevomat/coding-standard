@@ -99,14 +99,6 @@ call(
 	},
 );
 
-call(<<<EOM
-This command will execute 'npm run' with a specified task.
-
-Example:
- - code:npm --build-all  will build the client resources for the core, the project zed and the project yves code
-EOM,
-);
-
 call(
     OPTION_TASK_BUILD_YVES,
     OPTION_TASK_BUILD_YVES_SHORT,
