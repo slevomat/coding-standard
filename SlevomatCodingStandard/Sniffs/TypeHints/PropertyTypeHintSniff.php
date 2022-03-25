@@ -429,10 +429,6 @@ class PropertyTypeHintSniff implements Sniff
 
 		$typeNode = $propertyAnnotation->getType();
 
-		if (TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $propertyPointer, (string) $typeNode)) {
-			return;
-		}
-
 		if (
 			!$hasTraversableTypeHint
 			&& !AnnotationTypeHelper::containsTraversableType($typeNode, $phpcsFile, $propertyPointer, $this->getTraversableTypeHints())

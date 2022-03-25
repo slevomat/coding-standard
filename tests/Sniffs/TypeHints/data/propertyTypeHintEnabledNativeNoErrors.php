@@ -198,4 +198,9 @@ class Aliases
 	 * @var SomeAlias3
 	 */
 	private array $withArrayAlias4;
+
+	/**
+	 * @var SomeAlias2|null
+	 */
+	private ?array $withArrayAlias5;
 }
