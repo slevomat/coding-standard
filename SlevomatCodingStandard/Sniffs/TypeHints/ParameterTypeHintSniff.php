@@ -447,14 +447,6 @@ class ParameterTypeHintSniff implements Sniff
 				continue;
 			}
 
-			if (TypeHintHelper::isTypeDefinedInAnnotation(
-				$phpcsFile,
-				$functionPointer,
-				(string) $parametersAnnotations[$parameterName]->getType()
-			)) {
-				continue;
-			}
-
 			$parameterTypeNode = $parametersAnnotations[$parameterName]->getType();
 
 			if (

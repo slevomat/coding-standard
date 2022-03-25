@@ -299,4 +299,11 @@ class Aliases
 	{
 	}
 
+	/**
+	 * @param SomeAlias4|null $array
+	 */
+	public function withNullableArrayAlias(?array $array)
+	{
+	}
+
 }
