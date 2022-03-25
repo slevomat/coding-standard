@@ -21,7 +21,7 @@ class RequireTrailingCommaInCallSniffTest extends TestCase
 			'enable' => true,
 		]);
 
-		self::assertSame(15, $report->getErrorCount());
+		self::assertSame(17, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, RequireTrailingCommaInCallSniff::CODE_MISSING_TRAILING_COMMA);
 		self::assertSniffError($report, 12, RequireTrailingCommaInCallSniff::CODE_MISSING_TRAILING_COMMA);
@@ -38,6 +38,8 @@ class RequireTrailingCommaInCallSniffTest extends TestCase
 		self::assertSniffError($report, 83, RequireTrailingCommaInCallSniff::CODE_MISSING_TRAILING_COMMA);
 		self::assertSniffError($report, 91, RequireTrailingCommaInCallSniff::CODE_MISSING_TRAILING_COMMA);
 		self::assertSniffError($report, 99, RequireTrailingCommaInCallSniff::CODE_MISSING_TRAILING_COMMA);
+		self::assertSniffError($report, 107, RequireTrailingCommaInCallSniff::CODE_MISSING_TRAILING_COMMA);
+		self::assertSniffError($report, 114, RequireTrailingCommaInCallSniff::CODE_MISSING_TRAILING_COMMA);
 
 		self::assertAllFixedInFile($report);
 	}
