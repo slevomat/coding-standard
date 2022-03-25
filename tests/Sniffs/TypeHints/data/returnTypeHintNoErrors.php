@@ -324,4 +324,11 @@ class Aliases
 	{
 	}
 
+	/**
+	 * @return SomeAlias2|null
+	 */
+	public function withNullableArrayAlias(): ?array
+	{
+	}
+
 }

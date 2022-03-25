@@ -535,6 +535,11 @@ class AnnotationTypeHelper
 		}
 
 		if ($typeNode instanceof IdentifierTypeNode) {
+			if (TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $pointer, $typeNode->name)) {
+				// We can expect it's better type for traversable
+				return true;
+			}
+
 			if (!$inTraversable) {
 				return false;
 			}
