@@ -17,7 +17,6 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "7.1"
           - "7.2"
           - "7.3"
           - "7.4"
@@ -42,7 +41,7 @@ jobs:
           restore-keys: "php-${{ matrix.php-version }}-composer-"
 
       - name: "Reset composer platform"
-        if: matrix.php-version == '7.1' || matrix.php-version == '7.2'
+        if: matrix.php-version == '7.2'
         run: "composer config --unset platform"
 
       - name: "Install dependencies"
@@ -119,7 +118,6 @@ jobs:
       matrix:
         dependencies: ["lowest", "highest"]
         php-version:
-          - "7.1"
           - "7.2"
           - "7.3"
           - "7.4"
@@ -146,7 +144,7 @@ jobs:
           restore-keys: "php-${{ matrix.php-version }}-composer-"
 
       - name: "Reset composer platform"
-        if: matrix.php-version == '7.1' || matrix.php-version == '7.2' || matrix.php-version == '8.1'
+        if: matrix.php-version == '7.2' || matrix.php-version == '8.1'
         run: "composer config --unset platform"
 
       - name: "Install lowest dependencies"
