@@ -322,4 +322,11 @@ abstract class Whatever
 		return 0;
 	}
 
+	/**
+	 * @return (Conditional is Conditional2 ? array : iterable)
+	 */
+	public function withConditional(): array
+	{
+	}
+
 }

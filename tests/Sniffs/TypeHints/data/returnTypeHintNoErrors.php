@@ -337,4 +337,46 @@ class Aliases
 	{
 	}
 
+	/**
+	 * @return (Conditional is Conditional2 ? int : false)
+	 */
+	public function withConditional(): int|false
+	{
+	}
+
+	/**
+	 * @return ($parameter is Conditional2 ? int : false)
+	 */
+	public function withConditionalParameter($parameter): int|false
+	{
+	}
+
+	/**
+	 * @return (Conditional is Conditional2 ? int[] : bool)
+	 */
+	public function withConditionalArrayInIf(): array
+	{
+	}
+
+	/**
+	 * @return (Conditional is Conditional2 ? bool : int[])
+	 */
+	public function withConditionalArrayInElse(): array
+	{
+	}
+
+	/**
+	 * @return ($parameter is Conditional2 ? int[] : bool)
+	 */
+	public function withParameterConditionalArrayInIf($parameter): array
+	{
+	}
+
+	/**
+	 * @return ($parameter is Conditional2 ? bool : int[])
+	 */
+	public function withParameterConditionalArrayInElse($parameter): array
+	{
+	}
+
 }

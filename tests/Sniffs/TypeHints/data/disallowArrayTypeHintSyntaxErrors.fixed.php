@@ -81,4 +81,14 @@ class Whatever
 		$closure = function (array $data): array {};
 	}
 
+	/** @return (Conditional is Conditional2 ? array<int> : array<float>) */
+	public function t()
+	{
+	}
+
+	/** @return ($parameter is Conditional2 ? array<int> : array<float>) */
+	public function u($parameter)
+	{
+	}
+
 }

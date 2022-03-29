@@ -8,6 +8,16 @@ use Foo\DateTime;
 use Foo\ArrayObject;
 use Foo\Exception;
 use Foo\Traversable;
+use Foo\Conditional1;
+use Foo\Conditional2;
+use Foo\Conditional3;
+use Foo\Conditional4;
+use Foo\Conditional5;
+use Foo\Conditional6;
+use Foo\Conditional7;
+use Foo\Conditional8;
+use Foo\Conditional9;
+use Foo\Conditional10;
 
 /**
  * @method \DateTimeImmutable|int|DateTime getProperty()
@@ -148,4 +158,23 @@ class CallableInArray
 {
 	/** @var (callable(): Anything)[] */
 	private $callableInArray;
+}
+
+class Conditional
+{
+
+	/**
+	 * @return (Conditional1 is Conditional2 ? (Conditional3|Conditional4) : (Conditional4 is not Conditional5 ? Conditional6 : Conditional7))
+	 */
+	public function withConditional()
+	{
+	}
+
+	/**
+	 * @return ($parameter is Conditional8 ? (Conditional9|Conditional10) : Conditional10)
+	 */
+	public function withConditionalParameter($parameter)
+	{
+	}
+
 }

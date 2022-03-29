@@ -17,7 +17,7 @@ class FullyQualifiedClassNameInAnnotationSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedClassNameInAnnotationErrors.php');
 
-		self::assertSame(70, $report->getErrorCount());
+		self::assertSame(82, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -410,6 +410,68 @@ class FullyQualifiedClassNameInAnnotationSniffTest extends TestCase
 			214,
 			FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME,
 			'Class name \DateTime in @param should be referenced via a fully qualified name'
+		);
+
+		self::assertSniffError(
+			$report,
+			246,
+			FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME,
+			'Class name \YYY\Partial\Conditional1 in @return should be referenced via a fully qualified name'
+		);
+		self::assertSniffError(
+			$report,
+			246,
+			FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME,
+			'Class name \YYY\Partial\Conditional2 in @return should be referenced via a fully qualified name'
+		);
+		self::assertSniffError(
+			$report,
+			246,
+			FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME,
+			'Class name \YYY\Partial\Conditional3 in @return should be referenced via a fully qualified name'
+		);
+		self::assertSniffError(
+			$report,
+			246,
+			FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME,
+			'Class name \YYY\Partial\Conditional4 in @return should be referenced via a fully qualified name'
+		);
+		self::assertSniffError(
+			$report,
+			246,
+			FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME,
+			'Class name \YYY\Partial\Conditional5 in @return should be referenced via a fully qualified name'
+		);
+		self::assertSniffError(
+			$report,
+			246,
+			FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME,
+			'Class name \YYY\Partial\Conditional6 in @return should be referenced via a fully qualified name'
+		);
+		self::assertSniffError(
+			$report,
+			246,
+			FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME,
+			'Class name \YYY\Partial\Conditional7 in @return should be referenced via a fully qualified name'
+		);
+
+		self::assertSniffError(
+			$report,
+			253,
+			FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME,
+			'Class name \YYY\Partial\Conditional8 in @return should be referenced via a fully qualified name'
+		);
+		self::assertSniffError(
+			$report,
+			253,
+			FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME,
+			'Class name \YYY\Partial\Conditional9 in @return should be referenced via a fully qualified name'
+		);
+		self::assertSniffError(
+			$report,
+			253,
+			FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME,
+			'Class name \YYY\Partial\Conditional10 in @return should be referenced via a fully qualified name'
 		);
 
 		self::assertAllFixedInFile($report);

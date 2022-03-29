@@ -727,7 +727,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			]
 		);
 
-		self::assertSame(32, $report->getErrorCount());
+		self::assertSame(44, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -923,6 +923,67 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			145,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
 			'Class \Foo\Anything should not be referenced via a fully qualified name, but via a use statement.'
+		);
+
+		self::assertSniffError(
+			$report,
+			153,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\Conditional1 should not be referenced via a fully qualified name, but via a use statement.'
+		);
+		self::assertSniffError(
+			$report,
+			153,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\Conditional2 should not be referenced via a fully qualified name, but via a use statement.'
+		);
+		self::assertSniffError(
+			$report,
+			153,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\Conditional3 should not be referenced via a fully qualified name, but via a use statement.'
+		);
+		self::assertSniffError(
+			$report,
+			153,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\Conditional4 should not be referenced via a fully qualified name, but via a use statement.'
+		);
+		self::assertSniffError(
+			$report,
+			153,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\Conditional5 should not be referenced via a fully qualified name, but via a use statement.'
+		);
+		self::assertSniffError(
+			$report,
+			153,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\Conditional6 should not be referenced via a fully qualified name, but via a use statement.'
+		);
+		self::assertSniffError(
+			$report,
+			153,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\Conditional7 should not be referenced via a fully qualified name, but via a use statement.'
+		);
+		self::assertSniffError(
+			$report,
+			160,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\Conditional8 should not be referenced via a fully qualified name, but via a use statement.'
+		);
+		self::assertSniffError(
+			$report,
+			160,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\Conditional9 should not be referenced via a fully qualified name, but via a use statement.'
+		);
+		self::assertSniffError(
+			$report,
+			160,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\Conditional10 should not be referenced via a fully qualified name, but via a use statement.'
 		);
 
 		self::assertAllFixedInFile($report);

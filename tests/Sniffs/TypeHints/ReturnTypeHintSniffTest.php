@@ -27,7 +27,7 @@ class ReturnTypeHintSniffTest extends TestCase
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 
-		self::assertSame(51, $report->getErrorCount());
+		self::assertSame(52, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, ReturnTypeHintSniff::CODE_MISSING_ANY_TYPE_HINT);
 		self::assertSniffError($report, 14, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
@@ -84,6 +84,8 @@ class ReturnTypeHintSniffTest extends TestCase
 		self::assertSniffError($report, 305, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 313, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 318, ReturnTypeHintSniff::CODE_USELESS_ANNOTATION);
+
+		self::assertSniffError($report, 326, ReturnTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION);
 
 		self::assertAllFixedInFile($report);
 	}

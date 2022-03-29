@@ -103,3 +103,22 @@ $arrayShape1 = [];
 
 /** @var array{foo: (int|null)} $arrayShape2 */
 $arrayShape2 = [];
+
+class Conditional
+{
+
+	/**
+	 * @return (Conditional1 is Conditional2 ? (Conditional3|null) : false)
+	 */
+	public function withConditional()
+	{
+	}
+
+	/**
+	 * @return ($parameter is Conditional2 ? (Conditional3|null) : false)
+	 */
+	public function withConditionalParameter($parameter)
+	{
+	}
+
+}

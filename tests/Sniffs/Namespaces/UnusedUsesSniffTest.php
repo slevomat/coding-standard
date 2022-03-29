@@ -96,7 +96,7 @@ class UnusedUsesSniffTest extends TestCase
 			'searchAnnotations' => false,
 		]);
 
-		self::assertSame(69, $report->getErrorCount());
+		self::assertSame(78, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Assert is not used in this file.');
 		self::assertSniffError(
@@ -191,6 +191,15 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertSniffError($report, 71, UnusedUsesSniff::CODE_UNUSED_USE, 'Type ArrayValue is not used in this file.');
 		self::assertSniffError($report, 72, UnusedUsesSniff::CODE_UNUSED_USE, 'Type TypeAliasWithConstant is not used in this file.');
 		self::assertSniffError($report, 73, UnusedUsesSniff::CODE_UNUSED_USE, 'Type CustomAssert is not used in this file.');
+		self::assertSniffError($report, 74, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Conditional1 is not used in this file.');
+		self::assertSniffError($report, 75, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Conditional2 is not used in this file.');
+		self::assertSniffError($report, 76, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Conditional3 is not used in this file.');
+		self::assertSniffError($report, 77, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Conditional4 is not used in this file.');
+		self::assertSniffError($report, 78, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Conditional5 is not used in this file.');
+		self::assertSniffError($report, 79, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Conditional6 is not used in this file.');
+		self::assertSniffError($report, 80, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Conditional7 is not used in this file.');
+		self::assertSniffError($report, 81, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Conditional8 is not used in this file.');
+		self::assertSniffError($report, 82, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Conditional9 is not used in this file.');
 	}
 
 	public function testUsedUseInAnnotationWithEnabledSearchAnnotations(): void

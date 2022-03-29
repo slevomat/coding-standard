@@ -71,6 +71,15 @@ use SomeImportFrom2;
 use ArrayValue;
 use TypeAliasWithConstant;
 use CustomAssert;
+use Conditional1;
+use Conditional2;
+use Conditional3;
+use Conditional4;
+use Conditional5;
+use Conditional6;
+use Conditional7;
+use Conditional8;
+use Conditional9;
 
 /**
  * @ORM\Entity()
@@ -274,4 +283,22 @@ class TypeAliasAndImportes
  */
 class PartlyUsedAliasInGenericAnnotation
 {
+}
+
+class Conditional
+{
+
+	/**
+	 * @return (Conditional1 is Conditional2 ? (Conditional3|Conditional4) : Conditional5)
+	 */
+	public function withConditional()
+	{
+	}
+
+	/**
+	 * @return ($parameter is Conditional6 ? (Conditional7|Conditional8) : Conditional9)
+	 */
+	public function withConditionalParameter($parameter)
+	{
+	}
 }

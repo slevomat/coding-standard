@@ -17,7 +17,7 @@ class NullTypeHintOnLastPositionSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/nullTypeHintOnLastPositionErrors.php');
 
-		self::assertSame(25, $report->getErrorCount());
+		self::assertSame(27, $report->getErrorCount());
 
 		self::assertSniffError($report, 7, NullTypeHintOnLastPositionSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
 		self::assertSniffError($report, 11, NullTypeHintOnLastPositionSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
@@ -75,6 +75,9 @@ class NullTypeHintOnLastPositionSniffTest extends TestCase
 			'Null type hint should be on last position in "null|bool".'
 		);
 		self::assertSniffError($report, 104, NullTypeHintOnLastPositionSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
+
+		self::assertSniffError($report, 111, NullTypeHintOnLastPositionSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
+		self::assertSniffError($report, 118, NullTypeHintOnLastPositionSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
 
 		self::assertAllFixedInFile($report);
 	}

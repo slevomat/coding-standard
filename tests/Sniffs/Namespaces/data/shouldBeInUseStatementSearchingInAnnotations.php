@@ -145,3 +145,22 @@ class CallableInArray
 	/** @var (callable(): \Foo\Anything)[] */
 	private $callableInArray;
 }
+
+class Conditional
+{
+
+	/**
+	 * @return (\Foo\Conditional1 is \Foo\Conditional2 ? (\Foo\Conditional3|\Foo\Conditional4) : (\Foo\Conditional4 is not \Foo\Conditional5 ? \Foo\Conditional6 : \Foo\Conditional7))
+	 */
+	public function withConditional()
+	{
+	}
+
+	/**
+	 * @return ($parameter is \Foo\Conditional8 ? (\Foo\Conditional9|\Foo\Conditional10) : \Foo\Conditional10)
+	 */
+	public function withConditionalParameter($parameter)
+	{
+	}
+
+}

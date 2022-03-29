@@ -238,3 +238,22 @@ class TypeAliasAndImportes
 	}
 
 }
+
+class Conditional
+{
+
+	/**
+	 * @return (\YYY\Partial\Conditional1 is \YYY\Partial\Conditional2 ? (\YYY\Partial\Conditional3|\YYY\Partial\Conditional4) : (\YYY\Partial\Conditional4 is not \YYY\Partial\Conditional5 ? \YYY\Partial\Conditional6 : \YYY\Partial\Conditional7))
+	 */
+	public function withConditional()
+	{
+	}
+
+	/**
+	 * @return ($parameter is \YYY\Partial\Conditional8 ? (\YYY\Partial\Conditional9|\YYY\Partial\Conditional10) : \YYY\Partial\Conditional10)
+	 */
+	public function withConditionalParameter($parameter)
+	{
+	}
+
+}
