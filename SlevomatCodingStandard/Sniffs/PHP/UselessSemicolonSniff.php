@@ -37,7 +37,6 @@ class UselessSemicolonSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $semicolonPointer
 	 */
 	public function process(File $phpcsFile, $semicolonPointer): void

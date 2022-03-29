@@ -84,7 +84,6 @@ class ForbiddenClassesSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $tokenPointer
 	 */
 	public function process(File $phpcsFile, $tokenPointer): void
@@ -138,11 +137,8 @@ class ForbiddenClassesSniff implements Sniff
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $tokenPointer
 	 * @param array{fullyQualifiedName: string, startPointer: int|null, endPointer: int|null}[] $references
 	 * @param array<string, (string|null)> $forbiddenNames
-	 * @param bool $isFixable
 	 */
 	private function checkReferences(
 		File $phpcsFile,
@@ -213,7 +209,6 @@ class ForbiddenClassesSniff implements Sniff
 
 	/**
 	 * @param array<string, array<int, int|string>|int|string> $token
-	 * @return bool
 	 */
 	private function isTraitsConflictResolutionToken(array $token): bool
 	{
@@ -221,9 +216,6 @@ class ForbiddenClassesSniff implements Sniff
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $startPointer
-	 * @param int $endPointer
 	 * @return array{fullyQualifiedName: string, startPointer: int|null, endPointer: int|null}[]
 	 */
 	private function getAllReferences(File $phpcsFile, int $startPointer, int $endPointer): array

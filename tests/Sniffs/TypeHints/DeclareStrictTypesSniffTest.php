@@ -42,8 +42,6 @@ class DeclareStrictTypesSniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataDeclareStrictTypesMissing
-	 * @param string $file
-	 * @param int $line
 	 */
 	public function testDeclareStrictTypesMissing(string $file, int $line): void
 	{
@@ -71,7 +69,6 @@ class DeclareStrictTypesSniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataDeclareStrictTypesIncorrectFormat
-	 * @param string $file
 	 */
 	public function testDeclareStrictTypesIncorrectFormat(string $file): void
 	{

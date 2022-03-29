@@ -36,7 +36,6 @@ class CatchHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param array<string, array<int, int|string>|int|string> $catchToken
 	 * @return string[]
 	 */

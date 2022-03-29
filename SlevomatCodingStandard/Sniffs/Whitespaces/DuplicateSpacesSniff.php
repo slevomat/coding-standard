@@ -56,7 +56,6 @@ class DuplicateSpacesSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $whitespacePointer
 	 */
 	public function process(File $phpcsFile, $whitespacePointer): void

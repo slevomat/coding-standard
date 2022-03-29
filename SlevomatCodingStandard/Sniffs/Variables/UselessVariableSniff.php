@@ -60,7 +60,6 @@ class UselessVariableSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $returnPointer
 	 */
 	public function process(File $phpcsFile, $returnPointer): void

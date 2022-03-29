@@ -28,7 +28,6 @@ class RequireNowdocSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $heredocStartPointer
 	 */
 	public function process(File $phpcsFile, $heredocStartPointer): void

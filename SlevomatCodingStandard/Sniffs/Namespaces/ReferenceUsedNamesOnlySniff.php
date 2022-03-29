@@ -132,7 +132,6 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $openTagPointer
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
@@ -539,10 +538,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $openTagPointer
 	 * @param UseStatement[] $useStatements
-	 * @return int
 	 */
 	private function getUseStatementPlacePointer(File $phpcsFile, int $openTagPointer, array $useStatements): int
 	{
@@ -615,8 +611,6 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $openTagPointer
 	 * @return stdClass[]
 	 */
 	private function getReferences(File $phpcsFile, int $openTagPointer): array

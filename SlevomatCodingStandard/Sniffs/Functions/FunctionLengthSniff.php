@@ -36,7 +36,6 @@ class FunctionLengthSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $file
 	 * @param int $functionPointer
 	 */
 	public function process(File $file, $functionPointer): void

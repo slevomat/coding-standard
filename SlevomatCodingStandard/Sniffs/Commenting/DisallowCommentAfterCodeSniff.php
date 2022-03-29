@@ -36,7 +36,6 @@ class DisallowCommentAfterCodeSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $commentPointer
 	 */
 	public function process(File $phpcsFile, $commentPointer): void

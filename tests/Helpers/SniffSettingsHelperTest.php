@@ -65,8 +65,6 @@ class SniffSettingsHelperTest extends TestCase
 	/**
 	 * @dataProvider validRegularExpressionsProvider
 	 * @dataProvider invalidRegularExpressionsProvider
-	 * @param string $expression
-	 * @param bool $valid
 	 */
 	public function testIsValidRegularExpression(string $expression, bool $valid): void
 	{

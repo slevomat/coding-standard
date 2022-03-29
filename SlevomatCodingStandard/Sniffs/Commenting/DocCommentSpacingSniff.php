@@ -83,7 +83,6 @@ class DocCommentSpacingSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $docCommentOpenerPointer
 	 */
 	public function process(File $phpcsFile, $docCommentOpenerPointer): void
@@ -277,8 +276,6 @@ class DocCommentSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $docCommentOpenerPointer
 	 * @param Annotation[] $annotations
 	 */
 	private function checkLinesBetweenDifferentAnnotationsTypes(File $phpcsFile, int $docCommentOpenerPointer, array $annotations): void
@@ -353,8 +350,6 @@ class DocCommentSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $docCommentOpenerPointer
 	 * @param Annotation[] $annotations
 	 */
 	private function checkAnnotationsGroups(File $phpcsFile, int $docCommentOpenerPointer, array $annotations): void
@@ -388,8 +383,6 @@ class DocCommentSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $docCommentOpenerPointer
 	 * @param Annotation[][] $annotationsGroups
 	 */
 	private function checkLinesBetweenAnnotationsGroups(File $phpcsFile, int $docCommentOpenerPointer, array $annotationsGroups): void
@@ -457,8 +450,6 @@ class DocCommentSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $docCommentOpenerPointer
 	 * @param Annotation[][] $annotationsGroups
 	 * @param Annotation[] $annotations
 	 */

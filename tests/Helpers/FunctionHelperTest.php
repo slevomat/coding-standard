@@ -102,7 +102,6 @@ class FunctionHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataParametersNames
-	 * @param string $functionName
 	 * @param string[] $expectedParametersNames
 	 */
 	public function testParametersNames(string $functionName, array $expectedParametersNames): void
@@ -226,7 +225,6 @@ class FunctionHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataParametersTypeHints
-	 * @param string $functionName
 	 * @param (TypeHint|null)[] $expectedParametersTypeHints
 	 */
 	public function testParametersTypeHints(string $functionName, array $expectedParametersTypeHints): void
@@ -258,7 +256,6 @@ class FunctionHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataParametersNullableTypeHints
-	 * @param string $functionName
 	 * @param (TypeHint|null)[] $expectedParametersTypeHints
 	 */
 	public function testParametersNullableTypeHints(string $functionName, array $expectedParametersTypeHints): void
@@ -303,8 +300,6 @@ class FunctionHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataFunctionReturnsValueOrNot
-	 * @param string $functionName
-	 * @param bool $returnsValue
 	 */
 	public function testFunctionReturnsValueOrNot(string $functionName, bool $returnsValue): void
 	{
@@ -330,8 +325,6 @@ class FunctionHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataClosureReturnsValueOrNot
-	 * @param int $line
-	 * @param bool $returnsValue
 	 */
 	public function testClosureReturnsValueOrNot(int $line, bool $returnsValue): void
 	{

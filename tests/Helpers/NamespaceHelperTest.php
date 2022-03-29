@@ -23,7 +23,6 @@ class NamespaceHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataIsFullyQualifiedName
-	 * @param string $typeName
 	 */
 	public function testIsFullyQualifiedName(string $typeName): void
 	{
@@ -32,7 +31,6 @@ class NamespaceHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataIsFullyQualifiedName
-	 * @param string $typeName
 	 */
 	public function testGetFullyQualifiedTypeNameUnchanged(string $typeName): void
 	{
@@ -54,7 +52,6 @@ class NamespaceHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataIsNotFullyQualifiedName
-	 * @param string $typeName
 	 */
 	public function testIsNotFullyQualifiedName(string $typeName): void
 	{
@@ -63,7 +60,6 @@ class NamespaceHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataIsNotFullyQualifiedName
-	 * @param string $typeName
 	 */
 	public function testGetFullyQualifiedTypeNameChanged(string $typeName): void
 	{
@@ -88,7 +84,6 @@ class NamespaceHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataHasNamespace
-	 * @param string $typeName
 	 */
 	public function testHasNamespace(string $typeName): void
 	{
@@ -110,7 +105,6 @@ class NamespaceHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataDoesNotHaveNamespace
-	 * @param string $typeName
 	 */
 	public function testDoesNotHaveNamespace(string $typeName): void
 	{
@@ -144,7 +138,6 @@ class NamespaceHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataGetNameParts
-	 * @param string $namespace
 	 * @param string[] $parts
 	 */
 	public function testGetNameParts(string $namespace, array $parts): void
@@ -231,8 +224,6 @@ class NamespaceHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataGetUnqualifiedNameFromFullyQualifiedName
-	 * @param string $unqualifiedName
-	 * @param string $fullyQualifiedName
 	 */
 	public function testGetUnqualifiedNameFromFullyQualifiedName(string $unqualifiedName, string $fullyQualifiedName): void
 	{
@@ -253,7 +244,6 @@ class NamespaceHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataIsQualifiedName
-	 * @param string $name
 	 */
 	public function testIsQualifiedName(string $name): void
 	{
@@ -272,7 +262,6 @@ class NamespaceHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataIsNotQualifiedName
-	 * @param string $name
 	 */
 	public function testIsNotQualifiedName(string $name): void
 	{
@@ -306,8 +295,6 @@ class NamespaceHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataNormalizeToCanonicalName
-	 * @param string $normalizedName
-	 * @param string $originalName
 	 */
 	public function testNormalizeToCanonicalName(string $normalizedName, string $originalName): void
 	{
@@ -341,8 +328,6 @@ class NamespaceHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataTypeIsInNamespace
-	 * @param string $typeName
-	 * @param string $namespace
 	 */
 	public function testTypeIsInNamespace(string $typeName, string $namespace): void
 	{
@@ -384,8 +369,6 @@ class NamespaceHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataTypeIsNotInNamespace
-	 * @param string $typeName
-	 * @param string $namespace
 	 */
 	public function testTypeIsNotInNamespace(string $typeName, string $namespace): void
 	{

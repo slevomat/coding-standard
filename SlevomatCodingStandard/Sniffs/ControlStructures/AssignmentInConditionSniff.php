@@ -36,7 +36,6 @@ class AssignmentInConditionSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $conditionStartPointer
 	 */
 	public function process(File $phpcsFile, $conditionStartPointer): void

@@ -29,9 +29,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
 	/**
 	 * @param int|string $code
-	 * @param int $line
-	 * @param File $phpcsFile
-	 * @param int|null $tokenPointer
 	 */
 	protected function assertTokenPointer($code, int $line, File $phpcsFile, ?int $tokenPointer = null): void
 	{
@@ -117,10 +114,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $line
 	 * @param int|string $tokenCode
-	 * @return int|null
 	 */
 	protected function findPointerByLineAndType(File $phpcsFile, int $line, $tokenCode): ?int
 	{
@@ -160,7 +154,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
 	/**
 	 * @param int|string $code
-	 * @return string|null
 	 */
 	private function findTokenName($code): ?string
 	{
@@ -185,8 +178,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int|null $tokenPointer
 	 * @return mixed[]
 	 */
 	private function getTokenFromPointer(File $phpcsFile, ?int $tokenPointer = null): array

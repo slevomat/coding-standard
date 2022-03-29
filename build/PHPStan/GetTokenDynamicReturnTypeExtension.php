@@ -34,10 +34,6 @@ class GetTokenDynamicReturnTypeExtension implements DynamicMethodReturnTypeExten
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
-	 * @param MethodReflection $methodReflection
-	 * @param MethodCall $methodCall
-	 * @param Scope $scope
-	 * @return Type
 	 */
 	public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): Type
 	{

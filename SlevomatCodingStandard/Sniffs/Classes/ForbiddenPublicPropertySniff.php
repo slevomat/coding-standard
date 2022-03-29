@@ -27,7 +27,6 @@ final class ForbiddenPublicPropertySniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $file
 	 * @param int $variablePointer
 	 */
 	public function process(File $file, $variablePointer): void
@@ -60,8 +59,6 @@ final class ForbiddenPublicPropertySniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
-	 * @param File $file
-	 * @param int $position
 	 * @return mixed[]
 	 */
 	private function getPropertyScopeModifier(File $file, int $position): array

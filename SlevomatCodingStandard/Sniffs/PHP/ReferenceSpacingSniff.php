@@ -42,7 +42,6 @@ class ReferenceSpacingSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $referencePointer
 	 */
 	public function process(File $phpcsFile, $referencePointer): void

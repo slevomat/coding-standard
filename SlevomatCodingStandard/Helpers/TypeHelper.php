@@ -16,8 +16,6 @@ class TypeHelper
 	 * Validates type name according to the allowed characters in type names + namespaces
 	 *
 	 * @link http://php.net/manual/en/language.oop5.basic.php
-	 * @param string $typeName
-	 * @return bool
 	 */
 	public static function isTypeName(string $typeName): bool
 	{

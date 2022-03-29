@@ -33,7 +33,6 @@ class RequireSingleLineMethodSignatureSniff extends AbstractMethodSignature
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $methodPointer
 	 */
 	public function process(File $phpcsFile, $methodPointer): void
@@ -91,9 +90,7 @@ class RequireSingleLineMethodSignatureSniff extends AbstractMethodSignature
 	}
 
 	/**
-	 * @param string $methodName
 	 * @param string[] $normalizedPatterns
-	 * @return bool
 	 */
 	private function isMethodNameInPatterns(string $methodName, array $normalizedPatterns): bool
 	{

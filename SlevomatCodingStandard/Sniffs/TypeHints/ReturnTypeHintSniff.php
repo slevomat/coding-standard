@@ -90,7 +90,6 @@ class ReturnTypeHintSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $pointer
 	 */
 	public function process(File $phpcsFile, $pointer): void
@@ -130,10 +129,6 @@ class ReturnTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $functionPointer
-	 * @param TypeHint|null $returnTypeHint
-	 * @param ReturnAnnotation|null $returnAnnotation
 	 * @param ReturnAnnotation[] $prefixedReturnAnnotations
 	 */
 	private function checkFunctionTypeHint(
@@ -408,10 +403,6 @@ class ReturnTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $functionPointer
-	 * @param TypeHint|null $returnTypeHint
-	 * @param ReturnAnnotation|null $returnAnnotation
 	 * @param ReturnAnnotation[] $prefixedReturnAnnotations
 	 */
 	private function checkFunctionTraversableTypeHintSpecification(
@@ -590,7 +581,6 @@ class ReturnTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @param ReturnAnnotation|null $returnAnnotation
 	 * @return GenericTypeNode|CallableTypeNode|IntersectionTypeNode|UnionTypeNode|ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|NullableTypeNode|ConstTypeNode|ConditionalTypeNode|ConditionalTypeForParameterNode|null
 	 */
 	private function getReturnTypeNode(?ReturnAnnotation $returnAnnotation): ?TypeNode

@@ -27,7 +27,6 @@ class TypeHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataValidTypeNames
-	 * @param string $typeName
 	 */
 	public function testValidTypeName(string $typeName): void
 	{
@@ -51,7 +50,6 @@ class TypeHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataNotValidTypeNames
-	 * @param string $typeName
 	 */
 	public function testNotValidTypeName(string $typeName): void
 	{

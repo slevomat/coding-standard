@@ -41,7 +41,6 @@ class DisallowYodaComparisonSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $comparisonTokenPointer
 	 */
 	public function process(File $phpcsFile, $comparisonTokenPointer): void

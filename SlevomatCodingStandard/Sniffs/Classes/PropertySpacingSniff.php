@@ -31,7 +31,6 @@ class PropertySpacingSniff extends AbstractPropertyAndConstantSpacing
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $pointer
 	 */
 	public function process(File $phpcsFile, $pointer): int

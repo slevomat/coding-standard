@@ -89,8 +89,6 @@ class UseStatementHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $pointer
 	 * @return array<string, UseStatement>
 	 */
 	public static function getUseStatementsForPointer(File $phpcsFile, int $pointer): array
@@ -111,7 +109,6 @@ class UseStatementHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @return array<int, array<string, UseStatement>>
 	 */
 	public static function getFileUseStatements(File $phpcsFile): array
@@ -176,8 +173,6 @@ class UseStatementHelper
 	/**
 	 * Searches for all use statements in a file, skips bodies of classes and traits.
 	 *
-	 * @param File $phpcsFile
-	 * @param int $openTagPointer
 	 * @return int[]
 	 */
 	private static function getUseStatementPointers(File $phpcsFile, int $openTagPointer): array

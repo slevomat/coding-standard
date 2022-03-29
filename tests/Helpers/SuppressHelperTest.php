@@ -92,7 +92,6 @@ class SuppressHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataFunctionIsSuppressed
-	 * @param string $name
 	 */
 	public function testFunctionIsSuppressed(string $name): void
 	{
@@ -119,7 +118,6 @@ class SuppressHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataFunctionIsNotSuppressed
-	 * @param string $name
 	 */
 	public function testFunctionIsNotSuppressed(string $name): void
 	{

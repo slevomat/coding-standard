@@ -22,7 +22,6 @@ class MultiLineArrayEndBracketPlacementSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $arrayStart
 	 */
 	public function process(File $phpcsFile, $arrayStart): void

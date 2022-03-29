@@ -30,7 +30,6 @@ class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacing
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $controlStructurePointer
 	 */
 	public function process(File $phpcsFile, $controlStructurePointer): void
@@ -75,9 +74,6 @@ class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacing
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
-	 * @param File $phpcsFile
-	 * @param int $controlStructurePointer
-	 * @return int
 	 */
 	protected function getLinesCountBeforeFirst(File $phpcsFile, int $controlStructurePointer): int
 	{
@@ -91,10 +87,6 @@ class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacing
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
-	 * @param File $phpcsFile
-	 * @param int $controlStructurePointer
-	 * @param int $controlStructureEndPointer
-	 * @return int
 	 */
 	protected function getLinesCountAfterLast(File $phpcsFile, int $controlStructurePointer, int $controlStructureEndPointer): int
 	{

@@ -74,7 +74,6 @@ class UnusedUsesSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $openTagPointer
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
@@ -368,10 +367,7 @@ class UnusedUsesSniff implements Sniff
 	}
 
 	/**
-	 * @param int $pointer
 	 * @param int[] $pointersBeforeUseStatements
-	 * @param int $startPointer
-	 * @return int
 	 */
 	private function firstPointerBefore(int $pointer, array $pointersBeforeUseStatements, int $startPointer): int
 	{

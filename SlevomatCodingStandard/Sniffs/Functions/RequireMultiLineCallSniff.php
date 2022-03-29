@@ -33,7 +33,6 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $stringPointer
 	 */
 	public function process(File $phpcsFile, $stringPointer): void

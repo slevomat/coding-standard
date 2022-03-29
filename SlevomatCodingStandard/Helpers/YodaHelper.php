@@ -74,7 +74,6 @@ class YodaHelper
 	private const DYNAMISM_FUNCTION_CALL = 998;
 
 	/**
-	 * @param File $phpcsFile
 	 * @param array<int, array<string, array<int, int|string>|int|string>> $leftSideTokens
 	 * @param array<int, array<string, array<int, int|string>|int|string>> $rightSideTokens
 	 */
@@ -88,7 +87,6 @@ class YodaHelper
 
 	/**
 	 * @param array<int, array<string, array<int, int|string>|int|string>> $tokens
-	 * @param int $comparisonTokenPointer
 	 * @return array<int, array<string, array<int, int|string>|int|string>>
 	 */
 	public static function getLeftSideTokens(array $tokens, int $comparisonTokenPointer): array
@@ -135,7 +133,6 @@ class YodaHelper
 
 	/**
 	 * @param array<int, array<string, array<int, int|string>|int|string>> $tokens
-	 * @param int $comparisonTokenPointer
 	 * @return array<int, array<string, array<int, int|string>|int|string>>
 	 */
 	public static function getRightSideTokens(array $tokens, int $comparisonTokenPointer): array
@@ -183,7 +180,6 @@ class YodaHelper
 	/**
 	 * @param array<int, array<string, array<int, int|string>|int|string>> $tokens
 	 * @param array<int, array<string, array<int, int|string>|int|string>> $sideTokens
-	 * @return int|null
 	 */
 	public static function getDynamismForTokens(array $tokens, array $sideTokens): ?int
 	{
@@ -274,7 +270,6 @@ class YodaHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param array<int, array<string, array<int, int|string>|int|string>> $oldTokens
 	 * @param array<int, array<string, array<int, int|string>|int|string>> $newTokens
 	 */

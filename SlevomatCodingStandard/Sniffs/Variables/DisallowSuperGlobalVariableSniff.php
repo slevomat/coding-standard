@@ -36,7 +36,6 @@ class DisallowSuperGlobalVariableSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $variablePointer
 	 */
 	public function process(File $phpcsFile, $variablePointer): void

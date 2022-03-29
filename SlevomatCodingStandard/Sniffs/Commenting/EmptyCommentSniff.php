@@ -33,7 +33,6 @@ class EmptyCommentSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $commentStartPointer
 	 */
 	public function process(File $phpcsFile, $commentStartPointer): void

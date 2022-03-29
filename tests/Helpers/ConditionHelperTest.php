@@ -27,8 +27,6 @@ class ConditionHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataConditionReturnsBoolean
-	 * @param int $line
-	 * @param bool $result
 	 */
 	public function testConditionReturnsBoolean(int $line, bool $result): void
 	{

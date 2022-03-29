@@ -196,9 +196,7 @@ class ClassStructureSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $pointer
-	 * @return int
 	 */
 	public function process(File $phpcsFile, $pointer): int
 	{
@@ -262,8 +260,6 @@ class ClassStructureSniff implements Sniff
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $pointer
 	 * @param array{scope_closer: int, level: int} $rootScopeToken
 	 * @return array{int, int, string}|null
 	 */
@@ -654,7 +650,6 @@ class ClassStructureSniff implements Sniff
 	}
 
 	/**
-	 * @param string $shortcut
 	 * @param array<int, string> $supportedGroups
 	 * @return array<int, string>
 	 */

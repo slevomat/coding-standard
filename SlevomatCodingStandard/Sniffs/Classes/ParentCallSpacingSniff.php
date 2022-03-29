@@ -38,7 +38,6 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $parentPointer
 	 */
 	public function process(File $phpcsFile, $parentPointer): void
@@ -95,9 +94,6 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
-	 * @param File $phpcsFile
-	 * @param int $parentPointer
-	 * @return int
 	 */
 	protected function getLinesCountBeforeFirst(File $phpcsFile, int $parentPointer): int
 	{
@@ -111,10 +107,6 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
-	 * @param File $phpcsFile
-	 * @param int $parentPointer
-	 * @param int $parentEndPointer
-	 * @return int
 	 */
 	protected function getLinesCountAfterLast(File $phpcsFile, int $parentPointer, int $parentEndPointer): int
 	{

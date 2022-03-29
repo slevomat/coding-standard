@@ -125,11 +125,7 @@ class AnnotationHelper
 
 	/**
 	 * @internal
-	 * @param File $phpcsFile
 	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation $annotation
-	 * @param TypeNode $typeNode
-	 * @param TypeNode $fixedTypeNode
-	 * @return string
 	 */
 	public static function fixAnnotationType(File $phpcsFile, Annotation $annotation, TypeNode $typeNode, TypeNode $fixedTypeNode): string
 	{
@@ -140,11 +136,7 @@ class AnnotationHelper
 
 	/**
 	 * @internal
-	 * @param File $phpcsFile
 	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation $annotation
-	 * @param ConstFetchNode $node
-	 * @param ConstFetchNode $fixedNode
-	 * @return string
 	 */
 	public static function fixAnnotationConstantFetchNode(
 		File $phpcsFile,
@@ -200,9 +192,6 @@ class AnnotationHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $pointer
-	 * @param string $annotationName
 	 * @return (VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|GenericAnnotation)[]
 	 */
 	public static function getAnnotationsByName(File $phpcsFile, int $pointer, string $annotationName): array
@@ -213,8 +202,6 @@ class AnnotationHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $pointer
 	 * @return (VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|GenericAnnotation)[][]
 	 */
 	public static function getAnnotations(File $phpcsFile, int $pointer): array
@@ -380,13 +367,8 @@ class AnnotationHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $functionPointer
-	 * @param TypeHint|null $typeHint
 	 * @param ReturnAnnotation|ParameterAnnotation|VariableAnnotation $annotation
 	 * @param array<int, string> $traversableTypeHints
-	 * @param bool $enableUnionTypeHint
-	 * @return bool
 	 */
 	public static function isAnnotationUseless(
 		File $phpcsFile,
@@ -487,9 +469,6 @@ class AnnotationHelper
 
 	/**
 	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|TypeAliasAnnotation|TypeImportAnnotation $annotation
-	 * @param TypeNode $typeNode
-	 * @param TypeNode $fixedTypeNode
-	 * @return Annotation
 	 */
 	private static function fixAnnotation(Annotation $annotation, TypeNode $typeNode, TypeNode $fixedTypeNode): Annotation
 	{

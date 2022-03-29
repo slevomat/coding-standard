@@ -36,7 +36,6 @@ class AnnotationTypeHelper
 {
 
 	/**
-	 * @param TypeNode $typeNode
 	 * @return IdentifierTypeNode[]|ThisTypeNode[]
 	 */
 	public static function getIdentifierTypeNodes(TypeNode $typeNode): array
@@ -111,7 +110,6 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param TypeNode $typeNode
 	 * @return ConstTypeNode[]
 	 */
 	public static function getConstantTypeNodes(TypeNode $typeNode): array
@@ -184,7 +182,6 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param TypeNode $typeNode
 	 * @return UnionTypeNode[]
 	 */
 	public static function getUnionTypeNodes(TypeNode $typeNode): array
@@ -254,7 +251,6 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param TypeNode $typeNode
 	 * @return ArrayTypeNode[]
 	 */
 	public static function getArrayTypeNodes(TypeNode $typeNode): array
@@ -324,7 +320,6 @@ class AnnotationTypeHelper
 
 	/**
 	 * @param IdentifierTypeNode|ThisTypeNode $typeNode
-	 * @return string
 	 */
 	public static function getTypeHintFromNode(TypeNode $typeNode): string
 	{
@@ -539,11 +534,7 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param TypeNode $typeNode
-	 * @param File $phpcsFile
-	 * @param int $pointer
 	 * @param array<int, string> $traversableTypeHints
-	 * @return bool
 	 */
 	public static function containsTraversableType(TypeNode $typeNode, File $phpcsFile, int $pointer, array $traversableTypeHints): bool
 	{
@@ -586,12 +577,7 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param TypeNode $typeNode
-	 * @param File $phpcsFile
-	 * @param int $pointer
 	 * @param array<int, string> $traversableTypeHints
-	 * @param bool $inTraversable
-	 * @return bool
 	 */
 	public static function containsItemsSpecificationForTraversable(
 		TypeNode $typeNode,
@@ -701,8 +687,6 @@ class AnnotationTypeHelper
 
 	/**
 	 * @param CallableTypeNode|GenericTypeNode|IdentifierTypeNode|ThisTypeNode|ArrayTypeNode|ArrayShapeNode|ConstTypeNode $typeNode
-	 * @param bool $enableUnionTypeHint
-	 * @return string
 	 */
 	public static function getTypeHintFromOneType(TypeNode $typeNode, bool $enableUnionTypeHint = false): string
 	{
@@ -757,10 +741,7 @@ class AnnotationTypeHelper
 
 	/**
 	 * @param UnionTypeNode|IntersectionTypeNode $typeNode
-	 * @param File $phpcsFile
-	 * @param int $pointer
 	 * @param array<int, string> $traversableTypeHints
-	 * @param bool $enableUnionTypeHint
 	 * @return string[]
 	 */
 	public static function getTraversableTypeHintsFromType(
@@ -801,7 +782,6 @@ class AnnotationTypeHelper
 
 	/**
 	 * @param UnionTypeNode|IntersectionTypeNode $typeNode
-	 * @return ?TypeNode
 	 */
 	public static function getItemsSpecificationTypeFromType(TypeNode $typeNode): ?TypeNode
 	{

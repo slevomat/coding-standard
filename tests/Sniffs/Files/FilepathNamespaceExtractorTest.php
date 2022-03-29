@@ -102,8 +102,6 @@ class FilepathNamespaceExtractorTest extends TestCase
 
 	/**
 	 * @dataProvider dataGetTypeNameFromProjectPath
-	 * @param string $path
-	 * @param string|null $expectedNamespace
 	 * @param string[] $extensions
 	 */
 	public function testGetTypeNameFromProjectPath(string $path, ?string $expectedNamespace, array $extensions): void

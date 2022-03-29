@@ -167,8 +167,6 @@ class FunctionHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $functionPointer
 	 * @return string[]
 	 */
 	public static function getParametersNames(File $phpcsFile, int $functionPointer): array
@@ -188,8 +186,6 @@ class FunctionHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $functionPointer
 	 * @return (TypeHint|null)[]
 	 */
 	public static function getParametersTypeHints(File $phpcsFile, int $functionPointer): array
@@ -317,8 +313,6 @@ class FunctionHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $functionPointer
 	 * @return ParameterAnnotation[]
 	 */
 	public static function getParametersAnnotations(File $phpcsFile, int $functionPointer): array
@@ -329,8 +323,6 @@ class FunctionHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $functionPointer
 	 * @return array<string, ParameterAnnotation>
 	 */
 	public static function getValidParametersAnnotations(File $phpcsFile, int $functionPointer): array
@@ -352,8 +344,6 @@ class FunctionHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $functionPointer
 	 * @return array<string, ParameterAnnotation>
 	 */
 	public static function getValidPrefixedParametersAnnotations(File $phpcsFile, int $functionPointer): array
@@ -391,8 +381,6 @@ class FunctionHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $functionPointer
 	 * @return ReturnAnnotation[]
 	 */
 	public static function getValidPrefixedReturnAnnotations(File $phpcsFile, int $functionPointer): array
@@ -414,7 +402,6 @@ class FunctionHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @return string[]
 	 */
 	public static function getAllFunctionNames(File $phpcsFile): array
@@ -435,8 +422,6 @@ class FunctionHelper
 	}
 
 	/**
-	 * @param File $file
-	 * @param int $functionPosition
 	 * @param int $flags optional bitmask of self::LINE_INCLUDE_* constants
 	 */
 	public static function getFunctionLengthInLines(File $file, int $functionPosition, int $flags = 0): int
@@ -519,8 +504,6 @@ class FunctionHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $previousFunctionPointer
 	 * @return Generator<int>
 	 */
 	private static function getAllFunctionOrMethodPointers(File $phpcsFile, int &$previousFunctionPointer): Generator

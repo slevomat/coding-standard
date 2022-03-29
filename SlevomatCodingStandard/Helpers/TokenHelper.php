@@ -102,11 +102,7 @@ class TokenHelper
 	];
 
 	/**
-	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
-	 * @param int $startPointer
-	 * @param int|null $endPointer
-	 * @return int|null
 	 */
 	public static function findNext(File $phpcsFile, $types, int $startPointer, ?int $endPointer = null): ?int
 	{
@@ -116,10 +112,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
-	 * @param int $startPointer
-	 * @param int|null $endPointer
 	 * @return int[]
 	 */
 	public static function findNextAll(File $phpcsFile, $types, int $startPointer, ?int $endPointer = null): array
@@ -141,12 +134,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
-	 * @param string $content
-	 * @param int $startPointer
-	 * @param int|null $endPointer
-	 * @return int|null
 	 */
 	public static function findNextContent(File $phpcsFile, $types, string $content, int $startPointer, ?int $endPointer = null): ?int
 	{
@@ -156,10 +144,8 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param int $startPointer Search starts at this token, inclusive
 	 * @param int|null $endPointer Search ends at this token, exclusive
-	 * @return int|null
 	 */
 	public static function findNextEffective(File $phpcsFile, int $startPointer, ?int $endPointer = null): ?int
 	{
@@ -167,11 +153,9 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer Search starts at this token, inclusive
 	 * @param int|null $endPointer Search ends at this token, exclusive
-	 * @return int|null
 	 */
 	public static function findNextExcluding(File $phpcsFile, $types, int $startPointer, ?int $endPointer = null): ?int
 	{
@@ -181,11 +165,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
-	 * @param int $startPointer
-	 * @param int|null $endPointer
-	 * @return int|null
 	 */
 	public static function findNextLocal(File $phpcsFile, $types, int $startPointer, ?int $endPointer = null): ?int
 	{
@@ -195,10 +175,8 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param int $startPointer Search starts at this token, inclusive
 	 * @param int|null $endPointer Search ends at this token, exclusive
-	 * @return int|null
 	 */
 	public static function findNextAnyToken(File $phpcsFile, int $startPointer, ?int $endPointer = null): ?int
 	{
@@ -206,11 +184,9 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer Search starts at this token, inclusive
 	 * @param int|null $endPointer Search ends at this token, exclusive
-	 * @return int|null
 	 */
 	public static function findPrevious(File $phpcsFile, $types, int $startPointer, ?int $endPointer = null): ?int
 	{
@@ -220,12 +196,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
-	 * @param string $content
-	 * @param int $startPointer
-	 * @param int|null $endPointer
-	 * @return int|null
 	 */
 	public static function findPreviousContent(File $phpcsFile, $types, string $content, int $startPointer, ?int $endPointer = null): ?int
 	{
@@ -235,10 +206,8 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param int $startPointer Search starts at this token, inclusive
 	 * @param int|null $endPointer Search ends at this token, exclusive
-	 * @return int|null
 	 */
 	public static function findPreviousEffective(File $phpcsFile, int $startPointer, ?int $endPointer = null): ?int
 	{
@@ -246,11 +215,9 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
 	 * @param int $startPointer Search starts at this token, inclusive
 	 * @param int|null $endPointer Search ends at this token, exclusive
-	 * @return int|null
 	 */
 	public static function findPreviousExcluding(File $phpcsFile, $types, int $startPointer, ?int $endPointer = null): ?int
 	{
@@ -260,11 +227,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param (int|string)|(int|string)[] $types
-	 * @param int $startPointer
-	 * @param int|null $endPointer
-	 * @return int|null
 	 */
 	public static function findPreviousLocal(File $phpcsFile, $types, int $startPointer, ?int $endPointer = null): ?int
 	{
@@ -274,9 +237,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param int $pointer Search starts at this token, inclusive
-	 * @return int
 	 */
 	public static function findFirstTokenOnLine(File $phpcsFile, int $pointer): int
 	{
@@ -296,9 +257,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param int $pointer Search starts at this token, inclusive
-	 * @return int
 	 */
 	public static function findLastTokenOnLine(File $phpcsFile, int $pointer): int
 	{
@@ -314,9 +273,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param int $pointer Search starts at this token, inclusive
-	 * @return int|null
 	 */
 	public static function findFirstTokenOnNextLine(File $phpcsFile, int $pointer): ?int
 	{
@@ -338,9 +295,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param int $pointer Search starts at this token, inclusive
-	 * @return int
 	 */
 	public static function findFirstNonWhitespaceOnLine(File $phpcsFile, int $pointer): int
 	{
@@ -360,9 +315,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param int $pointer Search starts at this token, inclusive
-	 * @return int|null
 	 */
 	public static function findFirstNonWhitespaceOnNextLine(File $phpcsFile, int $pointer): ?int
 	{
@@ -382,9 +335,7 @@ class TokenHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @param int $pointer Search starts at this token, inclusive
-	 * @return int|null
 	 */
 	public static function findFirstNonWhitespaceOnPreviousLine(File $phpcsFile, int $pointer): ?int
 	{

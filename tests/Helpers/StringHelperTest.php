@@ -28,8 +28,6 @@ class StringHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataStartsWith
-	 * @param string $haystack
-	 * @param string $needle
 	 */
 	public function testStartsWith(string $haystack, string $needle): void
 	{
@@ -63,8 +61,6 @@ class StringHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataNotStartsWith
-	 * @param string $haystack
-	 * @param string $needle
 	 */
 	public function testNotStartsWith(string $haystack, string $needle): void
 	{
@@ -94,8 +90,6 @@ class StringHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataEndsWith
-	 * @param string $haystack
-	 * @param string $needle
 	 */
 	public function testEndsWith(string $haystack, string $needle): void
 	{
@@ -129,8 +123,6 @@ class StringHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataNotEndsWith
-	 * @param string $haystack
-	 * @param string $needle
 	 */
 	public function testNotEndsWith(string $haystack, string $needle): void
 	{

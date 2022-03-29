@@ -52,7 +52,6 @@ class RequireExplicitAssertionSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $docCommentOpenPointer
 	 */
 	public function process(File $phpcsFile, $docCommentOpenPointer): void
@@ -296,9 +295,7 @@ class RequireExplicitAssertionSniff implements Sniff
 	}
 
 	/**
-	 * @param string $variableName
 	 * @param IdentifierTypeNode|ThisTypeNode|UnionTypeNode|IntersectionTypeNode $typeNode
-	 * @return string
 	 */
 	private function createAssert(string $variableName, TypeNode $typeNode): string
 	{
@@ -319,7 +316,6 @@ class RequireExplicitAssertionSniff implements Sniff
 	}
 
 	/**
-	 * @param string $variableName
 	 * @param IdentifierTypeNode|ThisTypeNode $typeNode
 	 * @return string[]
 	 */

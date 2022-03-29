@@ -60,7 +60,6 @@ class ClassHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @return array<int, string>
 	 */
 	public static function getAllNames(File $phpcsFile): array
@@ -81,8 +80,6 @@ class ClassHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $classPointer
 	 * @return int[]
 	 */
 	public static function getTraitUsePointers(File $phpcsFile, int $classPointer): array
@@ -108,7 +105,6 @@ class ClassHelper
 	}
 
 	/**
-	 * @param File $phpcsFile
 	 * @return array<int>
 	 */
 	private static function getAllClassPointers(File $phpcsFile): array

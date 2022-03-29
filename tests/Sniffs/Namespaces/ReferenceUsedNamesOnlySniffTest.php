@@ -393,7 +393,6 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNames
-	 * @param bool $allowFullyQualifiedExceptions
 	 * @param string[] $ignoredNames
 	 */
 	public function testIgnoredNames(bool $allowFullyQualifiedExceptions, array $ignoredNames): void
@@ -442,7 +441,6 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesInNamespace
-	 * @param bool $allowFullyQualifiedExceptions
 	 * @param string[] $ignoredNames
 	 */
 	public function testIgnoredNamesInNamespace(bool $allowFullyQualifiedExceptions, array $ignoredNames): void

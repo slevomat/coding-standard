@@ -79,8 +79,6 @@ class PropertyHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataIsProperty
-	 * @param string $variableName
-	 * @param bool $isProperty
 	 */
 	public function testIsProperty(string $variableName, bool $isProperty): void
 	{
@@ -156,9 +154,6 @@ class PropertyHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataFindTypeHint
-	 * @param string $propertyName
-	 * @param string|null $typeHint
-	 * @param bool|null $isNullable
 	 */
 	public function testFindTypeHint(string $propertyName, ?string $typeHint, ?bool $isNullable): void
 	{

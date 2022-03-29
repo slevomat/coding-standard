@@ -115,34 +115,6 @@
 		<exclude name="Squiz.Commenting.DocCommentAlignment.SpaceAfterStar"/><!-- space needed for indented annotations -->
 	</rule>
 	<rule ref="Squiz.Commenting.EmptyCatchComment"/>
-	<rule ref="Squiz.Commenting.FunctionComment">
-		<exclude name="Squiz.Commenting.FunctionComment.EmptyThrows"/><!-- @throws are forbidden -->
-		<exclude name="Squiz.Commenting.FunctionComment.IncorrectParamVarName"/><!-- Throws error with short type hint for integer and boolean -->
-		<exclude name="Squiz.Commenting.FunctionComment.IncorrectTypeHint"/><!-- Collection syntax such as string[] is not supported -->
-		<exclude name="Squiz.Commenting.FunctionComment.InvalidReturn"/><!-- Enforces incorrect types -->
-		<exclude name="Squiz.Commenting.FunctionComment.InvalidReturnNotVoid"/><!-- Is not able to detect return types such as string|null as correct -->
-		<exclude name="Squiz.Commenting.FunctionComment.InvalidThrows"/><!-- @throws are forbidden -->
-		<exclude name="Squiz.Commenting.FunctionComment.Missing"/><!-- PHPDoc is not required on all methods -->
-		<exclude name="Squiz.Commenting.FunctionComment.MissingParamComment"/><!-- Comments are not required for @param -->
-		<exclude name="Squiz.Commenting.FunctionComment.MissingReturn"/><!-- Void type is not used -->
-		<exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop"/><!-- Comments don't have to be sentences -->
-		<exclude name="Squiz.Commenting.FunctionComment.ParamCommentNotCapital"/><!-- Comments don't have to be sentences -->
-		<exclude name="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing"/><!-- Works only for code requiring PHP 7 code or better -->
-		<exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamType"/><!-- We don't want spacing with alignment -->
-		<exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamName"/><!-- We don't want spacing with alignment -->
-	</rule>
-	<rule ref="Squiz.Commenting.FunctionComment.DuplicateReturn">
-		<message>Only 1 @return annotation is allowed in a function comment</message>
-	</rule>
-	<rule ref="Squiz.Commenting.FunctionComment.ExtraParamComment">
-		<message>Extra @param annotation</message>
-	</rule>
-	<rule ref="Squiz.Commenting.FunctionComment.InvalidNoReturn">
-		<message>Function has no return statement, but annotation @return is present</message>
-	</rule>
-	<rule ref="Squiz.Commenting.FunctionComment.MissingParamTag">
-		<message>@param annotation for parameter "%s" missing</message>
-	</rule>
 	<rule ref="Squiz.ControlStructures.ControlSignature"/>
 	<rule ref="Squiz.ControlStructures.ForEachLoopDeclaration"/>
 	<rule ref="Squiz.ControlStructures.ForLoopDeclaration"/>
@@ -474,14 +446,10 @@
 	<rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition"/>
-	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint">
-		<exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint.UselessAnnotation"/>
-	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/>
-	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint">
-		<exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation"/>
-	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
 	<rule ref="SlevomatCodingStandard.TypeHints.UselessConstantTypeHint"/>
 

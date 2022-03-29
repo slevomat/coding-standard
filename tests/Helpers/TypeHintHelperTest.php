@@ -36,8 +36,6 @@ class TypeHintHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataIsSimpleTypeHint
-	 * @param string $typeHint
-	 * @param bool $isSimple
 	 */
 	public function testIsSimpleTypeHint(string $typeHint, bool $isSimple): void
 	{
@@ -60,8 +58,6 @@ class TypeHintHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataIsSimpleIterableTypeHint
-	 * @param string $typeHint
-	 * @param bool $isSimple
 	 */
 	public function testIsSimpleIterableTypeHint(string $typeHint, bool $isSimple): void
 	{
@@ -94,8 +90,6 @@ class TypeHintHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataIsSimpleUnofficialTypeHint
-	 * @param string $typeHint
-	 * @param bool $isSimple
 	 */
 	public function testIsSimpleUnofficialTypeHint(string $typeHint, bool $isSimple): void
 	{
@@ -120,8 +114,6 @@ class TypeHintHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataConvertLongSimpleTypeHintToShort
-	 * @param string $long
-	 * @param string $short
 	 */
 	public function testConvertLongSimpleTypeHintToShort(string $long, string $short): void
 	{
@@ -332,8 +324,6 @@ class TypeHintHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataIsTypeDefinedInAnnotation
-	 * @param string $typeHintName
-	 * @param bool $isTemplate
 	 */
 	public function testIsTypeDefinedInAnnotation(string $typeHintName, bool $isTemplate): void
 	{
@@ -359,8 +349,6 @@ class TypeHintHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataIsTypeDefinedInAnnotationWhenAnnotationIsInvalid
-	 * @param int $line
-	 * @param string $type
 	 */
 	public function testIsTypeDefinedInAnnotationWhenAnnotationIsInvalid(int $line, string $type): void
 	{

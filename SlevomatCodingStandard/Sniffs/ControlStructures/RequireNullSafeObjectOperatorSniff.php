@@ -56,9 +56,7 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param File $phpcsFile
 	 * @param int $identicalPointer
-	 * @return int
 	 */
 	public function process(File $phpcsFile, $identicalPointer): int
 	{
@@ -333,8 +331,6 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 	}
 
 	/**
-	 * @param File $phpcsFile
-	 * @param int $pointerBefore
 	 * @return array<int, int>|null
 	 */
 	private function getNextIdentificator(File $phpcsFile, int $pointerBefore): ?array
