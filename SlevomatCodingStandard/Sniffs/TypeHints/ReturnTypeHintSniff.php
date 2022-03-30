@@ -197,27 +197,28 @@ class ReturnTypeHintSniff implements Sniff
 				!$hasReturnAnnotation
 				|| $isAnnotationReturnTypeVoid
 			)
-			&& !$isSuppressedNativeTypeHint
 		) {
-			$message = !$hasReturnAnnotation
-				? sprintf(
-					'%s %s() does not have void return type hint.',
-					FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
-					FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
-				)
-				: sprintf(
-					'%s %s() does not have native return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
-					FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
-					FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-					AnnotationTypeHelper::export($returnTypeNode)
-				);
+			if (!$isSuppressedNativeTypeHint) {
+				$message = !$hasReturnAnnotation
+					? sprintf(
+						'%s %s() does not have void return type hint.',
+						FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
+						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
+					)
+					: sprintf(
+						'%s %s() does not have native return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
+						FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
+						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
+						AnnotationTypeHelper::export($returnTypeNode)
+					);
 
-			$fix = $phpcsFile->addFixableError($message, $functionPointer, self::getSniffName(self::CODE_MISSING_NATIVE_TYPE_HINT));
+				$fix = $phpcsFile->addFixableError($message, $functionPointer, self::getSniffName(self::CODE_MISSING_NATIVE_TYPE_HINT));
 
-			if ($fix) {
-				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContent($phpcsFile->getTokens()[$functionPointer]['parenthesis_closer'], ': void');
-				$phpcsFile->fixer->endChangeset();
+				if ($fix) {
+					$phpcsFile->fixer->beginChangeset();
+					$phpcsFile->fixer->addContent($phpcsFile->getTokens()[$functionPointer]['parenthesis_closer'], ': void');
+					$phpcsFile->fixer->endChangeset();
+				}
 			}
 
 			return;
