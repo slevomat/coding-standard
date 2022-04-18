@@ -330,7 +330,7 @@ class AnnotationTypeHelper
 
 	public static function export(TypeNode $typeNode): string
 	{
-		$exportedTypeNode = (string) preg_replace(['~\\s*(&|\|)\\s*~'], '\\1', (string) $typeNode);
+		$exportedTypeNode = (string) preg_replace(['~\\s*([&|])\\s*~'], '\\1', (string) $typeNode);
 
 		if (
 			$typeNode instanceof UnionTypeNode
