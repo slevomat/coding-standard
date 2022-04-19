@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use UrlGeneratorInterface;
 use UsedNamespace\UsedNameFooBar as UsedNameFooBarBaz;
+use UsedNamespace\Enum;
 use function DI\string;
 use function doSomething;
 use function stream_wrapper_restore;
@@ -18,6 +19,7 @@ class FooClass extends \ExtendedClass implements \ImplementedInterface, \SecondI
 
 	use \FullyQualified\SomeOtherTrait, SomeDifferentTrait, \FullyQualified\SometTotallyDifferentTrait;
 	use SomeTrait;
+	use Enum;
 
 	/** @ORM\Column(name="foo") */
 	private $foo;

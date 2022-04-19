@@ -13,6 +13,7 @@ use function sprintf;
 use function token_name;
 use const T_CLASS;
 use const T_CONST;
+use const T_ENUM;
 use const T_FUNCTION;
 use const T_INTERFACE;
 use const T_STRING;
@@ -50,7 +51,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 				continue;
 			}
 
-			$classPointer = TokenHelper::findPrevious($phpcsFile, [T_CLASS, T_INTERFACE, T_TRAIT], $i - 1);
+			$classPointer = TokenHelper::findPrevious($phpcsFile, [T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM], $i - 1);
 			if ($classPointer === null) {
 				continue;
 			}

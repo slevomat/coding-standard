@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.1
 
 namespace Foo;
 
@@ -80,6 +80,7 @@ use Conditional6;
 use Conditional7;
 use Conditional8;
 use Conditional9;
+use Something\Enum;
 
 /**
  * @ORM\Entity()
@@ -301,4 +302,9 @@ class Conditional
 	public function withConditionalParameter($parameter)
 	{
 	}
+}
+
+enum SomeEnum
+{
+	use Enum;
 }

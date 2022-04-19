@@ -15,6 +15,7 @@ use function substr_count;
 use const T_ANON_CLASS;
 use const T_CLASS;
 use const T_CLOSE_CURLY_BRACKET;
+use const T_ENUM;
 use const T_OPEN_CURLY_BRACKET;
 use const T_SEMICOLON;
 use const T_TRAIT;
@@ -51,6 +52,7 @@ class TraitUseSpacingSniff implements Sniff
 			T_CLASS,
 			T_ANON_CLASS,
 			T_TRAIT,
+			T_ENUM,
 		];
 	}
 

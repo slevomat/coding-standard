@@ -23,6 +23,7 @@ class ReferencedNameHelperTest extends TestCase
 			['SomeDifferentTrait', false, false],
 			['\FullyQualified\SometTotallyDifferentTrait', false, false],
 			['SomeTrait', false, false],
+			['Enum', false, false],
 			['SomeClass', false, false],
 			['TYPE_ONE', false, true],
 			['ArrayKey1', false, false],
@@ -154,6 +155,13 @@ class ReferencedNameHelperTest extends TestCase
 	public function testConstantIsNotReferencedName(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/classConstant.php');
+		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
+		self::assertCount(0, $names);
+	}
+
+	public function testEnumCaseIsNotReferencedName(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/enumCase.php');
 		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
 		self::assertCount(0, $names);
 	}

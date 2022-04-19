@@ -4,16 +4,13 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_reverse;
 use function in_array;
-use const T_ANON_CLASS;
-use const T_CLASS;
 use const T_DOUBLE_COLON;
-use const T_INTERFACE;
 use const T_STATIC;
-use const T_TRAIT;
 
 class UselessLateStaticBindingSniff implements Sniff
 {
@@ -45,7 +42,7 @@ class UselessLateStaticBindingSniff implements Sniff
 
 		$classPointer = null;
 		foreach (array_reverse($tokens[$staticPointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
-			if (!in_array($conditionTokenCode, [T_CLASS, T_INTERFACE, T_TRAIT, T_ANON_CLASS], true)) {
+			if (!in_array($conditionTokenCode, Tokens::$ooScopeTokens, true)) {
 				continue;
 			}
 

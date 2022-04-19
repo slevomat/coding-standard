@@ -20,6 +20,7 @@ use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_STRING;
 use const T_DOC_COMMENT_TAG;
 use const T_DOC_COMMENT_WHITESPACE;
+use const T_ENUM;
 use const T_FINAL;
 use const T_FUNCTION;
 use const T_INTERFACE;
@@ -193,7 +194,7 @@ class DocCommentHelper
 			$nextPointer !== null
 			&& in_array(
 				$tokens[$nextPointer]['code'],
-				[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT],
+				[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM],
 				true
 			)
 		) {
