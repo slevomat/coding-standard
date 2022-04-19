@@ -4,13 +4,11 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_values;
 use function sprintf;
-use const T_ANON_CLASS;
-use const T_CLASS;
-use const T_INTERFACE;
-use const T_TRAIT;
 use const T_WHITESPACE;
 
 class EmptyLinesAroundClassBracesSniff implements Sniff
@@ -39,12 +37,7 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return [
-			T_CLASS,
-			T_ANON_CLASS,
-			T_INTERFACE,
-			T_TRAIT,
-		];
+		return array_values(Tokens::$ooScopeTokens);
 	}
 
 	/**

@@ -25,6 +25,7 @@ use const T_CLASS;
 use const T_CLOSURE;
 use const T_COLON;
 use const T_ELLIPSIS;
+use const T_ENUM;
 use const T_FUNCTION;
 use const T_INTERFACE;
 use const T_NULLABLE;
@@ -113,7 +114,7 @@ class FunctionHelper
 					return sprintf('class@anonymous::%s', $name);
 				}
 
-				if (in_array($conditionTokenCode, [T_CLASS, T_INTERFACE, T_TRAIT], true)) {
+				if (in_array($conditionTokenCode, [T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM], true)) {
 					$name = sprintf(
 						'%s%s::%s',
 						NamespaceHelper::NAMESPACE_SEPARATOR,
@@ -144,7 +145,7 @@ class FunctionHelper
 			return false;
 		}
 		$lastFunctionPointerCondition = array_pop($functionPointerConditions);
-		return in_array($lastFunctionPointerCondition, [T_CLASS, T_INTERFACE, T_TRAIT, T_ANON_CLASS], true);
+		return in_array($lastFunctionPointerCondition, Tokens::$ooScopeTokens, true);
 	}
 
 	public static function findClassPointer(File $phpcsFile, int $functionPointer): ?int
@@ -156,7 +157,7 @@ class FunctionHelper
 		}
 
 		foreach (array_reverse($tokens[$functionPointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
-			if (!in_array($conditionTokenCode, [T_CLASS, T_INTERFACE, T_TRAIT, T_ANON_CLASS], true)) {
+			if (!in_array($conditionTokenCode, Tokens::$ooScopeTokens, true)) {
 				continue;
 			}
 

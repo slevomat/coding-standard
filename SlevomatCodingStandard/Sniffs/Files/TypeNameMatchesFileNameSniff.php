@@ -21,6 +21,7 @@ use function ucfirst;
 use function uksort;
 use const DIRECTORY_SEPARATOR;
 use const T_CLASS;
+use const T_ENUM;
 use const T_INTERFACE;
 use const T_STRING;
 use const T_TRAIT;
@@ -66,6 +67,7 @@ class TypeNameMatchesFileNameSniff implements Sniff
 			T_CLASS,
 			T_INTERFACE,
 			T_TRAIT,
+			T_ENUM,
 		];
 	}
 

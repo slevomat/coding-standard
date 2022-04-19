@@ -20,6 +20,7 @@ use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_STRING;
 use const T_DOC_COMMENT_TAG;
 use const T_DOC_COMMENT_WHITESPACE;
+use const T_ENUM;
 use const T_EXIT;
 use const T_FALSE;
 use const T_FN;
@@ -55,6 +56,7 @@ class TokenHelper
 		T_CLASS,
 		T_TRAIT,
 		T_INTERFACE,
+		T_ENUM,
 	];
 
 	/** @var (int|string)[] */
