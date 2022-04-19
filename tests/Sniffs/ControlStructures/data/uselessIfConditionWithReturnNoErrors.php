@@ -76,3 +76,7 @@ function () {
 
 	return true || false;
 };
+
+if (true) {
+	return false;
+}

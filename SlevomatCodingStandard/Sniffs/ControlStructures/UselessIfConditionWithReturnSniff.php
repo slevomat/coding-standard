@@ -108,8 +108,12 @@ class UselessIfConditionWithReturnSniff implements Sniff
 			}
 			$phpcsFile->fixer->endChangeset();
 		} else {
-			/** @var int $returnPointer */
 			$returnPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$ifPointer]['scope_closer'] + 1);
+
+			if ($returnPointer === null) {
+				return;
+			}
+
 			if ($tokens[$returnPointer]['code'] !== T_RETURN) {
 				return;
 			}
