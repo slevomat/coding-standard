@@ -31,5 +31,14 @@ class Whatever
 		self::doWhatever(
 			self::doAnything(true, false)
 		);
+
+		self::doWithHeredoc(<<<'CODE'
+			Anything
+CODE
+);
+
+		self::doWithNewLines("
+			Anything
+		");
 	}
 }
