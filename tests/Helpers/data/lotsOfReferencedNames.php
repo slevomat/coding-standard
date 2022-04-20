@@ -177,6 +177,14 @@ class SomeController
 	}
 }
 
+<<<MULTILINE_COMMENT_HEREDOC
+/**
+ * I'm a multiline comment in HEREDOC.
+ * Why?
+ * Because one can make a sniff that checks copyright correctness.
+ */
+MULTILINE_COMMENT_HEREDOC;
+
 <<<XML
 	<string>Hello world and {$this->wrap(ClassInHeredoc::EXAMPLE)}</string>
 XML;
