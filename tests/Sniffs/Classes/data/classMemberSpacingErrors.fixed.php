@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.1
 
 class Whatever
 {
@@ -38,6 +38,33 @@ class Whatever
 
 	} /* Fucking comment */
 
-	private $third;
+	static $third;
+
+	final const THIRD = 'third';
+
+	readonly int $forth;
+
+}
+
+enum Gender: string
+{
+
+	use LabeledEnumTrait;
+
+	case FEMALE = 'female';
+	case MALE = 'male';
+	case UNSPECIFIED = 'unspecified';
+
+	/**
+	 * @return string[]
+	 */
+	public static function getLabelDefinitions(): array
+	{
+		return [
+			self::FEMALE->value => 'man',
+			self::MALE->value => 'woman',
+			self::UNSPECIFIED->value => 'unspecified',
+		];
+	}
 
 }

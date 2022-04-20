@@ -24,13 +24,16 @@ use const T_AS;
 use const T_ATTRIBUTE_END;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CONST;
+use const T_ENUM_CASE;
 use const T_FINAL;
 use const T_FUNCTION;
 use const T_OPEN_CURLY_BRACKET;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
+use const T_READONLY;
 use const T_SEMICOLON;
+use const T_STATIC;
 use const T_USE;
 use const T_VAR;
 use const T_VARIABLE;
@@ -149,7 +152,7 @@ class ClassMemberSpacingSniff implements Sniff
 		do {
 			$memberPointer = TokenHelper::findNext(
 				$phpcsFile,
-				[T_USE, T_CONST, T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FUNCTION],
+				[T_USE, T_CONST, T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC, T_FUNCTION, T_ENUM_CASE],
 				$memberPointer + 1,
 				$tokens[$classPointer]['scope_closer']
 			);
@@ -162,13 +165,13 @@ class ClassMemberSpacingSniff implements Sniff
 				if (!UseStatementHelper::isTraitUse($phpcsFile, $memberPointer)) {
 					continue;
 				}
-			} elseif (in_array($tokens[$memberPointer]['code'], [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE], true)) {
+			} elseif (in_array($tokens[$memberPointer]['code'], [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC], true)) {
 				$asPointer = TokenHelper::findPreviousEffective($phpcsFile, $memberPointer - 1);
 				if ($tokens[$asPointer]['code'] === T_AS) {
 					continue;
 				}
 
-				$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION, T_CONST], $memberPointer + 1);
+				$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION, T_CONST, T_ENUM_CASE], $memberPointer + 1);
 				if (
 					$propertyPointer === null
 					|| $tokens[$propertyPointer]['code'] !== T_VARIABLE

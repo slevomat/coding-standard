@@ -1,4 +1,4 @@
-<?php // lint >= 8.0
+<?php // lint >= 8.1
 
 class EmptyClass
 {
@@ -115,6 +115,29 @@ abstract class WithoutErrors
 
 	public function __construct(private $propertyPromotion)
 	{
+	}
+
+}
+
+enum Gender: string
+{
+
+	use LabeledEnumTrait;
+
+	case FEMALE = 'female';
+	case MALE = 'male';
+	case UNSPECIFIED = 'unspecified';
+
+	/**
+	 * @return string[]
+	 */
+	public static function getLabelDefinitions(): array
+	{
+		return [
+			self::FEMALE->value => 'man',
+			self::MALE->value => 'woman',
+			self::UNSPECIFIED->value => 'unspecified',
+		];
 	}
 
 }
