@@ -106,4 +106,21 @@ trait Tr
 
 	function lorem() {
 	}
+
+	protected static final function protectedFinalStatic()
+	{
+	}
+
+	public final static function publicFinalStatic()
+	{
+	}
+
+	final protected function protectedFinal()
+	{
+	}
+
+	public final function publicFinal()
+	{
+	}
+
 }

@@ -207,6 +207,7 @@
 				<element value="constructor"/>
 				<element value="static constructors"/>
 				<element value="destructor"/>
+				<element value="final methods"/>
 				<element value="public methods"/>
 				<element value="public static methods"/>
 				<element value="protected methods"/>

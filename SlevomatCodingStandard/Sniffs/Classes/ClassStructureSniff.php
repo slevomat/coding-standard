@@ -182,9 +182,6 @@ class ClassStructureSniff implements Sniff
 	/** @var string[] */
 	public $groups = [];
 
-	/** @var bool */
-	public $enableFinalMethods = false;
-
 	/** @var array<string, int>|null */
 	private $normalizedGroups;
 
@@ -358,13 +355,13 @@ class ClassStructureSniff implements Sniff
 
 				switch ($visibility) {
 					case T_PUBLIC:
-						if ($this->enableFinalMethods && $isFinal) {
+						if ($isFinal) {
 							return $isStatic ? self::GROUP_PUBLIC_STATIC_FINAL_METHODS : self::GROUP_PUBLIC_FINAL_METHODS;
 						}
 
 						return $isStatic ? self::GROUP_PUBLIC_STATIC_METHODS : self::GROUP_PUBLIC_METHODS;
 					case T_PROTECTED:
-						if ($this->enableFinalMethods && $isFinal) {
+						if ($isFinal) {
 							return $isStatic ? self::GROUP_PROTECTED_STATIC_FINAL_METHODS : self::GROUP_PROTECTED_FINAL_METHODS;
 						}
 
@@ -589,16 +586,6 @@ class ClassStructureSniff implements Sniff
 				self::GROUP_PRIVATE_STATIC_METHODS,
 				self::GROUP_MAGIC_METHODS,
 			];
-
-			if (!$this->enableFinalMethods) {
-				foreach ($supportedGroups as $supportedGroupNo => $supportedGroupName) {
-					if (!in_array($supportedGroupName, self::SHORTCUTS[self::GROUP_SHORTCUT_FINAL_METHODS], true)) {
-						continue;
-					}
-
-					unset($supportedGroups[$supportedGroupNo]);
-				}
-			}
 
 			$normalizedGroupsWithShortcuts = [];
 			$order = 1;

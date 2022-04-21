@@ -3,7 +3,6 @@
 namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use SlevomatCodingStandard\Sniffs\TestCase;
-use function array_merge;
 
 class ClassStructureSniffTest extends TestCase
 {
@@ -20,9 +19,6 @@ class ClassStructureSniffTest extends TestCase
 		'constructor, destructor',
 		'static constructors',
 		'methods',
-	];
-
-	private const RULES_FOR_FINAL_METHODS = [
 		'public final methods',
 		'public static final methods',
 		'protected final methods',
@@ -95,7 +91,7 @@ class ClassStructureSniffTest extends TestCase
 			['groups' => self::DIFFERENT_RULES]
 		);
 
-		self::assertSame(13, $report->getErrorCount());
+		self::assertSame(16, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 12, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
@@ -109,22 +105,11 @@ class ClassStructureSniffTest extends TestCase
 		self::assertSniffError($report, 94, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 103, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 107, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-
-		self::assertAllFixedInFile($report);
-	}
-
-	public function testErrorsWithFinalMethodsEnabled(): void
-	{
-		$report = self::checkFile(
-			__DIR__ . '/data/classStructureWithFinalMethodsEnabledErrors.php',
-			['groups' => array_merge(self::DIFFERENT_RULES, self::RULES_FOR_FINAL_METHODS), 'enableFinalMethods' => true]
-		);
-
-		self::assertSame(3, $report->getErrorCount());
-
-		self::assertSniffError($report, 10, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($report, 14, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($report, 18, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 107, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 107, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 114, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 118, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 122, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 
 		self::assertAllFixedInFile($report);
 	}
@@ -152,7 +137,6 @@ class ClassStructureSniffTest extends TestCase
 					'methods',
 					'magic methods',
 				],
-				'enableFinalMethods' => true,
 			]
 		);
 
@@ -183,36 +167,6 @@ class ClassStructureSniffTest extends TestCase
 			self::fail();
 		} catch (MissingClassGroupsException $e) {
 			self::assertStringContainsString(', constructor, static constructors, destructor, ', $e->getMessage());
-		}
-	}
-
-	public function testThrowExceptionForMissingGroupsWithFinalMethodsEnabled(): void
-	{
-		try {
-			self::checkFile(
-				__DIR__ . '/data/classStructureSniffNoErrors.php',
-				[
-					'groups' => [
-						'uses',
-						'enum cases',
-						'constants',
-						'properties',
-						'public static abstract methods, public static methods, protected static abstract methods, protected static methods, private static methods',
-						'public abstract methods, public methods, protected abstract methods, protected methods, private methods',
-						'constructor',
-						'static constructors',
-						'destructor',
-						'magic methods',
-					],
-					'enableFinalMethods' => true,
-				]
-			);
-			self::fail();
-		} catch (MissingClassGroupsException $e) {
-			self::assertStringContainsString(
-				': public static final methods, protected static final methods, public final methods, protected final methods.',
-				$e->getMessage()
-			);
 		}
 	}
 
