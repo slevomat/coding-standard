@@ -1,4 +1,4 @@
-<?php // lint >= 8.0
+<?php // lint >= 8.1
 
 class Whatever
 {
@@ -166,5 +166,7 @@ class Whatever
 	private $uselessSuppressOfMissingNativeTypeHint;
 
 	private ?int $uselessAnnotationWithShortNullable;
+
+	static int $staticProperty;
 
 }
