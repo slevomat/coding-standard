@@ -1,4 +1,4 @@
-<?php // lint >= 8.0
+<?php // lint >= 8.1
 
 class Whatever
 {
@@ -17,13 +17,16 @@ class Whatever
 
 	private $e;
 
-	public function __construct(string $a, int|null $b = 0, ?bool $c, $d, $e)
+	private readonly string $f;
+
+	public function __construct(string $a, int|null $b = 0, ?bool $c, $d, $e, string $f)
 	{
 		$this->a = $a;
 		$this->b = $b;
 		$this->c = $c;
 		$this->d = $d;
 		$this->e = $e;
+		$this->f = $f;
 	}
 
 }
