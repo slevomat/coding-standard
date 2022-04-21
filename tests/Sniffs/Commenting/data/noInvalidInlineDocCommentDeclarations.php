@@ -1,4 +1,4 @@
-<?php // lint >= 8.0
+<?php // lint >= 8.1
 
 class Foo
 {
@@ -21,6 +21,12 @@ class Foo
 
 	/** @var string */
 	public static $static2;
+
+	/** @var string */
+	readonly string $readonly;
+
+	/** @var string */
+	static $static;
 
 	public function __construct()
 	{

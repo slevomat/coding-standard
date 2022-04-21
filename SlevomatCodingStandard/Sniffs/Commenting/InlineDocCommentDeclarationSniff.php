@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
+use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function count;
 use function in_array;
@@ -27,6 +28,7 @@ use const T_OPEN_SHORT_ARRAY;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
+use const T_READONLY;
 use const T_RETURN;
 use const T_SEMICOLON;
 use const T_STATIC;
@@ -83,13 +85,17 @@ class InlineDocCommentDeclarationSniff implements Sniff
 				);
 			} while (true);
 
-			if (in_array($tokens[$pointerAfterCommentClosePointer]['code'], [T_PRIVATE, T_PROTECTED, T_PUBLIC], true)) {
+			if (in_array($tokens[$pointerAfterCommentClosePointer]['code'], [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_READONLY], true)) {
 				return;
 			}
 
 			if ($tokens[$pointerAfterCommentClosePointer]['code'] === T_STATIC) {
 				$pointerAfterStatic = TokenHelper::findNextEffective($phpcsFile, $pointerAfterCommentClosePointer + 1);
-				if (in_array($tokens[$pointerAfterStatic]['code'], [T_PRIVATE, T_PROTECTED, T_PUBLIC], true)) {
+				if (in_array($tokens[$pointerAfterStatic]['code'], [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_READONLY], true)) {
+					return;
+				}
+
+				if ($tokens[$pointerAfterStatic]['code'] === T_VARIABLE && PropertyHelper::isProperty($phpcsFile, $pointerAfterStatic)) {
 					return;
 				}
 			}
