@@ -458,7 +458,7 @@ class AnnotationHelper
 			$annotationTypeNode instanceof IdentifierTypeNode
 			&& in_array(
 				strtolower($annotationTypeNode->name),
-				['true', 'false', 'class-string', 'trait-string', 'callable-string', 'numeric-string'],
+				['true', 'false', 'class-string', 'trait-string', 'callable-string', 'numeric-string', 'non-empty-string', 'literal-string', 'positive-int', 'negative-int'],
 				true
 			)
 		) {
