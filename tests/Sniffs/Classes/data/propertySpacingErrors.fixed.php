@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.1
 
 abstract class Foo {
 	/** @var string */
@@ -55,6 +55,11 @@ abstract class Bar {
 
 	private string $string = '';
 
+	readonly string $readonly;
+
+	static $static = 'static';
+
+	private readonly string $privateReadonly;
 
 	/**
 	 * whatever

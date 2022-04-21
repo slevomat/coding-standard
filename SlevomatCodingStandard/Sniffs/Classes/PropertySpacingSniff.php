@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use PHP_CodeSniffer\Files\File;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function in_array;
 use function sprintf;
 use const T_AS;
 use const T_CONST;
@@ -12,6 +13,8 @@ use const T_FUNCTION;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
+use const T_READONLY;
+use const T_STATIC;
 use const T_USE;
 use const T_VAR;
 use const T_VARIABLE;
@@ -26,7 +29,7 @@ class PropertySpacingSniff extends AbstractPropertyAndConstantSpacing
 	 */
 	public function register(): array
 	{
-		return [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE];
+		return [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC];
 	}
 
 	/**
@@ -40,6 +43,12 @@ class PropertySpacingSniff extends AbstractPropertyAndConstantSpacing
 		$asPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
 		if ($tokens[$asPointer]['code'] === T_AS) {
 			return $pointer;
+		}
+
+		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
+		if (in_array($tokens[$nextPointer]['code'], [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC], true)) {
+			// We don't want to report the some property twice
+			return $nextPointer;
 		}
 
 		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION, T_CONST, T_USE], $pointer + 1);
