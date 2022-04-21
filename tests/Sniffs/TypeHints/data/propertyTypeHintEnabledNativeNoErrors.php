@@ -204,3 +204,8 @@ class Aliases
 	 */
 	private ?array $withArrayAlias5;
 }
+
+interface SomeInterface
+{
+	public static function someMethod(): static;
+}
