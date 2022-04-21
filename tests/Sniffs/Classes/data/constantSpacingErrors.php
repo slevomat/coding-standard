@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.1
 
 abstract class Foo {
 	/** @var string */
@@ -29,6 +29,14 @@ abstract class Bar {
 
 	const WHATEVER = 'whatever';
 
+
+	final const FINAL_CONSTANT = 'final';
+
+
+	final public const FINAL_PUBLIC_CONSTANT = 'final';
+
+
+	public final const PUBLIC_FINAL_CONSTANT = 'final';
 
 
 	/**
