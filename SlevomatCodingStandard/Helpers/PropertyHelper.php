@@ -22,6 +22,7 @@ use const T_OPEN_CURLY_BRACKET;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
+use const T_READONLY;
 use const T_SEMICOLON;
 use const T_STATIC;
 use const T_VAR;
@@ -42,7 +43,7 @@ class PropertyHelper
 			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
 		}
 
-		if (in_array($tokens[$previousPointer]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_VAR], true)) {
+		if (in_array($tokens[$previousPointer]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_VAR, T_READONLY], true)) {
 			$constructorPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $previousPointer - 1);
 			return $constructorPointer === null || $tokens[$constructorPointer]['parenthesis_closer'] < $previousPointer;
 		}
@@ -77,7 +78,7 @@ class PropertyHelper
 
 		$propertyStartPointer = TokenHelper::findPrevious(
 			$phpcsFile,
-			[T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR, T_STATIC],
+			[T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR, T_STATIC, T_READONLY],
 			$propertyPointer - 1
 		);
 

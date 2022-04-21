@@ -74,6 +74,22 @@ class PropertyHelperTest extends TestCase
 				'$unionWithSpaces',
 				true,
 			],
+			[
+				'$withReadonlyLast',
+				true,
+			],
+			[
+				'$withReadonlyFirst',
+				true,
+			],
+			[
+				'$onlyReadonlyProperty',
+				true,
+			],
+			[
+				'$onlyReadonlyPropertyWithTypeHint',
+				true,
+			],
 		];
 	}
 
@@ -148,6 +164,26 @@ class PropertyHelperTest extends TestCase
 				'$unionWithSpaces',
 				'string|int|false|null',
 				true,
+			],
+			[
+				'$withReadonlyLast',
+				'int',
+				false,
+			],
+			[
+				'$withReadonlyFirst',
+				'int',
+				false,
+			],
+			[
+				'$onlyReadonlyProperty',
+				'int',
+				false,
+			],
+			[
+				'$onlyReadonlyPropertyWithTypeHint',
+				'string|int',
+				false,
 			],
 		];
 	}

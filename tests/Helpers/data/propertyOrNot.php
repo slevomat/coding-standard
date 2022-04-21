@@ -1,4 +1,4 @@
-<?php // lint >= 8.0
+<?php // lint >= 8.1
 
 class Foo
 {
@@ -36,4 +36,11 @@ class Foo
 
 	private string | int | false | null $unionWithSpaces;
 
+	private readonly int $withReadonlyLast;
+
+	readonly public int $withReadonlyFirst;
+
+	readonly int $onlyReadonlyProperty;
+
+	readonly string|int $onlyReadonlyPropertyWithTypeHint;
 }
