@@ -78,7 +78,12 @@ class TypeHintHelper
 
 	public static function isVoidTypeHint(string $typeHint): bool
 	{
-		return in_array($typeHint, ['void', 'never', 'never-return', 'never-returns', 'no-return'], true);
+		return $typeHint === 'void';
+	}
+
+	public static function isNeverTypeHint(string $typeHint): bool
+	{
+		return in_array($typeHint, ['never', 'never-return', 'never-returns', 'no-return'], true);
 	}
 
 	/**
@@ -330,6 +335,10 @@ class TypeHintHelper
 	{
 		if (StringHelper::startsWith($typeHint, '?')) {
 			$typeHint = substr($typeHint, 1) . '|null';
+		}
+
+		if (self::isNeverTypeHint($typeHint)) {
+			return 'never';
 		}
 
 		$parts = explode('|', $typeHint);
