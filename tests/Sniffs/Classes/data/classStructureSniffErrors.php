@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.1
 
 class A
 {
@@ -224,5 +224,13 @@ class N
 	];
 
 	public $whatever;
+
+}
+
+enum O: string
+{
+
+	const SOME_CONST = 'const';
+	case SOME_ENUM_CASE = 'case';
 
 }
