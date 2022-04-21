@@ -1,4 +1,4 @@
-<?php // lint = 8.0
+<?php // lint = 8.1
 
 class Whatever
 {
@@ -20,5 +20,7 @@ class Whatever
 	private null|float  $nullableUnion = 0.0;
 
 	private   false|int $unionWithFalse = false;
+
+	readonly  int  $readonly = 0;
 
 }
