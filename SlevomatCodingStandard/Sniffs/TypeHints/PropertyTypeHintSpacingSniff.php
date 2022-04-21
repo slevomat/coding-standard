@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
+use function in_array;
 use const T_AS;
 use const T_CONST;
 use const T_FUNCTION;
@@ -14,6 +15,8 @@ use const T_NULLABLE;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
+use const T_READONLY;
+use const T_STATIC;
 use const T_VAR;
 use const T_VARIABLE;
 use const T_WHITESPACE;
@@ -43,23 +46,30 @@ class PropertyTypeHintSpacingSniff implements Sniff
 			T_PUBLIC,
 			T_PROTECTED,
 			T_PRIVATE,
+			T_READONLY,
 		];
 	}
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $visibilityPointer
+	 * @param int $pointer
 	 */
-	public function process(File $phpcsFile, $visibilityPointer): void
+	public function process(File $phpcsFile, $pointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$asPointer = TokenHelper::findPreviousEffective($phpcsFile, $visibilityPointer - 1);
+		$asPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
 		if ($tokens[$asPointer]['code'] === T_AS) {
 			return;
 		}
 
-		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $visibilityPointer + 1);
+		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
+		if (in_array($tokens[$nextPointer]['code'], [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC], true)) {
+			// We don't want to report the some property twice
+			return;
+		}
+
+		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $pointer + 1);
 
 		if ($tokens[$propertyPointer]['code'] !== T_VARIABLE) {
 			return;
@@ -69,7 +79,7 @@ class PropertyTypeHintSpacingSniff implements Sniff
 			return;
 		}
 
-		$propertyStartPointer = $visibilityPointer;
+		$propertyStartPointer = $pointer;
 
 		$typeHintEndPointer = TokenHelper::findPrevious(
 			$phpcsFile,
