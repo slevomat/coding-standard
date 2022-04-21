@@ -25,4 +25,6 @@ class Whatever
 
 	static string $static = 'string';
 
+	public static string $static = 'string';
+
 }
