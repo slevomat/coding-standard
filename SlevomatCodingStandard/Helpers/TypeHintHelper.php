@@ -173,9 +173,13 @@ class TypeHintHelper
 				'trait-string',
 				'callable-string',
 				'numeric-string',
+				'non-empty-string',
+				'literal-string',
 				'array-key',
 				'list',
 				'empty',
+				'positive-int',
+				'negative-int',
 			];
 		}
 

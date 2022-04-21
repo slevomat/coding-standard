@@ -317,4 +317,29 @@ abstract class Whatever
 	{
 	}
 
+	/** @return positive-int */
+	public function returnsPositiveInteger(): int
+	{
+	}
+
+	/** @return negative-int */
+	public function returnsNegativeInteger(): int
+	{
+	}
+
+	/** @return non-empty-array<int> */
+	public function returnsNonEmptyArray(): array
+	{
+	}
+
+	/** @return non-empty-string */
+	public function returnsNonEmptyString(): string
+	{
+	}
+
+	/** @return literal-string */
+	public function returnsLiteralString(): string
+	{
+	}
+
 }

@@ -727,7 +727,13 @@ class AnnotationTypeHelper
 	public static function getTypeHintFromOneType(TypeNode $typeNode, bool $enableUnionTypeHint = false): string
 	{
 		if ($typeNode instanceof GenericTypeNode) {
-			return $typeNode->type->name;
+			$genericName = $typeNode->type->name;
+
+			if (strtolower($genericName) === 'non-empty-array') {
+				return 'array';
+			}
+
+			return $genericName;
 		}
 
 		if ($typeNode instanceof IdentifierTypeNode) {
@@ -739,7 +745,15 @@ class AnnotationTypeHelper
 				return $enableUnionTypeHint ? 'false' : 'bool';
 			}
 
-			if (in_array(strtolower($typeNode->name), ['class-string', 'trait-string', 'callable-string', 'numeric-string'], true)) {
+			if (in_array(strtolower($typeNode->name), ['positive-int', 'negative-int'], true)) {
+				return 'int';
+			}
+
+			if (in_array(
+				strtolower($typeNode->name),
+				['class-string', 'trait-string', 'callable-string', 'numeric-string', 'non-empty-string', 'literal-string'],
+				true
+			)) {
 				return 'string';
 			}
 
