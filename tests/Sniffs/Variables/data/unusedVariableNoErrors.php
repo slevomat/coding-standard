@@ -406,3 +406,27 @@ function ($path, $name) {
 
 	return $name;
 };
+
+function ($i) {
+	return ++$i;
+};
+
+function ($i) {
+	exit(++$i);
+};
+
+function ($i) {
+	print ++$i;
+};
+
+function ($i) {
+	echo $i, ++$i;
+};
+
+function ($i) {
+	return empty(++$i);
+};
+
+function ($i) {
+	eval(++$i . ' !== 1 ?: exit("zero");');
+};
