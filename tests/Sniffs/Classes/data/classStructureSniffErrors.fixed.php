@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.1
 
 class A
 {
@@ -224,5 +224,13 @@ class N
 		'password',
 		'remember_token',
 	];
+
+}
+
+enum O: string
+{
+
+	case SOME_ENUM_CASE = 'case';
+	const SOME_CONST = 'const';
 
 }

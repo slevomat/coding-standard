@@ -14,6 +14,7 @@ class ClassStructureSniffTest extends TestCase
 		'public static properties, protected static properties, private static properties',
 		'public static abstract methods, public static methods, protected static abstract methods, protected static methods, private static methods',
 		'public properties, protected properties, private properties',
+		'enum cases',
 		'magic methods',
 		'public abstract methods, public methods, protected abstract methods, protected methods, private methods',
 		'constructor, destructor',
@@ -38,7 +39,7 @@ class ClassStructureSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/classStructureSniffErrors.php');
 
-		self::assertSame(26, $report->getErrorCount());
+		self::assertSame(27, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 12, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
@@ -64,6 +65,7 @@ class ClassStructureSniffTest extends TestCase
 		self::assertSniffError($report, 207, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 209, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 226, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 234, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 
 		self::assertAllFixedInFile($report);
 	}
@@ -134,6 +136,7 @@ class ClassStructureSniffTest extends TestCase
 			[
 				'groups' => [
 					'uses',
+					'enum cases',
 					'constants',
 					'private properties',
 					'static properties',
@@ -191,6 +194,7 @@ class ClassStructureSniffTest extends TestCase
 				[
 					'groups' => [
 						'uses',
+						'enum cases',
 						'constants',
 						'properties',
 						'public static abstract methods, public static methods, protected static abstract methods, protected static methods, private static methods',

@@ -192,6 +192,7 @@
 		<properties>
 			<property name="groups" type="array">
 				<element value="uses"/>
+				<element value="enum cases"/>
 				<element value="public constants"/>
 				<element value="protected constants"/>
 				<element value="private constants"/>
