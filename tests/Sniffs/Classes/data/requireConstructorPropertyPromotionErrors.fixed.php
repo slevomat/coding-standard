@@ -1,4 +1,4 @@
-<?php // lint >= 8.0
+<?php // lint >= 8.1
 
 class Whatever
 {
@@ -6,7 +6,7 @@ class Whatever
 	#[SomeAttribute]
 	private $d;
 
-	public function __construct(public string $a, protected int|null $b = 0, private ?bool $c = null, $d, private $e)
+	public function __construct(public string $a, protected int|null $b = 0, private ?bool $c = null, $d, private $e, private readonly string $f)
 	{
 		$this->d = $d;
 	}
