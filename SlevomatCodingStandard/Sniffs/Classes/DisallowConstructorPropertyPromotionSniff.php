@@ -4,11 +4,14 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function sprintf;
 use function strtolower;
 use const T_FUNCTION;
+use const T_PRIVATE;
+use const T_PROTECTED;
+use const T_PUBLIC;
+use const T_READONLY;
 use const T_VARIABLE;
 
 class DisallowConstructorPropertyPromotionSniff implements Sniff
@@ -38,19 +41,19 @@ class DisallowConstructorPropertyPromotionSniff implements Sniff
 			return;
 		}
 
-		$visibilityPointers = TokenHelper::findNextAll(
+		$modifierPointers = TokenHelper::findNextAll(
 			$phpcsFile,
-			Tokens::$scopeModifiers,
+			[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY],
 			$tokens[$functionPointer]['parenthesis_opener'] + 1,
 			$tokens[$functionPointer]['parenthesis_closer']
 		);
 
-		if ($visibilityPointers === []) {
+		if ($modifierPointers === []) {
 			return;
 		}
 
-		foreach ($visibilityPointers as $visibilityPointer) {
-			$variablePointer = TokenHelper::findNext($phpcsFile, T_VARIABLE, $visibilityPointer + 1);
+		foreach ($modifierPointers as $modifierPointer) {
+			$variablePointer = TokenHelper::findNext($phpcsFile, T_VARIABLE, $modifierPointer + 1);
 
 			$phpcsFile->addError(
 				sprintf(

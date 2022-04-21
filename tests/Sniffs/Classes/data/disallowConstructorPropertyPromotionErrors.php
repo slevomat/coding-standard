@@ -1,4 +1,4 @@
-<?php // lint >= 8.0
+<?php // lint >= 8.1
 
 class Whatever
 {
@@ -16,6 +16,7 @@ class Anything
 	public function __construct(
 		public int $a,
 		private float $b,
+		readonly int $c,
 	)
 	{
 
