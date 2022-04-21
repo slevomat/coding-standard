@@ -106,4 +106,21 @@ trait Tr
 	public static function staticConstructor() : self
 	{
 	}
+
+	public final function publicFinal()
+	{
+	}
+
+	public final static function publicFinalStatic()
+	{
+	}
+
+	final protected function protectedFinal()
+	{
+	}
+
+	protected static final function protectedFinalStatic()
+	{
+	}
+
 }

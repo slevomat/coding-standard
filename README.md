@@ -133,7 +133,6 @@ Checks that class/trait/interface members are in the correct order.
 Sniff provides the following settings:
 
 * `groups`: order of groups. Use multiple groups in one `<element value="">` to not differentiate among them. You can use specific groups or shortcuts.
-* `enableFinalMethods`: enables groups for `final` methods
 
 **List of supported groups**:
 uses,
