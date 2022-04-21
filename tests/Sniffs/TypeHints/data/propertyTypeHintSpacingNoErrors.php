@@ -30,3 +30,8 @@ class Whatever
 	}
 
 }
+
+interface SomeInterface
+{
+	public static function someMethod(): static;
+}

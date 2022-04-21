@@ -47,6 +47,7 @@ class PropertyTypeHintSpacingSniff implements Sniff
 			T_PROTECTED,
 			T_PRIVATE,
 			T_READONLY,
+			T_STATIC,
 		];
 	}
 
@@ -71,7 +72,7 @@ class PropertyTypeHintSpacingSniff implements Sniff
 
 		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $pointer + 1);
 
-		if ($tokens[$propertyPointer]['code'] !== T_VARIABLE) {
+		if ($propertyPointer === null || $tokens[$propertyPointer]['code'] !== T_VARIABLE) {
 			return;
 		}
 

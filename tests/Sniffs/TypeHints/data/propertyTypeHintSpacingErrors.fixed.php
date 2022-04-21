@@ -23,4 +23,6 @@ class Whatever
 
 	readonly int $readonly = 0;
 
+	static string $static = 'string';
+
 }
