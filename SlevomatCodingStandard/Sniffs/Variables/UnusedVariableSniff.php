@@ -653,7 +653,7 @@ class UnusedVariableSniff implements Sniff
 		return in_array(
 			$tokens[$previousPointer]['code'],
 			array_merge(
-				[T_STRING_CONCAT, T_ECHO, T_RETURN, T_EXIT, T_PRINT, T_COMMA, T_EMPTY, T_EVAL],
+				[T_STRING_CONCAT, T_ECHO, T_RETURN, T_EXIT, T_PRINT, T_COMMA, T_EMPTY, T_EVAL, T_YIELD],
 				Tokens::$operators,
 				Tokens::$assignmentTokens,
 				Tokens::$booleanOperators
