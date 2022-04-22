@@ -430,3 +430,7 @@ function ($i) {
 function ($i) {
 	eval(++$i . ' !== 1 ?: exit("zero");');
 };
+
+function ($i) {
+	yield ++$i;
+};
