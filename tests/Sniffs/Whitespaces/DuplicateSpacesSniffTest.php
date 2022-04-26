@@ -17,7 +17,7 @@ class DuplicateSpacesSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/duplicateSpacesErrors.php');
 
-		self::assertSame(9, $report->getErrorCount());
+		self::assertSame(11, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES);
 		self::assertSniffError($report, 7, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES, 'Duplicate spaces at position 7.');
@@ -27,7 +27,8 @@ class DuplicateSpacesSniffTest extends TestCase
 		self::assertSniffError($report, 9, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES, 'Duplicate spaces at position 21.');
 		self::assertSniffError($report, 9, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES, 'Duplicate spaces at position 36.');
 		self::assertSniffError($report, 9, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES, 'Duplicate spaces at position 40.');
-		self::assertSniffError($report, 11, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES);
+		self::assertSniffError($report, 17, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES);
+		self::assertSniffError($report, 18, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES);
 
 		self::assertAllFixedInFile($report);
 	}
@@ -100,6 +101,32 @@ class DuplicateSpacesSniffTest extends TestCase
 
 		self::assertSniffError($report, 7, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES, 'Duplicate spaces at position 12.');
 		self::assertSniffError($report, 7, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES, 'Duplicate spaces at position 15.');
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testIgnoreSpacesInMatchNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/duplicateSpacesIgnoreSpacesInMatchNoErrors.php', [
+			'ignoreSpacesInMatch' => true,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testIgnoreSpacesInMatchErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/duplicateSpacesIgnoreSpacesInMatchErrors.php', [
+			'ignoreSpacesInMatch' => true,
+		]);
+
+		self::assertSame(6, $report->getErrorCount());
+
+		self::assertSniffError($report, 4, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES, 'Duplicate spaces at position 16.');
+		self::assertSniffError($report, 4, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES, 'Duplicate spaces at position 19.');
+		self::assertSniffError($report, 5, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES, 'Duplicate spaces at position 17.');
+		self::assertSniffError($report, 5, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES, 'Duplicate spaces at position 20.');
+		self::assertSniffError($report, 6, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES, 'Duplicate spaces at position 18.');
+		self::assertSniffError($report, 6, DuplicateSpacesSniff::CODE_DUPLICATE_SPACES, 'Duplicate spaces at position 21.');
 
 		self::assertAllFixedInFile($report);
 	}
