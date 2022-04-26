@@ -821,6 +821,16 @@ This sniff provides the following setting:
 
 This sniff disallows trailing commas in multi-line `use` of closure declaration.
 
+#### SlevomatCodingStandard.Functions.RequireTrailingCommaInClosureUse 🔧
+
+Commas after the last inherited variable in multi-line `use` of closure declaration make adding a new variable easier and result in a cleaner versioning diff.
+
+This sniff enforces trailing commas in multi-line declarations.
+
+This sniff provides the following setting:
+
+* `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 8.0 or higher.
+
 #### SlevomatCodingStandard.Functions.DisallowTrailingCommaInDeclaration 🔧
 
 This sniff disallows trailing commas in multi-line declarations.
@@ -834,8 +844,6 @@ This sniff enforces trailing commas in multi-line declarations.
 This sniff provides the following setting:
 
 * `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 8.0 or higher.
-
-#### SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses 🔧
 
 Checks whether uses at the top of a file are alphabetically sorted. Follows natural sorting and takes edge cases with special symbols into consideration. The following code snippet is an example of correctly sorted uses:
 
