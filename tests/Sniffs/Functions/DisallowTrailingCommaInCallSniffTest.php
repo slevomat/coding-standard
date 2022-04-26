@@ -9,15 +9,19 @@ class DisallowTrailingCommaInCallSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/disallowTrailingCommaInCallNoErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/disallowTrailingCommaInCallNoErrors.php', [
+			'onlySingleLine' => false,
+		]);
 		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/disallowTrailingCommaInCallErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/disallowTrailingCommaInCallErrors.php', [
+			'onlySingleLine' => false,
+		]);
 
-		self::assertSame(14, $report->getErrorCount());
+		self::assertSame(15, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, DisallowTrailingCommaInCallSniff::CODE_DISALLOWED_TRAILING_COMMA);
 		self::assertSniffError($report, 12, DisallowTrailingCommaInCallSniff::CODE_DISALLOWED_TRAILING_COMMA);
@@ -33,6 +37,20 @@ class DisallowTrailingCommaInCallSniffTest extends TestCase
 		self::assertSniffError($report, 75, DisallowTrailingCommaInCallSniff::CODE_DISALLOWED_TRAILING_COMMA);
 		self::assertSniffError($report, 83, DisallowTrailingCommaInCallSniff::CODE_DISALLOWED_TRAILING_COMMA);
 		self::assertSniffError($report, 91, DisallowTrailingCommaInCallSniff::CODE_DISALLOWED_TRAILING_COMMA);
+		self::assertSniffError($report, 97, DisallowTrailingCommaInCallSniff::CODE_DISALLOWED_TRAILING_COMMA);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testWithOnlySingleLineEnabledErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/disallowTrailingCommaInCallWithOnlySingleLineEnabledErrors.php', [
+			'onlySingleLine' => true,
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 8, DisallowTrailingCommaInCallSniff::CODE_DISALLOWED_TRAILING_COMMA);
 
 		self::assertAllFixedInFile($report);
 	}

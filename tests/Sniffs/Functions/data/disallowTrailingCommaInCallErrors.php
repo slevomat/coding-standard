@@ -93,3 +93,5 @@ class SelfStaticParent extends Whatever
 	}
 
 }
+
+doSomething(1, 2, 3, );

@@ -807,6 +807,10 @@ This sniff disallows usage of named arguments.
 
 This sniff disallows trailing commas in multi-line calls.
 
+This sniff provides the following setting:
+
+* `onlySingleLine`: to enable checks only for single-line calls.
+
 #### SlevomatCodingStandard.Functions.RequireTrailingCommaInCall 🔧
 
 Commas after the last parameter in function or method call make adding a new parameter easier and result in a cleaner versioning diff.
