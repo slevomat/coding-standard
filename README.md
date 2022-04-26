@@ -817,6 +817,10 @@ This sniff provides the following setting:
 
 * `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 7.3 or higher.
 
+#### SlevomatCodingStandard.Functions.DisallowTrailingCommaInClosureUse 🔧
+
+This sniff disallows trailing commas in multi-line `use` of closure declaration.
+
 #### SlevomatCodingStandard.Functions.DisallowTrailingCommaInDeclaration 🔧
 
 This sniff disallows trailing commas in multi-line declarations.
