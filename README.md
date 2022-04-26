@@ -821,6 +821,10 @@ This sniff provides the following setting:
 
 This sniff disallows trailing commas in multi-line `use` of closure declaration.
 
+This sniff provides the following setting:
+
+* `onlySingleLine`: to enable checks only for single-line `use` declarations.
+
 #### SlevomatCodingStandard.Functions.RequireTrailingCommaInClosureUse 🔧
 
 Commas after the last inherited variable in multi-line `use` of closure declaration make adding a new variable easier and result in a cleaner versioning diff.

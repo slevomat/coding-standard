@@ -15,6 +15,9 @@ class DisallowTrailingCommaInClosureUseSniff implements Sniff
 
 	public const CODE_DISALLOWED_TRAILING_COMMA = 'DisallowedTrailingComma';
 
+	/** @var bool */
+	public $onlySingleLine = false;
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
@@ -41,16 +44,21 @@ class DisallowTrailingCommaInClosureUseSniff implements Sniff
 			return;
 		}
 
-		$useParenthesisOpener = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
+		$useParenthesisOpenerPointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
+		$useParenthesisCloserPointer = $tokens[$useParenthesisOpenerPointer]['parenthesis_closer'];
 
 		$pointerBeforeUseParenthesisCloser = TokenHelper::findPreviousExcluding(
 			$phpcsFile,
 			T_WHITESPACE,
-			$tokens[$useParenthesisOpener]['parenthesis_closer'] - 1,
-			$useParenthesisOpener
+			$tokens[$useParenthesisOpenerPointer]['parenthesis_closer'] - 1,
+			$useParenthesisOpenerPointer
 		);
 
 		if ($tokens[$pointerBeforeUseParenthesisCloser]['code'] !== T_COMMA) {
+			return;
+		}
+
+		if ($this->onlySingleLine && $tokens[$useParenthesisOpenerPointer]['line'] !== $tokens[$useParenthesisCloserPointer]['line']) {
 			return;
 		}
 
@@ -66,6 +74,13 @@ class DisallowTrailingCommaInClosureUseSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 		$phpcsFile->fixer->replaceToken($pointerBeforeUseParenthesisCloser, '');
+
+		if ($tokens[$pointerBeforeUseParenthesisCloser]['line'] === $tokens[$useParenthesisCloserPointer]['line']) {
+			for ($i = $pointerBeforeUseParenthesisCloser + 1; $i < $useParenthesisCloserPointer; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
+		}
+
 		$phpcsFile->fixer->endChangeset();
 	}
 

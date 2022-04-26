@@ -7,6 +7,6 @@ function () use (
 
 };
 
-function () use ($a, $b, ) {
+function () use ($a, $b) {
 
 };

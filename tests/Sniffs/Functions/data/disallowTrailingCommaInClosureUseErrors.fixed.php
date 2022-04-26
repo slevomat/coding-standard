@@ -6,3 +6,7 @@ function () use (
 ) {
 
 };
+
+function () use ($a, $b) {
+
+};
