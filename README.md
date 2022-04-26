@@ -843,6 +843,10 @@ This sniff provides the following setting:
 
 This sniff disallows trailing commas in multi-line declarations.
 
+This sniff provides the following setting:
+
+* `onlySingleLine`: to enable checks only for single-line declarations.
+
 #### SlevomatCodingStandard.Functions.RequireTrailingCommaInDeclaration 🔧
 
 Commas after the last parameter in function or method declaration make adding a new parameter easier and result in a cleaner versioning diff.
