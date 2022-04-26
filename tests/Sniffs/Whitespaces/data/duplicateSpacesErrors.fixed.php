@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.0
 
 class Whatever
 {
@@ -12,3 +12,9 @@ class Whatever
 	}
 
 }
+
+match (true) {
+	$a => 'a',
+	$aa => 'aa',
+	$aaa => 'aaa',
+};
