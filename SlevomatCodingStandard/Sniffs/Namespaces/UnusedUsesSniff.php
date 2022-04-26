@@ -45,7 +45,6 @@ class UnusedUsesSniff implements Sniff
 {
 
 	public const CODE_UNUSED_USE = 'UnusedUse';
-	public const CODE_MISMATCHING_CASE = 'MismatchingCaseSensitivity';
 
 	/** @var bool */
 	public $searchAnnotations = false;
@@ -113,18 +112,6 @@ class UnusedUsesSniff implements Sniff
 					continue;
 				}
 
-				if ($fileUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile() !== $nameAsReferencedInFile) {
-					$phpcsFile->addError(
-						sprintf(
-							'Case of reference name "%s" and use statement "%s" does not match.',
-							$nameAsReferencedInFile,
-							$fileUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
-						),
-						$pointer,
-						self::CODE_MISMATCHING_CASE
-					);
-				}
-
 				$allUsedNames[$pointerBeforeUseStatements][$uniqueId] = true;
 			}
 		}
@@ -179,16 +166,6 @@ class UnusedUsesSniff implements Sniff
 							) !== 0
 						) {
 							$allUsedNames[$pointerBeforeUseStatements][$uniqueId] = true;
-
-							if ($matches[1] !== $nameAsReferencedInFile) {
-								foreach ($annotationsByName as $annotation) {
-									$phpcsFile->addError(sprintf(
-										'Case of reference name "%s" and use statement "%s" does not match.',
-										$matches[1],
-										$fileUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
-									), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
-								}
-							}
 						}
 
 						foreach ($annotationsByName as $annotation) {
@@ -216,16 +193,6 @@ class UnusedUsesSniff implements Sniff
 							}
 
 							$allUsedNames[$pointerBeforeUseStatements][$uniqueId] = true;
-
-							if ($matches[1] === $nameAsReferencedInFile) {
-								continue;
-							}
-
-							$phpcsFile->addError(sprintf(
-								'Case of reference name "%s" and use statement "%s" does not match.',
-								$matches[1],
-								$fileUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
-							), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 						}
 
 						/** @var VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|GenericAnnotation $annotation */
@@ -286,16 +253,6 @@ class UnusedUsesSniff implements Sniff
 								}
 
 								$allUsedNames[$pointerBeforeUseStatements][$uniqueId] = true;
-
-								if ($matches[1] === $nameAsReferencedInFile) {
-									continue;
-								}
-
-								$phpcsFile->addError(sprintf(
-									'Case of reference name "%s" and use statement "%s" does not match.',
-									$matches[1],
-									$fileUnusedNames[$pointerBeforeUseStatements][$uniqueId]->getNameAsReferencedInFile()
-								), $annotation->getStartPointer(), self::CODE_MISMATCHING_CASE);
 							}
 						}
 					}
