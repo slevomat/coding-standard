@@ -534,6 +534,12 @@ Sniff provides the following settings:
 * `linesCountAfter`: allows to configure the number of lines after parent call.
 * `linesCountAfterLast`: allows to configure the number of lines after last parent call.
 
+#### SlevomatCodingStandard.Classes.PropertyDeclaration 🔧
+
+* Checks that there's a single space between a typehint and a property name: `Foo $foo`
+* Checks that there's no whitespace between a nullability symbol and a typehint: `?Foo`
+* Checks that there's a single space before nullability symbol or a typehint: `private ?Foo` or `private Foo`
+
 #### SlevomatCodingStandard.Classes.PropertySpacing 🔧
 
 Checks that there is a certain number of blank lines between properties.
@@ -1075,12 +1081,6 @@ function foo(
 
 * Checks that there's a single space between a typehint and a parameter name: `Foo $foo`
 * Checks that there's no whitespace between a nullability symbol and a typehint: `?Foo`
-
-#### SlevomatCodingStandard.TypeHints.PropertyTypeHintSpacing 🔧
-
-* Checks that there's a single space between a typehint and a property name: `Foo $foo`
-* Checks that there's no whitespace between a nullability symbol and a typehint: `?Foo`
-* Checks that there's a single space before nullability symbol or a typehint: `private ?Foo` or `private Foo`
 
 #### SlevomatCodingStandard.Namespaces.DisallowGroupUse
 
