@@ -37,12 +37,18 @@ use const T_PHPCS_ENABLE;
 use const T_PHPCS_IGNORE;
 use const T_PHPCS_IGNORE_FILE;
 use const T_PHPCS_SET;
+use const T_PRIVATE;
+use const T_PROTECTED;
+use const T_PUBLIC;
+use const T_READONLY;
 use const T_RETURN;
 use const T_SELF;
+use const T_STATIC;
 use const T_STRING;
 use const T_THROW;
 use const T_TRAIT;
 use const T_TYPE_UNION;
+use const T_VAR;
 use const T_WHITESPACE;
 
 /**
@@ -101,6 +107,16 @@ class TokenHelper
 		T_FUNCTION,
 		T_CLOSURE,
 		T_FN,
+	];
+
+	/** @var (int|string)[] */
+	public static $propertyModifiersTokenCodes = [
+		T_VAR,
+		T_PUBLIC,
+		T_PROTECTED,
+		T_PRIVATE,
+		T_READONLY,
+		T_STATIC,
 	];
 
 	/**

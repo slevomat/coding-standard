@@ -27,4 +27,8 @@ class Whatever
 
 	public static  string  $static = 'string';
 
+	static public $publicStatic;
+
+	readonly private int $privateReadonly;
+
 }

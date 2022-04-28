@@ -5,9 +5,20 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
+use UnexpectedValueException;
+use function array_key_exists;
+use function array_keys;
+use function array_map;
+use function asort;
+use function count;
+use function implode;
 use function in_array;
+use function preg_split;
+use function sprintf;
+use function strtolower;
 use const T_AS;
 use const T_CONST;
 use const T_FUNCTION;
@@ -36,41 +47,42 @@ class PropertyDeclarationSniff implements Sniff
 
 	public const CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL = 'WhitespaceAfterNullabilitySymbol';
 
+	public const CODE_INCORRECT_ORDER_OF_MODIFIERS = 'IncorrectOrderOfModifiers';
+
+	/** @var string[]|null */
+	public $modifiersOrder = [];
+
+	/** @var array<int, array<int, (int|string)>>|null */
+	private $normalizedModifiersOrder = null;
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{
-		return [
-			T_VAR,
-			T_PUBLIC,
-			T_PROTECTED,
-			T_PRIVATE,
-			T_READONLY,
-			T_STATIC,
-		];
+		return TokenHelper::$propertyModifiersTokenCodes;
 	}
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $pointer
+	 * @param int $modifierPointer
 	 */
-	public function process(File $phpcsFile, $pointer): void
+	public function process(File $phpcsFile, $modifierPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$asPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
+		$asPointer = TokenHelper::findPreviousEffective($phpcsFile, $modifierPointer - 1);
 		if ($tokens[$asPointer]['code'] === T_AS) {
 			return;
 		}
 
-		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
-		if (in_array($tokens[$nextPointer]['code'], [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC], true)) {
+		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $modifierPointer + 1);
+		if (in_array($tokens[$nextPointer]['code'], TokenHelper::$propertyModifiersTokenCodes, true)) {
 			// We don't want to report the some property twice
 			return;
 		}
 
-		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $pointer + 1);
+		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $modifierPointer + 1);
 
 		if ($propertyPointer === null || $tokens[$propertyPointer]['code'] !== T_VARIABLE) {
 			return;
@@ -80,34 +92,126 @@ class PropertyDeclarationSniff implements Sniff
 			return;
 		}
 
-		$propertyStartPointer = $pointer;
+		$firstModifierPointer = $modifierPointer;
+		do {
+			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $firstModifierPointer - 1);
+			if (!in_array($tokens[$previousPointer]['code'], TokenHelper::$propertyModifiersTokenCodes, true)) {
+				break;
+			}
 
+			$firstModifierPointer = $previousPointer;
+		} while (true);
+
+		$this->checkModifiersOrder($phpcsFile, $propertyPointer, $firstModifierPointer, $modifierPointer);
+		$this->checkTypeHintSpacing($phpcsFile, $propertyPointer, $modifierPointer);
+	}
+
+	private function checkModifiersOrder(File $phpcsFile, int $propertyPointer, int $firstModifierPointer, int $lastModifierPointer): void
+	{
+		$modifiersPointers = TokenHelper::findNextAll(
+			$phpcsFile,
+			TokenHelper::$propertyModifiersTokenCodes,
+			$firstModifierPointer,
+			$propertyPointer
+		);
+
+		$modifiersGroups = $this->getNormalizedModifiersOrder();
+
+		if (count($modifiersPointers) < 2) {
+			return;
+		}
+
+		$tokens = $phpcsFile->getTokens();
+
+		$expectedModifiersPositions = [];
+		foreach ($modifiersPointers as $modifierPointer) {
+			for ($i = 0; $i < count($modifiersGroups); $i++) {
+				if (in_array($tokens[$modifierPointer]['code'], $modifiersGroups[$i], true)) {
+					$expectedModifiersPositions[$modifierPointer] = $i;
+					continue 2;
+				}
+			}
+
+			// Modifier position is not defined so add it to the end
+			$expectedModifiersPositions[$modifierPointer] = count($modifiersGroups);
+		}
+
+		$error = false;
+
+		for ($i = 1; $i < count($modifiersPointers); $i++) {
+			for ($j = 0; $j < $i; $j++) {
+				if ($expectedModifiersPositions[$modifiersPointers[$i]] < $expectedModifiersPositions[$modifiersPointers[$j]]) {
+					$error = true;
+					break;
+				}
+			}
+		}
+
+		if (!$error) {
+			return;
+		}
+
+		$actualModifiers = array_map(static function (int $modifierPointer) use ($tokens): string {
+			return $tokens[$modifierPointer]['content'];
+		}, $modifiersPointers);
+		$actualModifiersFormatted = implode(' ', $actualModifiers);
+
+		asort($expectedModifiersPositions);
+		$expectedModifiers = array_map(static function (int $modifierPointer) use ($tokens): string {
+			return $tokens[$modifierPointer]['content'];
+		}, array_keys($expectedModifiersPositions));
+		$expectedModifiersFormatted = implode(' ', $expectedModifiers);
+
+		$fix = $phpcsFile->addFixableError(
+			sprintf('Incorrect order of property modifiers "%s", expected "%s".', $actualModifiersFormatted, $expectedModifiersFormatted),
+			$firstModifierPointer,
+			self::CODE_INCORRECT_ORDER_OF_MODIFIERS
+		);
+		if (!$fix) {
+			return;
+		}
+
+		$phpcsFile->fixer->beginChangeset();
+
+		$phpcsFile->fixer->replaceToken($firstModifierPointer, $expectedModifiersFormatted);
+
+		for ($i = $firstModifierPointer + 1; $i <= $lastModifierPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+
+		$phpcsFile->fixer->endChangeset();
+	}
+
+	private function checkTypeHintSpacing(File $phpcsFile, int $propertyPointer, int $lastModifierPointer): void
+	{
 		$typeHintEndPointer = TokenHelper::findPrevious(
 			$phpcsFile,
 			TokenHelper::getTypeHintTokenCodes(),
 			$propertyPointer - 1,
-			$propertyStartPointer
+			$lastModifierPointer
 		);
 		if ($typeHintEndPointer === null) {
 			return;
 		}
 
+		$tokens = $phpcsFile->getTokens();
+
 		$typeHintStartPointer = TypeHintHelper::getStartPointer($phpcsFile, $typeHintEndPointer);
 
-		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $typeHintStartPointer - 1, $propertyStartPointer);
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $typeHintStartPointer - 1, $lastModifierPointer);
 		$nullabilitySymbolPointer = $previousPointer !== null && $tokens[$previousPointer]['code'] === T_NULLABLE ? $previousPointer : null;
 
-		if ($tokens[$propertyStartPointer + 1]['code'] !== T_WHITESPACE) {
+		if ($tokens[$lastModifierPointer + 1]['code'] !== T_WHITESPACE) {
 			$errorMessage = 'There must be exactly one space before type hint nullability symbol.';
 			$errorCode = self::CODE_NO_SPACE_BEFORE_NULLABILITY_SYMBOL;
 
 			$fix = $phpcsFile->addFixableError($errorMessage, $typeHintEndPointer, $errorCode);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContent($propertyStartPointer, ' ');
+				$phpcsFile->fixer->addContent($lastModifierPointer, ' ');
 				$phpcsFile->fixer->endChangeset();
 			}
-		} elseif ($tokens[$propertyStartPointer + 1]['content'] !== ' ') {
+		} elseif ($tokens[$lastModifierPointer + 1]['content'] !== ' ') {
 			if ($nullabilitySymbolPointer !== null) {
 				$errorMessage = 'There must be exactly one space before type hint nullability symbol.';
 				$errorCode = self::CODE_MULTIPLE_SPACES_BEFORE_NULLABILITY_SYMBOL;
@@ -116,10 +220,10 @@ class PropertyDeclarationSniff implements Sniff
 				$errorCode = self::CODE_MULTIPLE_SPACES_BEFORE_TYPE_HINT;
 			}
 
-			$fix = $phpcsFile->addFixableError($errorMessage, $propertyStartPointer, $errorCode);
+			$fix = $phpcsFile->addFixableError($errorMessage, $lastModifierPointer, $errorCode);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->replaceToken($propertyStartPointer + 1, ' ');
+				$phpcsFile->fixer->replaceToken($lastModifierPointer + 1, ' ');
 				$phpcsFile->fixer->endChangeset();
 			}
 		}
@@ -168,6 +272,51 @@ class PropertyDeclarationSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 		$phpcsFile->fixer->replaceToken($nullabilitySymbolPointer + 1, '');
 		$phpcsFile->fixer->endChangeset();
+	}
+
+	/**
+	 * @return array<int, array<int, (int|string)>>
+	 */
+	private function getNormalizedModifiersOrder(): array
+	{
+		if ($this->normalizedModifiersOrder === null) {
+			$modifiersGroups = SniffSettingsHelper::normalizeArray($this->modifiersOrder);
+
+			if ($modifiersGroups === []) {
+				$modifiersGroups = [
+					'var, public, protected, private',
+					'static, readonly',
+				];
+			}
+
+			$this->normalizedModifiersOrder = [];
+
+			$mapping = [
+				'var' => T_VAR,
+				'public' => T_PUBLIC,
+				'protected' => T_PROTECTED,
+				'private' => T_PRIVATE,
+				'static' => T_STATIC,
+				'readonly' => T_READONLY,
+			];
+
+			foreach ($modifiersGroups as $modifiersGroupNo => $modifiersGroup) {
+				$this->normalizedModifiersOrder[$modifiersGroupNo] = [];
+
+				/** @var string[] $modifiers */
+				$modifiers = preg_split('~\\s*,\\s*~', strtolower($modifiersGroup));
+
+				foreach ($modifiers as $modifier) {
+					if (!array_key_exists($modifier, $mapping)) {
+						throw new UnexpectedValueException(sprintf('Unknown property modifier "%s".', $modifier));
+					}
+
+					$this->normalizedModifiersOrder[$modifiersGroupNo][] = $mapping[$modifier];
+				}
+			}
+		}
+
+		return $this->normalizedModifiersOrder;
 	}
 
 }
