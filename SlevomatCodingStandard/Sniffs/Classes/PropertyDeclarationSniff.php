@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace SlevomatCodingStandard\Sniffs\TypeHints;
+namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
@@ -21,7 +21,7 @@ use const T_VAR;
 use const T_VARIABLE;
 use const T_WHITESPACE;
 
-class PropertyTypeHintSpacingSniff implements Sniff
+class PropertyDeclarationSniff implements Sniff
 {
 
 	public const CODE_NO_SPACE_BEFORE_NULLABILITY_SYMBOL = 'NoSpaceBeforeNullabilitySymbol';
