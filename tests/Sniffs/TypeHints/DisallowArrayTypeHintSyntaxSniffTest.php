@@ -22,7 +22,7 @@ class DisallowArrayTypeHintSyntaxSniffTest extends TestCase
 			],
 		]);
 
-		self::assertSame(29, $report->getErrorCount());
+		self::assertSame(30, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -197,6 +197,13 @@ class DisallowArrayTypeHintSyntaxSniffTest extends TestCase
 			89,
 			DisallowArrayTypeHintSyntaxSniff::CODE_DISALLOWED_ARRAY_TYPE_HINT_SYNTAX,
 			'Usage of array type hint syntax in "float[]" is disallowed, use generic type hint syntax instead.'
+		);
+
+		self::assertSniffError(
+			$report,
+			94,
+			DisallowArrayTypeHintSyntaxSniff::CODE_DISALLOWED_ARRAY_TYPE_HINT_SYNTAX,
+			'Usage of array type hint syntax in "string[]" is disallowed, use generic type hint syntax instead.'
 		);
 
 		self::assertAllFixedInFile($report);

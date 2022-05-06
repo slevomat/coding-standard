@@ -122,3 +122,14 @@ class Conditional
 	}
 
 }
+
+class OffsetAccess
+{
+
+	/**
+	 * @return \Foo\OffsetAccessType[(null|\Foo\OffsetAccessOffset2)]
+	 */
+	public function returnOffsetAccess()
+	{}
+
+}

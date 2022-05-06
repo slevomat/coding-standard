@@ -18,6 +18,12 @@ use Foo\Conditional7;
 use Foo\Conditional8;
 use Foo\Conditional9;
 use Foo\Conditional10;
+use Foo\OffsetAccessType;
+use Foo\OffsetAccessOffset;
+use Foo\OffsetAccessType2;
+use Foo\OffsetAccessOffset2;
+use Foo\OffsetAccessType3;
+use Foo\OffsetAccessOffset3;
 
 /**
  * @method \DateTimeImmutable|int|DateTime getProperty()
@@ -176,5 +182,16 @@ class Conditional
 	public function withConditionalParameter($parameter)
 	{
 	}
+
+}
+
+class OffsetAccess
+{
+
+	/**
+	 * @return OffsetAccessType[OffsetAccessOffset]|OffsetAccessType2[OffsetAccessOffset2]|OffsetAccessType3[array{offset: OffsetAccessOffset3}]
+	 */
+	public function returnOffsetAccess()
+	{}
 
 }

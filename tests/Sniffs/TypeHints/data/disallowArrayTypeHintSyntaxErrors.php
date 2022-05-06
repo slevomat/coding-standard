@@ -91,4 +91,9 @@ class Whatever
 	{
 	}
 
+	/** @return OffsetAccess[string[]] */
+	public function v($parameter)
+	{
+	}
+
 }
