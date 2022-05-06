@@ -175,3 +175,50 @@ class OffsetAccess
 	{}
 
 }
+
+class Assert
+{
+
+	/**
+	 * @phpstan-assert \Foo\Assertion $parameter
+	 */
+	public function phpstanAssert($parameter)
+	{
+	}
+
+	/**
+	 * @phpstan-assert-if-true \Foo\Assertion $parameter
+	 */
+	public function phpstanAssertIfTrue($parameter)
+	{
+	}
+
+	/**
+	 * @phpstan-assert-if-false \Foo\Assertion $parameter
+	 */
+	public function phpstanAssertIfFalse($parameter)
+	{
+	}
+
+	/**
+	 * @psalm-assert \Foo\Assertion $parameter
+	 */
+	public function psalmAssert($parameter)
+	{
+	}
+
+	/**
+	 * @psalm-assert-if-true \Foo\Assertion $parameter
+	 */
+	public function psalmAssertIfTrue($parameter)
+	{
+	}
+
+	/**
+	 * @psalm-assert-if-false \Foo\Assertion $parameter
+	 */
+	public function psalmAssertIfFalse($parameter)
+	{
+	}
+
+}
