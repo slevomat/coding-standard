@@ -725,7 +725,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			]
 		);
 
-		self::assertSame(44, $report->getErrorCount());
+		self::assertSame(50, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -982,6 +982,43 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			160,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
 			'Class \Foo\Conditional10 should not be referenced via a fully qualified name, but via a use statement.'
+		);
+
+		self::assertSniffError(
+			$report,
+			172,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\OffsetAccessType should not be referenced via a fully qualified name, but via a use statement.'
+		);
+		self::assertSniffError(
+			$report,
+			172,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\OffsetAccessOffset should not be referenced via a fully qualified name, but via a use statement.'
+		);
+		self::assertSniffError(
+			$report,
+			172,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\OffsetAccessType2 should not be referenced via a fully qualified name, but via a use statement.'
+		);
+		self::assertSniffError(
+			$report,
+			172,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\OffsetAccessOffset2 should not be referenced via a fully qualified name, but via a use statement.'
+		);
+		self::assertSniffError(
+			$report,
+			172,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\OffsetAccessType3 should not be referenced via a fully qualified name, but via a use statement.'
+		);
+		self::assertSniffError(
+			$report,
+			172,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\OffsetAccessOffset3 should not be referenced via a fully qualified name, but via a use statement.'
 		);
 
 		self::assertAllFixedInFile($report);

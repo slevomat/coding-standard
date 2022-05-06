@@ -164,3 +164,14 @@ class Conditional
 	}
 
 }
+
+class OffsetAccess
+{
+
+	/**
+	 * @return \Foo\OffsetAccessType[\Foo\OffsetAccessOffset]|\Foo\OffsetAccessType2[\Foo\OffsetAccessOffset2]|\Foo\OffsetAccessType3[array{offset: \Foo\OffsetAccessOffset3}]
+	 */
+	public function returnOffsetAccess()
+	{}
+
+}

@@ -18,6 +18,7 @@ use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\OffsetAccessTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
@@ -104,6 +105,13 @@ class AnnotationTypeHelper
 			);
 		}
 
+		if ($typeNode instanceof OffsetAccessTypeNode) {
+			return array_merge(
+				self::getIdentifierTypeNodes($typeNode->type),
+				self::getIdentifierTypeNodes($typeNode->offset)
+			);
+		}
+
 		/** @var IdentifierTypeNode|ThisTypeNode $typeNode */
 		$typeNode = $typeNode;
 		return [$typeNode];
@@ -171,6 +179,13 @@ class AnnotationTypeHelper
 				self::getConstantTypeNodes($typeNode->targetType),
 				self::getConstantTypeNodes($typeNode->if),
 				self::getConstantTypeNodes($typeNode->else)
+			);
+		}
+
+		if ($typeNode instanceof OffsetAccessTypeNode) {
+			return array_merge(
+				self::getConstantTypeNodes($typeNode->type),
+				self::getConstantTypeNodes($typeNode->offset)
 			);
 		}
 
@@ -247,6 +262,13 @@ class AnnotationTypeHelper
 			);
 		}
 
+		if ($typeNode instanceof OffsetAccessTypeNode) {
+			return array_merge(
+				self::getUnionTypeNodes($typeNode->type),
+				self::getUnionTypeNodes($typeNode->offset)
+			);
+		}
+
 		return [];
 	}
 
@@ -312,6 +334,13 @@ class AnnotationTypeHelper
 				self::getArrayTypeNodes($typeNode->targetType),
 				self::getArrayTypeNodes($typeNode->if),
 				self::getArrayTypeNodes($typeNode->else)
+			);
+		}
+
+		if ($typeNode instanceof OffsetAccessTypeNode) {
+			return array_merge(
+				self::getArrayTypeNodes($typeNode->type),
+				self::getArrayTypeNodes($typeNode->offset)
 			);
 		}
 
@@ -444,6 +473,13 @@ class AnnotationTypeHelper
 				self::change($masterTypeNode->if, $typeNodeToChange, $changedTypeNode),
 				self::change($masterTypeNode->else, $typeNodeToChange, $changedTypeNode),
 				$masterTypeNode->negated
+			);
+		}
+
+		if ($masterTypeNode instanceof OffsetAccessTypeNode) {
+			return new OffsetAccessTypeNode(
+				self::change($masterTypeNode->type, $typeNodeToChange, $changedTypeNode),
+				self::change($masterTypeNode->offset, $typeNodeToChange, $changedTypeNode)
 			);
 		}
 
