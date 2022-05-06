@@ -24,6 +24,7 @@ use Foo\OffsetAccessType2;
 use Foo\OffsetAccessOffset2;
 use Foo\OffsetAccessType3;
 use Foo\OffsetAccessOffset3;
+use Foo\Assertion;
 
 /**
  * @method \DateTimeImmutable|int|DateTime getProperty()
@@ -193,5 +194,52 @@ class OffsetAccess
 	 */
 	public function returnOffsetAccess()
 	{}
+
+}
+
+class Assert
+{
+
+	/**
+	 * @phpstan-assert Assertion $parameter
+	 */
+	public function phpstanAssert($parameter)
+	{
+	}
+
+	/**
+	 * @phpstan-assert-if-true Assertion $parameter
+	 */
+	public function phpstanAssertIfTrue($parameter)
+	{
+	}
+
+	/**
+	 * @phpstan-assert-if-false Assertion $parameter
+	 */
+	public function phpstanAssertIfFalse($parameter)
+	{
+	}
+
+	/**
+	 * @psalm-assert Assertion $parameter
+	 */
+	public function psalmAssert($parameter)
+	{
+	}
+
+	/**
+	 * @psalm-assert-if-true Assertion $parameter
+	 */
+	public function psalmAssertIfTrue($parameter)
+	{
+	}
+
+	/**
+	 * @psalm-assert-if-false Assertion $parameter
+	 */
+	public function psalmAssertIfFalse($parameter)
+	{
+	}
 
 }
