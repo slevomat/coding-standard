@@ -194,3 +194,5 @@ return "
 		$objName = \$locator->"
 	. '()->entity'
 	. $this->getObjectClassName() . '();';
+
+object();
