@@ -69,6 +69,7 @@ class ReferencedNameHelperTest extends TestCase
 			['UrlGeneratorInterface', false, false],
 			['ClassInHeredoc', false, false],
 			['ClassInDoubleQuote', false, false],
+			['object', true, false],
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
