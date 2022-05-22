@@ -17,9 +17,9 @@ class DisallowCommentAfterCodeSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/disallowCommentAfterCodeErrors.php');
 
-		self::assertSame(19, $report->getErrorCount());
+		self::assertSame(23, $report->getErrorCount());
 
-		foreach ([7, 9, 11, 13, 15, 19, 25, 27, 30, 35, 36, 39, 40, 41, 42, 43, 44, 45, 48] as $line) {
+		foreach ([7, 9, 11, 13, 15, 19, 25, 27, 30, 35, 36, 39, 40, 41, 42, 43, 44, 45, 50, 53, 58, 61, 63] as $line) {
 			self::assertSniffError($report, $line, DisallowCommentAfterCodeSniff::CODE_DISALLOWED_COMMENT_AFTER_CODE);
 		}
 

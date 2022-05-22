@@ -63,6 +63,25 @@ class Whatever
 				return;
 		}
 
+		// comment
+		doSomething("
+			aaa
+		");
+		// comment
+		doSomething('
+			aaa
+		');
+		$a = rand()
+			? 5
+			// comment
+			: '
+				aaa
+			';
+		// comment
+		doSomething("
+			{$a}
+		");
+
 		// True
 		return true;
 	}
