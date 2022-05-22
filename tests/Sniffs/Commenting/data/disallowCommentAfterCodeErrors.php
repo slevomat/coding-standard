@@ -45,6 +45,21 @@ class Whatever
 				return; // Return
 		}
 
+		doSomething("
+			aaa
+		"); // comment
+		doSomething('
+			aaa
+		'); // comment
+		$a = rand()
+			? 5
+			: '
+				aaa
+			'; // comment
+		doSomething("
+			{$a}
+		"); // comment
+
 		return true; // True
 	}
 
