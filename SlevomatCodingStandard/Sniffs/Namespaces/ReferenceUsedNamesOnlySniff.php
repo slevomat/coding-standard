@@ -248,6 +248,15 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 					if (array_key_exists($unqualifiedName, $definedConstantsIndex)) {
 						continue;
 					}
+
+					if (
+						array_key_exists($collidingUseStatementUniqueId, $useStatements)
+						&& $canonicalName !== NamespaceHelper::normalizeToCanonicalName(
+							$useStatements[$collidingUseStatementUniqueId]->getFullyQualifiedTypeName()
+						)
+					) {
+						continue;
+					}
 				}
 			}
 
