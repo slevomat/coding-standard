@@ -2,6 +2,8 @@
 
 namespace FooNamespace;
 
+use function B\decode;
+
 function phpversion()
 {
 	return '6.0.0';
@@ -16,3 +18,5 @@ class Foo
 	}
 
 }
+
+decode(\A\decode(''));
