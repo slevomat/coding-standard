@@ -645,8 +645,10 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			['allowFullyQualifiedNameForCollidingFunctions' => false]
 		);
 
-		self::assertSame(1, $report->getErrorCount());
-		self::assertSniffError($report, 15, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 17, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+		self::assertSniffError($report, 22, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
 	}
 
 	public function testCollidingFullyQualifiedConstantNameAllowed(): void
