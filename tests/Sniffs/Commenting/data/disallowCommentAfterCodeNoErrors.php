@@ -1,3 +1,4 @@
+<?php /** @var Token $token */ ?>
 <?php
 
 // Comment

@@ -6,6 +6,7 @@ use function sprintf;
 use const T_CLASS;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
+use const T_COMMENT;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_DOC_COMMENT_WHITESPACE;
 use const T_EQUAL;
@@ -232,6 +233,19 @@ class TokenHelperTest extends TestCase
 		$firstNonWhiteSpaceTokenPointer = TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $openParenthesisPointer);
 		self::assertTokenPointer(T_STRING, 4, $phpcsFile, $firstNonWhiteSpaceTokenPointer);
 		self::assertSame('foo', $tokens[$firstNonWhiteSpaceTokenPointer]['content']);
+	}
+
+	public function testFindFirstNonWhitespaceOnFirstLine(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/useStatements.php');
+		$tokens = $phpcsFile->getTokens();
+
+		$comment = $this->findPointerByLineAndType($phpcsFile, 1, T_COMMENT);
+		self::assertNotNull($comment);
+
+		$firstNonWhiteSpaceTokenPointer = TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $comment);
+		self::assertTokenPointer(T_OPEN_TAG, 1, $phpcsFile, $firstNonWhiteSpaceTokenPointer);
+		self::assertSame('<?php ', $tokens[$firstNonWhiteSpaceTokenPointer]['content']);
 	}
 
 	public function testFindFirstTokenOnNextLineEndingWithAComment(): void

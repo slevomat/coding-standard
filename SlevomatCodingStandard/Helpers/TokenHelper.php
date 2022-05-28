@@ -309,7 +309,7 @@ class TokenHelper
 
 		do {
 			$pointer--;
-		} while ($tokens[$pointer]['line'] === $line);
+		} while ($pointer >= 0 && $tokens[$pointer]['line'] === $line);
 
 		return self::findNextExcluding($phpcsFile, [T_WHITESPACE, T_DOC_COMMENT_WHITESPACE], $pointer + 1);
 	}
