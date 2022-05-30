@@ -19,9 +19,11 @@ class ClassHelper
 
 	public static function getClassPointer(File $phpcsFile, int $pointer): ?int
 	{
+		$tokens = $phpcsFile->getTokens();
+
 		$classPointers = array_reverse(self::getAllClassPointers($phpcsFile));
 		foreach ($classPointers as $classPointer) {
-			if ($classPointer < $pointer && ScopeHelper::isInSameScope($phpcsFile, $classPointer, $pointer)) {
+			if ($tokens[$classPointer]['scope_opener'] < $pointer && $tokens[$classPointer]['scope_closer'] > $pointer) {
 				return $classPointer;
 			}
 		}

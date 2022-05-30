@@ -344,6 +344,16 @@ class DocCommentHelperTest extends TestCase
 		);
 	}
 
+	public function testNoOwnerOfFileComment(): void
+	{
+		self::assertNull(
+			DocCommentHelper::findDocCommentOwnerPointer(
+				$this->getTestedCodeSnifferFile(),
+				$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 3, T_DOC_COMMENT_OPEN_TAG)
+			)
+		);
+	}
+
 	public function testIsInline(): void
 	{
 		$phpcsFile = $this->getTestedCodeSnifferFile();

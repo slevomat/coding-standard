@@ -156,7 +156,10 @@ class TypeAliasAndImportes
 	 */
 	public function types($a, $b)
 	{
+		/** @psalm-var SomeTypeAlias $someTypeAlias */
+		$someTypeAlias = 'someTypeAlias';
 
+		return $someTypeAlias;
 	}
 
 }

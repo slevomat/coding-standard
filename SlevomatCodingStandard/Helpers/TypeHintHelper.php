@@ -258,35 +258,18 @@ class TypeHintHelper
 
 		$tokens = $phpcsFile->getTokens();
 
-		$docCommentOwnerPointer = TokenHelper::findNext(
-			$phpcsFile,
-			array_merge([T_FUNCTION], TokenHelper::$typeKeywordTokenCodes),
-			$tokens[$docCommentOpenPointer]['comment_closer'] + 1
-		);
-		if (
-			$docCommentOwnerPointer !== null
-			&& $tokens[$tokens[$docCommentOpenPointer]['comment_closer']]['line'] + 1 === $tokens[$docCommentOwnerPointer]['line']
-		) {
-			if ($containsTypeHintInTemplateAnnotation($docCommentOpenPointer)) {
+		$docCommentOwnerPointer = DocCommentHelper::findDocCommentOwnerPointer($phpcsFile, $docCommentOpenPointer);
+		if ($docCommentOwnerPointer !== null) {
+			if (in_array($tokens[$docCommentOwnerPointer]['code'], TokenHelper::$typeKeywordTokenCodes, true)) {
+				return $containsTypeHintInTemplateAnnotation($docCommentOpenPointer);
+			}
+
+			if ($tokens[$docCommentOwnerPointer]['code'] === T_FUNCTION && $containsTypeHintInTemplateAnnotation($docCommentOpenPointer)) {
 				return true;
 			}
-
-			if ($tokens[$docCommentOwnerPointer]['code'] !== T_FUNCTION) {
-				return false;
-			}
-		} else {
-			$docCommentOwnerPointer = null;
 		}
 
-		$pointerToFindClass = $docCommentOpenPointer;
-		if ($docCommentOwnerPointer === null) {
-			$functionPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $docCommentOpenPointer - 1);
-			if ($functionPointer !== null) {
-				$pointerToFindClass = $functionPointer;
-			}
-		}
-
-		$classPointer = ClassHelper::getClassPointer($phpcsFile, $pointerToFindClass);
+		$classPointer = ClassHelper::getClassPointer($phpcsFile, $docCommentOpenPointer);
 
 		if ($classPointer === null) {
 			return false;
