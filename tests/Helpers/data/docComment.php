@@ -107,3 +107,21 @@ class PropertyDoesNotHaveDocCommentButClassHas
 	private $propertyWithoutDocCommentInClassWithDocComment;
 
 }
+
+/**
+ * Class with attribute.
+ */
+#[Attribute]
+class ClassWithAttribute
+{
+}
+
+/**
+ * Class with attributes.
+ */
+#[Attribute]
+#[Attribute2]
+#[Something(Anything::TARGET_CLASS | \Whatever\Anything::IS_REPEATABLE, PHP_VERSION, parameter1: 123, parameter2: [Nothing::SOMETHING, 'string'])]
+class ClassWithAttributes
+{
+}

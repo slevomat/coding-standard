@@ -10,6 +10,7 @@ use function preg_match;
 use function stripos;
 use function trim;
 use const T_ABSTRACT;
+use const T_ATTRIBUTE;
 use const T_CLASS;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CONST;
@@ -29,6 +30,7 @@ use const T_PUBLIC;
 use const T_SEMICOLON;
 use const T_STATIC;
 use const T_TRAIT;
+use const T_VAR;
 use const T_VARIABLE;
 use const T_WHITESPACE;
 
@@ -151,20 +153,34 @@ class DocCommentHelper
 			return null;
 		}
 
-		$docCommentOwnerPointer = TokenHelper::findNext(
-			$phpcsFile,
-			array_merge([T_FUNCTION, T_VARIABLE], TokenHelper::$typeKeywordTokenCodes),
-			$docCommentCloserPointer + 1
-		);
+		$docCommentOwnerPointer = null;
 
-		if (
-			$docCommentOwnerPointer !== null
-			&& $tokens[$docCommentCloserPointer]['line'] + 1 === $tokens[$docCommentOwnerPointer]['line']
-		) {
-			return $docCommentOwnerPointer;
+		for ($i = $docCommentCloserPointer + 1; $i < count($tokens); $i++) {
+			if ($tokens[$i]['code'] === T_ATTRIBUTE) {
+				$i = $tokens[$i]['attribute_closer'];
+				continue;
+			}
+
+			if (in_array(
+				$tokens[$i]['code'],
+				[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_VAR, T_FINAL, T_STATIC, T_ABSTRACT, T_WHITESPACE],
+				true
+			)) {
+				continue;
+			}
+
+			if (in_array(
+				$tokens[$i]['code'],
+				array_merge([T_FUNCTION, T_VARIABLE, T_CONST], TokenHelper::$typeKeywordTokenCodes),
+				true
+			)) {
+				$docCommentOwnerPointer = $i;
+			}
+
+			break;
 		}
 
-		return null;
+		return $docCommentOwnerPointer;
 	}
 
 	public static function isInline(File $phpcsFile, int $docCommentOpenPointer): bool

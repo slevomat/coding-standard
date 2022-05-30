@@ -111,6 +111,7 @@ class FooClass
 	 * @template TemplateAboveMethod
 	 * @return TemplateAboveMethod
 	 */
+	#[SomeAttribute]
 	public function usingTemplateAboveMethod()
 	{
 
