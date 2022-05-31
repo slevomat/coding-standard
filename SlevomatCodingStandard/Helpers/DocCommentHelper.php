@@ -28,6 +28,7 @@ use const T_OPEN_CURLY_BRACKET;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
+use const T_READONLY;
 use const T_SEMICOLON;
 use const T_STATIC;
 use const T_TRAIT;
@@ -164,7 +165,7 @@ class DocCommentHelper
 
 			if (in_array(
 				$tokens[$i]['code'],
-				[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_VAR, T_FINAL, T_STATIC, T_ABSTRACT, T_WHITESPACE],
+				[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_VAR, T_READONLY, T_FINAL, T_STATIC, T_ABSTRACT, T_WHITESPACE],
 				true
 			)) {
 				continue;
@@ -194,7 +195,7 @@ class DocCommentHelper
 			$nextPointer !== null
 			&& in_array(
 				$tokens[$nextPointer]['code'],
-				[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM],
+				[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM],
 				true
 			)
 		) {
