@@ -3,7 +3,9 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
 use function array_key_exists;
+use function array_merge;
 use function preg_match;
 use function strpos;
 use const T_COMMENT;
@@ -36,7 +38,12 @@ class CommentHelper
 			return null;
 		}
 
-		$nextPointerAfterComment = TokenHelper::findNextExcluding($phpcsFile, T_COMMENT, $commentStartPointer + 1);
+		$nextPointerAfterComment = TokenHelper::findNextExcluding(
+			$phpcsFile,
+			array_merge([T_COMMENT], Tokens::$phpcsCommentTokens),
+			$commentStartPointer + 1
+		);
+
 		return $nextPointerAfterComment - 1;
 	}
 

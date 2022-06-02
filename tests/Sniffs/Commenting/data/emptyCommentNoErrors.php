@@ -35,3 +35,9 @@
 //
 //
 // Line comment
+
+/*
+// phpcs:disable
+$some = 'sample_code';
+// phpcs:enable
+ */
