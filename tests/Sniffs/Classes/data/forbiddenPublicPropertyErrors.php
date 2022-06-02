@@ -2,6 +2,7 @@
 
 class Test
 {
-	public $one;
+	var $one;
 	public $two;
+	public $three;
 }

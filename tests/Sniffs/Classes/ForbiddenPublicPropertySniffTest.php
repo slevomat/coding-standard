@@ -17,10 +17,11 @@ class ForbiddenPublicPropertySniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/forbiddenPublicPropertyErrors.php');
 
-		self::assertSame(2, $report->getErrorCount());
+		self::assertSame(3, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
 		self::assertSniffError($report, 6, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertSniffError($report, 7, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
 	}
 
 }
