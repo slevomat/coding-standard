@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Helpers\Annotation;
 
 use InvalidArgumentException;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TypelessParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
@@ -25,10 +26,13 @@ use function sprintf;
 class ParameterAnnotation extends Annotation
 {
 
-	/** @var ParamTagValueNode|null */
+	/** @var ParamTagValueNode|TypelessParamTagValueNode|null */
 	private $contentNode;
 
-	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, ?ParamTagValueNode $contentNode)
+	/**
+	 * @param ParamTagValueNode|TypelessParamTagValueNode|null $contentNode
+	 */
+	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, $contentNode)
 	{
 		if (!in_array($name, ['@param', '@psalm-param', '@phpstan-param'], true)) {
 			throw new InvalidArgumentException(sprintf('Unsupported annotation %s.', $name));
@@ -44,7 +48,10 @@ class ParameterAnnotation extends Annotation
 		return $this->contentNode === null;
 	}
 
-	public function getContentNode(): ParamTagValueNode
+	/**
+	 * @return ParamTagValueNode|TypelessParamTagValueNode|null
+	 */
+	public function getContentNode()
 	{
 		$this->errorWhenInvalid();
 
@@ -71,11 +78,15 @@ class ParameterAnnotation extends Annotation
 	}
 
 	/**
-	 * @return GenericTypeNode|CallableTypeNode|IntersectionTypeNode|UnionTypeNode|ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|NullableTypeNode|ConstTypeNode
+	 * @return GenericTypeNode|CallableTypeNode|IntersectionTypeNode|UnionTypeNode|ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|NullableTypeNode|ConstTypeNode|null
 	 */
-	public function getType(): TypeNode
+	public function getType(): ?TypeNode
 	{
 		$this->errorWhenInvalid();
+
+		if ($this->contentNode instanceof TypelessParamTagValueNode) {
+			return null;
+		}
 
 		/** @var GenericTypeNode|CallableTypeNode|IntersectionTypeNode|UnionTypeNode|ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|NullableTypeNode|ConstTypeNode $type */
 		$type = $this->contentNode->type;

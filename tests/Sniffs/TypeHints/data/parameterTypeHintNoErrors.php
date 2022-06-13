@@ -121,9 +121,17 @@ class Whatever
 	}
 
 	/**
-	 * @param $a
+	 * @param invalid invalid $a
 	 */
 	public function invalidAnnotation(int $a)
+	{
+
+	}
+
+	/**
+	 * @param $a
+	 */
+	public function noType(int $a)
 	{
 
 	}
@@ -217,7 +225,7 @@ class Whatever
 
 	/**
 	 * @psalm-param
-	 * @psalm-param $b Invalid
+	 * @psalm-param invalid invalid $b Invalid
 	 * @psalm-param Whatever<int> $a
 	 */
 	public function withPsalmAnnotationAndTraversableNativeTypeHint(array $a)
@@ -226,7 +234,7 @@ class Whatever
 
 	/**
 	 * @phpstan-param
-	 * @phpstan-param $b Invalid
+	 * @phpstan-param invalid invalid $b Invalid
 	 * @phpstan-param Whatever<int> $a
 	 */
 	public function withPhpstanAnnotationAndTraversableNativeTypeHint(array $a)

@@ -25,7 +25,15 @@ parameters:
 			path: %currentWorkingDirectory%/SlevomatCodingStandard/Sniffs/ControlStructures/AssignmentInConditionSniff.php
 		-
 			message: '#Parameter \#5 \$contentNode of class SlevomatCodingStandard\\Helpers\\Annotation\\\w+Annotation constructor expects PHPStan\\PhpDocParser\\Ast\\PhpDoc\\\w+TagValueNode\|null, PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\|null given.#'
-			count: 14
+			count: 13
+			path: %currentWorkingDirectory%/SlevomatCodingStandard/Helpers/AnnotationHelper.php
+		-
+			message: "#^Access to an undefined property PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\AssertTagValueNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\MixinTagValueNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\ParamTagValueNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\PropertyTagValueNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\ReturnTagValueNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\ThrowsTagValueNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\TypeAliasTagValueNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\TypelessParamTagValueNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\VarTagValueNode\\:\\:\\$type\\.$#"
+			count: 1
+			path: %currentWorkingDirectory%/SlevomatCodingStandard/Helpers/AnnotationHelper.php
+		-
+			message: "#^Parameter \\#5 \\$contentNode of class SlevomatCodingStandard\\\\Helpers\\\\Annotation\\\\ParameterAnnotation constructor expects PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\ParamTagValueNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\TypelessParamTagValueNode\\|null, PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\PhpDocTagValueNode\\|null given\\.$#"
+			count: 1
 			path: %currentWorkingDirectory%/SlevomatCodingStandard/Helpers/AnnotationHelper.php
 
 services:

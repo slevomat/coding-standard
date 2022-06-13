@@ -409,6 +409,7 @@ class ParameterTypeHintSniff implements Sniff
 				$hasTraversableTypeHint = true;
 			} elseif (
 				array_key_exists($parameterName, $parametersAnnotations)
+				&& $parametersAnnotations[$parameterName]->getType() !== null
 				&& AnnotationTypeHelper::containsTraversableType(
 					$parametersAnnotations[$parameterName]->getType(),
 					$phpcsFile,
@@ -443,6 +444,9 @@ class ParameterTypeHintSniff implements Sniff
 			}
 
 			$parameterTypeNode = $parametersAnnotations[$parameterName]->getType();
+			if ($parameterTypeNode === null) {
+				continue;
+			}
 
 			if (
 				(
@@ -508,6 +512,9 @@ class ParameterTypeHintSniff implements Sniff
 			}
 
 			$parameterAnnotation = $parametersAnnotations[$parameterName];
+			if ($parameterAnnotation->getType() === null) {
+				continue;
+			}
 
 			if (!AnnotationHelper::isAnnotationUseless(
 				$phpcsFile,

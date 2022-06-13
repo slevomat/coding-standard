@@ -89,7 +89,7 @@ class AnnotationHelper
 			}
 		} elseif ($annotation instanceof TypeImportAnnotation) {
 			$annotationTypes[] = $annotation->getImportedFrom();
-		} else {
+		} elseif ($annotation->getType() !== null) {
 			$annotationTypes[] = $annotation->getType();
 		}
 
