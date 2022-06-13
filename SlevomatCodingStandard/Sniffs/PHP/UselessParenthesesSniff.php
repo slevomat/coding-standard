@@ -135,6 +135,7 @@ class UselessParenthesesSniff implements Sniff
 				T_ANON_CLASS,
 				T_SELF,
 				T_STATIC,
+				T_PARENT,
 				T_EXIT,
 				T_CLOSE_PARENTHESIS,
 				T_EVAL,
