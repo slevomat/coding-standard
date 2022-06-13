@@ -83,13 +83,10 @@
 			checkreturn="true"
 		>
 			<arg value="analyse"/>
-			<arg value="-l"/>
-			<arg value="7"/>
 			<arg value="-c"/>
 			<arg path="build/PHPStan/phpstan.neon"/>
 			<arg value="--memory-limit"/>
 			<arg value="512M"/>
-			<arg path="SlevomatCodingStandard"/>
 		</exec>
 
 		<exec
@@ -99,11 +96,8 @@
 			checkreturn="true"
 		>
 			<arg value="analyse"/>
-			<arg value="-l"/>
-			<arg value="7"/>
 			<arg value="-c"/>
 			<arg path="build/PHPStan/phpstan.tests.neon"/>
-			<arg path="tests"/>
 		</exec>
 	</target>
 

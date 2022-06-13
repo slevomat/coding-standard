@@ -1,10 +1,15 @@
 includes:
-	- ../../vendor/phpstan/phpstan-phpunit/extension.neon
-	- ../../vendor/phpstan/phpstan-phpunit/rules.neon
-	- ../../vendor/phpstan/phpstan-strict-rules/rules.neon
+	- %currentWorkingDirectory%/vendor/phpstan/phpstan-phpunit/extension.neon
+	- %currentWorkingDirectory%/vendor/phpstan/phpstan-phpunit/rules.neon
+	- %currentWorkingDirectory%/vendor/phpstan/phpstan-strict-rules/rules.neon
 
 parameters:
+	level: 7
+
 	checkGenericClassInNonGenericObjectType: false
+
+	paths:
+		- %currentWorkingDirectory%/SlevomatCodingStandard
 
 	bootstrapFiles:
 		- %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/autoload.php
