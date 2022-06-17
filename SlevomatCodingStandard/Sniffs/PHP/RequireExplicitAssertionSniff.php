@@ -105,6 +105,15 @@ class RequireExplicitAssertionSniff implements Sniff
 				continue;
 			}
 
+			/** @var IdentifierTypeNode|ThisTypeNode|UnionTypeNode $variableAnnotationType */
+			$variableAnnotationType = $variableAnnotationType;
+
+			$assertion = $this->createAssert($variableAnnotation->getVariableName(), $variableAnnotationType);
+
+			if ($assertion === null) {
+				continue;
+			}
+
 			if ($tokens[$codePointer]['code'] === T_VARIABLE) {
 				$pointerAfterVariable = TokenHelper::findNextEffective($phpcsFile, $codePointer + 1);
 				if ($tokens[$pointerAfterVariable]['code'] !== T_EQUAL) {
@@ -245,11 +254,6 @@ class RequireExplicitAssertionSniff implements Sniff
 				}
 			}
 
-			/** @var IdentifierTypeNode|ThisTypeNode|UnionTypeNode $variableAnnotationType */
-			$variableAnnotationType = $variableAnnotationType;
-
-			$assertion = $this->createAssert($variableAnnotation->getVariableName(), $variableAnnotationType);
-
 			if (
 				$pointerToAddAssertion < $docCommentClosePointer
 				&& array_key_exists($pointerAfterDocComment + 1, $tokens)
@@ -265,15 +269,7 @@ class RequireExplicitAssertionSniff implements Sniff
 
 	private function isValidTypeNode(TypeNode $typeNode): bool
 	{
-		if ($typeNode instanceof ThisTypeNode) {
-			return true;
-		}
-
-		if (!$typeNode instanceof IdentifierTypeNode) {
-			return false;
-		}
-
-		return !in_array($typeNode->name, ['mixed', 'static'], true);
+		return $typeNode instanceof ThisTypeNode || $typeNode instanceof IdentifierTypeNode;
 	}
 
 	private function getNextSemicolonInSameScope(File $phpcsFile, int $scopePointer, int $searchAt): int
@@ -297,7 +293,7 @@ class RequireExplicitAssertionSniff implements Sniff
 	/**
 	 * @param IdentifierTypeNode|ThisTypeNode|UnionTypeNode|IntersectionTypeNode $typeNode
 	 */
-	private function createAssert(string $variableName, TypeNode $typeNode): string
+	private function createAssert(string $variableName, TypeNode $typeNode): ?string
 	{
 		$conditions = [];
 
@@ -308,6 +304,10 @@ class RequireExplicitAssertionSniff implements Sniff
 			foreach ($typeNode->types as $innerTypeNode) {
 				$conditions = array_merge($conditions, $this->createConditions($variableName, $innerTypeNode));
 			}
+		}
+
+		if ($conditions === []) {
+			return null;
 		}
 
 		$operator = $typeNode instanceof IntersectionTypeNode ? '&&' : '||';
@@ -355,6 +355,10 @@ class RequireExplicitAssertionSniff implements Sniff
 				sprintf('\is_bool(%s)', $variableName),
 				sprintf('\is_string(%s)', $variableName),
 			];
+		}
+
+		if (TypeHintHelper::isSimpleUnofficialTypeHints($typeNode->name)) {
+			return [];
 		}
 
 		return [sprintf('%s instanceof %s', $variableName, $typeNode->name)];

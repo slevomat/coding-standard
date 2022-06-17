@@ -51,3 +51,6 @@ list($j) = [];
 
 /** @var $m invalid annotation */
 $m = 0;
+
+/** @var class-string $n */
+$n = 'SomeClass';
