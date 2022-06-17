@@ -77,6 +77,7 @@ Sniff provides the following settings:
 * `enableStaticTypeHint`: enforces to transform `@return static` into native `static` typehint. It's on by default if you're on PHP 8.0+
 * `enableMixedTypeHint`: enforces to transform `@return mixed` into native `mixed` typehint. It's on by default if you're on PHP 8.0+
 * `enableUnionTypeHint`: enforces to transform `@return string|int` into native `string|int` typehint. It's on by default if you're on PHP 8.0+.
+* `enableIntersectionTypeHint`: enforces to transform `@return Foo&Bar` into native `Foo&Bar` typehint. It's on by default if you're on PHP 8.1+.
 * `enableNeverTypeHint`: enforces to transform `@return never` into native `never` typehint. It's on by default if you're on PHP 8.1+.
 * `traversableTypeHints`: enforces which typehints must have specified contained type. E. g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
 

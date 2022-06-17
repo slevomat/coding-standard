@@ -74,6 +74,9 @@ class ReturnTypeHintSniff implements Sniff
 	public $enableUnionTypeHint = null;
 
 	/** @var bool|null */
+	public $enableIntersectionTypeHint = null;
+
+	/** @var bool|null */
 	public $enableNeverTypeHint = null;
 
 	/** @var string[] */
@@ -103,6 +106,7 @@ class ReturnTypeHintSniff implements Sniff
 		$this->enableStaticTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableStaticTypeHint, 80000);
 		$this->enableMixedTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableMixedTypeHint, 80000);
 		$this->enableUnionTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableUnionTypeHint, 80000);
+		$this->enableIntersectionTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableIntersectionTypeHint, 80100);
 		$this->enableNeverTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableNeverTypeHint, 80100);
 
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $pointer, self::NAME)) {
@@ -368,7 +372,7 @@ class ReturnTypeHintSniff implements Sniff
 		}
 		$typeHintsWithConvertedUnion = array_unique($typeHintsWithConvertedUnion);
 
-		if (count($typeHintsWithConvertedUnion) > 1 && !$canTryUnionTypeHint) {
+		if (count($typeHintsWithConvertedUnion) > 1 && !$canTryUnionTypeHint && !$this->enableIntersectionTypeHint) {
 			$this->reportUselessSuppress($phpcsFile, $functionPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 			return;
 		}
@@ -422,6 +426,8 @@ class ReturnTypeHintSniff implements Sniff
 
 		if (in_array('mixed', $typeHintsWithConvertedUnion, true)) {
 			$returnTypeHint = 'mixed';
+		} elseif ($originalReturnTypeNode instanceof IntersectionTypeNode) {
+			$returnTypeHint = implode('&', $typeHintsWithConvertedUnion);
 		} else {
 			$returnTypeHint = implode('|', $typeHintsWithConvertedUnion);
 			if ($nullableReturnTypeHint) {
@@ -544,7 +550,8 @@ class ReturnTypeHintSniff implements Sniff
 			$returnTypeHint,
 			$returnAnnotation,
 			$this->getTraversableTypeHints(),
-			$this->enableUnionTypeHint
+			$this->enableUnionTypeHint,
+			$this->enableIntersectionTypeHint
 		)) {
 			$this->reportUselessSuppress($phpcsFile, $functionPointer, $isSuppressed, $suppressName);
 			return;
