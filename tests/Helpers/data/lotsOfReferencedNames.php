@@ -1,4 +1,4 @@
-<?php // lint >= 8.0
+<?php // lint >= 8.1
 
 namespace FooNamespace;
 
@@ -161,6 +161,21 @@ class WithUnion
 	}
 
 	public function call2(bool|UnionType6 $union)
+	{
+	}
+
+}
+
+class WithIntersection
+{
+
+	private IntersectionType&\Intersection\IntersectionType2 $intersection;
+
+	public function call(\Intersection\IntersectionType3|IntersectionType4|\Intersection\IntersectionType5 $intersection)
+	{
+	}
+
+	public function call2(): IntersectionType6&\Intersection\IntersectionType7
 	{
 	}
 

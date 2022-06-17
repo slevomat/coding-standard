@@ -47,6 +47,7 @@ use const T_OPEN_TAG;
 use const T_PARAM_NAME;
 use const T_STRING;
 use const T_TRAIT;
+use const T_TYPE_INTERSECTION;
 use const T_TYPE_UNION;
 use const T_USE;
 use const T_VARIABLE;
@@ -207,6 +208,13 @@ class ReferencedNameHelper
 		if (
 			$tokens[$previousTokenBeforeStartPointer]['code'] === T_TYPE_UNION
 			|| $tokens[$nextTokenAfterEndPointer]['code'] === T_TYPE_UNION
+		) {
+			return ReferencedName::TYPE_CLASS;
+		}
+
+		if (
+			$tokens[$previousTokenBeforeStartPointer]['code'] === T_TYPE_INTERSECTION
+			|| $tokens[$nextTokenAfterEndPointer]['code'] === T_TYPE_INTERSECTION
 		) {
 			return ReferencedName::TYPE_CLASS;
 		}
