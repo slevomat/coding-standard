@@ -327,7 +327,7 @@ class TypeHintHelperTest extends TestCase
 	 */
 	public function testIsTypeDefinedInAnnotation(string $typeHintName, bool $isTemplate): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintsDefinedInAnnotation.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintDefinedInAnnotation.php');
 
 		$docCommentOpenPointer = $this->findPointerByLineAndType($phpcsFile, 3, T_DOC_COMMENT_OPEN_TAG);
 
@@ -352,7 +352,7 @@ class TypeHintHelperTest extends TestCase
 	 */
 	public function testIsTypeDefinedInAnnotationWhenAnnotationIsInvalid(int $line, string $type): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintsDefinedInAnnotation.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintDefinedInAnnotation.php');
 
 		$docCommentOpenPointer = $this->findPointerByLineAndType($phpcsFile, $line, T_DOC_COMMENT_OPEN_TAG);
 
