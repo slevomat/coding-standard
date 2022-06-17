@@ -361,4 +361,41 @@ class TypeHintHelperTest extends TestCase
 		self::assertFalse(TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $docCommentOpenPointer, $type));
 	}
 
+	/**
+	 * @return mixed[][]
+	 */
+	public function dataTypeHintEqualsAnnotation(): array
+	{
+		return [
+			['scalar', true],
+			['unionIsNotIntersection', false],
+		];
+	}
+
+	/**
+	 * @dataProvider dataTypeHintEqualsAnnotation
+	 */
+	public function testTypeHintEqualsAnnotation(string $functionName, bool $equals): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintEqualsAnnotation.php');
+
+		$functionPointer = $this->findFunctionPointerByName($phpcsFile, $functionName);
+
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
+		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
+
+		self::assertNotNull($returnTypeHint);
+		self::assertNotNull($returnAnnotation);
+
+		self::assertSame(
+			$equals,
+			TypeHintHelper::typeHintEqualsAnnotation(
+				$phpcsFile,
+				$functionPointer,
+				$returnTypeHint->getTypeHint(),
+				AnnotationTypeHelper::export($returnAnnotation->getType())
+			)
+		);
+	}
+
 }

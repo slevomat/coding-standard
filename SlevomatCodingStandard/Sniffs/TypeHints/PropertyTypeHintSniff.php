@@ -72,6 +72,9 @@ class PropertyTypeHintSniff implements Sniff
 	/** @var bool|null */
 	public $enableUnionTypeHint = null;
 
+	/** @var bool|null */
+	public $enableIntersectionTypeHint = null;
+
 	/** @var string[] */
 	public $traversableTypeHints = [];
 
@@ -104,6 +107,9 @@ class PropertyTypeHintSniff implements Sniff
 			: false;
 		$this->enableUnionTypeHint = $this->enableNativeTypeHint
 			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableUnionTypeHint, 80000)
+			: false;
+		$this->enableIntersectionTypeHint = $this->enableNativeTypeHint
+			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableIntersectionTypeHint, 80100)
 			: false;
 
 		$tokens = $phpcsFile->getTokens();
@@ -299,7 +305,7 @@ class PropertyTypeHintSniff implements Sniff
 		}
 		$typeHintsWithConvertedUnion = array_unique($typeHintsWithConvertedUnion);
 
-		if (count($typeHintsWithConvertedUnion) > 1 && !$canTryUnionTypeHint) {
+		if (count($typeHintsWithConvertedUnion) > 1 && !$canTryUnionTypeHint && !$this->enableUnionTypeHint) {
 			$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 			return;
 		}
@@ -350,6 +356,8 @@ class PropertyTypeHintSniff implements Sniff
 
 		if (in_array('mixed', $typeHintsWithConvertedUnion, true)) {
 			$propertyTypeHint = 'mixed';
+		} elseif ($originalTypeNode instanceof IntersectionTypeNode) {
+			$propertyTypeHint = implode('&', $typeHintsWithConvertedUnion);
 		} else {
 			$propertyTypeHint = implode('|', $typeHintsWithConvertedUnion);
 			if ($nullableTypeHint) {
@@ -480,7 +488,8 @@ class PropertyTypeHintSniff implements Sniff
 			$propertyTypeHint,
 			$propertyAnnotation,
 			$this->getTraversableTypeHints(),
-			$this->enableUnionTypeHint
+			$this->enableUnionTypeHint,
+			$this->enableIntersectionTypeHint
 		)) {
 			$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressed, $suppressName);
 			return;
