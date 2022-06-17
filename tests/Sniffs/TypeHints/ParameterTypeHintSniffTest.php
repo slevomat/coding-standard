@@ -12,6 +12,7 @@ class ParameterTypeHintSniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/parameterTypeHintNoErrors.php', [
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => false,
+			'enableIntersectionTypeHint' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 		self::assertNoSniffErrorInFile($report);
@@ -23,6 +24,7 @@ class ParameterTypeHintSniffTest extends TestCase
 			'enableObjectTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => false,
+			'enableIntersectionTypeHint' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 
@@ -87,6 +89,7 @@ class ParameterTypeHintSniffTest extends TestCase
 			'enableObjectTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => true,
+			'enableIntersectionTypeHint' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 		self::assertNoSniffErrorInFile($report);
@@ -98,6 +101,7 @@ class ParameterTypeHintSniffTest extends TestCase
 			'enableObjectTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => true,
+			'enableIntersectionTypeHint' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 
@@ -118,6 +122,36 @@ class ParameterTypeHintSniffTest extends TestCase
 		self::assertSniffError($report, 51, ParameterTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 55, ParameterTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 59, ParameterTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testWithIntersectionNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/parameterTypeHintWithIntersectionNoErrors.php', [
+			'enableObjectTypeHint' => true,
+			'enableMixedTypeHint' => true,
+			'enableUnionTypeHint' => true,
+			'enableIntersectionTypeHint' => false,
+			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testWithIntersectionErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/parameterTypeHintWithIntersectionErrors.php', [
+			'enableObjectTypeHint' => true,
+			'enableMixedTypeHint' => true,
+			'enableUnionTypeHint' => true,
+			'enableIntersectionTypeHint' => true,
+			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
+		]);
+
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 9, ParameterTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 14, ParameterTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 
 		self::assertAllFixedInFile($report);
 	}
