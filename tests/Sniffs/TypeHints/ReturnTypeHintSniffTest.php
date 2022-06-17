@@ -12,6 +12,7 @@ class ReturnTypeHintSniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/returnTypeHintNoErrors.php', [
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => false,
+			'enableIntersectionTypeHint' => false,
 			'enableNeverTypeHint' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
@@ -25,6 +26,7 @@ class ReturnTypeHintSniffTest extends TestCase
 			'enableStaticTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => false,
+			'enableIntersectionTypeHint' => false,
 			'enableNeverTypeHint' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
@@ -104,6 +106,7 @@ class ReturnTypeHintSniffTest extends TestCase
 			'enableObjectTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => true,
+			'enableIntersectionTypeHint' => false,
 			'enableNeverTypeHint' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
@@ -116,6 +119,7 @@ class ReturnTypeHintSniffTest extends TestCase
 			'enableObjectTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => true,
+			'enableIntersectionTypeHint' => false,
 			'enableNeverTypeHint' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
@@ -143,12 +147,45 @@ class ReturnTypeHintSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testWithIntersectionNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/returnTypeHintWithIntersectionNoErrors.php', [
+			'enableObjectTypeHint' => true,
+			'enableMixedTypeHint' => true,
+			'enableUnionTypeHint' => true,
+			'enableIntersectionTypeHint' => true,
+			'enableNeverTypeHint' => false,
+			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testWithIntersectionErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/returnTypeHintWithIntersectionErrors.php', [
+			'enableObjectTypeHint' => true,
+			'enableMixedTypeHint' => true,
+			'enableUnionTypeHint' => true,
+			'enableIntersectionTypeHint' => true,
+			'enableNeverTypeHint' => false,
+			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
+		]);
+
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 9, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 14, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testWithNeverErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/returnTypeHintWithNeverErrors.php', [
 			'enableObjectTypeHint' => true,
 			'enableMixedTypeHint' => false,
 			'enableUnionTypeHint' => false,
+			'enableIntersectionTypeHint' => false,
 			'enableNeverTypeHint' => true,
 		]);
 
