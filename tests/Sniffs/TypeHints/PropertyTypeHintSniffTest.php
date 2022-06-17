@@ -39,6 +39,7 @@ class PropertyTypeHintSniffTest extends TestCase
 			'enableNativeTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => false,
+			'enableIntersectionTypeHint' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 		self::assertNoSniffErrorInFile($report);
@@ -50,6 +51,7 @@ class PropertyTypeHintSniffTest extends TestCase
 			'enableNativeTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => false,
+			'enableIntersectionTypeHint' => false,
 			'traversableTypeHints' => ['Traversable'],
 		]);
 
@@ -118,6 +120,7 @@ class PropertyTypeHintSniffTest extends TestCase
 			'enableNativeTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => true,
+			'enableIntersectionTypeHint' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 		self::assertNoSniffErrorInFile($report);
@@ -129,6 +132,7 @@ class PropertyTypeHintSniffTest extends TestCase
 			'enableNativeTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => true,
+			'enableIntersectionTypeHint' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 
@@ -147,6 +151,36 @@ class PropertyTypeHintSniffTest extends TestCase
 		self::assertSniffError($report, 37, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 40, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 43, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testEnabledNativeWithIntersectionNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintEnabledNativeWithIntersectionNoErrors.php', [
+			'enableNativeTypeHint' => true,
+			'enableMixedTypeHint' => true,
+			'enableUnionTypeHint' => true,
+			'enableIntersectionTypeHint' => true,
+			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testEnabledNativeWithIntersectionErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintEnabledNativeWithIntersectionErrors.php', [
+			'enableNativeTypeHint' => true,
+			'enableMixedTypeHint' => true,
+			'enableUnionTypeHint' => true,
+			'enableIntersectionTypeHint' => true,
+			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
+		]);
+
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 7, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 10, PropertyTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 
 		self::assertAllFixedInFile($report);
 	}

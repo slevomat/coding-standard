@@ -11,12 +11,13 @@ use function array_map;
 use function array_merge;
 use function array_unique;
 use function count;
-use function explode;
 use function implode;
 use function in_array;
+use function preg_split;
 use function sort;
 use function sprintf;
 use function substr;
+use const PREG_SPLIT_DELIM_CAPTURE;
 use const T_FUNCTION;
 use const T_WHITESPACE;
 
@@ -201,14 +202,26 @@ class TypeHintHelper
 		string $typeHintInAnnotation
 	): bool
 	{
-		$typeHintParts = explode('|', self::normalize($typeHint));
-		$typeHintInAnnotationParts = explode('|', self::normalize($typeHintInAnnotation));
+		/** @var string[] $typeHintParts */
+		$typeHintParts = preg_split('~([&|])~', self::normalize($typeHint), -1, PREG_SPLIT_DELIM_CAPTURE);
+		/** @var string[] $typeHintInAnnotationParts */
+		$typeHintInAnnotationParts = preg_split('~([&|])~', self::normalize($typeHintInAnnotation), -1, PREG_SPLIT_DELIM_CAPTURE);
 
 		if (count($typeHintParts) !== count($typeHintInAnnotationParts)) {
 			return false;
 		}
 
 		for ($i = 0; $i < count($typeHintParts); $i++) {
+			if (
+				(
+					$typeHintParts[$i] === '|'
+					|| $typeHintParts[$i] === '&'
+				)
+				&& $typeHintParts[$i] !== $typeHintInAnnotationParts[$i]
+			) {
+				return false;
+			}
+
 			if (self::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHintParts[$i]) !== self::getFullyQualifiedTypeHint(
 				$phpcsFile,
 				$functionPointer,
@@ -345,32 +358,44 @@ class TypeHintHelper
 			return 'never';
 		}
 
-		$parts = explode('|', $typeHint);
+		/** @var string[] $parts */
+		$parts = preg_split('~([&|])~', $typeHint, -1, PREG_SPLIT_DELIM_CAPTURE);
 
-		if (in_array('mixed', $parts, true)) {
+		$hints = [];
+		$delimiter = '|';
+		foreach ($parts as $part) {
+			if ($part === '|' || $part === '&') {
+				$delimiter = $part;
+				continue;
+			}
+
+			$hints[] = $part;
+		}
+
+		if (in_array('mixed', $hints, true)) {
 			return 'mixed';
 		}
 
-		$convertedParts = [];
-		foreach ($parts as $part) {
-			if (self::isUnofficialUnionTypeHint($part)) {
-				$convertedParts = array_merge($convertedParts, self::convertUnofficialUnionTypeHintToOfficialTypeHints($part));
+		$convertedHints = [];
+		foreach ($hints as $hint) {
+			if (self::isUnofficialUnionTypeHint($hint) && $delimiter !== '&') {
+				$convertedHints = array_merge($convertedHints, self::convertUnofficialUnionTypeHintToOfficialTypeHints($hint));
 			} else {
-				$convertedParts[] = $part;
+				$convertedHints[] = $hint;
 			}
 		}
 
-		$convertedParts = array_unique($convertedParts);
+		$convertedHints = array_unique($convertedHints);
 
-		if (count($convertedParts) > 1) {
-			$convertedParts = array_map(static function (string $part): string {
+		if (count($convertedHints) > 1) {
+			$convertedHints = array_map(static function (string $part): string {
 				return TypeHintHelper::isVoidTypeHint($part) ? 'null' : $part;
-			}, $convertedParts);
+			}, $convertedHints);
 		}
 
-		sort($convertedParts);
+		sort($convertedHints);
 
-		return implode('|', $convertedParts);
+		return implode($delimiter, $convertedHints);
 	}
 
 }
