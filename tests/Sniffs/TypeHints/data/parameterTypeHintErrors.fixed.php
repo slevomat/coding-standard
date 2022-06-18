@@ -276,4 +276,9 @@ class Whatever
 	{
 	}
 
+	/** @param $a */
+	private function noTypeHintNoAnnotationWithPhpdoc($a)
+	{
+	}
+
 }

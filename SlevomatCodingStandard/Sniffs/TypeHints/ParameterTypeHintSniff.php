@@ -150,7 +150,7 @@ class ParameterTypeHintSniff implements Sniff
 		);
 
 		foreach ($parametersWithoutTypeHint as $parameterName) {
-			if (!array_key_exists($parameterName, $parametersAnnotations)) {
+			if (!array_key_exists($parameterName, $parametersAnnotations) || $parametersAnnotations[$parameterName]->getType() === null) {
 				if (array_key_exists($parameterName, $prefixedParametersAnnotations)) {
 					continue;
 				}
