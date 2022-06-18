@@ -169,4 +169,12 @@ class Whatever
 		return [];
 	}
 
+	/**
+	 * @param $a
+	 * Some info
+	 */
+	public function onlyParameterWithoutType(int $a): void
+	{
+	}
+
 }

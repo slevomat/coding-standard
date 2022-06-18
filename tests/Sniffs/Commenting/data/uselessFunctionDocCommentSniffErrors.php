@@ -41,4 +41,18 @@ class Whatever
 
 	}
 
+	/**
+	 * @param $a
+	 */
+	public function onlyParameterWithoutType(int $a): void
+	{
+	}
+
+	/**
+	 * @param $a
+	 */
+	public function onlyParameterWithoutTypeArray(array $a): void
+	{
+	}
+
 }

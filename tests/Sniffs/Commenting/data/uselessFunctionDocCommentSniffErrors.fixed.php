@@ -25,4 +25,12 @@ class Whatever
 
 	}
 
+	public function onlyParameterWithoutType(int $a): void
+	{
+	}
+
+	public function onlyParameterWithoutTypeArray(array $a): void
+	{
+	}
+
 }

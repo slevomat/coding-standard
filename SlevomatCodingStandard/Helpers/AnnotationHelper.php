@@ -400,6 +400,10 @@ class AnnotationHelper
 			return false;
 		}
 
+		if ($annotation->getType() === null) {
+			return true;
+		}
+
 		if (TypeHintHelper::isTraversableType(
 			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint->getTypeHintWithoutNullabilitySymbol()),
 			$traversableTypeHints
