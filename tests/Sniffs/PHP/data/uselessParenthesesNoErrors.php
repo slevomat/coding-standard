@@ -169,6 +169,8 @@ match ($code) {
 
 $char = (0xF0 & ord('1')) >> 4;
 
+$anotherObject = new ($object->getClassName());
+
 // Must be last
 return true
 	? 100
