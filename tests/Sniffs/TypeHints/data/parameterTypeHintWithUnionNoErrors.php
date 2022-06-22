@@ -21,4 +21,18 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @param A&B $a
+	 */
+	public function intersectionWithoutNativeTypeHint($a)
+	{
+	}
+
+	/**
+	 * @param A&B $a
+	 */
+	public function intersectionWithBroadNativeTypeHint(A $a)
+	{
+	}
+
 }

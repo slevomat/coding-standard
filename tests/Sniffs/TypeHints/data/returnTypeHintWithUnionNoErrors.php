@@ -19,4 +19,18 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @return A&B
+	 */
+	public function intersectionWithoutNativeTypeHint()
+	{
+	}
+
+	/**
+	 * @return A&B
+	 */
+	public function intersectionWithBroadNativeTypeHint(): A
+	{
+	}
+
 }
