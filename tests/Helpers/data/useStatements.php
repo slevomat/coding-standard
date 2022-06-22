@@ -7,6 +7,7 @@ use const Lerdorf\IS_BAR;
 use const Rasmus\FOO;
 use function Lerdorf\isBar;
 use function Rasmus\foo;
+use Doctrine\Common\Collections\Expr\{ Comparison, Value, CompositeExpression };
 
 class FooBar
 {

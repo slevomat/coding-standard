@@ -14,6 +14,7 @@ use const T_COMMA;
 use const T_NAMESPACE;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_TAG;
+use const T_OPEN_USE_GROUP;
 use const T_SEMICOLON;
 use const T_STRING;
 use const T_USE;
@@ -193,10 +194,17 @@ class UseStatementHelper
 					$pointer = $token['scope_closer'] + 1;
 					continue;
 				}
+
+				if (self::isGroupUse($phpcsFile, $pointer)) {
+					$pointer++;
+					continue;
+				}
+
 				if (self::isAnonymousFunctionUse($phpcsFile, $pointer)) {
 					$pointer++;
 					continue;
 				}
+
 				$pointers[] = $pointer;
 				$pointer++;
 			}
@@ -205,6 +213,14 @@ class UseStatementHelper
 		};
 
 		return SniffLocalCache::getAndSetIfNotCached($phpcsFile, 'useStatementPointers', $lazy);
+	}
+
+	private static function isGroupUse(File $phpcsFile, int $usePointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+		$semicolonOrGroupUsePointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_OPEN_USE_GROUP], $usePointer + 1);
+
+		return $tokens[$semicolonOrGroupUsePointer]['code'] === T_OPEN_USE_GROUP;
 	}
 
 }
