@@ -13,4 +13,10 @@ class Whatever
 	 */
 	protected $arrayAndArrayHash;
 
+	/** @var A&B */
+	public $intersectionWithoutNativeTypeHint;
+
+	/** @var A&B */
+	public A $intersectionWitBroadNativeTypeHint;
+
 }
