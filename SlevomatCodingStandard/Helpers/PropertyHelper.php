@@ -33,11 +33,15 @@ use const T_VAR;
 class PropertyHelper
 {
 
-	public static function isProperty(File $phpcsFile, int $variablePointer): bool
+	public static function isProperty(File $phpcsFile, int $variablePointer, bool $promoted = false): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $variablePointer - 1);
+		$previousPointer = TokenHelper::findPreviousExcluding(
+			$phpcsFile,
+			array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::getTypeHintTokenCodes(), [T_NULLABLE]),
+			$variablePointer - 1
+		);
 
 		if ($tokens[$previousPointer]['code'] === T_STATIC) {
 			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
@@ -45,7 +49,12 @@ class PropertyHelper
 
 		if (in_array($tokens[$previousPointer]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_VAR, T_READONLY], true)) {
 			$constructorPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $previousPointer - 1);
-			return $constructorPointer === null || $tokens[$constructorPointer]['parenthesis_closer'] < $previousPointer;
+
+			if ($constructorPointer === null) {
+				return true;
+			}
+
+			return $tokens[$constructorPointer]['parenthesis_closer'] < $previousPointer || $promoted;
 		}
 
 		if (

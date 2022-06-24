@@ -35,6 +35,10 @@ class PropertyHelperTest extends TestCase
 				false,
 			],
 			[
+				'$propertyPromotionWithTypeHint',
+				false,
+			],
+			[
 				'$hoo',
 				false,
 			],
@@ -102,6 +106,28 @@ class PropertyHelperTest extends TestCase
 
 		$variablePointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, 0);
 		self::assertSame($isProperty, PropertyHelper::isProperty($phpcsFile, $variablePointer));
+	}
+
+	/**
+	 * @return mixed[][]
+	 */
+	public function dataIsPropertyIfPromoted(): array
+	{
+		return [
+			['$propertyPromotion'],
+			['$propertyPromotionWithTypeHint'],
+		];
+	}
+
+	/**
+	 * @dataProvider dataIsPropertyIfPromoted
+	 */
+	public function testIsPropertyIfPromoted(string $variableName): void
+	{
+		$phpcsFile = $this->getTestedCodeSnifferFile();
+
+		$variablePointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, 0);
+		self::assertTrue(PropertyHelper::isProperty($phpcsFile, $variablePointer, true));
 	}
 
 	/**

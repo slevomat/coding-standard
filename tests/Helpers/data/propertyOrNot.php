@@ -10,7 +10,7 @@ class Foo
 
 	private static $string = 'string';
 
-	public function __construct(private $propertyPromotion, $boo)
+	public function __construct(private $propertyPromotion, $boo, public readonly Foo|Bar $propertyPromotionWithTypeHint)
 	{
 		$hoo = $boo;
 	}
