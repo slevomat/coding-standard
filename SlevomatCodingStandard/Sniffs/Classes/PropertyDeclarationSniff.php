@@ -49,11 +49,16 @@ class PropertyDeclarationSniff implements Sniff
 
 	public const CODE_INCORRECT_ORDER_OF_MODIFIERS = 'IncorrectOrderOfModifiers';
 
+	public const CODE_MULTIPLE_SPACES_BETWEEN_MODIFIERS = 'MultipleSpacesBetweenModifiers';
+
 	/** @var string[]|null */
 	public $modifiersOrder = [];
 
 	/** @var bool */
 	public $checkPromoted = false;
+
+	/** @var bool */
+	public $enableMultipleSpacesBetweenModifiersCheck = false;
 
 	/** @var array<int, array<int, (int|string)>>|null */
 	private $normalizedModifiersOrder = null;
@@ -106,6 +111,7 @@ class PropertyDeclarationSniff implements Sniff
 		} while (true);
 
 		$this->checkModifiersOrder($phpcsFile, $propertyPointer, $firstModifierPointer, $modifierPointer);
+		$this->checkSpacesBetweenModifiers($phpcsFile, $propertyPointer, $firstModifierPointer, $modifierPointer);
 		$this->checkTypeHintSpacing($phpcsFile, $propertyPointer, $modifierPointer);
 	}
 
@@ -177,6 +183,68 @@ class PropertyDeclarationSniff implements Sniff
 		if (!$fix) {
 			return;
 		}
+
+		$phpcsFile->fixer->beginChangeset();
+
+		$phpcsFile->fixer->replaceToken($firstModifierPointer, $expectedModifiersFormatted);
+
+		for ($i = $firstModifierPointer + 1; $i <= $lastModifierPointer; $i++) {
+			$phpcsFile->fixer->replaceToken($i, '');
+		}
+
+		$phpcsFile->fixer->endChangeset();
+	}
+
+	private function checkSpacesBetweenModifiers(
+		File $phpcsFile,
+		int $propertyPointer,
+		int $firstModifierPointer,
+		int $lastModifierPointer
+	): void
+	{
+		if (!$this->enableMultipleSpacesBetweenModifiersCheck) {
+			return;
+		}
+
+		$modifiersPointers = TokenHelper::findNextAll(
+			$phpcsFile,
+			TokenHelper::$propertyModifiersTokenCodes,
+			$firstModifierPointer,
+			$lastModifierPointer + 1
+		);
+
+		if (count($modifiersPointers) < 2) {
+			return;
+		}
+
+		$tokens = $phpcsFile->getTokens();
+
+		$error = false;
+		for ($i = 0; $i < count($modifiersPointers) - 1; $i++) {
+			$whitespace = TokenHelper::getContent($phpcsFile, $modifiersPointers[$i] + 1, $modifiersPointers[$i + 1] - 1);
+			if ($whitespace !== ' ') {
+				$error = true;
+				break;
+			}
+		}
+
+		if (!$error) {
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError(
+			sprintf('There must be exactly one space between modifiers of property %s.', $tokens[$propertyPointer]['content']),
+			$firstModifierPointer,
+			self::CODE_MULTIPLE_SPACES_BETWEEN_MODIFIERS
+		);
+		if (!$fix) {
+			return;
+		}
+
+		$expectedModifiers = array_map(static function (int $modifierPointer) use ($tokens): string {
+			return $tokens[$modifierPointer]['content'];
+		}, $modifiersPointers);
+		$expectedModifiersFormatted = implode(' ', $expectedModifiers);
 
 		$phpcsFile->fixer->beginChangeset();
 

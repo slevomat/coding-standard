@@ -78,6 +78,55 @@ class PropertyDeclarationSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testDisabledMultipleSpacesBetweenModifiersNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/propertyDeclarationDisabledMultipleSpacesBetweenModifiersNoErrors.php', [
+			'checkPromoted' => true,
+			'enableMultipleSpacesBetweenModifiersCheck' => false,
+		], [PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_MODIFIERS]);
+
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testEnabledMultipleSpacesBetweenModifiersNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/propertyDeclarationEnabledMultipleSpacesBetweenModifiersNoErrors.php', [
+			'checkPromoted' => true,
+			'enableMultipleSpacesBetweenModifiersCheck' => true,
+		], [PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_MODIFIERS]);
+
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testEnabledMultipleSpacesBetweenModifiersErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/propertyDeclarationEnabledMultipleSpacesBetweenModifiersErrors.php', [
+			'checkPromoted' => true,
+			'enableMultipleSpacesBetweenModifiersCheck' => true,
+		], [PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_MODIFIERS]);
+
+		self::assertSame(6, $report->getErrorCount());
+
+		self::assertSniffError($report, 6, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_MODIFIERS);
+		self::assertSniffError($report, 8, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_MODIFIERS);
+		self::assertSniffError(
+			$report,
+			10,
+			PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_MODIFIERS,
+			'There must be exactly one space between modifiers of property $three.'
+		);
+		self::assertSniffError(
+			$report,
+			10,
+			PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_MODIFIERS,
+			'There must be exactly one space between modifiers of property $four.'
+		);
+		self::assertSniffError($report, 20, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_MODIFIERS);
+		self::assertSniffError($report, 21, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_MODIFIERS);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testModifiedModifiersOrderNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/propertyDeclarationModifiedModifiersOrderNoErrors.php', [
@@ -86,6 +135,7 @@ class PropertyDeclarationSniffTest extends TestCase
 				'var, public, protected, private',
 			],
 		]);
+
 		self::assertNoSniffErrorInFile($report);
 	}
 
