@@ -166,7 +166,12 @@ class PropertyDeclarationSniff implements Sniff
 		$expectedModifiersFormatted = implode(' ', $expectedModifiers);
 
 		$fix = $phpcsFile->addFixableError(
-			sprintf('Incorrect order of property modifiers "%s", expected "%s".', $actualModifiersFormatted, $expectedModifiersFormatted),
+			sprintf(
+				'Incorrect order of modifiers "%s" of property %s, expected "%s".',
+				$actualModifiersFormatted,
+				$tokens[$propertyPointer]['content'],
+				$expectedModifiersFormatted
+			),
 			$firstModifierPointer,
 			self::CODE_INCORRECT_ORDER_OF_MODIFIERS
 		);
@@ -204,8 +209,10 @@ class PropertyDeclarationSniff implements Sniff
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $typeHintStartPointer - 1, $lastModifierPointer);
 		$nullabilitySymbolPointer = $previousPointer !== null && $tokens[$previousPointer]['code'] === T_NULLABLE ? $previousPointer : null;
 
+		$propertyName = $tokens[$propertyPointer]['content'];
+
 		if ($tokens[$lastModifierPointer + 1]['code'] !== T_WHITESPACE) {
-			$errorMessage = 'There must be exactly one space before type hint nullability symbol.';
+			$errorMessage = sprintf('There must be exactly one space before type hint nullability symbol of property %s.', $propertyName);
 			$errorCode = self::CODE_NO_SPACE_BEFORE_NULLABILITY_SYMBOL;
 
 			$fix = $phpcsFile->addFixableError($errorMessage, $typeHintEndPointer, $errorCode);
@@ -216,10 +223,13 @@ class PropertyDeclarationSniff implements Sniff
 			}
 		} elseif ($tokens[$lastModifierPointer + 1]['content'] !== ' ') {
 			if ($nullabilitySymbolPointer !== null) {
-				$errorMessage = 'There must be exactly one space before type hint nullability symbol.';
+				$errorMessage = sprintf(
+					'There must be exactly one space before type hint nullability symbol of property %s.',
+					$propertyName
+				);
 				$errorCode = self::CODE_MULTIPLE_SPACES_BEFORE_NULLABILITY_SYMBOL;
 			} else {
-				$errorMessage = 'There must be exactly one space before type hint.';
+				$errorMessage = sprintf('There must be exactly one space before type hint of property %s.', $propertyName);
 				$errorCode = self::CODE_MULTIPLE_SPACES_BEFORE_TYPE_HINT;
 			}
 
@@ -233,7 +243,7 @@ class PropertyDeclarationSniff implements Sniff
 
 		if ($tokens[$typeHintEndPointer + 1]['code'] !== T_WHITESPACE) {
 			$fix = $phpcsFile->addFixableError(
-				'There must be exactly one space between type hint and property.',
+				sprintf('There must be exactly one space between type hint and property %s.', $propertyName),
 				$typeHintEndPointer,
 				self::CODE_NO_SPACE_BETWEEN_TYPE_HINT_AND_PROPERTY
 			);
@@ -244,7 +254,7 @@ class PropertyDeclarationSniff implements Sniff
 			}
 		} elseif ($tokens[$typeHintEndPointer + 1]['content'] !== ' ') {
 			$fix = $phpcsFile->addFixableError(
-				'There must be exactly one space between type hint and property.',
+				sprintf('There must be exactly one space between type hint and property %s.', $propertyName),
 				$typeHintEndPointer,
 				self::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PROPERTY
 			);
@@ -264,7 +274,7 @@ class PropertyDeclarationSniff implements Sniff
 		}
 
 		$fix = $phpcsFile->addFixableError(
-			'There must be no whitespace between type hint nullability symbol and type hint.',
+			sprintf('There must be no whitespace between type hint nullability symbol and type hint of property %s.', $propertyName),
 			$typeHintStartPointer,
 			self::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL
 		);

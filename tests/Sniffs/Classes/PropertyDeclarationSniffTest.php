@@ -57,9 +57,20 @@ class PropertyDeclarationSniffTest extends TestCase
 
 		self::assertSame(7, $report->getErrorCount());
 
-		self::assertSniffError($report, 6, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BEFORE_TYPE_HINT);
+		self::assertSniffError(
+			$report,
+			6,
+			PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BEFORE_TYPE_HINT,
+			'There must be exactly one space before type hint of property $promotion1.'
+		);
 		self::assertSniffError($report, 6, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PROPERTY);
 		self::assertSniffError($report, 6, PropertyDeclarationSniff::CODE_INCORRECT_ORDER_OF_MODIFIERS);
+		self::assertSniffError(
+			$report,
+			6,
+			PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BEFORE_TYPE_HINT,
+			'There must be exactly one space before type hint of property $promotion2.'
+		);
 		self::assertSniffError($report, 16, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BEFORE_TYPE_HINT);
 		self::assertSniffError($report, 16, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PROPERTY);
 		self::assertSniffError($report, 17, PropertyDeclarationSniff::CODE_INCORRECT_ORDER_OF_MODIFIERS);
