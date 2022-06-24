@@ -20,6 +20,9 @@ final class ForbiddenPublicPropertySniff implements Sniff
 
 	public const CODE_FORBIDDEN_PUBLIC_PROPERTY = 'ForbiddenPublicProperty';
 
+	/** @var bool */
+	public $checkPromoted = false;
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
@@ -34,7 +37,7 @@ final class ForbiddenPublicPropertySniff implements Sniff
 	 */
 	public function process(File $file, $variablePointer): void
 	{
-		if (!PropertyHelper::isProperty($file, $variablePointer)) {
+		if (!PropertyHelper::isProperty($file, $variablePointer, $this->checkPromoted)) {
 			return;
 		}
 

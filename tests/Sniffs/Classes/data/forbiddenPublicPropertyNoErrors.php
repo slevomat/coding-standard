@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.1
 
 function add(int $a, int $b)
 {
@@ -8,6 +8,10 @@ function add(int $a, int $b)
 class Test
 {
 	private $one, $two;
+
+	public function __construct(public int $promoted)
+	{
+	}
 }
 
 class TestSniff

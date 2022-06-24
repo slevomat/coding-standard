@@ -24,4 +24,25 @@ class ForbiddenPublicPropertySniffTest extends TestCase
 		self::assertSniffError($report, 7, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
 	}
 
+	public function testPromotedNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/forbiddenPublicPropertyPromotedNoErrors.php', [
+			'checkPromoted' => true,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testPromotedErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/forbiddenPublicPropertyPromotedErrors.php', [
+			'checkPromoted' => true,
+		]);
+
+		self::assertSame(4, $report->getErrorCount());
+
+		self::assertSniffError($report, 5, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertSniffError($report, 13, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertSniffError($report, 14, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+	}
+
 }

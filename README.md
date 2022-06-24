@@ -187,6 +187,10 @@ Disallows late static binding for constants.
 
 Disallows using public properties.
 
+This sniff provides the following setting:
+
+* `checkPromoted`: will check promoted properties too.
+
 #### SlevomatCodingStandard.Classes.RequireAbstractOrFinal 🔧
 
 Requires the class to be declared either as abstract or as final.
