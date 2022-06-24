@@ -118,13 +118,12 @@ class PropertyDeclarationSniff implements Sniff
 			$propertyPointer
 		);
 
-		$modifiersGroups = $this->getNormalizedModifiersOrder();
-
 		if (count($modifiersPointers) < 2) {
 			return;
 		}
 
 		$tokens = $phpcsFile->getTokens();
+		$modifiersGroups = $this->getNormalizedModifiersOrder();
 
 		$expectedModifiersPositions = [];
 		foreach ($modifiersPointers as $modifierPointer) {
