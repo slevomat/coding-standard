@@ -547,6 +547,7 @@ Sniff provides the following settings:
 Sniff provides the following settings:
 
 * `modifiersOrder`: allows to configurure order of modifiers.
+* `checkPromoted`: will check promoted properties too.
 
 #### SlevomatCodingStandard.Classes.PropertySpacing 🔧
 

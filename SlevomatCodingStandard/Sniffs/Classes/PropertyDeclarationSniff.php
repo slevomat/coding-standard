@@ -52,6 +52,9 @@ class PropertyDeclarationSniff implements Sniff
 	/** @var string[]|null */
 	public $modifiersOrder = [];
 
+	/** @var bool */
+	public $checkPromoted = false;
+
 	/** @var array<int, array<int, (int|string)>>|null */
 	private $normalizedModifiersOrder = null;
 
@@ -88,7 +91,7 @@ class PropertyDeclarationSniff implements Sniff
 			return;
 		}
 
-		if (!PropertyHelper::isProperty($phpcsFile, $propertyPointer)) {
+		if (!PropertyHelper::isProperty($phpcsFile, $propertyPointer, $this->checkPromoted)) {
 			return;
 		}
 

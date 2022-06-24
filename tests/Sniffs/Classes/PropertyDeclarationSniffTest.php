@@ -41,6 +41,32 @@ class PropertyDeclarationSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testPromotedNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/propertyDeclarationPromotedNoErrors.php', [
+			'checkPromoted' => true,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testPromotedErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/propertyDeclarationPromotedErrors.php', [
+			'checkPromoted' => true,
+		]);
+
+		self::assertSame(7, $report->getErrorCount());
+
+		self::assertSniffError($report, 6, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BEFORE_TYPE_HINT);
+		self::assertSniffError($report, 6, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PROPERTY);
+		self::assertSniffError($report, 6, PropertyDeclarationSniff::CODE_INCORRECT_ORDER_OF_MODIFIERS);
+		self::assertSniffError($report, 16, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BEFORE_TYPE_HINT);
+		self::assertSniffError($report, 16, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PROPERTY);
+		self::assertSniffError($report, 17, PropertyDeclarationSniff::CODE_INCORRECT_ORDER_OF_MODIFIERS);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testModifiedModifiersOrderNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/propertyDeclarationModifiedModifiersOrderNoErrors.php', [
