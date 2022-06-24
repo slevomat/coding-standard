@@ -115,7 +115,7 @@ class PropertyDeclarationSniff implements Sniff
 			$phpcsFile,
 			TokenHelper::$propertyModifiersTokenCodes,
 			$firstModifierPointer,
-			$propertyPointer
+			$lastModifierPointer + 1
 		);
 
 		if (count($modifiersPointers) < 2) {
