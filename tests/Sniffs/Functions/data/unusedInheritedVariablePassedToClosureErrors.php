@@ -1,40 +1,28 @@
 <?php
 
-function () use ($boo, $foo, $doo) {
-	echo $foo;
-	echo $doo;
-};
+declare(strict_types=1);
 
-function () use (
-	$boo,
-	$foo,
-	$doo
-) {
-	echo $boo;
-	echo $doo;
-};
-
-function () use ($boo, $foo, $doo) {
-	echo $boo;
-	echo $foo;
-};
-
-function () use (
-	$boo
-) {
-	(function () {
-		$boo = 'boo2';
-	})();
-};
-
-function ($arrays) use ($boo) {
-	foreach ($arrays as $key => $array) {
-		$value = array_filter($array, function ($boo) {
-			return $boo === 'boo';
-		});
+class X
+{
+	public function a(int $arg,): void
+    {
 	}
-};
 
-(function ($type, $buffer) use (&$output, &$successful) : void {
-	$successful = false;
-})();
+	public function b(
+		int $arg
+	): void
+	{
+	}
+}
+
+$class = new X();
+
+function a(int $arg) use ($class,): void
+{
+}
+
+function b(int $arg) use (
+	$class
+): void
+{
+}
