@@ -485,6 +485,15 @@ Sniff provides the following settings:
 
 * `enableAfterHeredoc`: enables/disables trailing commas after HEREDOC/NOWDOC, default based on PHP version.
 
+#### SlevomatCodingStandard.Classes.BackedEnumTypeSpacing 🔧
+
+* Checks number of spaces before `:` and before type.
+
+Sniff provides the following settings:
+
+* `spacesCountBeforeColon`: the number of spaces before `:`.
+* `spacesCountBeforeType`: the number of spaces before type.
+
 #### SlevomatCodingStandard.Classes.ClassMemberSpacing 🔧
 
 Checks lines count between different class members, eg. between last property and first method.
