@@ -23,7 +23,7 @@ class BackedEnumTypeSpacingSniff implements Sniff
 	public $spacesCountBeforeColon = 0;
 
 	/** @var int */
-	public $spacesCountBeforeType = 1;
+		public $spacesCountBeforeType = 1;
 
 	/**
 	 * @return array<int, (int|string)>
