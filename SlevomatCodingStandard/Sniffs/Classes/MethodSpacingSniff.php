@@ -42,6 +42,9 @@ class MethodSpacingSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $methodPointer): void
 	{
+		$this->minLinesCount = SniffSettingsHelper::normalizeInteger($this->minLinesCount);
+		$this->maxLinesCount = SniffSettingsHelper::normalizeInteger($this->maxLinesCount);
+
 		if (!FunctionHelper::isMethod($phpcsFile, $methodPointer)) {
 			return;
 		}
@@ -78,15 +81,13 @@ class MethodSpacingSniff implements Sniff
 		$linesBetween = $tokens[$nextMethodFirstLinePointer]['line'] !== $tokens[$methodEndPointer]['line']
 			? $tokens[$nextMethodFirstLinePointer]['line'] - $tokens[$methodEndPointer]['line'] - 1
 			: null;
-		$minExpectedLines = SniffSettingsHelper::normalizeInteger($this->minLinesCount);
-		$maxExpectedLines = SniffSettingsHelper::normalizeInteger($this->maxLinesCount);
 
-		if ($linesBetween !== null && $linesBetween >= $minExpectedLines && $linesBetween <= $maxExpectedLines) {
+		if ($linesBetween !== null && $linesBetween >= $this->minLinesCount && $linesBetween <= $this->maxLinesCount) {
 			return;
 		}
 
-		if ($minExpectedLines === $maxExpectedLines) {
-			$errorMessage = $minExpectedLines === 1
+		if ($this->minLinesCount === $this->maxLinesCount) {
+			$errorMessage = $this->minLinesCount === 1
 				? 'Expected 1 blank line after method, found %3$d.'
 				: 'Expected %2$d blank lines after method, found %3$d.';
 		} else {
@@ -94,7 +95,7 @@ class MethodSpacingSniff implements Sniff
 		}
 
 		$fix = $phpcsFile->addFixableError(
-			sprintf($errorMessage, $minExpectedLines, $maxExpectedLines, $linesBetween ?? 0),
+			sprintf($errorMessage, $this->minLinesCount, $this->maxLinesCount, $linesBetween ?? 0),
 			$methodPointer,
 			self::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS
 		);
@@ -108,7 +109,7 @@ class MethodSpacingSniff implements Sniff
 		if ($linesBetween === null) {
 			$phpcsFile->fixer->addContent(
 				$methodEndPointer,
-				$phpcsFile->eolChar . str_repeat($phpcsFile->eolChar, $minExpectedLines) . IndentationHelper::getIndentation(
+				$phpcsFile->eolChar . str_repeat($phpcsFile->eolChar, $this->minLinesCount) . IndentationHelper::getIndentation(
 					$phpcsFile,
 					TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $methodPointer)
 				)
@@ -118,14 +119,14 @@ class MethodSpacingSniff implements Sniff
 				$phpcsFile->fixer->replaceToken($i, '');
 			}
 
-		} elseif ($linesBetween > $maxExpectedLines) {
-			$phpcsFile->fixer->addContent($methodEndPointer, str_repeat($phpcsFile->eolChar, $maxExpectedLines + 1));
+		} elseif ($linesBetween > $this->maxLinesCount) {
+			$phpcsFile->fixer->addContent($methodEndPointer, str_repeat($phpcsFile->eolChar, $this->maxLinesCount + 1));
 
 			for ($i = $methodEndPointer + 1; $i < TokenHelper::findFirstTokenOnLine($phpcsFile, $nextMethodFirstLinePointer); $i++) {
 				$phpcsFile->fixer->replaceToken($i, '');
 			}
 		} else {
-			$phpcsFile->fixer->addContent($methodEndPointer, str_repeat($phpcsFile->eolChar, $minExpectedLines - $linesBetween));
+			$phpcsFile->fixer->addContent($methodEndPointer, str_repeat($phpcsFile->eolChar, $this->minLinesCount - $linesBetween));
 		}
 
 		$phpcsFile->fixer->endChangeset();

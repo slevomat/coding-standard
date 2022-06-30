@@ -36,23 +36,22 @@ class SpreadOperatorSpacingSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $spreadOperatorPointer): void
 	{
+		$this->spacesCountAfterOperator = SniffSettingsHelper::normalizeInteger($this->spacesCountAfterOperator);
+
 		$pointerAfterWhitespace = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $spreadOperatorPointer + 1);
 
 		$whitespace = TokenHelper::getContent($phpcsFile, $spreadOperatorPointer + 1, $pointerAfterWhitespace - 1);
 
-		$requiredSpacesCountAfterOperator = SniffSettingsHelper::normalizeInteger($this->spacesCountAfterOperator);
-		$actualSpacesCountAfterOperator = strlen($whitespace);
-
-		if ($requiredSpacesCountAfterOperator === $actualSpacesCountAfterOperator) {
+		if ($this->spacesCountAfterOperator === strlen($whitespace)) {
 			return;
 		}
 
-		$errorMessage = $requiredSpacesCountAfterOperator === 0
+		$errorMessage = $this->spacesCountAfterOperator === 0
 			? 'There must be no whitespace after spread operator.'
 			: sprintf(
 				'There must be exactly %d whitespace%s after spread operator.',
-				$requiredSpacesCountAfterOperator,
-				$requiredSpacesCountAfterOperator !== 1 ? 's' : ''
+				$this->spacesCountAfterOperator,
+				$this->spacesCountAfterOperator !== 1 ? 's' : ''
 			);
 
 		$fix = $phpcsFile->addFixableError($errorMessage, $spreadOperatorPointer, self::CODE_INCORRECT_SPACES_AFTER_OPERATOR);
@@ -63,7 +62,7 @@ class SpreadOperatorSpacingSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->addContent($spreadOperatorPointer, str_repeat(' ', $requiredSpacesCountAfterOperator));
+		$phpcsFile->fixer->addContent($spreadOperatorPointer, str_repeat(' ', $this->spacesCountAfterOperator));
 		for ($i = $spreadOperatorPointer + 1; $i < $pointerAfterWhitespace; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}

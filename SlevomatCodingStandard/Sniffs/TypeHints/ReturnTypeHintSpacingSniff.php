@@ -47,6 +47,8 @@ class ReturnTypeHintSpacingSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $functionPointer): void
 	{
+		$this->spacesCountBeforeColon = SniffSettingsHelper::normalizeInteger($this->spacesCountBeforeColon);
+
 		$typeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 
 		if ($typeHint === null) {
@@ -123,14 +125,13 @@ class ReturnTypeHintSpacingSniff implements Sniff
 			}
 		}
 
-		$spacesCountBeforeColon = SniffSettingsHelper::normalizeInteger($this->spacesCountBeforeColon);
-		$expectedSpaces = str_repeat(' ', $spacesCountBeforeColon);
+		$expectedSpaces = str_repeat(' ', $this->spacesCountBeforeColon);
 
 		if (
 			$tokens[$colonPointer - 1]['code'] !== T_CLOSE_PARENTHESIS
 			&& $tokens[$colonPointer - 1]['content'] !== $expectedSpaces
 		) {
-			$fix = $spacesCountBeforeColon === 0
+			$fix = $this->spacesCountBeforeColon === 0
 				? $phpcsFile->addFixableError(
 					'There must be no whitespace between closing parenthesis and return type colon.',
 					$typeHintStartPointer,
@@ -139,8 +140,8 @@ class ReturnTypeHintSpacingSniff implements Sniff
 				: $phpcsFile->addFixableError(
 					sprintf(
 						'There must be exactly %d whitespace%s between closing parenthesis and return type colon.',
-						$spacesCountBeforeColon,
-						$spacesCountBeforeColon !== 1 ? 's' : ''
+						$this->spacesCountBeforeColon,
+						$this->spacesCountBeforeColon !== 1 ? 's' : ''
 					),
 					$typeHintStartPointer,
 					self::CODE_INCORRECT_SPACES_BEFORE_COLON
@@ -150,12 +151,12 @@ class ReturnTypeHintSpacingSniff implements Sniff
 				$phpcsFile->fixer->replaceToken($colonPointer - 1, $expectedSpaces);
 				$phpcsFile->fixer->endChangeset();
 			}
-		} elseif ($tokens[$colonPointer - 1]['code'] === T_CLOSE_PARENTHESIS && $spacesCountBeforeColon !== 0) {
+		} elseif ($tokens[$colonPointer - 1]['code'] === T_CLOSE_PARENTHESIS && $this->spacesCountBeforeColon !== 0) {
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
 					'There must be exactly %d whitespace%s between closing parenthesis and return type colon.',
-					$spacesCountBeforeColon,
-					$spacesCountBeforeColon !== 1 ? 's' : ''
+					$this->spacesCountBeforeColon,
+					$this->spacesCountBeforeColon !== 1 ? 's' : ''
 				),
 				$typeHintStartPointer,
 				self::CODE_INCORRECT_SPACES_BEFORE_COLON

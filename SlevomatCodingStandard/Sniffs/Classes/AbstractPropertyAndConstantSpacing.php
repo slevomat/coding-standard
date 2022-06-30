@@ -53,6 +53,11 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 	 */
 	public function process(File $phpcsFile, $pointer): int
 	{
+		$this->minLinesCountBeforeWithComment = SniffSettingsHelper::normalizeInteger($this->minLinesCountBeforeWithComment);
+		$this->maxLinesCountBeforeWithComment = SniffSettingsHelper::normalizeInteger($this->maxLinesCountBeforeWithComment);
+		$this->minLinesCountBeforeWithoutComment = SniffSettingsHelper::normalizeInteger($this->minLinesCountBeforeWithoutComment);
+		$this->maxLinesCountBeforeWithoutComment = SniffSettingsHelper::normalizeInteger($this->maxLinesCountBeforeWithoutComment);
+
 		$tokens = $phpcsFile->getTokens();
 
 		$classPointer = ClassHelper::getClassPointer($phpcsFile, $pointer);
@@ -81,11 +86,11 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 
 		$linesBetween = $tokens[$nextPointer]['line'] - $tokens[$semicolonPointer]['line'] - 1;
 		if (in_array($tokens[$nextPointer]['code'], [T_DOC_COMMENT_OPEN_TAG, T_COMMENT, T_ATTRIBUTE], true)) {
-			$minExpectedLines = SniffSettingsHelper::normalizeInteger($this->minLinesCountBeforeWithComment);
-			$maxExpectedLines = SniffSettingsHelper::normalizeInteger($this->maxLinesCountBeforeWithComment);
+			$minExpectedLines = $this->minLinesCountBeforeWithComment;
+			$maxExpectedLines = $this->maxLinesCountBeforeWithComment;
 		} else {
-			$minExpectedLines = SniffSettingsHelper::normalizeInteger($this->minLinesCountBeforeWithoutComment);
-			$maxExpectedLines = SniffSettingsHelper::normalizeInteger($this->maxLinesCountBeforeWithoutComment);
+			$minExpectedLines = $this->minLinesCountBeforeWithoutComment;
+			$maxExpectedLines = $this->maxLinesCountBeforeWithoutComment;
 		}
 
 		if ($linesBetween >= $minExpectedLines && $linesBetween <= $maxExpectedLines) {

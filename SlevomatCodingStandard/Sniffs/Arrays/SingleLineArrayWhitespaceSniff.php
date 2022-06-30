@@ -42,6 +42,8 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $stackPointer): int
 	{
+		$this->spacesAroundBrackets = SniffSettingsHelper::normalizeInteger($this->spacesAroundBrackets);
+
 		$tokens = $phpcsFile->getTokens();
 
 		$arrayStart = $stackPointer;
@@ -99,11 +101,6 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 		return $arrayStart + 1;
 	}
 
-	protected function getSpacesAroundBrackets(): int
-	{
-		return SniffSettingsHelper::normalizeInteger($this->spacesAroundBrackets);
-	}
-
 	private function checkWhitespaceInEmptyArray(File $phpcsFile, int $arrayStart, int $arrayEnd): void
 	{
 		if ($arrayEnd - $arrayStart === 1) {
@@ -130,21 +127,20 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 			$spaceLength = $tokens[$whitespacePointer]['length'];
 		}
 
-		$spacesAroundBrackets = $this->getSpacesAroundBrackets();
-		if ($spaceLength === $spacesAroundBrackets) {
+		if ($spaceLength === $this->spacesAroundBrackets) {
 			return;
 		}
 
-		$error = sprintf('Expected %d spaces after array opening bracket, %d found.', $spacesAroundBrackets, $spaceLength);
+		$error = sprintf('Expected %d spaces after array opening bracket, %d found.', $this->spacesAroundBrackets, $spaceLength);
 		$fix = $phpcsFile->addFixableError($error, $arrayStart, self::CODE_SPACE_AFTER_ARRAY_OPEN);
 		if (!$fix) {
 			return;
 		}
 
 		if ($spaceLength === 0) {
-			$phpcsFile->fixer->addContent($arrayStart, str_repeat(' ', $spacesAroundBrackets));
+			$phpcsFile->fixer->addContent($arrayStart, str_repeat(' ', $this->spacesAroundBrackets));
 		} else {
-			$phpcsFile->fixer->replaceToken($whitespacePointer, str_repeat(' ', $spacesAroundBrackets));
+			$phpcsFile->fixer->replaceToken($whitespacePointer, str_repeat(' ', $this->spacesAroundBrackets));
 		}
 	}
 
@@ -159,21 +155,20 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 			$spaceLength = $tokens[$whitespacePointer]['length'];
 		}
 
-		$spacesAroundBrackets = $this->getSpacesAroundBrackets();
-		if ($spaceLength === $spacesAroundBrackets) {
+		if ($spaceLength === $this->spacesAroundBrackets) {
 			return;
 		}
 
-		$error = sprintf('Expected %d spaces before array closing bracket, %d found.', $spacesAroundBrackets, $spaceLength);
+		$error = sprintf('Expected %d spaces before array closing bracket, %d found.', $this->spacesAroundBrackets, $spaceLength);
 		$fix = $phpcsFile->addFixableError($error, $arrayEnd, self::CODE_SPACE_BEFORE_ARRAY_CLOSE);
 		if (!$fix) {
 			return;
 		}
 
 		if ($spaceLength === 0) {
-			$phpcsFile->fixer->addContentBefore($arrayEnd, str_repeat(' ', $spacesAroundBrackets));
+			$phpcsFile->fixer->addContentBefore($arrayEnd, str_repeat(' ', $this->spacesAroundBrackets));
 		} else {
-			$phpcsFile->fixer->replaceToken($whitespacePointer, str_repeat(' ', $spacesAroundBrackets));
+			$phpcsFile->fixer->replaceToken($whitespacePointer, str_repeat(' ', $this->spacesAroundBrackets));
 		}
 	}
 

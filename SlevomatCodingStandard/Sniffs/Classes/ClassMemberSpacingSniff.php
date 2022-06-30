@@ -62,6 +62,8 @@ class ClassMemberSpacingSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $classPointer): void
 	{
+		$this->linesCountBetweenMembers = SniffSettingsHelper::normalizeInteger($this->linesCountBetweenMembers);
+
 		$tokens = $phpcsFile->getTokens();
 
 		$memberPointer = null;
@@ -110,18 +112,17 @@ class ClassMemberSpacingSniff implements Sniff
 			$memberStartPointer = $this->getMemberStartPointer($phpcsFile, $memberPointer);
 
 			$actualLinesCount = $tokens[$memberStartPointer]['line'] - $tokens[$previousMemberEndPointer]['line'] - 1;
-			$requiredLinesCount = SniffSettingsHelper::normalizeInteger($this->linesCountBetweenMembers);
 
-			if ($actualLinesCount === $requiredLinesCount) {
+			if ($actualLinesCount === $this->linesCountBetweenMembers) {
 				continue;
 			}
 
-			$errorMessage = $requiredLinesCount === 1
+			$errorMessage = $this->linesCountBetweenMembers === 1
 				? 'Expected 1 blank line between class members, found %2$d.'
 				: 'Expected %1$d blank lines between class members, found %2$d.';
 
 			$fix = $phpcsFile->addFixableError(
-				sprintf($errorMessage, $requiredLinesCount, $actualLinesCount),
+				sprintf($errorMessage, $this->linesCountBetweenMembers, $actualLinesCount),
 				$memberPointer,
 				self::CODE_INCORRECT_COUNT_OF_BLANK_LINES_BETWEEN_MEMBERS
 			);
@@ -129,7 +130,10 @@ class ClassMemberSpacingSniff implements Sniff
 				continue;
 			}
 
-			$newLines = str_repeat($phpcsFile->eolChar, $requiredLinesCount + ($hasCommentWithNewLineAfterPreviousMember ? 0 : 1));
+			$newLines = str_repeat(
+				$phpcsFile->eolChar,
+				$this->linesCountBetweenMembers + ($hasCommentWithNewLineAfterPreviousMember ? 0 : 1)
+			);
 
 			$phpcsFile->fixer->beginChangeset();
 

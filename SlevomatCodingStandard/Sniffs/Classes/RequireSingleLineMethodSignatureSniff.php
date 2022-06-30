@@ -37,6 +37,8 @@ class RequireSingleLineMethodSignatureSniff extends AbstractMethodSignature
 	 */
 	public function process(File $phpcsFile, $methodPointer): void
 	{
+		$this->maxLineLength = SniffSettingsHelper::normalizeInteger($this->maxLineLength);
+
 		if (!FunctionHelper::isMethod($phpcsFile, $methodPointer)) {
 			return;
 		}
@@ -67,8 +69,7 @@ class RequireSingleLineMethodSignatureSniff extends AbstractMethodSignature
 			return;
 		}
 
-		$maxLineLength = SniffSettingsHelper::normalizeInteger($this->maxLineLength);
-		if ($maxLineLength !== 0 && strlen($signatureWithoutTabIndentation) > $maxLineLength) {
+		if ($this->maxLineLength !== 0 && strlen($signatureWithoutTabIndentation) > $this->maxLineLength) {
 			return;
 		}
 

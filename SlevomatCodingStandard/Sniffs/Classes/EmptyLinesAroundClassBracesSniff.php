@@ -46,6 +46,9 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $stackPointer): void
 	{
+		$this->linesCountAfterOpeningBrace = SniffSettingsHelper::normalizeInteger($this->linesCountAfterOpeningBrace);
+		$this->linesCountBeforeClosingBrace = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeClosingBrace);
+
 		$this->processOpeningBrace($phpcsFile, $stackPointer);
 		$this->processClosingBrace($phpcsFile, $stackPointer);
 	}
@@ -58,14 +61,13 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 		$openerToken = $tokens[$openerPointer];
 		$nextPointerAfterOpeningBrace = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $openerPointer + 1);
 		$nextTokenAfterOpeningBrace = $tokens[$nextPointerAfterOpeningBrace];
-		$linesCountAfterOpeningBrace = SniffSettingsHelper::normalizeInteger($this->linesCountAfterOpeningBrace);
 		$lines = $nextTokenAfterOpeningBrace['line'] - $openerToken['line'] - 1;
 
-		if ($lines === $linesCountAfterOpeningBrace) {
+		if ($lines === $this->linesCountAfterOpeningBrace) {
 			return;
 		}
 
-		if ($linesCountAfterOpeningBrace === 1) {
+		if ($this->linesCountAfterOpeningBrace === 1) {
 			$fix = $phpcsFile->addFixableError(
 				sprintf('There must be one empty line after %s opening brace.', $typeToken['content']),
 				$openerPointer,
@@ -76,7 +78,7 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 		} else {
 			$fix = $phpcsFile->addFixableError(sprintf(
 				'There must be exactly %d empty lines after %s opening brace.',
-				$linesCountAfterOpeningBrace,
+				$this->linesCountAfterOpeningBrace,
 				$typeToken['content']
 			), $openerPointer, self::CODE_INCORRECT_EMPTY_LINES_AFTER_OPENING_BRACE);
 		}
@@ -87,12 +89,12 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		if ($lines < $linesCountAfterOpeningBrace) {
-			for ($i = $lines; $i < $linesCountAfterOpeningBrace; $i++) {
+		if ($lines < $this->linesCountAfterOpeningBrace) {
+			for ($i = $lines; $i < $this->linesCountAfterOpeningBrace; $i++) {
 				$phpcsFile->fixer->addNewline($openerPointer);
 			}
 		} else {
-			for ($i = $openerPointer + $linesCountAfterOpeningBrace + 2; $i < $nextPointerAfterOpeningBrace; $i++) {
+			for ($i = $openerPointer + $this->linesCountAfterOpeningBrace + 2; $i < $nextPointerAfterOpeningBrace; $i++) {
 				if ($tokens[$i]['content'] !== $phpcsFile->eolChar) {
 					break;
 				}
@@ -111,14 +113,13 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 		$closerToken = $tokens[$closerPointer];
 		$previousPointerBeforeClosingBrace = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $closerPointer - 1);
 		$previousTokenBeforeClosingBrace = $tokens[$previousPointerBeforeClosingBrace];
-		$linesCountBeforeClosingBrace = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeClosingBrace);
 		$lines = $closerToken['line'] - $previousTokenBeforeClosingBrace['line'] - 1;
 
-		if ($lines === $linesCountBeforeClosingBrace) {
+		if ($lines === $this->linesCountBeforeClosingBrace) {
 			return;
 		}
 
-		if ($linesCountBeforeClosingBrace === 1) {
+		if ($this->linesCountBeforeClosingBrace === 1) {
 			$fix = $phpcsFile->addFixableError(
 				sprintf('There must be one empty line before %s closing brace.', $typeToken['content']),
 				$closerPointer,
@@ -129,7 +130,7 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 		} else {
 			$fix = $phpcsFile->addFixableError(sprintf(
 				'There must be exactly %d empty lines before %s closing brace.',
-				$linesCountBeforeClosingBrace,
+				$this->linesCountBeforeClosingBrace,
 				$typeToken['content']
 			), $closerPointer, self::CODE_INCORRECT_EMPTY_LINES_BEFORE_CLOSING_BRACE);
 		}
@@ -140,12 +141,12 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		if ($lines < $linesCountBeforeClosingBrace) {
-			for ($i = $lines; $i < $linesCountBeforeClosingBrace; $i++) {
+		if ($lines < $this->linesCountBeforeClosingBrace) {
+			for ($i = $lines; $i < $this->linesCountBeforeClosingBrace; $i++) {
 				$phpcsFile->fixer->addNewlineBefore($closerPointer);
 			}
 		} else {
-			for ($i = $previousPointerBeforeClosingBrace + $linesCountBeforeClosingBrace + 2; $i < $closerPointer; $i++) {
+			for ($i = $previousPointerBeforeClosingBrace + $this->linesCountBeforeClosingBrace + 2; $i < $closerPointer; $i++) {
 				$phpcsFile->fixer->replaceToken($i, '');
 			}
 		}

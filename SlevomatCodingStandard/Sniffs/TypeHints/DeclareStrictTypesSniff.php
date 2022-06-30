@@ -56,6 +56,10 @@ class DeclareStrictTypesSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
+		$this->linesCountBeforeDeclare = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeDeclare);
+		$this->linesCountAfterDeclare = SniffSettingsHelper::normalizeInteger($this->linesCountAfterDeclare);
+		$this->spacesCountAroundEqualsSign = SniffSettingsHelper::normalizeInteger($this->spacesCountAroundEqualsSign);
+
 		if (TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $openTagPointer - 1) !== null) {
 			return;
 		}
@@ -128,8 +132,7 @@ class DeclareStrictTypesSniff implements Sniff
 		}
 
 		$strictTypesContent = TokenHelper::getContent($phpcsFile, $strictTypesPointer, $numberPointer);
-		$spacesCountAroundEqualsSign = SniffSettingsHelper::normalizeInteger($this->spacesCountAroundEqualsSign);
-		$format = sprintf('strict_types%1$s=%1$s1', str_repeat(' ', $spacesCountAroundEqualsSign));
+		$format = sprintf('strict_types%1$s=%1$s1', str_repeat(' ', $this->spacesCountAroundEqualsSign));
 		if ($strictTypesContent !== $format) {
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
@@ -161,7 +164,6 @@ class DeclareStrictTypesSniff implements Sniff
 			$whitespaceBefore .= TokenHelper::getContent($phpcsFile, $pointerBeforeDeclare + 1, $declarePointer - 1);
 		}
 
-		$requiredLinesCountBeforeDeclare = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeDeclare);
 		if ($this->declareOnFirstLine) {
 			if ($whitespaceBefore !== ' ') {
 				$fix = $phpcsFile->addFixableError(
@@ -181,12 +183,12 @@ class DeclareStrictTypesSniff implements Sniff
 		} else {
 			$declareOnFirstLine = $tokens[$declarePointer]['line'] === $tokens[$openTagPointer]['line'];
 			$linesCountBefore = $declareOnFirstLine ? 0 : substr_count($whitespaceBefore, $phpcsFile->eolChar) - 1;
-			if ($declareOnFirstLine || $linesCountBefore !== $requiredLinesCountBeforeDeclare) {
+			if ($declareOnFirstLine || $linesCountBefore !== $this->linesCountBeforeDeclare) {
 				$fix = $phpcsFile->addFixableError(
 					sprintf(
 						'Expected %d line%s before declare statement, found %d.',
-						$requiredLinesCountBeforeDeclare,
-						$requiredLinesCountBeforeDeclare === 1 ? '' : 's',
+						$this->linesCountBeforeDeclare,
+						$this->linesCountBeforeDeclare === 1 ? '' : 's',
 						$linesCountBefore
 					),
 					$declarePointer,
@@ -202,7 +204,7 @@ class DeclareStrictTypesSniff implements Sniff
 					for ($i = $pointerBeforeDeclare + 1; $i < $declarePointer; $i++) {
 						$phpcsFile->fixer->replaceToken($i, '');
 					}
-					for ($i = 0; $i <= $requiredLinesCountBeforeDeclare; $i++) {
+					for ($i = 0; $i <= $this->linesCountBeforeDeclare; $i++) {
 						$phpcsFile->fixer->addNewline($pointerBeforeDeclare);
 					}
 					$phpcsFile->fixer->endChangeset();
@@ -219,19 +221,18 @@ class DeclareStrictTypesSniff implements Sniff
 
 		$whitespaceAfter = TokenHelper::getContent($phpcsFile, $declareSemicolonPointer + 1, $pointerAfterWhitespaceEnd - 1);
 
-		$requiredLinesCountAfter = SniffSettingsHelper::normalizeInteger($this->linesCountAfterDeclare);
 		$newLinesAfter = substr_count($whitespaceAfter, $phpcsFile->eolChar);
 		$linesCountAfter = $newLinesAfter > 0 ? $newLinesAfter - 1 : 0;
 
-		if ($linesCountAfter === $requiredLinesCountAfter) {
+		if ($linesCountAfter === $this->linesCountAfterDeclare) {
 			return;
 		}
 
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
 				'Expected %d line%s after declare statement, found %d.',
-				$requiredLinesCountAfter,
-				$requiredLinesCountAfter === 1 ? '' : 's',
+				$this->linesCountAfterDeclare,
+				$this->linesCountAfterDeclare === 1 ? '' : 's',
 				$linesCountAfter
 			),
 			$declarePointer,
@@ -245,7 +246,7 @@ class DeclareStrictTypesSniff implements Sniff
 		for ($i = $declareSemicolonPointer + 1; $i < $pointerAfterWhitespaceEnd; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
-		for ($i = 0; $i <= $requiredLinesCountAfter; $i++) {
+		for ($i = 0; $i <= $this->linesCountAfterDeclare; $i++) {
 			$phpcsFile->fixer->addNewline($declareSemicolonPointer);
 		}
 		$phpcsFile->fixer->endChangeset();
@@ -255,8 +256,8 @@ class DeclareStrictTypesSniff implements Sniff
 	{
 		return sprintf(
 			'strict_types%s=%s1',
-			str_repeat(' ', SniffSettingsHelper::normalizeInteger($this->spacesCountAroundEqualsSign)),
-			str_repeat(' ', SniffSettingsHelper::normalizeInteger($this->spacesCountAroundEqualsSign))
+			str_repeat(' ', $this->spacesCountAroundEqualsSign),
+			str_repeat(' ', $this->spacesCountAroundEqualsSign)
 		);
 	}
 

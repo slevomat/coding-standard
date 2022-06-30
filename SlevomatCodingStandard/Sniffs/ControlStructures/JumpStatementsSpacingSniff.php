@@ -58,6 +58,20 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 	 */
 	public function process(File $phpcsFile, $jumpStatementPointer): void
 	{
+		$this->linesCountBefore = SniffSettingsHelper::normalizeInteger($this->linesCountBefore);
+		$this->linesCountBeforeFirst = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirst);
+		$this->linesCountBeforeWhenFirstInCaseOrDefault = SniffSettingsHelper::normalizeNullableInteger(
+			$this->linesCountBeforeWhenFirstInCaseOrDefault
+		);
+		$this->linesCountAfter = SniffSettingsHelper::normalizeInteger($this->linesCountAfter);
+		$this->linesCountAfterLast = SniffSettingsHelper::normalizeInteger($this->linesCountAfterLast);
+		$this->linesCountAfterWhenLastInCaseOrDefault = SniffSettingsHelper::normalizeNullableInteger(
+			$this->linesCountAfterWhenLastInCaseOrDefault
+		);
+		$this->linesCountAfterWhenLastInLastCaseOrDefault = SniffSettingsHelper::normalizeNullableInteger(
+			$this->linesCountAfterWhenLastInLastCaseOrDefault
+		);
+
 		if ($this->isOneOfYieldSpecialCases($phpcsFile, $jumpStatementPointer)) {
 			return;
 		}
@@ -91,7 +105,7 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 
 	protected function getLinesCountBefore(): int
 	{
-		return SniffSettingsHelper::normalizeInteger($this->linesCountBefore);
+		return $this->linesCountBefore;
 	}
 
 	protected function getLinesCountBeforeFirst(File $phpcsFile, int $jumpStatementPointer): int
@@ -100,15 +114,15 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 			$this->linesCountBeforeWhenFirstInCaseOrDefault !== null
 			&& $this->isFirstInCaseOrDefault($phpcsFile, $jumpStatementPointer)
 		) {
-			return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeWhenFirstInCaseOrDefault);
+			return $this->linesCountBeforeWhenFirstInCaseOrDefault;
 		}
 
-		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirst);
+		return $this->linesCountBeforeFirst;
 	}
 
 	protected function getLinesCountAfter(): int
 	{
-		return SniffSettingsHelper::normalizeInteger($this->linesCountAfter);
+		return $this->linesCountAfter;
 	}
 
 	/**
@@ -120,17 +134,17 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 			$this->linesCountAfterWhenLastInLastCaseOrDefault !== null
 			&& $this->isLastInLastCaseOrDefault($phpcsFile, $jumpStatementEndPointer)
 		) {
-			return SniffSettingsHelper::normalizeInteger($this->linesCountAfterWhenLastInLastCaseOrDefault);
+			return $this->linesCountAfterWhenLastInLastCaseOrDefault;
 		}
 
 		if (
 			$this->linesCountAfterWhenLastInCaseOrDefault !== null
 			&& $this->isLastInCaseOrDefault($phpcsFile, $jumpStatementEndPointer)
 		) {
-			return SniffSettingsHelper::normalizeInteger($this->linesCountAfterWhenLastInCaseOrDefault);
+			return $this->linesCountAfterWhenLastInCaseOrDefault;
 		}
 
-		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterLast);
+		return $this->linesCountAfterLast;
 	}
 
 	protected function checkLinesBefore(File $phpcsFile, int $jumpStatementPointer): void

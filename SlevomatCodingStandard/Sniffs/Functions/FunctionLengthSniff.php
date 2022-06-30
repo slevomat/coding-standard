@@ -40,6 +40,8 @@ class FunctionLengthSniff implements Sniff
 	 */
 	public function process(File $file, $functionPointer): void
 	{
+		$this->maxLinesLength = SniffSettingsHelper::normalizeInteger($this->maxLinesLength);
+
 		$flags = array_keys(array_filter([
 			FunctionHelper::LINE_INCLUDE_COMMENT => $this->includeComments,
 			FunctionHelper::LINE_INCLUDE_WHITESPACE => $this->includeWhitespace,
@@ -50,7 +52,7 @@ class FunctionLengthSniff implements Sniff
 
 		$length = FunctionHelper::getFunctionLengthInLines($file, $functionPointer, $flags);
 
-		if ($length <= SniffSettingsHelper::normalizeInteger($this->maxLinesLength)) {
+		if ($length <= $this->maxLinesLength) {
 			return;
 		}
 

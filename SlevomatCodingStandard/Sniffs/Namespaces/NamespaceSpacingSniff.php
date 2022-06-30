@@ -46,6 +46,9 @@ class NamespaceSpacingSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $namespacePointer): void
 	{
+		$this->linesCountBeforeNamespace = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeNamespace);
+		$this->linesCountAfterNamespace = SniffSettingsHelper::normalizeInteger($this->linesCountAfterNamespace);
+
 		$this->checkLinesBeforeNamespace($phpcsFile, $namespacePointer);
 		$this->checkLinesAfterNamespace($phpcsFile, $namespacePointer);
 	}
@@ -71,18 +74,17 @@ class NamespaceSpacingSniff implements Sniff
 			$whitespaceBeforeNamespace .= TokenHelper::getContent($phpcsFile, $pointerBeforeNamespace + 1, $namespacePointer - 1);
 		}
 
-		$requiredLinesCountBeforeNamespace = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeNamespace);
 		$actualLinesCountBeforeNamespace = substr_count($whitespaceBeforeNamespace, $phpcsFile->eolChar) - 1;
 
-		if ($actualLinesCountBeforeNamespace === $requiredLinesCountBeforeNamespace) {
+		if ($actualLinesCountBeforeNamespace === $this->linesCountBeforeNamespace) {
 			return;
 		}
 
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
 				'Expected %d line%s before namespace statement, found %d.',
-				$requiredLinesCountBeforeNamespace,
-				$requiredLinesCountBeforeNamespace === 1 ? '' : 's',
+				$this->linesCountBeforeNamespace,
+				$this->linesCountBeforeNamespace === 1 ? '' : 's',
 				$actualLinesCountBeforeNamespace
 			),
 			$namespacePointer,
@@ -107,7 +109,7 @@ class NamespaceSpacingSniff implements Sniff
 		for ($i = $pointerBeforeNamespace + 1; $i < $namespacePointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
-		for ($i = 0; $i <= $requiredLinesCountBeforeNamespace; $i++) {
+		for ($i = 0; $i <= $this->linesCountBeforeNamespace; $i++) {
 			$phpcsFile->fixer->addNewline($pointerBeforeNamespace);
 		}
 		$phpcsFile->fixer->endChangeset();
@@ -129,18 +131,17 @@ class NamespaceSpacingSniff implements Sniff
 
 		$whitespaceAfterNamespace = TokenHelper::getContent($phpcsFile, $namespaceSemicolonPointer + 1, $pointerAfterWhitespaceEnd - 1);
 
-		$requiredLinesCountAfterNamespace = SniffSettingsHelper::normalizeInteger($this->linesCountAfterNamespace);
 		$actualLinesCountAfterNamespace = substr_count($whitespaceAfterNamespace, $phpcsFile->eolChar) - 1;
 
-		if ($actualLinesCountAfterNamespace === $requiredLinesCountAfterNamespace) {
+		if ($actualLinesCountAfterNamespace === $this->linesCountAfterNamespace) {
 			return;
 		}
 
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
 				'Expected %d line%s after namespace statement, found %d.',
-				$requiredLinesCountAfterNamespace,
-				$requiredLinesCountAfterNamespace === 1 ? '' : 's',
+				$this->linesCountAfterNamespace,
+				$this->linesCountAfterNamespace === 1 ? '' : 's',
 				$actualLinesCountAfterNamespace
 			),
 			$namespacePointer,
@@ -155,7 +156,7 @@ class NamespaceSpacingSniff implements Sniff
 		for ($i = $namespaceSemicolonPointer + 1; $i < $pointerAfterWhitespaceEnd; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
-		for ($i = 0; $i <= $requiredLinesCountAfterNamespace; $i++) {
+		for ($i = 0; $i <= $this->linesCountAfterNamespace; $i++) {
 			$phpcsFile->fixer->addNewline($namespaceSemicolonPointer);
 		}
 		$phpcsFile->fixer->endChangeset();

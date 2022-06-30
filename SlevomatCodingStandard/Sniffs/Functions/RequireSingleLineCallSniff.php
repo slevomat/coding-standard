@@ -42,6 +42,8 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 	 */
 	public function process(File $phpcsFile, $stringPointer): void
 	{
+		$this->maxLineLength = SniffSettingsHelper::normalizeInteger($this->maxLineLength);
+
 		if (!$this->isCall($phpcsFile, $stringPointer)) {
 			return;
 		}
@@ -188,13 +190,11 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 
 	private function shouldReportError(int $lineLength): bool
 	{
-		$maxLineLength = SniffSettingsHelper::normalizeInteger($this->maxLineLength);
-
-		if ($maxLineLength === 0) {
+		if ($this->maxLineLength === 0) {
 			return true;
 		}
 
-		return $lineLength <= $maxLineLength;
+		return $lineLength <= $this->maxLineLength;
 	}
 
 }

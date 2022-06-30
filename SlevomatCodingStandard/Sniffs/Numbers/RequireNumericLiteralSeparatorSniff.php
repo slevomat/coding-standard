@@ -45,6 +45,8 @@ class RequireNumericLiteralSeparatorSniff implements Sniff
 	public function process(File $phpcsFile, $numberPointer): void
 	{
 		$this->enable = SniffSettingsHelper::isEnabledByPhpVersion($this->enable, 70400);
+		$this->minDigitsBeforeDecimalPoint = SniffSettingsHelper::normalizeInteger($this->minDigitsBeforeDecimalPoint);
+		$this->minDigitsAfterDecimalPoint = SniffSettingsHelper::normalizeInteger($this->minDigitsAfterDecimalPoint);
 
 		if (!$this->enable) {
 			return;
@@ -64,9 +66,7 @@ class RequireNumericLiteralSeparatorSniff implements Sniff
 			return;
 		}
 
-		$regexp = '~(?:^\\d{' . SniffSettingsHelper::normalizeInteger(
-			$this->minDigitsBeforeDecimalPoint
-		) . '}|\.\\d{' . SniffSettingsHelper::normalizeInteger($this->minDigitsAfterDecimalPoint) . '})~';
+		$regexp = '~(?:^\\d{' . $this->minDigitsBeforeDecimalPoint . '}|\.\\d{' . $this->minDigitsAfterDecimalPoint . '})~';
 
 		if (preg_match($regexp, $number) === 0) {
 			return;

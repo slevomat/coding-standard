@@ -42,6 +42,11 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 	 */
 	public function process(File $phpcsFile, $parentPointer): void
 	{
+		$this->linesCountBefore = SniffSettingsHelper::normalizeInteger($this->linesCountBefore);
+		$this->linesCountBeforeFirst = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirst);
+		$this->linesCountAfter = SniffSettingsHelper::normalizeInteger($this->linesCountAfter);
+		$this->linesCountAfterLast = SniffSettingsHelper::normalizeInteger($this->linesCountAfterLast);
+
 		$tokens = $phpcsFile->getTokens();
 
 		if (array_key_exists('nested_parenthesis', $tokens[$parentPointer])) {
@@ -89,7 +94,7 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 
 	protected function getLinesCountBefore(): int
 	{
-		return SniffSettingsHelper::normalizeInteger($this->linesCountBefore);
+		return $this->linesCountBefore;
 	}
 
 	/**
@@ -97,12 +102,12 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 	 */
 	protected function getLinesCountBeforeFirst(File $phpcsFile, int $parentPointer): int
 	{
-		return SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirst);
+		return $this->linesCountBeforeFirst;
 	}
 
 	protected function getLinesCountAfter(): int
 	{
-		return SniffSettingsHelper::normalizeInteger($this->linesCountAfter);
+		return $this->linesCountAfter;
 	}
 
 	/**
@@ -110,7 +115,7 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 	 */
 	protected function getLinesCountAfterLast(File $phpcsFile, int $parentPointer, int $parentEndPointer): int
 	{
-		return SniffSettingsHelper::normalizeInteger($this->linesCountAfterLast);
+		return $this->linesCountAfterLast;
 	}
 
 }

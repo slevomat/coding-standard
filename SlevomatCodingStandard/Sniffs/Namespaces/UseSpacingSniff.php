@@ -53,6 +53,10 @@ class UseSpacingSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
+		$this->linesCountBeforeFirstUse = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirstUse);
+		$this->linesCountBetweenUseTypes = SniffSettingsHelper::normalizeInteger($this->linesCountBetweenUseTypes);
+		$this->linesCountAfterLastUse = SniffSettingsHelper::normalizeInteger($this->linesCountAfterLastUse);
+
 		if (TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $openTagPointer - 1) !== null) {
 			return;
 		}
@@ -92,18 +96,17 @@ class UseSpacingSniff implements Sniff
 			$pointerBeforeFirstUse = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $useStartPointer - 1);
 		}
 
-		$requiredLinesCountBeforeFirstUse = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirstUse);
 		$actualLinesCountBeforeFirstUse = $tokens[$useStartPointer]['line'] - $tokens[$pointerBeforeFirstUse]['line'] - 1;
 
-		if ($actualLinesCountBeforeFirstUse === $requiredLinesCountBeforeFirstUse) {
+		if ($actualLinesCountBeforeFirstUse === $this->linesCountBeforeFirstUse) {
 			return;
 		}
 
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
 				'Expected %d line%s before first use statement, found %d.',
-				$requiredLinesCountBeforeFirstUse,
-				$requiredLinesCountBeforeFirstUse === 1 ? '' : 's',
+				$this->linesCountBeforeFirstUse,
+				$this->linesCountBeforeFirstUse === 1 ? '' : 's',
 				$actualLinesCountBeforeFirstUse
 			),
 			$firstUse->getPointer(),
@@ -123,7 +126,7 @@ class UseSpacingSniff implements Sniff
 		for ($i = $pointerBeforeFirstUse + 1; $i < $useStartPointer; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
-		for ($i = 0; $i <= $requiredLinesCountBeforeFirstUse; $i++) {
+		for ($i = 0; $i <= $this->linesCountBeforeFirstUse; $i++) {
 			$phpcsFile->fixer->addNewline($pointerBeforeFirstUse);
 		}
 		$phpcsFile->fixer->endChangeset();
@@ -154,18 +157,17 @@ class UseSpacingSniff implements Sniff
 			$pointerAfterWhitespaceEnd = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $useEndPointer + 1);
 		}
 
-		$requiredLinesCountAfterLastUse = SniffSettingsHelper::normalizeInteger($this->linesCountAfterLastUse);
 		$actualLinesCountAfterLastUse = $tokens[$pointerAfterWhitespaceEnd]['line'] - $tokens[$useEndPointer]['line'] - 1;
 
-		if ($actualLinesCountAfterLastUse === $requiredLinesCountAfterLastUse) {
+		if ($actualLinesCountAfterLastUse === $this->linesCountAfterLastUse) {
 			return;
 		}
 
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
 				'Expected %d line%s after last use statement, found %d.',
-				$requiredLinesCountAfterLastUse,
-				$requiredLinesCountAfterLastUse === 1 ? '' : 's',
+				$this->linesCountAfterLastUse,
+				$this->linesCountAfterLastUse === 1 ? '' : 's',
 				$actualLinesCountAfterLastUse
 			),
 			$lastUse->getPointer(),
@@ -181,7 +183,7 @@ class UseSpacingSniff implements Sniff
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
 
-		$linesToAdd = $requiredLinesCountAfterLastUse;
+		$linesToAdd = $this->linesCountAfterLastUse;
 		if (CommentHelper::isLineComment($phpcsFile, $useEndPointer)) {
 			$linesToAdd--;
 		}
@@ -277,8 +279,6 @@ class UseSpacingSniff implements Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
-		$requiredLinesCountBetweenUseTypes = SniffSettingsHelper::normalizeInteger($this->linesCountBetweenUseTypes);
-
 		$previousUse = null;
 		foreach ($useStatements as $use) {
 			if ($previousUse === null) {
@@ -307,7 +307,7 @@ class UseSpacingSniff implements Sniff
 
 			$actualLinesCountAfterPreviousUse = $tokens[$useStartPointer]['line'] - $tokens[$previousUse->getPointer()]['line'] - 1;
 
-			if ($actualLinesCountAfterPreviousUse === $requiredLinesCountBetweenUseTypes) {
+			if ($actualLinesCountAfterPreviousUse === $this->linesCountBetweenUseTypes) {
 				$previousUse = $use;
 				continue;
 			}
@@ -315,8 +315,8 @@ class UseSpacingSniff implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
 					'Expected %d line%s between different types of use statement, found %d.',
-					$requiredLinesCountBetweenUseTypes,
-					$requiredLinesCountBetweenUseTypes === 1 ? '' : 's',
+					$this->linesCountBetweenUseTypes,
+					$this->linesCountBetweenUseTypes === 1 ? '' : 's',
 					$actualLinesCountAfterPreviousUse
 				),
 				$use->getPointer(),
@@ -335,7 +335,7 @@ class UseSpacingSniff implements Sniff
 			for ($i = $previousUseSemicolonPointer + 1; $i < $useStartPointer; $i++) {
 				$phpcsFile->fixer->replaceToken($i, '');
 			}
-			for ($i = 0; $i <= $requiredLinesCountBetweenUseTypes; $i++) {
+			for ($i = 0; $i <= $this->linesCountBetweenUseTypes; $i++) {
 				$phpcsFile->fixer->addNewline($previousUseSemicolonPointer);
 			}
 			$phpcsFile->fixer->endChangeset();

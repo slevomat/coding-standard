@@ -41,6 +41,8 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 	 */
 	public function process(File $phpcsFile, $methodPointer): void
 	{
+		$this->minLineLength = SniffSettingsHelper::normalizeInteger($this->minLineLength);
+
 		if (!FunctionHelper::isMethod($phpcsFile, $methodPointer)) {
 			return;
 		}
@@ -76,8 +78,7 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 			return;
 		}
 
-		$minLineLength = SniffSettingsHelper::normalizeInteger($this->minLineLength);
-		if ($minLineLength !== 0 && strlen($signatureWithoutTabIndentation) < $minLineLength) {
+		if ($this->minLineLength !== 0 && strlen($signatureWithoutTabIndentation) < $this->minLineLength) {
 			return;
 		}
 

@@ -46,6 +46,8 @@ class ReferenceSpacingSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $referencePointer): void
 	{
+		$this->spacesCountAfterReference = SniffSettingsHelper::normalizeInteger($this->spacesCountAfterReference);
+
 		if (!$this->isReference($phpcsFile, $referencePointer)) {
 			return;
 		}
@@ -54,19 +56,18 @@ class ReferenceSpacingSniff implements Sniff
 
 		$whitespace = TokenHelper::getContent($phpcsFile, $referencePointer + 1, $pointerAfterWhitespace - 1);
 
-		$requiredSpacesCount = SniffSettingsHelper::normalizeInteger($this->spacesCountAfterReference);
 		$actualSpacesCount = strlen($whitespace);
 
-		if ($requiredSpacesCount === $actualSpacesCount) {
+		if ($this->spacesCountAfterReference === $actualSpacesCount) {
 			return;
 		}
 
-		$errorMessage = $requiredSpacesCount === 0
+		$errorMessage = $this->spacesCountAfterReference === 0
 			? 'There must be no whitespace after reference.'
 			: sprintf(
 				'There must be exactly %d whitespace%s after reference.',
-				$requiredSpacesCount,
-				$requiredSpacesCount !== 1 ? 's' : ''
+				$this->spacesCountAfterReference,
+				$this->spacesCountAfterReference !== 1 ? 's' : ''
 			);
 
 		$fix = $phpcsFile->addFixableError($errorMessage, $referencePointer, self::CODE_INCORRECT_SPACES_AFTER_REFERENCE);
@@ -77,7 +78,7 @@ class ReferenceSpacingSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->addContent($referencePointer, str_repeat(' ', $requiredSpacesCount));
+		$phpcsFile->fixer->addContent($referencePointer, str_repeat(' ', $this->spacesCountAfterReference));
 		for ($i = $referencePointer + 1; $i < $pointerAfterWhitespace; $i++) {
 			$phpcsFile->fixer->replaceToken($i, '');
 		}
