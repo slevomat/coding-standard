@@ -781,6 +781,14 @@ Sniff provides the following settings:
 
 However, if you prefer Yoda conditions, you can use `RequireYodaComparisonSniff`.
 
+#### SlevomatCodingStandard.Files.FileLength
+
+Disallows long files. This sniff provides the following settings:
+
+* `includeComments`: should comments be included in the count (default value is false).
+* `includeWhitespace`: shoud empty lines be included in the count (default value is false).
+* `maxLinesLength`: specifies max allowed function lines length (default value is 250).
+
 #### SlevomatCodingStandard.Files.LineLength
 
 Enforces maximum length of a single line of code.
