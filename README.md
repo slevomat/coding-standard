@@ -302,7 +302,7 @@ Reports closures not using `$this` that are not declared `static`.
 
 #### SlevomatCodingStandard.Functions.FunctionLength
 
-Disallows long functions. This sniff provides the following setting:
+Disallows long functions. This sniff provides the following settings:
 
 * `includeComments`: should comments be included in the count (default value is false).
 * `includeWhitespace`: shoud empty lines be included in the count (default value is false).
@@ -493,6 +493,14 @@ Sniff provides the following settings:
 
 * `spacesCountBeforeColon`: the number of spaces before `:`.
 * `spacesCountBeforeType`: the number of spaces before type.
+
+#### SlevomatCodingStandard.Classes.ClassLineCount
+
+Disallows long classes. This sniff provides the following settings:
+
+* `includeComments`: should comments be included in the count (default value is false).
+* `includeWhitespace`: shoud empty lines be included in the count (default value is false).
+* `maxLinesLength`: specifies max allowed function lines length (default value is 250).
 
 #### SlevomatCodingStandard.Classes.ClassMemberSpacing 🔧
 
@@ -773,6 +781,14 @@ Sniff provides the following settings:
 
 However, if you prefer Yoda conditions, you can use `RequireYodaComparisonSniff`.
 
+#### SlevomatCodingStandard.Files.FileLineCount
+
+Disallows long files. This sniff provides the following settings:
+
+* `includeComments`: should comments be included in the count (default value is false).
+* `includeWhitespace`: shoud empty lines be included in the count (default value is false).
+* `maxLinesLength`: specifies max allowed function lines length (default value is 250).
+
 #### SlevomatCodingStandard.Files.LineLength
 
 Enforces maximum length of a single line of code.
@@ -949,7 +965,7 @@ Disallows numeric literal separators.
 
 Requires use of numeric literal separators.
 
-This sniff provides the following setting:
+This sniff provides the following settings:
 
 * `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 7.4 or higher.
 * `minDigitsBeforeDecimalPoint`: the mininum digits before decimal point to require separator.

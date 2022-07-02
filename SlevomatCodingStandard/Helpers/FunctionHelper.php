@@ -430,15 +430,19 @@ class FunctionHelper
 		if (self::isAbstract($file, $functionPosition)) {
 			return 0;
 		}
+		return self::getLineCount($file, $functionPosition, $flags);
+	}
 
+	public static function getLineCount(File $file, int $tokenPosition, int $flags = 0): int
+	{
 		$includeWhitespace = ($flags & self::LINE_INCLUDE_WHITESPACE) === self::LINE_INCLUDE_WHITESPACE;
 		$includeComments = ($flags & self::LINE_INCLUDE_COMMENT) === self::LINE_INCLUDE_COMMENT;
 
 		$tokens = $file->getTokens();
-		$token = $tokens[$functionPosition];
+		$token = $tokens[$tokenPosition];
 
-		$tokenOpenerPosition = $token['scope_opener'];
-		$tokenCloserPosition = $token['scope_closer'];
+		$tokenOpenerPosition = $token['scope_opener'] ?? $tokenPosition;
+		$tokenCloserPosition = $token['scope_closer'] ?? $file->numTokens - 1;
 		$tokenOpenerLine = $tokens[$tokenOpenerPosition]['line'];
 		$tokenCloserLine = $tokens[$tokenCloserPosition]['line'];
 
