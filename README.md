@@ -634,6 +634,14 @@ Sniff provides the following settings:
 * `linesCountAfterLastUse`: allows to configure the number of lines after last `use`.
 * `linesCountAfterLastUseWhenLastInClass`: allows to configure the number of lines after last `use` when the `use` is the last statement in the class.
 
+#### SlevomatCodingStandard.Complexity.Cognitive
+
+Enforces maximum [cognitive complexity](https://www.sonarsource.com/docs/CognitiveComplexity.pdf) for functions.
+
+Sniff provides the following setting:
+
+* `maxComplexity`: defaults to 5
+
 #### SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing 🔧
 
 Enforces configurable number of lines around block control structures (if, foreach, ...).
