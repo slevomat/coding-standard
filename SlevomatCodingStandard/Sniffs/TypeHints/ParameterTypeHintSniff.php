@@ -15,6 +15,7 @@ use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
@@ -40,6 +41,7 @@ use function sprintf;
 use function strtolower;
 use const T_BITWISE_AND;
 use const T_DOC_COMMENT_CLOSE_TAG;
+use const T_DOC_COMMENT_OPEN_TAG;
 use const T_DOC_COMMENT_STAR;
 use const T_ELLIPSIS;
 use const T_FUNCTION;
@@ -124,8 +126,8 @@ class ParameterTypeHintSniff implements Sniff
 
 	/**
 	 * @param (TypeHint|null)[] $parametersTypeHints
-	 * @param ParameterAnnotation[] $parametersAnnotations
-	 * @param ParameterAnnotation[] $prefixedParametersAnnotations
+	 * @param array<string, ParameterAnnotation|VariableAnnotation> $parametersAnnotations
+	 * @param array<string, ParameterAnnotation|VariableAnnotation> $prefixedParametersAnnotations
 	 */
 	private function checkTypeHints(
 		File $phpcsFile,
@@ -384,8 +386,8 @@ class ParameterTypeHintSniff implements Sniff
 
 	/**
 	 * @param (TypeHint|null)[] $parametersTypeHints
-	 * @param ParameterAnnotation[] $parametersAnnotations
-	 * @param ParameterAnnotation[] $prefixedParametersAnnotations
+	 * @param array<string, ParameterAnnotation|VariableAnnotation> $parametersAnnotations
+	 * @param array<string, ParameterAnnotation|VariableAnnotation> $prefixedParametersAnnotations
 	 */
 	private function checkTraversableTypeHintSpecification(
 		File $phpcsFile,
@@ -499,7 +501,7 @@ class ParameterTypeHintSniff implements Sniff
 
 	/**
 	 * @param (TypeHint|null)[] $parametersTypeHints
-	 * @param ParameterAnnotation[] $parametersAnnotations
+	 * @param array<string, ParameterAnnotation|VariableAnnotation> $parametersAnnotations
 	 */
 	private function checkUselessAnnotations(
 		File $phpcsFile,
@@ -554,7 +556,10 @@ class ParameterTypeHintSniff implements Sniff
 				continue;
 			}
 
-			$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $functionPointer);
+			$docCommentOpenPointer = $parameterAnnotation instanceof VariableAnnotation
+				? TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_OPEN_TAG, $parameterAnnotation->getStartPointer() - 1)
+				: DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $functionPointer);
+
 			$starPointer = TokenHelper::findPrevious(
 				$phpcsFile,
 				T_DOC_COMMENT_STAR,

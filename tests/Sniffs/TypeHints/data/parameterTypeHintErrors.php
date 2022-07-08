@@ -294,3 +294,17 @@ class Whatever
 	}
 
 }
+
+class Promoted
+{
+
+	public function __construct(
+		public array $promoted,
+		/** @var int */
+		public int $promoted2, /** @var string */ private string $promoted3
+	)
+	{
+
+	}
+
+}

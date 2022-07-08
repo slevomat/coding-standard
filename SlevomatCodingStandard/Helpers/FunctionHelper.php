@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use function array_filter;
 use function array_map;
 use function array_merge;
@@ -324,11 +325,30 @@ class FunctionHelper
 	}
 
 	/**
-	 * @return array<string, ParameterAnnotation>
+	 * @return array<string, ParameterAnnotation|VariableAnnotation>
 	 */
 	public static function getValidParametersAnnotations(File $phpcsFile, int $functionPointer): array
 	{
+		$tokens = $phpcsFile->getTokens();
+
 		$parametersAnnotations = [];
+
+		if (self::getName($phpcsFile, $functionPointer) === '__construct') {
+			for ($i = $tokens[$functionPointer]['parenthesis_opener'] + 1; $i < $tokens[$functionPointer]['parenthesis_closer']; $i++) {
+				if ($tokens[$i]['code'] !== T_VARIABLE) {
+					continue;
+				}
+
+				/** @var VariableAnnotation[] $varAnnotations */
+				$varAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $i, '@var');
+				if ($varAnnotations === []) {
+					continue;
+				}
+
+				$parametersAnnotations[$tokens[$i]['content']] = $varAnnotations[0];
+			}
+		}
+
 		foreach (self::getParametersAnnotations($phpcsFile, $functionPointer) as $parameterAnnotation) {
 			if ($parameterAnnotation->getContent() === null) {
 				continue;
@@ -345,12 +365,30 @@ class FunctionHelper
 	}
 
 	/**
-	 * @return array<string, ParameterAnnotation>
+	 * @return array<string, ParameterAnnotation|VariableAnnotation>
 	 */
 	public static function getValidPrefixedParametersAnnotations(File $phpcsFile, int $functionPointer): array
 	{
+		$tokens = $phpcsFile->getTokens();
+
 		$parametersAnnotations = [];
 		foreach (AnnotationHelper::PREFIXES as $prefix) {
+			if (self::getName($phpcsFile, $functionPointer) === '__construct') {
+				for ($i = $tokens[$functionPointer]['parenthesis_opener'] + 1; $i < $tokens[$functionPointer]['parenthesis_closer']; $i++) {
+					if ($tokens[$i]['code'] !== T_VARIABLE) {
+						continue;
+					}
+
+					/** @var VariableAnnotation[] $varAnnotations */
+					$varAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $i, sprintf('@%s-var', $prefix));
+					if ($varAnnotations === []) {
+						continue;
+					}
+
+					$parametersAnnotations[$tokens[$i]['content']] = $varAnnotations[0];
+				}
+			}
+
 			/** @var ParameterAnnotation[] $annotations */
 			$annotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $functionPointer, sprintf('@%s-param', $prefix));
 			foreach ($annotations as $parameterAnnotation) {

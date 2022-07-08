@@ -102,8 +102,12 @@ class TypeHintHelper
 
 	public static function isTypeDefinedInAnnotation(File $phpcsFile, int $pointer, string $typeHint): bool
 	{
-		/** @var int $docCommentOpenPointer */
 		$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $pointer);
+
+		if ($docCommentOpenPointer === null) {
+			return false;
+		}
+
 		return self::isTemplate($phpcsFile, $docCommentOpenPointer, $typeHint)
 			|| self::isAlias($phpcsFile, $docCommentOpenPointer, $typeHint);
 	}

@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.0
 
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -312,6 +312,21 @@ class Aliases
 	 */
 	public function withNullableArrayAlias(?array $array)
 	{
+	}
+
+}
+
+class Promoted
+{
+
+	public function __construct(
+		/** @var array<int, string> */
+		public array $promoted,
+		/** @phpstan-var array<int, string> */
+		public array $promoted2
+	)
+	{
+
 	}
 
 }

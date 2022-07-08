@@ -282,3 +282,17 @@ class Whatever
 	}
 
 }
+
+class Promoted
+{
+
+	public function __construct(
+		public array $promoted,
+		/***/
+		public int $promoted2, /***/ private string $promoted3
+	)
+	{
+
+	}
+
+}
