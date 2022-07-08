@@ -45,7 +45,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 	abstract protected function isValidType(ReferencedName $name): bool;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{

@@ -102,7 +102,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 	abstract protected function getLinesCountAfterLast(File $phpcsFile, int $controlStructurePointer, int $controlStructureEndPointer): int;
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	public function register(): array
 	{
@@ -337,7 +337,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 	}
 
 	/**
-	 * @return (int|string)[]
+	 * @return array<int, (int|string)>
 	 */
 	private function getTokensToCheck(): array
 	{
