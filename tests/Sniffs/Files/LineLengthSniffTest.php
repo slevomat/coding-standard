@@ -9,13 +9,13 @@ class LineLengthSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/LineLengthSniffNoErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/lineLengthNoErrors.php');
 		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/LineLengthSniffErrors.php', ['ignoreImports' => false]);
+		$report = self::checkFile(__DIR__ . '/data/lineLengthErrors.php', ['ignoreImports' => false]);
 
 		self::assertSame(7, $report->getErrorCount());
 
@@ -28,9 +28,9 @@ class LineLengthSniffTest extends TestCase
 		self::assertSniffError($report, 20, LineLengthSniff::CODE_LINE_TOO_LONG);
 	}
 
-	public function testErrorsIgnoreComments(): void
+	public function testIgnoreCommentsErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/LineLengthSniffErrorsIgnoreComments.php', ['ignoreComments' => true]);
+		$report = self::checkFile(__DIR__ . '/data/lineLengthIgnoreCommentsErrors.php', ['ignoreComments' => true]);
 
 		self::assertSame(4, $report->getErrorCount());
 
@@ -40,9 +40,9 @@ class LineLengthSniffTest extends TestCase
 		self::assertSniffError($report, 20, LineLengthSniff::CODE_LINE_TOO_LONG);
 	}
 
-	public function testErrorsIgnoreImports(): void
+	public function testIgnoreImportsErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/LineLengthSniffErrorsIgnoreImports.php');
+		$report = self::checkFile(__DIR__ . '/data/lineLengthIgnoreImportsErrors.php');
 
 		self::assertSame(7, $report->getErrorCount());
 
@@ -55,9 +55,9 @@ class LineLengthSniffTest extends TestCase
 		self::assertSniffError($report, 22, LineLengthSniff::CODE_LINE_TOO_LONG);
 	}
 
-	public function testErrorsWithoutUseStatements(): void
+	public function testWithoutUseStatementsErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/LineLengthSniffErrorsWithoutUseStatements.php');
+		$report = self::checkFile(__DIR__ . '/data/lineLengthWithoutUseStatementsErrors.php');
 
 		self::assertSame(6, $report->getErrorCount());
 
