@@ -494,6 +494,14 @@ Sniff provides the following settings:
 * `spacesCountBeforeColon`: the number of spaces before `:`.
 * `spacesCountBeforeType`: the number of spaces before type.
 
+#### SlevomatCodingStandard.Classes.ClassLength
+
+Disallows long classes. This sniff provides the following settings:
+
+* `includeComments`: should comments be included in the count (default value is false).
+* `includeWhitespace`: shoud empty lines be included in the count (default value is false).
+* `maxLinesLength`: specifies max allowed function lines length (default value is 250).
+
 #### SlevomatCodingStandard.Classes.ClassMemberSpacing 🔧
 
 Checks lines count between different class members, eg. between last property and first method.
