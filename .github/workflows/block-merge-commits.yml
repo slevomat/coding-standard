@@ -1,0 +1,18 @@
+name: "Block merge commits"
+
+on:
+  pull_request:
+
+jobs:
+  block-merge-commits:
+    name: Block merge commits
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Block merge commits
+        uses: Morishiri/block-merge-commits-action@v1.0.1
+
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
