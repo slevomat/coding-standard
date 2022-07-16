@@ -27,6 +27,12 @@ class Fgh
 		$g = $this;
 	}
 
+	public function foo()
+	{
+		/** @var static|null $x */
+		$x = call();
+	}
+
 }
 
 /** @var resource $h */
