@@ -329,6 +329,10 @@ class RequireExplicitAssertionSniff implements Sniff
 			return [sprintf('%s instanceof %s', $variableName, $typeNode->name)];
 		}
 
+		if ($typeNode->name === 'static') {
+			return [sprintf('%s instanceof static', $variableName)];
+		}
+
 		if (TypeHintHelper::isSimpleTypeHint($typeNode->name)) {
 			return [sprintf('\is_%s(%s)', $typeNode->name, $variableName)];
 		}

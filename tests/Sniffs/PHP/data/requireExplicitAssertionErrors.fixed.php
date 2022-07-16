@@ -27,6 +27,12 @@ class Fgh
 		\assert($g instanceof self);
 	}
 
+	public function foo()
+	{
+		$x = call();
+		\assert($x instanceof static || $x === null);
+	}
+
 }
 
 $h = fopen('file.txt', 'r');
