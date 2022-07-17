@@ -17,6 +17,7 @@ use function strpos;
 use const T_CLOSURE;
 use const T_CONSTANT_ENCAPSED_STRING;
 use const T_DOUBLE_COLON;
+use const T_DOUBLE_QUOTED_STRING;
 use const T_FN;
 use const T_FUNCTION;
 use const T_NEW;
@@ -71,7 +72,7 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 		}
 
 		for ($i = $parenthesisOpenerPointer + 1; $i < $parenthesisCloserPointer; $i++) {
-			if ($tokens[$i]['code'] !== T_CONSTANT_ENCAPSED_STRING) {
+			if ($tokens[$i]['code'] !== T_CONSTANT_ENCAPSED_STRING && $tokens[$i]['code'] !== T_DOUBLE_QUOTED_STRING) {
 				continue;
 			}
 
