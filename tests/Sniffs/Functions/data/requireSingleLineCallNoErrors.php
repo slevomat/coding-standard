@@ -40,5 +40,10 @@ CODE
 		self::doWithNewLines("
 			Anything
 		");
+		$table = 'aaa';
+		$this->query("
+			INSERT INTO {$table} (id)
+			VALUES (1), (2), (3)
+		");
 	}
 }
