@@ -13,3 +13,7 @@ HED;
 $c = <<<"HED"
 	{$abc}
 HED;
+
+$c = <<<"HED"
+	\n
+HED;

@@ -39,7 +39,7 @@ class RequireNowdocSniff implements Sniff
 		$heredocContentPointers = [];
 		for ($i = $heredocStartPointer + 1; $i < $heredocEndPointer; $i++) {
 			if ($tokens[$i]['code'] === T_HEREDOC) {
-				if (preg_match('~(?<!\\\\)\$~', $tokens[$i]['content']) > 0) {
+				if (preg_match('~^([^\\\\$]|\\\\[^nrtvef0-7xu])*$~', $tokens[$i]['content']) === 0) {
 					return;
 				}
 
