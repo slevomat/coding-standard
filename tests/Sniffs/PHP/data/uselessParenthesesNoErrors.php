@@ -157,6 +157,8 @@ $x = fn ($a, $b) => $a . $b;
 })();
 
 $output = (($a and $b) ? 'yes' : 'nope');
+$output = (($a or $b) ? 'yes' : 'nope');
+$output = (($a xor $b) ? 'yes' : 'nope');
 
 $whatever = (null !== $a = $b->call());
 

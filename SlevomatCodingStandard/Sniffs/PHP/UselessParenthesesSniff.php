@@ -44,6 +44,7 @@ use const T_LIST;
 use const T_LNUMBER;
 use const T_LOGICAL_AND;
 use const T_LOGICAL_OR;
+use const T_LOGICAL_XOR;
 use const T_MATCH;
 use const T_MINUS;
 use const T_MODULUS;
@@ -213,7 +214,7 @@ class UselessParenthesesSniff implements Sniff
 
 		if (TokenHelper::findNext(
 			$phpcsFile,
-			[T_LOGICAL_AND, T_LOGICAL_OR],
+			[T_LOGICAL_AND, T_LOGICAL_OR, T_LOGICAL_XOR],
 			$parenthesisOpenerPointer + 1,
 			$parenthesisCloserPointer
 		) !== null) {
