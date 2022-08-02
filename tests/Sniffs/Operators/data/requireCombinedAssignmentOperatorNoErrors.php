@@ -38,5 +38,24 @@ class Whatever
 		$a = $a / $b / $c;
 	}
 
+	public function probablyStringOffsets($a, $b, $c)
+	{
+		$a[0] = $a[0] & '';
+		$b[0] = $b[0] | '';
+
+		$a[0] = $a[0] & "";
+		$b[0] = $b[0] | "";
+
+		$a[0] = $a[0] & "{$c}";
+		$b[0] = $b[0] | "{$c}";
+
+		$a[0] = $a[0] & <<<CODE
+			Something
+CODE;
+		$b[0] = $b[0] | <<<CODE
+			Something
+CODE;
+	}
+
 }
 

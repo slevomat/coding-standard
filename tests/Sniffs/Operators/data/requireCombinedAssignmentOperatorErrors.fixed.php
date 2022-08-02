@@ -22,12 +22,18 @@ class Whatever extends Something implements Anything
 
 		$this
 			->something += 10;
+
+		$a[0] &= 1;
+		$b[0] |= 1;
+
+		$a[0] &= 1.0;
+		$b[0] |= 1.0;
 	}
 
-	public function possibleStringOffsets($a, $b)
+	public function notFixable($variable)
 	{
-		$a[0] = $a[0] & '';
-		$b[0] = $b[0] | '';
+		$a[0] = $a[0] & true;
+		$b[0] = $b[0] | $variable;
 	}
 
 }

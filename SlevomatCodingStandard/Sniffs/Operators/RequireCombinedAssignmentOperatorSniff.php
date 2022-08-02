@@ -8,13 +8,18 @@ use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
+use function in_array;
 use function sprintf;
 use const T_BITWISE_AND;
 use const T_BITWISE_OR;
 use const T_BITWISE_XOR;
 use const T_CLOSE_SQUARE_BRACKET;
+use const T_CONSTANT_ENCAPSED_STRING;
 use const T_DIVIDE;
+use const T_DNUMBER;
+use const T_DOUBLE_QUOTED_STRING;
 use const T_EQUAL;
+use const T_LNUMBER;
 use const T_MINUS;
 use const T_MODULUS;
 use const T_MULTIPLY;
@@ -23,6 +28,8 @@ use const T_POW;
 use const T_SEMICOLON;
 use const T_SL;
 use const T_SR;
+use const T_START_HEREDOC;
+use const T_START_NOWDOC;
 use const T_STRING_CONCAT;
 
 class RequireCombinedAssignmentOperatorSniff implements Sniff
@@ -77,6 +84,21 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 			return;
 		}
 
+		$isFixable = true;
+
+		if ($tokens[$variableEndPointer]['code'] === T_CLOSE_SQUARE_BRACKET) {
+			$pointerAfterOperator = TokenHelper::findNextEffective($phpcsFile, $operatorPointer + 1);
+			if (in_array(
+				$tokens[$pointerAfterOperator]['code'],
+				[T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING, T_START_HEREDOC, T_START_NOWDOC],
+				true
+			)) {
+				return;
+			}
+
+			$isFixable = in_array($tokens[$pointerAfterOperator]['code'], [T_LNUMBER, T_DNUMBER], true);
+		}
+
 		$variableContent = IdentificatorHelper::getContent($phpcsFile, $variableStartPointer, $variableEndPointer);
 
 		/** @var int $beforeEqualEndPointer */
@@ -103,9 +125,6 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 			$operators[$tokens[$operatorPointer]['code']],
 			$tokens[$operatorPointer]['content']
 		);
-
-		// Not fixable with possible string offset
-		$isFixable = $tokens[$variableEndPointer]['code'] !== T_CLOSE_SQUARE_BRACKET;
 
 		if (!$isFixable) {
 			$phpcsFile->addError($errorMessage, $equalPointer, self::CODE_REQUIRED_COMBINED_ASSIGMENT_OPERATOR);
