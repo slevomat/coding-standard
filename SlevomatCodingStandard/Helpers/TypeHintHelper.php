@@ -132,6 +132,7 @@ class TypeHintHelper
 			$simpleTypeHints = [
 				'int',
 				'integer',
+				'false',
 				'float',
 				'string',
 				'bool',
@@ -141,6 +142,7 @@ class TypeHintHelper
 				'array',
 				'iterable',
 				'void',
+				'never',
 			];
 		}
 
@@ -169,7 +171,6 @@ class TypeHintHelper
 				'scalar',
 				'numeric',
 				'true',
-				'false',
 				'object',
 				'resource',
 				'static',

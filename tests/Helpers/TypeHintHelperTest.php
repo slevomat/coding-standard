@@ -75,7 +75,6 @@ class TypeHintHelperTest extends TestCase
 			['scalar', true],
 			['numeric', true],
 			['true', true],
-			['false', true],
 			['resource', true],
 			['static', true],
 			['$this', true],

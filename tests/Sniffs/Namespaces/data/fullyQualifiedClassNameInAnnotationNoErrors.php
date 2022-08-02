@@ -164,3 +164,15 @@ class TypeAliasAndImportes
 	}
 
 }
+
+class NeverIsType
+{
+
+	/**
+	 * @return never
+	 */
+	public function withNever()
+	{
+	}
+
+}
