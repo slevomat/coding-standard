@@ -3,6 +3,8 @@
 namespace SlevomatCodingStandard\Helpers\Annotation;
 
 use InvalidArgumentException;
+use PHPStan\PhpDocParser\Ast\PhpDoc\AssertTagMethodValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\AssertTagPropertyValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\AssertTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
@@ -15,10 +17,13 @@ use function sprintf;
 class AssertAnnotation extends Annotation
 {
 
-	/** @var AssertTagValueNode|null */
+	/** @var AssertTagValueNode|AssertTagPropertyValueNode|AssertTagMethodValueNode|null */
 	private $contentNode;
 
-	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, ?AssertTagValueNode $contentNode)
+	/**
+	 * @param AssertTagValueNode|AssertTagPropertyValueNode|AssertTagMethodValueNode|null $contentNode
+	 */
+	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content, $contentNode)
 	{
 		if (!in_array(
 			$name,
@@ -38,7 +43,10 @@ class AssertAnnotation extends Annotation
 		return $this->contentNode === null;
 	}
 
-	public function getContentNode(): AssertTagValueNode
+	/**
+	 * @return AssertTagMethodValueNode|AssertTagPropertyValueNode|AssertTagValueNode|null
+	 */
+	public function getContentNode()
 	{
 		$this->errorWhenInvalid();
 
