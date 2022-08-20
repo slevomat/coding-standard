@@ -95,7 +95,7 @@ Checks format of union type hints.
 Sniff provides the following settings:
 
 * `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 8.0 or higher.
-* `withSpaces`: `yes` requires spaces around `|`, `no` requires no space around `|`. None is set by default so both is enabled.
+* `withSpaces`: `yes` requires spaces around `|`, `no` requires no space around `|`. None is set by default so both are enabled.
 * `shortNullable`: `yes` requires usage of `?` for nullable type hint, `no` disallows it. None is set by default so both are enabled.
 * `nullPosition`: `first` requires `null` on first position in the type hint, `last` requires last position. None is set by default so `null` can be everywhere.
 
@@ -219,7 +219,7 @@ if ($file = findFile($path)) {
 
 Assignment in `while` loop condition is specifically allowed because it's commonly used.
 
-This is a great addition to already existing `SlevomatCodingStandard.ControlStructures.DisallowYodaComparison` because it prevents the danger of assigning something by mistake instead of using comparison operator like `===`.
+This is a great addition to already existing `SlevomatCodingStandard.ControlStructures.DisallowYodaComparison` because it prevents the danger of assigning something by mistake instead of using a comparison operator like `===`.
 
 Sniff provides the following settings:
 * `ignoreAssignmentsInsideFunctionCalls`: ignores assignment inside function calls, like this:
@@ -305,7 +305,7 @@ Reports closures not using `$this` that are not declared `static`.
 Disallows long functions. This sniff provides the following setting:
 
 * `includeComments`: should comments be included in the count (default value is false).
-* `includeWhitespace`: shoud empty lines be included in the count (default value is false).
+* `includeWhitespace`: should empty lines be included in the count (default value is false).
 * `maxLinesLength`: specifies max allowed function lines length (default value is 20).
 
 #### SlevomatCodingStandard.PHP.DisallowDirectMagicInvokeCall 🔧
@@ -412,7 +412,7 @@ Sniff provides the following settings:
 
 #### SlevomatCodingStandard.PHP.OptimizedFunctionsWithoutUnpacking
 
-PHP optimizes some internal functions into special opcodes on VM level. Such optimization results in much faster execution compared to calling standard function. This only works when these functions are not invoked with argument unpacking (`...`).
+PHP optimizes some internal functions into special opcodes on VM level. Such optimization results in much faster execution compared to calling standard functions. This only works when these functions are not invoked with argument unpacking (`...`).
 
 The list of these functions varies across PHP versions, but is the same as functions that must be referenced by their global name (either by `\ ` prefix or using `use function`), not a fallback name inside namespaced code.
 
@@ -499,7 +499,7 @@ Sniff provides the following settings:
 Disallows long classes. This sniff provides the following settings:
 
 * `includeComments`: should comments be included in the count (default value is false).
-* `includeWhitespace`: shoud empty lines be included in the count (default value is false).
+* `includeWhitespace`: should empty lines be included in the count (default value is false).
 * `maxLinesLength`: specifies max allowed function lines length (default value is 250).
 
 #### SlevomatCodingStandard.Classes.ClassMemberSpacing 🔧
@@ -567,7 +567,7 @@ Sniff provides the following settings:
 
 Sniff provides the following settings:
 
-* `modifiersOrder`: allows to configurure order of modifiers.
+* `modifiersOrder`: allows to configure order of modifiers.
 * `checkPromoted`: will check promoted properties too.
 * `enableMultipleSpacesBetweenModifiersCheck`: checks multiple spaces between modifiers.
 
@@ -735,7 +735,7 @@ Ternary operator has to be reformatted to more lines when the line length exceed
 Sniff provides the following settings:
 
 * `lineLengthLimit` (defaults to `0`)
-* `minExpressionsLength` (defaults to `null`): when the expressions after `?` are shorter than this length, the ternary operator does not has to be reformatted.
+* `minExpressionsLength` (defaults to `null`): when the expressions after `?` are shorter than this length, the ternary operator does not have to be reformatted.
 
 #### SlevomatCodingStandard.ControlStructures.RequireNullSafeObjectOperator 🔧
 
@@ -751,7 +751,7 @@ Enforces conditions of `if`, `elseif`, `while` and `do-while` to be on a single 
 
 Sniff provides the following settings:
 
-* `maxLineLength`: specifies max allowed line length. If conditition (and the rest of the line) would fit on it, it's enforced. Use 0 value to enforce for all conditions, regardless of length.
+* `maxLineLength`: specifies max allowed line length. If condition (and the rest of the line) would fit on it, it's enforced. Use 0 value to enforce for all conditions, regardless of length.
 * `alwaysForSimpleConditions`: allows to enforce single line for all simple conditions (i.e no `&&`, `||` or `xor`), regardless of length.
 
 #### SlevomatCodingStandard.ControlStructures.RequireMultiLineCondition 🔧
@@ -761,7 +761,7 @@ so each condition part is on its own line.
 
 Sniff provides the following settings:
 
-* `minLineLength`: specifies mininum line length to enforce condition to be splitted. Use 0 value to enforce for all conditions, regardless of length.
+* `minLineLength`: specifies minimum line length to enforce condition to be splitted. Use 0 value to enforce for all conditions, regardless of length.
 * `booleanOperatorOnPreviousLine`: boolean operator is placed at the end of previous line when fixing.
 * `alwaysSplitAllConditionParts`: require all condition parts to be on its own line - it reports error even if condition is already multi-line but there are some condition parts on the same line.
 
@@ -794,7 +794,7 @@ However, if you prefer Yoda conditions, you can use `RequireYodaComparisonSniff`
 Disallows long files. This sniff provides the following settings:
 
 * `includeComments`: should comments be included in the count (default value is false).
-* `includeWhitespace`: shoud empty lines be included in the count (default value is false).
+* `includeWhitespace`: should empty lines be included in the count (default value is false).
 * `maxLinesLength`: specifies max allowed function lines length (default value is 250).
 
 #### SlevomatCodingStandard.Files.LineLength
@@ -976,8 +976,8 @@ Requires use of numeric literal separators.
 This sniff provides the following setting:
 
 * `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 7.4 or higher.
-* `minDigitsBeforeDecimalPoint`: the mininum digits before decimal point to require separator.
-* `minDigitsAfterDecimalPoint`: the mininum digits after decimal point to require separator.
+* `minDigitsBeforeDecimalPoint`: the minimum digits before decimal point to require separator.
+* `minDigitsAfterDecimalPoint`: the minimum digits after decimal point to require separator.
 * `ignoreOctalNumbers`: to ignore octal numbers.
 
 #### SlevomatCodingStandard.PHP.ReferenceSpacing 🔧
@@ -1092,7 +1092,7 @@ In PHP 7.1+ it's possible to declare [visibility of class constants](https://wik
 
 Sniff provides the following settings:
 
-* `fixable`: the sniff is not fixable by default because we think it's better to decide about each constant one by one however you can enable fixability with this option.
+* `fixable`: the sniff is not fixable by default because we think it's better to decide about each constant one by one, however you can enable fixability with this option.
 
 ```php
 const FOO = 1; // visibility missing!
@@ -1160,7 +1160,7 @@ try {
 Sniff provides the following settings:
 
 * Exceptions with different names can be configured in `specialExceptionNames` property.
-* If your codebase uses classes that look like exceptions (because they have `Exception` or `Error` suffixes) but aren't, you can add them to `ignoredNames` property and the sniff won't enforce them to be fully qualified. Classes with `Error` suffix has to be added to ignored only if they are in the root namespace (like `LibXMLError`).
+* If your codebase uses classes that look like exceptions (because they have `Exception` or `Error` suffixes) but aren't, you can add them to `ignoredNames` property and the sniff won't enforce them to be fully qualified. Classes with `Error` suffix have to be added to ignored only if they are in the root namespace (like `LibXMLError`).
 
 #### SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalConstants 🔧
 
@@ -1275,16 +1275,16 @@ Sniff provides the following settings:
 #### SlevomatCodingStandard.Commenting.DocCommentSpacing 🔧
 
 Enforces configurable number of lines before first content (description or annotation), after last content (description or annotation),
-between description and annotations, between two different annotations types (eg. between `@param` and `@return`).
+between description and annotations, between two different annotation types (eg. between `@param` and `@return`).
 
 Sniff provides the following settings:
 
 * `linesCountBeforeFirstContent`: allows to configure the number of lines before first content (description or annotation).
 * `linesCountBetweenDescriptionAndAnnotations`: allows to configure the number of lines between description and annotations.
-* `linesCountBetweenDifferentAnnotationsTypes`: allows to configure the number of lines between two different annotations types.
-* `linesCountBetweenAnnotationsGroups`: allows to configure the number of lines between annotations groups.
+* `linesCountBetweenDifferentAnnotationsTypes`: allows to configure the number of lines between two different annotation types.
+* `linesCountBetweenAnnotationsGroups`: allows to configure the number of lines between annotation groups.
 * `linesCountAfterLastContent`: allows to configure the number of lines after last content (description or annotation).
-* `annotationsGroups`: allows to configurure order of annotations groups and even order of annotations in every group. Supports prefixes, eg. `@ORM\`.
+* `annotationsGroups`: allows to configure order of annotation groups and even order of annotations in every group. Supports prefixes, eg. `@ORM\`.
 
 ```xml
 <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing">
@@ -1318,8 +1318,8 @@ Reports invalid inline phpDocs with `@var`.
 
 Sniff provides the following settings:
 
-* `allowDocCommentAboveReturn`: Allows documentation comments without variable name above `return` statemens.
-* `allowAboveNonAssignment`: Allows documentation comments above non-assigment if the line contains the right variable name.
+* `allowDocCommentAboveReturn`: Allows documentation comments without variable name above `return` statement.
+* `allowAboveNonAssignment`: Allows documentation comments above non-assignment if the line contains the right variable name.
 
 #### SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment 🔧
 
@@ -1481,7 +1481,7 @@ After writing some code and editing or adding unit tests, run phing again to che
 bin/phing
 ```
 
-We are always looking forward for your bugreports, feature requests and pull requests. Thank you.
+We are always looking forward to your bugreports, feature requests and pull requests. Thank you.
 
 ## Code of Conduct
 
