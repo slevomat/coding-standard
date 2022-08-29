@@ -37,3 +37,13 @@ interface SomeInterface
 {
 	public static function someMethod(): static;
 }
+
+class UserEvent
+{
+    public static function detailsUpdated(): self
+    {
+        return static::create(UserEventType::DetailsUpdated);
+    }
+
+    public User $user;
+}

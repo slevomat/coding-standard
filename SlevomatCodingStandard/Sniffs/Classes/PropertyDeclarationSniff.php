@@ -21,6 +21,7 @@ use function sprintf;
 use function strtolower;
 use const T_AS;
 use const T_CONST;
+use const T_DOUBLE_COLON;
 use const T_FUNCTION;
 use const T_NULLABLE;
 use const T_PRIVATE;
@@ -87,6 +88,11 @@ class PropertyDeclarationSniff implements Sniff
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $modifierPointer + 1);
 		if (in_array($tokens[$nextPointer]['code'], TokenHelper::$propertyModifiersTokenCodes, true)) {
 			// We don't want to report the some property twice
+			return;
+		}
+
+		if ($tokens[$nextPointer]['code'] === T_DOUBLE_COLON) {
+			// Ignore static::
 			return;
 		}
 
