@@ -51,11 +51,9 @@ class RequireShortTernaryOperatorSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
-	public function testNoErrorRecurrence(): void
+	public function testNoErrorWithCloseTag(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/requireShortTernaryOperatorCloseTag.php', [
-			'lineLengthLimit' => 120,
-		]);
+		$report = self::checkFile(__DIR__ . '/data/requireShortTernaryOperatorCloseTag.php');
 		self::assertNoSniffErrorInFile($report);
 	}
 
