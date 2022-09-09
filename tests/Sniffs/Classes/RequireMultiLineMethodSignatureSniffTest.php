@@ -55,7 +55,7 @@ final class RequireMultiLineMethodSignatureSniffTest extends TestCase
 	public function testIncludedMethodPatterns(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireMultiLineMethodSignatureIncludedMethodsErrors.php', [
-			'maxLineLength' => 0,
+			'minLineLength' => 0,
 			'includedMethodPatterns' => ['/__construct/'],
 		], [RequireMultiLineMethodSignatureSniff::CODE_REQUIRED_MULTI_LINE_SIGNATURE]);
 
@@ -69,7 +69,7 @@ final class RequireMultiLineMethodSignatureSniffTest extends TestCase
 	public function testExcludedMethodPatterns(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireMultiLineMethodSignatureExcludedMethodsErrors.php', [
-			'maxLineLength' => 0,
+			'minLineLength' => 0,
 			'excludedMethodPatterns' => ['/__construct/'],
 		], [RequireMultiLineMethodSignatureSniff::CODE_REQUIRED_MULTI_LINE_SIGNATURE]);
 
