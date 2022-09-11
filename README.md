@@ -140,6 +140,7 @@ Sniff provides the following settings:
 
 **List of supported groups**:
 uses,
+enum cases,
 public constants, protected constants, private constants,
 public properties, public static properties, protected properties, protected static properties, private properties, private static properties,
 constructor, static constructors, destructor, magic methods,
@@ -157,6 +158,8 @@ constants, properties, static properties, methods, all public methods, all prote
 	<properties>
 		<property name="groups" type="array">
 			<element value="uses"/>
+			
+			<element value="enum cases"/>
 
 			<!-- Public constants are first but you don't care about the order of protected or private constants -->
 			<element value="public constants"/>
