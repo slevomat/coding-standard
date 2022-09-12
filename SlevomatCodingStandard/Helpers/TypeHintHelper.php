@@ -31,7 +31,8 @@ class TypeHintHelper
 		string $typeHint,
 		bool $enableObjectTypeHint,
 		bool $enableStaticTypeHint,
-		bool $enableMixedTypeHint
+		bool $enableMixedTypeHint,
+		bool $enableStandaloneNullTrueFalseTypeHints
 	): bool
 	{
 		if (self::isSimpleTypeHint($typeHint)) {
@@ -48,6 +49,10 @@ class TypeHintHelper
 
 		if ($typeHint === 'mixed') {
 			return $enableMixedTypeHint;
+		}
+
+		if (in_array($typeHint, ['null', 'true', 'false'], true)) {
+			return $enableStandaloneNullTrueFalseTypeHints;
 		}
 
 		return !self::isSimpleUnofficialTypeHints($typeHint);

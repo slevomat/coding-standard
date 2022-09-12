@@ -75,6 +75,9 @@ class PropertyTypeHintSniff implements Sniff
 	/** @var bool|null */
 	public $enableIntersectionTypeHint = null;
 
+	/** @var bool|null */
+	public $enableStandaloneNullTrueFalseTypeHints = null;
+
 	/** @var string[] */
 	public $traversableTypeHints = [];
 
@@ -110,6 +113,9 @@ class PropertyTypeHintSniff implements Sniff
 			: false;
 		$this->enableIntersectionTypeHint = $this->enableNativeTypeHint
 			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableIntersectionTypeHint, 80100)
+			: false;
+		$this->enableStandaloneNullTrueFalseTypeHints = $this->enableNativeTypeHint
+			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableStandaloneNullTrueFalseTypeHints, 80200)
 			: false;
 
 		$tokens = $phpcsFile->getTokens();
@@ -225,7 +231,7 @@ class PropertyTypeHintSniff implements Sniff
 		if (AnnotationTypeHelper::containsOneType($typeNode)) {
 			/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $typeNode */
 			$typeNode = $typeNode;
-			$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($typeNode);
+			$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($typeNode, false, $this->enableStandaloneNullTrueFalseTypeHints);
 
 		} elseif ($typeNode instanceof UnionTypeNode || $typeNode instanceof IntersectionTypeNode) {
 			$traversableTypeHints = [];
@@ -320,7 +326,13 @@ class PropertyTypeHintSniff implements Sniff
 				continue;
 			}
 
-			if (!TypeHintHelper::isValidTypeHint($typeHint, true, false, $this->enableMixedTypeHint)) {
+			if (!TypeHintHelper::isValidTypeHint(
+				$typeHint,
+				true,
+				false,
+				$this->enableMixedTypeHint,
+				$this->enableStandaloneNullTrueFalseTypeHints
+			)) {
 				$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 				return;
 			}
@@ -489,7 +501,8 @@ class PropertyTypeHintSniff implements Sniff
 			$propertyAnnotation,
 			$this->getTraversableTypeHints(),
 			$this->enableUnionTypeHint,
-			$this->enableIntersectionTypeHint
+			$this->enableIntersectionTypeHint,
+			$this->enableStandaloneNullTrueFalseTypeHints
 		)) {
 			$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressed, $suppressName);
 			return;

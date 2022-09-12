@@ -79,6 +79,9 @@ class ReturnTypeHintSniff implements Sniff
 	/** @var bool|null */
 	public $enableNeverTypeHint = null;
 
+	/** @var bool|null */
+	public $enableStandaloneNullTrueFalseTypeHints = null;
+
 	/** @var string[] */
 	public $traversableTypeHints = [];
 
@@ -108,6 +111,10 @@ class ReturnTypeHintSniff implements Sniff
 		$this->enableUnionTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableUnionTypeHint, 80000);
 		$this->enableIntersectionTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableIntersectionTypeHint, 80100);
 		$this->enableNeverTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableNeverTypeHint, 80100);
+		$this->enableStandaloneNullTrueFalseTypeHints = SniffSettingsHelper::isEnabledByPhpVersion(
+			$this->enableStandaloneNullTrueFalseTypeHints,
+			80200
+		);
 
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $pointer, self::NAME)) {
 			return;
@@ -292,7 +299,11 @@ class ReturnTypeHintSniff implements Sniff
 		if (AnnotationTypeHelper::containsOneType($returnTypeNode)) {
 			/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $returnTypeNode */
 			$returnTypeNode = $returnTypeNode;
-			$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($returnTypeNode);
+			$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType(
+				$returnTypeNode,
+				false,
+				$this->enableStandaloneNullTrueFalseTypeHints
+			);
 
 		} elseif ($returnTypeNode instanceof UnionTypeNode || $returnTypeNode instanceof IntersectionTypeNode) {
 			$traversableTypeHints = [];
@@ -386,7 +397,8 @@ class ReturnTypeHintSniff implements Sniff
 				$typeHint,
 				$this->enableObjectTypeHint,
 				$this->enableStaticTypeHint,
-				$this->enableMixedTypeHint
+				$this->enableMixedTypeHint,
+				$this->enableStandaloneNullTrueFalseTypeHints
 			)) {
 				$this->reportUselessSuppress($phpcsFile, $functionPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 				return;
@@ -551,7 +563,8 @@ class ReturnTypeHintSniff implements Sniff
 			$returnAnnotation,
 			$this->getTraversableTypeHints(),
 			$this->enableUnionTypeHint,
-			$this->enableIntersectionTypeHint
+			$this->enableIntersectionTypeHint,
+			$this->enableStandaloneNullTrueFalseTypeHints
 		)) {
 			$this->reportUselessSuppress($phpcsFile, $functionPointer, $isSuppressed, $suppressName);
 			return;

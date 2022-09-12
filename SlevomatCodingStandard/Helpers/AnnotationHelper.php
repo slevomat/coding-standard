@@ -385,7 +385,8 @@ class AnnotationHelper
 		Annotation $annotation,
 		array $traversableTypeHints,
 		bool $enableUnionTypeHint = false,
-		bool $enableIntersectionTypeHint = false
+		bool $enableIntersectionTypeHint = false,
+		bool $enableStandaloneNullTrueFalseTypeHints = false
 	): bool
 	{
 		if ($annotation->isInvalid()) {
@@ -464,15 +465,22 @@ class AnnotationHelper
 		/** @var GenericTypeNode|IdentifierTypeNode|ThisTypeNode $annotationTypeNode */
 		$annotationTypeNode = $annotation->getType();
 
-		if (
-			$annotationTypeNode instanceof IdentifierTypeNode
-			&& in_array(
+		if ($annotationTypeNode instanceof IdentifierTypeNode) {
+			if (in_array(
 				strtolower($annotationTypeNode->name),
-				['true', 'false', 'class-string', 'trait-string', 'callable-string', 'numeric-string', 'non-empty-string', 'literal-string', 'positive-int', 'negative-int'],
+				['true', 'false', 'null'],
 				true
-			)
-		) {
-			return false;
+			)) {
+				return $enableStandaloneNullTrueFalseTypeHints;
+			}
+
+			if (in_array(
+				strtolower($annotationTypeNode->name),
+				['class-string', 'trait-string', 'callable-string', 'numeric-string', 'non-empty-string', 'literal-string', 'positive-int', 'negative-int'],
+				true
+			)) {
+				return false;
+			}
 		}
 
 		$annotationTypeHint = AnnotationTypeHelper::getTypeHintFromOneType($annotationTypeNode);

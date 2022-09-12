@@ -47,6 +47,7 @@ use const T_STATIC;
 use const T_STRING;
 use const T_THROW;
 use const T_TRAIT;
+use const T_TRUE;
 use const T_TYPE_INTERSECTION;
 use const T_TYPE_UNION;
 use const T_VAR;
@@ -444,6 +445,7 @@ class TokenHelper
 					T_ARRAY_HINT,
 					T_CALLABLE,
 					T_FALSE,
+					T_TRUE,
 					T_NULL,
 				]
 			);

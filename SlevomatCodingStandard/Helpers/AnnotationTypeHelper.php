@@ -724,7 +724,11 @@ class AnnotationTypeHelper
 	/**
 	 * @param CallableTypeNode|GenericTypeNode|IdentifierTypeNode|ThisTypeNode|ArrayTypeNode|ArrayShapeNode|ConstTypeNode $typeNode
 	 */
-	public static function getTypeHintFromOneType(TypeNode $typeNode, bool $enableUnionTypeHint = false): string
+	public static function getTypeHintFromOneType(
+		TypeNode $typeNode,
+		bool $enableUnionTypeHint = false,
+		bool $enableStandaloneNullTrueFalseTypeHints = false
+	): string
 	{
 		if ($typeNode instanceof GenericTypeNode) {
 			$genericName = $typeNode->type->name;
@@ -738,11 +742,11 @@ class AnnotationTypeHelper
 
 		if ($typeNode instanceof IdentifierTypeNode) {
 			if (strtolower($typeNode->name) === 'true') {
-				return 'bool';
+				return $enableStandaloneNullTrueFalseTypeHints ? 'true' : 'bool';
 			}
 
 			if (strtolower($typeNode->name) === 'false') {
-				return $enableUnionTypeHint ? 'false' : 'bool';
+				return $enableUnionTypeHint || $enableStandaloneNullTrueFalseTypeHints ? 'false' : 'bool';
 			}
 
 			if (in_array(strtolower($typeNode->name), ['positive-int', 'negative-int'], true)) {

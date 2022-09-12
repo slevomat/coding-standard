@@ -74,6 +74,9 @@ class ParameterTypeHintSniff implements Sniff
 	/** @var bool|null */
 	public $enableIntersectionTypeHint = null;
 
+	/** @var bool|null */
+	public $enableStandaloneNullTrueFalseTypeHints = null;
+
 	/** @var string[] */
 	public $traversableTypeHints = [];
 
@@ -100,6 +103,10 @@ class ParameterTypeHintSniff implements Sniff
 		$this->enableMixedTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableMixedTypeHint, 80000);
 		$this->enableUnionTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableUnionTypeHint, 80000);
 		$this->enableIntersectionTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableIntersectionTypeHint, 80100);
+		$this->enableStandaloneNullTrueFalseTypeHints = SniffSettingsHelper::isEnabledByPhpVersion(
+			$this->enableStandaloneNullTrueFalseTypeHints,
+			80200
+		);
 
 		if (SuppressHelper::isSniffSuppressed($phpcsFile, $functionPointer, self::NAME)) {
 			return;
@@ -178,7 +185,11 @@ class ParameterTypeHintSniff implements Sniff
 
 			$parameterTypeNode = $parametersAnnotations[$parameterName]->getType();
 
-			if ($parameterTypeNode instanceof IdentifierTypeNode && strtolower($parameterTypeNode->name) === 'null') {
+			if (
+				$parameterTypeNode instanceof IdentifierTypeNode
+				&& strtolower($parameterTypeNode->name) === 'null'
+				&& !$this->enableStandaloneNullTrueFalseTypeHints
+			) {
 				continue;
 			}
 
@@ -196,7 +207,11 @@ class ParameterTypeHintSniff implements Sniff
 			if (AnnotationTypeHelper::containsOneType($parameterTypeNode)) {
 				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode|ConstTypeNode $parameterTypeNode */
 				$parameterTypeNode = $parameterTypeNode;
-				$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($parameterTypeNode);
+				$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType(
+					$parameterTypeNode,
+					false,
+					$this->enableStandaloneNullTrueFalseTypeHints
+				);
 
 			} elseif (
 				$parameterTypeNode instanceof UnionTypeNode
@@ -285,7 +300,13 @@ class ParameterTypeHintSniff implements Sniff
 					continue;
 				}
 
-				if (!TypeHintHelper::isValidTypeHint($typeHint, $this->enableObjectTypeHint, false, $this->enableMixedTypeHint)) {
+				if (!TypeHintHelper::isValidTypeHint(
+					$typeHint,
+					$this->enableObjectTypeHint,
+					false,
+					$this->enableMixedTypeHint,
+					$this->enableStandaloneNullTrueFalseTypeHints
+				)) {
 					continue 2;
 				}
 
@@ -531,7 +552,8 @@ class ParameterTypeHintSniff implements Sniff
 				$parameterAnnotation,
 				$this->getTraversableTypeHints(),
 				$this->enableUnionTypeHint,
-				$this->enableIntersectionTypeHint
+				$this->enableIntersectionTypeHint,
+				$this->enableStandaloneNullTrueFalseTypeHints
 			)) {
 				continue;
 			}

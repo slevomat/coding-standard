@@ -14,6 +14,7 @@ class ReturnTypeHintSniffTest extends TestCase
 			'enableUnionTypeHint' => false,
 			'enableIntersectionTypeHint' => false,
 			'enableNeverTypeHint' => false,
+			'enableStandaloneNullTrueFalseTypeHints' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 		self::assertNoSniffErrorInFile($report);
@@ -28,6 +29,7 @@ class ReturnTypeHintSniffTest extends TestCase
 			'enableUnionTypeHint' => false,
 			'enableIntersectionTypeHint' => false,
 			'enableNeverTypeHint' => false,
+			'enableStandaloneNullTrueFalseTypeHints' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 
@@ -108,6 +110,7 @@ class ReturnTypeHintSniffTest extends TestCase
 			'enableUnionTypeHint' => true,
 			'enableIntersectionTypeHint' => false,
 			'enableNeverTypeHint' => false,
+			'enableStandaloneNullTrueFalseTypeHints' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 		self::assertNoSniffErrorInFile($report);
@@ -121,6 +124,7 @@ class ReturnTypeHintSniffTest extends TestCase
 			'enableUnionTypeHint' => true,
 			'enableIntersectionTypeHint' => false,
 			'enableNeverTypeHint' => false,
+			'enableStandaloneNullTrueFalseTypeHints' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 
@@ -155,6 +159,7 @@ class ReturnTypeHintSniffTest extends TestCase
 			'enableUnionTypeHint' => true,
 			'enableIntersectionTypeHint' => true,
 			'enableNeverTypeHint' => false,
+			'enableStandaloneNullTrueFalseTypeHints' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 		self::assertNoSniffErrorInFile($report);
@@ -168,6 +173,7 @@ class ReturnTypeHintSniffTest extends TestCase
 			'enableUnionTypeHint' => true,
 			'enableIntersectionTypeHint' => true,
 			'enableNeverTypeHint' => false,
+			'enableStandaloneNullTrueFalseTypeHints' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
 		]);
 
@@ -187,6 +193,7 @@ class ReturnTypeHintSniffTest extends TestCase
 			'enableUnionTypeHint' => false,
 			'enableIntersectionTypeHint' => false,
 			'enableNeverTypeHint' => true,
+			'enableStandaloneNullTrueFalseTypeHints' => false,
 		]);
 
 		self::assertSame(4, $report->getErrorCount());
@@ -195,6 +202,29 @@ class ReturnTypeHintSniffTest extends TestCase
 		self::assertSniffError($report, 13, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 19, ReturnTypeHintSniff::CODE_LESS_SPECIFIC_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 25, ReturnTypeHintSniff::CODE_LESS_SPECIFIC_NATIVE_TYPE_HINT);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testWithNullTrueFalseErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/returnTypeHintWithNullTrueFalseErrors.php', [
+			'enableObjectTypeHint' => true,
+			'enableMixedTypeHint' => true,
+			'enableUnionTypeHint' => true,
+			'enableIntersectionTypeHint' => true,
+			'enableNeverTypeHint' => true,
+			'enableStandaloneNullTrueFalseTypeHints' => true,
+		]);
+
+		self::assertSame(6, $report->getErrorCount());
+
+		self::assertSniffError($report, 7, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 13, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 19, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		self::assertSniffError($report, 22, ReturnTypeHintSniff::CODE_USELESS_ANNOTATION);
+		self::assertSniffError($report, 27, ReturnTypeHintSniff::CODE_USELESS_ANNOTATION);
+		self::assertSniffError($report, 33, ReturnTypeHintSniff::CODE_USELESS_ANNOTATION);
 
 		self::assertAllFixedInFile($report);
 	}
