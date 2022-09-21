@@ -54,3 +54,6 @@ $m = 0;
 
 /** @var class-string $n */
 $n = 'SomeClass';
+
+/** @var positive-int|null $o */
+$o = 1;

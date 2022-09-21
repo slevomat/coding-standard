@@ -302,7 +302,13 @@ class RequireExplicitAssertionSniff implements Sniff
 		} else {
 			/** @var IdentifierTypeNode|ThisTypeNode $innerTypeNode */
 			foreach ($typeNode->types as $innerTypeNode) {
-				$conditions = array_merge($conditions, $this->createConditions($variableName, $innerTypeNode));
+				$innerTypeConditions = $this->createConditions($variableName, $innerTypeNode);
+
+				if ($innerTypeConditions === []) {
+					return null;
+				}
+
+				$conditions = array_merge($conditions, $innerTypeConditions);
 			}
 		}
 
