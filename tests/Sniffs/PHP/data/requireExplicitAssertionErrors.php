@@ -113,3 +113,9 @@ function () {
 
 $z = new ArrayObject();
 /** @var \Traversable&\Countable $z */
+
+/** @var boolean $aa */
+$aa = true;
+
+/** @var integer $bb */
+$bb = 0;

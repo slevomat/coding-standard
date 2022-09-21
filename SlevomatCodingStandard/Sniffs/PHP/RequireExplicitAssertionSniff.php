@@ -343,8 +343,16 @@ class RequireExplicitAssertionSniff implements Sniff
 			return [sprintf('%s === %s', $variableName, $typeNode->name)];
 		}
 
+		if (
+			$typeNode->name === 'mixed'
+			|| TypeHintHelper::isVoidTypeHint($typeNode->name)
+			|| TypeHintHelper::isNeverTypeHint($typeNode->name)
+		) {
+			return [];
+		}
+
 		if (TypeHintHelper::isSimpleTypeHint($typeNode->name)) {
-			return [sprintf('\is_%s(%s)', $typeNode->name, $variableName)];
+			return [sprintf('\is_%s(%s)', TypeHintHelper::convertLongSimpleTypeHintToShort($typeNode->name), $variableName)];
 		}
 
 		if (in_array($typeNode->name, ['resource', 'object'], true)) {

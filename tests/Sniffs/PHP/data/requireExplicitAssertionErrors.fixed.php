@@ -105,3 +105,9 @@ function () {
 
 $z = new ArrayObject();
 \assert($z instanceof \Traversable && $z instanceof \Countable);
+
+$aa = true;
+\assert(\is_bool($aa));
+
+$bb = 0;
+\assert(\is_int($bb));

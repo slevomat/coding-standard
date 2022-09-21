@@ -17,7 +17,7 @@ class RequireExplicitAssertionSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireExplicitAssertionErrors.php');
 
-		self::assertSame(29, $report->getErrorCount());
+		self::assertSame(31, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
 		self::assertSniffError($report, 6, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
@@ -48,6 +48,8 @@ class RequireExplicitAssertionSniffTest extends TestCase
 		self::assertSniffError($report, 103, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
 		self::assertSniffError($report, 108, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
 		self::assertSniffError($report, 115, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
+		self::assertSniffError($report, 117, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
+		self::assertSniffError($report, 120, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
 
 		self::assertAllFixedInFile($report);
 	}

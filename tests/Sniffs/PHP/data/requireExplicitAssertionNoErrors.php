@@ -57,3 +57,9 @@ $n = 'SomeClass';
 
 /** @var positive-int|null $o */
 $o = 1;
+
+/** @var never $p */
+$p = null;
+
+/** @var void $p */
+$q = null;
