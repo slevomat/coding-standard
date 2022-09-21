@@ -33,4 +33,6 @@ class Foo
 	private $b = ['b'];
 	private $c = ['c'];
 
+	private $aa = array('a', 'aa');
+	private $bb = array('b', 'bb');
 }

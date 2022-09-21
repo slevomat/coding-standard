@@ -17,6 +17,11 @@ class Foo
 		'c',
 	];
 
+	public $oldArray = array(
+		'a',
+		'b',
+	);
+
 	public function __construct(private string $propertyPromotion, private int $propertyPromotion2)
 	{
 	}

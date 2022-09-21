@@ -11,6 +11,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use function count;
 use function sprintf;
 use function trim;
+use const T_ARRAY;
 use const T_AS;
 use const T_COMMA;
 use const T_FUNCTION;
@@ -61,7 +62,7 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 		$commaPointers = [];
 		$nextPointer = $propertyPointer;
 		do {
-			$nextPointer = TokenHelper::findNext($phpcsFile, [T_COMMA, T_OPEN_SHORT_ARRAY], $nextPointer + 1, $semicolonPointer);
+			$nextPointer = TokenHelper::findNext($phpcsFile, [T_COMMA, T_OPEN_SHORT_ARRAY, T_ARRAY], $nextPointer + 1, $semicolonPointer);
 
 			if ($nextPointer === null) {
 				break;
@@ -69,6 +70,11 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 
 			if ($tokens[$nextPointer]['code'] === T_OPEN_SHORT_ARRAY) {
 				$nextPointer = $tokens[$nextPointer]['bracket_closer'];
+				continue;
+			}
+
+			if ($tokens[$nextPointer]['code'] === T_ARRAY) {
+				$nextPointer = $tokens[$nextPointer]['parenthesis_closer'];
 				continue;
 			}
 

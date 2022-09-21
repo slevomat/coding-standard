@@ -29,4 +29,5 @@ class Foo
 		$c = ['c']
 	;
 
+	private $aa = array('a', 'aa'), $bb = array('b', 'bb');
 }
