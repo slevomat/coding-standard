@@ -161,7 +161,7 @@ constants, properties, static properties, methods, all public methods, all prote
 	<properties>
 		<property name="groups" type="array">
 			<element value="uses"/>
-			
+
 			<element value="enum cases"/>
 
 			<!-- Public constants are first but you don't care about the order of protected or private constants -->
