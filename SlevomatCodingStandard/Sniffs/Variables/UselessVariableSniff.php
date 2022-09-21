@@ -6,7 +6,6 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use function array_key_exists;
 use function array_keys;
 use function array_reverse;
 use function count;
@@ -24,12 +23,13 @@ use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOUBLE_COLON;
 use const T_ELSEIF;
 use const T_EQUAL;
+use const T_FOR;
+use const T_FOREACH;
 use const T_IF;
 use const T_MINUS_EQUAL;
 use const T_MOD_EQUAL;
 use const T_MUL_EQUAL;
 use const T_OPEN_CURLY_BRACKET;
-use const T_OPEN_PARENTHESIS;
 use const T_OR_EQUAL;
 use const T_PLUS_EQUAL;
 use const T_POW_EQUAL;
@@ -38,6 +38,7 @@ use const T_SEMICOLON;
 use const T_SL_EQUAL;
 use const T_SR_EQUAL;
 use const T_STATIC;
+use const T_SWITCH;
 use const T_VARIABLE;
 use const T_WHILE;
 use const T_WHITESPACE;
@@ -104,6 +105,10 @@ class UselessVariableSniff implements Sniff
 			return;
 		}
 
+		if ($this->isAssignedInControlStructure($phpcsFile, $previousVariablePointer)) {
+			return;
+		}
+
 		if ($this->hasVariableVarAnnotation($phpcsFile, $previousVariablePointer)) {
 			return;
 		}
@@ -121,28 +126,6 @@ class UselessVariableSniff implements Sniff
 			$previousVariablePointer,
 			self::CODE_USELESS_VARIABLE,
 		];
-
-		$searchBefore = $previousVariablePointer;
-		do {
-			$previousOpenParenthesisPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_PARENTHESIS, $searchBefore - 1);
-
-			if (
-				$previousOpenParenthesisPointer === null
-				|| $tokens[$previousOpenParenthesisPointer]['parenthesis_closer'] < $previousVariablePointer
-			) {
-				break;
-			}
-
-			if (
-				array_key_exists('parenthesis_owner', $tokens[$previousOpenParenthesisPointer])
-				&& in_array($tokens[$tokens[$previousOpenParenthesisPointer]['parenthesis_owner']]['code'], [T_IF, T_ELSEIF, T_WHILE], true)
-			) {
-				return;
-			}
-
-			$searchBefore = $previousOpenParenthesisPointer;
-
-		} while (true);
 
 		$pointerBeforePreviousVariable = TokenHelper::findPreviousEffective($phpcsFile, $previousVariablePointer - 1);
 
@@ -232,6 +215,26 @@ class UselessVariableSniff implements Sniff
 		}
 
 		return null;
+	}
+
+	private function isAssignedInControlStructure(File $phpcsFile, int $pointer): bool
+	{
+		$controlStructure = TokenHelper::findPrevious($phpcsFile, [
+			T_WHILE,
+			T_FOR,
+			T_FOREACH,
+			T_SWITCH,
+			T_IF,
+			T_ELSEIF,
+		], $pointer - 1);
+
+		if ($controlStructure === null) {
+			return false;
+		}
+
+		$tokens = $phpcsFile->getTokens();
+
+		return $tokens[$controlStructure]['parenthesis_opener'] < $pointer && $pointer < $tokens[$controlStructure]['parenthesis_closer'];
 	}
 
 	private function isAssigmentToVariable(File $phpcsFile, int $pointer): bool

@@ -186,3 +186,8 @@ function foo( $bar ) {
 	$bar .= ' more bar';
 	return $bar;
 }
+
+function boo($backtrace) {
+    for ($class = $backtrace[$frame]['class']; ($parent = get_parent_class($class)) !== false; $class = $parent);
+    return $class;
+}
