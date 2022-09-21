@@ -79,3 +79,7 @@ function ($condition, $actual) {
 		default => false,
 	};
 };
+
+$event = $actualEvents->find(
+	static fn (SpaceflowEvent $event): bool => $expectedEvent::class === $event::class,
+);
