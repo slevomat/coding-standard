@@ -47,6 +47,9 @@ class RequireExplicitAssertionSniff implements Sniff
 	/** @var bool */
 	public $enableIntegerRanges = false;
 
+	/** @var bool */
+	public $enableAdvancedStringTypes = false;
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
@@ -438,6 +441,20 @@ class RequireExplicitAssertionSniff implements Sniff
 			if ($typeNode->name === 'negative-int') {
 				return [sprintf('\is_int(%1$s) && %1$s < 0', $variableName)];
 			}
+		}
+
+		if ($this->enableAdvancedStringTypes) {
+			$conditions = [sprintf('\is_string(%s)', $variableName)];
+
+			if ($typeNode->name === 'non-empty-string') {
+				$conditions[] = sprintf("%s !== ''", $variableName);
+			} elseif ($typeNode->name === 'callable-string') {
+				$conditions[] = sprintf('\is_callable(%s)', $variableName);
+			} elseif ($typeNode->name === 'numeric-string') {
+				$conditions[] = sprintf('\is_numeric(%s)', $variableName);
+			}
+
+			return [implode(' && ', $conditions)];
 		}
 
 		if (TypeHintHelper::isSimpleUnofficialTypeHints($typeNode->name)) {
