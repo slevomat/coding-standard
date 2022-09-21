@@ -9,13 +9,17 @@ class RequireExplicitAssertionSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/requireExplicitAssertionNoErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/requireExplicitAssertionNoErrors.php', [
+			'enableIntegerRanges' => false,
+		]);
 		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/requireExplicitAssertionErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/requireExplicitAssertionErrors.php', [
+			'enableIntegerRanges' => false,
+		]);
 
 		self::assertSame(31, $report->getErrorCount());
 
@@ -50,6 +54,36 @@ class RequireExplicitAssertionSniffTest extends TestCase
 		self::assertSniffError($report, 115, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
 		self::assertSniffError($report, 117, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
 		self::assertSniffError($report, 120, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testIntegerRangesNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireExplicitAssertionIntegerRangesNoErrors.php', [
+			'enableIntegerRanges' => true,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testIntegerRangesErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireExplicitAssertionIntegerRangesErrors.php', [
+			'enableIntegerRanges' => true,
+		]);
+
+		self::assertSame(10, $report->getErrorCount());
+
+		self::assertSniffError($report, 3, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
+		self::assertSniffError($report, 6, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
+		self::assertSniffError($report, 9, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
+		self::assertSniffError($report, 12, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
+		self::assertSniffError($report, 15, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
+		self::assertSniffError($report, 18, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
+		self::assertSniffError($report, 21, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
+		self::assertSniffError($report, 24, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
+		self::assertSniffError($report, 27, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
+		self::assertSniffError($report, 30, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
 
 		self::assertAllFixedInFile($report);
 	}

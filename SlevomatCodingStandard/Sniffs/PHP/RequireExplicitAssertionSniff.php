@@ -4,6 +4,9 @@ namespace SlevomatCodingStandard\Sniffs\PHP;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
+use PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
@@ -23,6 +26,7 @@ use function count;
 use function implode;
 use function in_array;
 use function sprintf;
+use function strpos;
 use function trim;
 use const T_AS;
 use const T_DOC_COMMENT_OPEN_TAG;
@@ -39,6 +43,9 @@ class RequireExplicitAssertionSniff implements Sniff
 {
 
 	public const CODE_REQUIRED_EXPLICIT_ASSERTION = 'RequiredExplicitAssertion';
+
+	/** @var bool */
+	public $enableIntegerRanges = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -105,7 +112,7 @@ class RequireExplicitAssertionSniff implements Sniff
 				continue;
 			}
 
-			/** @var IdentifierTypeNode|ThisTypeNode|UnionTypeNode $variableAnnotationType */
+			/** @var IdentifierTypeNode|ThisTypeNode|UnionTypeNode|GenericTypeNode $variableAnnotationType */
 			$variableAnnotationType = $variableAnnotationType;
 
 			$assertion = $this->createAssert($variableAnnotation->getVariableName(), $variableAnnotationType);
@@ -269,7 +276,33 @@ class RequireExplicitAssertionSniff implements Sniff
 
 	private function isValidTypeNode(TypeNode $typeNode): bool
 	{
-		return $typeNode instanceof ThisTypeNode || $typeNode instanceof IdentifierTypeNode;
+		if ($typeNode instanceof ThisTypeNode) {
+			return true;
+		}
+
+		if ($typeNode instanceof IdentifierTypeNode) {
+			return true;
+		}
+
+		if (
+			$this->enableIntegerRanges
+			&& $typeNode instanceof GenericTypeNode
+			&& $typeNode->type->name === 'int'
+			&& count($typeNode->genericTypes) === 2
+		) {
+			foreach ($typeNode->genericTypes as $genericType) {
+				$isValid = ($genericType instanceof IdentifierTypeNode && in_array($genericType->name, ['min', 'max'], true))
+					|| ($genericType instanceof ConstTypeNode && $genericType->constExpr instanceof ConstExprIntegerNode);
+
+				if (!$isValid) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 	private function getNextSemicolonInSameScope(File $phpcsFile, int $scopePointer, int $searchAt): int
@@ -291,42 +324,64 @@ class RequireExplicitAssertionSniff implements Sniff
 	}
 
 	/**
-	 * @param IdentifierTypeNode|ThisTypeNode|UnionTypeNode|IntersectionTypeNode $typeNode
+	 * @param IdentifierTypeNode|ThisTypeNode|UnionTypeNode|IntersectionTypeNode|GenericTypeNode $typeNode
 	 */
 	private function createAssert(string $variableName, TypeNode $typeNode): ?string
 	{
 		$conditions = [];
 
-		if ($typeNode instanceof IdentifierTypeNode || $typeNode instanceof ThisTypeNode) {
+		if (
+			$typeNode instanceof IdentifierTypeNode
+			|| $typeNode instanceof ThisTypeNode
+			|| $typeNode instanceof GenericTypeNode
+		) {
 			$conditions = $this->createConditions($variableName, $typeNode);
-		} else {
-			/** @var IdentifierTypeNode|ThisTypeNode $innerTypeNode */
-			foreach ($typeNode->types as $innerTypeNode) {
-				$innerTypeConditions = $this->createConditions($variableName, $innerTypeNode);
 
-				if ($innerTypeConditions === []) {
-					return null;
-				}
-
-				$conditions = array_merge($conditions, $innerTypeConditions);
-			}
+			return $conditions !== [] ? sprintf('\assert(%s);', implode(' || ', $conditions)) : null;
 		}
 
-		if ($conditions === []) {
-			return null;
+		/** @var IdentifierTypeNode|ThisTypeNode|GenericTypeNode $innerTypeNode */
+		foreach ($typeNode->types as $innerTypeNode) {
+			$innerTypeConditions = $this->createConditions($variableName, $innerTypeNode);
+
+			if ($innerTypeConditions === []) {
+				return null;
+			}
+
+			$conditions = array_merge($conditions, $innerTypeConditions);
 		}
 
 		$operator = $typeNode instanceof IntersectionTypeNode ? '&&' : '||';
 
-		return sprintf('\assert(%s);', implode(sprintf(' %s ', $operator), array_unique($conditions)));
+		$formattedConditions = [];
+
+		foreach (array_unique($conditions) as $condition) {
+			$formattedConditions[] = $operator === '||' && strpos($condition, '&&') !== false ? sprintf('(%s)', $condition) : $condition;
+		}
+
+		return sprintf('\assert(%s);', implode(sprintf(' %s ', $operator), $formattedConditions));
 	}
 
 	/**
-	 * @param IdentifierTypeNode|ThisTypeNode $typeNode
+	 * @param IdentifierTypeNode|ThisTypeNode|GenericTypeNode $typeNode
 	 * @return string[]
 	 */
 	private function createConditions(string $variableName, TypeNode $typeNode): array
 	{
+		if ($typeNode instanceof GenericTypeNode) {
+			$conditions = [sprintf('\is_int(%s)', $variableName)];
+
+			if ($typeNode->genericTypes[0] instanceof ConstTypeNode) {
+				$conditions[] = sprintf('%s >= %s', $variableName, (string) $typeNode->genericTypes[0]);
+			}
+
+			if ($typeNode->genericTypes[1] instanceof ConstTypeNode) {
+				$conditions[] = sprintf('%s <= %s', $variableName, (string) $typeNode->genericTypes[1]);
+			}
+
+			return [implode(' && ', $conditions)];
+		}
+
 		if ($typeNode instanceof ThisTypeNode) {
 			return [sprintf('%s instanceof $this', $variableName)];
 		}
@@ -373,6 +428,16 @@ class RequireExplicitAssertionSniff implements Sniff
 				sprintf('\is_bool(%s)', $variableName),
 				sprintf('\is_string(%s)', $variableName),
 			];
+		}
+
+		if ($this->enableIntegerRanges) {
+			if ($typeNode->name === 'positive-int') {
+				return [sprintf('\is_int(%1$s) && %1$s > 0', $variableName)];
+			}
+
+			if ($typeNode->name === 'negative-int') {
+				return [sprintf('\is_int(%1$s) && %1$s < 0', $variableName)];
+			}
 		}
 
 		if (TypeHintHelper::isSimpleUnofficialTypeHints($typeNode->name)) {
