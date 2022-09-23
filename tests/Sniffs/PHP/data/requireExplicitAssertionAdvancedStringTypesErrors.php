@@ -8,3 +8,6 @@ $b = 'MyClass::myCallbackMethod';
 
 /** @var numeric-string $c */
 $c = '100';
+
+/** @var SomeClass|null $d */
+$d = null;
