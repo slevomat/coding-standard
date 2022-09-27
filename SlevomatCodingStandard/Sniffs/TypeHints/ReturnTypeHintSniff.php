@@ -383,7 +383,13 @@ class ReturnTypeHintSniff implements Sniff
 		}
 		$typeHintsWithConvertedUnion = array_unique($typeHintsWithConvertedUnion);
 
-		if (count($typeHintsWithConvertedUnion) > 1 && !$canTryUnionTypeHint && !$this->enableIntersectionTypeHint) {
+		if (
+			count($typeHintsWithConvertedUnion) > 1
+			&& (
+				($returnTypeNode instanceof UnionTypeNode && !$canTryUnionTypeHint)
+				|| ($returnTypeNode instanceof IntersectionTypeNode && !$this->enableIntersectionTypeHint)
+			)
+		) {
 			$this->reportUselessSuppress($phpcsFile, $functionPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 			return;
 		}

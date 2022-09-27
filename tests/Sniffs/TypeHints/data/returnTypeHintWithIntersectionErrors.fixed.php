@@ -14,4 +14,9 @@ class Whatever
 	{
 	}
 
+	/** @return Foo|Bar */
+	public function union()
+	{
+	}
+
 }

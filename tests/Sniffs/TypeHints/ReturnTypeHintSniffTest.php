@@ -156,7 +156,7 @@ class ReturnTypeHintSniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/returnTypeHintWithIntersectionNoErrors.php', [
 			'enableObjectTypeHint' => true,
 			'enableMixedTypeHint' => true,
-			'enableUnionTypeHint' => true,
+			'enableUnionTypeHint' => false,
 			'enableIntersectionTypeHint' => true,
 			'enableNeverTypeHint' => false,
 			'enableStandaloneNullTrueFalseTypeHints' => false,
@@ -170,7 +170,7 @@ class ReturnTypeHintSniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/returnTypeHintWithIntersectionErrors.php', [
 			'enableObjectTypeHint' => true,
 			'enableMixedTypeHint' => true,
-			'enableUnionTypeHint' => true,
+			'enableUnionTypeHint' => false,
 			'enableIntersectionTypeHint' => true,
 			'enableNeverTypeHint' => false,
 			'enableStandaloneNullTrueFalseTypeHints' => false,
