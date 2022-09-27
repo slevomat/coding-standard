@@ -9,4 +9,7 @@ class Whatever
 	/** @var Foo&Bar&Boo */
 	private $three;
 
+	/** @var Foo|Bar */
+	public $union;
+
 }

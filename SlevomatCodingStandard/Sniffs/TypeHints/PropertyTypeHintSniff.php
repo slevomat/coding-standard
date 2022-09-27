@@ -311,7 +311,13 @@ class PropertyTypeHintSniff implements Sniff
 		}
 		$typeHintsWithConvertedUnion = array_unique($typeHintsWithConvertedUnion);
 
-		if (count($typeHintsWithConvertedUnion) > 1 && !$canTryUnionTypeHint && !$this->enableIntersectionTypeHint) {
+		if (
+			count($typeHintsWithConvertedUnion) > 1
+			&& (
+				($typeNode instanceof UnionTypeNode && !$canTryUnionTypeHint)
+				|| ($typeNode instanceof IntersectionTypeNode && !$this->enableIntersectionTypeHint)
+			)
+		) {
 			$this->reportUselessSuppress($phpcsFile, $propertyPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
 			return;
 		}

@@ -164,7 +164,7 @@ class PropertyTypeHintSniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintEnabledNativeWithIntersectionNoErrors.php', [
 			'enableNativeTypeHint' => true,
 			'enableMixedTypeHint' => true,
-			'enableUnionTypeHint' => true,
+			'enableUnionTypeHint' => false,
 			'enableIntersectionTypeHint' => true,
 			'enableStandaloneNullTrueFalseTypeHints' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
@@ -177,7 +177,7 @@ class PropertyTypeHintSniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintEnabledNativeWithIntersectionErrors.php', [
 			'enableNativeTypeHint' => true,
 			'enableMixedTypeHint' => true,
-			'enableUnionTypeHint' => true,
+			'enableUnionTypeHint' => false,
 			'enableIntersectionTypeHint' => true,
 			'enableStandaloneNullTrueFalseTypeHints' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],

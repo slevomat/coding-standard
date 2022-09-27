@@ -7,4 +7,7 @@ class Whatever
 
 	private Foo&Bar&Boo $three;
 
+	/** @var Foo|Bar */
+	public $union;
+
 }
