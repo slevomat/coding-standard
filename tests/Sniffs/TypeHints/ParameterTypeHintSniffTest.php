@@ -140,7 +140,7 @@ class ParameterTypeHintSniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/parameterTypeHintWithIntersectionNoErrors.php', [
 			'enableObjectTypeHint' => true,
 			'enableMixedTypeHint' => true,
-			'enableUnionTypeHint' => true,
+			'enableUnionTypeHint' => false,
 			'enableIntersectionTypeHint' => false,
 			'enableStandaloneNullTrueFalseTypeHints' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
@@ -153,7 +153,7 @@ class ParameterTypeHintSniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/parameterTypeHintWithIntersectionErrors.php', [
 			'enableObjectTypeHint' => true,
 			'enableMixedTypeHint' => true,
-			'enableUnionTypeHint' => true,
+			'enableUnionTypeHint' => false,
 			'enableIntersectionTypeHint' => true,
 			'enableStandaloneNullTrueFalseTypeHints' => false,
 			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],

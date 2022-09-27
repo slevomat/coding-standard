@@ -14,4 +14,9 @@ class Whatever
 	{
 	}
 
+	/** @param Foo|Bar $a */
+	public function union($a)
+	{
+	}
+
 }

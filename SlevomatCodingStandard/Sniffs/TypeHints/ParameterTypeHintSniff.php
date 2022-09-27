@@ -291,7 +291,13 @@ class ParameterTypeHintSniff implements Sniff
 			}
 			$typeHintsWithConvertedUnion = array_unique($typeHintsWithConvertedUnion);
 
-			if (count($typeHintsWithConvertedUnion) > 1 && !$canTryUnionTypeHint && !$this->enableIntersectionTypeHint) {
+			if (
+				count($typeHintsWithConvertedUnion) > 1
+				&& (
+					($parameterTypeNode instanceof UnionTypeNode && !$canTryUnionTypeHint)
+					|| ($parameterTypeNode instanceof IntersectionTypeNode && !$this->enableIntersectionTypeHint)
+				)
+			) {
 				continue;
 			}
 
