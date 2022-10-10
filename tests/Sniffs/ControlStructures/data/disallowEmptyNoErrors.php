@@ -9,6 +9,6 @@ if (!$foo) {
 class X {
     public static function empty(): self
     {
-		return $this;
+		return new self();
 	}
 }
