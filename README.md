@@ -306,6 +306,10 @@ Some functions have `$strict` parameter. This sniff reports calls to these funct
 
 Reports closures not using `$this` that are not declared `static`.
 
+#### SlevomatCodingStandard.Functions.ThisInStaticClosure 🔧
+
+Reports closures using `$this` that are declared `static`.
+
 #### SlevomatCodingStandard.Functions.FunctionLength
 
 Disallows long functions. This sniff provides the following setting:

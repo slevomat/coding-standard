@@ -370,6 +370,7 @@
 	<rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInClosureUse"/>
 	<rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInDeclaration"/>
 	<rule ref="SlevomatCodingStandard.Functions.StaticClosure"/>
+	<rule ref="SlevomatCodingStandard.Functions.ThisInStaticClosure"/>
 	<rule ref="SlevomatCodingStandard.Functions.StrictCall"/>
 	<rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall">
 		<properties>
