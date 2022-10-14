@@ -259,3 +259,15 @@ class Conditional
 	}
 
 }
+
+class ParameterOut
+{
+
+	/**
+	 * @param-out DateTime|null $a
+	 */
+	public function parameterOut(&$a)
+	{
+	}
+
+}
