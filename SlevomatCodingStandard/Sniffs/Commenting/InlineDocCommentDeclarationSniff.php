@@ -13,7 +13,6 @@ use function in_array;
 use function preg_match;
 use function sprintf;
 use function substr;
-use function trim;
 use const T_AS;
 use const T_ATTRIBUTE;
 use const T_CLOSURE;
@@ -101,42 +100,15 @@ class InlineDocCommentDeclarationSniff implements Sniff
 			}
 		}
 
-		$this->checkFormat($phpcsFile, $commentOpenPointer, $commentClosePointer);
-
-		if ($tokens[$commentOpenPointer]['code'] !== T_DOC_COMMENT_OPEN_TAG) {
+		if ($tokens[$commentOpenPointer]['code'] === T_COMMENT) {
+			$this->checkCommentType($phpcsFile, $commentOpenPointer);
 			return;
 		}
 
-		$this->checkVariable($phpcsFile, $commentOpenPointer, $commentClosePointer);
-	}
+		/** @var list<VariableAnnotation> $annotations */
+		$annotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $commentOpenPointer, '@var');
 
-	private function checkFormat(File $phpcsFile, int $commentOpenPointer, int $commentClosePointer): void
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		if ($tokens[$commentOpenPointer]['code'] === T_COMMENT) {
-			if (preg_match('~^/\*\\s*@var\\s+~', $tokens[$commentOpenPointer]['content']) === 0) {
-				return;
-			}
-
-			$fix = $phpcsFile->addFixableError(
-				'Invalid comment type /* */ for inline documentation comment, use /** */.',
-				$commentOpenPointer,
-				self::CODE_INVALID_COMMENT_TYPE
-			);
-
-			if ($fix) {
-				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->replaceToken($commentOpenPointer, sprintf('/**%s', substr($tokens[$commentOpenPointer]['content'], 2)));
-				$phpcsFile->fixer->endChangeset();
-			}
-
-			$commentContent = trim(substr($tokens[$commentOpenPointer]['content'], 2, -2));
-		} else {
-			$commentContent = trim(TokenHelper::getContent($phpcsFile, $commentOpenPointer + 1, $commentClosePointer - 1));
-		}
-
-		if (preg_match('~^@var~', $commentContent) === 0) {
+		if ($annotations === []) {
 			return;
 		}
 
@@ -147,72 +119,119 @@ class InlineDocCommentDeclarationSniff implements Sniff
 			}
 		}
 
-		if (preg_match(
-			'~^@var\\s+(?:\\S+?( ?: ?\S+)?(?:<.+>|{.+})?)(?:\\s*[|&]\\s*(?:\\S+(?:<.+>|\{.+\})?))*\\s+\$\\S+(?:\\s+.+)?$~',
-			$commentContent
-		) !== 0) {
+		$this->checkFormat($phpcsFile, $annotations);
+		$this->checkVariable($phpcsFile, $annotations, $commentOpenPointer, $commentClosePointer);
+	}
+
+	private function checkCommentType(File $phpcsFile, int $commentOpenPointer): void
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		if (preg_match('~^/\*\\s*@var\\s+~', $tokens[$commentOpenPointer]['content']) === 0) {
 			return;
 		}
 
-		if (
-			preg_match('~^@var\\s+(\$\\S+)\\s+((?:\\S+(?:\\s*[&\|]\\s*\\S+)+)|\\S+)(\\s+.+)?$~', $commentContent, $matches) !== 0
-			&& preg_match('~[<>\{\}\\s]~', $matches[2]) === 0
-		) {
+		$fix = $phpcsFile->addFixableError(
+			'Invalid comment type /* */ for inline documentation comment, use /** */.',
+			$commentOpenPointer,
+			self::CODE_INVALID_COMMENT_TYPE
+		);
+
+		if (!$fix) {
+			return;
+		}
+
+		$phpcsFile->fixer->beginChangeset();
+		$phpcsFile->fixer->replaceToken($commentOpenPointer, sprintf('/**%s', substr($tokens[$commentOpenPointer]['content'], 2)));
+		$phpcsFile->fixer->endChangeset();
+	}
+
+	/**
+	 * @param list<VariableAnnotation> $annotations
+	 */
+	private function checkFormat(File $phpcsFile, array $annotations): void
+	{
+		foreach ($annotations as $annotation) {
+			if (!$annotation->isInvalid() && $annotation->getVariableName() !== null) {
+				continue;
+			}
+
+			$annotationContent = $annotation->getContent();
+
+			$variableName = '$variable';
+			$type = null;
+
+			if (
+				$annotationContent !== null
+				&& preg_match('~(\$\w+)(?:\s+(.+))?$~i', $annotation->getContent(), $matches) === 1
+			) {
+				$variableName = $matches[1];
+				$type = $matches[2] ?? null;
+			}
+
+			// It may be description when it contains whitespaces
+			$isFixable = $type !== null && preg_match('~\s~', $type) === 0;
+
+			if (!$isFixable) {
+				$phpcsFile->addError(
+					sprintf(
+						'Invalid inline documentation comment format "@var %1$s", expected "@var type %2$s Optional description".',
+						$annotation->getContent(),
+						$variableName
+					),
+					$annotation->getStartPointer(),
+					self::CODE_INVALID_FORMAT
+				);
+
+				continue;
+			}
+
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
-					'Invalid inline documentation comment format "%s", expected "@var %s %s%s".',
-					$commentContent,
-					$matches[2],
-					$matches[1],
-					$matches[3] ?? ''
+					'Invalid inline documentation comment format "@var %1$s", expected "@var %2$s %3$s".',
+					$annotation->getContent(),
+					$type,
+					$variableName
 				),
-				$commentOpenPointer,
+				$annotation->getStartPointer(),
 				self::CODE_INVALID_FORMAT
 			);
 
-			if ($fix) {
-				$phpcsFile->fixer->beginChangeset();
-				for ($i = $commentOpenPointer; $i <= $commentClosePointer; $i++) {
-					$phpcsFile->fixer->replaceToken($i, '');
-				}
-				$phpcsFile->fixer->addContent(
-					$commentOpenPointer,
-					sprintf(
-						'%s @var %s %s%s */',
-						$tokens[$commentOpenPointer]['code'] === T_DOC_COMMENT_OPEN_TAG
-							? '/**'
-							: '/*',
-						$matches[2],
-						$matches[1],
-						$matches[3] ?? ''
-					)
-				);
-				$phpcsFile->fixer->endChangeset();
+			if (!$fix) {
+				continue;
 			}
-		} else {
-			$phpcsFile->addError(
-				sprintf('Invalid inline documentation comment format "%1$s", expected "@var type $variable".', $commentContent),
-				$commentOpenPointer,
-				self::CODE_INVALID_FORMAT
+
+			$phpcsFile->fixer->beginChangeset();
+
+			$phpcsFile->fixer->addContent(
+				$annotation->getStartPointer(),
+				sprintf(
+					' %s %s ',
+					$type,
+					$variableName
+				)
 			);
+
+			for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
+
+			$phpcsFile->fixer->endChangeset();
 		}
 	}
 
-	private function checkVariable(File $phpcsFile, int $docCommentOpenPointer, int $commentClosePointer): void
+	/**
+	 * @param list<VariableAnnotation> $annotations
+	 */
+	private function checkVariable(File $phpcsFile, array $annotations, int $docCommentOpenerPointer, int $docCommentCloserPointer): void
 	{
-		$variableAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $docCommentOpenPointer, '@var');
-		if (count($variableAnnotations) === 0) {
-			return;
-		}
-
 		$tokens = $phpcsFile->getTokens();
 
 		$checkedTokens = [T_VARIABLE, T_FOREACH, T_WHILE, T_LIST, T_OPEN_SHORT_ARRAY, T_CLOSURE, T_FN];
 
 		$variableNames = [];
 
-		/** @var VariableAnnotation $variableAnnotation */
-		foreach ($variableAnnotations as $variableAnnotation) {
+		foreach ($annotations as $variableAnnotation) {
 			if ($variableAnnotation->isInvalid()) {
 				continue;
 			}
@@ -252,7 +271,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 			return $codePointer;
 		};
 
-		$firstPointerOnNextLine = TokenHelper::findFirstNonWhitespaceOnNextLine($phpcsFile, $commentClosePointer);
+		$firstPointerOnNextLine = TokenHelper::findFirstNonWhitespaceOnNextLine($phpcsFile, $docCommentCloserPointer);
 
 		$codePointerAfter = $firstPointerOnNextLine;
 		while ($codePointerAfter !== null && $tokens[$codePointerAfter]['code'] === T_DOC_COMMENT_OPEN_TAG) {
@@ -267,7 +286,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 			$codePointerAfter = $improveCodePointer($codePointerAfter);
 		}
 
-		$codePointerBefore = TokenHelper::findFirstNonWhitespaceOnPreviousLine($phpcsFile, $docCommentOpenPointer);
+		$codePointerBefore = TokenHelper::findFirstNonWhitespaceOnPreviousLine($phpcsFile, $docCommentOpenerPointer);
 		while ($codePointerBefore !== null && $tokens[$codePointerBefore]['code'] === T_DOC_COMMENT_OPEN_TAG) {
 			$codePointerBefore = TokenHelper::findFirstNonWhitespaceOnPreviousLine($phpcsFile, $codePointerBefore - 1);
 		}
@@ -276,8 +295,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 			$codePointerBefore = $improveCodePointer($codePointerBefore);
 		}
 
-		/** @var VariableAnnotation $variableAnnotation */
-		foreach ($variableAnnotations as $variableAnnotation) {
+		foreach ($annotations as $variableAnnotation) {
 			if ($variableAnnotation->isInvalid()) {
 				continue;
 			}
@@ -289,13 +307,13 @@ class InlineDocCommentDeclarationSniff implements Sniff
 
 			$missingVariableErrorParameters = [
 				sprintf('Missing variable %s before or after the documentation comment.', $variableName),
-				$docCommentOpenPointer,
+				$docCommentOpenerPointer,
 				self::CODE_MISSING_VARIABLE,
 			];
 
 			$noAssignmentErrorParameters = [
 				sprintf('No assignment to %s variable before or after the documentation comment.', $variableName),
-				$docCommentOpenPointer,
+				$docCommentOpenerPointer,
 				self::CODE_NO_ASSIGNMENT,
 			];
 

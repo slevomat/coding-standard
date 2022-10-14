@@ -17,7 +17,7 @@ class Foo
 		/** @var $c */
 		$c = [];
 
-		/** @var iterable|array|\Traversable $d Lorem ipsum */
+		/** @var $d iterable|array|\Traversable Lorem ipsum */
 		$d = [];
 
 		/** @var string $f */
