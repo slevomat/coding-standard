@@ -17,7 +17,7 @@ class FullyQualifiedClassNameInAnnotationSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedClassNameInAnnotationErrors.php');
 
-		self::assertSame(86, $report->getErrorCount());
+		self::assertSame(87, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -491,6 +491,13 @@ class FullyQualifiedClassNameInAnnotationSniffTest extends TestCase
 			267,
 			FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME,
 			'Class name \DateTime in @param-out should be referenced via a fully qualified name'
+		);
+
+		self::assertSniffError(
+			$report,
+			279,
+			FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME,
+			'Class name \DateTime in @phpstan-self-out should be referenced via a fully qualified name'
 		);
 
 		self::assertAllFixedInFile($report);

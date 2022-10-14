@@ -25,7 +25,7 @@ parameters:
 			path: %currentWorkingDirectory%/SlevomatCodingStandard/Sniffs/ControlStructures/AssignmentInConditionSniff.php
 		-
 			message: '#Parameter \#5 \$contentNode of class SlevomatCodingStandard\\Helpers\\Annotation\\\w+Annotation constructor expects PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\\\w+(?:\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\\\w+)*\\|null, PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode\|null given.#'
-			count: 15
+			count: 16
 			path: %currentWorkingDirectory%/SlevomatCodingStandard/Helpers/AnnotationHelper.php
 		-
 			message: "#^Access to an undefined property PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\\\w+(?:\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\PhpDoc\\\\\\w+)*\\:\\:\\$type\\.$#"

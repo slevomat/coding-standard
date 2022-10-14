@@ -271,3 +271,15 @@ class ParameterOut
 	}
 
 }
+
+class SelfOut
+{
+
+	/**
+	 * @phpstan-self-out \DateTime|null
+	 */
+	public function selfOut()
+	{
+	}
+
+}
