@@ -133,7 +133,7 @@ Sniff provides the following settings:
 
 Disallows implicit array creation.
 
-#### SlevomatCodingStandard.Attributes.DisallowAttributeJoining
+#### SlevomatCodingStandard.Attributes.DisallowAttributeJoining 🔧
 
 Requires that only one attribute can be placed inside `#[]` (no comma-separated list). In case of more attributes applied, they are split into individual `#[]` blocks.
 
