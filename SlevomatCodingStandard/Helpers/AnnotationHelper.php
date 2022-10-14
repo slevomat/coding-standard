@@ -64,6 +64,58 @@ class AnnotationHelper
 
 	public const PREFIXES = ['psalm', 'phpstan'];
 
+	private const MAPPING = [
+		'@param' => ParameterAnnotation::class,
+		'@psalm-param' => ParameterAnnotation::class,
+		'@phpstan-param' => ParameterAnnotation::class,
+		'@return' => ReturnAnnotation::class,
+		'@psalm-return' => ReturnAnnotation::class,
+		'@phpstan-return' => ReturnAnnotation::class,
+		'@var' => VariableAnnotation::class,
+		'@psalm-var' => VariableAnnotation::class,
+		'@phpstan-var' => VariableAnnotation::class,
+		'@throws' => ThrowsAnnotation::class,
+		'@phpstan-throws' => ThrowsAnnotation::class,
+		'@property' => PropertyAnnotation::class,
+		'@psalm-property' => PropertyAnnotation::class,
+		'@phpstan-property' => PropertyAnnotation::class,
+		'@property-read' => PropertyAnnotation::class,
+		'@psalm-property-read' => PropertyAnnotation::class,
+		'@phpstan-property-read' => PropertyAnnotation::class,
+		'@property-write' => PropertyAnnotation::class,
+		'@psalm-property-write' => PropertyAnnotation::class,
+		'@phpstan-property-write' => PropertyAnnotation::class,
+		'@method' => MethodAnnotation::class,
+		'@psalm-method' => MethodAnnotation::class,
+		'@phpstan-method' => MethodAnnotation::class,
+		'@template' => TemplateAnnotation::class,
+		'@psalm-template' => TemplateAnnotation::class,
+		'@phpstan-template' => TemplateAnnotation::class,
+		'@template-covariant' => TemplateAnnotation::class,
+		'@psalm-template-covariant' => TemplateAnnotation::class,
+		'@phpstan-template-covariant' => TemplateAnnotation::class,
+		'@extends' => ExtendsAnnotation::class,
+		'@template-extends' => ExtendsAnnotation::class,
+		'@phpstan-extends' => ExtendsAnnotation::class,
+		'@implements' => ImplementsAnnotation::class,
+		'@template-implements' => ImplementsAnnotation::class,
+		'@phpstan-implements' => ImplementsAnnotation::class,
+		'@use' => UseAnnotation::class,
+		'@template-use' => UseAnnotation::class,
+		'@phpstan-use' => UseAnnotation::class,
+		'@psalm-type' => TypeAliasAnnotation::class,
+		'@phpstan-type' => TypeAliasAnnotation::class,
+		'@psalm-import-type' => TypeImportAnnotation::class,
+		'@phpstan-import-type' => TypeImportAnnotation::class,
+		'@mixin' => MixinAnnotation::class,
+		'@phpstan-assert' => AssertAnnotation::class,
+		'@phpstan-assert-if-true' => AssertAnnotation::class,
+		'@phpstan-assert-if-false' => AssertAnnotation::class,
+		'@psalm-assert' => AssertAnnotation::class,
+		'@psalm-assert-if-true' => AssertAnnotation::class,
+		'@psalm-assert-if-false' => AssertAnnotation::class,
+	];
+
 	/**
 	 * @internal
 	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|TypeAliasAnnotation|TypeImportAnnotation|AssertAnnotation $annotation
@@ -295,60 +347,8 @@ class AnnotationHelper
 						}
 					}
 
-					$mapping = [
-						'@param' => ParameterAnnotation::class,
-						'@psalm-param' => ParameterAnnotation::class,
-						'@phpstan-param' => ParameterAnnotation::class,
-						'@return' => ReturnAnnotation::class,
-						'@psalm-return' => ReturnAnnotation::class,
-						'@phpstan-return' => ReturnAnnotation::class,
-						'@var' => VariableAnnotation::class,
-						'@psalm-var' => VariableAnnotation::class,
-						'@phpstan-var' => VariableAnnotation::class,
-						'@throws' => ThrowsAnnotation::class,
-						'@phpstan-throws' => ThrowsAnnotation::class,
-						'@property' => PropertyAnnotation::class,
-						'@psalm-property' => PropertyAnnotation::class,
-						'@phpstan-property' => PropertyAnnotation::class,
-						'@property-read' => PropertyAnnotation::class,
-						'@psalm-property-read' => PropertyAnnotation::class,
-						'@phpstan-property-read' => PropertyAnnotation::class,
-						'@property-write' => PropertyAnnotation::class,
-						'@psalm-property-write' => PropertyAnnotation::class,
-						'@phpstan-property-write' => PropertyAnnotation::class,
-						'@method' => MethodAnnotation::class,
-						'@psalm-method' => MethodAnnotation::class,
-						'@phpstan-method' => MethodAnnotation::class,
-						'@template' => TemplateAnnotation::class,
-						'@psalm-template' => TemplateAnnotation::class,
-						'@phpstan-template' => TemplateAnnotation::class,
-						'@template-covariant' => TemplateAnnotation::class,
-						'@psalm-template-covariant' => TemplateAnnotation::class,
-						'@phpstan-template-covariant' => TemplateAnnotation::class,
-						'@extends' => ExtendsAnnotation::class,
-						'@template-extends' => ExtendsAnnotation::class,
-						'@phpstan-extends' => ExtendsAnnotation::class,
-						'@implements' => ImplementsAnnotation::class,
-						'@template-implements' => ImplementsAnnotation::class,
-						'@phpstan-implements' => ImplementsAnnotation::class,
-						'@use' => UseAnnotation::class,
-						'@template-use' => UseAnnotation::class,
-						'@phpstan-use' => UseAnnotation::class,
-						'@psalm-type' => TypeAliasAnnotation::class,
-						'@phpstan-type' => TypeAliasAnnotation::class,
-						'@psalm-import-type' => TypeImportAnnotation::class,
-						'@phpstan-import-type' => TypeImportAnnotation::class,
-						'@mixin' => MixinAnnotation::class,
-						'@phpstan-assert' => AssertAnnotation::class,
-						'@phpstan-assert-if-true' => AssertAnnotation::class,
-						'@phpstan-assert-if-false' => AssertAnnotation::class,
-						'@psalm-assert' => AssertAnnotation::class,
-						'@psalm-assert-if-true' => AssertAnnotation::class,
-						'@psalm-assert-if-false' => AssertAnnotation::class,
-					];
-
-					if (array_key_exists($annotationName, $mapping)) {
-						$className = $mapping[$annotationName];
+					if (array_key_exists($annotationName, self::MAPPING)) {
+						$className = self::MAPPING[$annotationName];
 
 						$parsedContent = null;
 						if ($annotationContent !== null) {
