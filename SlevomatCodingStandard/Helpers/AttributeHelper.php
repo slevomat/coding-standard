@@ -119,20 +119,28 @@ class AttributeHelper
 	 * Attributes have syntax that when defined incorrectly or in older PHP version, they are treated as comments.
 	 * An example of incorrect declaration is variables that are not properties.
 	 */
-	public static function isValidAttribute(File $phpcsFile, int $attributeOpenPointer): bool
+	public static function isValidAttribute(File $phpcsFile, int $attributeOpenerPointer): bool
 	{
-		$attributedTokenPointer = TokenHelper::findNext($phpcsFile, self::ATTRIBUTE_TARGETS, $attributeOpenPointer);
+		return self::getAttributeTarget($phpcsFile, $attributeOpenerPointer) !== null;
+	}
 
-		if ($attributedTokenPointer === null) {
-			return false;
+	public static function getAttributeTarget(File $phpcsFile, int $attributeOpenerPointer): ?int
+	{
+		$attributeTargetPointer = TokenHelper::findNext($phpcsFile, self::ATTRIBUTE_TARGETS, $attributeOpenerPointer);
+
+		if ($attributeTargetPointer === null) {
+			return null;
 		}
 
-		$tokens = $phpcsFile->getTokens();
+		if (
+			$phpcsFile->getTokens()[$attributeTargetPointer]['code'] === T_VARIABLE
+			&& !PropertyHelper::isProperty($phpcsFile, $attributeTargetPointer)
+			&& !ParameterHelper::isParameter($phpcsFile, $attributeTargetPointer)
+		) {
+			return null;
+		}
 
-		return
-			$tokens[$attributedTokenPointer]['code'] !== T_VARIABLE
-			|| PropertyHelper::isProperty($phpcsFile, $attributedTokenPointer)
-			|| ParameterHelper::isParameter($phpcsFile, $attributedTokenPointer);
+		return $attributeTargetPointer;
 	}
 
 }
