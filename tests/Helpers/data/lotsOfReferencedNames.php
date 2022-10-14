@@ -213,3 +213,9 @@ return "
 	. $this->getObjectClassName() . '();';
 
 object();
+
+echo "something{$a([DateTime::class, 'format'])}";
+
+echo "something{$a(
+	[DateTimeImmutable::class, 'format']
+)}";

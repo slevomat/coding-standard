@@ -78,6 +78,8 @@ class ReferencedNameHelperTest extends TestCase
 			['ClassInHeredoc', false, false],
 			['ClassInDoubleQuote', false, false],
 			['object', true, false],
+			['DateTime', false, false],
+			['DateTimeImmutable', false, false],
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);

@@ -144,17 +144,18 @@ class ReferencedNameHelper
 			// Find referenced names inside double quotes string
 			if (self::isNeedParsedContent($tokens[$nameStartPointer]['code'])) {
 				$content = $tokens[$nameStartPointer]['content'];
-				if (self::isNeedParsedContent($tokens[$nameStartPointer - 1]['code'])) {
-					$content = '"' . $content;
+				$currentPointer = $nameStartPointer + 1;
+				while (self::isNeedParsedContent($tokens[$currentPointer]['code'])) {
+					$content .= $tokens[$currentPointer]['content'];
+					$currentPointer++;
 				}
-				if (self::isNeedParsedContent($tokens[$nameStartPointer + 1]['code'])) {
-					$content .= '"';
-				}
+
 				$names = self::getReferencedNamesFromString($content);
 				foreach ($names as $name) {
 					$referencedNames[] = new ReferencedName($name, $nameStartPointer, $nameStartPointer, ReferencedName::TYPE_CLASS);
 				}
-				$beginSearchAtPointer = $nameStartPointer + 1;
+
+				$beginSearchAtPointer = $currentPointer;
 				continue;
 			}
 
