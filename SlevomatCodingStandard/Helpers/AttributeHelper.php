@@ -16,7 +16,6 @@ use const T_FN;
 use const T_FUNCTION;
 use const T_INTERFACE;
 use const T_OPEN_PARENTHESIS;
-use const T_STRING;
 use const T_TRAIT;
 use const T_VARIABLE;
 
@@ -60,7 +59,12 @@ class AttributeHelper
 		/** @var int|null $commaPointer */
 		$commaPointer = 0;
 
-		$attributeNamePointer = TokenHelper::findNext($phpcsFile, T_STRING, $startPointer + 1, $attributeEndPointer);
+		$attributeNamePointer = TokenHelper::findNext(
+			$phpcsFile,
+			TokenHelper::getNameTokenCodes(),
+			$startPointer + 1,
+			$attributeEndPointer
+		);
 		$attributes[] = $attributeNamePointer;
 
 		while ($commaPointer !== null) {
@@ -76,7 +80,12 @@ class AttributeHelper
 			if ($parenthesisOpenPointer === null || $commaPointer < $parenthesisOpenPointer) {
 				// Yes, it's before, so we have an attribute
 				$startPointer = $commaPointer;
-				$attributeNamePointer = TokenHelper::findNext($phpcsFile, T_STRING, $startPointer + 1, $attributeEndPointer);
+				$attributeNamePointer = TokenHelper::findNext(
+					$phpcsFile,
+					TokenHelper::getNameTokenCodes(),
+					$startPointer + 1,
+					$attributeEndPointer
+				);
 				$attributes[] = $attributeNamePointer;
 			} else {
 				// No, it's after, but we do not know if inside parenthesis or outside

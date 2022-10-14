@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use InvalidArgumentException;
+use function count;
 use const T_ATTRIBUTE;
 
 class AttributeHelperTest extends TestCase
@@ -13,10 +14,25 @@ class AttributeHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithJoinedAttributes.php');
 		/** @var int $firstAttributePointer */
 		$firstAttributePointer = $phpcsFile->findNext(T_ATTRIBUTE, 0);
-		self::assertSame(
-			[4, 7, 14, 36, 40],
-			AttributeHelper::getAttributesPointersInsideAttributeTags($phpcsFile, $firstAttributePointer)
-		);
+
+		$attributesPointers = AttributeHelper::getAttributesPointersInsideAttributeTags($phpcsFile, $firstAttributePointer);
+
+		$expected = [
+			4 => 'Attribute1',
+			7 => '\\',
+			17 => 'Attribute3',
+			39 => '\\',
+			44 => 'Attribute5',
+		];
+
+		self::assertCount(count($expected), $attributesPointers);
+
+		$tokens = $phpcsFile->getTokens();
+
+		foreach ($attributesPointers as $attributePointer) {
+			self::assertArrayHasKey($attributePointer, $expected);
+			self::assertSame($expected[$attributePointer], $tokens[$attributePointer]['content']);
+		}
 	}
 
 	public function testIsValidAttributeAttributeAtEndOfFile(): void
