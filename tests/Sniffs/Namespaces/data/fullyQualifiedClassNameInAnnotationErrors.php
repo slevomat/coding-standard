@@ -167,7 +167,9 @@ class ConstantExpression
 
 /**
  * @template Template of DateTime
- * @template-covariant Template2 of DateTimeImmutable
+ * @template Template2 of DateTimeInterface = DateTimeImmutable
+ * @template Template3 = DateTimeImmutable
+ * @template-covariant Template4 of DateTimeImmutable
  * @template-extends Iterator<DateTimeImmutable>
  * @template-implements Iterator<DateTimeImmutable>
  * @template-use Iterator<DateTimeImmutable>

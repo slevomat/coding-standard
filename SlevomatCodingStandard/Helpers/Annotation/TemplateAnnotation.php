@@ -71,12 +71,23 @@ class TemplateAnnotation extends Annotation
 		return $this->contentNode->bound;
 	}
 
+	public function getDefault(): ?TypeNode
+	{
+		$this->errorWhenInvalid();
+
+		return $this->contentNode->default;
+	}
+
 	public function export(): string
 	{
 		$exported = sprintf('%s %s', $this->name, $this->contentNode->name);
 
 		if ($this->contentNode->bound !== null) {
 			$exported .= sprintf(' of %s', AnnotationTypeHelper::export($this->contentNode->bound));
+		}
+
+		if ($this->contentNode->default !== null) {
+			$exported .= sprintf(' = %s', AnnotationTypeHelper::export($this->contentNode->default));
 		}
 
 		$description = $this->getDescription();

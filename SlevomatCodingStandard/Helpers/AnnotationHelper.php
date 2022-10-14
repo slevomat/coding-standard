@@ -88,6 +88,9 @@ class AnnotationHelper
 			if ($annotation->getBound() !== null) {
 				$annotationTypes[] = $annotation->getBound();
 			}
+			if ($annotation->getDefault() !== null) {
+				$annotationTypes[] = $annotation->getDefault();
+			}
 		} elseif ($annotation instanceof TypeImportAnnotation) {
 			$annotationTypes[] = $annotation->getImportedFrom();
 		} elseif ($annotation->getType() !== null) {
@@ -517,7 +520,12 @@ class AnnotationHelper
 			}
 		} elseif ($annotation instanceof TemplateAnnotation) {
 			$fixedContentNode = clone $annotation->getContentNode();
-			$fixedContentNode->bound = AnnotationTypeHelper::change($annotation->getBound(), $typeNode, $fixedTypeNode);
+			if ($fixedContentNode->bound !== null) {
+				$fixedContentNode->bound = AnnotationTypeHelper::change($annotation->getBound(), $typeNode, $fixedTypeNode);
+			}
+			if ($fixedContentNode->default !== null) {
+				$fixedContentNode->default = AnnotationTypeHelper::change($annotation->getDefault(), $typeNode, $fixedTypeNode);
+			}
 		} elseif ($annotation instanceof TypeImportAnnotation) {
 			$fixedContentNode = clone $annotation->getContentNode();
 			/** @var IdentifierTypeNode $fixedType */

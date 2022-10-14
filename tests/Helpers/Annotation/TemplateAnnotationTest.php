@@ -18,7 +18,7 @@ class TemplateAnnotationTest extends TestCase
 			1,
 			10,
 			'Description',
-			new TemplateTagValueNode('Whatever', new IdentifierTypeNode('Anything'), 'Description')
+			new TemplateTagValueNode('Whatever', new IdentifierTypeNode('Anything'), 'Description', new IdentifierTypeNode('null'))
 		);
 
 		self::assertSame('@template', $annotation->getName());
@@ -31,7 +31,8 @@ class TemplateAnnotationTest extends TestCase
 		self::assertSame('Description', $annotation->getDescription());
 		self::assertSame('Whatever', $annotation->getTemplateName());
 		self::assertInstanceOf(IdentifierTypeNode::class, $annotation->getBound());
-		self::assertSame('@template Whatever of Anything Description', $annotation->export());
+		self::assertInstanceOf(IdentifierTypeNode::class, $annotation->getDefault());
+		self::assertSame('@template Whatever of Anything = null Description', $annotation->export());
 	}
 
 	public function testUnsupportedAnnotation(): void
@@ -63,6 +64,14 @@ class TemplateAnnotationTest extends TestCase
 		self::expectExceptionMessage('Invalid @template annotation.');
 		$annotation = new TemplateAnnotation('@template', 1, 1, null, null);
 		$annotation->getBound();
+	}
+
+	public function testGetDefaultWhenInvalid(): void
+	{
+		self::expectException(LogicException::class);
+		self::expectExceptionMessage('Invalid @template annotation.');
+		$annotation = new TemplateAnnotation('@template', 1, 1, null, null);
+		$annotation->getDefault();
 	}
 
 }
