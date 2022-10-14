@@ -15,23 +15,23 @@ class AttributeHelperTest extends TestCase
 		/** @var int $firstAttributePointer */
 		$firstAttributePointer = $phpcsFile->findNext(T_ATTRIBUTE, 0);
 
-		$attributesPointers = AttributeHelper::getAttributesPointersInsideAttributeTags($phpcsFile, $firstAttributePointer);
+		$attributes = AttributeHelper::getAttributes($phpcsFile, $firstAttributePointer);
 
 		$expected = [
-			4 => 'Attribute1',
-			7 => '\\',
-			17 => 'Attribute3',
-			39 => '\\',
-			44 => 'Attribute5',
+			4 => ['Attribute1', null],
+			7 => ['\\FQN\\Attribute2', "('var')"],
+			17 => ['Attribute3', "(option: PDO::class, option2: true, option3: 'False')"],
+			39 => ['\\Attribute4', '()'],
+			44 => ['Attribute5', null],
 		];
 
-		self::assertCount(count($expected), $attributesPointers);
+		self::assertCount(count($expected), $attributes);
 
-		$tokens = $phpcsFile->getTokens();
-
-		foreach ($attributesPointers as $attributePointer) {
-			self::assertArrayHasKey($attributePointer, $expected);
-			self::assertSame($expected[$attributePointer], $tokens[$attributePointer]['content']);
+		foreach ($attributes as $attribute) {
+			self::assertSame(3, $attribute->getAttributePointer());
+			self::assertArrayHasKey($attribute->getStartPointer(), $expected);
+			self::assertSame($expected[$attribute->getStartPointer()][0], $attribute->getName());
+			self::assertSame($expected[$attribute->getStartPointer()][1], $attribute->getContent());
 		}
 	}
 
@@ -56,7 +56,7 @@ class AttributeHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithJoinedAttributes.php');
 		self::expectException(InvalidArgumentException::class);
 		self::expectExceptionMessage('Token 0 must be attribute, T_OPEN_TAG given');
-		AttributeHelper::getAttributesPointersInsideAttributeTags($phpcsFile, 0);
+		AttributeHelper::getAttributes($phpcsFile, 0);
 	}
 
 }

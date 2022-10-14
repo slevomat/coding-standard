@@ -5,11 +5,9 @@ namespace SlevomatCodingStandard\Sniffs\Attributes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AttributeHelper;
-use SlevomatCodingStandard\Helpers\TokenHelper;
 use function count;
 use function sprintf;
 use const T_ATTRIBUTE;
-use const T_CLOSE_PARENTHESIS;
 use const T_COMMA;
 
 class DisallowAttributeJoiningSniff implements Sniff
@@ -35,7 +33,7 @@ class DisallowAttributeJoiningSniff implements Sniff
 			return;
 		}
 
-		$attributes = AttributeHelper::getAttributesPointersInsideAttributeTags($phpcsFile, $attributeOpenPointer);
+		$attributes = AttributeHelper::getAttributes($phpcsFile, $attributeOpenPointer);
 		$attributeCount = count($attributes);
 
 		if ($attributeCount === 1) {
@@ -52,21 +50,23 @@ class DisallowAttributeJoiningSniff implements Sniff
 			return;
 		}
 
+		$tokens = $phpcsFile->getTokens();
+
 		$phpcsFile->fixer->beginChangeset();
 
-		for ($i = 1; $i < $attributeCount; $i++) {
-			$attributeNamePointer = $attributes[$i];
-			/** @var int $separatingCommaPointer */
-			$separatingCommaPointer = TokenHelper::findPrevious($phpcsFile, T_COMMA, $attributeNamePointer);
-			/** @var int $previousAttributeNameEndPointer */
-			$previousAttributeNameEndPointer = TokenHelper::findPrevious(
-				$phpcsFile,
-				[T_COMMA, T_CLOSE_PARENTHESIS],
-				$separatingCommaPointer
-			);
-			$phpcsFile->fixer->addContentBefore($attributeNamePointer, '#[');
-			$phpcsFile->fixer->replaceToken($separatingCommaPointer, '');
-			$phpcsFile->fixer->addContent($previousAttributeNameEndPointer, ']');
+		for ($i = 1; $i < count($attributes); $i++) {
+			$previousAttribute = $attributes[$i - 1];
+			$attribute = $attributes[$i];
+
+			$phpcsFile->fixer->addContent($previousAttribute->getEndPointer(), ']');
+
+			for ($j = $previousAttribute->getEndPointer() + 1; $j < $attribute->getStartPointer(); $j++) {
+				if ($tokens[$j]['code'] === T_COMMA) {
+					$phpcsFile->fixer->replaceToken($j, '');
+				}
+			}
+
+			$phpcsFile->fixer->addContentBefore($attribute->getStartPointer(), '#[');
 		}
 
 		$phpcsFile->fixer->endChangeset();

@@ -39,66 +39,85 @@ class AttributeHelper
 	];
 
 	/**
-	 * @return list<int>
+	 * @return list<Attribute>
 	 */
-	public static function getAttributesPointersInsideAttributeTags(File $phpcsFile, int $attributeOpenPointer): array
+	public static function getAttributes(File $phpcsFile, int $attributeOpenerPointer): array
 	{
-		$attributes = [];
-
 		$tokens = $phpcsFile->getTokens();
 
-		if ($tokens[$attributeOpenPointer]['code'] !== T_ATTRIBUTE) {
+		if ($tokens[$attributeOpenerPointer]['code'] !== T_ATTRIBUTE) {
 			throw new InvalidArgumentException(
-				sprintf('Token %d must be attribute, %s given.', $attributeOpenPointer, $tokens[$attributeOpenPointer]['type'])
+				sprintf('Token %d must be attribute, %s given.', $attributeOpenerPointer, $tokens[$attributeOpenerPointer]['type'])
 			);
 		}
 
-		$attributeEndPointer = $tokens[$attributeOpenPointer]['attribute_closer'];
+		$attributeCloserPointer = $tokens[$attributeOpenerPointer]['attribute_closer'];
 
-		$startPointer = $attributeOpenPointer;
-		/** @var int|null $commaPointer */
-		$commaPointer = 0;
+		$actualPointer = $attributeOpenerPointer;
+		$attributes = [];
 
-		$attributeNamePointer = TokenHelper::findNext(
-			$phpcsFile,
-			TokenHelper::getNameTokenCodes(),
-			$startPointer + 1,
-			$attributeEndPointer
-		);
-		$attributes[] = $attributeNamePointer;
+		do {
+			$attributeNameStartPointer = TokenHelper::findNextEffective($phpcsFile, $actualPointer + 1, $attributeCloserPointer);
+			$attributeNameEndPointer = TokenHelper::findNextExcluding(
+				$phpcsFile,
+				TokenHelper::getNameTokenCodes(),
+				$attributeNameStartPointer + 1
+			) - 1;
+			$attributeName = TokenHelper::getContent($phpcsFile, $attributeNameStartPointer, $attributeNameEndPointer);
 
-		while ($commaPointer !== null) {
-			$parenthesisOpenPointer = TokenHelper::findNext($phpcsFile, T_OPEN_PARENTHESIS, $startPointer + 1, $attributeEndPointer);
-			$commaPointer = TokenHelper::findNext($phpcsFile, T_COMMA, $startPointer + 1, $attributeEndPointer);
+			$pointerAfterAttributeName = TokenHelper::findNextEffective($phpcsFile, $attributeNameEndPointer + 1, $attributeCloserPointer);
 
-			if ($commaPointer === null) {
-				// No more attributes
+			if ($pointerAfterAttributeName === null) {
+				$attributes[] = new Attribute(
+					$attributeOpenerPointer,
+					$attributeName,
+					$attributeNameStartPointer,
+					$attributeNameEndPointer
+				);
 				break;
 			}
 
-			// We have comma, lets see if it's before parenthesis
-			if ($parenthesisOpenPointer === null || $commaPointer < $parenthesisOpenPointer) {
-				// Yes, it's before, so we have an attribute
-				$startPointer = $commaPointer;
-				$attributeNamePointer = TokenHelper::findNext(
-					$phpcsFile,
-					TokenHelper::getNameTokenCodes(),
-					$startPointer + 1,
-					$attributeEndPointer
+			if ($tokens[$pointerAfterAttributeName]['code'] === T_COMMA) {
+				$attributes[] = new Attribute(
+					$attributeOpenerPointer,
+					$attributeName,
+					$attributeNameStartPointer,
+					$attributeNameEndPointer
 				);
-				$attributes[] = $attributeNamePointer;
-			} else {
-				// No, it's after, but we do not know if inside parenthesis or outside
-				$startPointer = $tokens[$parenthesisOpenPointer]['parenthesis_closer'];
+
+				$actualPointer = $pointerAfterAttributeName;
 			}
-		}
+
+			if ($tokens[$pointerAfterAttributeName]['code'] === T_OPEN_PARENTHESIS) {
+				$attributes[] = new Attribute(
+					$attributeOpenerPointer,
+					$attributeName,
+					$attributeNameStartPointer,
+					$tokens[$pointerAfterAttributeName]['parenthesis_closer'],
+					TokenHelper::getContent(
+						$phpcsFile,
+						$pointerAfterAttributeName,
+						$tokens[$pointerAfterAttributeName]['parenthesis_closer']
+					)
+				);
+
+				$actualPointer = TokenHelper::findNextEffective(
+					$phpcsFile,
+					$tokens[$pointerAfterAttributeName]['parenthesis_closer'] + 1,
+					$attributeCloserPointer
+				);
+
+				continue;
+			}
+
+		} while ($actualPointer !== null);
 
 		return $attributes;
 	}
 
 	/**
-	 * Attributes have syntax that when defined incorrectly or in older PHP version, they are treated as comments
-	 * An example of incorrect declaration is variables that are not properties
+	 * Attributes have syntax that when defined incorrectly or in older PHP version, they are treated as comments.
+	 * An example of incorrect declaration is variables that are not properties.
 	 */
 	public static function isValidAttribute(File $phpcsFile, int $attributeOpenPointer): bool
 	{
