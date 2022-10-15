@@ -12,16 +12,20 @@ jobs:
   lint:
     name: "Lint"
 
-    runs-on: "ubuntu-latest"
+    runs-on: ${{ matrix.operating-system }}
 
     strategy:
       matrix:
+        dependencies:
+          - "highest"
         php-version:
           - "7.2"
           - "7.3"
           - "7.4"
           - "8.0"
           - "8.1"
+        operating-system:
+          - "ubuntu-latest"
 
     steps:
       - name: "Checkout"
@@ -33,19 +37,14 @@ jobs:
           coverage: "none"
           php-version: "${{ matrix.php-version }}"
 
-      - name: "Cache dependencies"
-        uses: "actions/cache@v3"
-        with:
-          path: "~/.composer/cache"
-          key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json') }}"
-          restore-keys: "php-${{ matrix.php-version }}-composer-"
-
       - name: "Reset composer platform"
         if: matrix.php-version == '7.2'
         run: "composer config --unset platform"
 
       - name: "Install dependencies"
-        run: "composer update --prefer-dist --no-interaction --no-progress"
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
 
       - name: "Lint"
         run: "bin/phing lint"
@@ -53,7 +52,16 @@ jobs:
   coding-standards:
     name: "Coding standards"
 
-    runs-on: "ubuntu-latest"
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      matrix:
+        dependencies:
+          - "highest"
+        php-version:
+          - "8.1"
+        operating-system:
+          - "ubuntu-latest"
 
     steps:
       - name: "Checkout"
@@ -63,17 +71,12 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           coverage: "none"
-          php-version: "8.1"
-
-      - name: "Cache dependencies"
-        uses: "actions/cache@v3"
-        with:
-          path: "~/.composer/cache"
-          key: "php-8.1-composer-${{ hashFiles('**/composer.json') }}"
-          restore-keys: "php-8.1-composer-"
+          php-version: "${{ matrix.php-version }}"
 
       - name: "Install dependencies"
-        run: "composer update --prefer-dist --no-interaction --no-progress"
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
 
       - name: "Lint"
         run: "bin/phing lint"
@@ -84,7 +87,16 @@ jobs:
   static-analysis:
     name: "Static analysis"
 
-    runs-on: "ubuntu-latest"
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      matrix:
+        dependencies:
+          - "highest"
+        php-version:
+          - "8.1"
+        operating-system:
+          - "ubuntu-latest"
 
     steps:
       - name: "Checkout"
@@ -94,17 +106,12 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           coverage: "none"
-          php-version: "8.1"
-
-      - name: "Cache dependencies"
-        uses: "actions/cache@v3"
-        with:
-          path: "~/.composer/cache"
-          key: "php-8.1-composer-${{ hashFiles('**/composer.json') }}"
-          restore-keys: "php-8.1-composer-"
+          php-version: "${{ matrix.php-version }}"
 
       - name: "Install dependencies"
-        run: "composer update --prefer-dist --no-interaction --no-progress"
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
 
       - name: "PHPStan"
         run: "bin/phing phpstan"
@@ -140,24 +147,14 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           extensions: mbstring
 
-      - name: "Cache dependencies"
-        uses: "actions/cache@v3"
-        with:
-          path: "~/.composer/cache"
-          key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json') }}"
-          restore-keys: "php-${{ matrix.php-version }}-composer-"
-
       - name: "Reset composer platform"
         if: matrix.php-version == '7.2' || matrix.php-version == '8.1'
         run: "composer config --unset platform"
 
-      - name: "Install lowest dependencies"
-        if: ${{ matrix.dependencies == 'lowest' }}
-        run: "composer update --prefer-lowest --prefer-dist --no-interaction --no-progress"
-
-      - name: "Install highest dependencies"
-        if: ${{ matrix.dependencies == 'highest' }}
-        run: "composer update --prefer-dist --no-interaction --no-progress"
+      - name: "Install dependencies"
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
 
       - name: "Tests"
         run: "bin/phing tests-without-code-coverage"
@@ -165,7 +162,16 @@ jobs:
   upload-code-coverage:
     name: "Upload code coverage"
 
-    runs-on: "ubuntu-latest"
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      matrix:
+        dependencies:
+          - "highest"
+        php-version:
+          - "8.1"
+        operating-system:
+          - "ubuntu-latest"
 
     steps:
       - name: "Checkout"
@@ -175,18 +181,12 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           coverage: "pcov"
-          php-version: "8.1"
-          tools: pecl
-
-      - name: "Cache dependencies"
-        uses: "actions/cache@v3"
-        with:
-          path: "~/.composer/cache"
-          key: "php-8.1-composer-${{ hashFiles('**/composer.json') }}"
-          restore-keys: "php-8.1-composer-"
+          php-version: "${{ matrix.php-version }}"
 
       - name: "Install dependencies"
-        run: "composer update --prefer-dist --no-interaction --no-progress"
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
 
       - name: "Tests"
         run: bin/phing tests
