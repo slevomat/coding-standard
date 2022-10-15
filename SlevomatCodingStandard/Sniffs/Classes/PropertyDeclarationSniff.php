@@ -87,7 +87,7 @@ class PropertyDeclarationSniff implements Sniff
 
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $modifierPointer + 1);
 		if (in_array($tokens[$nextPointer]['code'], TokenHelper::$propertyModifiersTokenCodes, true)) {
-			// We don't want to report the some property twice
+			// We don't want to report the same property twice
 			return;
 		}
 
