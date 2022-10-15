@@ -63,14 +63,14 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           coverage: "none"
-          php-version: "8.0"
+          php-version: "8.1"
 
       - name: "Cache dependencies"
         uses: "actions/cache@v3"
         with:
           path: "~/.composer/cache"
-          key: "php-8.0-composer-${{ hashFiles('**/composer.json') }}"
-          restore-keys: "php-8.0-composer-"
+          key: "php-8.1-composer-${{ hashFiles('**/composer.json') }}"
+          restore-keys: "php-8.1-composer-"
 
       - name: "Install dependencies"
         run: "composer update --prefer-dist --no-interaction --no-progress"
@@ -94,14 +94,14 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           coverage: "none"
-          php-version: "8.0"
+          php-version: "8.1"
 
       - name: "Cache dependencies"
         uses: "actions/cache@v3"
         with:
           path: "~/.composer/cache"
-          key: "php-8.0-composer-${{ hashFiles('**/composer.json') }}"
-          restore-keys: "php-8.0-composer-"
+          key: "php-8.1-composer-${{ hashFiles('**/composer.json') }}"
+          restore-keys: "php-8.1-composer-"
 
       - name: "Install dependencies"
         run: "composer update --prefer-dist --no-interaction --no-progress"
@@ -175,15 +175,15 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           coverage: "pcov"
-          php-version: "8.0"
+          php-version: "8.1"
           tools: pecl
 
       - name: "Cache dependencies"
         uses: "actions/cache@v3"
         with:
           path: "~/.composer/cache"
-          key: "php-8.0-composer-${{ hashFiles('**/composer.json') }}"
-          restore-keys: "php-8.0-composer-"
+          key: "php-8.1-composer-${{ hashFiles('**/composer.json') }}"
+          restore-keys: "php-8.1-composer-"
 
       - name: "Install dependencies"
         run: "composer update --prefer-dist --no-interaction --no-progress"
