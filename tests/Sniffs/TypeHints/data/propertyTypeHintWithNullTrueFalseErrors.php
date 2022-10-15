@@ -22,7 +22,7 @@ class Whatever
 	/**
 	 * @var true
 	 */
-	public true $propertyTrueWithUselessAnnotation();
+	public true $propertyTrueWithUselessAnnotation;
 
 	/**
 	 * @var false
