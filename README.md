@@ -133,7 +133,7 @@ Sniff provides the following settings:
 
 Disallows implicit array creation.
 
-#### SlevomatCodingStandard.Attributes.AttributeAndTargetSpacingSniff 🔧
+#### SlevomatCodingStandard.Attributes.AttributeAndTargetSpacing 🔧
 
 Checks lines count between attribute and its target (or target's documentation comment).
 
