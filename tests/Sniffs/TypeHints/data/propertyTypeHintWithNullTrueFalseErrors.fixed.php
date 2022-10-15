@@ -11,7 +11,7 @@ class Whatever
 
 	public null $propertyNullWithUselessAnnotation;
 
-	public true $propertyTrueWithUselessAnnotation();
+	public true $propertyTrueWithUselessAnnotation;
 
 	public false $propertyFalseWithUselessAnnotation;
 
