@@ -5,6 +5,8 @@ namespace SlevomatCodingStandard\Sniffs\Attributes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AttributeHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
+use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function sprintf;
@@ -49,23 +51,44 @@ class AttributeAndTargetSpacingSniff implements Sniff
 			return;
 		}
 
-		$actualLinesCount = $tokens[$pointerAfter]['line'] - $tokens[$attributeCloserPointer]['line'] - 1;
+		$areOnSameLine = $tokens[$pointerAfter]['line'] === $tokens[$attributeCloserPointer]['line'];
 
-		if ($this->linesCount === $actualLinesCount) {
-			return;
+		if ($areOnSameLine) {
+			$errorMessage = $this->linesCount === 1
+				? 'Expected 1 blank line between attribute and its target, both are on same line.'
+				: sprintf('Expected %1$d blank lines between attribute and its target, both are on same line.', $this->linesCount);
+		} else {
+			$actualLinesCount = $tokens[$pointerAfter]['line'] - $tokens[$attributeCloserPointer]['line'] - 1;
+
+			if ($this->linesCount === $actualLinesCount) {
+				return;
+			}
+
+			$errorMessage = $this->linesCount === 1
+				? sprintf('Expected 1 blank line between attribute and its target, found %1$d.', $actualLinesCount)
+				: sprintf('Expected %1$d blank lines between attribute and its target, found %2$d.', $this->linesCount, $actualLinesCount);
 		}
 
-		$errorMessage = $this->linesCount === 1
-			? 'Expected 1 blank line between attribute and its target, found %2$d.'
-			: 'Expected %1$d blank lines between attribute and its target, found %2$d.';
-
 		$fix = $phpcsFile->addFixableError(
-			sprintf($errorMessage, $this->linesCount, $actualLinesCount),
+			$errorMessage,
 			$attributeOpenerPointer,
 			self::CODE_INCORRECT_LINES_COUNT_BETWEEN_ATTRIBUTE_AND_TARGET
 		);
 
 		if (!$fix) {
+			return;
+		}
+
+		if ($areOnSameLine) {
+			$indentation = IndentationHelper::getIndentation($phpcsFile, $attributeOpenerPointer);
+
+			$phpcsFile->fixer->beginChangeset();
+
+			FixerHelper::cleanWhitespaceAfter($phpcsFile, $attributeCloserPointer);
+			$phpcsFile->fixer->addContentBefore($pointerAfter, str_repeat($phpcsFile->eolChar, $this->linesCount + 1) . $indentation);
+
+			$phpcsFile->fixer->endChangeset();
+
 			return;
 		}
 

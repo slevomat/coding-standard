@@ -17,11 +17,12 @@ class AttributeAndTargetSpacingSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/attributeAndTargetSpacingErrors.php');
 
-		self::assertSame(3, $report->getErrorCount());
+		self::assertSame(4, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, AttributeAndTargetSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_ATTRIBUTE_AND_TARGET);
 		self::assertSniffError($report, 12, AttributeAndTargetSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_ATTRIBUTE_AND_TARGET);
 		self::assertSniffError($report, 18, AttributeAndTargetSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_ATTRIBUTE_AND_TARGET);
+		self::assertSniffError($report, 22, AttributeAndTargetSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_ATTRIBUTE_AND_TARGET);
 
 		self::assertAllFixedInFile($report);
 	}
@@ -40,11 +41,12 @@ class AttributeAndTargetSpacingSniffTest extends TestCase
 			'linesCount' => 1,
 		]);
 
-		self::assertSame(3, $report->getErrorCount());
+		self::assertSame(4, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, AttributeAndTargetSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_ATTRIBUTE_AND_TARGET);
 		self::assertSniffError($report, 11, AttributeAndTargetSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_ATTRIBUTE_AND_TARGET);
 		self::assertSniffError($report, 18, AttributeAndTargetSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_ATTRIBUTE_AND_TARGET);
+		self::assertSniffError($report, 23, AttributeAndTargetSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_ATTRIBUTE_AND_TARGET);
 
 		self::assertAllFixedInFile($report);
 	}
