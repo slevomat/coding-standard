@@ -564,10 +564,10 @@ Checks that there is a certain number of blank lines between constants.
 
 Sniff provides the following settings:
 
-* `minLinesCountBeforeWithComment`: minimum number of lines before constant with a doc comment
-* `maxLinesCountBeforeWithComment`: maximum number of lines before constant with a doc comment
-* `minLinesCountBeforeWithoutComment`: minimum number of lines before constant without a doc comment
-* `maxLinesCountBeforeWithoutComment`: maximum number of lines before constant without a doc comment
+* `minLinesCountBeforeWithComment`: minimum number of lines before constant with a documentation comment or attribute
+* `maxLinesCountBeforeWithComment`: maximum number of lines before constant with a documentation comment or attribute
+* `minLinesCountBeforeWithoutComment`: minimum number of lines before constant without a documentation comment or attribute
+* `maxLinesCountBeforeWithoutComment`: maximum number of lines before constant without a documentation comment or attribute
 
 #### SlevomatCodingStandard.Classes.DisallowMultiConstantDefinition 🔧
 
@@ -625,10 +625,10 @@ Checks that there is a certain number of blank lines between properties.
 
 Sniff provides the following settings:
 
-* `minLinesCountBeforeWithComment`: minimum number of lines before property with a doc comment
-* `maxLinesCountBeforeWithComment`: maximum number of lines before property with a doc comment
-* `minLinesCountBeforeWithoutComment`: minimum number of lines before property without a doc comment
-* `maxLinesCountBeforeWithoutComment`: maximum number of lines before property without a doc comment
+* `minLinesCountBeforeWithComment`: minimum number of lines before property with a documentation comment or attribute
+* `maxLinesCountBeforeWithComment`: maximum number of lines before property with a documentation comment or attribute
+* `minLinesCountBeforeWithoutComment`: minimum number of lines before property without a documentation comment or attribute
+* `maxLinesCountBeforeWithoutComment`: maximum number of lines before property without a documentation comment or attribute
 
 #### SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature 🔧
 
