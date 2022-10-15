@@ -148,7 +148,7 @@ jobs:
           extensions: mbstring
 
       - name: "Reset composer platform"
-        if: matrix.php-version == '7.2' || matrix.php-version == '8.1'
+        if: matrix.php-version == '7.2' || matrix.php-version == '7.3' || matrix.php-version == '7.4'
         run: "composer config --unset platform"
 
       - name: "Install dependencies"
