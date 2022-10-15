@@ -137,6 +137,10 @@ Disallows implicit array creation.
 
 Requires that only one attribute can be placed inside `#[]` (no comma-separated list). In case of more attributes applied, they are split into individual `#[]` blocks.
 
+#### SlevomatCodingStandard.Attributes.RequireAttributeAfterDocComment 🔧
+
+Requires that attributes are always after documentation comment.
+
 #### SlevomatCodingStandard.Classes.ClassStructure 🔧
 
 Checks that class/trait/interface members are in the correct order.
