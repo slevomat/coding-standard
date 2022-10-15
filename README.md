@@ -133,6 +133,14 @@ Sniff provides the following settings:
 
 Disallows implicit array creation.
 
+#### SlevomatCodingStandard.Attributes.AttributeAndTargetSpacingSniff 🔧
+
+Checks lines count between attribute and its target (or target's documentation comment).
+
+Sniff provides the following settings:
+
+* `linesCount`: lines count between attribute and its target
+
 #### SlevomatCodingStandard.Attributes.DisallowAttributeJoining 🔧
 
 Requires that only one attribute can be placed inside `#[]` (no comma-separated list). In case of more attributes applied, they are split into individual `#[]` blocks.
