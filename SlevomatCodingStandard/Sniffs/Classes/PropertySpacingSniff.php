@@ -47,7 +47,7 @@ class PropertySpacingSniff extends AbstractPropertyAndConstantSpacing
 
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
 		if (in_array($tokens[$nextPointer]['code'], [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC], true)) {
-			// We don't want to report the some property twice
+			// We don't want to report the same property twice
 			return $nextPointer;
 		}
 
