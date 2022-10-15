@@ -25,7 +25,7 @@ use const T_VARIABLE;
 class AttributeHelper
 {
 
-	private const ATTRIBUTABLE_TOKENS = [
+	private const ATTRIBUTE_TARGETS = [
 		T_CLASS,
 		T_CLOSURE,
 		T_CONST,
@@ -121,7 +121,7 @@ class AttributeHelper
 	 */
 	public static function isValidAttribute(File $phpcsFile, int $attributeOpenPointer): bool
 	{
-		$attributedTokenPointer = TokenHelper::findNext($phpcsFile, self::ATTRIBUTABLE_TOKENS, $attributeOpenPointer);
+		$attributedTokenPointer = TokenHelper::findNext($phpcsFile, self::ATTRIBUTE_TARGETS, $attributeOpenPointer);
 
 		if ($attributedTokenPointer === null) {
 			return false;
