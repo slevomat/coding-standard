@@ -8,7 +8,6 @@ use SlevomatCodingStandard\Helpers\AttributeHelper;
 use function count;
 use function sprintf;
 use const T_ATTRIBUTE;
-use const T_COMMA;
 
 class DisallowAttributesJoiningSniff implements Sniff
 {
@@ -50,8 +49,6 @@ class DisallowAttributesJoiningSniff implements Sniff
 			return;
 		}
 
-		$tokens = $phpcsFile->getTokens();
-
 		$phpcsFile->fixer->beginChangeset();
 
 		for ($i = 1; $i < count($attributes); $i++) {
@@ -61,7 +58,7 @@ class DisallowAttributesJoiningSniff implements Sniff
 			$phpcsFile->fixer->addContent($previousAttribute->getEndPointer(), ']');
 
 			for ($j = $previousAttribute->getEndPointer() + 1; $j < $attribute->getStartPointer(); $j++) {
-				if ($tokens[$j]['code'] === T_COMMA) {
+				if ($phpcsFile->fixer->getTokenContent($j) === ',') {
 					$phpcsFile->fixer->replaceToken($j, '');
 				}
 			}
