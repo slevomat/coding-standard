@@ -78,7 +78,7 @@ class DisallowCommentAfterCodeSniff implements Sniff
 
 		$newLineAfterComment = $commentHasNewLineAtTheEnd
 			? $commentEndPointer
-			: TokenHelper::findNextContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $commentEndPointer + 1);
+			: TokenHelper::findLastTokenOnLine($phpcsFile, $commentEndPointer);
 
 		$indentation = IndentationHelper::getIndentation($phpcsFile, $firstNonWhitespacePointerOnLine);
 		$firstPointerOnLine = TokenHelper::findFirstTokenOnLine($phpcsFile, $firstNonWhitespacePointerOnLine);
