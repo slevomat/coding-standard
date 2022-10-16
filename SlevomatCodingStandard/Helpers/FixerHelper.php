@@ -4,7 +4,7 @@ namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use function count;
-use const T_WHITESPACE;
+use function preg_match;
 
 /**
  * @internal
@@ -14,10 +14,8 @@ class FixerHelper
 
 	public static function cleanWhitespaceBefore(File $phpcsFile, int $pointer): void
 	{
-		$tokens = $phpcsFile->getTokens();
-
 		for ($i = $pointer - 1; $i > 0; $i--) {
-			if ($tokens[$i]['code'] !== T_WHITESPACE) {
+			if (preg_match('~^\\s+$~', $phpcsFile->fixer->getTokenContent($i)) === 0) {
 				break;
 			}
 
@@ -27,10 +25,8 @@ class FixerHelper
 
 	public static function cleanWhitespaceAfter(File $phpcsFile, int $pointer): void
 	{
-		$tokens = $phpcsFile->getTokens();
-
-		for ($i = $pointer + 1; $i < count($tokens); $i++) {
-			if ($tokens[$i]['code'] !== T_WHITESPACE) {
+		for ($i = $pointer + 1; $i < count($phpcsFile->getTokens()); $i++) {
+			if (preg_match('~^\\s+$~', $phpcsFile->fixer->getTokenContent($i)) === 0) {
 				break;
 			}
 
