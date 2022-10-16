@@ -163,7 +163,7 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 
 	private function getIndentation(File $phpcsFile, int $endOfLinePointer): string
 	{
-		$pointerAfterWhitespace = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $endOfLinePointer + 1);
+		$pointerAfterWhitespace = TokenHelper::findNextNonWhitespace($phpcsFile, $endOfLinePointer + 1);
 		$actualIndentation = TokenHelper::getContent($phpcsFile, $endOfLinePointer + 1, $pointerAfterWhitespace - 1);
 
 		if (strlen($actualIndentation) !== 0) {

@@ -89,7 +89,7 @@ class TraitUseSpacingSniff implements Sniff
 		$useStartPointer = $firstUsePointer;
 
 		/** @var int $pointerBeforeFirstUse */
-		$pointerBeforeFirstUse = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $firstUsePointer - 1);
+		$pointerBeforeFirstUse = TokenHelper::findPreviousNonWhitespace($phpcsFile, $firstUsePointer - 1);
 
 		if (in_array($tokens[$pointerBeforeFirstUse]['code'], Tokens::$commentTokens, true)) {
 			$pointerBeforeFirstUse = TokenHelper::findPreviousEffective($phpcsFile, $pointerBeforeFirstUse - 1);
@@ -166,7 +166,7 @@ class TraitUseSpacingSniff implements Sniff
 		$pointerAfterLastUse = TokenHelper::findNextEffective($phpcsFile, $lastUseEndPointer + 1);
 		$isAtTheEndOfClass = $tokens[$pointerAfterLastUse]['code'] === T_CLOSE_CURLY_BRACKET;
 
-		$whitespaceEnd = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $lastUseEndPointer + 1) - 1;
+		$whitespaceEnd = TokenHelper::findNextNonWhitespace($phpcsFile, $lastUseEndPointer + 1) - 1;
 		if ($lastUseEndPointer !== $whitespaceEnd && $tokens[$whitespaceEnd]['content'] !== $phpcsFile->eolChar) {
 			$lastEolPointer = TokenHelper::findPreviousContent(
 				$phpcsFile,
@@ -237,7 +237,7 @@ class TraitUseSpacingSniff implements Sniff
 			}
 
 			$useStartPointer = $usePointer;
-			$pointerBeforeUse = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $usePointer - 1);
+			$pointerBeforeUse = TokenHelper::findPreviousNonWhitespace($phpcsFile, $usePointer - 1);
 
 			if (in_array($tokens[$pointerBeforeUse]['code'], Tokens::$commentTokens, true)) {
 				$useStartPointer = TokenHelper::findNext(

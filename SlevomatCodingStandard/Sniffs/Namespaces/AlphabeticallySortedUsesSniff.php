@@ -26,7 +26,6 @@ use function strcmp;
 use function uasort;
 use const T_OPEN_TAG;
 use const T_SEMICOLON;
-use const T_WHITESPACE;
 
 class AlphabeticallySortedUsesSniff implements Sniff
 {
@@ -106,7 +105,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 
 		$commentsBefore = [];
 		foreach ($useStatements as $useStatement) {
-			$pointerBeforeUseStatement = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $useStatement->getPointer() - 1);
+			$pointerBeforeUseStatement = TokenHelper::findPreviousNonWhitespace($phpcsFile, $useStatement->getPointer() - 1);
 
 			if (!in_array($tokens[$pointerBeforeUseStatement]['code'], TokenHelper::$inlineCommentTokenCodes, true)) {
 				continue;

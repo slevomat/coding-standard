@@ -70,7 +70,7 @@ class EmptyCommentSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		/** @var int $pointerBeforeWhitespaceBeforeComment */
-		$pointerBeforeWhitespaceBeforeComment = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $commentStartPointer - 1);
+		$pointerBeforeWhitespaceBeforeComment = TokenHelper::findPreviousNonWhitespace($phpcsFile, $commentStartPointer - 1);
 		$whitespaceBeforeComment = $pointerBeforeWhitespaceBeforeComment !== $commentStartPointer - 1
 			? TokenHelper::getContent($phpcsFile, $pointerBeforeWhitespaceBeforeComment + 1, $commentStartPointer - 1)
 			: '';
@@ -141,7 +141,7 @@ class EmptyCommentSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		/** @var int $beforeCommentStartPointer */
-		$beforeCommentStartPointer = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $commentStartPointer - 1);
+		$beforeCommentStartPointer = TokenHelper::findPreviousNonWhitespace($phpcsFile, $commentStartPointer - 1);
 
 		if ($tokens[$beforeCommentStartPointer]['code'] !== T_COMMENT) {
 			return false;
@@ -168,7 +168,7 @@ class EmptyCommentSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$afterCommentStartPointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $commentEndPointer + 1);
+		$afterCommentStartPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $commentEndPointer + 1);
 
 		if ($afterCommentStartPointer === null) {
 			return false;

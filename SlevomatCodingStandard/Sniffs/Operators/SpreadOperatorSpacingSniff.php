@@ -11,7 +11,6 @@ use function sprintf;
 use function str_repeat;
 use function strlen;
 use const T_ELLIPSIS;
-use const T_WHITESPACE;
 
 class SpreadOperatorSpacingSniff implements Sniff
 {
@@ -39,7 +38,7 @@ class SpreadOperatorSpacingSniff implements Sniff
 	{
 		$this->spacesCountAfterOperator = SniffSettingsHelper::normalizeInteger($this->spacesCountAfterOperator);
 
-		$pointerAfterWhitespace = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $spreadOperatorPointer + 1);
+		$pointerAfterWhitespace = TokenHelper::findNextNonWhitespace($phpcsFile, $spreadOperatorPointer + 1);
 
 		$whitespace = TokenHelper::getContent($phpcsFile, $spreadOperatorPointer + 1, $pointerAfterWhitespace - 1);
 

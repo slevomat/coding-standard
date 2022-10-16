@@ -9,7 +9,6 @@ use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_ATTRIBUTE;
-use const T_WHITESPACE;
 
 class DisallowMultipleAttributesPerLineSniff implements Sniff
 {
@@ -65,7 +64,7 @@ class DisallowMultipleAttributesPerLineSniff implements Sniff
 			return;
 		}
 
-		$nonWhitespacePointerBefore = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $nextAttributeOpenerPointer - 1);
+		$nonWhitespacePointerBefore = TokenHelper::findPreviousNonWhitespace($phpcsFile, $nextAttributeOpenerPointer - 1);
 		$indentation = IndentationHelper::getIndentation(
 			$phpcsFile,
 			TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $attributeOpenerPointer)

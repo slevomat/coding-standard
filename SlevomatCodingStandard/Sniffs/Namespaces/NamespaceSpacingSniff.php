@@ -17,7 +17,6 @@ use function substr_count;
 use const T_NAMESPACE;
 use const T_OPEN_TAG;
 use const T_SEMICOLON;
-use const T_WHITESPACE;
 
 class NamespaceSpacingSniff implements Sniff
 {
@@ -59,7 +58,7 @@ class NamespaceSpacingSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		/** @var int $pointerBeforeNamespace */
-		$pointerBeforeNamespace = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $namespacePointer - 1);
+		$pointerBeforeNamespace = TokenHelper::findPreviousNonWhitespace($phpcsFile, $namespacePointer - 1);
 
 		$whitespaceBeforeNamespace = '';
 
@@ -124,7 +123,7 @@ class NamespaceSpacingSniff implements Sniff
 		/** @var int $namespaceSemicolonPointer */
 		$namespaceSemicolonPointer = TokenHelper::findNextLocal($phpcsFile, T_SEMICOLON, $namespacePointer + 1);
 
-		$pointerAfterWhitespaceEnd = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $namespaceSemicolonPointer + 1);
+		$pointerAfterWhitespaceEnd = TokenHelper::findNextNonWhitespace($phpcsFile, $namespaceSemicolonPointer + 1);
 		if ($pointerAfterWhitespaceEnd === null) {
 			return;
 		}

@@ -78,7 +78,7 @@ class DuplicateSpacesSniff implements Sniff
 
 		if ($tokens[$whitespacePointer]['code'] === T_WHITESPACE) {
 			if ($this->ignoreSpacesBeforeAssignment) {
-				$pointerAfter = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $whitespacePointer + 1);
+				$pointerAfter = TokenHelper::findNextNonWhitespace($phpcsFile, $whitespacePointer + 1);
 				if (
 					$pointerAfter !== null
 					&& in_array($tokens[$pointerAfter]['code'], Tokens::$assignmentTokens, true)
@@ -88,7 +88,7 @@ class DuplicateSpacesSniff implements Sniff
 			}
 
 			if ($this->ignoreSpacesInParameters) {
-				$pointerAfter = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $whitespacePointer + 1);
+				$pointerAfter = TokenHelper::findNextNonWhitespace($phpcsFile, $whitespacePointer + 1);
 				if (
 					$pointerAfter !== null
 					&& $tokens[$pointerAfter]['code'] === T_VARIABLE
@@ -99,7 +99,7 @@ class DuplicateSpacesSniff implements Sniff
 			}
 
 			if ($this->ignoreSpacesInMatch) {
-				$pointerAfter = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $whitespacePointer + 1);
+				$pointerAfter = TokenHelper::findNextNonWhitespace($phpcsFile, $whitespacePointer + 1);
 				if (
 					$pointerAfter !== null
 					&& $tokens[$pointerAfter]['code'] === T_MATCH_ARROW

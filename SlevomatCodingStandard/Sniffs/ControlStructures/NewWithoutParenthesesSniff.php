@@ -18,7 +18,6 @@ use const T_INLINE_THEN;
 use const T_NEW;
 use const T_OPEN_PARENTHESIS;
 use const T_SEMICOLON;
-use const T_WHITESPACE;
 
 class NewWithoutParenthesesSniff implements Sniff
 {
@@ -83,7 +82,7 @@ class NewWithoutParenthesesSniff implements Sniff
 			return;
 		}
 
-		$nextPointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $parenthesisOpenerPointer + 1);
+		$nextPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $parenthesisOpenerPointer + 1);
 		if ($nextPointer !== $tokens[$parenthesisOpenerPointer]['parenthesis_closer']) {
 			return;
 		}

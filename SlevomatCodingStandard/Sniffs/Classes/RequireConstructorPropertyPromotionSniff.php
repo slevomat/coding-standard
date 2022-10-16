@@ -42,7 +42,6 @@ use const T_READONLY;
 use const T_SEMICOLON;
 use const T_SWITCH;
 use const T_VARIABLE;
-use const T_WHITESPACE;
 
 class RequireConstructorPropertyPromotionSniff implements Sniff
 {
@@ -199,7 +198,7 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 				$propertyEndPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $propertyPointer + 1);
 				$pointerAfterProperty = TokenHelper::findFirstTokenOnLine(
 					$phpcsFile,
-					TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $propertyEndPointer + 1)
+					TokenHelper::findNextNonWhitespace($phpcsFile, $propertyEndPointer + 1)
 				);
 
 				$pointerBeforeParameterStart = TokenHelper::findPrevious($phpcsFile, [T_COMMA, T_OPEN_PARENTHESIS], $parameterPointer - 1);

@@ -21,7 +21,6 @@ use const T_EQUAL;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_USE;
-use const T_WHITESPACE;
 
 class ReferenceSpacingSniff implements Sniff
 {
@@ -53,7 +52,7 @@ class ReferenceSpacingSniff implements Sniff
 			return;
 		}
 
-		$pointerAfterWhitespace = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $referencePointer + 1);
+		$pointerAfterWhitespace = TokenHelper::findNextNonWhitespace($phpcsFile, $referencePointer + 1);
 
 		$whitespace = TokenHelper::getContent($phpcsFile, $referencePointer + 1, $pointerAfterWhitespace - 1);
 

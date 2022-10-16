@@ -577,7 +577,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 		$useStatementPlacePointer = $openTagPointer;
 
-		$nonWhitespacePointerAfterOpenTag = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $openTagPointer + 1);
+		$nonWhitespacePointerAfterOpenTag = TokenHelper::findNextNonWhitespace($phpcsFile, $openTagPointer + 1);
 		if (in_array($tokens[$nonWhitespacePointerAfterOpenTag]['code'], Tokens::$commentTokens, true)) {
 			$commentEndPointer = CommentHelper::getCommentEndPointer($phpcsFile, $nonWhitespacePointerAfterOpenTag);
 
@@ -587,7 +587,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 				$newLineAfterComment = $commentEndPointer + 1;
 
 				if (array_key_exists($newLineAfterComment, $tokens) && $tokens[$newLineAfterComment]['content'] === $phpcsFile->eolChar) {
-					$pointerAfterCommentEnd = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $newLineAfterComment + 1);
+					$pointerAfterCommentEnd = TokenHelper::findNextNonWhitespace($phpcsFile, $newLineAfterComment + 1);
 
 					if (TokenHelper::findNextContent(
 						$phpcsFile,

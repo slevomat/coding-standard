@@ -38,7 +38,6 @@ use const T_STATIC;
 use const T_USE;
 use const T_VAR;
 use const T_VARIABLE;
-use const T_WHITESPACE;
 
 class ClassMemberSpacingSniff implements Sniff
 {
@@ -95,7 +94,7 @@ class ClassMemberSpacingSniff implements Sniff
 
 			$hasCommentWithNewLineAfterPreviousMember = false;
 
-			$commentPointerAfterPreviousMember = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $previousMemberEndPointer + 1);
+			$commentPointerAfterPreviousMember = TokenHelper::findNextNonWhitespace($phpcsFile, $previousMemberEndPointer + 1);
 			if (
 				in_array($tokens[$commentPointerAfterPreviousMember]['code'], TokenHelper::$inlineCommentTokenCodes, true)
 				&& (
@@ -204,7 +203,7 @@ class ClassMemberSpacingSniff implements Sniff
 		$memberFirstCodePointer = $this->getMemberFirstCodePointer($phpcsFile, $memberPointer);
 
 		do {
-			$pointerBefore = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $memberFirstCodePointer - 1);
+			$pointerBefore = TokenHelper::findPreviousNonWhitespace($phpcsFile, $memberFirstCodePointer - 1);
 
 			if ($tokens[$pointerBefore]['code'] === T_ATTRIBUTE_END) {
 				$memberFirstCodePointer = $tokens[$pointerBefore]['attribute_opener'];

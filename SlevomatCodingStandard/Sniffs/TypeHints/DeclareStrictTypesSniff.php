@@ -16,7 +16,6 @@ use const T_DECLARE;
 use const T_LNUMBER;
 use const T_OPEN_TAG;
 use const T_STRING;
-use const T_WHITESPACE;
 
 class DeclareStrictTypesSniff implements Sniff
 {
@@ -152,7 +151,7 @@ class DeclareStrictTypesSniff implements Sniff
 			}
 		}
 
-		$pointerBeforeDeclare = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $declarePointer - 1);
+		$pointerBeforeDeclare = TokenHelper::findPreviousNonWhitespace($phpcsFile, $declarePointer - 1);
 
 		$whitespaceBefore = '';
 		if ($pointerBeforeDeclare === $openTagPointer) {
@@ -210,7 +209,7 @@ class DeclareStrictTypesSniff implements Sniff
 
 		/** @var int $declareSemicolonPointer */
 		$declareSemicolonPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$declarePointer]['parenthesis_closer'] + 1);
-		$pointerAfterWhitespaceEnd = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $declareSemicolonPointer + 1);
+		$pointerAfterWhitespaceEnd = TokenHelper::findNextNonWhitespace($phpcsFile, $declareSemicolonPointer + 1);
 		if ($pointerAfterWhitespaceEnd === null) {
 			return;
 		}

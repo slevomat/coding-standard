@@ -53,7 +53,7 @@ class RequireAttributeAfterDocCommentSniff implements Sniff
 
 		$firstAttributeOpenerPointer = $attributeOpenerPointer;
 		do {
-			$nonWhitespacePointerBefore = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $firstAttributeOpenerPointer - 1);
+			$nonWhitespacePointerBefore = TokenHelper::findPreviousNonWhitespace($phpcsFile, $firstAttributeOpenerPointer - 1);
 
 			if ($tokens[$nonWhitespacePointerBefore]['code'] !== T_ATTRIBUTE_END) {
 				break;

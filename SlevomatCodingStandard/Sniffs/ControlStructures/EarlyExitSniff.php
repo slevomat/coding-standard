@@ -30,7 +30,6 @@ use const T_IF;
 use const T_OPEN_CURLY_BRACKET;
 use const T_SEMICOLON;
 use const T_WHILE;
-use const T_WHITESPACE;
 
 class EarlyExitSniff implements Sniff
 {
@@ -261,7 +260,7 @@ class EarlyExitSniff implements Sniff
 		}
 
 		/** @var int $pointerBeforeElseIfPointer */
-		$pointerBeforeElseIfPointer = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $elseIfPointer - 1);
+		$pointerBeforeElseIfPointer = TokenHelper::findPreviousNonWhitespace($phpcsFile, $elseIfPointer - 1);
 
 		$phpcsFile->fixer->beginChangeset();
 
@@ -287,7 +286,7 @@ class EarlyExitSniff implements Sniff
 			return;
 		}
 
-		$nextPointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $tokens[$ifPointer]['scope_closer'] + 1);
+		$nextPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $tokens[$ifPointer]['scope_closer'] + 1);
 		if ($nextPointer === null || $tokens[$nextPointer]['code'] !== T_CLOSE_CURLY_BRACKET) {
 			return;
 		}

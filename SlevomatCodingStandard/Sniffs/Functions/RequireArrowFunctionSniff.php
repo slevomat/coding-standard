@@ -88,7 +88,7 @@ class RequireArrowFunctionSniff implements Sniff
 			return;
 		}
 
-		$pointerAfterReturn = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $returnPointer + 1);
+		$pointerAfterReturn = TokenHelper::findNextNonWhitespace($phpcsFile, $returnPointer + 1);
 		$semicolonAfterReturn = $this->findSemicolon($phpcsFile, $returnPointer);
 		$usePointer = TokenHelper::findNext(
 			$phpcsFile,

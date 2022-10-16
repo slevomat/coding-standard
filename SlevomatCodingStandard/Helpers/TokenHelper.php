@@ -173,6 +173,15 @@ class TokenHelper
 	}
 
 	/**
+	 * @param int $startPointer Search starts at this token, inclusive
+	 * @param int|null $endPointer Search ends at this token, exclusive
+	 */
+	public static function findNextNonWhitespace(File $phpcsFile, int $startPointer, ?int $endPointer = null): ?int
+	{
+		return self::findNextExcluding($phpcsFile, T_WHITESPACE, $startPointer, $endPointer);
+	}
+
+	/**
 	 * @param int|string|array<int|string, int|string> $types
 	 * @param int $startPointer Search starts at this token, inclusive
 	 * @param int|null $endPointer Search ends at this token, exclusive
@@ -232,6 +241,15 @@ class TokenHelper
 	public static function findPreviousEffective(File $phpcsFile, int $startPointer, ?int $endPointer = null): ?int
 	{
 		return self::findPreviousExcluding($phpcsFile, self::$ineffectiveTokenCodes, $startPointer, $endPointer);
+	}
+
+	/**
+	 * @param int $startPointer Search starts at this token, inclusive
+	 * @param int|null $endPointer Search ends at this token, exclusive
+	 */
+	public static function findPreviousNonWhitespace(File $phpcsFile, int $startPointer, ?int $endPointer = null): ?int
+	{
+		return self::findPreviousExcluding($phpcsFile, T_WHITESPACE, $startPointer, $endPointer);
 	}
 
 	/**

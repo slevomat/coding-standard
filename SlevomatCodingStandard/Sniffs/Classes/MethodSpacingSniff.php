@@ -16,7 +16,6 @@ use function sprintf;
 use function str_repeat;
 use const T_FUNCTION;
 use const T_SEMICOLON;
-use const T_WHITESPACE;
 
 class MethodSpacingSniff implements Sniff
 {
@@ -75,7 +74,7 @@ class MethodSpacingSniff implements Sniff
 			? TokenHelper::findNextEffective($phpcsFile, $methodEndPointer + 1)
 			: TokenHelper::findFirstTokenOnLine($phpcsFile, $nextMethodDocCommentStartPointer ?? $nextMethodPointer);
 
-		if (TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $methodEndPointer + 1, $nextMethodFirstLinePointer) !== null) {
+		if (TokenHelper::findNextNonWhitespace($phpcsFile, $methodEndPointer + 1, $nextMethodFirstLinePointer) !== null) {
 			return;
 		}
 

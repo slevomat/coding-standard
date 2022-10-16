@@ -18,7 +18,6 @@ use function substr;
 use function trim;
 use const T_ATTRIBUTE;
 use const T_ATTRIBUTE_END;
-use const T_WHITESPACE;
 
 class AttributesOrderSniff implements Sniff
 {
@@ -54,7 +53,7 @@ class AttributesOrderSniff implements Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
-		$pointerBefore = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $attributeOpenerPointer - 1);
+		$pointerBefore = TokenHelper::findPreviousNonWhitespace($phpcsFile, $attributeOpenerPointer - 1);
 
 		if ($tokens[$pointerBefore]['code'] === T_ATTRIBUTE_END) {
 			return;
@@ -65,7 +64,7 @@ class AttributesOrderSniff implements Sniff
 		$lastAttributeCloserPointer = $tokens[$attributeOpenerPointer]['attribute_closer'];
 
 		do {
-			$nextPointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $lastAttributeCloserPointer + 1);
+			$nextPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $lastAttributeCloserPointer + 1);
 
 			if ($tokens[$nextPointer]['code'] !== T_ATTRIBUTE) {
 				break;

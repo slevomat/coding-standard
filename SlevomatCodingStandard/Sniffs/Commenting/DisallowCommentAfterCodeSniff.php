@@ -51,7 +51,7 @@ class DisallowCommentAfterCodeSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$commentEndPointer = CommentHelper::getCommentEndPointer($phpcsFile, $commentPointer);
-		$nextNonWhitespacePointer = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $commentEndPointer + 1);
+		$nextNonWhitespacePointer = TokenHelper::findNextNonWhitespace($phpcsFile, $commentEndPointer + 1);
 
 		if (
 			$nextNonWhitespacePointer !== null
@@ -74,7 +74,7 @@ class DisallowCommentAfterCodeSniff implements Sniff
 			$commentContent .= $phpcsFile->eolChar;
 		}
 
-		$firstNonWhiteSpacePointerBeforeComment = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $commentPointer - 1);
+		$firstNonWhiteSpacePointerBeforeComment = TokenHelper::findPreviousNonWhitespace($phpcsFile, $commentPointer - 1);
 
 		$newLineAfterComment = $commentHasNewLineAtTheEnd
 			? $commentEndPointer

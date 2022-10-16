@@ -54,7 +54,7 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 			return $arrayEnd;
 		}
 
-		$content = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $arrayStart + 1, $arrayEnd + 1);
+		$content = TokenHelper::findNextNonWhitespace($phpcsFile, $arrayStart + 1, $arrayEnd + 1);
 		if ($content === $arrayEnd) {
 			// Empty array, but if the brackets aren't together, there's a problem.
 			if ($this->enableEmptyArrayCheck) {
@@ -89,7 +89,7 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 			}
 
 			// Before checking this comma, make sure we are not at the end of the array.
-			$next = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $i + 1, $arrayEnd);
+			$next = TokenHelper::findNextNonWhitespace($phpcsFile, $i + 1, $arrayEnd);
 			if ($next === null) {
 				return $arrayStart + 1;
 			}

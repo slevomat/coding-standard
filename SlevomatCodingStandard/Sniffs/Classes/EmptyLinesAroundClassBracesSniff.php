@@ -10,7 +10,6 @@ use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_values;
 use function sprintf;
-use const T_WHITESPACE;
 
 class EmptyLinesAroundClassBracesSniff implements Sniff
 {
@@ -60,7 +59,7 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 		$typeToken = $tokens[$stackPointer];
 		$openerPointer = $typeToken['scope_opener'];
 		$openerToken = $tokens[$openerPointer];
-		$nextPointerAfterOpeningBrace = TokenHelper::findNextExcluding($phpcsFile, T_WHITESPACE, $openerPointer + 1);
+		$nextPointerAfterOpeningBrace = TokenHelper::findNextNonWhitespace($phpcsFile, $openerPointer + 1);
 		$nextTokenAfterOpeningBrace = $tokens[$nextPointerAfterOpeningBrace];
 		$lines = $nextTokenAfterOpeningBrace['line'] - $openerToken['line'] - 1;
 
@@ -112,7 +111,7 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 		$typeToken = $tokens[$stackPointer];
 		$closerPointer = $typeToken['scope_closer'];
 		$closerToken = $tokens[$closerPointer];
-		$previousPointerBeforeClosingBrace = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $closerPointer - 1);
+		$previousPointerBeforeClosingBrace = TokenHelper::findPreviousNonWhitespace($phpcsFile, $closerPointer - 1);
 		$previousTokenBeforeClosingBrace = $tokens[$previousPointerBeforeClosingBrace];
 		$lines = $closerToken['line'] - $previousTokenBeforeClosingBrace['line'] - 1;
 

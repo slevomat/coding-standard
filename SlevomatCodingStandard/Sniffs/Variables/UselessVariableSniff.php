@@ -42,7 +42,6 @@ use const T_STATIC;
 use const T_SWITCH;
 use const T_VARIABLE;
 use const T_WHILE;
-use const T_WHITESPACE;
 use const T_XOR_EQUAL;
 
 class UselessVariableSniff implements Sniff
@@ -318,7 +317,7 @@ class UselessVariableSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$pointerBeforeVariable = TokenHelper::findPreviousExcluding($phpcsFile, T_WHITESPACE, $variablePointer - 1);
+		$pointerBeforeVariable = TokenHelper::findPreviousNonWhitespace($phpcsFile, $variablePointer - 1);
 		if ($tokens[$pointerBeforeVariable]['code'] !== T_DOC_COMMENT_CLOSE_TAG) {
 			return false;
 		}
