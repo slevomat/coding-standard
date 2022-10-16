@@ -48,7 +48,7 @@ class RequireAttributeAfterDocCommentSniff implements Sniff
 		}
 
 		$docCommentStartPointer = TokenHelper::findFirstTokenOnLine($phpcsFile, $docCommentOpenerPointer);
-		$docCommentEndPointer = TokenHelper::findFirstTokenOnNextLine($phpcsFile, $tokens[$docCommentOpenerPointer]['comment_closer']) - 1;
+		$docCommentEndPointer = TokenHelper::findLastTokenOnLine($phpcsFile, $tokens[$docCommentOpenerPointer]['comment_closer']);
 		$docComment = TokenHelper::getContent($phpcsFile, $docCommentStartPointer, $docCommentEndPointer);
 
 		$firstAttributeOpenerPointer = $attributeOpenerPointer;
