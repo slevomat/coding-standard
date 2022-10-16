@@ -12,7 +12,7 @@ use function preg_match;
 class FixerHelper
 {
 
-	public static function cleanWhitespaceBefore(File $phpcsFile, int $pointer): void
+	public static function removeWhitespaceBefore(File $phpcsFile, int $pointer): void
 	{
 		for ($i = $pointer - 1; $i > 0; $i--) {
 			if (preg_match('~^\\s+$~', $phpcsFile->fixer->getTokenContent($i)) === 0) {
@@ -23,7 +23,7 @@ class FixerHelper
 		}
 	}
 
-	public static function cleanWhitespaceAfter(File $phpcsFile, int $pointer): void
+	public static function removeWhitespaceAfter(File $phpcsFile, int $pointer): void
 	{
 		for ($i = $pointer + 1; $i < count($phpcsFile->getTokens()); $i++) {
 			if (preg_match('~^\\s+$~', $phpcsFile->fixer->getTokenContent($i)) === 0) {

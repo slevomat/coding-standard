@@ -150,7 +150,7 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 
 		for ($i = $parenthesisOpenerPointer + 1; $i < $parenthesisCloserPointer; $i++) {
 			if (in_array($i, $parametersPointers, true)) {
-				FixerHelper::cleanWhitespaceBefore($phpcsFile, $i);
+				FixerHelper::removeWhitespaceBefore($phpcsFile, $i);
 				$phpcsFile->fixer->addContentBefore($i, $phpcsFile->eolChar . $parametersIndentation);
 			} elseif ($tokens[$i]['content'] === $phpcsFile->eolChar) {
 				$phpcsFile->fixer->addContent($i, $oneIndentation);

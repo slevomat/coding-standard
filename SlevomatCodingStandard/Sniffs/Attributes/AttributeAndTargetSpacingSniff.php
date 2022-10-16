@@ -84,7 +84,7 @@ class AttributeAndTargetSpacingSniff implements Sniff
 
 			$phpcsFile->fixer->beginChangeset();
 
-			FixerHelper::cleanWhitespaceAfter($phpcsFile, $attributeCloserPointer);
+			FixerHelper::removeWhitespaceAfter($phpcsFile, $attributeCloserPointer);
 			$phpcsFile->fixer->addContentBefore($pointerAfter, str_repeat($phpcsFile->eolChar, $this->linesCount + 1) . $indentation);
 
 			$phpcsFile->fixer->endChangeset();
