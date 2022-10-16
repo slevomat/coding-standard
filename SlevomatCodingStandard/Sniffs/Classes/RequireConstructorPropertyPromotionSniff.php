@@ -8,6 +8,7 @@ use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
@@ -212,9 +213,7 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 
 				$phpcsFile->fixer->beginChangeset();
 
-				for ($i = $pointerBeforeProperty; $i < $pointerAfterProperty; $i++) {
-					$phpcsFile->fixer->replaceToken($i, '');
-				}
+				FixerHelper::removeBetweenIncluding($phpcsFile, $pointerBeforeProperty, $pointerAfterProperty - 1);
 
 				if ($isReadonly) {
 					$phpcsFile->fixer->addContentBefore($parameterStartPointer, 'readonly ');
@@ -226,9 +225,7 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 					$phpcsFile->fixer->addContent($parameterPointer, sprintf(' = %s', $propertyDefaultValue));
 				}
 
-				for ($i = $pointerBeforeAssignment; $i <= $pointerAfterAssignment; $i++) {
-					$phpcsFile->fixer->replaceToken($i, '');
-				}
+				FixerHelper::removeBetweenIncluding($phpcsFile, $pointerBeforeAssignment, $pointerAfterAssignment);
 
 				$phpcsFile->fixer->endChangeset();
 			}

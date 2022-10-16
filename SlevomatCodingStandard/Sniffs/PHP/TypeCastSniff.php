@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\PHP;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function preg_match;
@@ -93,9 +94,7 @@ class TypeCastSniff implements Sniff
 
 			$phpcsFile->fixer->beginChangeset();
 
-			for ($i = $pointer; $i < $end; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+			FixerHelper::removeBetweenIncluding($phpcsFile, $pointer, $end - 1);
 
 			$phpcsFile->fixer->endChangeset();
 

@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\TernaryOperatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -106,9 +107,7 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 
 		$phpcsFile->fixer->replaceToken($startPointer, sprintf('%s ??', $variableContent));
 
-		for ($i = $startPointer + 1; $i <= $inlineElsePointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetweenIncluding($phpcsFile, $startPointer + 1, $inlineElsePointer);
 
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -204,20 +203,14 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 		$phpcsFile->fixer->replaceToken($conditionStart, sprintf('%s ??', $variableContent));
 
 		if ($tokens[$identicalOperator]['code'] === T_IS_IDENTICAL) {
-			for ($i = $conditionStart + 1; $i <= $inlineThenPointer; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+			FixerHelper::removeBetweenIncluding($phpcsFile, $conditionStart + 1, $inlineThenPointer);
 
 			$pointerBeforeInlineElse = TokenHelper::findPreviousEffective($phpcsFile, $inlineElsePointer - 1);
 
-			for ($i = $pointerBeforeInlineElse + 1; $i <= $inlineElseEndPointer; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+			FixerHelper::removeBetweenIncluding($phpcsFile, $pointerBeforeInlineElse + 1, $inlineElseEndPointer);
 
 		} else {
-			for ($i = $conditionStart + 1; $i <= $inlineElsePointer; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+			FixerHelper::removeBetweenIncluding($phpcsFile, $conditionStart + 1, $inlineElsePointer);
 		}
 
 		$phpcsFile->fixer->endChangeset();

@@ -6,6 +6,7 @@ use Exception;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use function array_key_exists;
 use function is_array;
@@ -102,9 +103,11 @@ class ForbiddenCommentsSniff implements Sniff
 						$phpcsFile->fixer->replaceToken($pointerBeforeDocComment, $contentBeforeWithoutSpaces);
 					}
 
-					for ($i = $docCommentOpenPointer; $i <= $tokens[$docCommentOpenPointer]['comment_closer']; $i++) {
-						$phpcsFile->fixer->replaceToken($i, '');
-					}
+					FixerHelper::removeBetweenIncluding(
+						$phpcsFile,
+						$docCommentOpenPointer,
+						$tokens[$docCommentOpenPointer]['comment_closer']
+					);
 
 					$pointerAfterDocComment = $tokens[$docCommentOpenPointer]['comment_closer'] + 1;
 					if (array_key_exists($pointerAfterDocComment, $tokens)) {

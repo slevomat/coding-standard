@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\CommentHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
@@ -115,9 +116,7 @@ class DisallowCommentAfterCodeSniff implements Sniff
 			$phpcsFile->fixer->addNewline($firstNonWhiteSpacePointerBeforeComment);
 		}
 
-		for ($i = $firstNonWhiteSpacePointerBeforeComment + 1; $i <= $newLineAfterComment; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetweenIncluding($phpcsFile, $firstNonWhiteSpacePointerBeforeComment + 1, $newLineAfterComment);
 
 		$phpcsFile->fixer->endChangeset();
 	}

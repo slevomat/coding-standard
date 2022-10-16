@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\PHP;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -79,9 +80,8 @@ class ReferenceSpacingSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		$phpcsFile->fixer->addContent($referencePointer, str_repeat(' ', $this->spacesCountAfterReference));
-		for ($i = $referencePointer + 1; $i < $pointerAfterWhitespace; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+
+		FixerHelper::removeBetween($phpcsFile, $referencePointer, $pointerAfterWhitespace);
 
 		$phpcsFile->fixer->endChangeset();
 	}

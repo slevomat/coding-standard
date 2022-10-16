@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Attributes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AttributeHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_ATTRIBUTE;
 use const T_ATTRIBUTE_END;
@@ -77,9 +78,7 @@ class RequireAttributeAfterDocCommentSniff implements Sniff
 
 		$phpcsFile->fixer->addContentBefore($attributeStartPointer, $docComment);
 
-		for ($i = $docCommentStartPointer; $i <= $docCommentEndPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetweenIncluding($phpcsFile, $docCommentStartPointer, $docCommentEndPointer);
 
 		$phpcsFile->fixer->endChangeset();
 	}

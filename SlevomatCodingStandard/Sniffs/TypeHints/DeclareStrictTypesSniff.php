@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function sprintf;
@@ -146,9 +147,7 @@ class DeclareStrictTypesSniff implements Sniff
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
 				$phpcsFile->fixer->replaceToken($strictTypesPointer, $format);
-				for ($i = $strictTypesPointer + 1; $i <= $numberPointer; $i++) {
-					$phpcsFile->fixer->replaceToken($i, '');
-				}
+				FixerHelper::removeBetweenIncluding($phpcsFile, $strictTypesPointer + 1, $numberPointer);
 				$phpcsFile->fixer->endChangeset();
 			}
 		}
@@ -174,9 +173,7 @@ class DeclareStrictTypesSniff implements Sniff
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
 					$phpcsFile->fixer->replaceToken($openTagPointer, '<?php ');
-					for ($i = $openTagPointer + 1; $i < $declarePointer; $i++) {
-						$phpcsFile->fixer->replaceToken($i, '');
-					}
+					FixerHelper::removeBetween($phpcsFile, $openTagPointer, $declarePointer);
 					$phpcsFile->fixer->endChangeset();
 				}
 			}
@@ -201,9 +198,8 @@ class DeclareStrictTypesSniff implements Sniff
 						$phpcsFile->fixer->replaceToken($openTagPointer, '<?php');
 					}
 
-					for ($i = $pointerBeforeDeclare + 1; $i < $declarePointer; $i++) {
-						$phpcsFile->fixer->replaceToken($i, '');
-					}
+					FixerHelper::removeBetween($phpcsFile, $pointerBeforeDeclare, $declarePointer);
+
 					for ($i = 0; $i <= $this->linesCountBeforeDeclare; $i++) {
 						$phpcsFile->fixer->addNewline($pointerBeforeDeclare);
 					}
@@ -243,12 +239,13 @@ class DeclareStrictTypesSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		for ($i = $declareSemicolonPointer + 1; $i < $pointerAfterWhitespaceEnd; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+
+		FixerHelper::removeBetween($phpcsFile, $declareSemicolonPointer, $pointerAfterWhitespaceEnd);
+
 		for ($i = 0; $i <= $this->linesCountAfterDeclare; $i++) {
 			$phpcsFile->fixer->addNewline($declareSemicolonPointer);
 		}
+
 		$phpcsFile->fixer->endChangeset();
 	}
 

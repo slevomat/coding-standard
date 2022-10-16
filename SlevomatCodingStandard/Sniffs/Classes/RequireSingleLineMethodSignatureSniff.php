@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use Exception;
 use PHP_CodeSniffer\Files\File;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use function count;
@@ -83,9 +84,7 @@ class RequireSingleLineMethodSignatureSniff extends AbstractMethodSignature
 
 		$phpcsFile->fixer->replaceToken($signatureStartPointer, $signature);
 
-		for ($i = $signatureStartPointer + 1; $i <= $signatureEndPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetweenIncluding($phpcsFile, $signatureStartPointer + 1, $signatureEndPointer);
 
 		$phpcsFile->fixer->endChangeset();
 	}

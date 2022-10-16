@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
@@ -240,9 +241,7 @@ class UnionTypeHintFormatSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		$phpcsFile->fixer->replaceToken($typeHint->getStartPointer(), $fixedTypeHint);
-		for ($i = $typeHint->getStartPointer() + 1; $i <= $typeHint->getEndPointer(); $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetweenIncluding($phpcsFile, $typeHint->getStartPointer() + 1, $typeHint->getEndPointer());
 
 		$phpcsFile->fixer->endChangeset();
 	}

@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_values;
@@ -95,7 +96,7 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 			}
 		} else {
 			for ($i = $openerPointer + $this->linesCountAfterOpeningBrace + 2; $i < $nextPointerAfterOpeningBrace; $i++) {
-				if ($tokens[$i]['content'] !== $phpcsFile->eolChar) {
+				if ($phpcsFile->fixer->getTokenContent($i) !== $phpcsFile->eolChar) {
 					break;
 				}
 				$phpcsFile->fixer->replaceToken($i, '');
@@ -146,9 +147,11 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 				$phpcsFile->fixer->addNewlineBefore($closerPointer);
 			}
 		} else {
-			for ($i = $previousPointerBeforeClosingBrace + $this->linesCountBeforeClosingBrace + 2; $i < $closerPointer; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+			FixerHelper::removeBetween(
+				$phpcsFile,
+				$previousPointerBeforeClosingBrace + $this->linesCountBeforeClosingBrace + 1,
+				$closerPointer
+			);
 		}
 
 		$phpcsFile->fixer->endChangeset();

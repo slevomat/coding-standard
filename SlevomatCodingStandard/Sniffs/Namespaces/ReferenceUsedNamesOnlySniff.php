@@ -14,6 +14,7 @@ use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\CommentHelper;
 use SlevomatCodingStandard\Helpers\ConstantHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedName;
@@ -301,9 +302,9 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 							);
 
 							$phpcsFile->fixer->replaceToken($startPointer, $fixedAnnotationContent);
-							for ($i = $startPointer + 1; $i <= $reference->endPointer; $i++) {
-								$phpcsFile->fixer->replaceToken($i, '');
-							}
+
+							FixerHelper::removeBetweenIncluding($phpcsFile, $startPointer + 1, $reference->endPointer);
+
 						} elseif ($reference->source === self::SOURCE_ANNOTATION_CONSTANT_FETCH) {
 							$fixedAnnotationContent = AnnotationHelper::fixAnnotationConstantFetchNode(
 								$phpcsFile,
@@ -313,10 +314,8 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 							);
 
 							$phpcsFile->fixer->replaceToken($startPointer, $fixedAnnotationContent);
-							for ($i = $startPointer + 1; $i <= $reference->endPointer; $i++) {
-								$phpcsFile->fixer->replaceToken($i, '');
-							}
 
+							FixerHelper::removeBetweenIncluding($phpcsFile, $startPointer + 1, $reference->endPointer);
 						} else {
 							$phpcsFile->fixer->replaceToken($startPointer, substr($tokens[$startPointer]['content'], 1));
 						}
@@ -513,9 +512,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 				$phpcsFile->fixer->replaceToken($startPointer, $nameToReference);
 			}
 
-			for ($i = $startPointer + 1; $i <= $reference->endPointer; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+			FixerHelper::removeBetweenIncluding($phpcsFile, $startPointer + 1, $reference->endPointer);
 		}
 
 		$phpcsFile->fixer->endChangeset();

@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ClassHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_ANON_CLASS;
 use const T_CLASS;
@@ -91,9 +92,8 @@ class TraitUseDeclarationSniff implements Sniff
 		foreach ($otherCommaPointers as $otherCommaPointer) {
 			$pointerAfterComma = TokenHelper::findNextEffective($phpcsFile, $otherCommaPointer + 1);
 			$phpcsFile->fixer->replaceToken($otherCommaPointer, ';' . $phpcsFile->eolChar . $indentation . 'use ');
-			for ($i = $otherCommaPointer + 1; $i < $pointerAfterComma; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+
+			FixerHelper::removeBetween($phpcsFile, $otherCommaPointer, $pointerAfterComma);
 		}
 
 		$phpcsFile->fixer->endChangeset();

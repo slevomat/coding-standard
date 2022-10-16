@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -78,9 +79,9 @@ class UseFromSameNamespaceSniff implements Sniff
 		$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $usePointer) + 1;
 
 		$phpcsFile->fixer->beginChangeset();
-		for ($i = $usePointer; $i <= $endPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+
+		FixerHelper::removeBetweenIncluding($phpcsFile, $usePointer, $endPointer);
+
 		$phpcsFile->fixer->endChangeset();
 	}
 

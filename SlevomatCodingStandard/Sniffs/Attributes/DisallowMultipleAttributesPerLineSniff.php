@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Attributes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AttributeHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_ATTRIBUTE;
@@ -72,9 +73,7 @@ class DisallowMultipleAttributesPerLineSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		for ($i = $nonWhitespacePointerBefore + 1; $i < $nextAttributeOpenerPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetween($phpcsFile, $nonWhitespacePointerBefore, $nextAttributeOpenerPointer);
 
 		$phpcsFile->fixer->addContentBefore($nextAttributeOpenerPointer, $phpcsFile->eolChar . $indentation);
 

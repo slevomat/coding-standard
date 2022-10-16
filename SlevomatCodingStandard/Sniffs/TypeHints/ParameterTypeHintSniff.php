@@ -19,6 +19,7 @@ use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
@@ -602,10 +603,9 @@ class ParameterTypeHintSniff implements Sniff
 				[T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR],
 				$parameterAnnotation->getEndPointer() + 1
 			) - 1;
+
 			$phpcsFile->fixer->beginChangeset();
-			for ($i = $changeStart; $i <= $changeEnd; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+			FixerHelper::removeBetweenIncluding($phpcsFile, $changeStart, $changeEnd);
 			$phpcsFile->fixer->endChangeset();
 		}
 

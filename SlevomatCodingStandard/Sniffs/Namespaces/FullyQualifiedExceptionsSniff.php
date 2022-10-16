@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
@@ -128,9 +129,8 @@ class FullyQualifiedExceptionsSniff implements Sniff
 
 			$phpcsFile->fixer->beginChangeset();
 
-			for ($i = $referencedName->getStartPointer(); $i <= $referencedName->getEndPointer(); $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+			FixerHelper::removeBetweenIncluding($phpcsFile, $referencedName->getStartPointer(), $referencedName->getEndPointer());
+
 			$phpcsFile->fixer->addContent($referencedName->getStartPointer(), $fullyQualifiedName);
 
 			$phpcsFile->fixer->endChangeset();

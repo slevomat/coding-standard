@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\CommentHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
@@ -135,13 +136,13 @@ class ClassMemberSpacingSniff implements Sniff
 				$this->linesCountBetweenMembers + ($hasCommentWithNewLineAfterPreviousMember ? 0 : 1)
 			);
 
+			$firstPointerOnMemberLine = TokenHelper::findFirstTokenOnLine($phpcsFile, $memberStartPointer);
+
 			$phpcsFile->fixer->beginChangeset();
 
 			$phpcsFile->fixer->addContent($previousMemberEndPointer, $newLines);
 
-			for ($i = $previousMemberEndPointer + 1; $i < TokenHelper::findFirstTokenOnLine($phpcsFile, $memberStartPointer); $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+			FixerHelper::removeBetween($phpcsFile, $previousMemberEndPointer, $firstPointerOnMemberLine);
 
 			$phpcsFile->fixer->endChangeset();
 

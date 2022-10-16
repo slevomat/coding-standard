@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Commenting;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
@@ -93,9 +94,7 @@ class ForbiddenAnnotationsSniff implements Sniff
 
 				$phpcsFile->fixer->beginChangeset();
 
-				for ($i = $annotationStartPointer; $i <= $annotationEndPointer; $i++) {
-					$phpcsFile->fixer->replaceToken($i, '');
-				}
+				FixerHelper::removeBetweenIncluding($phpcsFile, $annotationStartPointer, $annotationEndPointer);
 
 				$docCommentUseful = false;
 				$docCommentClosePointer = $tokens[$docCommentOpenPointer]['comment_closer'];
@@ -112,9 +111,8 @@ class ForbiddenAnnotationsSniff implements Sniff
 				if (!$docCommentUseful) {
 					/** @var int $nextPointerAfterDocComment */
 					$nextPointerAfterDocComment = TokenHelper::findNextEffective($phpcsFile, $docCommentClosePointer + 1);
-					for ($i = $docCommentOpenPointer; $i < $nextPointerAfterDocComment; $i++) {
-						$phpcsFile->fixer->replaceToken($i, '');
-					}
+
+					FixerHelper::removeBetweenIncluding($phpcsFile, $docCommentOpenPointer, $nextPointerAfterDocComment - 1);
 				}
 
 				$phpcsFile->fixer->endChangeset();

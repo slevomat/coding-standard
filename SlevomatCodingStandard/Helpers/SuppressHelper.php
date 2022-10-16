@@ -57,9 +57,7 @@ class SuppressHelper
 			$suppressAnnotation->getEndPointer() + 1
 		) - 1;
 		$phpcsFile->fixer->beginChangeset();
-		for ($i = $changeStart; $i <= $changeEnd; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetweenIncluding($phpcsFile, $changeStart, $changeEnd);
 		$phpcsFile->fixer->endChangeset();
 	}
 

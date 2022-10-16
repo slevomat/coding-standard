@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ConditionHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TernaryOperatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
@@ -94,14 +95,10 @@ class UselessTernaryOperatorSniff implements Sniff
 			$negativeCondition = ConditionHelper::getNegativeCondition($phpcsFile, $conditionStartPointer, $conditionEndPointer);
 
 			$phpcsFile->fixer->replaceToken($conditionStartPointer, $negativeCondition);
-			for ($i = $conditionStartPointer + 1; $i <= $conditionEndPointer; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+			FixerHelper::removeBetweenIncluding($phpcsFile, $conditionStartPointer + 1, $conditionEndPointer);
 		}
 
-		for ($i = $conditionEndPointer + 1; $i < $pointerAfterTernaryOperator; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetween($phpcsFile, $conditionEndPointer, $pointerAfterTernaryOperator);
 
 		$phpcsFile->fixer->endChangeset();
 	}

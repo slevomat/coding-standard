@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\CommentHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -135,9 +136,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		for ($i = $firstPointer; $i <= $lastSemicolonPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetweenIncluding($phpcsFile, $firstPointer, $lastSemicolonPointer);
 
 		$phpcsFile->fixer->addContent(
 			$firstPointer,

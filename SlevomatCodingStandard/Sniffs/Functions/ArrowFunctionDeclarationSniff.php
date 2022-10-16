@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Functions;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function preg_match;
@@ -173,9 +174,7 @@ class ArrowFunctionDeclarationSniff implements Sniff
 			$phpcsFile->fixer->addContent($pointerBefore, str_repeat(' ', $requiredSpaces));
 		}
 
-		for ($i = $pointerBefore + 1; $i < $pointerAfter; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetween($phpcsFile, $pointerBefore, $pointerAfter);
 
 		$phpcsFile->fixer->endChangeset();
 	}

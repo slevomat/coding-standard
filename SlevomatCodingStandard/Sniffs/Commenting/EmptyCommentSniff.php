@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Commenting;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\CommentHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
@@ -77,14 +78,11 @@ class EmptyCommentSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		for ($i = $pointerBeforeWhitespaceBeforeComment + 1; $i < $commentStartPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetween($phpcsFile, $pointerBeforeWhitespaceBeforeComment, $commentStartPointer);
+
 		$phpcsFile->fixer->addContent($pointerBeforeWhitespaceBeforeComment, $fixedWhitespaceBeforeComment);
 
-		for ($i = $commentStartPointer; $i <= $commentEndPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetweenIncluding($phpcsFile, $commentStartPointer, $commentEndPointer);
 
 		$whitespacePointerAfterComment = $commentEndPointer + 1;
 

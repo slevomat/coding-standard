@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Commenting;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
@@ -109,9 +110,9 @@ class UselessInheritDocCommentSniff implements Sniff
 		$fixerStart = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $docCommentOpenPointer - 1);
 
 		$phpcsFile->fixer->beginChangeset();
-		for ($i = $fixerStart; $i <= $tokens[$docCommentOpenPointer]['comment_closer']; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+
+		FixerHelper::removeBetweenIncluding($phpcsFile, $fixerStart, $tokens[$docCommentOpenPointer]['comment_closer']);
+
 		$phpcsFile->fixer->endChangeset();
 	}
 

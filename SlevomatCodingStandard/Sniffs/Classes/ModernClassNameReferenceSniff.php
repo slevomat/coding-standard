@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ClassHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -169,9 +170,9 @@ class ModernClassNameReferenceSniff implements Sniff
 			$phpcsFile->fixer->replaceToken($functionPointer - 1, '');
 		}
 		$phpcsFile->fixer->replaceToken($functionPointer, $fixedContent);
-		for ($i = $functionPointer + 1; $i <= $tokens[$openParenthesisPointer]['parenthesis_closer']; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+
+		FixerHelper::removeBetweenIncluding($phpcsFile, $functionPointer + 1, $tokens[$openParenthesisPointer]['parenthesis_closer']);
+
 		$phpcsFile->fixer->endChangeset();
 	}
 

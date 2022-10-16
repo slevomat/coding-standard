@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\ClassHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function count;
@@ -143,9 +144,7 @@ class TraitUseSpacingSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		if ($pointerBeforeIndentation !== null) {
-			for ($i = $pointerBeforeFirstUse + 1; $i <= $pointerBeforeIndentation; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+			FixerHelper::removeBetweenIncluding($phpcsFile, $pointerBeforeFirstUse + 1, $pointerBeforeIndentation);
 		}
 		for ($i = 0; $i <= $requiredLinesCountBeforeFirstUse; $i++) {
 			$phpcsFile->fixer->addNewline($pointerBeforeFirstUse);
@@ -203,9 +202,9 @@ class TraitUseSpacingSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		for ($i = $lastUseEndPointer + 1; $i <= $whitespaceEnd; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+
+		FixerHelper::removeBetweenIncluding($phpcsFile, $lastUseEndPointer + 1, $whitespaceEnd);
+
 		for ($i = 0; $i <= $requiredLinesCountAfterLastUse; $i++) {
 			$phpcsFile->fixer->addNewline($lastUseEndPointer);
 		}
@@ -291,9 +290,7 @@ class TraitUseSpacingSniff implements Sniff
 
 			$phpcsFile->fixer->beginChangeset();
 			if ($pointerBeforeIndentation !== null) {
-				for ($i = $previousUseEndPointer + 1; $i <= $pointerBeforeIndentation; $i++) {
-					$phpcsFile->fixer->replaceToken($i, '');
-				}
+				FixerHelper::removeBetweenIncluding($phpcsFile, $previousUseEndPointer + 1, $pointerBeforeIndentation);
 			}
 			for ($i = 0; $i <= $this->linesCountBetweenUses; $i++) {
 				$phpcsFile->fixer->addNewline($previousUseEndPointer);

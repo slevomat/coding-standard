@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function sprintf;
@@ -75,9 +76,7 @@ class BackedEnumTypeSpacingSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		for ($i = $namePointer + 1; $i < $colonPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetween($phpcsFile, $namePointer, $colonPointer);
 
 		$phpcsFile->fixer->addContentBefore($colonPointer, str_repeat(' ', $this->spacesCountBeforeColon));
 
@@ -105,9 +104,7 @@ class BackedEnumTypeSpacingSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		for ($i = $colonPointer + 1; $i < $typePointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetween($phpcsFile, $colonPointer, $typePointer);
 
 		$phpcsFile->fixer->addContentBefore($typePointer, str_repeat(' ', $this->spacesCountBeforeType));
 

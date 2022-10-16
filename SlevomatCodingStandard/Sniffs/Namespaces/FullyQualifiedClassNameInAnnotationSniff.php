@@ -10,6 +10,7 @@ use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationConstantExpressionHelper;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TypeHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function sprintf;
@@ -91,9 +92,8 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 						$phpcsFile->fixer->beginChangeset();
 
 						$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
-						for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {
-							$phpcsFile->fixer->replaceToken($i, '');
-						}
+
+						FixerHelper::removeBetweenIncluding($phpcsFile, $annotation->getStartPointer() + 1, $annotation->getEndPointer());
 
 						$phpcsFile->fixer->endChangeset();
 					}
@@ -132,9 +132,8 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 						$phpcsFile->fixer->beginChangeset();
 
 						$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
-						for ($i = $annotation->getStartPointer() + 1; $i <= $annotation->getEndPointer(); $i++) {
-							$phpcsFile->fixer->replaceToken($i, '');
-						}
+
+						FixerHelper::removeBetweenIncluding($phpcsFile, $annotation->getStartPointer() + 1, $annotation->getEndPointer());
 
 						$phpcsFile->fixer->endChangeset();
 					}

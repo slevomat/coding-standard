@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Attributes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AttributeHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use UnexpectedValueException;
@@ -128,9 +129,7 @@ class AttributesOrderSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		for ($i = $attributesStartPointer; $i <= $attributesEndPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetweenIncluding($phpcsFile, $attributesStartPointer, $attributesEndPointer);
 
 		foreach (array_keys($expectedOrder) as $position => $attributesGroupNo) {
 			if ($areOnSameLine) {

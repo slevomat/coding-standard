@@ -96,9 +96,7 @@ class AttributeAndTargetSpacingSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		for ($i = $attributeCloserPointer + 1; $i < $firstTokenOnLine; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetween($phpcsFile, $attributeCloserPointer, $firstTokenOnLine);
 
 		$phpcsFile->fixer->addContentBefore($firstTokenOnLine, str_repeat($phpcsFile->eolChar, $this->linesCount + 1));
 

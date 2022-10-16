@@ -6,6 +6,7 @@ use Exception;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ConditionHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -158,9 +159,7 @@ class EarlyExitSniff implements Sniff
 
 			$phpcsFile->fixer->beginChangeset();
 
-			for ($i = $ifPointer; $i <= $tokens[$elsePointer]['scope_closer']; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+			FixerHelper::removeBetweenIncluding($phpcsFile, $ifPointer, $tokens[$elsePointer]['scope_closer']);
 
 			$phpcsFile->fixer->addContent(
 				$ifPointer,
@@ -210,9 +209,11 @@ class EarlyExitSniff implements Sniff
 			)
 		);
 
-		for ($i = $tokens[$previousConditionPointer]['scope_closer'] + 2; $i <= $tokens[$elsePointer]['scope_closer']; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetweenIncluding(
+			$phpcsFile,
+			$tokens[$previousConditionPointer]['scope_closer'] + 2,
+			$tokens[$elsePointer]['scope_closer']
+		);
 
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -264,9 +265,7 @@ class EarlyExitSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		for ($i = $pointerBeforeElseIfPointer + 1; $i < $elseIfPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetween($phpcsFile, $pointerBeforeElseIfPointer, $elseIfPointer);
 
 		$phpcsFile->fixer->addNewline($pointerBeforeElseIfPointer);
 		$phpcsFile->fixer->addNewline($pointerBeforeElseIfPointer);
@@ -384,9 +383,7 @@ class EarlyExitSniff implements Sniff
 			)
 		);
 
-		for ($i = $ifPointer + 1; $i <= $tokens[$ifPointer]['scope_closer']; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetweenIncluding($phpcsFile, $ifPointer + 1, $tokens[$ifPointer]['scope_closer']);
 
 		$phpcsFile->fixer->endChangeset();
 	}

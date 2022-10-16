@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\CommentHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatement;
@@ -123,9 +124,8 @@ class UseSpacingSniff implements Sniff
 			$phpcsFile->fixer->replaceToken($pointerBeforeFirstUse, '<?php');
 		}
 
-		for ($i = $pointerBeforeFirstUse + 1; $i < $useStartPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetween($phpcsFile, $pointerBeforeFirstUse, $useStartPointer);
+
 		for ($i = 0; $i <= $this->linesCountBeforeFirstUse; $i++) {
 			$phpcsFile->fixer->addNewline($pointerBeforeFirstUse);
 		}
@@ -179,9 +179,8 @@ class UseSpacingSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		for ($i = $useEndPointer + 1; $i < $pointerAfterWhitespaceEnd; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+
+		FixerHelper::removeBetween($phpcsFile, $useEndPointer, $pointerAfterWhitespaceEnd);
 
 		$linesToAdd = $this->linesCountAfterLastUse;
 		if (CommentHelper::isLineComment($phpcsFile, $useEndPointer)) {
@@ -258,9 +257,7 @@ class UseSpacingSniff implements Sniff
 			$previousUseSemicolonPointer = TokenHelper::findNextLocal($phpcsFile, T_SEMICOLON, $previousUse->getPointer() + 1);
 
 			$phpcsFile->fixer->beginChangeset();
-			for ($i = $previousUseSemicolonPointer + 1; $i < $useStartPointer; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+			FixerHelper::removeBetween($phpcsFile, $previousUseSemicolonPointer, $useStartPointer);
 			$phpcsFile->fixer->addNewline($previousUseSemicolonPointer);
 			$phpcsFile->fixer->endChangeset();
 
@@ -332,9 +329,9 @@ class UseSpacingSniff implements Sniff
 			$previousUseSemicolonPointer = TokenHelper::findNextLocal($phpcsFile, T_SEMICOLON, $previousUse->getPointer() + 1);
 
 			$phpcsFile->fixer->beginChangeset();
-			for ($i = $previousUseSemicolonPointer + 1; $i < $useStartPointer; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+
+			FixerHelper::removeBetween($phpcsFile, $previousUseSemicolonPointer, $useStartPointer);
+
 			for ($i = 0; $i <= $this->linesCountBetweenUseTypes; $i++) {
 				$phpcsFile->fixer->addNewline($previousUseSemicolonPointer);
 			}

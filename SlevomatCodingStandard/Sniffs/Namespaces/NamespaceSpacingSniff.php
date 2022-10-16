@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
@@ -106,9 +107,8 @@ class NamespaceSpacingSniff implements Sniff
 			);
 		}
 
-		for ($i = $pointerBeforeNamespace + 1; $i < $namespacePointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetween($phpcsFile, $pointerBeforeNamespace, $namespacePointer);
+
 		for ($i = 0; $i <= $this->linesCountBeforeNamespace; $i++) {
 			$phpcsFile->fixer->addNewline($pointerBeforeNamespace);
 		}
@@ -153,9 +153,9 @@ class NamespaceSpacingSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		for ($i = $namespaceSemicolonPointer + 1; $i < $pointerAfterWhitespaceEnd; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+
+		FixerHelper::removeBetween($phpcsFile, $namespaceSemicolonPointer, $pointerAfterWhitespaceEnd);
+
 		for ($i = 0; $i <= $this->linesCountAfterNamespace; $i++) {
 			$phpcsFile->fixer->addNewline($namespaceSemicolonPointer);
 		}

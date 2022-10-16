@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\PHP;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_LIST;
 use const T_OPEN_PARENTHESIS;
@@ -40,9 +41,7 @@ class ShortListSniff implements Sniff
 		$endPointer = $tokens[$startPointer]['parenthesis_closer'];
 
 		$phpcsFile->fixer->beginChangeset();
-		for ($i = $pointer; $i < $startPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetweenIncluding($phpcsFile, $pointer, $startPointer - 1);
 		$phpcsFile->fixer->replaceToken($startPointer, '[');
 		$phpcsFile->fixer->replaceToken($endPointer, ']');
 		$phpcsFile->fixer->endChangeset();

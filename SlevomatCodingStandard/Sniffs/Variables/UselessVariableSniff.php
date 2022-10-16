@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Variables;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_keys;
@@ -166,18 +167,14 @@ class UselessVariableSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		if ($tokens[$assigmentPointer]['code'] === T_EQUAL) {
-			for ($i = $previousVariablePointer; $i < $assigmentPointer; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+			FixerHelper::removeBetweenIncluding($phpcsFile, $previousVariablePointer, $assigmentPointer - 1);
 			$phpcsFile->fixer->replaceToken($assigmentPointer, 'return');
 		} else {
 			$phpcsFile->fixer->addContentBefore($previousVariablePointer, 'return ');
 			$phpcsFile->fixer->replaceToken($assigmentPointer, $assigmentFixerMapping[$tokens[$assigmentPointer]['code']]);
 		}
 
-		for ($i = $previousVariableSemicolonPointer + 1; $i <= $returnSemicolonPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetweenIncluding($phpcsFile, $previousVariableSemicolonPointer + 1, $returnSemicolonPointer);
 
 		$phpcsFile->fixer->endChangeset();
 	}

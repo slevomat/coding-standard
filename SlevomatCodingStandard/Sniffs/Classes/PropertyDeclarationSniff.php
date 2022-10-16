@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -194,9 +195,7 @@ class PropertyDeclarationSniff implements Sniff
 
 		$phpcsFile->fixer->replaceToken($firstModifierPointer, $expectedModifiersFormatted);
 
-		for ($i = $firstModifierPointer + 1; $i <= $lastModifierPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetweenIncluding($phpcsFile, $firstModifierPointer + 1, $lastModifierPointer);
 
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -256,9 +255,7 @@ class PropertyDeclarationSniff implements Sniff
 
 		$phpcsFile->fixer->replaceToken($firstModifierPointer, $expectedModifiersFormatted);
 
-		for ($i = $firstModifierPointer + 1; $i <= $lastModifierPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetweenIncluding($phpcsFile, $firstModifierPointer + 1, $lastModifierPointer);
 
 		$phpcsFile->fixer->endChangeset();
 	}

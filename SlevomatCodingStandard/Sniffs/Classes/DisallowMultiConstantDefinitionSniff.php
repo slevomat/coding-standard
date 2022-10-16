@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function count;
@@ -97,14 +98,11 @@ class DisallowMultiConstantDefinitionSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		$phpcsFile->fixer->addContent($constantPointer, ' ');
-		for ($i = $constantPointer + 1; $i < $pointerAfterConst; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+
+		FixerHelper::removeBetween($phpcsFile, $constantPointer, $pointerAfterConst);
 
 		foreach ($commaPointers as $commaPointer) {
-			for ($i = $data[$commaPointer]['pointerBeforeComma'] + 1; $i < $commaPointer; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+			FixerHelper::removeBetween($phpcsFile, $data[$commaPointer]['pointerBeforeComma'], $commaPointer);
 
 			$phpcsFile->fixer->replaceToken(
 				$commaPointer,
@@ -119,14 +117,10 @@ class DisallowMultiConstantDefinitionSniff implements Sniff
 				)
 			);
 
-			for ($i = $commaPointer + 1; $i < $data[$commaPointer]['pointerAfterComma']; $i++) {
-				$phpcsFile->fixer->replaceToken($i, '');
-			}
+			FixerHelper::removeBetween($phpcsFile, $commaPointer, $data[$commaPointer]['pointerAfterComma']);
 		}
 
-		for ($i = $pointerBeforeSemicolon + 1; $i < $semicolonPointer; $i++) {
-			$phpcsFile->fixer->replaceToken($i, '');
-		}
+		FixerHelper::removeBetween($phpcsFile, $pointerBeforeSemicolon, $semicolonPointer);
 
 		$phpcsFile->fixer->endChangeset();
 	}
