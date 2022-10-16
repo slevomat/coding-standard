@@ -13,9 +13,9 @@ class DisallowAttributeJoiningSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
-	public function testInvalidAttributePriorPHP80NoErrors(): void
+	public function testInvalidAttributePriorPhp80NoErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/disallowedAttributeJoiningInvalidAttributeNoErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/disallowedAttributeJoiningInvalidAttribute.php');
 		self::assertNoSniffErrorInFile($report);
 	}
 

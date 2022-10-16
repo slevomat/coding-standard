@@ -37,7 +37,7 @@ class AttributeHelperTest extends TestCase
 
 	public function testIsValidAttributeAttributeAtEndOfFile(): void
 	{
-		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/attributeAtEndOfFileTreatedAsCommentPriorPHP80.php');
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/invalidAttribute.php');
 		/** @var int $firstAttributePointer */
 		$firstAttributePointer = $phpcsFile->findNext(T_ATTRIBUTE, 0);
 		self::assertFalse(AttributeHelper::isValidAttribute($phpcsFile, $firstAttributePointer));
