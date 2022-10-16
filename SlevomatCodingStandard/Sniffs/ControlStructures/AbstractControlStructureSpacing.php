@@ -311,7 +311,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 		}
 
 		$replaceStartPointer = $isCommentAfterOnSameLine ? $notWhitespacePointerAfter : $controlStructureEndPointer;
-		$endOfLineBeforeAfterPointer = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $pointerAfter - 1);
+		$endOfLineBeforeAfterPointer = TokenHelper::findLastTokenOnPreviousLine($phpcsFile, $pointerAfter);
 
 		$phpcsFile->fixer->beginChangeset();
 

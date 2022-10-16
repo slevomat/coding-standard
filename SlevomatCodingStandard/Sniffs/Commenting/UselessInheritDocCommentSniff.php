@@ -15,7 +15,6 @@ use const T_ATTRIBUTE;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_WHITESPACE;
-use const T_WHITESPACE;
 
 class UselessInheritDocCommentSniff implements Sniff
 {
@@ -107,7 +106,7 @@ class UselessInheritDocCommentSniff implements Sniff
 		}
 
 		/** @var int $fixerStart */
-		$fixerStart = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, $phpcsFile->eolChar, $docCommentOpenPointer - 1);
+		$fixerStart = TokenHelper::findLastTokenOnPreviousLine($phpcsFile, $docCommentOpenPointer);
 
 		$phpcsFile->fixer->beginChangeset();
 
