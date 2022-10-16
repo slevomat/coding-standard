@@ -25,15 +25,15 @@ class DisallowAttributeJoiningSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $attributeOpenPointer
+	 * @param int $attributeOpenerPointer
 	 */
-	public function process(File $phpcsFile, $attributeOpenPointer): void
+	public function process(File $phpcsFile, $attributeOpenerPointer): void
 	{
-		if (!AttributeHelper::isValidAttribute($phpcsFile, $attributeOpenPointer)) {
+		if (!AttributeHelper::isValidAttribute($phpcsFile, $attributeOpenerPointer)) {
 			return;
 		}
 
-		$attributes = AttributeHelper::getAttributes($phpcsFile, $attributeOpenPointer);
+		$attributes = AttributeHelper::getAttributes($phpcsFile, $attributeOpenerPointer);
 		$attributeCount = count($attributes);
 
 		if ($attributeCount === 1) {
@@ -42,7 +42,7 @@ class DisallowAttributeJoiningSniff implements Sniff
 
 		$fix = $phpcsFile->addFixableError(
 			sprintf('%d attributes are joined.', $attributeCount),
-			$attributeOpenPointer,
+			$attributeOpenerPointer,
 			self::CODE_DISALLOWED_ATTRIBUTE_JOINING
 		);
 
