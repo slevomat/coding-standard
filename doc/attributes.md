@@ -29,14 +29,14 @@ Sniff provides the following settings:
 </rule>
 ```
 
-#### SlevomatCodingStandard.Attributes.DisallowAttributeJoining 🔧
+#### SlevomatCodingStandard.Attributes.DisallowAttributesJoining 🔧
 
 Requires that only one attribute can be placed inside `#[]` (no comma-separated list). In case of more attributes applied, they are split into individual `#[]` blocks.
 
 #### SlevomatCodingStandard.Attributes.DisallowMultipleAttributesPerLine 🔧
 
 Disallows multiple attributes of some target on same line.
-This sniff treats multiple attributes declared inside one `#[]` as a single attribute. See `DisallowAttributeJoining` to modify this behavior.
+This sniff treats multiple attributes declared inside one `#[]` as a single attribute. See `DisallowAttributesJoining` to modify this behavior.
 
 #### SlevomatCodingStandard.Attributes.RequireAttributeAfterDocComment 🔧
 

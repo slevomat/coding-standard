@@ -10,10 +10,10 @@ use function sprintf;
 use const T_ATTRIBUTE;
 use const T_COMMA;
 
-class DisallowAttributeJoiningSniff implements Sniff
+class DisallowAttributesJoiningSniff implements Sniff
 {
 
-	public const CODE_DISALLOWED_ATTRIBUTE_JOINING = 'DisallowedAttributeJoining';
+	public const CODE_DISALLOWED_ATTRIBUTES_JOINING = 'DisallowedAttributesJoining';
 
 	/**
 	 * @return array<int, (int|string)>
@@ -43,7 +43,7 @@ class DisallowAttributeJoiningSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			sprintf('%d attributes are joined.', $attributeCount),
 			$attributeOpenerPointer,
-			self::CODE_DISALLOWED_ATTRIBUTE_JOINING
+			self::CODE_DISALLOWED_ATTRIBUTES_JOINING
 		);
 
 		if (!$fix) {

@@ -35,7 +35,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_
  - [SlevomatCodingStandard.Arrays.TrailingArrayComma](doc/arrays.md#slevomatcodingstandardarraystrailingarraycomma-) 🔧
  - [SlevomatCodingStandard.Attributes.AttributeAndTargetSpacing](doc/attributes.md#slevomatcodingstandardattributesattributeandtargetspacing-) 🔧
  - [SlevomatCodingStandard.Attributes.AttributesOrder](doc/attributes.md#slevomatcodingstandardattributesattributesorder-) 🔧
- - [SlevomatCodingStandard.Attributes.DisallowAttributeJoining](doc/attributes.md#slevomatcodingstandardattributesdisallowattributejoining-) 🔧
+ - [SlevomatCodingStandard.Attributes.DisallowAttributesJoining](doc/attributes.md#slevomatcodingstandardattributesdisallowattributesjoining-) 🔧
  - [SlevomatCodingStandard.Attributes.DisallowMultipleAttributesPerLine](doc/attributes.md#slevomatcodingstandardattributesdisallowmultipleattributesperline-) 🔧
  - [SlevomatCodingStandard.Attributes.RequireAttributeAfterDocComment](doc/attributes.md#slevomatcodingstandardattributesrequireattributeafterdoccomment-) 🔧
  - [SlevomatCodingStandard.Classes.BackedEnumTypeSpacing](doc/classes.md#slevomatcodingstandardclassesbackedenumtypespacing-) 🔧
