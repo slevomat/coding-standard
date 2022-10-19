@@ -1,5 +1,10 @@
 <?php // lint >= 8.1
 
+/**
+ * @var string
+ */
+const BOO = 'boo';
+
 class Foo
 {
 

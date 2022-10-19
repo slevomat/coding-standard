@@ -19,6 +19,7 @@ use const T_ATTRIBUTE;
 use const T_CLOSURE;
 use const T_COALESCE_EQUAL;
 use const T_COMMENT;
+use const T_CONST;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_EQUAL;
 use const T_FN;
@@ -85,7 +86,11 @@ class InlineDocCommentDeclarationSniff implements Sniff
 				);
 			} while (true);
 
-			if (in_array($tokens[$pointerAfterCommentClosePointer]['code'], [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_READONLY], true)) {
+			if (in_array(
+				$tokens[$pointerAfterCommentClosePointer]['code'],
+				[T_PRIVATE, T_PROTECTED, T_PUBLIC, T_READONLY, T_CONST],
+				true
+			)) {
 				return;
 			}
 
