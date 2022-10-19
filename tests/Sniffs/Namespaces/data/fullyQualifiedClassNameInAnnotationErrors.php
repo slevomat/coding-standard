@@ -159,6 +159,7 @@ $arrayShape2 = [];
 /**
  * @method method1(string $parameter = Iterator::class)
  * @method method2(array $parameter = [Iterator::class => Traversable::class], $parameter2)
+ * @method sortBy(callable $path, int $order = SORT_DESC, int $sort = SORT_NUMERIC)
  */
 class ConstantExpression
 {

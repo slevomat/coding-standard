@@ -176,3 +176,10 @@ class NeverIsType
 	}
 
 }
+
+/**
+ * @method sortBy(callable $path, int $order = \SORT_DESC, int $sort = \SORT_NUMERIC)
+ */
+class ConstantExpression
+{
+}
