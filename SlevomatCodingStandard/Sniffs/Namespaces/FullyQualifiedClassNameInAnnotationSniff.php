@@ -109,6 +109,10 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 							? $constantFetchNode->className
 							: $constantFetchNode->name;
 
+						if ($typeHint === 'self') {
+							continue;
+						}
+
 						$fullyQualifiedTypeHint = $isClassConstant
 							? NamespaceHelper::resolveClassName(
 								$phpcsFile,

@@ -178,7 +178,7 @@ class NeverIsType
 }
 
 /**
- * @method sortBy(callable $path, int $order = \SORT_DESC, int $sort = \SORT_NUMERIC)
+ * @method sortBy(callable $path, int $order = \SORT_DESC, int $sort = \SORT_NUMERIC, int $flags = self::FLAG)
  */
 class ConstantExpression
 {
