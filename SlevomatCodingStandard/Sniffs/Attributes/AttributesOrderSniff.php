@@ -88,6 +88,10 @@ class AttributesOrderSniff implements Sniff
 						substr($attributeNameOnPosition, -1) === '\\'
 						&& strpos($attributeName, $attributeNameOnPosition) === 0
 					)
+					|| (
+						substr($attributeNameOnPosition, -1) === '*'
+						&& strpos($attributeName, substr($attributeNameOnPosition, 0, -1)) === 0
+					)
 				) {
 					$actualOrder[$attributesGroupNo] = $orderPosition;
 					continue 2;
