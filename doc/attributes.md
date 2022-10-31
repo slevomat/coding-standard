@@ -14,7 +14,7 @@ Requires order of attributes. When more attributes are in one `#[]`, eg. `#[One,
 
 Sniff provides the following settings:
 
-* `order`: required order of attributes. Supports prefixes, eg. `ORM\`.
+* `order`: required order of attributes. Supports prefixes, eg. `ORM\`, and mask , eg. `AppAssert*`.
 
 ```xml
 <rule ref="SlevomatCodingStandard.Attributes.AttributesOrder">

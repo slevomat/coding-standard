@@ -18,6 +18,7 @@ class AttributesOrderSniffTest extends TestCase
 				'Group\\Attribute1',
 				'Group\\Attribute2',
 				'Group\\',
+				'AppAssert*',
 			],
 		]);
 		self::assertNoSniffErrorInFile($report);
@@ -33,14 +34,15 @@ class AttributesOrderSniffTest extends TestCase
 				'Group\\Attribute1',
 				'Group\\Attribute2',
 				'Group\\',
+				'AppAssert*',
 			],
 		]);
 
 		self::assertSame(3, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, AttributesOrderSniff::CODE_INCORRECT_ORDER);
-		self::assertSniffError($report, 12, AttributesOrderSniff::CODE_INCORRECT_ORDER);
-		self::assertSniffError($report, 17, AttributesOrderSniff::CODE_INCORRECT_ORDER);
+		self::assertSniffError($report, 14, AttributesOrderSniff::CODE_INCORRECT_ORDER);
+		self::assertSniffError($report, 19, AttributesOrderSniff::CODE_INCORRECT_ORDER);
 
 		self::assertAllFixedInFile($report);
 	}
