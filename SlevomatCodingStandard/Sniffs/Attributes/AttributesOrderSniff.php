@@ -13,9 +13,11 @@ use function array_keys;
 use function asort;
 use function count;
 use function ltrim;
+use function strnatcmp;
 use function strpos;
 use function substr;
 use function trim;
+use function uasort;
 use const T_ATTRIBUTE;
 use const T_ATTRIBUTE_END;
 
@@ -26,6 +28,9 @@ class AttributesOrderSniff implements Sniff
 
 	/** @var list<string> */
 	public $order = [];
+
+	/** @var bool */
+	public $orderAlphabetically = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -45,8 +50,12 @@ class AttributesOrderSniff implements Sniff
 			return;
 		}
 
-		if ($this->order === []) {
-			throw new UnexpectedValueException('Attributes order not specified.');
+		if ($this->order === [] && !$this->orderAlphabetically) {
+			throw new UnexpectedValueException('Nether manual or alphabetical order is set.');
+		}
+
+		if ($this->order !== [] && $this->orderAlphabetically) {
+			throw new UnexpectedValueException('Only one order can be set.');
 		}
 
 		$this->order = $this->normalizeOrder($this->order);
@@ -76,34 +85,44 @@ class AttributesOrderSniff implements Sniff
 
 		} while (true);
 
-		$actualOrder = [];
+		if ($this->orderAlphabetically) {
+			$actualOrder = $attributesGroups;
+			$expectedOrder = $actualOrder;
 
-		foreach ($attributesGroups as $attributesGroupNo => $attributesGroup) {
-			$attributeName = $this->normalizeAttributeName($attributesGroup[0]->getName());
+			uasort($expectedOrder, static function (array $attributesGroup1, array $attributesGroup2): int {
+				return strnatcmp($attributesGroup1[0]->getName(), $attributesGroup2[0]->getName());
+			});
 
-			foreach ($this->order as $orderPosition => $attributeNameOnPosition) {
-				if (
-					$attributeName === $attributeNameOnPosition
-					|| (
-						substr($attributeNameOnPosition, -1) === '\\'
-						&& strpos($attributeName, $attributeNameOnPosition) === 0
-					)
-					|| (
-						substr($attributeNameOnPosition, -1) === '*'
-						&& strpos($attributeName, substr($attributeNameOnPosition, 0, -1)) === 0
-					)
-				) {
-					$actualOrder[$attributesGroupNo] = $orderPosition;
-					continue 2;
+		} else {
+			$actualOrder = [];
+
+			foreach ($attributesGroups as $attributesGroupNo => $attributesGroup) {
+				$attributeName = $this->normalizeAttributeName($attributesGroup[0]->getName());
+
+				foreach ($this->order as $orderPosition => $attributeNameOnPosition) {
+					if (
+						$attributeName === $attributeNameOnPosition
+						|| (
+							substr($attributeNameOnPosition, -1) === '\\'
+							&& strpos($attributeName, $attributeNameOnPosition) === 0
+						)
+						|| (
+							substr($attributeNameOnPosition, -1) === '*'
+							&& strpos($attributeName, substr($attributeNameOnPosition, 0, -1)) === 0
+						)
+					) {
+						$actualOrder[$attributesGroupNo] = $orderPosition;
+						continue 2;
+					}
 				}
+
+				// Unknown order - add to the end
+				$actualOrder[$attributesGroupNo] = 999;
 			}
 
-			// Unknown order - add to the end
-			$actualOrder[$attributesGroupNo] = 999;
+			$expectedOrder = $actualOrder;
+			asort($expectedOrder);
 		}
-
-		$expectedOrder = $actualOrder;
-		asort($expectedOrder);
 
 		if ($expectedOrder === $actualOrder) {
 			return;
