@@ -12,8 +12,11 @@ class Whatever
 	 * Method comment
 	 */
 	public function method(
-		#[Attribute1]
-		$parameter
+		#[Attribute1] // WTF
+		$parameter,
+		#[Attribute1] /* WTF */
+		#[Attribute2]
+		$parameter2
 	)
 	{
 	}
