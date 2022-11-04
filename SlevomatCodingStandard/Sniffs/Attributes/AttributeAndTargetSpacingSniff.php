@@ -12,6 +12,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use function sprintf;
 use function str_repeat;
 use const T_ATTRIBUTE;
+use const T_COMMENT;
 
 class AttributeAndTargetSpacingSniff implements Sniff
 {
@@ -45,6 +46,10 @@ class AttributeAndTargetSpacingSniff implements Sniff
 		$attributeCloserPointer = $tokens[$attributeOpenerPointer]['attribute_closer'];
 
 		$pointerAfter = TokenHelper::findNextNonWhitespace($phpcsFile, $attributeCloserPointer + 1);
+
+		while ($tokens[$pointerAfter]['code'] === T_COMMENT) {
+			$pointerAfter = TokenHelper::findNextNonWhitespace($phpcsFile, $pointerAfter + 1);
+		}
 
 		if ($tokens[$pointerAfter]['code'] === T_ATTRIBUTE) {
 			return;
