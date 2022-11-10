@@ -58,6 +58,11 @@ class AttributeHelper
 
 		do {
 			$attributeNameStartPointer = TokenHelper::findNextEffective($phpcsFile, $actualPointer + 1, $attributeCloserPointer);
+
+			if ($attributeNameStartPointer === null) {
+				break;
+			}
+
 			$attributeNameEndPointer = TokenHelper::findNextExcluding(
 				$phpcsFile,
 				TokenHelper::getNameTokenCodes(),
