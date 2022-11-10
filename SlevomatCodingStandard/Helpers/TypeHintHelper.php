@@ -191,6 +191,8 @@ class TypeHintHelper
 				'empty',
 				'positive-int',
 				'negative-int',
+				'min',
+				'max',
 			];
 		}
 

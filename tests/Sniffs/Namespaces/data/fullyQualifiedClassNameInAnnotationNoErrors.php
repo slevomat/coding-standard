@@ -183,3 +183,11 @@ class NeverIsType
 class ConstantExpression
 {
 }
+
+/**
+ * @param int<min, 100> $range
+ * @return int<0, max>
+ */
+function intRange(array $range): array
+{
+}
