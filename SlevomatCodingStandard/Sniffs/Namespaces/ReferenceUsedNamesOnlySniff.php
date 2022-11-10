@@ -470,6 +470,11 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 				$nameToReference = $useStatement->getNameAsReferencedInFile();
 				$addUse = false;
+				// Lock the use statement, so it is not modified by other sniffs
+				$phpcsFile->fixer->replaceToken(
+					$useStatement->getPointer(),
+					$phpcsFile->fixer->getTokenContent($useStatement->getPointer())
+				);
 				break;
 			}
 
