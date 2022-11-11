@@ -96,7 +96,7 @@ class UnusedUsesSniffTest extends TestCase
 			'searchAnnotations' => false,
 		]);
 
-		self::assertSame(78, $report->getErrorCount());
+		self::assertSame(79, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Assert is not used in this file.');
 		self::assertSniffError(
@@ -200,6 +200,7 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertSniffError($report, 80, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Conditional7 is not used in this file.');
 		self::assertSniffError($report, 81, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Conditional8 is not used in this file.');
 		self::assertSniffError($report, 82, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Conditional9 is not used in this file.');
+		self::assertSniffError($report, 84, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Comma\After is not used in this file.');
 	}
 
 	public function testUsedUseInAnnotationWithEnabledSearchAnnotations(): void
