@@ -81,6 +81,7 @@ use Conditional7;
 use Conditional8;
 use Conditional9;
 use Something\Enum;
+use Comma\After;
 
 /**
  * @ORM\Entity()
@@ -278,7 +279,6 @@ class TypeAliasAndImportes
 	}
 
 }
-
 /**
  * @CustomAssert\NotBlank(message=CustomAssert\AbstractConstraint::VIOLATION_IS_REQUIRED)
  */
@@ -307,4 +307,15 @@ class Conditional
 enum SomeEnum
 {
 	use Enum;
+}
+
+class CommaAfterAnnotation
+{
+    /**
+     * @After\A(property="Packages", type="array",
+     *     @After\B(type="object"),
+     * ),
+     * @After\C({"write-send"})
+     */
+    public int $packages;
 }
