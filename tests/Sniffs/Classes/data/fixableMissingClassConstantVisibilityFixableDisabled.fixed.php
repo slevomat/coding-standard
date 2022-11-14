@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.2
 
 const NON_CLASS = 1;
 
@@ -38,3 +38,10 @@ $class = new class ()
 	const A = 'a';
 
 };
+
+trait E
+{
+
+	const EE = 'ee';
+
+}
