@@ -1,4 +1,4 @@
-<?php // lint >= 8.1
+<?php // lint >= 8.2
 
 abstract class Foo {
 	/** @var string */
@@ -49,4 +49,14 @@ abstract class Bar {
 	private function such()
 	{
 	}
+}
+
+trait Boo
+{
+
+	const BOO = 'boo';
+
+
+	const BOOO = 'booo';
+
 }

@@ -14,6 +14,7 @@ use const T_CONST;
 use const T_ENUM;
 use const T_FUNCTION;
 use const T_INTERFACE;
+use const T_TRAIT;
 use const T_USE;
 use const T_VARIABLE;
 
@@ -44,7 +45,7 @@ class ConstantSpacingSniff extends AbstractPropertyAndConstantSpacing
 
 		/** @var int $classPointer */
 		$classPointer = array_keys($tokens[$constantPointer]['conditions'])[count($tokens[$constantPointer]['conditions']) - 1];
-		if (!in_array($tokens[$classPointer]['code'], [T_CLASS, T_INTERFACE, T_ANON_CLASS, T_ENUM], true)) {
+		if (!in_array($tokens[$classPointer]['code'], [T_CLASS, T_INTERFACE, T_ANON_CLASS, T_ENUM, T_TRAIT], true)) {
 			return $constantPointer;
 		}
 
