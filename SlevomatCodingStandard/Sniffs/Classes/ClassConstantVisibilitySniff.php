@@ -19,6 +19,7 @@ use const T_INTERFACE;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
+use const T_TRAIT;
 
 class ClassConstantVisibilitySniff implements Sniff
 {
@@ -52,7 +53,7 @@ class ClassConstantVisibilitySniff implements Sniff
 
 		/** @var int $classPointer */
 		$classPointer = array_keys($tokens[$constantPointer]['conditions'])[count($tokens[$constantPointer]['conditions']) - 1];
-		if (!in_array($tokens[$classPointer]['code'], [T_CLASS, T_INTERFACE, T_ANON_CLASS, T_ENUM], true)) {
+		if (!in_array($tokens[$classPointer]['code'], [T_CLASS, T_INTERFACE, T_ANON_CLASS, T_ENUM, T_TRAIT], true)) {
 			return;
 		}
 
