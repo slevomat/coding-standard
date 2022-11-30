@@ -281,4 +281,14 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testUsesInDocBlock(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/collidingUnusedUse.php', [
+			'searchAnnotations' => true,
+			'allowFullyQualifiedGlobalFunctions' => true,
+			'allowFullyQualifiedGlobalConstants' => true,
+		], [UnusedUsesSniff::CODE_UNUSED_USE]);
+
+		self::assertSniffError($report, 6, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Baz is not used in this file.');
+	}
 }
