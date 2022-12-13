@@ -222,3 +222,13 @@ class Assert
 	}
 
 }
+
+class GenericTypeProjections
+{
+	/**
+	 * @param \Foo\Anything<covariant \Foo\Something, \Foo\Something> $parameter
+	 */
+	public function covariant($parameter)
+	{
+	}
+}

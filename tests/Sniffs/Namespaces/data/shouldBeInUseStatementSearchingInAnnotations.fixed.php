@@ -243,3 +243,13 @@ class Assert
 	}
 
 }
+
+class GenericTypeProjections
+{
+	/**
+	 * @param Anything<covariant Something, Something> $parameter
+	 */
+	public function covariant($parameter)
+	{
+	}
+}

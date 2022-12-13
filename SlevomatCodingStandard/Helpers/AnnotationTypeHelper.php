@@ -407,7 +407,7 @@ class AnnotationTypeHelper
 
 			/** @var IdentifierTypeNode $identificatorTypeNode */
 			$identificatorTypeNode = self::change($masterTypeNode->type, $typeNodeToChange, $changedTypeNode);
-			return new GenericTypeNode($identificatorTypeNode, $genericTypes);
+			return new GenericTypeNode($identificatorTypeNode, $genericTypes, $masterTypeNode->variances);
 		}
 
 		if ($masterTypeNode instanceof ArrayTypeNode) {
