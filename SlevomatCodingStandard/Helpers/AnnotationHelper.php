@@ -8,6 +8,7 @@ use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ConditionalTypeForParameterNode;
 use PHPStan\PhpDocParser\Ast\Type\ConditionalTypeNode;
@@ -137,6 +138,14 @@ class AnnotationHelper
 		if ($annotation instanceof MethodAnnotation) {
 			if ($annotation->getMethodReturnType() !== null) {
 				$annotationTypes[] = $annotation->getMethodReturnType();
+			}
+			foreach ($annotation->getMethodTemplateTypes() as $methodTemplateType) {
+				if ($methodTemplateType->bound !== null) {
+					$annotationTypes[] = $methodTemplateType->bound;
+				}
+				if ($methodTemplateType->default !== null) {
+					$annotationTypes[] = $methodTemplateType->default;
+				}
 			}
 			foreach ($annotation->getMethodParameters() as $methodParameterAnnotation) {
 				if ($methodParameterAnnotation->type === null) {
@@ -515,6 +524,13 @@ class AnnotationHelper
 			if ($fixedContentNode->returnType !== null) {
 				$fixedContentNode->returnType = AnnotationTypeHelper::change($fixedContentNode->returnType, $typeNode, $fixedTypeNode);
 			}
+			foreach ($fixedContentNode->templateTypes as $templateTypeNo => $templateTypeNode) {
+				$fixedContentNode->templateTypes[$templateTypeNo] = self::fixTemplateTagValueNode(
+					$templateTypeNode,
+					$typeNode,
+					$fixedTypeNode
+				);
+			}
 			foreach ($fixedContentNode->parameters as $parameterNo => $parameterNode) {
 				if ($parameterNode->type === null) {
 					continue;
@@ -528,13 +544,7 @@ class AnnotationHelper
 				);
 			}
 		} elseif ($annotation instanceof TemplateAnnotation) {
-			$fixedContentNode = clone $annotation->getContentNode();
-			if ($fixedContentNode->bound !== null) {
-				$fixedContentNode->bound = AnnotationTypeHelper::change($annotation->getBound(), $typeNode, $fixedTypeNode);
-			}
-			if ($fixedContentNode->default !== null) {
-				$fixedContentNode->default = AnnotationTypeHelper::change($annotation->getDefault(), $typeNode, $fixedTypeNode);
-			}
+			$fixedContentNode = self::fixTemplateTagValueNode($annotation->getContentNode(), $typeNode, $fixedTypeNode);
 		} elseif ($annotation instanceof TypeImportAnnotation) {
 			$fixedContentNode = clone $annotation->getContentNode();
 			/** @var IdentifierTypeNode $fixedType */
@@ -563,6 +573,24 @@ class AnnotationHelper
 			$annotation->getContent(),
 			$fixedContentNode
 		);
+	}
+
+	private static function fixTemplateTagValueNode(
+		TemplateTagValueNode $node,
+		TypeNode $typeNode,
+		TypeNode $fixedTypeNode
+	): TemplateTagValueNode
+	{
+		$fixedNode = clone $node;
+
+		if ($fixedNode->bound !== null) {
+			$fixedNode->bound = AnnotationTypeHelper::change($node->bound, $typeNode, $fixedTypeNode);
+		}
+		if ($fixedNode->default !== null) {
+			$fixedNode->default = AnnotationTypeHelper::change($node->default, $typeNode, $fixedTypeNode);
+		}
+
+		return $fixedNode;
 	}
 
 	private static function fix(File $phpcsFile, Annotation $annotation, Annotation $fixedAnnotation): string

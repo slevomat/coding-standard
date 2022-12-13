@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Helpers\Annotation;
 use InvalidArgumentException;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueParameterNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
@@ -82,6 +83,16 @@ class MethodAnnotation extends Annotation
 	}
 
 	/**
+	 * @return TemplateTagValueNode[]
+	 */
+	public function getMethodTemplateTypes(): array
+	{
+		$this->errorWhenInvalid();
+
+		return $this->contentNode->templateTypes;
+	}
+
+	/**
 	 * @return MethodTagValueParameterNode[]
 	 */
 	public function getMethodParameters(): array
@@ -98,6 +109,8 @@ class MethodAnnotation extends Annotation
 			? sprintf('%s ', AnnotationTypeHelper::export($this->getMethodReturnType()))
 			: '';
 
+		$templateTypes = $this->contentNode->templateTypes !== [] ? '<' . implode(', ', $this->contentNode->templateTypes) . '>' : '';
+
 		$parameters = [];
 		foreach ($this->getMethodParameters() as $parameter) {
 			$type = $parameter->type !== null ? AnnotationTypeHelper::export($parameter->type) . ' ' : '';
@@ -108,7 +121,15 @@ class MethodAnnotation extends Annotation
 			$parameters[] = sprintf('%s%s%s%s%s', $type, $isReference, $isVariadic, $parameter->parameterName, $default);
 		}
 
-		$exported = sprintf('%s %s%s%s(%s)', $this->name, $static, $returnType, $this->getMethodName(), implode(', ', $parameters));
+		$exported = sprintf(
+			'%s %s%s%s%s(%s)',
+			$this->name,
+			$static,
+			$returnType,
+			$this->getMethodName(),
+			$templateTypes,
+			implode(', ', $parameters)
+		);
 
 		$description = $this->getDescription();
 		if ($description !== null) {
