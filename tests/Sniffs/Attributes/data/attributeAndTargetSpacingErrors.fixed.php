@@ -21,4 +21,12 @@ class Whatever
 	{
 	}
 
+	public function __construct(
+		#[ORM\Column(unique: true)]
+		protected string $name,
+		#[ORM\Cache] #[ORM\ManyToOne(targetEntity: 'State', inversedBy: 'cities')] #[ORM\JoinColumn(name: 'state_id', referencedColumnName: 'id')]
+		protected State|null $state = null,
+	) {
+	}
+
 }

@@ -84,7 +84,10 @@ class AttributeAndTargetSpacingSniff implements Sniff
 		}
 
 		if ($areOnSameLine) {
-			$indentation = IndentationHelper::getIndentation($phpcsFile, $attributeOpenerPointer);
+			$indentation = IndentationHelper::getIndentation(
+				$phpcsFile,
+				TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $pointerAfter)
+			);
 
 			$phpcsFile->fixer->beginChangeset();
 
