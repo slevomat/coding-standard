@@ -8,6 +8,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_keys;
 use function sprintf;
+use const T_ATTRIBUTE_END;
 use const T_BITWISE_AND;
 use const T_COMMA;
 use const T_ELLIPSIS;
@@ -63,7 +64,14 @@ class ParameterTypeHintSpacingSniff implements Sniff
 				$parameterEndPointer = $parametersEndPointer;
 			}
 
-			$typeHintEndPointer = TokenHelper::findPrevious($phpcsFile, $typeHintTokenCodes, $parameterPointer - 1, $parameterStartPointer);
+			$attributeCloserPointer = TokenHelper::findPrevious($phpcsFile, T_ATTRIBUTE_END, $parameterPointer - 1, $parameterStartPointer);
+
+			$typeHintEndPointer = TokenHelper::findPrevious(
+				$phpcsFile,
+				$typeHintTokenCodes,
+				$parameterPointer - 1,
+				$attributeCloserPointer ?? $parameterStartPointer
+			);
 			if ($typeHintEndPointer === null) {
 				continue;
 			}

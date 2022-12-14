@@ -1,4 +1,4 @@
-<?php // lint >= 8.0
+<?php // lint >= 8.1
 
 $a = function (?bool $a, ?string &$b, ?int ...$c)
 {
@@ -8,7 +8,9 @@ $a = function (?bool $a, ?string &$b, ?int ...$c)
 function b(
 	?bool $a,
 	array $b,
-	$c
+	#[SomeAttribute]
+	$c,
+	$d
 ) {
 
 }
