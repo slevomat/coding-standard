@@ -135,7 +135,7 @@ class CallableType
 /** @var array{int, DateTime} $arrayShape1 */
 $arrayShape1 = [];
 
-/** @var array{int: DateTime} $arrayShape2 */
+/** @var array{int: DateTime, ...} $arrayShape2 */
 $arrayShape2 = [];
 
 /**

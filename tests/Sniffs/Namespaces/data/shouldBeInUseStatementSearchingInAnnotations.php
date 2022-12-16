@@ -114,7 +114,7 @@ class CallableType
 /** @var array{int, \Foo\DateTime} $arrayShape1 */
 $arrayShape1 = [];
 
-/** @var array{int: \Foo\DateTime} $arrayShape2 */
+/** @var array{int: \Foo\DateTime, ...} $arrayShape2 */
 $arrayShape2 = [];
 
 /**

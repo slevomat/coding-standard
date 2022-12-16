@@ -420,7 +420,7 @@ class AnnotationTypeHelper
 				$arrayShapeItemNodes[] = self::change($arrayShapeItemNode, $typeNodeToChange, $changedTypeNode);
 			}
 
-			return new ArrayShapeNode($arrayShapeItemNodes);
+			return new ArrayShapeNode($arrayShapeItemNodes, $masterTypeNode->sealed);
 		}
 
 		if ($masterTypeNode instanceof ArrayShapeItemNode) {
