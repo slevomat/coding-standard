@@ -23,6 +23,15 @@ Sniff provides the following settings:
 
 Disallows usage of "mixed" type hint in phpDocs.
 
+#### SlevomatCodingStandard.TypeHints.IntersectionTypeHintFormat 🔧
+
+Checks format of intersection type hints.
+
+Sniff provides the following settings:
+
+* `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 8.1 or higher.
+* `withSpaces`: `yes` requires spaces around `&`, `no` requires no space around `&`. None is set by default so both are enabled.
+
 #### SlevomatCodingStandard.TypeHints.LongTypeHints 🔧
 
 Enforces using shorthand scalar typehint variants in phpDocs: `int` instead of `integer` and `bool` instead of `boolean`. This is for consistency with native scalar typehints which also allow shorthand variants only.
