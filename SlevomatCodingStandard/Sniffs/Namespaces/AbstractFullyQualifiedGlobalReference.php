@@ -14,7 +14,6 @@ use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use function array_flip;
 use function array_key_exists;
 use function array_map;
-use function sprintf;
 use function strtolower;
 use const T_OPEN_TAG;
 
@@ -111,9 +110,10 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 			}
 
 			$fix = $phpcsFile->addFixableError(
-				sprintf($this->getNotFullyQualifiedMessage(), $tokens[$namePointer]['content']),
+				$this->getNotFullyQualifiedMessage(),
 				$namePointer,
-				self::CODE_NON_FULLY_QUALIFIED
+				self::CODE_NON_FULLY_QUALIFIED,
+				[$tokens[$namePointer]['content']]
 			);
 			if (!$fix) {
 				continue;
