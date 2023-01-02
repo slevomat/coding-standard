@@ -51,7 +51,7 @@ class AttributesOrderSniff implements Sniff
 		}
 
 		if ($this->order === [] && !$this->orderAlphabetically) {
-			throw new UnexpectedValueException('Nether manual or alphabetical order is set.');
+			throw new UnexpectedValueException('Neither manual or alphabetical order is set.');
 		}
 
 		if ($this->order !== [] && $this->orderAlphabetically) {
