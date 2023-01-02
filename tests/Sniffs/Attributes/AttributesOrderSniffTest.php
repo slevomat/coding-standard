@@ -74,7 +74,7 @@ class AttributesOrderSniffTest extends TestCase
 	public function testNetherOrderIsSet(): void
 	{
 		$this->expectException(UnexpectedValueException::class);
-		$this->expectExceptionMessage('Nether manual or alphabetical order is set.');
+		$this->expectExceptionMessage('Neither manual or alphabetical order is set.');
 
 		self::checkFile(__DIR__ . '/data/attributesOrderNoErrors.php');
 	}
