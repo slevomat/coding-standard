@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.2
 
 class C1
 {
@@ -44,4 +44,12 @@ class C2
 /* One more comment */ class E2 extends \Exception
 {
 
+}
+
+final readonly class G
+{
+}
+
+readonly class G2
+{
 }

@@ -11,12 +11,13 @@ class RequireAbstractOrFinalSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireAbstractOrFinalErrors.php');
 
-		self::assertSame(4, $report->getErrorCount());
+		self::assertSame(5, $report->getErrorCount());
 
-		self::assertSniffError($report, 2, RequireAbstractOrFinalSniff::CODE_NO_ABSTRACT_OR_FINAL);
-		self::assertSniffError($report, 17, RequireAbstractOrFinalSniff::CODE_NO_ABSTRACT_OR_FINAL);
-		self::assertSniffError($report, 38, RequireAbstractOrFinalSniff::CODE_NO_ABSTRACT_OR_FINAL);
+		self::assertSniffError($report, 3, RequireAbstractOrFinalSniff::CODE_NO_ABSTRACT_OR_FINAL);
+		self::assertSniffError($report, 18, RequireAbstractOrFinalSniff::CODE_NO_ABSTRACT_OR_FINAL);
+		self::assertSniffError($report, 39, RequireAbstractOrFinalSniff::CODE_NO_ABSTRACT_OR_FINAL);
 		self::assertSniffError($report, 44, RequireAbstractOrFinalSniff::CODE_NO_ABSTRACT_OR_FINAL);
+		self::assertSniffError($report, 53, RequireAbstractOrFinalSniff::CODE_NO_ABSTRACT_OR_FINAL);
 
 		self::assertAllFixedInFile($report);
 	}
