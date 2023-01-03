@@ -56,7 +56,7 @@
 	<rule ref="Generic.PHP.LowerCaseKeyword"/>
 	<rule ref="Generic.Strings.UnnecessaryStringConcat">
 		<properties>
-			<property name="allowMultiLine" value="true"/>
+			<property name="allowMultiline" value="true"/>
 		</properties>
 	</rule>
 	<rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
