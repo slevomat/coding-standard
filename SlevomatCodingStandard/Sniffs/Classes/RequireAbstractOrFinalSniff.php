@@ -9,6 +9,7 @@ use function in_array;
 use const T_ABSTRACT;
 use const T_CLASS;
 use const T_FINAL;
+use const T_READONLY;
 
 class RequireAbstractOrFinalSniff implements Sniff
 {
@@ -31,9 +32,13 @@ class RequireAbstractOrFinalSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $classPointer): void
 	{
+		$tokens = $phpcsFile->getTokens();
+
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $classPointer - 1);
 
-		$tokens = $phpcsFile->getTokens();
+		if ($tokens[$previousPointer]['code'] === T_READONLY) {
+			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
+		}
 
 		if (in_array($tokens[$previousPointer]['code'], [T_ABSTRACT, T_FINAL], true)) {
 			return;
@@ -41,7 +46,7 @@ class RequireAbstractOrFinalSniff implements Sniff
 
 		$fix = $phpcsFile->addFixableError(
 			'All classes should be declared using either the "abstract" or "final" keyword.',
-			$classPointer - 1,
+			$classPointer,
 			self::CODE_NO_ABSTRACT_OR_FINAL
 		);
 
@@ -50,7 +55,7 @@ class RequireAbstractOrFinalSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->addContent($classPointer - 1, 'final ');
+		$phpcsFile->fixer->addContentBefore($classPointer, 'final ');
 		$phpcsFile->fixer->endChangeset();
 	}
 
