@@ -86,6 +86,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_
  - [SlevomatCodingStandard.ControlStructures.DisallowEmpty](doc/control-structures.md#slevomatcodingstandardcontrolstructuresdisallowempty)
  - [SlevomatCodingStandard.ControlStructures.DisallowNullSafeObjectOperator](doc/control-structures.md#slevomatcodingstandardcontrolstructuresdisallownullsafeobjectoperator)
  - [SlevomatCodingStandard.ControlStructures.DisallowShortTernaryOperator](doc/control-structures.md#slevomatcodingstandardcontrolstructuresdisallowshortternaryoperator-) 🔧
+ - [SlevomatCodingStandard.ControlStructures.DisallowTrailingMultiLineTernaryOperatorSniff](doc/control-structures.md#slevomatcodingstandardcontrolstructuresdisallowtrailingmultilineternaryoperator-) 🔧
  - [SlevomatCodingStandard.ControlStructures.DisallowYodaComparison](doc/control-structures.md#slevomatcodingstandardcontrolstructuresdisallowyodacomparison-) 🔧
  - [SlevomatCodingStandard.ControlStructures.EarlyExit](doc/control-structures.md#slevomatcodingstandardcontrolstructuresearlyexit-) 🔧
  - [SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing](doc/control-structures.md#slevomatcodingstandardcontrolstructuresjumpstatementsspacing-) 🔧

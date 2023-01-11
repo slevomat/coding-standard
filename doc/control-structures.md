@@ -111,6 +111,22 @@ Sniff provides the following settings:
 
 * `fixable`: the sniff is fixable by default, however in strict code it makes sense to forbid this weakly typed form of ternary altogether, you can disable fixability with this option.
 
+#### SlevomatCodingStandard.ControlStructures.DisallowTrailingMultiLineTernaryOperator 🔧
+
+Ternary operator has to be reformatted when the operator is not leading the line.
+
+```php
+# wrong
+$t = $someCondition ?
+  $thenThis :
+  $otherwiseThis;
+
+# correct
+$t = $someCondition
+  ? $thenThis
+  : $otherwiseThis;
+```
+
 #### SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing 🔧
 
 Enforces configurable number of lines around jump statements (continue, return, ...).
