@@ -13,11 +13,12 @@ class TrailingArrayCommaSniffTest extends TestCase
 			'enableAfterHeredoc' => true,
 		]);
 
-		self::assertSame(3, $report->getErrorCount());
+		self::assertSame(4, $report->getErrorCount());
 
 		self::assertSniffError($report, 18, TrailingArrayCommaSniff::CODE_MISSING_TRAILING_COMMA);
 		self::assertSniffError($report, 26, TrailingArrayCommaSniff::CODE_MISSING_TRAILING_COMMA);
 		self::assertSniffError($report, 44, TrailingArrayCommaSniff::CODE_MISSING_TRAILING_COMMA);
+		self::assertSniffError($report, 52, TrailingArrayCommaSniff::CODE_MISSING_TRAILING_COMMA);
 	}
 
 	public function testFixable(): void
