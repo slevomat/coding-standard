@@ -21,6 +21,18 @@ class Whatever
 	{
 	}
 
+	#[Attribute1, Attribute2('var'), Attribute3(option: PDO::class, option2: true, option3: 'False')]
+	#[Attribute4(), Attribute5]
+	// Another method comment
+	public function anotherMethod(
+		#[Attribute1]
+		$parameter,
+		#[Attribute2]
+		$parameter2
+	)
+	{
+	}
+
 	public function __construct(
 		#[ORM\Column(unique: true)]
 		protected string $name,
