@@ -46,7 +46,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 			$codeSniffer->ruleset->ruleset[self::getSniffName()]['properties'] = $sniffProperties;
 		}
 
-		$sniffClassName = self::getSniffClassName();
+		$sniffClassName = static::getSniffClassName();
 		/** @var Sniff $sniff */
 		$sniff = new $sniffClassName();
 
@@ -147,7 +147,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 				'',
 				'',
 			],
-			self::getSniffClassName()
+			static::getSniffClassName()
 		);
 	}
 
@@ -155,7 +155,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	{
 		static $reflections = [];
 
-		$className = self::getSniffClassName();
+		$className = static::getSniffClassName();
 
 		return $reflections[$className] ?? $reflections[$className] = new ReflectionClass($className);
 	}
