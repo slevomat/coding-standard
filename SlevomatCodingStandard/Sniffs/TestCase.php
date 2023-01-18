@@ -123,6 +123,17 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		self::assertStringEqualsFile(preg_replace('~(\\.php)$~', '.fixed\\1', $phpcsFile->getFilename()), $phpcsFile->fixer->getContents());
 	}
 
+	/**
+	 * @return class-string
+	 */
+	protected static function getSniffClassName(): string
+	{
+		/** @var class-string $sniffClassName */
+		$sniffClassName = substr(static::class, 0, -strlen('Test'));
+
+		return $sniffClassName;
+	}
+
 	private static function getSniffName(): string
 	{
 		return preg_replace(
@@ -138,17 +149,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 			],
 			self::getSniffClassName()
 		);
-	}
-
-	/**
-	 * @return class-string
-	 */
-	private static function getSniffClassName(): string
-	{
-		/** @var class-string $sniffClassName */
-		$sniffClassName = substr(static::class, 0, -strlen('Test'));
-
-		return $sniffClassName;
 	}
 
 	private static function getSniffClassReflection(): ReflectionClass
