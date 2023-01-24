@@ -4,12 +4,12 @@ namespace Abc;
 
 use A;
 use D\E\F;
-use H\I\K;
 use H\I\J;
+use H\I\K;
 use L\M\O;
 use P\Q\R\S;
-use U\V\W\Z;
 use P\Q\R\T;
+use U\V\W\Z;
 use U\V\X\Y;
 use B\C as Ccc;
 use L\m\O as Ooo;

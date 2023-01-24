@@ -180,7 +180,13 @@ class UsesSortedByLengthSniff implements Sniff
 		$lengthA = strlen($importA);
 		$lengthB = strlen($importB);
 
-		return $lengthA <=> $lengthB;
+		$result = $lengthA <=> $lengthB;
+
+		if ($result === 0) {
+			$result = $importA <=> $importB;
+		}
+
+		return $result;
 	}
 
 }

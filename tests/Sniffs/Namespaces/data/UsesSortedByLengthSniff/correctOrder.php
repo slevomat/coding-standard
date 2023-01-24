@@ -3,8 +3,8 @@
 use Beta;
 use Gamma;
 use Charlie;
-use function Beta\fouFunction;
 use function Beta\bazFunction;
+use function Beta\fouFunction;
 use function Alpha\barFunction;
 use function Alpha\fooFunction;
 use const Beta\BAZ_CONSTANT;
