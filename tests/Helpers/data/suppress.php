@@ -55,6 +55,22 @@ abstract class IsSuppressed
 	}
 
 	/**
+	 * @phpcsSuppress Sniff.Sniff.Sniff.check Some comment
+	 */
+	final public function suppressWithFullNameAndComment()
+	{
+
+	}
+
+	/**
+	 * @phpcsSuppress Sniff.Sniff.Sniff Some comment
+	 */
+	final public function suppressWithPartialNameAndComment($e)
+	{
+
+	}
+
+	/**
 	 * Description description description.
 	 *
 	 * @param bool $e

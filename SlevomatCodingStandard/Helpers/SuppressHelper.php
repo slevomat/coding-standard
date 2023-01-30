@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use SlevomatCodingStandard\Helpers\Annotation\Annotation;
 use function array_reduce;
 use function assert;
+use function explode;
 use function sprintf;
 use function strpos;
 use const T_DOC_COMMENT_CLOSE_TAG;
@@ -24,9 +25,15 @@ class SuppressHelper
 		return array_reduce(
 			AnnotationHelper::getAnnotationsByName($phpcsFile, $pointer, self::ANNOTATION),
 			static function (bool $carry, Annotation $annotation) use ($suppressName): bool {
+				if ($annotation->getContent() === null) {
+					return $carry;
+				}
+
+				$annotationSuppressName = explode(' ', $annotation->getContent())[0];
+
 				if (
-					$annotation->getContent() === $suppressName
-					|| strpos($suppressName, sprintf('%s.', $annotation->getContent())) === 0
+					$suppressName === $annotationSuppressName
+					|| strpos($suppressName, sprintf('%s.', $annotationSuppressName)) === 0
 				) {
 					$carry = true;
 				}

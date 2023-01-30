@@ -86,6 +86,8 @@ class SuppressHelperTest extends TestCase
 		return [
 			['suppressWithFullName'],
 			['suppressWithPartialName'],
+			['suppressWithFullNameAndComment'],
+			['suppressWithPartialNameAndComment'],
 			['suppressWithFullDocComment'],
 		];
 	}
