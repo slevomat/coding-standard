@@ -29,6 +29,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_
 
 🚧 = [Sniff check can be suppressed locally](#suppressing-sniffs-locally)
 
+ - [SlevomatCodingStandard.Arrays.AlphabeticallySortedByKeys](doc/arrays.md#slevomatcodingstandardarrayalphabeticallysortedbykeys) 🔧
  - [SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation](doc/arrays.md#slevomatcodingstandardarraysdisallowimplicitarraycreation)
  - [SlevomatCodingStandard.Arrays.MultiLineArrayEndBracketPlacement](doc/arrays.md#slevomatcodingstandardarraysmultilinearrayendbracketplacement-) 🔧
  - [SlevomatCodingStandard.Arrays.SingleLineArrayWhitespace](doc/arrays.md#slevomatcodingstandardarrayssinglelinearraywhitespace-) 🔧

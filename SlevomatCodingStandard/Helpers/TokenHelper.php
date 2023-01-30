@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use function array_key_exists;
 use function array_merge;
 use function count;
+use const T_ARRAY;
 use const T_ARRAY_HINT;
 use const T_BREAK;
 use const T_CALLABLE;
@@ -31,6 +32,7 @@ use const T_NAME_QUALIFIED;
 use const T_NAME_RELATIVE;
 use const T_NS_SEPARATOR;
 use const T_NULL;
+use const T_OPEN_SHORT_ARRAY;
 use const T_PARENT;
 use const T_PHPCS_DISABLE;
 use const T_PHPCS_ENABLE;
@@ -58,6 +60,12 @@ use const T_WHITESPACE;
  */
 class TokenHelper
 {
+
+	/** @var array<int, (int|string)> */
+	public static $arrayTokenCodes = [
+		T_ARRAY,
+		T_OPEN_SHORT_ARRAY,
+	];
 
 	/** @var array<int, (int|string)> */
 	public static $typeKeywordTokenCodes = [
