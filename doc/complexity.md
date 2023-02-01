@@ -6,4 +6,5 @@ Enforces maximum [cognitive complexity](https://www.sonarsource.com/docs/Cogniti
 
 Sniff provides the following setting:
 
-* `maxComplexity`: defaults to 5
+* `warningThreshold`: defaults to 6
+* `errorThreshold` : defaults to 6

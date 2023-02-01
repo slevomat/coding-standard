@@ -93,12 +93,39 @@ class CognitiveSniffTest extends TestCase
 	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
 	 * @dataProvider dataProviderFiles
 	 */
-	public function testNoErrors(string $filepath, int $line, string $functionName, int $expectedComplexity): void
+	public function testNoErrorsOrWarnings(string $filepath, int $line, string $functionName, int $expectedComplexity): void
 	{
 		$report = self::checkFile($filepath, [
-			'maxComplexity' => $expectedComplexity,
+			'errorThreshold' => $expectedComplexity + 1,
+			'warningThreshold' => $expectedComplexity + 1,
 		]);
 		self::assertNoSniffErrorInFile($report);
+		self::assertNoSniffWarningInFile($report);
+	}
+
+	/**
+	 * @dataProvider dataProviderFiles
+	 */
+	public function testWarnings(string $filepath, int $line, string $functionName, int $expectedComplexity): void
+	{
+		$report = self::checkFile($filepath, [
+			'errorThreshold' => $expectedComplexity + 1,
+			'warningThreshold' => $expectedComplexity,
+		]);
+
+		self::assertSame(1, $report->getWarningCount());
+		self::assertNoSniffErrorInFile($report);
+		self::assertSniffWarning(
+			$report,
+			$line,
+			CognitiveSniff::CODE_COMPLEXITY,
+			sprintf(
+				'Cognitive complexity for "%s" is %s but has to be less than or equal to %s.',
+				$functionName,
+				$expectedComplexity,
+				$expectedComplexity - 1
+			)
+		);
 	}
 
 	/**
@@ -106,12 +133,13 @@ class CognitiveSniffTest extends TestCase
 	 */
 	public function testErrors(string $filepath, int $line, string $functionName, int $expectedComplexity): void
 	{
-		$maxComplexity = $expectedComplexity - 1;
 		$report = self::checkFile($filepath, [
-			'maxComplexity' => $maxComplexity,
+			'errorThreshold' => $expectedComplexity,
+			'warningThreshold' => $expectedComplexity - 1,
 		]);
 
 		self::assertSame(1, $report->getErrorCount());
+		self::assertNoSniffWarningInFile($report);
 		self::assertSniffError(
 			$report,
 			$line,
@@ -120,7 +148,89 @@ class CognitiveSniffTest extends TestCase
 				'Cognitive complexity for "%s" is %s but has to be less than or equal to %s.',
 				$functionName,
 				$expectedComplexity,
-				$maxComplexity
+				$expectedComplexity - 2
+			)
+		);
+	}
+
+	public function testErrorAndWarning(): void
+	{
+		$filepath = __DIR__ . '/data/cognitive/warnAndError.php';
+		$warnInfo = [
+			'complexity' => 6,
+			'func' => 'warning',
+			'line' => 3,
+		];
+		$errorInfo = [
+			'complexity' => 9,
+			'func' => 'error',
+			'line' => 15,
+		];
+
+		$report = self::checkFile($filepath, [
+			'errorThreshold' => 9,
+			'warningThreshold' => 6,
+		]);
+
+		self::assertSame(1, $report->getWarningCount());
+		self::assertSame(1, $report->getErrorCount());
+		self::assertSniffWarning(
+			$report,
+			$warnInfo['line'],
+			CognitiveSniff::CODE_COMPLEXITY,
+			sprintf(
+				'Cognitive complexity for "%s" is %s but has to be less than or equal to %s.',
+				$warnInfo['func'],
+				$warnInfo['complexity'],
+				5
+			)
+		);
+		self::assertSniffError(
+			$report,
+			$errorInfo['line'],
+			CognitiveSniff::CODE_COMPLEXITY,
+			sprintf(
+				'Cognitive complexity for "%s" is %s but has to be less than or equal to %s.',
+				$errorInfo['func'],
+				$errorInfo['complexity'],
+				5
+			)
+		);
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+	 * @dataProvider dataProviderFiles
+	 */
+	public function testDeprecatedNoErrorsOrWarnings(string $filepath, int $line, string $functionName, int $expectedComplexity): void
+	{
+		$report = self::checkFile($filepath, [
+			'maxComplexity' => $expectedComplexity,
+		]);
+		self::assertNoSniffErrorInFile($report);
+		self::assertNoSniffWarningInFile($report);
+	}
+
+	/**
+	 * @dataProvider dataProviderFiles
+	 */
+	public function testDeprecatedErrors(string $filepath, int $line, string $functionName, int $expectedComplexity): void
+	{
+		$report = self::checkFile($filepath, [
+			'maxComplexity' => $expectedComplexity - 1,
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+		self::assertNoSniffWarningInFile($report);
+		self::assertSniffError(
+			$report,
+			$line,
+			CognitiveSniff::CODE_COMPLEXITY,
+			sprintf(
+				'Cognitive complexity for "%s" is %s but has to be less than or equal to %s.',
+				$functionName,
+				$expectedComplexity,
+				$expectedComplexity - 1
 			)
 		);
 	}

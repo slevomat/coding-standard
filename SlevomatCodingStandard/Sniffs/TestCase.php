@@ -76,6 +76,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		self::assertEmpty($errors, sprintf('No errors expected, but %d errors found.', count($errors)));
 	}
 
+	protected static function assertNoSniffWarningInFile(File $phpcsFile): void
+	{
+		$warnings = $phpcsFile->getWarnings();
+		self::assertEmpty($warnings, sprintf('No warnings expected, but %d warnings found.', count($warnings)));
+	}
+
 	protected static function assertSniffError(File $phpcsFile, int $line, string $code, ?string $message = null): void
 	{
 		$errors = $phpcsFile->getErrors();
@@ -87,6 +93,31 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 			self::hasError($errors[$line], $sniffCode, $message),
 			sprintf(
 				'Expected error %s%s, but none found on line %d.%sErrors found on line %d:%s%s%s',
+				$sniffCode,
+				$message !== null
+					? sprintf(' with message "%s"', $message)
+					: '',
+				$line,
+				PHP_EOL . PHP_EOL,
+				$line,
+				PHP_EOL,
+				self::getFormattedErrors($errors[$line]),
+				PHP_EOL
+			)
+		);
+	}
+
+	protected static function assertSniffWarning(File $phpcsFile, int $line, string $code, ?string $message = null): void
+	{
+		$errors = $phpcsFile->getWarnings();
+		self::assertTrue(isset($errors[$line]), sprintf('Expected warning on line %s, but none found.', $line));
+
+		$sniffCode = sprintf('%s.%s', self::getSniffName(), $code);
+
+		self::assertTrue(
+			self::hasError($errors[$line], $sniffCode, $message),
+			sprintf(
+				'Expected warning %s%s, but none found on line %d.%sWarnings found on line %d:%s%s%s',
 				$sniffCode,
 				$message !== null
 					? sprintf(' with message "%s"', $message)
