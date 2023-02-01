@@ -101,8 +101,17 @@ class CognitiveSniff implements Sniff
 		T_BREAK => T_BREAK,
 	];
 
-	/** @var int */
-	public $maxComplexity = 5;
+	/**
+	 * @deprecated
+	 * @var ?int maximum allowed complexity
+	 */
+	public $maxComplexity = null;
+
+	/** @var int complexity which will raise warning */
+	public $warningThreshold = 6;
+
+	/** @var int complexity which will raise error */
+	public $errorThreshold = 6;
 
 	/** @var int */
 	private $cognitiveComplexity = 0;
@@ -136,24 +145,34 @@ class CognitiveSniff implements Sniff
 			return;
 		}
 
+		if ($this->maxComplexity !== null) {
+			// maxComplexity is deprecated... if set use it
+			$this->warningThreshold = $this->maxComplexity + 1;
+			$this->errorThreshold = $this->maxComplexity + 1;
+		}
+
 		$cognitiveComplexity = $this->computeForFunctionFromTokensAndPosition($stackPtr);
 
-		if ($cognitiveComplexity <= $this->maxComplexity) {
+		if ($cognitiveComplexity < $this->warningThreshold) {
 			return;
 		}
 
 		$name = $phpcsFile->getDeclarationName($stackPtr);
 
-		$phpcsFile->addError(
+		$errorParameters = [
 			'Cognitive complexity for "%s" is %d but has to be less than or equal to %d.',
 			$stackPtr,
 			self::CODE_COMPLEXITY,
 			[
 				$name,
 				$cognitiveComplexity,
-				$this->maxComplexity,
-			]
-		);
+				$this->warningThreshold - 1,
+			],
+		];
+
+		$cognitiveComplexity >= $this->errorThreshold
+			? $phpcsFile->addError(...$errorParameters)
+			: $phpcsFile->addWarning(...$errorParameters);
 	}
 
 	public function computeForFunctionFromTokensAndPosition(int $position): int
