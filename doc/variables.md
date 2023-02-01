@@ -4,6 +4,10 @@
 
 Disallows use of super global variables.
 
+#### SlevomatCodingStandard.Variables.DisallowVariableVariable
+
+Disallows use of variable variables.
+
 #### SlevomatCodingStandard.Variables.DuplicateAssignmentToVariable
 
 Looks for duplicate assignments to a variable.
