@@ -733,7 +733,7 @@ class AnnotationTypeHelper
 		if ($typeNode instanceof GenericTypeNode) {
 			$genericName = $typeNode->type->name;
 
-			if (strtolower($genericName) === 'non-empty-array') {
+			if (in_array(strtolower($genericName), ['non-empty-array', 'list', 'non-empty-list'], true)) {
 				return 'array';
 			}
 
@@ -755,7 +755,7 @@ class AnnotationTypeHelper
 
 			if (in_array(
 				strtolower($typeNode->name),
-				['class-string', 'trait-string', 'callable-string', 'numeric-string', 'non-empty-string', 'literal-string'],
+				['class-string', 'trait-string', 'callable-string', 'numeric-string', 'non-empty-string', 'non-falsy-string', 'literal-string'],
 				true
 			)) {
 				return 'string';

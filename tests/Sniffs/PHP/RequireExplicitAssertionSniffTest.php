@@ -99,12 +99,13 @@ class RequireExplicitAssertionSniffTest extends TestCase
 			'enableAdvancedStringTypes' => true,
 		]);
 
-		self::assertSame(4, $report->getErrorCount());
+		self::assertSame(5, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
 		self::assertSniffError($report, 6, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
 		self::assertSniffError($report, 9, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
 		self::assertSniffError($report, 12, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
+		self::assertSniffError($report, 15, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
 
 		self::assertAllFixedInFile($report);
 	}

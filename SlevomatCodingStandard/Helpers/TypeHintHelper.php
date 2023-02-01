@@ -185,6 +185,7 @@ class TypeHintHelper
 				'callable-string',
 				'numeric-string',
 				'non-empty-string',
+				'non-falsy-string',
 				'literal-string',
 				'array-key',
 				'list',

@@ -497,7 +497,7 @@ class AnnotationHelper
 
 			if (in_array(
 				strtolower($annotationTypeNode->name),
-				['class-string', 'trait-string', 'callable-string', 'numeric-string', 'non-empty-string', 'literal-string', 'positive-int', 'negative-int'],
+				['class-string', 'trait-string', 'callable-string', 'numeric-string', 'non-empty-string', 'non-falsy-string', 'literal-string', 'positive-int', 'negative-int'],
 				true
 			)) {
 				return false;

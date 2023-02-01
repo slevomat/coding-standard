@@ -3,6 +3,9 @@
 $a = 'string';
 \assert(\is_string($a) && $a !== '');
 
+$a = 'string';
+\assert(\is_string($a) && (bool) $a === true);
+
 $b = 'MyClass::myCallbackMethod';
 \assert(\is_string($b) && \is_callable($b));
 

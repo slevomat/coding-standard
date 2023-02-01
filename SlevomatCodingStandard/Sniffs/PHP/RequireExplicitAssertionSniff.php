@@ -442,12 +442,14 @@ class RequireExplicitAssertionSniff implements Sniff
 
 		if (
 			$this->enableAdvancedStringTypes
-			&& in_array($typeNode->name, ['non-empty-string', 'callable-string', 'numeric-string'], true)
+			&& in_array($typeNode->name, ['non-empty-string', 'non-falsy-string', 'callable-string', 'numeric-string'], true)
 		) {
 			$conditions = [sprintf('\is_string(%s)', $variableName)];
 
 			if ($typeNode->name === 'non-empty-string') {
 				$conditions[] = sprintf("%s !== ''", $variableName);
+			} elseif ($typeNode->name === 'non-falsy-string') {
+				$conditions[] = sprintf('(bool) %s === true', $variableName);
 			} elseif ($typeNode->name === 'callable-string') {
 				$conditions[] = sprintf('\is_callable(%s)', $variableName);
 			} else {

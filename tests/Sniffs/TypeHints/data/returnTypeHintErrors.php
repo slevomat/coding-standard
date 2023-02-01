@@ -344,8 +344,23 @@ abstract class Whatever
 	{
 	}
 
+	/** @return list<int> */
+	public function returnsList()
+	{
+	}
+
+	/** @return non-empty-list<int> */
+	public function returnsNonEmptyList()
+	{
+	}
+
 	/** @return non-empty-string */
 	public function returnsNonEmptyString()
+	{
+	}
+
+	/** @return non-falsy-string */
+	public function returnsNonFalseString()
 	{
 	}
 
