@@ -19,7 +19,7 @@ use const T_USE;
 use const T_VAR;
 use const T_VARIABLE;
 
-class PropertySpacingSniff extends AbstractPropertyAndConstantSpacing
+class PropertySpacingSniff extends AbstractPropertyConstantAndEnumCaseSpacing
 {
 
 	public const CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_PROPERTY = 'IncorrectCountOfBlankLinesAfterProperty';

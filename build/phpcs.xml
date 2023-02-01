@@ -239,7 +239,7 @@
 		</properties>
 	</rule>
 	<rule ref="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming">
-		<exclude-pattern>SlevomatCodingStandard/Sniffs/Classes/AbstractPropertyAndConstantSpacing.php</exclude-pattern>
+		<exclude-pattern>SlevomatCodingStandard/Sniffs/Classes/AbstractPropertyConstantAndEnumCaseSpacing.php</exclude-pattern>
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Classes/AbstractMethodSignature.php</exclude-pattern>
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/Commenting/AbstractRequireOneLineDocComment.php</exclude-pattern>
 		<exclude-pattern>SlevomatCodingStandard/Sniffs/ControlStructures/AbstractControlStructureSpacing.php</exclude-pattern>

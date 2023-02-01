@@ -15,6 +15,7 @@ use const T_ATTRIBUTE;
 use const T_COMMENT;
 use const T_CONST;
 use const T_DOC_COMMENT_OPEN_TAG;
+use const T_ENUM_CASE;
 use const T_FUNCTION;
 use const T_PRIVATE;
 use const T_PROTECTED;
@@ -29,7 +30,7 @@ use const T_VARIABLE;
 /**
  * @internal
  */
-abstract class AbstractPropertyAndConstantSpacing implements Sniff
+abstract class AbstractPropertyConstantAndEnumCaseSpacing implements Sniff
 {
 
 	/** @var int */
@@ -69,7 +70,11 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 		$firstOnLinePointer = TokenHelper::findFirstTokenOnNextLine($phpcsFile, $semicolonPointer);
 		assert($firstOnLinePointer !== null);
 
-		$nextFunctionPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE, T_USE], $firstOnLinePointer + 1);
+		$nextFunctionPointer = TokenHelper::findNext(
+			$phpcsFile,
+			[T_FUNCTION, T_ENUM_CASE, T_CONST, T_VARIABLE, T_USE],
+			$firstOnLinePointer + 1
+		);
 		if (
 			$nextFunctionPointer === null
 			|| $tokens[$nextFunctionPointer]['code'] === T_FUNCTION
@@ -78,7 +83,7 @@ abstract class AbstractPropertyAndConstantSpacing implements Sniff
 			return $nextFunctionPointer ?? $firstOnLinePointer;
 		}
 
-		$types = [T_COMMENT, T_DOC_COMMENT_OPEN_TAG, T_ATTRIBUTE, T_CONST, T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC, T_USE];
+		$types = [T_COMMENT, T_DOC_COMMENT_OPEN_TAG, T_ATTRIBUTE, T_ENUM_CASE, T_CONST, T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC, T_USE];
 		$nextPointer = TokenHelper::findNext($phpcsFile, $types, $firstOnLinePointer + 1, $tokens[$classPointer]['scope_closer']);
 
 		if (!$this->isNextMemberValid($phpcsFile, $nextPointer)) {

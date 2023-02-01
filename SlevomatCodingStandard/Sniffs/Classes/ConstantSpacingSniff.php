@@ -18,7 +18,7 @@ use const T_TRAIT;
 use const T_USE;
 use const T_VARIABLE;
 
-class ConstantSpacingSniff extends AbstractPropertyAndConstantSpacing
+class ConstantSpacingSniff extends AbstractPropertyConstantAndEnumCaseSpacing
 {
 
 	public const CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_CONSTANT = 'IncorrectCountOfBlankLinesAfterConstant';
