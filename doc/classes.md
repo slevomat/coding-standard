@@ -207,6 +207,10 @@ Sniff provides the following settings:
 
 * `excludedMethodPatterns`: allows to configure which methods are excluded from sniff detection. This is an array of regular expressions (PCRE) with delimiters. You should not use this with `includedMethodPatterns`, as it will not work properly.
 
+#### SlevomatCodingStandard.Classes.RequireSelfReference 🔧
+
+Requires `self` for local reference.
+
 #### SlevomatCodingStandard.Classes.RequireSingleLineMethodSignature 🔧
 
 Enforces method signature to be on a single line.
