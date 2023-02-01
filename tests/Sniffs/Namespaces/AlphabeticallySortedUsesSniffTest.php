@@ -86,6 +86,16 @@ class AlphabeticallySortedUsesSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testFixableWithDocComment(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/fixableAlphabeticalSortedUsesWithDocComment.php',
+			[],
+			[AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER]
+		);
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testFixableNotPsr12Compatible(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableAlphabeticalSortedUsesNotPsr12Compatible.php', [
