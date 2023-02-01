@@ -118,7 +118,8 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 								$phpcsFile,
 								$typeHint,
 								$annotation->getStartPointer()
-							) : NamespaceHelper::resolveName(
+							)
+							: NamespaceHelper::resolveName(
 								$phpcsFile,
 								$typeHint,
 								ReferencedName::TYPE_CONSTANT,

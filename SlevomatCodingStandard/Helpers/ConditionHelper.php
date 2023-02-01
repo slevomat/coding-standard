@@ -115,17 +115,21 @@ class ConditionHelper
 
 		return sprintf(
 			'%s%s%s',
-			$conditionBoundaryStartPointer !== $conditionStartPointer ? TokenHelper::getContent(
-				$phpcsFile,
-				$conditionBoundaryStartPointer,
-				$conditionStartPointer - 1
-			) : '',
+			$conditionBoundaryStartPointer !== $conditionStartPointer
+				? TokenHelper::getContent(
+					$phpcsFile,
+					$conditionBoundaryStartPointer,
+					$conditionStartPointer - 1
+				)
+				: '',
 			self::getNegativeConditionPart($phpcsFile, $conditionStartPointer, $conditionEndPointer, $nested),
-			$conditionBoundaryEndPointer !== $conditionEndPointer ? TokenHelper::getContent(
-				$phpcsFile,
-				$conditionEndPointer + 1,
-				$conditionBoundaryEndPointer
-			) : ''
+			$conditionBoundaryEndPointer !== $conditionEndPointer
+				? TokenHelper::getContent(
+					$phpcsFile,
+					$conditionEndPointer + 1,
+					$conditionBoundaryEndPointer
+				)
+				: ''
 		);
 	}
 
