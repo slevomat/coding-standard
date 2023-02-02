@@ -23,6 +23,16 @@ final class RequireMultiLineMethodSignatureSniffTest extends TestCase
 		);
 	}
 
+	public function testThrowExceptionOnInvalidSetup(): void
+	{
+		$this->expectException(Throwable::class);
+
+		self::checkFile(
+			__DIR__ . '/data/requireMultiLineMethodSignatureNoErrors.php',
+			['minLineLength' => 100, 'minParametersCount' => 2]
+		);
+	}
+
 	public function testNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireMultiLineMethodSignatureNoErrors.php');
@@ -38,6 +48,22 @@ final class RequireMultiLineMethodSignatureSniffTest extends TestCase
 		self::assertSniffError($report, 8, RequireMultiLineMethodSignatureSniff::CODE_REQUIRED_MULTI_LINE_SIGNATURE);
 		self::assertSniffError($report, 14, RequireMultiLineMethodSignatureSniff::CODE_REQUIRED_MULTI_LINE_SIGNATURE);
 		self::assertSniffError($report, 16, RequireMultiLineMethodSignatureSniff::CODE_REQUIRED_MULTI_LINE_SIGNATURE);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testErrorsBasedOnParamCount(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/requireMultiLineMethodSignatureBasedOnParamCountErrors.php',
+			[
+				'minParametersCount' => 2,
+			]
+		);
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 8, RequireMultiLineMethodSignatureSniff::CODE_REQUIRED_MULTI_LINE_SIGNATURE);
+		self::assertSniffError($report, 14, RequireMultiLineMethodSignatureSniff::CODE_REQUIRED_MULTI_LINE_SIGNATURE);
 
 		self::assertAllFixedInFile($report);
 	}
