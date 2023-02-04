@@ -124,7 +124,7 @@ Sniff provides the following settings:
 * `allowFullyQualifiedGlobalConstants`: allows using fully qualified constants from global space (i.e. `\PHP_VERSION`).
 * `allowFallbackGlobalFunctions`: allows using global functions via fallback name without `use` (i.e. `phpversion()`).
 * `allowFallbackGlobalConstants`: allows using global constants via fallback name without `use` (i.e. `PHP_VERSION`).
-* `allowPartialUses`: allows using and referencing whole namespaces:
+* `allowPartialUses`: allows using and referencing whole namespaces.
 
 #### SlevomatCodingStandard.Namespaces.UseFromSameNamespace 🔧
 
