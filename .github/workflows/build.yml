@@ -73,6 +73,7 @@ jobs:
       - name: "Validate ruleset"
         uses: "szepeviktor/phpcs-ruleset-validator@v0.1.0"
         with:
+          xmllint_indent: "	"
           xml_ruleset: "SlevomatCodingStandard/ruleset.xml"
           xml_ruleset2: "build/phpcs.xml"
 
