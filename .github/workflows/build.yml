@@ -50,6 +50,32 @@ jobs:
       - name: "Lint"
         run: "bin/phing lint"
 
+  validate-rulesets:
+    name: "Validate PHPCS rulesets"
+
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v3"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "none"
+          php-version: "8.2"
+
+      - name: "Install dependencies"
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: "highest"
+
+      - name: "Validate ruleset"
+        uses: "szepeviktor/phpcs-ruleset-validator@v0.1.0"
+        with:
+          xml_ruleset: "SlevomatCodingStandard/ruleset.xml"
+          xml_ruleset2: "build/phpcs.xml"
+
   coding-standards:
     name: "Coding standards"
 
