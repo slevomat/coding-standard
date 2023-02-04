@@ -71,7 +71,7 @@ jobs:
           dependency-versions: "highest"
 
       - name: "Validate ruleset"
-        uses: "szepeviktor/phpcs-ruleset-validator@v0.1.0"
+        uses: "szepeviktor/phpcs-ruleset-validator@v0.2.0"
         with:
           xmllint_indent: "	"
           xml_ruleset: "SlevomatCodingStandard/ruleset.xml"
