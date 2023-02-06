@@ -571,7 +571,7 @@ function () {
 	if (true) {
 		throw new \Exception('');
 	} else {
-		//return false;
+		echo 'world';
 	}
 	echo 'hello';
 };
