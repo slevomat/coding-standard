@@ -566,6 +566,16 @@ function booleanOperatorPriorities(bool $a, bool $b, bool $c): void
 	}
 }
 
+// with some text after
+function () {
+	if (true) {
+		throw new \Exception('');
+	} else {
+		//return false;
+	}
+	echo 'hello';
+};
+
 // Simple else - needs to be last
 if (true) {
 	return true;
