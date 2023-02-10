@@ -162,28 +162,6 @@ function oneConditionsWithoutEarlyExit($dateTime) {
 	throw new NotImplementedException();
 }
 
-function allConditionsWithEarlyExitButCodeAfter($dateTime) {
-	if ($dateTime instanceof DateTimeImmutable) {
-		return true;
-	}
-
-	if ($dateTime instanceof DateTime) {
-		return true;
-	}
-
-	if (is_numeric($dateTime)) {
-		return true;
-	}
-
-	if (is_string($dateTime)) {
-		throw new NotImplementedException();
-	} else {
-		throw new NotImplementedException();
-	}
-
-	doSomething();
-}
-
 // Code in the end of file
 if (!empty($_SERVER['argv'])) {
 	something();
