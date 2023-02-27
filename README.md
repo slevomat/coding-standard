@@ -170,6 +170,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_
  - [SlevomatCodingStandard.PHP.TypeCast](doc/php.md#slevomatcodingstandardphptypecast-) 🔧
  - [SlevomatCodingStandard.PHP.UselessParentheses](doc/php.md#slevomatcodingstandardphpuselessparentheses-) 🔧
  - [SlevomatCodingStandard.PHP.UselessSemicolon](doc/php.md#slevomatcodingstandardphpuselesssemicolon-) 🔧
+ - [SlevomatCodingStandard.Strings.DisallowVariableParsing](doc/strings.md#slevomatcodingstandardstringsdisallowvariableparsing)
  - [SlevomatCodingStandard.TypeHints.DeclareStrictTypes](doc/type-hints.md#slevomatcodingstandardtypehintsdeclarestricttypes-) 🔧
  - [SlevomatCodingStandard.TypeHints.DisallowArrayTypeHintSyntax](doc/type-hints.md#slevomatcodingstandardtypehintsdisallowarraytypehintsyntax-) 🔧
  - [SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint](doc/type-hints.md#slevomatcodingstandardtypehintsdisallowmixedtypehint)
