@@ -22,6 +22,9 @@ class AttributeAndTargetSpacingSniff implements Sniff
 	/** @var int */
 	public $linesCount = 0;
 
+	/** @var bool */
+	public $allowOnSameLine = false;
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
@@ -58,6 +61,10 @@ class AttributeAndTargetSpacingSniff implements Sniff
 		$areOnSameLine = $tokens[$pointerAfter]['line'] === $tokens[$attributeCloserPointer]['line'];
 
 		if ($areOnSameLine) {
+			if ($this->allowOnSameLine) {
+				return;
+			}
+
 			$errorMessage = $this->linesCount === 1
 				? 'Expected 1 blank line between attribute and its target, both are on same line.'
 				: sprintf('Expected %1$d blank lines between attribute and its target, both are on same line.', $this->linesCount);
