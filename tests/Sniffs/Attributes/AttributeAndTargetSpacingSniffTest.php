@@ -53,6 +53,28 @@ class AttributeAndTargetSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testAllowOnSameLineNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/attributeAndTargetSpacingAllowOnSameLineNoErrors.php', [
+			'allowOnSameLine' => true,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testAllowOnSameLineErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/attributeAndTargetSpacingAllowOnSameLineErrors.php', [
+			'allowOnSameLine' => true,
+		]);
+
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 11, AttributeAndTargetSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_ATTRIBUTE_AND_TARGET);
+		self::assertSniffError($report, 18, AttributeAndTargetSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_ATTRIBUTE_AND_TARGET);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testInvalidAttributePriorPhp80(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/attributeAndTargetSpacingInvalidAttribute.php');
