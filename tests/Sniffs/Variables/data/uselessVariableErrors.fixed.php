@@ -63,16 +63,6 @@ function moreVariableOneWithoutAssigment() {
 	return 10;
 }
 
-function assigmentAsFunctionParametr() {
-	doSomething($p = 0);
-	return $p;
-}
-
-function assigmentAfterAssignment() {
-	doSomething($qq = $q = 0);
-	return $q;
-}
-
 function afterIfStatement(float $seconds): string
 {
 	if ($seconds < 1) {
@@ -80,6 +70,11 @@ function afterIfStatement(float $seconds): string
 	}
 
 	return round($seconds, 2) . 's';
+}
+
+function moreAssigments($object) {
+	$object->title = $s = $object->url ?: $object->somethingElse;
+	return $s;
 }
 
 return null;

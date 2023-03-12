@@ -31,6 +31,7 @@ use const T_MINUS_EQUAL;
 use const T_MOD_EQUAL;
 use const T_MUL_EQUAL;
 use const T_OPEN_CURLY_BRACKET;
+use const T_OPEN_PARENTHESIS;
 use const T_OR_EQUAL;
 use const T_PLUS_EQUAL;
 use const T_POW_EQUAL;
@@ -39,6 +40,7 @@ use const T_SEMICOLON;
 use const T_SL_EQUAL;
 use const T_SR_EQUAL;
 use const T_STATIC;
+use const T_STRING;
 use const T_SWITCH;
 use const T_VARIABLE;
 use const T_WHILE;
@@ -106,6 +108,10 @@ class UselessVariableSniff implements Sniff
 		}
 
 		if ($this->isAssignedInControlStructure($phpcsFile, $previousVariablePointer)) {
+			return;
+		}
+
+		if ($this->isAssignedInFunctionCall($phpcsFile, $previousVariablePointer)) {
 			return;
 		}
 
@@ -231,6 +237,24 @@ class UselessVariableSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		return $tokens[$controlStructure]['parenthesis_opener'] < $pointer && $pointer < $tokens[$controlStructure]['parenthesis_closer'];
+	}
+
+	private function isAssignedInFunctionCall(File $phpcsFile, int $pointer): bool
+	{
+		$possibleFunctionNamePointer = TokenHelper::findPrevious($phpcsFile, T_STRING, $pointer - 1);
+
+		if ($possibleFunctionNamePointer === null) {
+			return false;
+		}
+
+		$tokens = $phpcsFile->getTokens();
+
+		$parenthesisOpenerPointer = TokenHelper::findNextEffective($phpcsFile, $possibleFunctionNamePointer + 1);
+		if ($tokens[$parenthesisOpenerPointer]['code'] !== T_OPEN_PARENTHESIS) {
+			return false;
+		}
+
+		return $parenthesisOpenerPointer < $pointer && $pointer < $tokens[$parenthesisOpenerPointer]['parenthesis_closer'];
 	}
 
 	private function isAssigmentToVariable(File $phpcsFile, int $pointer): bool

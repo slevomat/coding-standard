@@ -191,3 +191,13 @@ function boo($backtrace) {
     for ($class = $backtrace[$frame]['class']; ($parent = get_parent_class($class)) !== false; $class = $parent);
     return $class;
 }
+
+function assigmentAsFunctionParametr() {
+	doSomething($p = 0);
+	return $p;
+}
+
+function assigmentAfterAssignment() {
+	doSomething($qq = $q = 0);
+	return $q;
+}
