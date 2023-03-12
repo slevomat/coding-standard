@@ -15,7 +15,7 @@ class OptimizedFunctionsWithoutUnpackingSniffTest extends TestCase
 
 	public function testNoErrorsNotNamespaced(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/optimizedFunctionsWithoutUnpackingNamespacedNoErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/optimizedFunctionsWithoutUnpackingNotNamespacedNoErrors.php');
 		self::assertNoSniffErrorInFile($report);
 	}
 
