@@ -99,6 +99,11 @@ class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
 			return;
 		}
 
+		if (TokenHelper::findNextEffective($phpcsFile, $nextTokenAfterSeparatorPointer + 1) === $closeBracketPointer) {
+			// First class callables
+			return;
+		}
+
 		$phpcsFile->addError(
 			sprintf('Function %s is specialized by PHP and should not use argument unpacking.', $invokedName),
 			$nextTokenAfterSeparatorPointer,

@@ -1,7 +1,8 @@
-<?php
+<?php // lint >= 8.1
 
 namespace Test;
 
+use function array_map;
 use function func_get_args;
 use function is_double as is_funny;
 use function strlen;
@@ -29,3 +30,5 @@ new Foo();
 new Foo(...bar());
 
 $foo->strlen(...$foo);
+
+array_map(\intval(...), ['123', '23']);

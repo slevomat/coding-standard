@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.1
 
 if (0) {
 	function strlen(...$foo)
@@ -9,3 +9,5 @@ if (0) {
 strlen($foo);
 new Foo(...$foo);
 (function (...$foo) {})(...$foo);
+
+array_map(intval(...), ['123', '23']);
