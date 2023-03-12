@@ -259,8 +259,8 @@
 		<properties>
 			<property name="linesCountBetweenAnnotationsGroups" value="0"/>
 			<property name="annotationsGroups" type="array">
-			    <element value="
-			        @internal,
+				<element value="
+					@internal,
 					@deprecated,
 					@codeCoverageIgnore,
 					@phpcsSuppress,
@@ -277,13 +277,13 @@
 	<rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
 		<properties>
 			<property name="forbiddenAnnotations" type="array">
-			    <element value="@author"/>
-			    <element value="@created"/>
-			    <element value="@copyright"/>
-			    <element value="@license"/>
-			    <element value="@package"/>
-			    <element value="@throws"/>
-			    <element value="@version"/>
+				<element value="@author"/>
+				<element value="@created"/>
+				<element value="@copyright"/>
+				<element value="@license"/>
+				<element value="@package"/>
+				<element value="@throws"/>
+				<element value="@version"/>
 			</property>
 		</properties>
 	</rule>
@@ -297,8 +297,8 @@
 	<rule ref="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing">
 		<properties>
 			<property name="controlStructures" type="array">
-			    <element value="switch"/>
-			    <element value="try"/>
+				<element value="switch"/>
+				<element value="try"/>
 			</property>
 		</properties>
 	</rule>
@@ -316,10 +316,10 @@
 	<rule ref="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing">
 		<properties>
 			<property name="jumpStatements" type="array">
-			    <element value="goto"/>
-			    <element value="throw"/>
-			    <element value="yield"/>
-			    <element value="yield_from"/>
+				<element value="goto"/>
+				<element value="throw"/>
+				<element value="yield"/>
+				<element value="yield_from"/>
 			</property>
 		</properties>
 	</rule>
