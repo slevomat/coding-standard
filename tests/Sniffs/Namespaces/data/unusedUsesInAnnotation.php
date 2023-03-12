@@ -82,6 +82,11 @@ use Conditional8;
 use Conditional9;
 use Something\Enum;
 use Comma\After;
+use OffLabelVar;
+use OffLabelVarWithVariable;
+use OffLabelParam;
+use OffLabelParamWithVariable;
+use OffLabelParamWithVariable2;
 
 /**
  * @ORM\Entity()
@@ -318,4 +323,52 @@ class CommaAfterAnnotation
      * @After\C({"write-send"})
      */
     public int $packages;
+}
+
+class OffLabel {
+	public function varSimple() {
+		/**
+		 * @var OffLabelVar
+		 */
+		$foo = some_func();
+
+		return $foo;
+	}
+
+	public function varWithVariable($foo) {
+		/**
+		 * @var OffLabelVarWithVariable $foo
+		 */
+		$result = $foo->bar();
+
+		return $result;
+	}
+
+	public function param() {
+		/**
+		 * @param OffLabelParam|false
+		 */
+		$foo = apply_filters( 'hello', false );
+
+		return $foo;
+	}
+
+	public function paramWithVariable($arg) {
+		/**
+		 * @param OffLabelParamWithVariable|false $arg
+		 */
+		$foo = apply_filters( 'hello', $arg );
+
+		return $foo;
+	}
+
+	public function paramWithVariableTwo($arg) {
+		/**
+		 * @param int|false
+		 * @param OffLabelParamWithVariable2 $arg
+		 */
+		$foo = apply_filters( 'hello', false, $arg );
+
+		return $foo;
+	}
 }

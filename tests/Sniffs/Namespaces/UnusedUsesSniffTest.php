@@ -96,7 +96,7 @@ class UnusedUsesSniffTest extends TestCase
 			'searchAnnotations' => false,
 		]);
 
-		self::assertSame(79, $report->getErrorCount());
+		self::assertSame(84, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Assert is not used in this file.');
 		self::assertSniffError(
@@ -201,6 +201,11 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertSniffError($report, 81, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Conditional8 is not used in this file.');
 		self::assertSniffError($report, 82, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Conditional9 is not used in this file.');
 		self::assertSniffError($report, 84, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Comma\After is not used in this file.');
+		self::assertSniffError($report, 85, UnusedUsesSniff::CODE_UNUSED_USE, 'Type OffLabelVar is not used in this file.');
+		self::assertSniffError($report, 86, UnusedUsesSniff::CODE_UNUSED_USE, 'Type OffLabelVarWithVariable is not used in this file.');
+		self::assertSniffError($report, 87, UnusedUsesSniff::CODE_UNUSED_USE, 'Type OffLabelParam is not used in this file.');
+		self::assertSniffError($report, 88, UnusedUsesSniff::CODE_UNUSED_USE, 'Type OffLabelParamWithVariable is not used in this file.');
+		self::assertSniffError($report, 89, UnusedUsesSniff::CODE_UNUSED_USE, 'Type OffLabelParamWithVariable2 is not used in this file.');
 	}
 
 	public function testUsedUseInAnnotationWithEnabledSearchAnnotations(): void
@@ -214,6 +219,15 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertSniffError($report, 9, UnusedUsesSniff::CODE_UNUSED_USE, 'Type XX is not used in this file.');
 
 		self::assertSniffError($report, 22, UnusedUsesSniff::CODE_UNUSED_USE, 'Type InvalidAnnotation is not used in this file.');
+
+		// @var annotation https://psalm.dev/docs/annotating_code/supported_annotations/#off-label-usage-of-the-var-tag
+		self::assertNoSniffError($report, 85);
+		self::assertNoSniffError($report, 86);
+
+		// @param annotations for e.g. WP apply_filters
+		self::assertNoSniffError($report, 87);
+		self::assertNoSniffError($report, 88);
+		self::assertNoSniffError($report, 89);
 	}
 
 	public function testIgnoredAnnotationsAreNotUsed(): void
