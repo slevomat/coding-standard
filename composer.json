@@ -32,13 +32,13 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"SlevomatCodingStandard\\": "SlevomatCodingStandard"
+			"SlevomatCodingStandard\\": "SlevomatCodingStandard/"
 		}
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"SlevomatCodingStandard\\PHPStan\\": "build/PHPStan",
-			"SlevomatCodingStandard\\": "tests"
+			"SlevomatCodingStandard\\PHPStan\\": "build/PHPStan/",
+			"SlevomatCodingStandard\\": "tests/"
 		}
 	},
 	"extra": {
