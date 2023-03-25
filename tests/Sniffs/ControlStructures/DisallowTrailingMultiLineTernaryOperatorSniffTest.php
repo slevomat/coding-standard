@@ -26,6 +26,7 @@ class DisallowTrailingMultiLineTernaryOperatorSniffTest extends TestCase
 		self::assertSniffError($report, 21, DisallowTrailingMultiLineTernaryOperatorSniff::CODE_TRAILING_MULTI_LINE_TERNARY_OPERATOR_USED);
 		self::assertSniffError($report, 25, DisallowTrailingMultiLineTernaryOperatorSniff::CODE_TRAILING_MULTI_LINE_TERNARY_OPERATOR_USED);
 		self::assertSniffError($report, 29, DisallowTrailingMultiLineTernaryOperatorSniff::CODE_TRAILING_MULTI_LINE_TERNARY_OPERATOR_USED);
+		self::assertSniffError($report, 33, DisallowTrailingMultiLineTernaryOperatorSniff::CODE_TRAILING_MULTI_LINE_TERNARY_OPERATOR_USED);
 
 		self::assertAllFixedInFile($report);
 	}

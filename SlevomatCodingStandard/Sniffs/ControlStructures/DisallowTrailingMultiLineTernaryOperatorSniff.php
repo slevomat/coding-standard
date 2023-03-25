@@ -8,15 +8,10 @@ use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TernaryOperatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use function array_merge;
-use function in_array;
 use function strlen;
 use function substr;
-use function trim;
 use const T_INLINE_ELSE;
 use const T_INLINE_THEN;
-use const T_OPEN_TAG;
-use const T_OPEN_TAG_WITH_ECHO;
 use const T_WHITESPACE;
 
 class DisallowTrailingMultiLineTernaryOperatorSniff implements Sniff
@@ -47,18 +42,7 @@ class DisallowTrailingMultiLineTernaryOperatorSniff implements Sniff
 			return;
 		}
 
-		$inlineElsePointer = TernaryOperatorHelper::getElsePointer($phpcsFile, $inlineThenPointer);
-
-		if ($tokens[$inlineThenPointer]['line'] === $tokens[$inlineElsePointer]['line']) {
-			return;
-		}
-
-		$endOfLineBeforeInlineThenPointer = $this->getEndOfLineBefore($phpcsFile, $inlineThenPointer);
-		$endOfLineBeforeInlineElsePointer = $this->getEndOfLineBefore($phpcsFile, $inlineElsePointer);
-
-		$contentBeforeThen = TokenHelper::getContent($phpcsFile, $endOfLineBeforeInlineThenPointer + 1, $inlineThenPointer - 1);
-		$contentBeforeElse = TokenHelper::getContent($phpcsFile, $endOfLineBeforeInlineElsePointer + 1, $inlineElsePointer - 1);
-		if (trim($contentBeforeElse) === '' && trim($contentBeforeThen) === '') {
+		if ($tokens[$inlineThenPointer]['line'] === $tokens[$nextPointer]['line']) {
 			return;
 		}
 
@@ -71,6 +55,9 @@ class DisallowTrailingMultiLineTernaryOperatorSniff implements Sniff
 		if (!$fix) {
 			return;
 		}
+
+		$inlineElsePointer = TernaryOperatorHelper::getElsePointer($phpcsFile, $inlineThenPointer);
+		$endOfLineBeforeInlineThenPointer = TokenHelper::findLastTokenOnPreviousLine($phpcsFile, $inlineThenPointer);
 
 		$indentation = $this->getIndentation($phpcsFile, $endOfLineBeforeInlineThenPointer);
 		$pointerBeforeInlineThen = TokenHelper::findPreviousEffective($phpcsFile, $inlineThenPointer - 1);
@@ -93,43 +80,6 @@ class DisallowTrailingMultiLineTernaryOperatorSniff implements Sniff
 		$phpcsFile->fixer->addContentBefore($pointerAfterInlineElse, ' ');
 
 		$phpcsFile->fixer->endChangeset();
-	}
-
-	private function getEndOfLineBefore(File $phpcsFile, int $pointer): int
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		$endOfLineBefore = null;
-
-		$startPointer = $pointer - 1;
-		while (true) {
-			$possibleEndOfLinePointer = TokenHelper::findPrevious(
-				$phpcsFile,
-				array_merge([T_WHITESPACE, T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO], TokenHelper::$inlineCommentTokenCodes),
-				$startPointer
-			);
-			if (
-				$tokens[$possibleEndOfLinePointer]['code'] === T_WHITESPACE
-				&& $tokens[$possibleEndOfLinePointer]['content'] === $phpcsFile->eolChar
-			) {
-				$endOfLineBefore = $possibleEndOfLinePointer;
-				break;
-			}
-
-			if (
-				in_array($tokens[$possibleEndOfLinePointer]['code'], TokenHelper::$inlineCommentTokenCodes, true)
-				&& substr($tokens[$possibleEndOfLinePointer]['content'], -1) === $phpcsFile->eolChar
-			) {
-				$endOfLineBefore = $possibleEndOfLinePointer;
-				break;
-			}
-
-			$startPointer = $possibleEndOfLinePointer - 1;
-		}
-
-		/** @var int $endOfLineBefore */
-		$endOfLineBefore = $endOfLineBefore;
-		return $endOfLineBefore;
 	}
 
 	private function getIndentation(File $phpcsFile, int $endOfLinePointer): string

@@ -56,3 +56,6 @@ $a = $b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
 
 $a = $b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' ? 'bbbb' :
 	'ccccccccccccc';
+
+$a = $b ? 'bbb'
+	: 'ccc';

@@ -30,5 +30,6 @@ $a = $b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' ?
 	'bbbb' :
 	(false ? 1 : 2);
 
-$array[$b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' ? 'bbbb'
+$array[$b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' ?
+	'bbbb'
 	: 'ccccccc'] = 'b';
