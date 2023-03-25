@@ -19,7 +19,11 @@ class Whatever
 
 	private readonly string $f;
 
-	public function __construct(string $a, int|null $b = 0, ?bool $c, $d, $e, string $f)
+    /** @phpstan-var array<int, string> */
+	private array $g;
+
+    /** @phpstan-param array<int, string> $g */
+	public function __construct(string $a, int|null $b = 0, ?bool $c, $d, $e, string $f, array $g)
 	{
 		$this->a = $a;
 		$this->b = $b;
@@ -27,6 +31,7 @@ class Whatever
 		$this->d = $d;
 		$this->e = $e;
 		$this->f = $f;
+		$this->g = $g;
 	}
 
 }

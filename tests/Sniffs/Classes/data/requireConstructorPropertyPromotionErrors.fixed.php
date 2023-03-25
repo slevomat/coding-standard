@@ -6,7 +6,8 @@ class Whatever
 	#[SomeAttribute]
 	private $d;
 
-	public function __construct(public string $a, protected int|null $b = 0, private ?bool $c = null, $d, private $e, private readonly string $f)
+    /** @phpstan-param array<int, string> $g */
+	public function __construct(public string $a, protected int|null $b = 0, private ?bool $c = null, $d, private $e, private readonly string $f, private array $g)
 	{
 		$this->d = $d;
 	}
