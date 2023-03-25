@@ -1,6 +1,5 @@
 ## Control structures
 
-
 #### SlevomatCodingStandard.ControlStructures.AssignmentInCondition
 
 Disallows assignments in `if`, `elseif` and `do-while` loop conditions:
@@ -118,13 +117,13 @@ Ternary operator has to be reformatted when the operator is not leading the line
 ```php
 # wrong
 $t = $someCondition ?
-  $thenThis :
-  $otherwiseThis;
+	$thenThis :
+	$otherwiseThis;
 
 # correct
 $t = $someCondition
-  ? $thenThis
-  : $otherwiseThis;
+	? $thenThis
+	: $otherwiseThis;
 ```
 
 #### SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing 🔧

@@ -2,7 +2,7 @@
 
 #### SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses 🔧
 
-Checks whether uses at the top of a file are alphabetically sorted. Follows natural sorting and takes edge cases with special symbols into consideration. The following code snippet is an example of correctly sorted uses:
+Sniff checks whether `use` declarations at the top of a file are alphabetically sorted. Follows natural sorting and takes edge cases with special symbols into consideration. The following code snippet is an example of correctly sorted uses:
 
 ```php
 use LogableTrait;
@@ -128,7 +128,7 @@ Sniff provides the following settings:
 
 #### SlevomatCodingStandard.Namespaces.UseFromSameNamespace 🔧
 
-Prohibits uses from the same namespace:
+Sniff prohibits uses from the same namespace:
 
 ```php
 namespace Foo;
@@ -156,11 +156,11 @@ Sniff provides the following settings:
 
 #### SlevomatCodingStandard.Namespaces.UseOnlyWhitelistedNamespaces
 
-Disallows uses of other than configured namespaces.
+Sniff disallows uses of other than configured namespaces.
 
 Sniff provides the following settings:
 
-* `namespacesRequiredToUse`: namespaces in this array are the only ones allowed to be used. E. g. root project namespace.
+* `namespacesRequiredToUse`: namespaces in this array are the only ones allowed to be used. E.g. root project namespace.
 * `allowUseFromRootNamespace`: also allow using top-level namespace:
 
 ```php
@@ -178,5 +178,5 @@ Looks for unused imports from other namespaces.
 Sniff provides the following settings:
 
 * `searchAnnotations` (defaults to `false`): enables searching for class names in annotations.
-* `ignoredAnnotationNames`: case sensitive list of annotation names that the sniff should ignore (only the name is ignored, annotation content is still searched). Useful for name collisions like `@testCase` annotation and `TestCase` class.
-* `ignoredAnnotations`: case sensitive list of annotation names that the sniff ignore completely (both name and content are ignored). Useful for name collisions like `@group Cache` annotation and `Cache` class.
+* `ignoredAnnotationNames`: case-sensitive list of annotation names that the sniff should ignore (only the name is ignored, annotation content is still searched). Useful for name collisions like `@testCase` annotation and `TestCase` class.
+* `ignoredAnnotations`: case-sensitive list of annotation names that the sniff ignore completely (both name and content are ignored). Useful for name collisions like `@group Cache` annotation and `Cache` class.

@@ -13,7 +13,7 @@ Sniff provides the following settings:
 
 #### SlevomatCodingStandard.TypeHints.DisallowArrayTypeHintSyntax 🔧
 
-Disallows usage of array type hint syntax (eg. `int[]`, `bool[][]`) in phpDocs in favour of generic type hint syntax (eg. `array<int>`, `array<array<bool>>`).
+Disallows usage of array type hint syntax (e.g. `int[]`, `bool[][]`) in phpDocs in favour of generic type hint syntax (eg. `array<int>`, `array<array<bool>>`).
 
 Sniff provides the following settings:
 
@@ -57,7 +57,7 @@ Sniff provides the following settings:
 * `enableUnionTypeHint`: enforces to transform `@param string|int` into native `string|int` typehint. It's on by default if you're on PHP 8.0+
 * `enableIntersectionTypeHint`: enforces to transform `@param Foo&Bar` into native `Foo&Bar` typehint. It's on by default if you're on PHP 8.1+
 * `enableStandaloneNullTrueFalseTypeHints`: enforces to transform `@param true`, `@param false` or `@param null` into native typehints. It's on by default if you're on PHP 8.2+
-* `traversableTypeHints`: enforces which typehints must have specified contained type. E. g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
+* `traversableTypeHints`: enforces which typehints must have specified contained type. E.g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
 
 This sniff can cause an error if you're overriding or implementing a parent method which does not have typehints. In such cases add `@phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint` annotation to the method to have this sniff skip it.
 
@@ -79,7 +79,7 @@ Sniff provides the following settings:
 * `enableUnionTypeHint`: enforces to transform `@var string|int` into native `string|int` typehint. It's on by default if you're on PHP 8.0+. It can be enabled only when `enableNativeTypeHint` is enabled too.
 * `enableIntersectionTypeHint`: enforces to transform `@var Foo&Bar` into native `Foo&Bar` typehint. It's on by default if you're on PHP 8.1+. It can be enabled only when `enableNativeTypeHint` is enabled too.
 * `enableStandaloneNullTrueFalseTypeHints`: enforces to transform `@var true`, `@var false` or `@var null` into native typehints. It's on by default if you're on PHP 8.2+. It can be enabled only when `enableNativeTypeHint` is enabled too.
-* `traversableTypeHints`: enforces which typehints must have specified contained type. E. g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
+* `traversableTypeHints`: enforces which typehints must have specified contained type. E.g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
 
 This sniff can cause an error if you're overriding parent property which does not have typehints. In such cases add `@phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint` annotation to the property to have this sniff skip it.
 
@@ -98,7 +98,7 @@ Sniff provides the following settings:
 * `enableIntersectionTypeHint`: enforces to transform `@return Foo&Bar` into native `Foo&Bar` typehint. It's on by default if you're on PHP 8.1+.
 * `enableNeverTypeHint`: enforces to transform `@return never` into native `never` typehint. It's on by default if you're on PHP 8.1+.
 * `enableStandaloneNullTrueFalseTypeHints`: enforces to transform `@return true`, `@return false` or `@return null` into native typehints. It's on by default if you're on PHP 8.2+.
-* `traversableTypeHints`: enforces which typehints must have specified contained type. E. g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
+* `traversableTypeHints`: enforces which typehints must have specified contained type. E.g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
 
 This sniff can cause an error if you're overriding or implementing a parent method which does not have typehints. In such cases add `@phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint` annotation to the method to have this sniff skip it.
 

@@ -6,7 +6,7 @@ Disallows direct call of `__invoke()`.
 
 #### SlevomatCodingStandard.PHP.DisallowReference
 
-Disallows references.
+Sniff disallows usage of references.
 
 #### SlevomatCodingStandard.PHP.ForbiddenClasses 🔧
 
@@ -73,7 +73,7 @@ Looks for useless parentheses.
 
 Sniff provides the following settings:
 
-* `ignoreComplexTernaryConditions` (defaults to `false`): ignores complex ternary conditions - condition must contain `&&`, `||` etc or end of line.
+* `ignoreComplexTernaryConditions` (defaults to `false`): ignores complex ternary conditions - condition must contain `&&`, `||` etc. or end of line.
 
 #### SlevomatCodingStandard.PHP.UselessSemicolon 🔧
 

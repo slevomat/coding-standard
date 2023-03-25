@@ -2,7 +2,7 @@
 
 #### SlevomatCodingStandard.Attributes.AttributeAndTargetSpacing 🔧
 
-Checks lines count between attribute and its target (or target's documentation comment).
+Sniff checks lines count between attribute and its target (or target's documentation comment).
 
 Sniff provides the following settings:
 
@@ -11,7 +11,7 @@ Sniff provides the following settings:
 
 #### SlevomatCodingStandard.Attributes.AttributesOrder 🔧
 
-Requires order of attributes. When more attributes are in one `#[]`, eg. `#[One, Two]`, the first attribute name is used to resolve the order.
+Requires order of attributes. When more attributes are in one `#[]`, e.g. `#[One, Two]`, the first attribute name is used to resolve the order.
 
 Sniff provides the following settings:
 
