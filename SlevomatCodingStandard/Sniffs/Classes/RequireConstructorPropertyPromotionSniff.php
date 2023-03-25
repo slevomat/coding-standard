@@ -320,7 +320,7 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 		}
 
 		foreach (AnnotationHelper::getAnnotations($phpcsFile, $propertyPointer) as $annotationType => $annotations) {
-			if ($annotationType !== '@var') {
+			if (!in_array($annotationType, ['@var', '@phpstan-var', '@psalm-var'], true)) {
 				return true;
 			}
 
