@@ -164,11 +164,22 @@ class ArrayHelper
 		$tokenOpener = $tokens[$pointerOpener];
 		$tokenCloser = $tokens[$pointerCloser];
 
+		return $tokenOpener['line'] !== $tokenCloser['line'];
+	}
+
+	/**
+	 * Test if effective tokens between open & closing tokens
+	 */
+	public static function isNotEmpty(File $phpcsFile, int $pointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+		$token = $tokens[$pointer];
+		[$pointerOpener, $pointerCloser] = self::openClosePointers($token);
+
 		/** @var int $pointerPreviousToClose */
 		$pointerPreviousToClose = TokenHelper::findPreviousEffective($phpcsFile, $pointerCloser - 1);
 
-		return $tokenOpener['line'] !== $tokenCloser['line']
-			&& $pointerPreviousToClose !== $pointerOpener;
+		return $pointerPreviousToClose !== $pointerOpener;
 	}
 
 	/**
@@ -189,7 +200,7 @@ class ArrayHelper
 
 	/**
 	 * @param array<string, array<int, int|string>|int|string> $token
-	 * @return int[]
+	 * @return array{0: int, 1: int}
 	 */
 	public static function openClosePointers(array $token): array
 	{

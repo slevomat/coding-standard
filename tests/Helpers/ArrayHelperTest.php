@@ -150,8 +150,22 @@ class ArrayHelperTest extends TestCase
 			self::expectNotToPerformAssertions();
 			return;
 		}
-		$isKeyed = ArrayHelper::isMultiLine($phpcsFile, $pointer);
-		self::assertSame(in_array('multi', $expect['flags'], true), $isKeyed);
+		$isMultiLine = ArrayHelper::isMultiLine($phpcsFile, $pointer);
+		self::assertSame(in_array('multi', $expect['flags'], true), $isMultiLine);
+	}
+
+	/**
+	 * @dataProvider dataProvider
+	 * @param array<string, mixed> $expect flags and various expected values for the given array
+	 */
+	public function testIsNotEmpty(File $phpcsFile, int $pointer, array $expect): void
+	{
+		if (array_key_exists('flags', $expect) === false) {
+			self::expectNotToPerformAssertions();
+			return;
+		}
+		$isNotEmpty = ArrayHelper::isNotEmpty($phpcsFile, $pointer);
+		self::assertSame(in_array('notEmpty', $expect['flags'], true), $isNotEmpty);
 	}
 
 	/**
@@ -243,74 +257,92 @@ class ArrayHelperTest extends TestCase
 	protected function files(): array
 	{
 		return [
-			__DIR__ . '/data/array/multiline1Keyed1Sorted1.php' => [
+			__DIR__ . '/data/array/isNotEmpty.php' => [
 				[
-					'flags' => ['keyed', 'keyedAll', 'multi', 'sorted'],
+					'flags' => ['multi'],
 					'indentation' => "\t",
 				],
 				[
-					'flags' => ['keyed', 'keyedAll', 'multi', 'sorted', 'short'],
+					'flags' => ['multi', 'short'],
+					'indentation' => "\t",
+				],
+				[
+					'flags' => ['multi', 'notEmpty'],
+					'indentation' => "\t",
+				],
+				[
+					'flags' => ['multi', 'notEmpty', 'short'],
+					'indentation' => "\t",
+				],
+			],
+			__DIR__ . '/data/array/multiline1Keyed1Sorted1.php' => [
+				[
+					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'sorted'],
+					'indentation' => "\t",
+				],
+				[
+					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'sorted', 'short'],
 					'indentation' => "\t\t",
 				],
 				[
-					'flags' => ['keyed', 'keyedAll', 'multi', 'sorted', 'short'],
+					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'sorted', 'short'],
 					'indentation' => "\t",
 				],
 				[
-					'flags' => ['keyed', 'keyedAll', 'multi', 'sorted'],
+					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'sorted'],
 					'indentation' => "\t\t",
 				],
 			],
 			__DIR__ . '/data/array/multiline1Keyed1Sorted0.php' => [
 				[
-					'flags' => ['keyed', 'keyedAll', 'multi'],
+					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty'],
 					'indentation' => "\t",
 				],
 				[
-					'flags' => ['keyed', 'keyedAll', 'multi', 'short'],
+					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'short'],
 					'indentation' => "\t\t",
 				],
 				[
-					'flags' => ['keyed', 'keyedAll', 'multi', 'short'],
+					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'short'],
 					'indentation' => "\t",
 				],
 				[
-					'flags' => ['keyed', 'keyedAll', 'multi'],
+					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty'],
 					'indentation' => "\t\t",
 				],
 			],
 			__DIR__ . '/data/array/multiline0Keyed1Sorted1.php' => [
 				[
-					'flags' => ['keyed', 'keyedAll', 'sorted'],
+					'flags' => ['keyed', 'keyedAll', 'notEmpty', 'sorted'],
 					'indentation' => null,
 				],
 				[
-					'flags' => ['keyed', 'keyedAll', 'sorted', 'short'],
+					'flags' => ['keyed', 'keyedAll', 'notEmpty', 'sorted', 'short'],
 					'indentation' => null,
 				],
 			],
 			__DIR__ . '/data/array/multiline1Keyed0.php' => [
 				[
-					'flags' => ['multi'],
+					'flags' => ['multi', 'notEmpty'],
 					'indentation' => "\t",
 				],
 				[
-					'flags' => ['multi', 'short'],
+					'flags' => ['multi', 'notEmpty', 'short'],
 					'indentation' => "\t\t",
 				],
 				[
-					'flags' => ['multi', 'short'],
+					'flags' => ['multi', 'notEmpty', 'short'],
 					'indentation' => "\t",
 				],
 				[
-					'flags' => ['multi'],
+					'flags' => ['multi', 'notEmpty'],
 					'indentation' => "\t\t",
 				],
 			],
 			__DIR__ . '/data/array/multiline1Keyed1Comments.php' => [
 				[
 					'count' => 8,
-					'flags' => ['multi', 'keyed', 'short'],
+					'flags' => ['keyed', 'multi', 'notEmpty', 'short'],
 					'indentation' => "\t",
 					'keyValues' => [
 						[
@@ -380,7 +412,7 @@ class ArrayHelperTest extends TestCase
 				[
 					// the array inside the closure
 					'count' => 2,
-					'flags' => ['short'],
+					'flags' => ['notEmpty', 'short'],
 					'indentation' => null,
 					'keyValues' => [
 						[
@@ -402,7 +434,7 @@ class ArrayHelperTest extends TestCase
 				[
 					// the nested array
 					'count' => 2,
-					'flags' => ['multi', 'keyed', 'keyedAll'],
+					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty'],
 					'indentation' => "\t\t",
 					'keyValues' => [
 						[

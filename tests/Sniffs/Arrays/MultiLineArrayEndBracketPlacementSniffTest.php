@@ -17,13 +17,16 @@ class MultiLineArrayEndBracketPlacementSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/multiLineArrayEndBracketPlacementErrors.php');
 
-		self::assertSame(5, $report->getErrorCount());
+		self::assertSame(8, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, MultiLineArrayEndBracketPlacementSniff::CODE_ARRAY_END_WRONG_PLACEMENT);
 		self::assertSniffError($report, 5, MultiLineArrayEndBracketPlacementSniff::CODE_ARRAY_END_WRONG_PLACEMENT);
 		self::assertSniffError($report, 13, MultiLineArrayEndBracketPlacementSniff::CODE_ARRAY_END_WRONG_PLACEMENT);
 		self::assertSniffError($report, 19, MultiLineArrayEndBracketPlacementSniff::CODE_ARRAY_END_WRONG_PLACEMENT);
 		self::assertSniffError($report, 33, MultiLineArrayEndBracketPlacementSniff::CODE_ARRAY_END_WRONG_PLACEMENT);
+		self::assertSniffError($report, 42, MultiLineArrayEndBracketPlacementSniff::CODE_ARRAY_END_WRONG_PLACEMENT);
+		self::assertSniffError($report, 44, MultiLineArrayEndBracketPlacementSniff::CODE_ARRAY_END_WRONG_PLACEMENT);
+		self::assertSniffError($report, 55, MultiLineArrayEndBracketPlacementSniff::CODE_ARRAY_END_WRONG_PLACEMENT);
 
 		self::assertAllFixedInFile($report);
 	}
