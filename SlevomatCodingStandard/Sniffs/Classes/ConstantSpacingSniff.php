@@ -3,18 +3,14 @@
 namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_keys;
 use function count;
 use function in_array;
 use function sprintf;
-use const T_ANON_CLASS;
-use const T_CLASS;
 use const T_CONST;
-use const T_ENUM;
 use const T_FUNCTION;
-use const T_INTERFACE;
-use const T_TRAIT;
 use const T_USE;
 use const T_VARIABLE;
 
@@ -45,7 +41,7 @@ class ConstantSpacingSniff extends AbstractPropertyConstantAndEnumCaseSpacing
 
 		/** @var int $classPointer */
 		$classPointer = array_keys($tokens[$constantPointer]['conditions'])[count($tokens[$constantPointer]['conditions']) - 1];
-		if (!in_array($tokens[$classPointer]['code'], [T_CLASS, T_INTERFACE, T_ANON_CLASS, T_ENUM, T_TRAIT], true)) {
+		if (!in_array($tokens[$classPointer]['code'], Tokens::$ooScopeTokens, true)) {
 			return $constantPointer;
 		}
 
