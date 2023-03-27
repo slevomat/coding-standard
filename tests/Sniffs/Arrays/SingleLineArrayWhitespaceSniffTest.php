@@ -48,11 +48,15 @@ class SingleLineArrayWhitespaceSniffTest extends TestCase
 			'enableEmptyArrayCheck' => true,
 		]);
 
-		self::assertSame(5, $report->getErrorCount());
+		self::assertSame(10, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, SingleLineArrayWhitespaceSniff::CODE_SPACE_AFTER_ARRAY_OPEN, '0 found');
 		self::assertSniffError($report, 3, SingleLineArrayWhitespaceSniff::CODE_SPACE_BEFORE_ARRAY_CLOSE, '0 found');
 		self::assertSniffError($report, 3, SingleLineArrayWhitespaceSniff::CODE_SPACE_IN_EMPTY_ARRAY);
+
+		self::assertSniffError($report, 5, SingleLineArrayWhitespaceSniff::CODE_SPACE_AFTER_ARRAY_OPEN, '0 found');
+		self::assertSniffError($report, 5, SingleLineArrayWhitespaceSniff::CODE_SPACE_BEFORE_ARRAY_CLOSE, '0 found');
+		self::assertSniffError($report, 5, SingleLineArrayWhitespaceSniff::CODE_SPACE_IN_EMPTY_ARRAY);
 
 		self::assertAllFixedInFile($report);
 	}
