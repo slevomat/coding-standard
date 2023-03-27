@@ -32,6 +32,13 @@ $coo = new class {
 
 };
 
+new
+#[AllowDynamicProperties]
+#[Attribute1]
+class
+{
+};
+
 $whitespaceBetweenClassNameAndParentheses = new stdClass    ();
 
 new $a->{'b'}["c"]->$d['e'][1]();

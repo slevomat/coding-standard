@@ -4,8 +4,10 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\AttributeHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_ANON_CLASS;
+use const T_ATTRIBUTE;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSE_SHORT_ARRAY;
 use const T_CLOSE_SQUARE_BRACKET;
@@ -42,6 +44,10 @@ class NewWithParenthesesSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 		/** @var int $nextPointer */
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $newPointer + 1);
+
+		if ($tokens[$nextPointer]['code'] === T_ATTRIBUTE) {
+			$nextPointer = AttributeHelper::getAttributeTarget($phpcsFile, $nextPointer);
+		}
 
 		if ($tokens[$nextPointer]['code'] === T_ANON_CLASS) {
 			return;

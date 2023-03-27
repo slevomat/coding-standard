@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Helpers;
 use InvalidArgumentException;
 use PHP_CodeSniffer\Files\File;
 use function sprintf;
+use const T_ANON_CLASS;
 use const T_ATTRIBUTE;
 use const T_CLASS;
 use const T_CLOSURE;
@@ -26,6 +27,7 @@ class AttributeHelper
 {
 
 	private const ATTRIBUTE_TARGETS = [
+		T_ANON_CLASS,
 		T_CLASS,
 		T_CLOSURE,
 		T_CONST,
