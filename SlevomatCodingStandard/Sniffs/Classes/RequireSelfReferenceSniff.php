@@ -53,12 +53,17 @@ class RequireSelfReferenceSniff implements Sniff
 				continue;
 			}
 
-			$classPointer = ClassHelper::getClassPointer($phpcsFile, $referencedName->getStartPointer());
-			if ($classPointer === null) {
+			$anonymousClassPointer = TokenHelper::findPrevious($phpcsFile, T_ANON_CLASS, $referencedName->getStartPointer() - 1);
+
+			if (
+				$anonymousClassPointer !== null
+				&& $tokens[$anonymousClassPointer]['scope_closer'] > $referencedName->getEndPointer()
+			) {
 				continue;
 			}
 
-			if ($tokens[$classPointer]['code'] === T_ANON_CLASS) {
+			$classPointer = ClassHelper::getClassPointer($phpcsFile, $referencedName->getStartPointer());
+			if ($classPointer === null) {
 				continue;
 			}
 

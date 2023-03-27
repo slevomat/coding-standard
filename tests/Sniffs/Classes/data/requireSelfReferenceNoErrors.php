@@ -19,6 +19,20 @@ class Whatever
 		};
 	}
 
+	public function doSomethingElse()
+	{
+		return new class extends Whatever {
+
+		};
+	}
+
+	public function doAnything()
+	{
+		return new class implements Whatever {
+
+		};
+	}
+
 }
 
 $function = function (): Whatever {
