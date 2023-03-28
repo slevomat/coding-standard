@@ -12,6 +12,10 @@ This sniff enforces natural sorting of array definitions by key in multi-line ar
 
 Disallows implicit array creation.
 
+#### SlevomatCodingStandard.Arrays.DisallowPartiallyKeyed 🚧
+
+Array must have keys specified for either all or none of the values.
+
 #### SlevomatCodingStandard.Arrays.MultiLineArrayEndBracketPlacement 🔧
 
 Enforces reasonable end bracket placement for multi-line arrays.
