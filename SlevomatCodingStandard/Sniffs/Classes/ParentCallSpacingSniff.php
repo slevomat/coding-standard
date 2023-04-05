@@ -15,6 +15,7 @@ use const T_COALESCE;
 use const T_COLON;
 use const T_INLINE_ELSE;
 use const T_INLINE_THEN;
+use const T_MATCH_ARROW;
 use const T_OPEN_SHORT_ARRAY;
 use const T_RETURN;
 use const T_STRING_CONCAT;
@@ -62,7 +63,7 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 			Tokens::$assignmentTokens,
 			Tokens::$equalityTokens,
 			Tokens::$booleanOperators,
-			[T_RETURN, T_YIELD, T_YIELD_FROM, T_COLON, T_STRING_CONCAT, T_INLINE_THEN, T_INLINE_ELSE, T_COALESCE]
+			[T_RETURN, T_YIELD, T_YIELD_FROM, T_COLON, T_STRING_CONCAT, T_INLINE_THEN, T_INLINE_ELSE, T_COALESCE, T_MATCH_ARROW]
 		);
 		if (in_array($tokens[$previousPointer]['code'], $tokensToIgnore, true)) {
 			return;

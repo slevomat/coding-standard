@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.1
 
 class X extends Whatever
 {
@@ -78,6 +78,14 @@ class X extends Whatever
 	public function p()
 	{
 		return @parent::foo();
+	}
+
+	public function q()
+	{
+		return match (true) {
+		    false => parent::q(),
+		    default => parent::q(),
+		};
 	}
 
 }
