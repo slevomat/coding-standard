@@ -11,6 +11,7 @@ use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\ObjectShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
@@ -230,7 +231,7 @@ class PropertyTypeHintSniff implements Sniff
 		$nullableTypeHint = false;
 
 		if (AnnotationTypeHelper::containsOneType($typeNode)) {
-			/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $typeNode */
+			/** @var ArrayTypeNode|ArrayShapeNode|ObjectShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $typeNode */
 			$typeNode = $typeNode;
 			$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType($typeNode, false, $this->enableStandaloneNullTrueFalseTypeHints);
 
@@ -242,7 +243,7 @@ class PropertyTypeHintSniff implements Sniff
 					return;
 				}
 
-				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $innerTypeNode */
+				/** @var ArrayTypeNode|ArrayShapeNode|ObjectShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $innerTypeNode */
 				$innerTypeNode = $innerTypeNode;
 
 				$typeHint = AnnotationTypeHelper::getTypeHintFromOneType($innerTypeNode, $canTryUnionTypeHint);

@@ -739,7 +739,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			]
 		);
 
-		self::assertSame(61, $report->getErrorCount());
+		self::assertSame(63, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -1096,6 +1096,19 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			237,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
 			'Class \Foo\Something should not be referenced via a fully qualified name, but via a use statement.'
+		);
+
+		self::assertSniffError(
+			$report,
+			246,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\ObjectShapeItem1 should not be referenced via a fully qualified name, but via a use statement.'
+		);
+		self::assertSniffError(
+			$report,
+			246,
+			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
+			'Class \Foo\ObjectShapeItem2 should not be referenced via a fully qualified name, but via a use statement.'
 		);
 
 		self::assertAllFixedInFile($report);

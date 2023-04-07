@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 namespace Foo\Test\Bla;
 
@@ -25,6 +25,8 @@ use Foo\OffsetAccessOffset2;
 use Foo\OffsetAccessType3;
 use Foo\OffsetAccessOffset3;
 use Foo\Assertion;
+use Foo\ObjectShapeItem1;
+use Foo\ObjectShapeItem2;
 
 /**
  * @method \DateTimeImmutable|int|DateTime getProperty()
@@ -259,4 +261,12 @@ class GenericTypeProjections
  */
 class MethodWithGenerics
 {
+}
+
+class ObjectShape
+{
+
+	/** @var object{a: ObjectShapeItem1, b: object{c: ObjectShapeItem2}} */
+	public object $object;
+
 }

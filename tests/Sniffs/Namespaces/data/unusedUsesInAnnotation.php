@@ -82,6 +82,8 @@ use Conditional8;
 use Conditional9;
 use Something\Enum;
 use Comma\After;
+use ObjectShapeItem1;
+use ObjectShapeItem2;
 
 /**
  * @ORM\Entity()
@@ -318,4 +320,12 @@ class CommaAfterAnnotation
      * @After\C({"write-send"})
      */
     public int $packages;
+}
+
+class ObjectShape
+{
+
+	/** @var object{a: ObjectShapeItem1, b: object{c: ObjectShapeItem2}} */
+	public object $object;
+
 }

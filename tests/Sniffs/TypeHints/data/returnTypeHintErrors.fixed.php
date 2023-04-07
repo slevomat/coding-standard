@@ -357,4 +357,9 @@ abstract class Whatever
 	{
 	}
 
+	/** @return object{a: int} */
+	public function returnsObjectShape(): object
+	{
+	}
+
 }

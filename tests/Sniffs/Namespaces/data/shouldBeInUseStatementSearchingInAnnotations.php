@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 namespace Foo\Test\Bla;
 
@@ -238,4 +238,12 @@ class GenericTypeProjections
  */
 class MethodWithGenerics
 {
+}
+
+class ObjectShape
+{
+
+	/** @var object{a: \Foo\ObjectShapeItem1, b: object{c: \Foo\ObjectShapeItem2}} */
+	public object $object;
+
 }

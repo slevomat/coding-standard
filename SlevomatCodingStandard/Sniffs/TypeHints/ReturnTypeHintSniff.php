@@ -14,6 +14,7 @@ use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\ObjectShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
@@ -298,7 +299,7 @@ class ReturnTypeHintSniff implements Sniff
 		}
 
 		if (AnnotationTypeHelper::containsOneType($returnTypeNode)) {
-			/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $returnTypeNode */
+			/** @var ArrayTypeNode|ArrayShapeNode|ObjectShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $returnTypeNode */
 			$returnTypeNode = $returnTypeNode;
 			$typeHints[] = AnnotationTypeHelper::getTypeHintFromOneType(
 				$returnTypeNode,
@@ -314,7 +315,7 @@ class ReturnTypeHintSniff implements Sniff
 					return;
 				}
 
-				/** @var ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $typeNode */
+				/** @var ArrayTypeNode|ArrayShapeNode|ObjectShapeNode|IdentifierTypeNode|ThisTypeNode|GenericTypeNode|CallableTypeNode $typeNode */
 				$typeNode = $typeNode;
 
 				$typeHint = AnnotationTypeHelper::getTypeHintFromOneType($typeNode, $canTryUnionTypeHint);
@@ -646,7 +647,7 @@ class ReturnTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @return GenericTypeNode|CallableTypeNode|IntersectionTypeNode|UnionTypeNode|ArrayTypeNode|ArrayShapeNode|IdentifierTypeNode|ThisTypeNode|NullableTypeNode|ConstTypeNode|ConditionalTypeNode|ConditionalTypeForParameterNode|null
+	 * @return GenericTypeNode|CallableTypeNode|IntersectionTypeNode|UnionTypeNode|ArrayTypeNode|ArrayShapeNode|ObjectShapeNode|IdentifierTypeNode|ThisTypeNode|NullableTypeNode|ConstTypeNode|ConditionalTypeNode|ConditionalTypeForParameterNode|null
 	 */
 	private function getReturnTypeNode(?ReturnAnnotation $returnAnnotation): ?TypeNode
 	{
