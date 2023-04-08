@@ -50,6 +50,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_
  - [SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants](doc/classes.md#slevomatcodingstandardclassesdisallowlatestaticbindingforconstants-) 🔧
  - [SlevomatCodingStandard.Classes.DisallowMultiConstantDefinition](doc/classes.md#slevomatcodingstandardclassesdisallowmulticonstantdefinition-) 🔧
  - [SlevomatCodingStandard.Classes.DisallowMultiPropertyDefinition](doc/classes.md#slevomatcodingstandardclassesdisallowmultipropertydefinition-) 🔧
+ - [SlevomatCodingStandard.Classes.DisallowStringExpressionPropertyFetch](doc/classes.md#slevomatcodingstandardclassesdisallowstringexpressionpropertyfetch-) 🔧
  - [SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces](doc/classes.md#slevomatcodingstandardclassesemptylinesaroundclassbraces-) 🔧
  - [SlevomatCodingStandard.Classes.EnumCaseSpacing](doc/classes.md#slevomatcodingstandardclassesenumcasespacing-) 🔧
  - [SlevomatCodingStandard.Classes.ForbiddenPublicProperty](doc/classes.md#slevomatcodingstandardclassesforbiddenpublicproperty)
