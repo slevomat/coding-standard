@@ -11,7 +11,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function dataIsFullyQualifiedName(): array
+	public static function dataIsFullyQualifiedName(): array
 	{
 		return [
 			[
@@ -40,7 +40,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function dataIsNotFullyQualifiedName(): array
+	public static function dataIsNotFullyQualifiedName(): array
 	{
 		return [
 			[
@@ -72,7 +72,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function dataHasNamespace(): array
+	public static function dataHasNamespace(): array
 	{
 		return [
 			[
@@ -93,7 +93,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function dataDoesNotHaveNamespace(): array
+	public static function dataDoesNotHaveNamespace(): array
 	{
 		return [
 			[
@@ -114,7 +114,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataGetNameParts(): array
+	public static function dataGetNameParts(): array
 	{
 		return [
 			[
@@ -200,7 +200,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function dataGetUnqualifiedNameFromFullyQualifiedName(): array
+	public static function dataGetUnqualifiedNameFromFullyQualifiedName(): array
 	{
 		return [
 			[
@@ -233,7 +233,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function dataIsQualifiedName(): array
+	public static function dataIsQualifiedName(): array
 	{
 		return [
 			['\Foo'],
@@ -253,7 +253,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function dataIsNotQualifiedName(): array
+	public static function dataIsNotQualifiedName(): array
 	{
 		return [
 			['Foo'],
@@ -271,7 +271,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function dataNormalizeToCanonicalName(): array
+	public static function dataNormalizeToCanonicalName(): array
 	{
 		return [
 			[
@@ -304,7 +304,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function dataTypeIsInNamespace(): array
+	public static function dataTypeIsInNamespace(): array
 	{
 		return [
 			[
@@ -337,7 +337,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function dataTypeIsNotInNamespace(): array
+	public static function dataTypeIsNotInNamespace(): array
 	{
 		return [
 			[

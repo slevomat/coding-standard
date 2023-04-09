@@ -208,12 +208,9 @@
 				<element value="static constructors"/>
 				<element value="destructor"/>
 				<element value="final methods"/>
-				<element value="public methods"/>
-				<element value="public static methods"/>
-				<element value="protected methods"/>
-				<element value="protected static methods"/>
-				<element value="private methods"/>
-				<element value="private static methods"/>
+				<element value="public methods, public static methods"/>
+				<element value="protected methods, protected static methods"/>
+				<element value="private methods, private static methods"/>
 				<element value="magic methods"/>
 			</property>
 		</properties>

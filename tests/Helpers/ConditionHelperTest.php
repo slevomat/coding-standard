@@ -10,7 +10,7 @@ class ConditionHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataConditionReturnsBoolean(): array
+	public static function dataConditionReturnsBoolean(): array
 	{
 		return [
 			[3, false],

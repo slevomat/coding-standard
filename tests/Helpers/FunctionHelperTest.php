@@ -70,7 +70,7 @@ class FunctionHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataParametersNames(): array
+	public static function dataParametersNames(): array
 	{
 		return [
 			[
@@ -115,7 +115,7 @@ class FunctionHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataParametersTypeHints(): array
+	public static function dataParametersTypeHints(): array
 	{
 		return [
 			[
@@ -181,7 +181,7 @@ class FunctionHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataParametersNullableTypeHints(): array
+	public static function dataParametersNullableTypeHints(): array
 	{
 		return [
 			[
@@ -280,7 +280,7 @@ class FunctionHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataFunctionReturnsValueOrNot(): array
+	public static function dataFunctionReturnsValueOrNot(): array
 	{
 		return [
 			['returnsValue', true],
@@ -313,7 +313,7 @@ class FunctionHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataClosureReturnsValueOrNot(): array
+	public static function dataClosureReturnsValueOrNot(): array
 	{
 		return [
 			[3, true],
