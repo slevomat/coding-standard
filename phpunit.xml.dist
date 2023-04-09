@@ -1,42 +1,32 @@
 <?xml version="1.0"?>
 <phpunit
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/8.1/phpunit.xsd"
+	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
 	bootstrap="tests/bootstrap.php"
 	colors="true"
 	backupGlobals="false"
-	backupStaticAttributes="false"
+	backupStaticProperties="false"
 	beStrictAboutChangesToGlobalState="true"
 	beStrictAboutOutputDuringTests="true"
 	beStrictAboutTestsThatDoNotTestAnything="true"
-	beStrictAboutTodoAnnotatedTests="true"
 	cacheResult="true"
-	cacheResultFile="temp/.phpunit.result.cache"
 	stopOnDefect="true"
 	executionOrder="defects"
+	cacheDirectory="temp/phpunit-cache"
 >
 	<testsuites>
 		<testsuite name="Slevomat Coding Standard">
 			<directory suffix="Test.php">./tests/</directory>
 		</testsuite>
 	</testsuites>
-
-	<logging>
-		<log
-			type="coverage-html"
-			target="temp/coverage"
-		/>
-		<log type="coverage-clover" target="temp/coverage.xml"/>
-		<log
-			type="coverage-text"
-			target="php://stdout"
-			showUncoveredFiles="true"
-			showOnlySummary="true"
-		/>
-	</logging>
-	<filter>
-		<whitelist processUncoveredFilesFromWhitelist="true">
+	<coverage>
+		<include>
 			<directory suffix=".php">SlevomatCodingStandard</directory>
-		</whitelist>
-	</filter>
+		</include>
+		<report>
+			<clover outputFile="temp/coverage.xml"/>
+			<html outputDirectory="temp/coverage"/>
+			<text outputFile="php://stdout" showUncoveredFiles="true" showOnlySummary="true"/>
+		</report>
+	</coverage>
 </phpunit>
