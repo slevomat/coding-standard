@@ -15,7 +15,7 @@ class PropertyHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataIsProperty(): array
+	public static function dataIsProperty(): array
 	{
 		return [
 			[
@@ -111,7 +111,7 @@ class PropertyHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataIsPropertyIfPromoted(): array
+	public static function dataIsPropertyIfPromoted(): array
 	{
 		return [
 			['$propertyPromotion'],
@@ -133,7 +133,7 @@ class PropertyHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataFindTypeHint(): array
+	public static function dataFindTypeHint(): array
 	{
 		return [
 			[

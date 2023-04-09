@@ -74,7 +74,7 @@ class SniffSettingsHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function validRegularExpressionsProvider(): array
+	public static function validRegularExpressionsProvider(): array
 	{
 		return [
 			['~abc~', true],
@@ -90,7 +90,7 @@ class SniffSettingsHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function invalidRegularExpressionsProvider(): array
+	public static function invalidRegularExpressionsProvider(): array
 	{
 		return [
 			['abc', false],

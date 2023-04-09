@@ -10,7 +10,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataIgnoredNamesForIrrelevantTests(): array
+	public static function dataIgnoredNamesForIrrelevantTests(): array
 	{
 		return [
 			[
@@ -374,7 +374,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataIgnoredNames(): array
+	public static function dataIgnoredNames(): array
 	{
 		return [
 			[
@@ -422,7 +422,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataIgnoredNamesInNamespace(): array
+	public static function dataIgnoredNamesInNamespace(): array
 	{
 		return [
 			[

@@ -2,10 +2,8 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-use Generator;
-use PHP_CodeSniffer\Files\File;
 use function array_key_exists;
-use function basename;
+use function count;
 use function in_array;
 use function sprintf;
 use function strpos;
@@ -15,12 +13,15 @@ class ArrayHelperTest extends TestCase
 {
 
 	/**
-	 * @dataProvider parseProvider
-	 * @param array<string, mixed> $expect flags and various expected values for the given array
+	 * @dataProvider dataKeyValues
+	 * @param array{keyValues: array<string, mixed>} $expect
 	 */
-	public function testParse(File $phpcsFile, int $pointer, array $expect): void
+	public function testParse(string $file, int $arrayPointerNo, array $expect): void
 	{
-		$parsed = ArrayHelper::parse($phpcsFile, $pointer);
+		$phpcsFile = $this->getCodeSnifferFile($file);
+		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
+
+		$parsed = ArrayHelper::parse($phpcsFile, $arrayPointers[$arrayPointerNo]);
 		$tokens = $phpcsFile->getTokens();
 
 		foreach ($parsed as $keyValue) {
@@ -28,10 +29,9 @@ class ArrayHelperTest extends TestCase
 			self::assertInstanceOf(ArrayKeyValue::class, $keyValue);
 		}
 
-		if (isset($expect['count'])) {
-			self::assertCount((int) $expect['count'], $parsed);
-		}
-		foreach ((array) $expect['keyValues'] as $i => $keyValueInfoExpect) {
+		self::assertCount(count($expect['keyValues']), $parsed);
+
+		foreach ($expect['keyValues'] as $i => $keyValueInfoExpect) {
 			$keyValueInfoExpect = (array) $keyValueInfoExpect;
 			$keyValue = $parsed[$i];
 			if (array_key_exists('indent', $keyValueInfoExpect)) {
@@ -74,9 +74,11 @@ class ArrayHelperTest extends TestCase
 						sprintf('pointerComma not null: keyValue %s', $i)
 					);
 			}
-			if (isset($keyValueInfoExpect['content']) === false) {
+
+			if (!array_key_exists('content', $keyValueInfoExpect)) {
 				continue;
 			}
+
 			self::assertSame(
 				$keyValueInfoExpect['content'],
 				$keyValue->getContent($phpcsFile),
@@ -89,259 +91,293 @@ class ArrayHelperTest extends TestCase
 			}
 			self::assertSame(
 				$contentNormalizedExpect,
-				$keyValue->getContent($phpcsFile, true, null),
+				$keyValue->getContent($phpcsFile, true),
 				sprintf('normalized content not same: keyValue %s', $i)
 			);
 		}
 	}
 
 	/**
-	 * @dataProvider dataProvider
-	 * @param array<string, mixed> $expect flags and various expected values for the given array
+	 * @dataProvider dataFlagsAndIndentation
+	 * @dataProvider dataKeyValues
+	 * @param array{indentation: string|null} $expect
 	 */
-	public function testGetIndentation(File $phpcsFile, int $pointer, array $expect): void
+	public function testGetIndentation(string $file, int $arrayPointerNo, array $expect): void
 	{
-		if (array_key_exists('indentation', $expect) === false) {
-			self::expectNotToPerformAssertions();
-			return;
-		}
-		$parsed = ArrayHelper::parse($phpcsFile, $pointer);
+		$phpcsFile = $this->getCodeSnifferFile($file);
+		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
+
+		$parsed = ArrayHelper::parse($phpcsFile, $arrayPointers[$arrayPointerNo]);
 		$indentation = ArrayHelper::getIndentation($parsed);
+
 		self::assertSame($expect['indentation'], $indentation);
 	}
 
 	/**
-	 * @dataProvider dataProvider
-	 * @param array<string, mixed> $expect flags and various expected values for the given array
+	 * @dataProvider dataFlagsAndIndentation
+	 * @dataProvider dataKeyValues
+	 * @param array{flags: string[]} $expect
 	 */
-	public function testIsKeyed(File $phpcsFile, int $pointer, array $expect): void
+	public function testIsKeyed(string $file, int $arrayPointerNo, array $expect): void
 	{
-		if (array_key_exists('flags', $expect) === false) {
-			self::expectNotToPerformAssertions();
-			return;
-		}
-		$parsed = ArrayHelper::parse($phpcsFile, $pointer);
+		$phpcsFile = $this->getCodeSnifferFile($file);
+		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
+
+		$parsed = ArrayHelper::parse($phpcsFile, $arrayPointers[$arrayPointerNo]);
 		$isKeyed = ArrayHelper::isKeyed($parsed);
+
 		self::assertSame(in_array('keyed', $expect['flags'], true), $isKeyed);
 	}
 
 	/**
-	 * @dataProvider dataProvider
-	 * @param array<string, mixed> $expect flags and various expected values for the given array
+	 * @dataProvider dataFlagsAndIndentation
+	 * @dataProvider dataKeyValues
+	 * @param array{flags: string[]} $expect
 	 */
-	public function testIsKeyedAll(File $phpcsFile, int $pointer, array $expect): void
+	public function testIsKeyedAll(string $file, int $arrayPointerNo, array $expect): void
 	{
-		if (array_key_exists('flags', $expect) === false) {
-			self::expectNotToPerformAssertions();
-			return;
-		}
-		$parsed = ArrayHelper::parse($phpcsFile, $pointer);
+		$phpcsFile = $this->getCodeSnifferFile($file);
+		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
+
+		$parsed = ArrayHelper::parse($phpcsFile, $arrayPointers[$arrayPointerNo]);
 		$isKeyedAll = ArrayHelper::isKeyedAll($parsed);
+
 		self::assertSame(in_array('keyedAll', $expect['flags'], true), $isKeyedAll);
 	}
 
 	/**
-	 * @dataProvider dataProvider
-	 * @param array<string, mixed> $expect flags and various expected values for the given array
+	 * @dataProvider dataFlagsAndIndentation
+	 * @dataProvider dataKeyValues
+	 * @param array{flags: string[]} $expect
 	 */
-	public function testIsMultiLine(File $phpcsFile, int $pointer, array $expect): void
+	public function testIsMultiLine(string $file, int $arrayPointerNo, array $expect): void
 	{
-		if (array_key_exists('flags', $expect) === false) {
-			self::expectNotToPerformAssertions();
-			return;
-		}
-		$isMultiLine = ArrayHelper::isMultiLine($phpcsFile, $pointer);
+		$phpcsFile = $this->getCodeSnifferFile($file);
+		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
+
+		$isMultiLine = ArrayHelper::isMultiLine($phpcsFile, $arrayPointers[$arrayPointerNo]);
 		self::assertSame(in_array('multi', $expect['flags'], true), $isMultiLine);
 	}
 
 	/**
-	 * @dataProvider dataProvider
-	 * @param array<string, mixed> $expect flags and various expected values for the given array
+	 * @dataProvider dataFlagsAndIndentation
+	 * @dataProvider dataKeyValues
+	 * @param array{flags: string[]} $expect
 	 */
-	public function testIsNotEmpty(File $phpcsFile, int $pointer, array $expect): void
+	public function testIsNotEmpty(string $file, int $arrayPointerNo, array $expect): void
 	{
-		if (array_key_exists('flags', $expect) === false) {
-			self::expectNotToPerformAssertions();
-			return;
-		}
-		$isNotEmpty = ArrayHelper::isNotEmpty($phpcsFile, $pointer);
+		$phpcsFile = $this->getCodeSnifferFile($file);
+		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
+
+		$isNotEmpty = ArrayHelper::isNotEmpty($phpcsFile, $arrayPointers[$arrayPointerNo]);
+
 		self::assertSame(in_array('notEmpty', $expect['flags'], true), $isNotEmpty);
 	}
 
 	/**
-	 * @dataProvider dataProvider
-	 * @param array<string, mixed> $expect flags and various expected values for the given array
+	 * @dataProvider dataFlagsAndIndentation
+	 * @dataProvider dataKeyValues
+	 * @param array{flags: string[]} $expect
 	 */
-	public function testIsSortedByKey(File $phpcsFile, int $pointer, array $expect): void
+	public function testIsSortedByKey(string $file, int $arrayPointerNo, array $expect): void
 	{
-		if (array_key_exists('flags', $expect) === false) {
+		if (!in_array('keyed', $expect['flags'], true)) {
 			self::expectNotToPerformAssertions();
 			return;
 		}
-		if (in_array('keyed', $expect['flags'], true) === false) {
-			self::expectNotToPerformAssertions();
-			return;
-		}
-		$parsed = ArrayHelper::parse($phpcsFile, $pointer);
+
+		$phpcsFile = $this->getCodeSnifferFile($file);
+		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
+
+		$parsed = ArrayHelper::parse($phpcsFile, $arrayPointers[$arrayPointerNo]);
 		$isSortedByKey = ArrayHelper::isSortedByKey($parsed);
+
 		self::assertSame(in_array('sorted', $expect['flags'], true), $isSortedByKey);
 	}
 
 	/**
-	 * @dataProvider dataProvider
-	 * @param array<string, mixed> $expect flags and various expected values for the given array
+	 * @dataProvider dataFlagsAndIndentation
+	 * @dataProvider dataKeyValues
+	 * @param array{flags: string[]} $expect
 	 */
-	public function testOpenClosePointers(File $phpcsFile, int $pointer, array $expect): void
+	public function testOpenClosePointers(string $file, int $arrayPointerNo, array $expect): void
 	{
-		if (array_key_exists('flags', $expect) === false) {
-			self::expectNotToPerformAssertions();
-			return;
-		}
+		$phpcsFile = $this->getCodeSnifferFile($file);
+		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
+
 		$tokens = $phpcsFile->getTokens();
-		$token = $tokens[$pointer];
-		[$pointerOpener, $pointerCloser] = ArrayHelper::openClosePointers($token);
-		$tokenOpener = $tokens[$pointerOpener];
-		$tokenCloser = $tokens[$pointerCloser];
+		[$pointerOpener, $pointerCloser] = ArrayHelper::openClosePointers($tokens[$arrayPointers[$arrayPointerNo]]);
+
 		$expect = in_array('short', $expect['flags'], true)
 			? ['[', ']']
 			: ['(', ')'];
-		self::assertSame($expect, [$tokenOpener['content'], $tokenCloser['content']]);
-	}
 
-	public function dataProvider(): Generator
-	{
-		$files = $this->files();
-		foreach ($files as $file => $fileArrays) {
-			$phpcsFile = $this->getCodeSnifferFile($file);
-			$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
-			foreach ($fileArrays as $k => $arrayInfoExpect) {
-				$pointer = $arrayPointers[$k];
-
-				yield basename($file) . ':' . $k => [
-					$phpcsFile,
-					$pointer,
-					$arrayInfoExpect,
-				];
-			}
-		}
+		self::assertSame($expect, [$tokens[$pointerOpener]['content'], $tokens[$pointerCloser]['content']]);
 	}
 
 	/**
-	 * Subset of files()... fileArrays containing keyValueInfo
+	 * @return array<int, array{0: string, 1: int, 2: array{flags: string[], indentation: string|null}}>
 	 */
-	public function parseProvider(): Generator
-	{
-		$files = $this->files();
-		foreach ($files as $file => $fileArrays) {
-			$phpcsFile = $this->getCodeSnifferFile($file);
-			$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
-			foreach ($fileArrays as $k => $arrayInfoExpect) {
-				if (isset($arrayInfoExpect['keyValues']) === false) {
-					continue;
-				}
-				$pointer = $arrayPointers[$k];
-
-				yield basename($file) . ':' . $k => [
-					$phpcsFile,
-					$pointer,
-					$arrayInfoExpect,
-				];
-			}
-		}
-	}
-
-	/**
-	 * @return array<string, array<int, array<string,
-	 *    array<int, array<string, bool|string|null>|string>|int|string|null>>>
-	 */
-	protected function files(): array
+	public static function dataFlagsAndIndentation(): array
 	{
 		return [
-			__DIR__ . '/data/array/isNotEmpty.php' => [
+			[
+				__DIR__ . '/data/array/isNotEmpty.php',
+				0,
 				[
 					'flags' => ['multi'],
 					'indentation' => "\t",
 				],
+			],
+			[
+				__DIR__ . '/data/array/isNotEmpty.php',
+				1,
 				[
 					'flags' => ['multi', 'short'],
 					'indentation' => "\t",
 				],
+			],
+			[
+				__DIR__ . '/data/array/isNotEmpty.php',
+				2,
 				[
 					'flags' => ['multi', 'notEmpty'],
 					'indentation' => "\t",
 				],
+			],
+			[
+				__DIR__ . '/data/array/isNotEmpty.php',
+				3,
 				[
 					'flags' => ['multi', 'notEmpty', 'short'],
 					'indentation' => "\t",
 				],
 			],
-			__DIR__ . '/data/array/multiline1Keyed1Sorted1.php' => [
+			[
+				__DIR__ . '/data/array/multiline1Keyed1Sorted1.php',
+				0,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'sorted'],
 					'indentation' => "\t",
 				],
+			],
+			[
+				__DIR__ . '/data/array/multiline1Keyed1Sorted1.php',
+				1,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'sorted', 'short'],
 					'indentation' => "\t\t",
 				],
+			],
+			[
+				__DIR__ . '/data/array/multiline1Keyed1Sorted1.php',
+				2,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'sorted', 'short'],
 					'indentation' => "\t",
 				],
+			],
+			[
+				__DIR__ . '/data/array/multiline1Keyed1Sorted1.php',
+				3,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'sorted'],
 					'indentation' => "\t\t",
 				],
 			],
-			__DIR__ . '/data/array/multiline1Keyed1Sorted0.php' => [
+			[
+				__DIR__ . '/data/array/multiline1Keyed1Sorted0.php',
+				0,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty'],
 					'indentation' => "\t",
 				],
+			],
+			[
+				__DIR__ . '/data/array/multiline1Keyed1Sorted0.php',
+				1,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'short'],
 					'indentation' => "\t\t",
 				],
+			],
+			[
+				__DIR__ . '/data/array/multiline1Keyed1Sorted0.php',
+				2,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'short'],
 					'indentation' => "\t",
 				],
+			],
+			[
+				__DIR__ . '/data/array/multiline1Keyed1Sorted0.php',
+				3,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty'],
 					'indentation' => "\t\t",
 				],
 			],
-			__DIR__ . '/data/array/multiline0Keyed1Sorted1.php' => [
+			[
+				__DIR__ . '/data/array/multiline0Keyed1Sorted1.php',
+				0,
 				[
 					'flags' => ['keyed', 'keyedAll', 'notEmpty', 'sorted'],
 					'indentation' => null,
 				],
+			],
+			[
+				__DIR__ . '/data/array/multiline0Keyed1Sorted1.php',
+				1,
 				[
 					'flags' => ['keyed', 'keyedAll', 'notEmpty', 'sorted', 'short'],
 					'indentation' => null,
 				],
 			],
-			__DIR__ . '/data/array/multiline1Keyed0.php' => [
+			[
+				__DIR__ . '/data/array/multiline1Keyed0.php',
+				0,
 				[
 					'flags' => ['multi', 'notEmpty'],
 					'indentation' => "\t",
 				],
+			],
+			[
+				__DIR__ . '/data/array/multiline1Keyed0.php',
+				1,
 				[
 					'flags' => ['multi', 'notEmpty', 'short'],
 					'indentation' => "\t\t",
 				],
+			],
+			[
+				__DIR__ . '/data/array/multiline1Keyed0.php',
+				2,
 				[
 					'flags' => ['multi', 'notEmpty', 'short'],
 					'indentation' => "\t",
 				],
+			],
+			[
+				__DIR__ . '/data/array/multiline1Keyed0.php',
+				3,
 				[
 					'flags' => ['multi', 'notEmpty'],
 					'indentation' => "\t\t",
 				],
 			],
-			__DIR__ . '/data/array/multiline1Keyed1Comments.php' => [
+		];
+	}
+
+	/**
+	 * @return array<int, array{0: string, 1: int, 2: array{flags: string[], indentation: string|null, keyValues: array<int, array<string, mixed>>}}>
+	 */
+	public static function dataKeyValues(): array
+	{
+		return [
+			[
+				__DIR__ . '/data/array/multiline1Keyed1Comments.php',
+				0,
 				[
-					'count' => 8,
 					'flags' => ['keyed', 'multi', 'notEmpty', 'short'],
 					'indentation' => "\t",
 					'keyValues' => [
@@ -409,9 +445,12 @@ class ArrayHelperTest extends TestCase
 						],
 					],
 				],
+			],
+			[
+				__DIR__ . '/data/array/multiline1Keyed1Comments.php',
+				1,
 				[
 					// the array inside the closure
-					'count' => 2,
 					'flags' => ['notEmpty', 'short'],
 					'indentation' => null,
 					'keyValues' => [
@@ -431,9 +470,12 @@ class ArrayHelperTest extends TestCase
 						],
 					],
 				],
+			],
+			[
+				__DIR__ . '/data/array/multiline1Keyed1Comments.php',
+				2,
 				[
 					// the nested array
-					'count' => 2,
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty'],
 					'indentation' => "\t\t",
 					'keyValues' => [
@@ -454,22 +496,38 @@ class ArrayHelperTest extends TestCase
 					],
 				],
 			],
-			__DIR__ . '/data/array/commentBeforeCloser.php' => [
+			[
+				__DIR__ . '/data/array/commentBeforeCloser.php',
+				0,
 				[
+					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'short', 'sorted'],
+					'indentation' => "\t",
 					'keyValues' => [
 						[
 							'content' => "	'a' => 'a',\n",
 						],
 					],
 				],
+			],
+			[
+				__DIR__ . '/data/array/commentBeforeCloser.php',
+				1,
 				[
+					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'short', 'sorted'],
+					'indentation' => "\t",
 					'keyValues' => [
 						[
 							'content' => "	'a' => 'a', // eol comment\n",
 						],
 					],
 				],
+			],
+			[
+				__DIR__ . '/data/array/commentBeforeCloser.php',
+				2,
 				[
+					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'short', 'sorted'],
+					'indentation' => "\t",
 					'keyValues' => [
 						[
 							'content' => "	'a' => 'a', // eol comment\n"

@@ -81,7 +81,7 @@ class SuppressHelperTest extends TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function dataFunctionIsSuppressed(): array
+	public static function dataFunctionIsSuppressed(): array
 	{
 		return [
 			['suppressWithFullName'],
@@ -109,7 +109,7 @@ class SuppressHelperTest extends TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function dataFunctionIsNotSuppressed(): array
+	public static function dataFunctionIsNotSuppressed(): array
 	{
 		return [
 			['noDocComment'],

@@ -12,7 +12,7 @@ class FilepathNamespaceExtractorTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataGetTypeNameFromProjectPath(): array
+	public static function dataGetTypeNameFromProjectPath(): array
 	{
 		$root = '/Users/www/slevomat';
 

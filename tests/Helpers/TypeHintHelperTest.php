@@ -11,7 +11,7 @@ class TypeHintHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataIsSimpleTypeHint(): array
+	public static function dataIsSimpleTypeHint(): array
 	{
 		return [
 			['int', true],
@@ -45,7 +45,7 @@ class TypeHintHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataIsSimpleIterableTypeHint(): array
+	public static function dataIsSimpleIterableTypeHint(): array
 	{
 		return [
 			['array', true],
@@ -67,7 +67,7 @@ class TypeHintHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataIsSimpleUnofficialTypeHint(): array
+	public static function dataIsSimpleUnofficialTypeHint(): array
 	{
 		return [
 			['null', true],
@@ -98,7 +98,7 @@ class TypeHintHelperTest extends TestCase
 	/**
 	 * @return string[][]
 	 */
-	public function dataConvertLongSimpleTypeHintToShort(): array
+	public static function dataConvertLongSimpleTypeHintToShort(): array
 	{
 		return [
 			['integer', 'int'],
@@ -314,7 +314,7 @@ class TypeHintHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataIsTypeDefinedInAnnotation(): array
+	public static function dataIsTypeDefinedInAnnotation(): array
 	{
 		return [
 			['Whatever', false],
@@ -338,7 +338,7 @@ class TypeHintHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataIsTypeDefinedInAnnotationWhenAnnotationIsInvalid(): array
+	public static function dataIsTypeDefinedInAnnotationWhenAnnotationIsInvalid(): array
 	{
 		return [
 			[22, 'Alias'],
@@ -363,7 +363,7 @@ class TypeHintHelperTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataTypeHintEqualsAnnotation(): array
+	public static function dataTypeHintEqualsAnnotation(): array
 	{
 		return [
 			['scalar', true],

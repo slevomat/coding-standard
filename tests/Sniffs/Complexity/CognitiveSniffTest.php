@@ -11,7 +11,7 @@ class CognitiveSniffTest extends TestCase
 	/**
 	 * @return mixed[][]
 	 */
-	public function dataProviderFiles(): array
+	public static function dataProviderFiles(): array
 	{
 		return [
 			[
