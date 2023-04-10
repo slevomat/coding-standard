@@ -25,6 +25,7 @@ use function sprintf;
 use function strcasecmp;
 use function strcmp;
 use function uasort;
+use const T_COMMA;
 use const T_OPEN_TAG;
 use const T_SEMICOLON;
 
@@ -68,14 +69,34 @@ class AlphabeticallySortedUsesSniff implements Sniff
 				} else {
 					$order = $this->compareUseStatements($useStatement, $lastUse);
 					if ($order < 0) {
-						$fix = $phpcsFile->addFixableError(
+						// The use statements are not ordered correctly. Go through all statements and if any are multi-part then
+						// we report the problem but cannot fix it, because this would lose the secondary parts of the statement.
+						$fixable = true;
+						$tokens = $phpcsFile->getTokens();
+						foreach ($useStatements as $statement) {
+							$nextBreaker = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_COMMA], $statement->getPointer());
+
+							if ($tokens[$nextBreaker]['code'] === T_COMMA) {
+								$fixable = false;
+								break;
+							}
+						}
+
+						$errorParameters = [
 							sprintf(
 								'Use statements should be sorted alphabetically. The first wrong one is %s.',
 								$useStatement->getFullyQualifiedTypeName()
 							),
 							$useStatement->getPointer(),
-							self::CODE_INCORRECT_ORDER
-						);
+							self::CODE_INCORRECT_ORDER,
+						];
+
+						if (!$fixable) {
+							$phpcsFile->addError(...$errorParameters);
+							return;
+						}
+
+						$fix = $phpcsFile->addFixableError(...$errorParameters);
 						if ($fix) {
 							$this->fixAlphabeticalOrder($phpcsFile, $useStatements);
 						}
