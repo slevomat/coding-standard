@@ -27,6 +27,7 @@ use function strcmp;
 use function uasort;
 use const T_COMMA;
 use const T_OPEN_TAG;
+use const T_OPEN_USE_GROUP;
 use const T_SEMICOLON;
 
 class AlphabeticallySortedUsesSniff implements Sniff
@@ -57,6 +58,12 @@ class AlphabeticallySortedUsesSniff implements Sniff
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
 		if (TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $openTagPointer - 1) !== null) {
+			return;
+		}
+
+		// If there are any 'use group' statements then we cannot sort and fix the file.
+		$groupUsePointer = TokenHelper::findNext($phpcsFile, T_OPEN_USE_GROUP, $openTagPointer);
+		if ($groupUsePointer !== null) {
 			return;
 		}
 
