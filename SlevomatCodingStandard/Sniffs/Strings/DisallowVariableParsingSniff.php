@@ -21,7 +21,7 @@ class DisallowVariableParsingSniff implements Sniff
 
 	private const DOLLAR_CURLY_SYNTAX_PATTERN = '~\${[\w\[\]]+}~';
 	private const CURLY_DOLLAR_SYNTAX_PATTERN = '~{\$[\w\[\]\->]+}~';
-	private const SIMPLE_SYNTAX_PATTERN = '~(?<!{)\$[\w\[\]\->]+(?!})~';
+	private const SIMPLE_SYNTAX_PATTERN = '~(?<!{|\[)\$[\w\[\]\->]+(?!})~';
 
 	/** @var bool */
 	public $disallowDollarCurlySyntax = true;
