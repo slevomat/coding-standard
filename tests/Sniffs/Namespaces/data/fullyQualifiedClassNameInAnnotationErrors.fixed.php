@@ -284,3 +284,17 @@ class SelfOut
 	}
 
 }
+
+class ArrayShapeWithQuotes
+{
+
+	/**
+	 * @param array{'foo': bool, date: \DateTime} $a
+	 * @return array{"foo": bool, date: \DateTime}
+	 */
+	public function arrayShape(array $a): array
+	{
+		return $a;
+	}
+
+}

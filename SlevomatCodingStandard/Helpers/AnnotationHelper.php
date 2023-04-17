@@ -639,7 +639,7 @@ class AnnotationHelper
 
 		if ($phpDocParser === null) {
 			$constantExpressionParser = new ConstExprParser();
-			$phpDocParser = new PhpDocParser(new TypeParser($constantExpressionParser), $constantExpressionParser);
+			$phpDocParser = new PhpDocParser(new TypeParser($constantExpressionParser, true), $constantExpressionParser);
 		}
 
 		return $phpDocParser;
