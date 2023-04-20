@@ -419,7 +419,9 @@ class AnnotationTypeHelper
 		if ($masterTypeNode instanceof ArrayShapeNode) {
 			$arrayShapeItemNodes = [];
 			foreach ($masterTypeNode->items as $arrayShapeItemNode) {
-				$arrayShapeItemNodes[] = self::change($arrayShapeItemNode, $typeNodeToChange, $changedTypeNode);
+				/** @var ArrayShapeItemNode $changedArrayShapeItemNode */
+				$changedArrayShapeItemNode = self::change($arrayShapeItemNode, $typeNodeToChange, $changedTypeNode);
+				$arrayShapeItemNodes[] = $changedArrayShapeItemNode;
 			}
 
 			return new ArrayShapeNode($arrayShapeItemNodes, $masterTypeNode->sealed, $masterTypeNode->kind);
@@ -436,7 +438,9 @@ class AnnotationTypeHelper
 		if ($masterTypeNode instanceof ObjectShapeNode) {
 			$objectShapeItemNodes = [];
 			foreach ($masterTypeNode->items as $objectShapeItemNode) {
-				$objectShapeItemNodes[] = self::change($objectShapeItemNode, $typeNodeToChange, $changedTypeNode);
+				/** @var ObjectShapeItemNode $changedObjectShapeItemNode */
+				$changedObjectShapeItemNode = self::change($objectShapeItemNode, $typeNodeToChange, $changedTypeNode);
+				$objectShapeItemNodes[] = $changedObjectShapeItemNode;
 			}
 
 			return new ObjectShapeNode($objectShapeItemNodes);
