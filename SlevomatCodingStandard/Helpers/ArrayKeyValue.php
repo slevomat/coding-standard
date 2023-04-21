@@ -10,6 +10,7 @@ use function strpos;
 use function trim;
 use const T_COMMA;
 use const T_DOUBLE_ARROW;
+use const T_ELLIPSIS;
 use const T_WHITESPACE;
 
 /**
@@ -35,6 +36,9 @@ class ArrayKeyValue
 
 	/** @var ?int */
 	private $pointerComma = null;
+
+	/** @var bool */
+	private $unpacking = false;
 
 	public function __construct(File $phpcsFile, int $pointerStart, int $pointerEnd)
 	{
@@ -102,6 +106,11 @@ class ArrayKeyValue
 		return $this->pointerStart;
 	}
 
+	public function isUnpacking(): bool
+	{
+		return $this->unpacking;
+	}
+
 	private function addValues(File $phpcsFile): void
 	{
 		$key = '';
@@ -119,6 +128,8 @@ class ArrayKeyValue
 				$this->pointerArrow = $pointer;
 			} elseif ($token['code'] === T_COMMA) {
 				$this->pointerComma = $pointer;
+			} elseif ($token['code'] === T_ELLIPSIS) {
+				$this->unpacking = true;
 			} elseif ($this->pointerArrow === null) {
 				if ($firstNonWhitespace === null && $token['code'] !== T_WHITESPACE) {
 					$firstNonWhitespace = $pointer;

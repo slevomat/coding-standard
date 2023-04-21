@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 7.4
 
 [];
 
@@ -8,7 +8,7 @@ array();
 
 array('foo', 'bar', 'baz');
 
-[
+$a = [
 	0 => 'zero',
 	'foo' => 'foo',
 	'bar' => 'bar',
@@ -18,6 +18,8 @@ array('foo', 'bar', 'baz');
 array(
 	0 => 'zero',
 	'foo' => 'foo',
+	...$a,
 	'bar' => 'bar',
-	'baz' => 'baz'
+	'baz' => 'baz',
+	...$a
 );

@@ -47,6 +47,7 @@ array(
 		'a4' => 'a4 val',
 	),
 );
+// @phpcs:enable SlevomatCodingStandard.Arrays.AlphabeticallySortedByKeys.IncorrectKeyOrder
 
 [
 	'I am',

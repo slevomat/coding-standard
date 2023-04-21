@@ -146,7 +146,7 @@ class ArrayHelper
 	public static function isKeyedAll(array $keyValues): bool
 	{
 		foreach ($keyValues as $keyValue) {
-			if ($keyValue->getKey() === null) {
+			if (!$keyValue->isUnpacking() && $keyValue->getKey() === null) {
 				return false;
 			}
 		}
@@ -187,14 +187,19 @@ class ArrayHelper
 	 */
 	public static function isSortedByKey(array $keyValues): bool
 	{
-		$prev = '';
+		$previousKey = '';
 		foreach ($keyValues as $keyValue) {
-			$cmp = strnatcasecmp((string) $prev, (string) $keyValue->getKey());
-			if ($cmp === 1) {
+			if ($keyValue->isUnpacking()) {
+				continue;
+			}
+
+			if (strnatcasecmp($previousKey, $keyValue->getKey()) === 1) {
 				return false;
 			}
-			$prev = $keyValue->getKey();
+
+			$previousKey = $keyValue->getKey();
 		}
+
 		return true;
 	}
 
