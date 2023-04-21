@@ -404,9 +404,9 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 
 	private function areIdentificatorsCompatible(string $first, string $second): bool
 	{
-		/** @var string[] $firstParts */
+		/** @var list<string> $firstParts */
 		$firstParts = preg_split(self::OPERATOR_REGEXP, $first, -1, PREG_SPLIT_DELIM_CAPTURE);
-		/** @var string[] $secondParts */
+		/** @var list<string> $secondParts */
 		$secondParts = preg_split(self::OPERATOR_REGEXP, $second, -1, PREG_SPLIT_DELIM_CAPTURE);
 
 		$minPartsCount = min(count($firstParts), count($secondParts));

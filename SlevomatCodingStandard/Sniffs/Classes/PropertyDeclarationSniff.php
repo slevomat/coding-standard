@@ -53,7 +53,7 @@ class PropertyDeclarationSniff implements Sniff
 
 	public const CODE_MULTIPLE_SPACES_BETWEEN_MODIFIERS = 'MultipleSpacesBetweenModifiers';
 
-	/** @var string[]|null */
+	/** @var list<string>|null */
 	public $modifiersOrder = [];
 
 	/** @var bool */
@@ -386,7 +386,7 @@ class PropertyDeclarationSniff implements Sniff
 			foreach ($modifiersGroups as $modifiersGroupNo => $modifiersGroup) {
 				$this->normalizedModifiersOrder[$modifiersGroupNo] = [];
 
-				/** @var string[] $modifiers */
+				/** @var list<string> $modifiers */
 				$modifiers = preg_split('~\\s*,\\s*~', strtolower($modifiersGroup));
 
 				foreach ($modifiers as $modifier) {

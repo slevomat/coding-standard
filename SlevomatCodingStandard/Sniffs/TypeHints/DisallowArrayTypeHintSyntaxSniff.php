@@ -24,6 +24,7 @@ use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_flip;
 use function array_key_exists;
 use function array_map;
+use function array_values;
 use function count;
 use function in_array;
 use function sprintf;
@@ -35,7 +36,7 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 
 	public const CODE_DISALLOWED_ARRAY_TYPE_HINT_SYNTAX = 'DisallowedArrayTypeHintSyntax';
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $traversableTypeHints = [];
 
 	/** @var array<string, int>|null */
@@ -138,7 +139,7 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 	}
 
 	/**
-	 * @return ArrayTypeNode[]
+	 * @return list<ArrayTypeNode>
 	 */
 	public function getArrayTypeNodes(TypeNode $typeNode): array
 	{
@@ -161,7 +162,7 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 			unset($arrayTypeNodes[$no]);
 		}
 
-		return $arrayTypeNodes;
+		return array_values($arrayTypeNodes);
 	}
 
 	private function fixArrayNode(TypeNode $node): TypeNode
@@ -174,7 +175,7 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 	}
 
 	/**
-	 * @param UnionTypeNode[] $unionTypeNodes
+	 * @param list<UnionTypeNode> $unionTypeNodes
 	 */
 	private function findUnionTypeThatContainsArrayType(ArrayTypeNode $arrayTypeNode, array $unionTypeNodes): ?UnionTypeNode
 	{

@@ -14,7 +14,7 @@ class ArrayHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataKeyValues
-	 * @param array{keyValues: array<string, mixed>} $expect
+	 * @param array{keyValues: array<int, array{content: string, indent?: string|null, key?: string|null, pointerArrow?: bool, pointerComma?: bool}>} $expect
 	 */
 	public function testParse(string $file, int $arrayPointerNo, array $expect): void
 	{
@@ -24,15 +24,9 @@ class ArrayHelperTest extends TestCase
 		$parsed = ArrayHelper::parse($phpcsFile, $arrayPointers[$arrayPointerNo]);
 		$tokens = $phpcsFile->getTokens();
 
-		foreach ($parsed as $keyValue) {
-			/** @phpstan-var mixed $keyValue phpstan making assumption based on phpdoc */
-			self::assertInstanceOf(ArrayKeyValue::class, $keyValue);
-		}
-
 		self::assertCount(count($expect['keyValues']), $parsed);
 
 		foreach ($expect['keyValues'] as $i => $keyValueInfoExpect) {
-			$keyValueInfoExpect = (array) $keyValueInfoExpect;
 			$keyValue = $parsed[$i];
 			if (array_key_exists('indent', $keyValueInfoExpect)) {
 				self::assertSame(
@@ -75,10 +69,6 @@ class ArrayHelperTest extends TestCase
 					);
 			}
 
-			if (!array_key_exists('content', $keyValueInfoExpect)) {
-				continue;
-			}
-
 			self::assertSame(
 				$keyValueInfoExpect['content'],
 				$keyValue->getContent($phpcsFile),
@@ -116,7 +106,7 @@ class ArrayHelperTest extends TestCase
 	/**
 	 * @dataProvider dataFlagsAndIndentation
 	 * @dataProvider dataKeyValues
-	 * @param array{flags: string[]} $expect
+	 * @param array{flags: list<string>} $expect
 	 */
 	public function testIsKeyed(string $file, int $arrayPointerNo, array $expect): void
 	{
@@ -132,7 +122,7 @@ class ArrayHelperTest extends TestCase
 	/**
 	 * @dataProvider dataFlagsAndIndentation
 	 * @dataProvider dataKeyValues
-	 * @param array{flags: string[]} $expect
+	 * @param array{flags: list<string>} $expect
 	 */
 	public function testIsKeyedAll(string $file, int $arrayPointerNo, array $expect): void
 	{
@@ -148,7 +138,7 @@ class ArrayHelperTest extends TestCase
 	/**
 	 * @dataProvider dataFlagsAndIndentation
 	 * @dataProvider dataKeyValues
-	 * @param array{flags: string[]} $expect
+	 * @param array{flags: list<string>} $expect
 	 */
 	public function testIsMultiLine(string $file, int $arrayPointerNo, array $expect): void
 	{
@@ -162,7 +152,7 @@ class ArrayHelperTest extends TestCase
 	/**
 	 * @dataProvider dataFlagsAndIndentation
 	 * @dataProvider dataKeyValues
-	 * @param array{flags: string[]} $expect
+	 * @param array{flags: list<string>} $expect
 	 */
 	public function testIsNotEmpty(string $file, int $arrayPointerNo, array $expect): void
 	{
@@ -177,7 +167,7 @@ class ArrayHelperTest extends TestCase
 	/**
 	 * @dataProvider dataFlagsAndIndentation
 	 * @dataProvider dataKeyValues
-	 * @param array{flags: string[]} $expect
+	 * @param array{flags: list<string>} $expect
 	 */
 	public function testIsSortedByKey(string $file, int $arrayPointerNo, array $expect): void
 	{
@@ -198,7 +188,7 @@ class ArrayHelperTest extends TestCase
 	/**
 	 * @dataProvider dataFlagsAndIndentation
 	 * @dataProvider dataKeyValues
-	 * @param array{flags: string[]} $expect
+	 * @param array{flags: list<string>} $expect
 	 */
 	public function testOpenClosePointers(string $file, int $arrayPointerNo, array $expect): void
 	{
@@ -216,7 +206,7 @@ class ArrayHelperTest extends TestCase
 	}
 
 	/**
-	 * @return array<int, array{0: string, 1: int, 2: array{flags: string[], indentation: string|null}}>
+	 * @return array<int, array{0: string, 1: int, 2: array{flags: list<string>, indentation: string|null}}>
 	 */
 	public static function dataFlagsAndIndentation(): array
 	{
@@ -369,7 +359,7 @@ class ArrayHelperTest extends TestCase
 	}
 
 	/**
-	 * @return array<int, array{0: string, 1: int, 2: array{flags: string[], indentation: string|null, keyValues: array<int, array<string, mixed>>}}>
+	 * @return array<int, array{0: string, 1: int, 2: array{flags: list<string>, indentation: string|null, keyValues: array<int, array{content: string, indent?: string|null, key?: string|null, pointerArrow?: bool, pointerComma?: bool}>}}>
 	 */
 	public static function dataKeyValues(): array
 	{

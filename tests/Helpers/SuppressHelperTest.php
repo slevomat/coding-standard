@@ -79,7 +79,7 @@ class SuppressHelperTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string}>
 	 */
 	public static function dataFunctionIsSuppressed(): array
 	{
@@ -107,7 +107,7 @@ class SuppressHelperTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string}>
 	 */
 	public static function dataFunctionIsNotSuppressed(): array
 	{

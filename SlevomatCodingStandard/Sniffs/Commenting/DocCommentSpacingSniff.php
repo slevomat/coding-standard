@@ -66,10 +66,10 @@ class DocCommentSpacingSniff implements Sniff
 	/** @var int */
 	public $linesCountAfterLastContent = 0;
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $annotationsGroups = [];
 
-	/** @var string[][]|null */
+	/** @var array<list<string>>|null */
 	private $normalizedAnnotationsGroups = null;
 
 	/**
@@ -281,7 +281,7 @@ class DocCommentSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @param Annotation[] $annotations
+	 * @param list<Annotation> $annotations
 	 */
 	private function checkLinesBetweenDifferentAnnotationsTypes(File $phpcsFile, int $docCommentOpenerPointer, array $annotations): void
 	{
@@ -350,7 +350,7 @@ class DocCommentSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @param Annotation[] $annotations
+	 * @param list<Annotation> $annotations
 	 */
 	private function checkAnnotationsGroups(File $phpcsFile, int $docCommentOpenerPointer, array $annotations): void
 	{
@@ -383,7 +383,7 @@ class DocCommentSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @param Annotation[][] $annotationsGroups
+	 * @param array<list<Annotation>> $annotationsGroups
 	 */
 	private function checkLinesBetweenAnnotationsGroups(File $phpcsFile, int $docCommentOpenerPointer, array $annotationsGroups): void
 	{
@@ -451,8 +451,8 @@ class DocCommentSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @param Annotation[][] $annotationsGroups
-	 * @param Annotation[] $annotations
+	 * @param array<list<Annotation>> $annotationsGroups
+	 * @param list<Annotation> $annotations
 	 */
 	private function checkAnnotationsGroupsOrder(
 		File $phpcsFile,
@@ -534,7 +534,7 @@ class DocCommentSpacingSniff implements Sniff
 			$positionsMappedToGroups = array_keys($annotationsGroupsPositions);
 			$tmp = array_values($annotationsGroupsPositions);
 			asort($tmp);
-			/** @var int[] $normalizedAnnotationsGroupsPositions */
+			/** @var list<int> $normalizedAnnotationsGroupsPositions */
 			$normalizedAnnotationsGroupsPositions = array_combine(array_keys($positionsMappedToGroups), array_keys($tmp));
 
 			foreach ($normalizedAnnotationsGroupsPositions as $normalizedAnnotationsGroupPosition => $sortedAnnotationsGroupPosition) {
@@ -644,8 +644,8 @@ class DocCommentSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @param Annotation[] $annotations
-	 * @return Annotation[][]
+	 * @param list<Annotation> $annotations
+	 * @return array<list<Annotation>>
 	 */
 	private function sortAnnotationsToGroups(array $annotations): array
 	{
@@ -776,7 +776,7 @@ class DocCommentSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @return string[][]
+	 * @return array<list<string>>
 	 */
 	private function getAnnotationsGroups(): array
 	{

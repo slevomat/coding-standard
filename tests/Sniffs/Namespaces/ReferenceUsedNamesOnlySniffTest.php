@@ -8,7 +8,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 {
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: list<string>}>
 	 */
 	public static function dataIgnoredNamesForIrrelevantTests(): array
 	{
@@ -24,7 +24,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testDoNotReportNamespaceName(array $ignoredNames): void
 	{
@@ -36,7 +36,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testCreatingNewObjectViaNonFullyQualifiedName(array $ignoredNames): void
 	{
@@ -48,7 +48,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testCreatingNewObjectViaFullyQualifiedName(array $ignoredNames): void
 	{
@@ -60,7 +60,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testReferencingClassConstantViaFullyQualifiedName(array $ignoredNames): void
 	{
@@ -116,7 +116,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testCreatingObjectFromSpecialExceptionName(array $ignoredNames): void
 	{
@@ -135,7 +135,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testReportFullyQualifiedInFileWithNamespace(array $ignoredNames): void
 	{
@@ -152,7 +152,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testDoNotAllowFullyQualifiedExtends(array $ignoredNames): void
 	{
@@ -168,7 +168,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testDoNotAllowFullyQualifiedImplements(array $ignoredNames): void
 	{
@@ -190,7 +190,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testAllowFullyQualifiedExceptions(array $ignoredNames): void
 	{
@@ -207,7 +207,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testDoNotAllowFullyQualifiedExceptionsInTypeHint(array $ignoredNames): void
 	{
@@ -224,7 +224,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testDoNotAllowFullyQualifiedExceptionsInThrow(array $ignoredNames): void
 	{
@@ -241,7 +241,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testDoNotAllowFullyQualifiedExceptionsInCatch(array $ignoredNames): void
 	{
@@ -284,7 +284,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testDoNotAllowPartialUses(array $ignoredNames): void
 	{
@@ -301,7 +301,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testAllowPartialUses(array $ignoredNames): void
 	{
@@ -318,7 +318,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testUseOnlyWhitelistedNamespaces(array $ignoredNames): void
 	{
@@ -339,7 +339,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testDisallowFullyQualifiedImplementsWithMultipleInterfaces(array $ignoredNames): void
 	{
@@ -356,7 +356,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testDoNotUseTypeInRootNamespaceInFileWithoutNamespace(array $ignoredNames): void
 	{
@@ -372,7 +372,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: bool, 1: list<string>}>
 	 */
 	public static function dataIgnoredNames(): array
 	{
@@ -393,7 +393,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNames
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testIgnoredNames(bool $allowFullyQualifiedExceptions, array $ignoredNames): void
 	{
@@ -420,7 +420,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: bool, 1: list<string>}>
 	 */
 	public static function dataIgnoredNamesInNamespace(): array
 	{
@@ -441,7 +441,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 	/**
 	 * @dataProvider dataIgnoredNamesInNamespace
-	 * @param string[] $ignoredNames
+	 * @param list<string> $ignoredNames
 	 */
 	public function testIgnoredNamesInNamespace(bool $allowFullyQualifiedExceptions, array $ignoredNames): void
 	{

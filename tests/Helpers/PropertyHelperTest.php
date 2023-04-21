@@ -13,7 +13,7 @@ class PropertyHelperTest extends TestCase
 	private $testedCodeSnifferFile;
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: bool}>
 	 */
 	public static function dataIsProperty(): array
 	{
@@ -109,7 +109,7 @@ class PropertyHelperTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string}>
 	 */
 	public static function dataIsPropertyIfPromoted(): array
 	{
@@ -131,7 +131,7 @@ class PropertyHelperTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: string|null, 2: bool|null}>
 	 */
 	public static function dataFindTypeHint(): array
 	{

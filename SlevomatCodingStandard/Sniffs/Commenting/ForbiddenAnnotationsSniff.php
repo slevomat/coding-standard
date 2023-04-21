@@ -22,10 +22,10 @@ class ForbiddenAnnotationsSniff implements Sniff
 
 	public const CODE_ANNOTATION_FORBIDDEN = 'AnnotationForbidden';
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $forbiddenAnnotations = [];
 
-	/** @var string[]|null */
+	/** @var list<string>|null */
 	private $normalizedForbiddenAnnotations;
 
 	/**
@@ -121,7 +121,7 @@ class ForbiddenAnnotationsSniff implements Sniff
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	private function getNormalizedForbiddenAnnotations(): array
 	{

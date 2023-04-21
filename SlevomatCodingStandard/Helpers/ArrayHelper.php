@@ -25,7 +25,7 @@ class ArrayHelper
 	protected static $tokens;
 
 	/**
-	 * @return ArrayKeyValue[]
+	 * @return list<ArrayKeyValue>
 	 */
 	public static function parse(File $phpcsFile, int $pointer): array
 	{
@@ -109,7 +109,7 @@ class ArrayHelper
 	}
 
 	/**
-	 * @param ArrayKeyValue[] $keyValues
+	 * @param list<ArrayKeyValue> $keyValues
 	 */
 	public static function getIndentation(array $keyValues): ?string
 	{
@@ -128,7 +128,7 @@ class ArrayHelper
 	}
 
 	/**
-	 * @param ArrayKeyValue[] $keyValues
+	 * @param list<ArrayKeyValue> $keyValues
 	 */
 	public static function isKeyed(array $keyValues): bool
 	{
@@ -141,7 +141,7 @@ class ArrayHelper
 	}
 
 	/**
-	 * @param ArrayKeyValue[] $keyValues
+	 * @param list<ArrayKeyValue> $keyValues
 	 */
 	public static function isKeyedAll(array $keyValues): bool
 	{
@@ -183,7 +183,7 @@ class ArrayHelper
 	}
 
 	/**
-	 * @param ArrayKeyValue[] $keyValues
+	 * @param list<ArrayKeyValue> $keyValues
 	 */
 	public static function isSortedByKey(array $keyValues): bool
 	{

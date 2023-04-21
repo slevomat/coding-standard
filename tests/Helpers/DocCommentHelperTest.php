@@ -400,8 +400,8 @@ class DocCommentHelperTest extends TestCase
 	}
 
 	/**
-	 * @param Comment[] $comments
-	 * @return string[]
+	 * @param list<Comment> $comments
+	 * @return list<string>
 	 */
 	private function stringifyComments(array $comments): array
 	{

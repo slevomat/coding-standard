@@ -24,7 +24,7 @@ abstract class AbstractLineCondition implements Sniff
 	protected const WHILE_CONTROL_STRUCTURE = 'while';
 	protected const DO_CONTROL_STRUCTURE = 'do';
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $checkedControlStructures = [
 		self::IF_CONTROL_STRUCTURE,
 		self::WHILE_CONTROL_STRUCTURE,

@@ -78,7 +78,7 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	protected function getSupportedKeywords(): array
 	{
@@ -86,7 +86,7 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	protected function getKeywordsToCheck(): array
 	{

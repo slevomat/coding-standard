@@ -14,7 +14,7 @@ class FullyQualifiedGlobalFunctionsSniff
 	public $includeSpecialFunctions = false;
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	protected function getNormalizedInclude(): array
 	{

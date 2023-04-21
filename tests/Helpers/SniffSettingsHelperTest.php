@@ -72,7 +72,7 @@ class SniffSettingsHelperTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: bool}>
 	 */
 	public static function validRegularExpressionsProvider(): array
 	{
@@ -88,7 +88,7 @@ class SniffSettingsHelperTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: bool}>
 	 */
 	public static function invalidRegularExpressionsProvider(): array
 	{

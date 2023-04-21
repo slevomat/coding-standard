@@ -29,9 +29,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
 
 	/**
-	 * @param (string|int|bool|array<int|string, (string|int|bool|null)>)[] $sniffProperties
-	 * @param string[] $codesToCheck
-	 * @param string[] $cliArgs
+	 * @param array<string, string|int|bool|array<int|string, (string|int|bool|null)>> $sniffProperties
+	 * @param list<string> $codesToCheck
+	 * @param list<string> $cliArgs
 	 */
 	protected static function checkFile(string $filePath, array $sniffProperties = [], array $codesToCheck = [], array $cliArgs = []): File
 	{
@@ -192,7 +192,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param (string|int)[][][] $errorsOnLine
+	 * @param list<list<array{source: string, message: string}>> $errorsOnLine
 	 */
 	private static function hasError(array $errorsOnLine, string $sniffCode, ?string $message): bool
 	{
@@ -222,7 +222,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @param (string|int|bool)[][][] $errors
+	 * @param list<list<array{source: string, message: string}>> $errors
 	 */
 	private static function getFormattedErrors(array $errors): string
 	{

@@ -111,7 +111,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 	}
 
 	/**
-	 * @param UseStatement[] $useStatements
+	 * @param array<string, UseStatement> $useStatements
 	 */
 	private function fixAlphabeticalOrder(File $phpcsFile, array $useStatements): void
 	{

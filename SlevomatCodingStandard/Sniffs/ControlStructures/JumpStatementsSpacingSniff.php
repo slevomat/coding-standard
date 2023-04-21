@@ -49,7 +49,7 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 	/** @var bool */
 	public $allowSingleLineYieldStacking = true;
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $jumpStatements = [];
 
 	/**
@@ -80,7 +80,7 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	protected function getSupportedKeywords(): array
 	{
@@ -96,7 +96,7 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	protected function getKeywordsToCheck(): array
 	{

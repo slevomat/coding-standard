@@ -26,7 +26,7 @@ class DeprecatedAnnotationDeclarationSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $docCommentStartPointer): void
 	{
-		/** @var GenericAnnotation[] $annotations */
+		/** @var list<GenericAnnotation> $annotations */
 		$annotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $docCommentStartPointer, '@deprecated');
 
 		if (count($annotations) === 0) {

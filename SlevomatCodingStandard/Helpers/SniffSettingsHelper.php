@@ -34,8 +34,8 @@ class SniffSettingsHelper
 	}
 
 	/**
-	 * @param string[] $settings
-	 * @return string[]
+	 * @param list<string> $settings
+	 * @return list<string>
 	 */
 	public static function normalizeArray(array $settings): array
 	{

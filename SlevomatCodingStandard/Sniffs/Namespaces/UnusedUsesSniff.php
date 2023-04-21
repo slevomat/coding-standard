@@ -50,16 +50,16 @@ class UnusedUsesSniff implements Sniff
 	/** @var bool */
 	public $searchAnnotations = false;
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $ignoredAnnotationNames = [];
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $ignoredAnnotations = [];
 
-	/** @var string[]|null */
+	/** @var list<string>|null */
 	private $normalizedIgnoredAnnotationNames;
 
-	/** @var string[]|null */
+	/** @var list<string>|null */
 	private $normalizedIgnoredAnnotations;
 
 	/**
@@ -293,7 +293,7 @@ class UnusedUsesSniff implements Sniff
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	private function getIgnoredAnnotationNames(): array
 	{
@@ -313,7 +313,7 @@ class UnusedUsesSniff implements Sniff
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	private function getIgnoredAnnotations(): array
 	{
@@ -325,7 +325,7 @@ class UnusedUsesSniff implements Sniff
 	}
 
 	/**
-	 * @param int[] $pointersBeforeUseStatements
+	 * @param list<int> $pointersBeforeUseStatements
 	 */
 	private function firstPointerBefore(int $pointer, array $pointersBeforeUseStatements, int $startPointer): int
 	{

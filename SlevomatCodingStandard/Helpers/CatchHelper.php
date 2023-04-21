@@ -37,7 +37,7 @@ class CatchHelper
 
 	/**
 	 * @param array<string, array<int, int|string>|int|string> $catchToken
-	 * @return string[]
+	 * @return list<string>
 	 */
 	public static function findCatchedTypesInCatch(File $phpcsFile, array $catchToken): array
 	{

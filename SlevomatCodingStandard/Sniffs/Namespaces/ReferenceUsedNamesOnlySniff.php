@@ -87,10 +87,10 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	/** @var bool */
 	public $allowFallbackGlobalConstants = true;
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $specialExceptionNames = [];
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $ignoredNames = [];
 
 	/** @var bool */
@@ -99,7 +99,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	/**
 	 * If empty, all namespaces are required to be used
 	 *
-	 * @var string[]
+	 * @var list<string>
 	 */
 	public $namespacesRequiredToUse = [];
 
@@ -112,13 +112,13 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	/** @var bool */
 	public $allowFullyQualifiedNameForCollidingConstants = false;
 
-	/** @var string[]|null */
+	/** @var list<string>|null */
 	private $normalizedSpecialExceptionNames;
 
-	/** @var string[]|null */
+	/** @var list<string>|null */
 	private $normalizedIgnoredNames;
 
-	/** @var string[]|null */
+	/** @var list<string>|null */
 	private $normalizedNamespacesRequiredToUse;
 
 	/**
@@ -524,7 +524,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	private function getSpecialExceptionNames(): array
 	{
@@ -536,7 +536,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	private function getIgnoredNames(): array
 	{
@@ -548,7 +548,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	private function getNamespacesRequiredToUse(): array
 	{
@@ -560,7 +560,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	}
 
 	/**
-	 * @param UseStatement[] $useStatements
+	 * @param array<string, UseStatement> $useStatements
 	 */
 	private function getUseStatementPlacePointer(File $phpcsFile, int $openTagPointer, array $useStatements): int
 	{
@@ -633,7 +633,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	}
 
 	/**
-	 * @return stdClass[]
+	 * @return list<stdClass>
 	 */
 	private function getReferences(File $phpcsFile, int $openTagPointer): array
 	{

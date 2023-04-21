@@ -83,7 +83,7 @@ class MethodAnnotation extends Annotation
 	}
 
 	/**
-	 * @return TemplateTagValueNode[]
+	 * @return list<TemplateTagValueNode>
 	 */
 	public function getMethodTemplateTypes(): array
 	{
@@ -93,7 +93,7 @@ class MethodAnnotation extends Annotation
 	}
 
 	/**
-	 * @return MethodTagValueParameterNode[]
+	 * @return list<MethodTagValueParameterNode>
 	 */
 	public function getMethodParameters(): array
 	{

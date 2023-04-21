@@ -193,7 +193,7 @@ class UseSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @param UseStatement[] $useStatements
+	 * @param list<UseStatement> $useStatements
 	 */
 	private function checkLinesBetweenSameTypesOfUse(File $phpcsFile, array $useStatements): void
 	{
@@ -265,7 +265,7 @@ class UseSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @param UseStatement[] $useStatements
+	 * @param list<UseStatement> $useStatements
 	 */
 	private function checkLinesBetweenDifferentTypesOfUse(File $phpcsFile, array $useStatements): void
 	{

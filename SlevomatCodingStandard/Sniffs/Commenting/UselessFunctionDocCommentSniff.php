@@ -22,7 +22,7 @@ class UselessFunctionDocCommentSniff implements Sniff
 
 	public const CODE_USELESS_DOC_COMMENT = 'UselessDocComment';
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $traversableTypeHints = [];
 
 	/** @var array<int, string>|null */

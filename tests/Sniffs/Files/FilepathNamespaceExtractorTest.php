@@ -10,7 +10,7 @@ class FilepathNamespaceExtractorTest extends TestCase
 {
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: string|null, 2: list<string>}>
 	 */
 	public static function dataGetTypeNameFromProjectPath(): array
 	{
@@ -102,7 +102,7 @@ class FilepathNamespaceExtractorTest extends TestCase
 
 	/**
 	 * @dataProvider dataGetTypeNameFromProjectPath
-	 * @param string[] $extensions
+	 * @param list<string> $extensions
 	 */
 	public function testGetTypeNameFromProjectPath(string $path, ?string $expectedNamespace, array $extensions): void
 	{

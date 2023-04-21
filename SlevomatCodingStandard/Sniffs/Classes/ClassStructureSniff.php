@@ -180,7 +180,7 @@ class ClassStructureSniff implements Sniff
 		'__debuginfo' => self::GROUP_MAGIC_METHODS,
 	];
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $groups = [];
 
 	/** @var array<string, int>|null */
@@ -586,7 +586,7 @@ class ClassStructureSniff implements Sniff
 			$normalizedGroupsWithShortcuts = [];
 			$order = 1;
 			foreach (SniffSettingsHelper::normalizeArray($this->groups) as $groupsString) {
-				/** @var string[] $groups */
+				/** @var list<string> $groups */
 				$groups = preg_split('~\\s*,\\s*~', strtolower($groupsString));
 				foreach ($groups as $groupOrShortcut) {
 					$groupOrShortcut = preg_replace('~\\s+~', ' ', $groupOrShortcut);

@@ -30,25 +30,25 @@ class TypeNameMatchesFileNameSniff implements Sniff
 	/** @var array<string, string> */
 	public $rootNamespaces = [];
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $skipDirs = [];
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $ignoredNamespaces = [];
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $extensions = ['php'];
 
 	/** @var array<string, string>|null */
 	private $normalizedRootNamespaces;
 
-	/** @var string[]|null */
+	/** @var list<string>|null */
 	private $normalizedSkipDirs;
 
-	/** @var string[]|null */
+	/** @var list<string>|null */
 	private $normalizedIgnoredNamespaces;
 
-	/** @var string[]|null */
+	/** @var list<string>|null */
 	private $normalizedExtensions;
 
 	/** @var FilepathNamespaceExtractor */
@@ -107,7 +107,7 @@ class TypeNameMatchesFileNameSniff implements Sniff
 	}
 
 	/**
-	 * @return string[] path(string) => namespace
+	 * @return array<string, string> path(string) => namespace
 	 */
 	private function getRootNamespaces(): array
 	{
@@ -137,7 +137,7 @@ class TypeNameMatchesFileNameSniff implements Sniff
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	private function getSkipDirs(): array
 	{
@@ -149,7 +149,7 @@ class TypeNameMatchesFileNameSniff implements Sniff
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	private function getIgnoredNamespaces(): array
 	{
@@ -161,7 +161,7 @@ class TypeNameMatchesFileNameSniff implements Sniff
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	private function getExtensions(): array
 	{

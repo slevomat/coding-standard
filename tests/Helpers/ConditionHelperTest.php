@@ -8,7 +8,7 @@ class ConditionHelperTest extends TestCase
 {
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: int, 1: bool}>
 	 */
 	public static function dataConditionReturnsBoolean(): array
 	{

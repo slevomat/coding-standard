@@ -6,7 +6,7 @@ class StringHelperTest extends TestCase
 {
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string, 1: string}>
 	 */
 	public static function dataStartsWith(): array
 	{
@@ -35,7 +35,7 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string, 1: string}>
 	 */
 	public static function dataNotStartsWith(): array
 	{
@@ -68,7 +68,7 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string, 1: string}>
 	 */
 	public static function dataEndsWith(): array
 	{
@@ -97,7 +97,7 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string, 1: string}>
 	 */
 	public static function dataNotEndsWith(): array
 	{

@@ -16,7 +16,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: int}>
 	 */
 	public static function dataDeclareStrictTypesMissing(): array
 	{
@@ -50,7 +50,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string}>
 	 */
 	public static function dataDeclareStrictTypesIncorrectFormat(): array
 	{

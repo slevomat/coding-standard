@@ -48,7 +48,7 @@ class IndentationHelper
 	}
 
 	/**
-	 * @param int[] $codePointers
+	 * @param list<int> $codePointers
 	 */
 	public static function fixIndentation(File $phpcsFile, array $codePointers, string $defaultIndentation): string
 	{

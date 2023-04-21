@@ -36,7 +36,7 @@ class ConstantHelper
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	public static function getAllNames(File $phpcsFile): array
 	{

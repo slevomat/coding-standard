@@ -84,7 +84,7 @@ class ReturnTypeHintSniff implements Sniff
 	/** @var bool|null */
 	public $enableStandaloneNullTrueFalseTypeHints = null;
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $traversableTypeHints = [];
 
 	/** @var array<int, string>|null */
@@ -148,7 +148,7 @@ class ReturnTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @param ReturnAnnotation[] $prefixedReturnAnnotations
+	 * @param list<ReturnAnnotation> $prefixedReturnAnnotations
 	 */
 	private function checkFunctionTypeHint(
 		File $phpcsFile,
@@ -468,7 +468,7 @@ class ReturnTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @param ReturnAnnotation[] $prefixedReturnAnnotations
+	 * @param list<ReturnAnnotation> $prefixedReturnAnnotations
 	 */
 	private function checkFunctionTraversableTypeHintSpecification(
 		File $phpcsFile,

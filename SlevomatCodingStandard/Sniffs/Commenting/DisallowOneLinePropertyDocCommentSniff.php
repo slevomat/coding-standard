@@ -18,7 +18,7 @@ class DisallowOneLinePropertyDocCommentSniff implements Sniff
 	public const CODE_ONE_LINE_PROPERTY_COMMENT = 'OneLinePropertyComment';
 
 	/**
-	 * @return int[]
+	 * @return list<int>
 	 */
 	public function register(): array
 	{

@@ -20,7 +20,7 @@ class ForbiddenCommentsSniff implements Sniff
 
 	public const CODE_COMMENT_FORBIDDEN = 'CommentForbidden';
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $forbiddenCommentPatterns = [];
 
 	/**
@@ -85,7 +85,7 @@ class ForbiddenCommentsSniff implements Sniff
 
 				$docCommentContent = '';
 				for ($i = $docCommentOpenPointer + 1; $i < $tokens[$docCommentOpenPointer]['comment_closer']; $i++) {
-					/** @var string|(string|int)[] $token */
+					/** @var string|array<(string|int)> $token */
 					$token = $phpcsFile->fixer->getTokenContent($i);
 					$docCommentContent .= is_array($token) ? $token['content'] : $token;
 				}

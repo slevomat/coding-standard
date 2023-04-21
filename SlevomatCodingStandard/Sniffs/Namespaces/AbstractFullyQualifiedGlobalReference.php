@@ -26,16 +26,16 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 
 	public const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified';
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $exclude = [];
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $include = [];
 
-	/** @var string[]|null */
+	/** @var list<string>|null */
 	private $normalizedExclude;
 
-	/** @var string[]|null */
+	/** @var list<string>|null */
 	private $normalizedInclude;
 
 	abstract protected function getNotFullyQualifiedMessage(): string;
@@ -126,7 +126,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	protected function getNormalizedInclude(): array
 	{
@@ -137,7 +137,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	private function getNormalizedExclude(): array
 	{
@@ -148,8 +148,8 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 	}
 
 	/**
-	 * @param string[] $names
-	 * @return string[]
+	 * @param list<string> $names
+	 * @return list<string>
 	 */
 	private function normalizeNames(array $names): array
 	{

@@ -81,16 +81,16 @@ abstract class AbstractControlStructureSpacing implements Sniff
 	protected const KEYWORD_YIELD = 'yield';
 	protected const KEYWORD_YIELD_FROM = 'yield_from';
 
-	/** @var (string|int)[]|null */
+	/** @var array<(string|int)>|null */
 	private $tokensToCheck;
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	abstract protected function getSupportedKeywords(): array;
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	abstract protected function getKeywordsToCheck(): array;
 

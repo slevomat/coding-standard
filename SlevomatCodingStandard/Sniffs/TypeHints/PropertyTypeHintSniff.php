@@ -80,7 +80,7 @@ class PropertyTypeHintSniff implements Sniff
 	/** @var bool|null */
 	public $enableStandaloneNullTrueFalseTypeHints = null;
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $traversableTypeHints = [];
 
 	/** @var array<int, string>|null */
@@ -151,7 +151,7 @@ class PropertyTypeHintSniff implements Sniff
 			return;
 		}
 
-		/** @var VariableAnnotation[] $varAnnotations */
+		/** @var list<VariableAnnotation> $varAnnotations */
 		$varAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $propertyPointer, '@var');
 		$prefixedPropertyAnnotations = $this->getValidPrefixedAnnotations($phpcsFile, $propertyPointer);
 
@@ -170,7 +170,7 @@ class PropertyTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @param VariableAnnotation[] $prefixedPropertyAnnotations
+	 * @param list<VariableAnnotation> $prefixedPropertyAnnotations
 	 */
 	private function checkTypeHint(
 		File $phpcsFile,
@@ -416,7 +416,7 @@ class PropertyTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @param VariableAnnotation[] $prefixedPropertyAnnotations
+	 * @param list<VariableAnnotation> $prefixedPropertyAnnotations
 	 */
 	private function checkTraversableTypeHintSpecification(
 		File $phpcsFile,
@@ -598,7 +598,7 @@ class PropertyTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @return array<int, string>
+	 * @return list<string>
 	 */
 	private function getTraversableTypeHints(): array
 	{
@@ -649,14 +649,14 @@ class PropertyTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @return VariableAnnotation[]
+	 * @return list<VariableAnnotation>
 	 */
 	private function getValidPrefixedAnnotations(File $phpcsFile, int $propertyPointer): array
 	{
 		$returnAnnotations = [];
 
 		foreach (AnnotationHelper::STATIC_ANALYSIS_PREFIXES as $prefix) {
-			/** @var VariableAnnotation[] $annotations */
+			/** @var list<VariableAnnotation> $annotations */
 			$annotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $propertyPointer, sprintf('@%s-var', $prefix));
 			foreach ($annotations as $annotation) {
 				if (!$annotation->isInvalid()) {

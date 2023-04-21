@@ -9,15 +9,13 @@ class NamespaceHelperTest extends TestCase
 {
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string}>
 	 */
 	public static function dataIsFullyQualifiedName(): array
 	{
 		return [
-			[
-				'\Foo',
-				'\Foo\Bar',
-			],
+			['\Foo'],
+			['\Foo\Bar'],
 		];
 	}
 
@@ -38,15 +36,13 @@ class NamespaceHelperTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string}>
 	 */
 	public static function dataIsNotFullyQualifiedName(): array
 	{
 		return [
-			[
-				'Bar',
-				'Foo\Bar',
-			],
+			['Bar'],
+			['Foo\Bar'],
 		];
 	}
 
@@ -70,15 +66,13 @@ class NamespaceHelperTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string}>
 	 */
 	public static function dataHasNamespace(): array
 	{
 		return [
-			[
-				'\Foo\Bar',
-				'Foo\Bar',
-			],
+			['\Foo\Bar'],
+			['Foo\Bar'],
 		];
 	}
 
@@ -91,15 +85,13 @@ class NamespaceHelperTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string}>
 	 */
 	public static function dataDoesNotHaveNamespace(): array
 	{
 		return [
-			[
-				'Foo',
-				'\Foo',
-			],
+			['Foo'],
+			['\Foo'],
 		];
 	}
 
@@ -112,7 +104,7 @@ class NamespaceHelperTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: list<string>}>
 	 */
 	public static function dataGetNameParts(): array
 	{
@@ -138,7 +130,7 @@ class NamespaceHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataGetNameParts
-	 * @param string[] $parts
+	 * @param list<string> $parts
 	 */
 	public function testGetNameParts(string $namespace, array $parts): void
 	{
@@ -198,7 +190,7 @@ class NamespaceHelperTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string, 1: string}>
 	 */
 	public static function dataGetUnqualifiedNameFromFullyQualifiedName(): array
 	{
@@ -231,7 +223,7 @@ class NamespaceHelperTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string}>
 	 */
 	public static function dataIsQualifiedName(): array
 	{
@@ -251,7 +243,7 @@ class NamespaceHelperTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string}>
 	 */
 	public static function dataIsNotQualifiedName(): array
 	{
@@ -269,7 +261,7 @@ class NamespaceHelperTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string, 1: string}>
 	 */
 	public static function dataNormalizeToCanonicalName(): array
 	{
@@ -302,7 +294,7 @@ class NamespaceHelperTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string, 1: string}>
 	 */
 	public static function dataTypeIsInNamespace(): array
 	{
@@ -335,7 +327,7 @@ class NamespaceHelperTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string, 1: string}>
 	 */
 	public static function dataTypeIsNotInNamespace(): array
 	{

@@ -6,7 +6,7 @@ class TypeHelperTest extends TestCase
 {
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string}>
 	 */
 	public static function dataValidTypeNames(): array
 	{
@@ -34,7 +34,7 @@ class TypeHelperTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string}>
 	 */
 	public static function dataNotValidTypeNames(): array
 	{

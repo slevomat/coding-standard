@@ -68,7 +68,7 @@ class FunctionHelperTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: list<string>}>
 	 */
 	public static function dataParametersNames(): array
 	{
@@ -102,7 +102,7 @@ class FunctionHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataParametersNames
-	 * @param string[] $expectedParametersNames
+	 * @param list<string> $expectedParametersNames
 	 */
 	public function testParametersNames(string $functionName, array $expectedParametersNames): void
 	{
@@ -113,7 +113,7 @@ class FunctionHelperTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: array<string, TypeHint|null>}>
 	 */
 	public static function dataParametersTypeHints(): array
 	{
@@ -179,7 +179,7 @@ class FunctionHelperTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: array<string, TypeHint|null>}>
 	 */
 	public static function dataParametersNullableTypeHints(): array
 	{
@@ -225,7 +225,7 @@ class FunctionHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataParametersTypeHints
-	 * @param (TypeHint|null)[] $expectedParametersTypeHints
+	 * @param array<string, TypeHint|null> $expectedParametersTypeHints
 	 */
 	public function testParametersTypeHints(string $functionName, array $expectedParametersTypeHints): void
 	{
@@ -256,7 +256,7 @@ class FunctionHelperTest extends TestCase
 
 	/**
 	 * @dataProvider dataParametersNullableTypeHints
-	 * @param (TypeHint|null)[] $expectedParametersTypeHints
+	 * @param array<string, TypeHint|null> $expectedParametersTypeHints
 	 */
 	public function testParametersNullableTypeHints(string $functionName, array $expectedParametersTypeHints): void
 	{
@@ -278,7 +278,7 @@ class FunctionHelperTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: bool}>
 	 */
 	public static function dataFunctionReturnsValueOrNot(): array
 	{
@@ -311,7 +311,7 @@ class FunctionHelperTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: int, 1: bool}>
 	 */
 	public static function dataClosureReturnsValueOrNot(): array
 	{

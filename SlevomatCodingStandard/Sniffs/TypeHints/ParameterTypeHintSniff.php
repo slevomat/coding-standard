@@ -79,7 +79,7 @@ class ParameterTypeHintSniff implements Sniff
 	/** @var bool|null */
 	public $enableStandaloneNullTrueFalseTypeHints = null;
 
-	/** @var string[] */
+	/** @var list<string> */
 	public $traversableTypeHints = [];
 
 	/** @var array<int, string>|null */
@@ -134,7 +134,7 @@ class ParameterTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @param (TypeHint|null)[] $parametersTypeHints
+	 * @param array<string, TypeHint|null> $parametersTypeHints
 	 * @param array<string, ParameterAnnotation|VariableAnnotation> $parametersAnnotations
 	 * @param array<string, ParameterAnnotation|VariableAnnotation> $prefixedParametersAnnotations
 	 */
@@ -414,7 +414,7 @@ class ParameterTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @param (TypeHint|null)[] $parametersTypeHints
+	 * @param array<string, TypeHint|null> $parametersTypeHints
 	 * @param array<string, ParameterAnnotation|VariableAnnotation> $parametersAnnotations
 	 * @param array<string, ParameterAnnotation|VariableAnnotation> $prefixedParametersAnnotations
 	 */
@@ -529,7 +529,7 @@ class ParameterTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @param (TypeHint|null)[] $parametersTypeHints
+	 * @param array<string, TypeHint|null> $parametersTypeHints
 	 * @param array<string, ParameterAnnotation|VariableAnnotation> $parametersAnnotations
 	 */
 	private function checkUselessAnnotations(
@@ -634,7 +634,7 @@ class ParameterTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @return array<int, string>
+	 * @return list<string>
 	 */
 	private function getTraversableTypeHints(): array
 	{

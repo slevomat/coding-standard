@@ -9,7 +9,7 @@ class CognitiveSniffTest extends TestCase
 {
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: int, 2: string, 3: int}>
 	 */
 	public static function dataProviderFiles(): array
 	{

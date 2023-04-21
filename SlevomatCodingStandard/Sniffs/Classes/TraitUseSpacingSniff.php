@@ -212,7 +212,7 @@ class TraitUseSpacingSniff implements Sniff
 	}
 
 	/**
-	 * @param int[] $usePointers
+	 * @param list<int> $usePointers
 	 */
 	private function checkLinesBetweenUses(File $phpcsFile, array $usePointers): void
 	{

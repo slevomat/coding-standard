@@ -364,7 +364,7 @@ class RequireExplicitAssertionSniff implements Sniff
 
 	/**
 	 * @param IdentifierTypeNode|ThisTypeNode|GenericTypeNode $typeNode
-	 * @return string[]
+	 * @return list<string>
 	 */
 	private function createConditions(string $variableName, TypeNode $typeNode): array
 	{

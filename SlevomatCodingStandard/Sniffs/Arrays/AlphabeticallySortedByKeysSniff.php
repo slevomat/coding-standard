@@ -59,7 +59,7 @@ class AlphabeticallySortedByKeysSniff implements Sniff
 	}
 
 	/**
-	 * @param ArrayKeyValue[] $keyValues
+	 * @param list<ArrayKeyValue> $keyValues
 	 */
 	private function fix(File $phpcsFile, array $keyValues): bool
 	{

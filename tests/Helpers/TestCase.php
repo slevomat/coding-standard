@@ -179,7 +179,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	}
 
 	/**
-	 * @return mixed[]
+	 * @return array{code: int|string, type: string, line: int}
 	 */
 	private function getTokenFromPointer(File $phpcsFile, ?int $tokenPointer = null): array
 	{

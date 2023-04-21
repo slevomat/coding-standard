@@ -59,7 +59,7 @@ class ReferencedNameHelper
 {
 
 	/**
-	 * @return ReferencedName[]
+	 * @return list<ReferencedName>
 	 */
 	public static function getAllReferencedNames(File $phpcsFile, int $openTagPointer): array
 	{
@@ -71,7 +71,7 @@ class ReferencedNameHelper
 	}
 
 	/**
-	 * @return ReferencedName[]
+	 * @return list<ReferencedName>
 	 */
 	public static function getAllReferencedNamesInAttributes(File $phpcsFile, int $openTagPointer): array
 	{
@@ -123,7 +123,7 @@ class ReferencedNameHelper
 	}
 
 	/**
-	 * @return ReferencedName[]
+	 * @return list<ReferencedName>
 	 */
 	private static function createAllReferencedNames(File $phpcsFile, int $openTagPointer): array
 	{
@@ -396,7 +396,7 @@ class ReferencedNameHelper
 	}
 
 	/**
-	 * @return ReferencedName[]
+	 * @return list<ReferencedName>
 	 */
 	private static function createAllReferencedNamesInAttributes(File $phpcsFile, int $openTagPointer): array
 	{
@@ -473,7 +473,7 @@ class ReferencedNameHelper
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	private static function getReferencedNamesFromString(string $content): array
 	{

@@ -98,7 +98,7 @@ class AnnotationHelper
 
 	/**
 	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|TypeAliasAnnotation|TypeImportAnnotation|AssertAnnotation|ParameterOutAnnotation|SelfOutAnnotation $annotation
-	 * @return TypeNode[]
+	 * @return list<TypeNode>
 	 */
 	public static function getAnnotationTypes(Annotation $annotation): array
 	{
@@ -141,7 +141,7 @@ class AnnotationHelper
 
 	/**
 	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|AssertAnnotation|ParameterOutAnnotation|SelfOutAnnotation $annotation
-	 * @return ConstExprNode[]
+	 * @return list<ConstExprNode>
 	 */
 	public static function getAnnotationConstantExpressions(Annotation $annotation): array
 	{
@@ -233,7 +233,7 @@ class AnnotationHelper
 	}
 
 	/**
-	 * @return (VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|AssertAnnotation|GenericAnnotation|ParameterOutAnnotation|SelfOutAnnotation)[]
+	 * @return list<VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|AssertAnnotation|GenericAnnotation|ParameterOutAnnotation|SelfOutAnnotation>
 	 */
 	public static function getAnnotationsByName(File $phpcsFile, int $pointer, string $annotationName): array
 	{
@@ -243,7 +243,7 @@ class AnnotationHelper
 	}
 
 	/**
-	 * @return (VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|AssertAnnotation|GenericAnnotation|ParameterOutAnnotation|SelfOutAnnotation)[][]
+	 * @return array<string, list<VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|AssertAnnotation|GenericAnnotation|ParameterOutAnnotation|SelfOutAnnotation>>
 	 */
 	public static function getAnnotations(File $phpcsFile, int $pointer): array
 	{

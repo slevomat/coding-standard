@@ -75,7 +75,9 @@
 		</exec>
 	</target>
 
-	<target name="phpstan">
+	<target name="phpstan" depends="phpstan-sources, phpstan-tests"/>
+
+	<target name="phpstan-sources">
 		<exec
 			executable="bin/phpstan"
 			logoutput="true"
@@ -88,7 +90,9 @@
 			<arg value="--memory-limit"/>
 			<arg value="512M"/>
 		</exec>
+	</target>
 
+	<target name="phpstan-tests">
 		<exec
 			executable="bin/phpstan"
 			logoutput="true"
@@ -100,5 +104,4 @@
 			<arg path="build/PHPStan/phpstan.tests.neon"/>
 		</exec>
 	</target>
-
 </project>

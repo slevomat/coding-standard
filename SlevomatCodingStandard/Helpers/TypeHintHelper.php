@@ -93,7 +93,7 @@ class TypeHintHelper
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	public static function convertUnofficialUnionTypeHintToOfficialTypeHints(string $typeHint): array
 	{
@@ -127,7 +127,7 @@ class TypeHintHelper
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	public static function getSimpleTypeHints(): array
 	{
@@ -155,7 +155,7 @@ class TypeHintHelper
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	public static function getSimpleIterableTypeHints(): array
 	{
@@ -201,7 +201,7 @@ class TypeHintHelper
 	}
 
 	/**
-	 * @param string[] $traversableTypeHints
+	 * @param list<string> $traversableTypeHints
 	 */
 	public static function isTraversableType(string $type, array $traversableTypeHints): bool
 	{
@@ -215,9 +215,9 @@ class TypeHintHelper
 		string $typeHintInAnnotation
 	): bool
 	{
-		/** @var string[] $typeHintParts */
+		/** @var list<string> $typeHintParts */
 		$typeHintParts = preg_split('~([&|])~', self::normalize($typeHint), -1, PREG_SPLIT_DELIM_CAPTURE);
-		/** @var string[] $typeHintInAnnotationParts */
+		/** @var list<string> $typeHintInAnnotationParts */
 		$typeHintInAnnotationParts = preg_split('~([&|])~', self::normalize($typeHintInAnnotation), -1, PREG_SPLIT_DELIM_CAPTURE);
 
 		if (count($typeHintParts) !== count($typeHintInAnnotationParts)) {
@@ -371,7 +371,7 @@ class TypeHintHelper
 			return 'never';
 		}
 
-		/** @var string[] $parts */
+		/** @var list<string> $parts */
 		$parts = preg_split('~([&|])~', $typeHint, -1, PREG_SPLIT_DELIM_CAPTURE);
 
 		$hints = [];

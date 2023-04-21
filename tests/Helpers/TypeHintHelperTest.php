@@ -9,7 +9,7 @@ class TypeHintHelperTest extends TestCase
 {
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: bool}>
 	 */
 	public static function dataIsSimpleTypeHint(): array
 	{
@@ -43,7 +43,7 @@ class TypeHintHelperTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: bool}>
 	 */
 	public static function dataIsSimpleIterableTypeHint(): array
 	{
@@ -65,7 +65,7 @@ class TypeHintHelperTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: bool}>
 	 */
 	public static function dataIsSimpleUnofficialTypeHint(): array
 	{
@@ -96,7 +96,7 @@ class TypeHintHelperTest extends TestCase
 	}
 
 	/**
-	 * @return string[][]
+	 * @return list<array{0: string, 1: string}>
 	 */
 	public static function dataConvertLongSimpleTypeHintToShort(): array
 	{
@@ -312,7 +312,7 @@ class TypeHintHelperTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: bool}>
 	 */
 	public static function dataIsTypeDefinedInAnnotation(): array
 	{
@@ -336,7 +336,7 @@ class TypeHintHelperTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: int, 1: string}>
 	 */
 	public static function dataIsTypeDefinedInAnnotationWhenAnnotationIsInvalid(): array
 	{
@@ -361,7 +361,7 @@ class TypeHintHelperTest extends TestCase
 	}
 
 	/**
-	 * @return mixed[][]
+	 * @return list<array{0: string, 1: bool}>
 	 */
 	public static function dataTypeHintEqualsAnnotation(): array
 	{

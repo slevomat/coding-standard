@@ -64,7 +64,7 @@ class DocCommentHelper
 	}
 
 	/**
-	 * @return Comment[]|null
+	 * @return list<Comment>|null
 	 */
 	public static function getDocCommentDescription(File $phpcsFile, int $pointer): ?array
 	{
@@ -97,7 +97,7 @@ class DocCommentHelper
 			$tokens[$docCommentOpenPointer]['comment_closer'] + 1
 		);
 
-		/** @var Comment[] $comments */
+		/** @var list<Comment> $comments */
 		$comments = [];
 		for ($i = $descriptionStartPointer; $i < $tokenAfterDescriptionPointer; $i++) {
 			if ($tokens[$i]['code'] !== T_DOC_COMMENT_STRING) {

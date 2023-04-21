@@ -386,7 +386,7 @@ class EarlyExitSniff implements Sniff
 	}
 
 	/**
-	 * @return int[]
+	 * @return list<int>
 	 */
 	private function getScopeCodePointers(File $phpcsFile, int $scopePointer): array
 	{
@@ -440,7 +440,7 @@ class EarlyExitSniff implements Sniff
 	}
 
 	/**
-	 * @return int[]
+	 * @return list<int>
 	 */
 	private function getAllConditionsPointers(File $phpcsFile, int $conditionPointer): array
 	{
