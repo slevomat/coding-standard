@@ -454,7 +454,6 @@ class TokenHelper
 	}
 
 	/**
-	 * @internal
 	 * @return array<int, (int|string)>
 	 */
 	public static function getNameTokenCodes(): array
@@ -463,7 +462,6 @@ class TokenHelper
 	}
 
 	/**
-	 * @internal
 	 * @return array<int, (int|string)>
 	 */
 	public static function getOnlyNameTokenCodes(): array
