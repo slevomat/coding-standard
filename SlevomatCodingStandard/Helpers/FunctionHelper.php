@@ -381,7 +381,7 @@ class FunctionHelper
 		$tokens = $phpcsFile->getTokens();
 
 		$parametersAnnotations = [];
-		foreach (AnnotationHelper::PREFIXES as $prefix) {
+		foreach (AnnotationHelper::STATIC_ANALYSIS_PREFIXES as $prefix) {
 			if (self::getName($phpcsFile, $functionPointer) === '__construct') {
 				for ($i = $tokens[$functionPointer]['parenthesis_opener'] + 1; $i < $tokens[$functionPointer]['parenthesis_closer']; $i++) {
 					if ($tokens[$i]['code'] !== T_VARIABLE) {
@@ -435,7 +435,7 @@ class FunctionHelper
 	{
 		$returnAnnotations = [];
 
-		foreach (AnnotationHelper::PREFIXES as $prefix) {
+		foreach (AnnotationHelper::STATIC_ANALYSIS_PREFIXES as $prefix) {
 			/** @var ReturnAnnotation[] $annotations */
 			$annotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $functionPointer, sprintf('@%s-return', $prefix));
 			foreach ($annotations as $annotation) {

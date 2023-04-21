@@ -655,7 +655,7 @@ class PropertyTypeHintSniff implements Sniff
 	{
 		$returnAnnotations = [];
 
-		foreach (AnnotationHelper::PREFIXES as $prefix) {
+		foreach (AnnotationHelper::STATIC_ANALYSIS_PREFIXES as $prefix) {
 			/** @var VariableAnnotation[] $annotations */
 			$annotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $propertyPointer, sprintf('@%s-var', $prefix));
 			foreach ($annotations as $annotation) {

@@ -263,7 +263,7 @@ class TypeHintHelper
 		if ($templateAnnotationNames === null) {
 			foreach (['template', 'template-covariant'] as $annotationName) {
 				$templateAnnotationNames[] = sprintf('@%s', $annotationName);
-				foreach (AnnotationHelper::PREFIXES as $prefixAnnotationName) {
+				foreach (AnnotationHelper::STATIC_ANALYSIS_PREFIXES as $prefixAnnotationName) {
 					$templateAnnotationNames[] = sprintf('@%s-%s', $prefixAnnotationName, $annotationName);
 				}
 			}
@@ -323,7 +323,7 @@ class TypeHintHelper
 		static $aliasAnnotationNames = null;
 		if ($aliasAnnotationNames === null) {
 			foreach (['type', 'import-type'] as $annotationName) {
-				foreach (AnnotationHelper::PREFIXES as $prefixAnnotationName) {
+				foreach (AnnotationHelper::STATIC_ANALYSIS_PREFIXES as $prefixAnnotationName) {
 					$aliasAnnotationNames[] = sprintf('@%s-%s', $prefixAnnotationName, $annotationName);
 				}
 			}
