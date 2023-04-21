@@ -72,6 +72,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_
  - [SlevomatCodingStandard.Classes.TraitUseDeclaration](doc/classes.md#slevomatcodingstandardclassestraitusedeclaration-) 🔧
  - [SlevomatCodingStandard.Classes.TraitUseSpacing](doc/classes.md#slevomatcodingstandardclassestraitusespacing-) 🔧
  - [SlevomatCodingStandard.Classes.UselessLateStaticBinding](doc/classes.md#slevomatcodingstandardclassesuselesslatestaticbinding-) 🔧
+ - [SlevomatCodingStandard.Commenting.AnnotationName](doc/commenting.md#slevomatcodingstandardcommentingannotationname-)
  - [SlevomatCodingStandard.Commenting.DeprecatedAnnotationDeclaration](doc/commenting.md#slevomatcodingstandardcommentingdeprecatedannotationdeclaration)
  - [SlevomatCodingStandard.Commenting.DisallowCommentAfterCode](doc/commenting.md#slevomatcodingstandardcommentingdisallowcommentaftercode-) 🔧
  - [SlevomatCodingStandard.Commenting.DisallowOneLinePropertyDocComment](doc/commenting.md#slevomatcodingstandardcommentingdisallowonelinepropertydoccomment-) 🔧
