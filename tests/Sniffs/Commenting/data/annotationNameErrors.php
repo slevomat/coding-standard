@@ -23,4 +23,14 @@ class Whatever
 	{
 	}
 
+	/** @inheritdoc */
+	public function inherit2()
+	{
+	}
+
+	/** {@inheritdoc} */
+	public function inherit3()
+	{
+	}
+
 }

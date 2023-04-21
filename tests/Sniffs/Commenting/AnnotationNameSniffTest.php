@@ -18,7 +18,7 @@ class AnnotationNameSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/annotationNameErrors.php');
 
-		self::assertSame(6, $report->getErrorCount());
+		self::assertSame(8, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -55,6 +55,18 @@ class AnnotationNameSniffTest extends TestCase
 			17,
 			AnnotationNameSniff::CODE_ANNOTATION_NAME_INCORRECT,
 			'Annotation name is incorrect. Expected @inheritDoc, found @INHERITDOC.'
+		);
+		self::assertSniffError(
+			$report,
+			26,
+			AnnotationNameSniff::CODE_ANNOTATION_NAME_INCORRECT,
+			'Annotation name is incorrect. Expected @inheritDoc, found @inheritdoc.'
+		);
+		self::assertSniffError(
+			$report,
+			31,
+			AnnotationNameSniff::CODE_ANNOTATION_NAME_INCORRECT,
+			'Annotation name is incorrect. Expected @inheritDoc, found @inheritdoc.'
 		);
 
 		self::assertAllFixedInFile($report);
