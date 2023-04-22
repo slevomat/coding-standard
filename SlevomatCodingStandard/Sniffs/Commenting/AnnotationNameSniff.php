@@ -13,6 +13,7 @@ use function array_key_exists;
 use function array_map;
 use function array_merge;
 use function array_unique;
+use function implode;
 use function ltrim;
 use function preg_match_all;
 use function sprintf;
@@ -204,41 +205,42 @@ class AnnotationNameSniff implements Sniff
 
 		$docCommentContent = TokenHelper::getContent($phpcsFile, $docCommentOpenPointer, $tokens[$docCommentOpenPointer]['comment_closer']);
 
-		foreach ($correctAnnotationNames as $correctAnnotationName) {
-			if (preg_match_all('~\{(' . $correctAnnotationName . ')\}~i', $docCommentContent, $matches, PREG_OFFSET_CAPTURE) === 0) {
+		if (preg_match_all(
+			'~\{(' . implode('|', $correctAnnotationNames) . ')\}~i',
+			$docCommentContent,
+			$matches,
+			PREG_OFFSET_CAPTURE
+		) === 0) {
+			return;
+		}
+
+		foreach ($matches[1] as $match) {
+			$correctAnnotationName = $correctAnnotationNames[strtolower($match[0])];
+
+			if ($correctAnnotationName === $match[0]) {
 				continue;
 			}
 
-			foreach ($matches[1] as $match) {
-				if ($match[0] === $correctAnnotationName) {
-					continue;
-				}
-
-				$fix = $phpcsFile->addFixableError(
-					sprintf('Annotation name is incorrect. Expected %s, found %s.', $correctAnnotationName, $match[0]),
-					$docCommentOpenPointer,
-					self::CODE_ANNOTATION_NAME_INCORRECT
-				);
-				if (!$fix) {
-					continue;
-				}
-
-				$phpcsFile->fixer->beginChangeset();
-
-				$fixedDocCommentContent = substr($docCommentContent, 0, $match[1]) . $correctAnnotationName . substr(
-					$docCommentContent,
-					$match[1] + strlen($match[0])
-				);
-
-				$phpcsFile->fixer->replaceToken($docCommentOpenPointer, $fixedDocCommentContent);
-				FixerHelper::removeBetweenIncluding(
-					$phpcsFile,
-					$docCommentOpenPointer + 1,
-					$tokens[$docCommentOpenPointer]['comment_closer']
-				);
-
-				$phpcsFile->fixer->endChangeset();
+			$fix = $phpcsFile->addFixableError(
+				sprintf('Annotation name is incorrect. Expected %s, found %s.', $correctAnnotationName, $match[0]),
+				$docCommentOpenPointer,
+				self::CODE_ANNOTATION_NAME_INCORRECT
+			);
+			if (!$fix) {
+				continue;
 			}
+
+			$phpcsFile->fixer->beginChangeset();
+
+			$fixedDocCommentContent = substr($docCommentContent, 0, $match[1]) . $correctAnnotationName . substr(
+				$docCommentContent,
+				$match[1] + strlen($match[0])
+			);
+
+			$phpcsFile->fixer->replaceToken($docCommentOpenPointer, $fixedDocCommentContent);
+			FixerHelper::removeBetweenIncluding($phpcsFile, $docCommentOpenPointer + 1, $tokens[$docCommentOpenPointer]['comment_closer']);
+
+			$phpcsFile->fixer->endChangeset();
 		}
 	}
 
