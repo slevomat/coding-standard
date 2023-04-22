@@ -66,7 +66,7 @@ class GetTokenDynamicReturnTypeExtension implements DynamicMethodReturnTypeExten
 
 			$baseTokenBuilder = ConstantArrayTypeBuilder::createEmpty();
 			$baseTokenBuilder->setOffsetValueType(new ConstantStringType('content'), $stringType);
-			$baseTokenBuilder->setOffsetValueType(new ConstantStringType('code'), $stringIntegerUnion);
+			//$baseTokenBuilder->setOffsetValueType(new ConstantStringType('code'), $stringIntegerUnion);
 			$baseTokenBuilder->setOffsetValueType(new ConstantStringType('type'), $stringType);
 			$baseTokenBuilder->setOffsetValueType(new ConstantStringType('line'), $integerType);
 			$baseTokenBuilder->setOffsetValueType(new ConstantStringType('column'), $integerType);
