@@ -1,0 +1,5 @@
+services:
+	-
+		class: SlevomatCodingStandard\PHPStan\GetTokenDynamicReturnTypeExtension
+		tags:
+			- phpstan.broker.dynamicMethodReturnTypeExtension
