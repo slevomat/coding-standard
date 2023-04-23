@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
+use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_combine;
@@ -184,6 +185,17 @@ class AnnotationNameSniff implements Sniff
 			}
 
 			foreach ($annotationsByName as $annotation) {
+				$annotationNameWithoutAtSign = ltrim($annotationName, '@');
+				$fullyQualifiedAnnotationName = NamespaceHelper::resolveClassName(
+					$phpcsFile,
+					$annotationNameWithoutAtSign,
+					$annotation->getStartPointer()
+				);
+
+				if (NamespaceHelper::normalizeToCanonicalName($fullyQualifiedAnnotationName) !== $annotationNameWithoutAtSign) {
+					continue;
+				}
+
 				$fix = $phpcsFile->addFixableError(
 					sprintf('Annotation name is incorrect. Expected %s, found %s.', $correctAnnotationName, $annotationName),
 					$annotation->getStartPointer(),

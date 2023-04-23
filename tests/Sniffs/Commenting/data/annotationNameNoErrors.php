@@ -1,5 +1,7 @@
 <?php
 
+use Something\Before;
+
 /**
  * @deprecated
  *
@@ -17,6 +19,8 @@ class Whatever
 	}
 
 	/**
+	 * @Before
+	 *
 	 * @inheritDoc
 	 *
 	 * And some text with {@inheritDoc} annotation.
