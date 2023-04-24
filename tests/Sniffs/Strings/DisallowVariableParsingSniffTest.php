@@ -67,7 +67,7 @@ class DisallowVariableParsingSniffTest extends TestCase
 			]
 		);
 
-		self::assertSame(6, $report->getErrorCount());
+		self::assertSame(8, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -110,6 +110,20 @@ class DisallowVariableParsingSniffTest extends TestCase
 			DisallowVariableParsingSniff::CODE_DISALLOWED_CURLY_DOLLAR_SYNTAX,
 			'Using variable syntax "{$...}" inside string is disallowed, found "{$object->name}".'
 		);
+
+		self::assertSniffError(
+			$report,
+			51,
+			DisallowVariableParsingSniff::CODE_DISALLOWED_CURLY_DOLLAR_SYNTAX,
+			'Using variable syntax "{$...}" inside string is disallowed, found "{$array[$simpleString]}".'
+		);
+
+		self::assertSniffError(
+			$report,
+			53,
+			DisallowVariableParsingSniff::CODE_DISALLOWED_CURLY_DOLLAR_SYNTAX,
+			'Using variable syntax "{$...}" inside string is disallowed, found "{$a->test($b)}".'
+		);
 	}
 
 	public function testErrorsSimpleSyntax(): void
@@ -123,7 +137,7 @@ class DisallowVariableParsingSniffTest extends TestCase
 			]
 		);
 
-		self::assertSame(6, $report->getErrorCount());
+		self::assertSame(7, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -136,14 +150,14 @@ class DisallowVariableParsingSniffTest extends TestCase
 			$report,
 			38,
 			DisallowVariableParsingSniff::CODE_DISALLOWED_SIMPLE_SYNTAX,
-			'Using variable syntax "$..." inside string is disallowed, found "$array[1]".'
+			'Using variable syntax "$..." inside string is disallowed, found "$array".'
 		);
 
 		self::assertSniffError(
 			$report,
 			39,
 			DisallowVariableParsingSniff::CODE_DISALLOWED_SIMPLE_SYNTAX,
-			'Using variable syntax "$..." inside string is disallowed, found "$object->name".'
+			'Using variable syntax "$..." inside string is disallowed, found "$object".'
 		);
 
 		self::assertSniffError(
@@ -157,14 +171,21 @@ class DisallowVariableParsingSniffTest extends TestCase
 			$report,
 			47,
 			DisallowVariableParsingSniff::CODE_DISALLOWED_SIMPLE_SYNTAX,
-			'Using variable syntax "$..." inside string is disallowed, found "$array[1]".'
+			'Using variable syntax "$..." inside string is disallowed, found "$array".'
 		);
 
 		self::assertSniffError(
 			$report,
 			48,
 			DisallowVariableParsingSniff::CODE_DISALLOWED_SIMPLE_SYNTAX,
-			'Using variable syntax "$..." inside string is disallowed, found "$object->name".'
+			'Using variable syntax "$..." inside string is disallowed, found "$object".'
+		);
+
+		self::assertSniffError(
+			$report,
+			51,
+			DisallowVariableParsingSniff::CODE_DISALLOWED_SIMPLE_SYNTAX,
+			'Using variable syntax "$..." inside string is disallowed, found "$simpleString".'
 		);
 	}
 

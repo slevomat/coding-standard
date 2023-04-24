@@ -48,4 +48,6 @@ Some heredoc line with array item variable $array[1]
 Some heredoc line with object variable $object->name
 EOT;
 
-"{$array[$simpleString]}";
+"{$array[$simpleString]} $simpleString";
+
+"{$a->test($b)}";
