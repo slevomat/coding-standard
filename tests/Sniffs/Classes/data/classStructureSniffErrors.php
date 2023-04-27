@@ -234,3 +234,12 @@ enum O: string
 	case SOME_ENUM_CASE = 'case';
 
 }
+
+class Foo
+{
+	private const BA = 582000;
+	private const KE = 599981;
+	use SettingsTrait {
+		SettingsTrait::__construct as private __settingsConstruct;
+	}
+}

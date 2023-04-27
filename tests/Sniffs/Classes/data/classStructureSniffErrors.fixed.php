@@ -234,3 +234,12 @@ enum O: string
 	const SOME_CONST = 'const';
 
 }
+
+class Foo
+{
+	use SettingsTrait {
+		SettingsTrait::__construct as private __settingsConstruct;
+	}
+	private const BA = 582000;
+	private const KE = 599981;
+}
