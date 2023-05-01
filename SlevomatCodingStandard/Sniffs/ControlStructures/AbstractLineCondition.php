@@ -89,9 +89,9 @@ abstract class AbstractLineCondition implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$parenthesisCloserPointer = $tokens[$whilePointer]['parenthesis_closer'];
-		$pointerAfterParentesisCloser = TokenHelper::findNextEffective($phpcsFile, $parenthesisCloserPointer + 1);
+		$pointerAfterParenthesisCloser = TokenHelper::findNextEffective($phpcsFile, $parenthesisCloserPointer + 1);
 
-		return $tokens[$pointerAfterParentesisCloser]['code'] !== T_OPEN_CURLY_BRACKET;
+		return $tokens[$pointerAfterParenthesisCloser]['code'] !== T_OPEN_CURLY_BRACKET;
 	}
 
 	protected function getLineStart(File $phpcsFile, int $pointer): string

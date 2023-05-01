@@ -253,7 +253,7 @@ class ArrayHelper
 			)
 		) {
 			// 'key' => 'value' // tokenPrev is this comment
-			//                  // we're in the preceeding whitespace
+			//                  // we're in the preceding whitespace
 			$startNew = false;
 		}
 

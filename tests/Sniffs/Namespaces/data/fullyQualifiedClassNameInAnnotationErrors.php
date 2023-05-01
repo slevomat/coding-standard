@@ -227,7 +227,7 @@ class ConstTypeNode
  * @psalm-import-type SomeImportedType from SomeImportFrom1
  * @phpstan-import-type AnotherImportedType from SomeImportFrom2 as AnotherImportedType2
  */
-class TypeAliasAndImportes
+class TypeAliasAndImports
 {
 
 	/**

@@ -17,26 +17,26 @@ class AnnotationConstantExpressionHelper
 	/**
 	 * @return array<int, ConstFetchNode>
 	 */
-	public static function getConstantFetchNodes(ConstExprNode $contantExpressionNode): array
+	public static function getConstantFetchNodes(ConstExprNode $constantExpressionNode): array
 	{
-		if ($contantExpressionNode instanceof ConstExprArrayNode) {
+		if ($constantExpressionNode instanceof ConstExprArrayNode) {
 			$constantFetchNodes = [];
-			foreach ($contantExpressionNode->items as $itemConstantExpressionNode) {
+			foreach ($constantExpressionNode->items as $itemConstantExpressionNode) {
 				$constantFetchNodes = array_merge($constantFetchNodes, self::getConstantFetchNodes($itemConstantExpressionNode));
 			}
 			return $constantFetchNodes;
 		}
 
-		if ($contantExpressionNode instanceof ConstExprArrayItemNode) {
-			$constantFetchNodes = self::getConstantFetchNodes($contantExpressionNode->value);
-			if ($contantExpressionNode->key !== null) {
-				$constantFetchNodes = array_merge($constantFetchNodes, self::getConstantFetchNodes($contantExpressionNode->key));
+		if ($constantExpressionNode instanceof ConstExprArrayItemNode) {
+			$constantFetchNodes = self::getConstantFetchNodes($constantExpressionNode->value);
+			if ($constantExpressionNode->key !== null) {
+				$constantFetchNodes = array_merge($constantFetchNodes, self::getConstantFetchNodes($constantExpressionNode->key));
 			}
 			return $constantFetchNodes;
 		}
 
-		if ($contantExpressionNode instanceof ConstFetchNode) {
-			return [$contantExpressionNode];
+		if ($constantExpressionNode instanceof ConstFetchNode) {
+			return [$constantExpressionNode];
 		}
 
 		return [];

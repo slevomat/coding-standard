@@ -33,9 +33,9 @@ class DeadCatchSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$catchToken = $tokens[$catchPointer];
-		$catchedTypes = CatchHelper::findCatchedTypesInCatch($phpcsFile, $catchToken);
+		$caughtTypes = CatchHelper::findCaughtTypesInCatch($phpcsFile, $catchToken);
 
-		if (!in_array('\\Throwable', $catchedTypes, true)) {
+		if (!in_array('\\Throwable', $caughtTypes, true)) {
 			return;
 		}
 

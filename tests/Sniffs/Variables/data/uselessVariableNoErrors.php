@@ -8,7 +8,7 @@ function returnWithoutVariable() {
 	return true;
 }
 
-function varibleOutsideScope() {
+function variableOutsideScope() {
 	return $a;
 }
 
@@ -78,13 +78,13 @@ function withPsalmDocComment() {
 	return $hhhh;
 }
 
-function moreAssigments() {
+function moreAssignments() {
 	$i = 'i';
 	$i .= 'ii';
 	return $i;
 }
 
-function moreAssigmentsWithIf() {
+function moreAssignmentsWithIf() {
 	$i = 'i';
 	if (true) {
 		$i .= 'ii';
@@ -93,7 +93,7 @@ function moreAssigmentsWithIf() {
 	return $i;
 }
 
-function moreAssigmentsWithFor($values) {
+function moreAssignmentsWithFor($values) {
 	$i = 'i';
 	for ($x = 0; $x < count($values); $x++) {
 		$i .= $values[$x];
@@ -102,7 +102,7 @@ function moreAssigmentsWithFor($values) {
 	return $i;
 }
 
-function moreAssigmentsWithForeach($values) {
+function moreAssignmentsWithForeach($values) {
 	$i = 'i';
 	foreach ($values as $value) {
 		$i .= $value;
@@ -111,7 +111,7 @@ function moreAssigmentsWithForeach($values) {
 	return $i;
 }
 
-function moreAssigmentsWithWhile($values) {
+function moreAssignmentsWithWhile($values) {
 	$i = 'i';
 	while ($value = current($values)) {
 		$i .= $value;
@@ -120,7 +120,7 @@ function moreAssigmentsWithWhile($values) {
 	return $i;
 }
 
-function moreAssigmentsWithDo($values) {
+function moreAssignmentsWithDo($values) {
 	$i = 'i';
 	$value = current($values);
 	do {
@@ -130,7 +130,7 @@ function moreAssigmentsWithDo($values) {
 	return $i;
 }
 
-function somethingBetweenAssigmentAndReturn() {
+function somethingBetweenAssignmentAndReturn() {
 	$j = 'j';
 	doSomething();
 	return $j;
@@ -144,7 +144,7 @@ function differentScope() {
 	}
 }
 
-function assigmentInCondition() {
+function assignmentInCondition() {
 	if ($l = 'l') {
 		$this->doSomething();
 		return $l;
@@ -152,7 +152,7 @@ function assigmentInCondition() {
 
 }
 
-function assigmentInConditionAgain($file) {
+function assignmentInConditionAgain($file) {
 	if (file_exists($path = realpath($file))) {
 		doAnything();
 		return $path;
@@ -192,12 +192,12 @@ function boo($backtrace) {
     return $class;
 }
 
-function assigmentAsFunctionParametr() {
+function assignmentAsFunctionParameter() {
 	doSomething($p = 0);
 	return $p;
 }
 
-function assigmentAfterAssignment() {
+function assignmentAfterAssignment() {
 	doSomething($qq = $q = 0);
 	return $q;
 }

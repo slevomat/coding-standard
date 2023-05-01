@@ -181,7 +181,7 @@ class M
 	}
 
 	/**
-	 * Static constuctor
+	 * Static constructor
 	 *
 	 * @return static
 	 */
@@ -200,7 +200,7 @@ class M
 abstract class WithAbstract
 {
 
-	public function notAbtractMethod()
+	public function notAbstractMethod()
 	{
 	}
 

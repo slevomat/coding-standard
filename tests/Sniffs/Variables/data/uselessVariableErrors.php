@@ -73,7 +73,7 @@ function sameVariableInDifferentScope() {
 	return $n;
 }
 
-function moreVariableOneWithoutAssigment() {
+function moreVariableOneWithoutAssignment() {
 	$o++;
 	$o = 10;
 
@@ -90,7 +90,7 @@ function afterIfStatement(float $seconds): string
 	return $r;
 }
 
-function moreAssigments($object) {
+function moreAssignments($object) {
 	$object->title = $s = $object->url ?: $object->somethingElse;
 	return $s;
 }

@@ -18,7 +18,7 @@ class Whatever
 
 }
 
-function noAssigment()
+function noAssignment()
 {
 	$a[]++;
 }

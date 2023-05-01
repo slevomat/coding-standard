@@ -158,7 +158,7 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 					continue;
 				}
 
-				if ($this->isParameterModifiedBeforeAssigment($phpcsFile, $functionPointer, $parameterName, $assignmentPointer)) {
+				if ($this->isParameterModifiedBeforeAssignment($phpcsFile, $functionPointer, $parameterName, $assignmentPointer)) {
 					continue;
 				}
 
@@ -361,16 +361,16 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 		return $parameterTypeHint->getTypeHint() === $propertyTypeHint->getTypeHint();
 	}
 
-	private function isParameterModifiedBeforeAssigment(
+	private function isParameterModifiedBeforeAssignment(
 		File $phpcsFile,
 		int $functionPointer,
 		string $parameterName,
-		int $assigmentPointer
+		int $assignmentPointer
 	): bool
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		for ($i = $assigmentPointer - 1; $i > $tokens[$functionPointer]['scope_opener']; $i--) {
+		for ($i = $assignmentPointer - 1; $i > $tokens[$functionPointer]['scope_opener']; $i--) {
 			if ($tokens[$i]['code'] !== T_VARIABLE) {
 				continue;
 			}
