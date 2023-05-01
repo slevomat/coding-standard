@@ -191,17 +191,17 @@ class InlineDocCommentDeclarationSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
-	public function testNoErrorsWithDocCommentAboveNonAssigmentAllowed(): void
+	public function testNoErrorsWithDocCommentAboveNonAssignmentAllowed(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/inlineDocDocommentDeclarationWithDocCommentAboveNonAssigmentAllowedNoErrors.php', [
+		$report = self::checkFile(__DIR__ . '/data/inlineDocDocommentDeclarationWithDocCommentAboveNonAssignmentAllowedNoErrors.php', [
 			'allowAboveNonAssignment' => true,
 		]);
 		self::assertNoSniffErrorInFile($report);
 	}
 
-	public function testErrorsWithDocCommentAboveNonAssigmentAllowed(): void
+	public function testErrorsWithDocCommentAboveNonAssignmentAllowed(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/inlineDocDocommentDeclarationWithDocCommentAboveNonAssigmentAllowedErrors.php', [
+		$report = self::checkFile(__DIR__ . '/data/inlineDocDocommentDeclarationWithDocCommentAboveNonAssignmentAllowedErrors.php', [
 			'allowAboveNonAssignment' => true,
 		]);
 

@@ -8,7 +8,7 @@ class Whatever
 
 	}
 
-	public function simpleAssigment()
+	public function simpleAssignment()
 	{
 		$variable = null;
 	}
@@ -23,7 +23,7 @@ class Whatever
 		$a = $b + $c;
 	}
 
-	public function noVariableAfterAssigment($b, $c)
+	public function noVariableAfterAssignment($b, $c)
 	{
 		$a = ($b * $c);
 	}

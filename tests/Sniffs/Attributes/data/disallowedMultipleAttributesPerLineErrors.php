@@ -53,7 +53,7 @@ trait sampleTrait{
 
 #[Attribute1] #[Attribute2('var')]
 #[Attribute3(option: PDO::class, option2: true, option3: 'False')]
-interface sampleInteface{
+interface sampleInterface{
     function traitFunc();
 }
 

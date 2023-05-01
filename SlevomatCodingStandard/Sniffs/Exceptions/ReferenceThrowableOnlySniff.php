@@ -126,8 +126,8 @@ class ReferenceThrowableOnlySniff implements Sniff
 				break;
 			}
 
-			$catchedTypes = CatchHelper::findCatchedTypesInCatch($phpcsFile, $nextCatchToken);
-			if (in_array('\\Throwable', $catchedTypes, true)) {
+			$caughtTypes = CatchHelper::findCaughtTypesInCatch($phpcsFile, $nextCatchToken);
+			if (in_array('\\Throwable', $caughtTypes, true)) {
 				return true;
 			}
 

@@ -9,6 +9,6 @@ class TestClass
 	}
 
 	use SomeTrait {
-		methodName as overridenName;
+		methodName as overriddenName;
 	}
 }

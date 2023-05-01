@@ -44,7 +44,7 @@ do {
 	// Something
 } while (true);
 
-function greateThanOrEqualCondition() {
+function greaterThanOrEqualCondition() {
 	if ($number < 0) {
 		return [];
 	}
@@ -52,7 +52,7 @@ function greateThanOrEqualCondition() {
 	// Something
 }
 
-function greateThanCondition() {
+function greaterThanCondition() {
 	if ($number <= 0) {
 		exit;
 	}

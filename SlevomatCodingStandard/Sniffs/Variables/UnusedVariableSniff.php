@@ -617,12 +617,12 @@ class UnusedVariableSniff implements Sniff
 				continue;
 			}
 
-			$assigmentPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
-			if ($tokens[$assigmentPointer]['code'] !== T_EQUAL) {
+			$assignmentPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
+			if ($tokens[$assignmentPointer]['code'] !== T_EQUAL) {
 				continue;
 			}
 
-			$referencePointer = TokenHelper::findNextEffective($phpcsFile, $assigmentPointer + 1);
+			$referencePointer = TokenHelper::findNextEffective($phpcsFile, $assignmentPointer + 1);
 			if ($tokens[$referencePointer]['code'] === T_BITWISE_AND) {
 				return true;
 			}
