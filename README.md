@@ -33,6 +33,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_
  - [SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation](doc/arrays.md#slevomatcodingstandardarraysdisallowimplicitarraycreation)
  - [SlevomatCodingStandard.Arrays.DisallowPartiallyKeyed](doc/arrays.md#slevomatcodingstandardarraysdisallowpartiallykeyed) 🚧
  - [SlevomatCodingStandard.Arrays.MultiLineArrayEndBracketPlacement](doc/arrays.md#slevomatcodingstandardarraysmultilinearrayendbracketplacement-) 🔧
+ - [SlevomatCodingStandard.Arrays.ArrayAccessSniff.php](doc/arrays.md#slevomatcodingstandardarraysarrayaccess-) 🔧
  - [SlevomatCodingStandard.Arrays.SingleLineArrayWhitespace](doc/arrays.md#slevomatcodingstandardarrayssinglelinearraywhitespace-) 🔧
  - [SlevomatCodingStandard.Arrays.TrailingArrayComma](doc/arrays.md#slevomatcodingstandardarraystrailingarraycomma-) 🔧
  - [SlevomatCodingStandard.Attributes.AttributeAndTargetSpacing](doc/attributes.md#slevomatcodingstandardattributesattributeandtargetspacing-) 🔧
