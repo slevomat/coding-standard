@@ -8,6 +8,10 @@ It reduces merge conflicts and duplicate entries.
 
 This sniff enforces natural sorting of array definitions by key in multi-line arrays.
 
+#### SlevomatCodingStandard.Arrays.ArrayAccess 🔧
+
+Disallow whitespace between array access operator and the variable, or between array access operators.
+
 #### SlevomatCodingStandard.Arrays.DisallowImplicitArrayCreation
 
 Disallows implicit array creation.
