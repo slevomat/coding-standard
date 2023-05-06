@@ -187,7 +187,9 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 			$collidingUseStatementUniqueId = UseStatement::getUniqueId($reference->type, $unqualifiedName);
 
-			$isFullyQualified = NamespaceHelper::isFullyQualifiedName($name);
+			$isFullyQualified = NamespaceHelper::isFullyQualifiedName($name)
+				|| ($namespacePointers === [] && NamespaceHelper::hasNamespace($name));
+
 			$isGlobalFallback = !$isFullyQualified
 				&& !NamespaceHelper::hasNamespace($name)
 				&& $namespacePointers !== []

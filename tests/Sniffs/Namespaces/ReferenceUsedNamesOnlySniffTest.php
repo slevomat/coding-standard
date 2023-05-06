@@ -369,6 +369,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 
 		self::assertSniffError($report, 3, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE, '\Foo');
 		self::assertSniffError($report, 4, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Bar\Lorem');
+		self::assertSniffError($report, 5, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, 'Bar\Lorem');
 	}
 
 	/**

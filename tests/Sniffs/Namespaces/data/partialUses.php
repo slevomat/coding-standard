@@ -1,7 +1,7 @@
 <?php
 
-use AnotherFramework\ConcreteClass;
+namespace Whatever;
+
 use SomeFramework;
 
-new ConcreteClass();
 new SomeFramework\ObjectPrototype();
