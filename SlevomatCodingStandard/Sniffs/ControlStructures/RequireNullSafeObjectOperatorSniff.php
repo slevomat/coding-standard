@@ -69,36 +69,23 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
-		$pointerBeforeIdentical = TokenHelper::findPreviousEffective($phpcsFile, $identicalPointer - 1);
-		$pointerAfterIdentical = TokenHelper::findNextEffective($phpcsFile, $identicalPointer + 1);
+		[$pointerBeforeIdentical, $pointerAfterIdentical] = $this->getIndenticalData($phpcsFile, $identicalPointer);
 
 		if ($tokens[$pointerBeforeIdentical]['code'] !== T_NULL && $tokens[$pointerAfterIdentical]['code'] !== T_NULL) {
 			return $identicalPointer + 1;
 		}
 
-		$isYoda = $tokens[$pointerBeforeIdentical]['code'] === T_NULL;
+		[$identificatorStartPointer, $identificatorEndPointer, $conditionStartPointer] = $this->getConditionData(
+			$phpcsFile,
+			$pointerBeforeIdentical,
+			$pointerAfterIdentical
+		);
 
-		if ($isYoda) {
-			$identificatorStartPointer = $pointerAfterIdentical;
-			$identificatorEndPointer = $this->findIdentificatorEnd($phpcsFile, $identificatorStartPointer);
-
-			if ($identificatorEndPointer === null) {
-				return $pointerAfterIdentical + 1;
-			}
-
-			$conditionStartPointer = $pointerBeforeIdentical;
-
-		} else {
-			$identificatorEndPointer = $pointerBeforeIdentical;
-			$identificatorStartPointer = $this->findIdentificatorStart($phpcsFile, $identificatorEndPointer);
-
-			if ($identificatorStartPointer === null) {
-				return $identificatorEndPointer + 1;
-			}
-
-			$conditionStartPointer = $identificatorStartPointer;
+		if ($identificatorStartPointer === null || $identificatorEndPointer === null) {
+			return $identicalPointer + 1;
 		}
 
+		$isYoda = $tokens[$pointerBeforeIdentical]['code'] === T_NULL;
 		$identificator = IdentificatorHelper::getContent($phpcsFile, $identificatorStartPointer, $identificatorEndPointer);
 
 		$pointerAfterCondition = TokenHelper::findNextEffective(
@@ -158,6 +145,40 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 			$searchStartPointer = $booleanOperatorPointer + 1;
 
 		} while (true);
+
+		$pointerBeforeCondition = TokenHelper::findPreviousEffective($phpcsFile, $conditionStartPointer - 1);
+		if (in_array($tokens[$pointerBeforeCondition]['code'], [T_BOOLEAN_AND, T_BOOLEAN_OR], true)) {
+			$previousIdenticalPointer = TokenHelper::findPreviousLocal(
+				$phpcsFile,
+				[T_IS_IDENTICAL, T_IS_NOT_IDENTICAL],
+				$pointerBeforeCondition
+			);
+
+			if ($previousIdenticalPointer !== null) {
+				[$pointerBeforePreviousIdentical, $pointerAfterPreviousIdentical] = $this->getIndenticalData(
+					$phpcsFile,
+					$previousIdenticalPointer
+				);
+
+				[$previousIdentificatorStartPointer, $previousIdentificatorEndPointer] = $this->getConditionData(
+					$phpcsFile,
+					$pointerBeforePreviousIdentical,
+					$pointerAfterPreviousIdentical
+				);
+
+				if ($previousIdentificatorStartPointer !== null && $previousIdentificatorEndPointer !== null) {
+					$previousIdentificator = IdentificatorHelper::getContent(
+						$phpcsFile,
+						$previousIdentificatorStartPointer,
+						$previousIdentificatorEndPointer
+					);
+
+					if (!self::areIdentificatorsCompatible($previousIdentificator, $identificator)) {
+						return;
+					}
+				}
+			}
+		}
 
 		$defaultInElse = $tokens[$identicalPointer]['code'] === T_IS_NOT_IDENTICAL;
 		$inlineElsePointer = TernaryOperatorHelper::getElsePointer($phpcsFile, $inlineThenPointer);
@@ -274,7 +295,7 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 		$nextIdentificator = IdentificatorHelper::getContent($phpcsFile, $nextIdentificatorStartPointer, $nextIdentificatorEndPointer);
 
 		if (!$this->areIdentificatorsCompatible($identificator, $nextIdentificator)) {
-			return $nextConditionBooleanPointer;
+			return $nextIdentificatorEndPointer;
 		}
 
 		$pointerAfterNexIdentificator = TokenHelper::findNextEffective($phpcsFile, $nextIdentificatorEndPointer + 1);
@@ -285,16 +306,16 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 			$tokens[$pointerAfterNexIdentificator]['code'] !== $tokens[$identicalPointer]['code']
 			&& !in_array($tokens[$pointerAfterNexIdentificator]['code'], [T_INLINE_THEN, T_SEMICOLON], true)
 		) {
-			return $nextConditionBooleanPointer;
+			return $pointerAfterNexIdentificator;
 		}
 
 		if (!in_array($tokens[$pointerAfterNexIdentificator]['code'], [T_IS_IDENTICAL, T_IS_NOT_IDENTICAL], true)) {
-			return $nextConditionBooleanPointer;
+			return $pointerAfterNexIdentificator;
 		}
 
 		$pointerAfterIdentical = TokenHelper::findNextEffective($phpcsFile, $pointerAfterNexIdentificator + 1);
 		if ($tokens[$pointerAfterIdentical]['code'] !== T_NULL) {
-			return $nextConditionBooleanPointer;
+			return $pointerAfterNexIdentificator;
 		}
 
 		$identificatorDifference = $this->getIdentificatorDifference(
@@ -307,7 +328,7 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 		$fix = $phpcsFile->addFixableError('Operator ?-> is required.', $identicalPointer, self::CODE_REQUIRED_NULL_SAFE_OBJECT_OPERATOR);
 
 		if (!$fix) {
-			return $nextConditionBooleanPointer;
+			return $pointerAfterNexIdentificator;
 		}
 
 		$isConditionOfTernaryOperator = TernaryOperatorHelper::isConditionOfTernaryOperator($phpcsFile, $identicalPointer);
@@ -324,7 +345,7 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 			return TokenHelper::findNext($phpcsFile, T_INLINE_THEN, $identicalPointer + 1);
 		}
 
-		return $nextConditionBooleanPointer;
+		return $pointerAfterNexIdentificator;
 	}
 
 	/**
@@ -449,6 +470,42 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 		}
 
 		return TokenHelper::getContent($phpcsFile, $differencePointer, $nextIdentificatorEndPointer);
+	}
+
+	/**
+	 * @return array{0: int, 1: int}
+	 */
+	private function getIndenticalData(File $phpcsFile, int $identicalPointer): array
+	{
+		/** @var int $pointerBeforeIdentical */
+		$pointerBeforeIdentical = TokenHelper::findPreviousEffective($phpcsFile, $identicalPointer - 1);
+		/** @var int $pointerAfterIdentical */
+		$pointerAfterIdentical = TokenHelper::findNextEffective($phpcsFile, $identicalPointer + 1);
+
+		return [$pointerBeforeIdentical, $pointerAfterIdentical];
+	}
+
+	/**
+	 * @return array{0: int|null, 1: int|null, 2: int|null}
+	 */
+	private function getConditionData(File $phpcsFile, int $pointerBeforeIdentical, int $pointerAfterIdentical): array
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$isYoda = $tokens[$pointerBeforeIdentical]['code'] === T_NULL;
+
+		if ($isYoda) {
+			$identificatorStartPointer = $pointerAfterIdentical;
+			$identificatorEndPointer = $this->findIdentificatorEnd($phpcsFile, $identificatorStartPointer);
+			$conditionStartPointer = $pointerBeforeIdentical;
+
+		} else {
+			$identificatorEndPointer = $pointerBeforeIdentical;
+			$identificatorStartPointer = $this->findIdentificatorStart($phpcsFile, $identificatorEndPointer);
+			$conditionStartPointer = $identificatorStartPointer;
+		}
+
+		return [$identificatorStartPointer, $identificatorEndPointer, $conditionStartPointer];
 	}
 
 }

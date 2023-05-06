@@ -54,3 +54,10 @@ if ($a === null || $a->size === 0) {
 
 if ($a === null || $a->size() === 0) {
 }
+
+function format($format, $date): ?string
+{
+	return $format !== null && $date !== null
+		? $date->format($format)
+		: null;
+}
