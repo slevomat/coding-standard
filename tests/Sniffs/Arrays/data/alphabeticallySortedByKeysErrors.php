@@ -18,13 +18,13 @@
 	        ];
 	    }
 	},
-	'arrow' => fn($x) => array(
-		'y' => 'y val',
-		'x' => 'x val',
-	),
 	'nested' => array(
 		'b2' => 'b2 val',
 		'a2' => 'a2 val',
+	),
+	'arrow' => fn($x) => array(
+		'y' => 'y val',
+		'x' => 'x val',
 	)];
 
 [

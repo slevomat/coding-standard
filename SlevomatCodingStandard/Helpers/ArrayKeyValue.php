@@ -116,23 +116,24 @@ class ArrayKeyValue
 		$key = '';
 		$tokens = $phpcsFile->getTokens();
 		$firstNonWhitespace = null;
-		$pointerCloser = null;
-		for ($pointer = $this->pointerStart; $pointer <= $this->pointerEnd; $pointer++) {
-			if ($pointer < $pointerCloser) {
+
+		for ($i = $this->pointerStart; $i <= $this->pointerEnd; $i++) {
+			$token = $tokens[$i];
+
+			if (in_array($token['code'], TokenHelper::$arrayTokenCodes, true)) {
+				$i = ArrayHelper::openClosePointers($token)[1];
 				continue;
 			}
-			$token = $tokens[$pointer];
-			if (in_array($token['code'], TokenHelper::$arrayTokenCodes, true)) {
-				$pointerCloser = ArrayHelper::openClosePointers($token)[1];
-			} elseif ($token['code'] === T_DOUBLE_ARROW) {
-				$this->pointerArrow = $pointer;
+
+			if ($token['code'] === T_DOUBLE_ARROW) {
+				$this->pointerArrow = $i;
 			} elseif ($token['code'] === T_COMMA) {
-				$this->pointerComma = $pointer;
+				$this->pointerComma = $i;
 			} elseif ($token['code'] === T_ELLIPSIS) {
 				$this->unpacking = true;
 			} elseif ($this->pointerArrow === null) {
 				if ($firstNonWhitespace === null && $token['code'] !== T_WHITESPACE) {
-					$firstNonWhitespace = $pointer;
+					$firstNonWhitespace = $i;
 				}
 				if (in_array($token['code'], TokenHelper::$inlineCommentTokenCodes, true) === false) {
 					$key .= $token['content'];
