@@ -62,17 +62,16 @@ class ArrayHelper
 			$nextEffectivePointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
 
 			if ($nextEffectivePointer === $arrayCloserPointer) {
-				$arrayKeyValueEndPointer = $i;
+				$arrayKeyValueEndPointer = self::getValueEndPointer($phpcsFile, $i, $arrayCloserPointer, $indentation);
 				break;
 			}
 
 			if ($token['code'] !== T_COMMA || !ScopeHelper::isInSameScope($phpcsFile, $arrayOpenerPointer, $i)) {
+				$arrayKeyValueEndPointer = $i;
 				continue;
 			}
 
-			$arrayKeyValueEndPointer = $tokens[$nextEffectivePointer]['line'] === $tokens[$i]['line']
-				? $nextEffectivePointer - 1
-				: self::getValueEndPointer($phpcsFile, $i, $indentation);
+			$arrayKeyValueEndPointer = self::getValueEndPointer($phpcsFile, $i, $arrayCloserPointer, $indentation);
 
 			$keyValues[] = new ArrayKeyValue($phpcsFile, $arrayKeyValueStartPointer, $arrayKeyValueEndPointer);
 
@@ -80,11 +79,7 @@ class ArrayHelper
 			$i = $arrayKeyValueEndPointer;
 		}
 
-		$keyValues[] = new ArrayKeyValue(
-			$phpcsFile,
-			$arrayKeyValueStartPointer,
-			self::getValueEndPointer($phpcsFile, $arrayKeyValueEndPointer, $indentation)
-		);
+		$keyValues[] = new ArrayKeyValue($phpcsFile, $arrayKeyValueStartPointer, $arrayKeyValueEndPointer);
 
 		return $keyValues;
 	}
@@ -200,11 +195,15 @@ class ArrayHelper
 		return [(int) $pointerOpener, (int) $pointerCloser];
 	}
 
-	private static function getValueEndPointer(File $phpcsFile, int $endPointer, string $indentation): int
+	private static function getValueEndPointer(File $phpcsFile, int $endPointer, int $arrayCloserPointer, string $indentation): int
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$nextEffectivePointer = TokenHelper::findNextEffective($phpcsFile, $endPointer + 1);
+		$nextEffectivePointer = TokenHelper::findNextEffective($phpcsFile, $endPointer + 1, $arrayCloserPointer + 1);
+
+		if ($tokens[$nextEffectivePointer]['line'] === $tokens[$endPointer]['line']) {
+			return $nextEffectivePointer - 1;
+		}
 
 		for ($i = $endPointer + 1; $i < $nextEffectivePointer; $i++) {
 			if ($tokens[$i]['line'] === $tokens[$endPointer]['line']) {

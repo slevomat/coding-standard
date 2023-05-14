@@ -3,7 +3,6 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
-use function array_key_exists;
 use function in_array;
 use function ltrim;
 use function rtrim;
@@ -143,18 +142,6 @@ class ArrayKeyValue
 			}
 
 			if ($this->pointerArrow !== null) {
-				continue;
-			}
-
-			if (array_key_exists('scope_closer', $token) && $token['scope_closer'] > $i) {
-				$key .= TokenHelper::getContent($phpcsFile, $i, $token['scope_closer']);
-				$i = $token['scope_closer'];
-				continue;
-			}
-
-			if (array_key_exists('parenthesis_closer', $token)) {
-				$key .= TokenHelper::getContent($phpcsFile, $i, $token['parenthesis_closer']);
-				$i = $token['parenthesis_closer'];
 				continue;
 			}
 
