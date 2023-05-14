@@ -23,3 +23,14 @@ array(
 	'baz' => 'baz',
 	...$a
 );
+
+[
+	'bail',
+	'array',
+	'required',
+	static function (array $value): array {
+		foreach ($value as $x => $z) {
+			$x + $z;
+		}
+	},
+];
