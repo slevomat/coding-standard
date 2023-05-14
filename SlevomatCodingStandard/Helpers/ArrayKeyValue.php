@@ -128,29 +128,42 @@ class ArrayKeyValue
 
 			if ($token['code'] === T_DOUBLE_ARROW) {
 				$this->pointerArrow = $i;
-			} elseif ($token['code'] === T_COMMA) {
+				continue;
+			}
+
+			if ($token['code'] === T_COMMA) {
 				$this->pointerComma = $i;
-			} elseif ($token['code'] === T_ELLIPSIS) {
+				continue;
+
+			}
+
+			if ($token['code'] === T_ELLIPSIS) {
 				$this->unpacking = true;
-			} elseif ($this->pointerArrow === null) {
-				if (array_key_exists('scope_closer', $token) && $token['scope_closer'] > $i) {
-					$key .= TokenHelper::getContent($phpcsFile, $i, $token['scope_closer']);
-					$i = $token['scope_closer'];
-					continue;
-				}
+				continue;
+			}
 
-				if (array_key_exists('parenthesis_closer', $token)) {
-					$key .= TokenHelper::getContent($phpcsFile, $i, $token['parenthesis_closer']);
-					$i = $token['parenthesis_closer'];
-					continue;
-				}
+			if ($this->pointerArrow !== null) {
+				continue;
+			}
 
-				if ($firstNonWhitespace === null && $token['code'] !== T_WHITESPACE) {
-					$firstNonWhitespace = $i;
-				}
-				if (in_array($token['code'], TokenHelper::$inlineCommentTokenCodes, true) === false) {
-					$key .= $token['content'];
-				}
+			if (array_key_exists('scope_closer', $token) && $token['scope_closer'] > $i) {
+				$key .= TokenHelper::getContent($phpcsFile, $i, $token['scope_closer']);
+				$i = $token['scope_closer'];
+				continue;
+			}
+
+			if (array_key_exists('parenthesis_closer', $token)) {
+				$key .= TokenHelper::getContent($phpcsFile, $i, $token['parenthesis_closer']);
+				$i = $token['parenthesis_closer'];
+				continue;
+			}
+
+			if ($firstNonWhitespace === null && $token['code'] !== T_WHITESPACE) {
+				$firstNonWhitespace = $i;
+			}
+
+			if (in_array($token['code'], TokenHelper::$inlineCommentTokenCodes, true) === false) {
+				$key .= $token['content'];
 			}
 		}
 		$haveIndent = $firstNonWhitespace !== null && TokenHelper::findFirstNonWhitespaceOnLine(
