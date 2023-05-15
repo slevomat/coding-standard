@@ -40,6 +40,7 @@ use function in_array;
 use function preg_quote;
 use function preg_replace;
 use function sprintf;
+use function strpos;
 use function strtolower;
 use function substr;
 use const T_DECLARE;
@@ -187,8 +188,17 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 
 			$collidingUseStatementUniqueId = UseStatement::getUniqueId($reference->type, $unqualifiedName);
 
+			$isPartialUse = false;
+			foreach ($useStatements as $useStatement) {
+				$useStatementName = $useStatement->getAlias() ?? $useStatement->getNameAsReferencedInFile();
+				if (strpos($name, $useStatementName . '\\') === 0) {
+					$isPartialUse = true;
+					break;
+				}
+			}
+
 			$isFullyQualified = NamespaceHelper::isFullyQualifiedName($name)
-				|| ($namespacePointers === [] && NamespaceHelper::hasNamespace($name));
+				|| ($namespacePointers === [] && NamespaceHelper::hasNamespace($name) && !$isPartialUse);
 
 			$isGlobalFallback = !$isFullyQualified
 				&& !NamespaceHelper::hasNamespace($name)

@@ -316,6 +316,18 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 		self::assertNoSniffError($report, 7);
 	}
 
+	public function testAllowPartialUsesWithoutNamespace(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/partialUsesWithoutNamespace.php',
+			[
+				'allowPartialUses' => true,
+			]
+		);
+
+		self::assertNoSniffErrorInFile($report);
+	}
+
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
