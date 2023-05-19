@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Files\LocalFile;
 use PHP_CodeSniffer\Runner;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Common;
 use ReflectionClass;
 use function array_map;
 use function array_merge;
@@ -165,21 +166,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		return $sniffClassName;
 	}
 
-	private static function getSniffName(): string
+	protected static function getSniffName(): string
 	{
-		return preg_replace(
-			[
-				'~\\\~',
-				'~\.Sniffs~',
-				'~Sniff$~',
-			],
-			[
-				'.',
-				'',
-				'',
-			],
-			static::getSniffClassName()
-		);
+		return Common::getSniffCode(static::getSniffClassName());
 	}
 
 	private static function getSniffClassReflection(): ReflectionClass
