@@ -31,7 +31,7 @@ class PropertyAnnotationTest extends TestCase
 		self::assertSame('Description', $annotation->getDescription());
 		self::assertSame('$property', $annotation->getPropertyName());
 		self::assertInstanceOf(IdentifierTypeNode::class, $annotation->getType());
-		self::assertSame('@property string $property Description', $annotation->export());
+		self::assertSame('@property string $property Description', $annotation->print());
 	}
 
 	public function testUnsupportedAnnotation(): void

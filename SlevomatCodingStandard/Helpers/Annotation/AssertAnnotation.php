@@ -7,7 +7,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\AssertTagMethodValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\AssertTagPropertyValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\AssertTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
+use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use function in_array;
 use function sprintf;
 
@@ -72,16 +72,9 @@ class AssertAnnotation extends Annotation
 		return $this->contentNode->type;
 	}
 
-	public function export(): string
+	public function print(): string
 	{
-		$exported = sprintf('%s %s %s', $this->name, AnnotationTypeHelper::export($this->getType()), $this->contentNode->parameter);
-
-		$description = $this->getDescription();
-		if ($description !== null) {
-			$exported .= sprintf(' %s', $this->fixDescription($description));
-		}
-
-		return $exported;
+		return sprintf('%s %s', $this->name, AnnotationHelper::getPhpDocPrinter()->print($this->contentNode));
 	}
 
 }

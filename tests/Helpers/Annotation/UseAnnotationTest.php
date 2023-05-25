@@ -33,7 +33,7 @@ class UseAnnotationTest extends TestCase
 		self::assertFalse($annotation->isInvalid());
 		self::assertTrue($annotation->hasDescription());
 		self::assertSame('Description', $annotation->getDescription());
-		self::assertSame('@use Whatever<Anything> Description', $annotation->export());
+		self::assertSame('@use Whatever<Anything> Description', $annotation->print());
 	}
 
 	public function testUnsupportedAnnotation(): void

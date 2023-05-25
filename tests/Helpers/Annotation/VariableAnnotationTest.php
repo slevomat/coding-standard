@@ -31,7 +31,7 @@ class VariableAnnotationTest extends TestCase
 		self::assertSame('Description', $annotation->getDescription());
 		self::assertSame('$variable', $annotation->getVariableName());
 		self::assertInstanceOf(IdentifierTypeNode::class, $annotation->getType());
-		self::assertSame('@var string $variable Description', $annotation->export());
+		self::assertSame('@var string $variable Description', $annotation->print());
 	}
 
 	public function testUnsupportedAnnotation(): void

@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Helpers\Annotation;
 use InvalidArgumentException;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TypeAliasTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
+use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use function in_array;
 use function sprintf;
 
@@ -59,9 +59,9 @@ class TypeAliasAnnotation extends Annotation
 		return $this->contentNode->type;
 	}
 
-	public function export(): string
+	public function print(): string
 	{
-		return sprintf('%s %s %s', $this->name, $this->contentNode->alias, AnnotationTypeHelper::export($this->contentNode->type));
+		return sprintf('%s %s', $this->name, AnnotationHelper::getPhpDocPrinter()->print($this->contentNode));
 	}
 
 }

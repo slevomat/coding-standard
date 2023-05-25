@@ -365,7 +365,7 @@ class PropertyTypeHintSniff implements Sniff
 			sprintf(
 				'Property %s does not have native type hint for its value but it should be possible to add it based on @var annotation "%s".',
 				PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer),
-				AnnotationTypeHelper::export($typeNode)
+				AnnotationTypeHelper::print($typeNode)
 			),
 			$propertyPointer,
 			self::CODE_MISSING_NATIVE_TYPE_HINT

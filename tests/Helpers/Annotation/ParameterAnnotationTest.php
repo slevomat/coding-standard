@@ -31,7 +31,7 @@ class ParameterAnnotationTest extends TestCase
 		self::assertSame('Description', $annotation->getDescription());
 		self::assertSame('$parameter', $annotation->getParameterName());
 		self::assertInstanceOf(IdentifierTypeNode::class, $annotation->getType());
-		self::assertSame('@param string $parameter Description', $annotation->export());
+		self::assertSame('@param string $parameter Description', $annotation->print());
 	}
 
 	public function testUnsupportedAnnotation(): void

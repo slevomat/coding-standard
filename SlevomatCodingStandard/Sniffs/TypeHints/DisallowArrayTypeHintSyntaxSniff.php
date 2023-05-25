@@ -76,7 +76,7 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 						$fix = $phpcsFile->addFixableError(
 							sprintf(
 								'Usage of array type hint syntax in "%s" is disallowed, use generic type hint syntax instead.',
-								AnnotationTypeHelper::export($arrayTypeNode)
+								AnnotationTypeHelper::print($arrayTypeNode)
 							),
 							$annotation->getStartPointer(),
 							self::CODE_DISALLOWED_ARRAY_TYPE_HINT_SYNTAX

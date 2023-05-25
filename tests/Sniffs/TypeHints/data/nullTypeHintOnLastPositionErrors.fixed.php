@@ -55,7 +55,7 @@ class Whatever
  * @property-write int|null $propertyWrite
  * @method bool|null method(int $m, bool ...$m2)
  * @method bool[]|array|null method2(bool $m)
- * @method method3(?\Foo<(int|null)> $m)
+ * @method method3(?\Foo<int|null> $m)
  */
 class Boo
 {
@@ -77,10 +77,10 @@ class IntersectionAndGeneric
 	/** @var int|(string<foo>&bool)[]|null */
 	public $d;
 
-	/** @var \Foo<(int|null), (bool|null)> */
+	/** @var \Foo<int|null, bool|null> */
 	public $e;
 
-	/** @var \Foo<\Foo<(int|null)>> */
+	/** @var \Foo<\Foo<int|null>> */
 	public $f;
 
 }
@@ -89,7 +89,7 @@ class CallableType
 {
 
 	/**
-	 * @return callable((bool|null) $bool): (int|null)
+	 * @return callable(bool|null $bool): (int|null)
 	 */
 	public function returnsCallable()
 	{
@@ -98,24 +98,24 @@ class CallableType
 
 }
 
-/** @var array{int, (int|null), (bool|null)} $arrayShape1 */
+/** @var array{int, int|null, bool|null} $arrayShape1 */
 $arrayShape1 = [];
 
-/** @var array{foo: (int|null)} $arrayShape2 */
+/** @var array{foo: int|null} $arrayShape2 */
 $arrayShape2 = [];
 
 class Conditional
 {
 
 	/**
-	 * @return (Conditional1 is Conditional2 ? (Conditional3|null) : false)
+	 * @return (Conditional1 is Conditional2 ? Conditional3|null : false)
 	 */
 	public function withConditional()
 	{
 	}
 
 	/**
-	 * @return ($parameter is Conditional2 ? (Conditional3|null) : false)
+	 * @return ($parameter is Conditional2 ? Conditional3|null : false)
 	 */
 	public function withConditionalParameter($parameter)
 	{
@@ -127,7 +127,7 @@ class OffsetAccess
 {
 
 	/**
-	 * @return \Foo\OffsetAccessType[(\Foo\OffsetAccessOffset2|null)]
+	 * @return \Foo\OffsetAccessType[\Foo\OffsetAccessOffset2|null]
 	 */
 	public function returnOffsetAccess()
 	{}

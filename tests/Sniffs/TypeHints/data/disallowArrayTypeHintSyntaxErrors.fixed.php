@@ -9,7 +9,7 @@ use Traversable;
 class Whatever
 {
 
-	/** @var array<(array<\DateTimeImmutable>|array<\DateTime>|null)> */
+	/** @var array<array<\DateTimeImmutable>|array<\DateTime>|null> */
 	public $a;
 
 	/** @var \ArrayObject<array<int>> */

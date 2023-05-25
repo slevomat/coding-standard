@@ -16,7 +16,7 @@ use PHPStan\PhpDocParser\Ast\Type\ObjectShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
+use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use function in_array;
 use function sprintf;
 
@@ -83,21 +83,9 @@ class VariableAnnotation extends Annotation
 		return $type;
 	}
 
-	public function export(): string
+	public function print(): string
 	{
-		$exported = sprintf('%s %s', $this->name, AnnotationTypeHelper::export($this->getType()));
-
-		$variableName = $this->getVariableName();
-		if ($variableName !== null) {
-			$exported .= sprintf(' %s', $variableName);
-		}
-
-		$description = $this->getDescription();
-		if ($description !== null) {
-			$exported .= sprintf(' %s', $this->fixDescription($description));
-		}
-
-		return $exported;
+		return sprintf('%s %s', $this->name, AnnotationHelper::getPhpDocPrinter()->print($this->contentNode));
 	}
 
 }

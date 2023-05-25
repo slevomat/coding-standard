@@ -25,6 +25,7 @@ use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
+use PHPStan\PhpDocParser\Printer\Printer;
 use SlevomatCodingStandard\Helpers\Annotation\Annotation;
 use SlevomatCodingStandard\Helpers\Annotation\AssertAnnotation;
 use SlevomatCodingStandard\Helpers\Annotation\ExtendsAnnotation;
@@ -52,7 +53,9 @@ use function preg_match;
 use function preg_match_all;
 use function preg_replace;
 use function sprintf;
+use function strlen;
 use function strtolower;
+use function substr;
 use function trim;
 use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOC_COMMENT_STAR;
@@ -353,6 +356,8 @@ class AnnotationHelper
 							$parsedContent = self::parseAnnotationContent($annotationName, $annotationContent);
 							if ($parsedContent instanceof InvalidTagValueNode) {
 								$parsedContent = null;
+							} elseif (isset($parsedContent->description) && $parsedContent->description !== '') {
+								$parsedContent->description = substr($annotationContent, -strlen($parsedContent->description));
 							}
 						}
 
@@ -434,7 +439,7 @@ class AnnotationHelper
 				&& $annotation->getType() instanceof IntersectionTypeNode
 			)
 		) {
-			$annotationTypeHint = AnnotationTypeHelper::export($annotation->getType());
+			$annotationTypeHint = AnnotationTypeHelper::print($annotation->getType());
 			return TypeHintHelper::typeHintEqualsAnnotation(
 				$phpcsFile,
 				$functionPointer,
@@ -495,6 +500,17 @@ class AnnotationHelper
 			$typeHint->getTypeHintWithoutNullabilitySymbol(),
 			$annotationTypeHint
 		);
+	}
+
+	public static function getPhpDocPrinter(): Printer
+	{
+		static $phpDocPrinter;
+
+		if ($phpDocPrinter === null) {
+			$phpDocPrinter = new Printer();
+		}
+
+		return $phpDocPrinter;
 	}
 
 	/**
@@ -588,7 +604,7 @@ class AnnotationHelper
 			$spaceAfterContent = $matches[1];
 		}
 
-		$fixedAnnotationContent = $fixedAnnotation->export() . $spaceAfterContent;
+		$fixedAnnotationContent = $fixedAnnotation->print() . $spaceAfterContent;
 
 		return preg_replace('~(\r\n|\n|\r)~', '\1 * ', $fixedAnnotationContent);
 	}
@@ -617,8 +633,11 @@ class AnnotationHelper
 		static $phpDocParser;
 
 		if ($phpDocParser === null) {
-			$constantExpressionParser = new ConstExprParser();
-			$phpDocParser = new PhpDocParser(new TypeParser($constantExpressionParser, true), $constantExpressionParser);
+			$constantExpressionParser = new ConstExprParser(true, true);
+			$phpDocParser = new PhpDocParser(
+				new TypeParser($constantExpressionParser, true),
+				$constantExpressionParser
+			);
 		}
 
 		return $phpDocParser;

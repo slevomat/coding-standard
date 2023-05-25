@@ -47,7 +47,7 @@ class MethodAnnotationTest extends TestCase
 		self::assertCount(3, $annotation->getMethodTemplateTypes());
 		self::assertContainsOnlyInstancesOf(TemplateTagValueNode::class, $annotation->getMethodTemplateTypes());
 		self::assertCount(1, $annotation->getMethodParameters());
-		self::assertSame('@method string method<T1, T2 of Bar, T3 of Baz>(int $p) Description', $annotation->export());
+		self::assertSame('@method string method<T1, T2 of Bar, T3 of Baz>(int $p) Description', $annotation->print());
 	}
 
 	public function testUnsupportedAnnotation(): void

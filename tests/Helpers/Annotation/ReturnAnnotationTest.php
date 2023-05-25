@@ -30,7 +30,7 @@ class ReturnAnnotationTest extends TestCase
 		self::assertTrue($annotation->hasDescription());
 		self::assertSame('Description', $annotation->getDescription());
 		self::assertInstanceOf(IdentifierTypeNode::class, $annotation->getType());
-		self::assertSame('@return string Description', $annotation->export());
+		self::assertSame('@return string Description', $annotation->print());
 	}
 
 	public function testUnsupportedAnnotation(): void

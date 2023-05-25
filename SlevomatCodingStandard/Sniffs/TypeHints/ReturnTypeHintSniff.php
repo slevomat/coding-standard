@@ -179,7 +179,7 @@ class ReturnTypeHintSniff implements Sniff
 						'%s %s() has return type hint "void" but it should be possible to add "never" based on @return annotation "%s".',
 						FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
 						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-						AnnotationTypeHelper::export($returnTypeNode)
+						AnnotationTypeHelper::print($returnTypeNode)
 					),
 					$functionPointer,
 					self::CODE_LESS_SPECIFIC_NATIVE_TYPE_HINT
@@ -253,7 +253,7 @@ class ReturnTypeHintSniff implements Sniff
 						'%s %s() does not have native return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
 						FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
 						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-						AnnotationTypeHelper::export($returnTypeNode)
+						AnnotationTypeHelper::print($returnTypeNode)
 					);
 
 				$fix = $phpcsFile->addFixableError($message, $functionPointer, self::getSniffName(self::CODE_MISSING_NATIVE_TYPE_HINT));
@@ -280,7 +280,7 @@ class ReturnTypeHintSniff implements Sniff
 				'%s %s() does not have native return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
 				FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
 				FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-				AnnotationTypeHelper::export($returnTypeNode)
+				AnnotationTypeHelper::print($returnTypeNode)
 			);
 
 			$phpcsFile->addError($message, $functionPointer, self::getSniffName(self::CODE_MISSING_NATIVE_TYPE_HINT));
@@ -435,7 +435,7 @@ class ReturnTypeHintSniff implements Sniff
 				'%s %s() does not have native return type hint for its return value but it should be possible to add it based on @return annotation "%s".',
 				FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
 				FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-				AnnotationTypeHelper::export($returnTypeNode)
+				AnnotationTypeHelper::print($returnTypeNode)
 			),
 			$functionPointer,
 			self::CODE_MISSING_NATIVE_TYPE_HINT

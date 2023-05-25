@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Helpers\Annotation;
 use InvalidArgumentException;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
+use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use function in_array;
 use function sprintf;
 
@@ -78,24 +78,9 @@ class TemplateAnnotation extends Annotation
 		return $this->contentNode->default;
 	}
 
-	public function export(): string
+	public function print(): string
 	{
-		$exported = sprintf('%s %s', $this->name, $this->contentNode->name);
-
-		if ($this->contentNode->bound !== null) {
-			$exported .= sprintf(' of %s', AnnotationTypeHelper::export($this->contentNode->bound));
-		}
-
-		if ($this->contentNode->default !== null) {
-			$exported .= sprintf(' = %s', AnnotationTypeHelper::export($this->contentNode->default));
-		}
-
-		$description = $this->getDescription();
-		if ($description !== null) {
-			$exported .= sprintf(' %s', $this->fixDescription($description));
-		}
-
-		return $exported;
+		return sprintf('%s %s', $this->name, AnnotationHelper::getPhpDocPrinter()->print($this->contentNode));
 	}
 
 }

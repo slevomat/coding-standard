@@ -18,7 +18,7 @@ class GenericAnnotationTest extends TestCase
 		self::assertSame('Whatever', $annotation->getContent());
 
 		self::assertFalse($annotation->isInvalid());
-		self::assertSame('@Something(Anything) Whatever', $annotation->export());
+		self::assertSame('@Something(Anything) Whatever', $annotation->print());
 	}
 
 }

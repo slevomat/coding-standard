@@ -4,8 +4,6 @@ namespace SlevomatCodingStandard\Helpers\Annotation;
 
 use LogicException;
 use function sprintf;
-use function strlen;
-use function substr;
 
 /**
  * @internal
@@ -27,7 +25,7 @@ abstract class Annotation
 
 	abstract public function isInvalid(): bool;
 
-	abstract public function export(): string;
+	abstract public function print(): string;
 
 	public function __construct(string $name, int $startPointer, int $endPointer, ?string $content)
 	{
@@ -55,11 +53,6 @@ abstract class Annotation
 	public function getContent(): ?string
 	{
 		return $this->content;
-	}
-
-	protected function fixDescription(string $description): string
-	{
-		return substr($this->getContent(), -strlen($description));
 	}
 
 	protected function errorWhenInvalid(): void

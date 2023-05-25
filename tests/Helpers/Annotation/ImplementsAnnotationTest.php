@@ -33,7 +33,7 @@ class ImplementsAnnotationTest extends TestCase
 		self::assertFalse($annotation->isInvalid());
 		self::assertTrue($annotation->hasDescription());
 		self::assertSame('Description', $annotation->getDescription());
-		self::assertSame('@implements Whatever<Anything> Description', $annotation->export());
+		self::assertSame('@implements Whatever<Anything> Description', $annotation->print());
 	}
 
 	public function testUnsupportedAnnotation(): void

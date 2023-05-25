@@ -29,7 +29,7 @@ class TypeAliasAnnotationTest extends TestCase
 		self::assertFalse($annotation->isInvalid());
 		self::assertSame('Whatever', $annotation->getAlias());
 		self::assertInstanceOf(IdentifierTypeNode::class, $annotation->getType());
-		self::assertSame('@phpstan-type Whatever Anything', $annotation->export());
+		self::assertSame('@phpstan-type Whatever Anything', $annotation->print());
 	}
 
 	public function testUnsupportedAnnotation(): void

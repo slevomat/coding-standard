@@ -30,7 +30,7 @@ class MixinAnnotationTest extends TestCase
 		self::assertTrue($annotation->hasDescription());
 		self::assertSame('Description', $annotation->getDescription());
 		self::assertInstanceOf(IdentifierTypeNode::class, $annotation->getType());
-		self::assertSame('@mixin Exception Description', $annotation->export());
+		self::assertSame('@mixin Exception Description', $annotation->print());
 	}
 
 	public function testUnsupportedAnnotation(): void

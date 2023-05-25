@@ -34,7 +34,7 @@ class AssertAnnotationTest extends TestCase
 		self::assertFalse($annotation->isInvalid());
 		self::assertTrue($annotation->hasDescription());
 		self::assertSame('Description', $annotation->getDescription());
-		self::assertSame('@phpstan-assert string $parameter Description', $annotation->export());
+		self::assertSame('@phpstan-assert string $parameter Description', $annotation->print());
 	}
 
 	public function testUnsupportedAnnotation(): void

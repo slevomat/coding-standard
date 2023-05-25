@@ -6,7 +6,7 @@ use InvalidArgumentException;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TypeAliasImportTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
+use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use function in_array;
 use function sprintf;
 
@@ -81,20 +81,9 @@ class TypeImportAnnotation extends Annotation
 		return $this->contentNode->importedAs;
 	}
 
-	public function export(): string
+	public function print(): string
 	{
-		$exported = sprintf(
-			'%s %s from %s',
-			$this->name,
-			$this->contentNode->importedAlias,
-			AnnotationTypeHelper::export($this->contentNode->importedFrom)
-		);
-
-		if ($this->contentNode->importedAs !== null) {
-			$exported .= sprintf(' as %s', $this->contentNode->importedAs);
-		}
-
-		return $exported;
+		return sprintf('%s %s', $this->name, AnnotationHelper::getPhpDocPrinter()->print($this->contentNode));
 	}
 
 }

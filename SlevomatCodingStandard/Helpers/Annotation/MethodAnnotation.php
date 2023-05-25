@@ -14,8 +14,7 @@ use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
-use function implode;
+use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use function in_array;
 use function sprintf;
 
@@ -102,41 +101,9 @@ class MethodAnnotation extends Annotation
 		return $this->contentNode->parameters;
 	}
 
-	public function export(): string
+	public function print(): string
 	{
-		$static = $this->contentNode->isStatic ? 'static ' : '';
-		$returnType = $this->getMethodReturnType() !== null
-			? sprintf('%s ', AnnotationTypeHelper::export($this->getMethodReturnType()))
-			: '';
-
-		$templateTypes = $this->contentNode->templateTypes !== [] ? '<' . implode(', ', $this->contentNode->templateTypes) . '>' : '';
-
-		$parameters = [];
-		foreach ($this->getMethodParameters() as $parameter) {
-			$type = $parameter->type !== null ? AnnotationTypeHelper::export($parameter->type) . ' ' : '';
-			$isReference = $parameter->isReference ? '&' : '';
-			$isVariadic = $parameter->isVariadic ? '...' : '';
-			$default = $parameter->defaultValue !== null ? sprintf(' = %s', $parameter->defaultValue) : '';
-
-			$parameters[] = sprintf('%s%s%s%s%s', $type, $isReference, $isVariadic, $parameter->parameterName, $default);
-		}
-
-		$exported = sprintf(
-			'%s %s%s%s%s(%s)',
-			$this->name,
-			$static,
-			$returnType,
-			$this->getMethodName(),
-			$templateTypes,
-			implode(', ', $parameters)
-		);
-
-		$description = $this->getDescription();
-		if ($description !== null) {
-			$exported .= sprintf(' %s', $this->fixDescription($description));
-		}
-
-		return $exported;
+		return sprintf('%s %s', $this->name, AnnotationHelper::getPhpDocPrinter()->print($this->contentNode));
 	}
 
 }

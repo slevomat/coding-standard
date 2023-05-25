@@ -173,14 +173,14 @@ class Conditional
 {
 
 	/**
-	 * @return (Conditional1 is Conditional2 ? (Conditional3|Conditional4) : (Conditional4 is not Conditional5 ? Conditional6 : Conditional7))
+	 * @return (Conditional1 is Conditional2 ? Conditional3|Conditional4 : (Conditional4 is not Conditional5 ? Conditional6 : Conditional7))
 	 */
 	public function withConditional()
 	{
 	}
 
 	/**
-	 * @return ($parameter is Conditional8 ? (Conditional9|Conditional10) : Conditional10)
+	 * @return ($parameter is Conditional8 ? Conditional9|Conditional10 : Conditional10)
 	 */
 	public function withConditionalParameter($parameter)
 	{

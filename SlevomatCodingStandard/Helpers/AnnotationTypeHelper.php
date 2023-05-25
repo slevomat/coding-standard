@@ -27,10 +27,7 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use function array_merge;
 use function count;
 use function in_array;
-use function preg_replace;
-use function sprintf;
 use function strtolower;
-use function substr;
 
 /**
  * @internal
@@ -359,22 +356,9 @@ class AnnotationTypeHelper
 			: $typeNode->name;
 	}
 
-	public static function export(TypeNode $typeNode): string
+	public static function print(TypeNode $typeNode): string
 	{
-		$exportedTypeNode = (string) preg_replace(['~\\s*([&|])\\s*~'], '\\1', (string) $typeNode);
-
-		if (
-			$typeNode instanceof UnionTypeNode
-			|| $typeNode instanceof IntersectionTypeNode
-		) {
-			$exportedTypeNode = substr($exportedTypeNode, 1, -1);
-		}
-
-		if ($typeNode instanceof ArrayTypeNode && $typeNode->type instanceof CallableTypeNode) {
-			$exportedTypeNode = sprintf('(%s)[]', substr($exportedTypeNode, 0, -2));
-		}
-
-		return $exportedTypeNode;
+		return AnnotationHelper::getPhpDocPrinter()->print($typeNode);
 	}
 
 	public static function change(TypeNode $masterTypeNode, TypeNode $typeNodeToChange, TypeNode $changedTypeNode): TypeNode

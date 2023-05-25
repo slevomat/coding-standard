@@ -7,7 +7,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\MixinTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
+use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use function sprintf;
 
 /**
@@ -66,16 +66,9 @@ class MixinAnnotation extends Annotation
 		return $type;
 	}
 
-	public function export(): string
+	public function print(): string
 	{
-		$exported = sprintf('%s %s', $this->name, AnnotationTypeHelper::export($this->getType()));
-
-		$description = $this->getDescription();
-		if ($description !== null) {
-			$exported .= sprintf(' %s', $this->fixDescription($description));
-		}
-
-		return $exported;
+		return sprintf('%s %s', $this->name, AnnotationHelper::getPhpDocPrinter()->print($this->contentNode));
 	}
 
 }

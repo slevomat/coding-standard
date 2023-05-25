@@ -29,7 +29,7 @@ class TypeImportAnnotationTest extends TestCase
 		self::assertFalse($annotation->isInvalid());
 		self::assertSame('Whatever', $annotation->getImportedAlias());
 		self::assertSame('ImportedAs', $annotation->getImportedAs());
-		self::assertSame('@phpstan-import-type Whatever from Anything as ImportedAs', $annotation->export());
+		self::assertSame('@phpstan-import-type Whatever from Anything as ImportedAs', $annotation->print());
 	}
 
 	public function testUnsupportedAnnotation(): void

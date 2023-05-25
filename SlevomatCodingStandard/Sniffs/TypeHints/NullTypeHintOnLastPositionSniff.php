@@ -72,7 +72,7 @@ class NullTypeHintOnLastPositionSniff implements Sniff
 						}
 
 						$fix = $phpcsFile->addFixableError(
-							sprintf('Null type hint should be on last position in "%s".', AnnotationTypeHelper::export($unionTypeNode)),
+							sprintf('Null type hint should be on last position in "%s".', AnnotationTypeHelper::print($unionTypeNode)),
 							$annotation->getStartPointer(),
 							self::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION
 						);

@@ -30,7 +30,7 @@ class SelfOutAnnotationTest extends TestCase
 		self::assertTrue($annotation->hasDescription());
 		self::assertSame('Description', $annotation->getDescription());
 		self::assertInstanceOf(IdentifierTypeNode::class, $annotation->getType());
-		self::assertSame('@phpstan-self-out string Description', $annotation->export());
+		self::assertSame('@phpstan-self-out string Description', $annotation->print());
 	}
 
 	public function testUnsupportedAnnotation(): void

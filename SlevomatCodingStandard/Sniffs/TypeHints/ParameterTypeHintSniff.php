@@ -340,7 +340,7 @@ class ParameterTypeHintSniff implements Sniff
 					FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
 					FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
 					$parameterName,
-					AnnotationTypeHelper::export($parameterTypeNode)
+					AnnotationTypeHelper::print($parameterTypeNode)
 				),
 				$functionPointer,
 				self::CODE_MISSING_NATIVE_TYPE_HINT

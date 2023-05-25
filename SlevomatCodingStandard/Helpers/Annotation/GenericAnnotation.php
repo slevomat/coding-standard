@@ -30,19 +30,19 @@ class GenericAnnotation extends Annotation
 		return false;
 	}
 
-	public function export(): string
+	public function print(): string
 	{
-		$exported = $this->name;
+		$printed = $this->name;
 
 		if ($this->parameters !== null) {
-			$exported .= sprintf('(%s)', $this->parameters);
+			$printed .= sprintf('(%s)', $this->parameters);
 		}
 
 		if ($this->content !== null) {
-			$exported .= sprintf(' %s', $this->content);
+			$printed .= sprintf(' %s', $this->content);
 		}
 
-		return $exported;
+		return $printed;
 	}
 
 }

@@ -32,7 +32,7 @@ class TemplateAnnotationTest extends TestCase
 		self::assertSame('Whatever', $annotation->getTemplateName());
 		self::assertInstanceOf(IdentifierTypeNode::class, $annotation->getBound());
 		self::assertInstanceOf(IdentifierTypeNode::class, $annotation->getDefault());
-		self::assertSame('@template Whatever of Anything = null Description', $annotation->export());
+		self::assertSame('@template Whatever of Anything = null Description', $annotation->print());
 	}
 
 	public function testUnsupportedAnnotation(): void

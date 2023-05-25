@@ -392,7 +392,7 @@ class TypeHintHelperTest extends TestCase
 				$phpcsFile,
 				$functionPointer,
 				$returnTypeHint->getTypeHint(),
-				AnnotationTypeHelper::export($returnAnnotation->getType())
+				AnnotationTypeHelper::print($returnAnnotation->getType())
 			)
 		);
 	}

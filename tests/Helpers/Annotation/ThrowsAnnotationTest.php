@@ -30,7 +30,7 @@ class ThrowsAnnotationTest extends TestCase
 		self::assertTrue($annotation->hasDescription());
 		self::assertSame('Description', $annotation->getDescription());
 		self::assertInstanceOf(IdentifierTypeNode::class, $annotation->getType());
-		self::assertSame('@throws Exception Description', $annotation->export());
+		self::assertSame('@throws Exception Description', $annotation->print());
 	}
 
 	public function testUnsupportedAnnotation(): void
