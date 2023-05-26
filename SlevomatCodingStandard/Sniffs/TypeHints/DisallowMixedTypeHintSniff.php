@@ -4,9 +4,8 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
-use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use function sprintf;
 use function strtolower;
@@ -45,31 +44,22 @@ class DisallowMixedTypeHintSniff implements Sniff
 
 		$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 
-		foreach ($annotations as $annotationByName) {
-			foreach ($annotationByName as $annotation) {
-				if ($annotation instanceof GenericAnnotation) {
+		foreach ($annotations as $annotation) {
+			/** @var list<IdentifierTypeNode> $identifierTypeNodes */
+			$identifierTypeNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), IdentifierTypeNode::class);
+
+			foreach ($identifierTypeNodes as $typeHintNode) {
+				$typeHint = $typeHintNode->name;
+
+				if (strtolower($typeHint) !== 'mixed') {
 					continue;
 				}
 
-				if ($annotation->isInvalid()) {
-					continue;
-				}
-
-				foreach (AnnotationHelper::getAnnotationTypes($annotation) as $annotationType) {
-					foreach (AnnotationTypeHelper::getIdentifierTypeNodes($annotationType) as $typeHintNode) {
-						$typeHint = AnnotationTypeHelper::getTypeHintFromNode($typeHintNode);
-
-						if (strtolower($typeHint) !== 'mixed') {
-							continue;
-						}
-
-						$phpcsFile->addError(
-							'Usage of "mixed" type hint is disallowed.',
-							$annotation->getStartPointer(),
-							self::CODE_DISALLOWED_MIXED_TYPE_HINT
-						);
-					}
-				}
+				$phpcsFile->addError(
+					'Usage of "mixed" type hint is disallowed.',
+					$annotation->getStartPointer(),
+					self::CODE_DISALLOWED_MIXED_TYPE_HINT
+				);
 			}
 		}
 	}

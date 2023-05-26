@@ -31,7 +31,7 @@ class DocCommentHelperTest extends TestCase
 	public function testClassGetDocComment(): void
 	{
 		self::assertSame(
-			"* Class WithDocComment\n *\n * @see https://www.slevomat.cz",
+			"/**\n * Class WithDocComment\n *\n * @see https://www.slevomat.cz\n */",
 			DocCommentHelper::getDocComment(
 				$this->getTestedCodeSnifferFile(),
 				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithDocCommentAndDescription')

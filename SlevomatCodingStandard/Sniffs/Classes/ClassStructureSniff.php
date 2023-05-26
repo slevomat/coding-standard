@@ -448,7 +448,7 @@ class ClassStructureSniff implements Sniff
 			return false;
 		}
 
-		return in_array($returnAnnotation->getContent(), ['static', 'self', $parentClassName], true);
+		return in_array((string) $returnAnnotation->getValue()->type, ['static', 'self', $parentClassName], true);
 	}
 
 	private function getParentClassName(File $phpcsFile, int $pointer): string

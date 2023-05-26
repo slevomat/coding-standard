@@ -6,10 +6,11 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
+use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
+use SlevomatCodingStandard\Helpers\PhpDocParserHelper;
 use function count;
 use function sprintf;
 use function strtolower;
@@ -38,77 +39,73 @@ class NullTypeHintOnLastPositionSniff implements Sniff
 	{
 		$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 
-		foreach ($annotations as $annotationByName) {
-			foreach ($annotationByName as $annotation) {
-				if ($annotation instanceof GenericAnnotation) {
-					continue;
-				}
+		foreach ($annotations as $annotation) {
+			if ($annotation->isInvalid()) {
+				continue;
+			}
 
-				if ($annotation->isInvalid()) {
-					continue;
-				}
+			/** @var list<UnionTypeNode> $unionTypeNodes */
+			$unionTypeNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), UnionTypeNode::class);
 
-				foreach (AnnotationHelper::getAnnotationTypes($annotation) as $annotationType) {
-					foreach (AnnotationTypeHelper::getUnionTypeNodes($annotationType) as $unionTypeNode) {
-						$nullTypeNode = null;
-						$nullPosition = 0;
-						$position = 0;
-						foreach ($unionTypeNode->types as $typeNode) {
-							if ($typeNode instanceof IdentifierTypeNode && strtolower($typeNode->name) === 'null') {
-								$nullTypeNode = $typeNode;
-								$nullPosition = $position;
-								break;
-							}
-
-							$position++;
-						}
-
-						if ($nullTypeNode === null) {
-							continue;
-						}
-
-						if ($nullPosition === count($unionTypeNode->types) - 1) {
-							continue;
-						}
-
-						$fix = $phpcsFile->addFixableError(
-							sprintf('Null type hint should be on last position in "%s".', AnnotationTypeHelper::print($unionTypeNode)),
-							$annotation->getStartPointer(),
-							self::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION
-						);
-
-						if (!$fix) {
-							continue;
-						}
-
-						$phpcsFile->fixer->beginChangeset();
-
-						FixerHelper::removeBetweenIncluding($phpcsFile, $annotation->getStartPointer(), $annotation->getEndPointer());
-
-						$fixedTypeNodes = [];
-						foreach ($unionTypeNode->types as $typeNode) {
-							if ($typeNode === $nullTypeNode) {
-								continue;
-							}
-
-							$fixedTypeNodes[] = $typeNode;
-						}
-						$fixedTypeNodes[] = $nullTypeNode;
-						$fixedUnionTypeNode = new UnionTypeNode($fixedTypeNodes);
-
-						$fixedAnnotationContent = AnnotationHelper::fixAnnotationType(
-							$phpcsFile,
-							$annotation,
-							$unionTypeNode,
-							$fixedUnionTypeNode
-						);
-
-						$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
-						FixerHelper::removeBetweenIncluding($phpcsFile, $annotation->getStartPointer() + 1, $annotation->getEndPointer());
-
-						$phpcsFile->fixer->endChangeset();
+			foreach ($unionTypeNodes as $unionTypeNode) {
+				$nullTypeNode = null;
+				$nullPosition = 0;
+				$position = 0;
+				foreach ($unionTypeNode->types as $typeNode) {
+					if ($typeNode instanceof IdentifierTypeNode && strtolower($typeNode->name) === 'null') {
+						$nullTypeNode = $typeNode;
+						$nullPosition = $position;
+						break;
 					}
+
+					$position++;
 				}
+
+				if ($nullTypeNode === null) {
+					continue;
+				}
+
+				if ($nullPosition === count($unionTypeNode->types) - 1) {
+					continue;
+				}
+
+				$fix = $phpcsFile->addFixableError(
+					sprintf('Null type hint should be on last position in "%s".', AnnotationTypeHelper::print($unionTypeNode)),
+					$annotation->getStartPointer(),
+					self::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION
+				);
+
+				if (!$fix) {
+					continue;
+				}
+
+				$fixedTypeNodes = [];
+				foreach ($unionTypeNode->types as $typeNode) {
+					if ($typeNode === $nullTypeNode) {
+						continue;
+					}
+
+					$fixedTypeNodes[] = $typeNode;
+				}
+				$fixedTypeNodes[] = $nullTypeNode;
+
+				$fixedUnionTypeNode = PhpDocParserHelper::cloneNode($unionTypeNode);
+				$fixedUnionTypeNode->types = $fixedTypeNodes;
+
+				$phpcsFile->fixer->beginChangeset();
+
+				$parsedDocComment = DocCommentHelper::parseDocComment($phpcsFile, $docCommentOpenPointer);
+
+				$fixedDocComment = AnnotationHelper::fixAnnotation($parsedDocComment, $annotation, $unionTypeNode, $fixedUnionTypeNode);
+
+				$phpcsFile->fixer->replaceToken($parsedDocComment->getOpenPointer(), $fixedDocComment);
+				FixerHelper::removeBetweenIncluding(
+					$phpcsFile,
+					$parsedDocComment->getOpenPointer() + 1,
+					$parsedDocComment->getClosePointer()
+				);
+
+				$phpcsFile->fixer->endChangeset();
 			}
 		}
 	}

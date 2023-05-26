@@ -3,7 +3,7 @@
 class Whatever
 {
 
-	/***/
+	/** */
 	private function simple(): string|int
 	{}
 
@@ -11,15 +11,15 @@ class Whatever
 	private function withTrue(): string|bool
 	{}
 
-	/***/
+	/** */
 	private function withFalse(): string|false
 	{}
 
-	/***/
+	/** */
 	private function withNull(): ?string
 	{}
 
-	/***/
+	/** */
 	private function moreWithNull(): int|string|null
 	{}
 
@@ -35,35 +35,35 @@ class Whatever
 	private function moreTraversable(): Traversable|ArrayIterator
 	{}
 
-	/***/
+	/** */
 	private function unionWithShortNullable(): ?string
 	{}
 
-	/***/
+	/** */
 	private function scalar(): string|int|float|bool
 	{}
 
-	/***/
+	/** */
 	private function scalarNullable(): string|int|float|bool|null
 	{}
 
-	/***/
+	/** */
 	private function numeric(): int|float
 	{}
 
-	/***/
+	/** */
 	private function numericNullable(): int|float|null
 	{}
 
-	/***/
+	/** */
 	private function scalarAndnumericNullable(): string|int|float|bool|null
 	{}
 
-	/***/
+	/** */
 	private function objectAndVoid(): object|null
 	{}
 
-	/***/
+	/** */
 	private function mixedAndVoid(): mixed
 	{}
 

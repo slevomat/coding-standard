@@ -19,7 +19,7 @@ interface DifferentAnnotation
 /**
  * Summary
  *
- * {@inheritDoc}
+ * @inheritDoc
  */
 trait ContainsEvenSomethingElse
 {

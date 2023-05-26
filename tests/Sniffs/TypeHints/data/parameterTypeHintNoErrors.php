@@ -22,6 +22,14 @@ class Whatever
 	}
 
 	/**
+	 * @inheritdoc
+	 */
+	private function hasInheritdocAnnotation2($a)
+	{
+
+	}
+
+	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint
 	 */
 	private function isSniffCodeAnyTypeHintSuppressed($a)

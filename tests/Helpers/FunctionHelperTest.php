@@ -2,7 +2,6 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-use SlevomatCodingStandard\Helpers\Annotation\Annotation;
 use function array_map;
 use function sprintf;
 use const T_CLOSURE;
@@ -413,14 +412,14 @@ class FunctionHelperTest extends TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'withAnnotations');
 
-		$parametersAnnotations = array_map(static function (Annotation $annotation): ?string {
-			return $annotation->getContent();
+		$parametersAnnotations = array_map(static function (Annotation $annotation): string {
+			return (string) $annotation->getValue();
 		}, FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer));
 		self::assertSame([
 			'string $a',
 			'int $b',
 		], $parametersAnnotations);
-		self::assertSame('bool', FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer)->getContent());
+		self::assertSame('bool', (string) FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer)->getValue());
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'withoutAnnotations');
 		self::assertCount(0, FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer));

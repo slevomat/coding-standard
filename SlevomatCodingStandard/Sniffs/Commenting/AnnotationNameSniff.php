@@ -171,8 +171,8 @@ class AnnotationNameSniff implements Sniff
 		$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 		$correctAnnotationNames = $this->getNormalizedAnnotationNames();
 
-		foreach ($annotations as $annotationName => $annotationsByName) {
-			$lowerCasedAnnotationName = strtolower($annotationName);
+		foreach ($annotations as $annotation) {
+			$lowerCasedAnnotationName = strtolower($annotation->getName());
 
 			if (!array_key_exists($lowerCasedAnnotationName, $correctAnnotationNames)) {
 				continue;
@@ -180,37 +180,35 @@ class AnnotationNameSniff implements Sniff
 
 			$correctAnnotationName = $correctAnnotationNames[$lowerCasedAnnotationName];
 
-			if ($correctAnnotationName === $annotationName) {
+			if ($correctAnnotationName === $annotation->getName()) {
 				continue;
 			}
 
-			foreach ($annotationsByName as $annotation) {
-				$annotationNameWithoutAtSign = ltrim($annotationName, '@');
-				$fullyQualifiedAnnotationName = NamespaceHelper::resolveClassName(
-					$phpcsFile,
-					$annotationNameWithoutAtSign,
-					$annotation->getStartPointer()
-				);
+			$annotationNameWithoutAtSign = ltrim($annotation->getName(), '@');
+			$fullyQualifiedAnnotationName = NamespaceHelper::resolveClassName(
+				$phpcsFile,
+				$annotationNameWithoutAtSign,
+				$annotation->getStartPointer()
+			);
 
-				if (NamespaceHelper::normalizeToCanonicalName($fullyQualifiedAnnotationName) !== $annotationNameWithoutAtSign) {
-					continue;
-				}
-
-				$fix = $phpcsFile->addFixableError(
-					sprintf('Annotation name is incorrect. Expected %s, found %s.', $correctAnnotationName, $annotationName),
-					$annotation->getStartPointer(),
-					self::CODE_ANNOTATION_NAME_INCORRECT
-				);
-				if (!$fix) {
-					continue;
-				}
-
-				$phpcsFile->fixer->beginChangeset();
-
-				$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $correctAnnotationName);
-
-				$phpcsFile->fixer->endChangeset();
+			if (NamespaceHelper::normalizeToCanonicalName($fullyQualifiedAnnotationName) !== $annotationNameWithoutAtSign) {
+				continue;
 			}
+
+			$fix = $phpcsFile->addFixableError(
+				sprintf('Annotation name is incorrect. Expected %s, found %s.', $correctAnnotationName, $annotation->getName()),
+				$annotation->getStartPointer(),
+				self::CODE_ANNOTATION_NAME_INCORRECT
+			);
+			if (!$fix) {
+				continue;
+			}
+
+			$phpcsFile->fixer->beginChangeset();
+
+			$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $correctAnnotationName);
+
+			$phpcsFile->fixer->endChangeset();
 		}
 
 		$tokens = $phpcsFile->getTokens();

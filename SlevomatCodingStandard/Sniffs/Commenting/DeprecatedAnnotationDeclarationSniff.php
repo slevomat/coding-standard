@@ -4,7 +4,8 @@ namespace SlevomatCodingStandard\Sniffs\Commenting;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
+use PHPStan\PhpDocParser\Ast\PhpDoc\DeprecatedTagValueNode;
+use SlevomatCodingStandard\Helpers\Annotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use function count;
 use const T_DOC_COMMENT_OPEN_TAG;
@@ -26,15 +27,15 @@ class DeprecatedAnnotationDeclarationSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $docCommentStartPointer): void
 	{
-		/** @var list<GenericAnnotation> $annotations */
-		$annotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $docCommentStartPointer, '@deprecated');
+		/** @var list<Annotation<DeprecatedTagValueNode>> $annotations */
+		$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentStartPointer, '@deprecated');
 
 		if (count($annotations) === 0) {
 			return;
 		}
 
 		foreach ($annotations as $annotation) {
-			if ($annotation->getContent() !== null) {
+			if ($annotation->getValue()->description !== '') {
 				continue;
 			}
 

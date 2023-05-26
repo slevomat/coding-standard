@@ -4,12 +4,10 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\ConditionalTypeForParameterNode;
-use PHPStan\PhpDocParser\Ast\Type\ConditionalTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
@@ -18,7 +16,7 @@ use PHPStan\PhpDocParser\Ast\Type\ObjectShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
@@ -148,13 +146,13 @@ class ReturnTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @param list<ReturnAnnotation> $prefixedReturnAnnotations
+	 * @param list<Annotation> $prefixedReturnAnnotations
 	 */
 	private function checkFunctionTypeHint(
 		File $phpcsFile,
 		int $functionPointer,
 		?TypeHint $returnTypeHint,
-		?ReturnAnnotation $returnAnnotation,
+		?Annotation $returnAnnotation,
 		array $prefixedReturnAnnotations
 	): void
 	{
@@ -468,13 +466,13 @@ class ReturnTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @param list<ReturnAnnotation> $prefixedReturnAnnotations
+	 * @param list<Annotation> $prefixedReturnAnnotations
 	 */
 	private function checkFunctionTraversableTypeHintSpecification(
 		File $phpcsFile,
 		int $functionPointer,
 		?TypeHint $returnTypeHint,
-		?ReturnAnnotation $returnAnnotation,
+		?Annotation $returnAnnotation,
 		array $prefixedReturnAnnotations
 	): void
 	{
@@ -536,7 +534,7 @@ class ReturnTypeHintSniff implements Sniff
 			return;
 		}
 
-		/** @var ReturnAnnotation $returnAnnotation */
+		/** @var Annotation $returnAnnotation */
 		$returnAnnotation = $returnAnnotation;
 
 		$phpcsFile->addError(
@@ -554,7 +552,7 @@ class ReturnTypeHintSniff implements Sniff
 		File $phpcsFile,
 		int $functionPointer,
 		?TypeHint $returnTypeHint,
-		?ReturnAnnotation $returnAnnotation
+		?Annotation $returnAnnotation
 	): void
 	{
 		if ($returnAnnotation === null) {
@@ -604,7 +602,7 @@ class ReturnTypeHintSniff implements Sniff
 			$docCommentOpenPointer
 		);
 
-		$changeStart = $starPointer ?? $docCommentOpenPointer + 1;
+		$changeStart = $starPointer ?? $returnAnnotation->getStartPointer();
 
 		/** @var int $changeEnd */
 		$changeEnd = TokenHelper::findNext(
@@ -647,12 +645,12 @@ class ReturnTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @return GenericTypeNode|CallableTypeNode|IntersectionTypeNode|UnionTypeNode|ArrayTypeNode|ArrayShapeNode|ObjectShapeNode|IdentifierTypeNode|ThisTypeNode|NullableTypeNode|ConstTypeNode|ConditionalTypeNode|ConditionalTypeForParameterNode|null
+	 * @param Annotation<ReturnTagValueNode>|null $returnAnnotation
 	 */
-	private function getReturnTypeNode(?ReturnAnnotation $returnAnnotation): ?TypeNode
+	private function getReturnTypeNode(?Annotation $returnAnnotation): ?TypeNode
 	{
 		if ($this->hasReturnAnnotation($returnAnnotation)) {
-			return $returnAnnotation->getType();
+			return $returnAnnotation->getValue()->type;
 		}
 
 		return null;
@@ -662,7 +660,7 @@ class ReturnTypeHintSniff implements Sniff
 		File $phpcsFile,
 		int $functionPointer,
 		?TypeHint $returnTypeHint,
-		?ReturnAnnotation $returnAnnotation
+		?Annotation $returnAnnotation
 	): bool
 	{
 		if (
@@ -689,9 +687,9 @@ class ReturnTypeHintSniff implements Sniff
 			);
 	}
 
-	private function hasReturnAnnotation(?ReturnAnnotation $returnAnnotation): bool
+	private function hasReturnAnnotation(?Annotation $returnAnnotation): bool
 	{
-		return $returnAnnotation !== null && $returnAnnotation->getContent() !== null && !$returnAnnotation->isInvalid();
+		return $returnAnnotation !== null && !$returnAnnotation->isInvalid();
 	}
 
 	private function reportUselessSuppress(File $phpcsFile, int $pointer, bool $isSuppressed, string $suppressName): void

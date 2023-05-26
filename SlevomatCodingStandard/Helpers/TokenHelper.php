@@ -94,6 +94,16 @@ class TokenHelper
 	];
 
 	/** @var array<int, (int|string)> */
+	public static $annotationTokenCodes = [
+		T_DOC_COMMENT_TAG,
+		T_PHPCS_DISABLE,
+		T_PHPCS_ENABLE,
+		T_PHPCS_IGNORE,
+		T_PHPCS_IGNORE_FILE,
+		T_PHPCS_SET,
+	];
+
+	/** @var array<int, (int|string)> */
 	public static $inlineCommentTokenCodes = [
 		T_COMMENT,
 		T_PHPCS_DISABLE,

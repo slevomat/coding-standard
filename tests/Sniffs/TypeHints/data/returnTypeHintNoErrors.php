@@ -7,9 +7,7 @@ abstract class Whatever
 	{
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
-	 */
+	/** @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint */
 	private function isSniffSuppressed()
 	{
 		return true;

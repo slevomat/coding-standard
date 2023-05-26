@@ -2,7 +2,7 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-use function preg_split;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use const T_DOC_COMMENT_OPEN_TAG;
 
 class TypeHintHelperTest extends TestCase
@@ -125,7 +125,10 @@ class TypeHintHelperTest extends TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithReturnAnnotation');
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
-		self::assertSame('void', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnAnnotation->getContent()));
+		self::assertSame(
+			'void',
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, (string) $returnAnnotation->getValue()->type)
+		);
 	}
 
 	public function testFunctionReturnTypeHintWithNamespace(): void
@@ -145,13 +148,12 @@ class TypeHintHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithParameterAnnotation');
+		/** @var Annotation<ParamTagValueNode> $parameterAnnotation */
 		$parameterAnnotation = FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer)[0];
-		$parts = preg_split('~\\s+~', $parameterAnnotation->getContent());
-		self::assertIsArray($parts);
-		$parameterTypeHint = $parts[0];
+
 		self::assertSame(
 			'\Doctrine\Common\Collections\ArrayCollection',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint)
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, (string) $parameterAnnotation->getValue()->type)
 		);
 	}
 
@@ -173,9 +175,10 @@ class TypeHintHelperTest extends TestCase
 
 		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithReturnAnnotation');
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $methodPointer);
+
 		self::assertSame(
 			'\FooNamespace\FooClass',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $returnAnnotation->getContent())
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, (string) $returnAnnotation->getValue()->type)
 		);
 	}
 
@@ -193,13 +196,12 @@ class TypeHintHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithNamespace.php');
 
 		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithParameterAnnotation');
+		/** @var Annotation<ParamTagValueNode> $parameterAnnotation */
 		$parameterAnnotation = FunctionHelper::getParametersAnnotations($phpcsFile, $methodPointer)[0];
-		$parts = preg_split('~\\s+~', $parameterAnnotation->getContent());
-		self::assertIsArray($parts);
-		$parameterTypeHint = $parts[0];
+
 		self::assertSame(
 			'\Doctrine\ORM\Mapping\Id',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint)
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, (string) $parameterAnnotation->getValue()->type)
 		);
 	}
 
@@ -221,7 +223,10 @@ class TypeHintHelperTest extends TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithReturnAnnotation');
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
-		self::assertSame('void', TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnAnnotation->getContent()));
+		self::assertSame(
+			'void',
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, (string) $returnAnnotation->getValue()->type)
+		);
 	}
 
 	public function testFunctionReturnTypeHintWithoutNamespace(): void
@@ -241,13 +246,12 @@ class TypeHintHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'fooFunctionWithParameterAnnotation');
+		/** @var Annotation<ParamTagValueNode> $parameterAnnotation */
 		$parameterAnnotation = FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer)[0];
-		$parts = preg_split('~\\s+~', $parameterAnnotation->getContent());
-		self::assertIsArray($parts);
-		$parameterTypeHint = $parts[0];
+
 		self::assertSame(
 			'\Doctrine\Common\Collections\ArrayCollection',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint)
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, (string) $parameterAnnotation->getValue()->type)
 		);
 	}
 
@@ -269,9 +273,10 @@ class TypeHintHelperTest extends TestCase
 
 		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithReturnAnnotation');
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $methodPointer);
+
 		self::assertSame(
 			'\FooClass',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $returnAnnotation->getContent())
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, (string) $returnAnnotation->getValue()->type)
 		);
 	}
 
@@ -289,13 +294,12 @@ class TypeHintHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintWithoutNamespace.php');
 
 		$methodPointer = $this->findFunctionPointerByName($phpcsFile, 'fooMethodWithParameterAnnotation');
+		/** @var Annotation<ParamTagValueNode> $parameterAnnotation */
 		$parameterAnnotation = FunctionHelper::getParametersAnnotations($phpcsFile, $methodPointer)[0];
-		$parts = preg_split('~\\s+~', $parameterAnnotation->getContent());
-		self::assertIsArray($parts);
-		$parameterTypeHint = $parts[0];
+
 		self::assertSame(
 			'\Doctrine\ORM\Mapping\Id',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint)
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, (string) $parameterAnnotation->getValue()->type)
 		);
 	}
 
@@ -336,20 +340,20 @@ class TypeHintHelperTest extends TestCase
 	}
 
 	/**
-	 * @return list<array{0: int, 1: string}>
+	 * @return list<array{0: int, 1: string, 2: bool}>
 	 */
 	public static function dataIsTypeDefinedInAnnotationWhenAnnotationIsInvalid(): array
 	{
 		return [
-			[22, 'Alias'],
-			[29, 'Template'],
+			[22, 'Alias', true],
+			[29, 'Template', false],
 		];
 	}
 
 	/**
 	 * @dataProvider dataIsTypeDefinedInAnnotationWhenAnnotationIsInvalid
 	 */
-	public function testIsTypeDefinedInAnnotationWhenAnnotationIsInvalid(int $line, string $type): void
+	public function testIsTypeDefinedInAnnotationWhenAnnotationIsInvalid(int $line, string $type, bool $isDefined): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintDefinedInAnnotation.php');
 
@@ -357,7 +361,7 @@ class TypeHintHelperTest extends TestCase
 
 		self::assertNotNull($docCommentOpenPointer);
 
-		self::assertFalse(TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $docCommentOpenPointer, $type));
+		self::assertSame($isDefined, TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $docCommentOpenPointer, $type));
 	}
 
 	/**
@@ -392,7 +396,7 @@ class TypeHintHelperTest extends TestCase
 				$phpcsFile,
 				$functionPointer,
 				$returnTypeHint->getTypeHint(),
-				AnnotationTypeHelper::print($returnAnnotation->getType())
+				AnnotationTypeHelper::print($returnAnnotation->getValue()->type)
 			)
 		);
 	}

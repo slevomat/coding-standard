@@ -3,7 +3,7 @@
 class Whatever
 {
 
-	/***/
+	/** */
 	public function returnsNull(): null
 	{}
 
@@ -17,7 +17,7 @@ class Whatever
 	public function returnsFalse(): false
 	{}
 
-	/***/
+	/** */
 	public function returnsNullWithUselessAnnotation(): null
 	{}
 

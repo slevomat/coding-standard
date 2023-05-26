@@ -3,9 +3,9 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
-use SlevomatCodingStandard\Helpers\Annotation\TemplateAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\TypeAliasAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\TypeImportAnnotation;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TypeAliasImportTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TypeAliasTagValueNode;
 use function array_key_exists;
 use function array_map;
 use function array_merge;
@@ -270,19 +270,16 @@ class TypeHintHelper
 		}
 
 		$containsTypeHintInTemplateAnnotation = static function (int $docCommentOpenPointer) use ($phpcsFile, $templateAnnotationNames, $typeHint): bool {
-			$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 			foreach ($templateAnnotationNames as $templateAnnotationName) {
-				if (!array_key_exists($templateAnnotationName, $annotations)) {
-					continue;
-				}
+				/** @var list<Annotation<TemplateTagValueNode>> $annotations */
+				$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer, $templateAnnotationName);
 
-				/** @var TemplateAnnotation $templateAnnotation */
-				foreach ($annotations[$templateAnnotationName] as $templateAnnotation) {
+				foreach ($annotations as $templateAnnotation) {
 					if ($templateAnnotation->isInvalid()) {
 						continue;
 					}
 
-					if ($templateAnnotation->getTemplateName() === $typeHint) {
+					if ($templateAnnotation->getValue()->name === $typeHint) {
 						return true;
 					}
 				}
@@ -340,19 +337,29 @@ class TypeHintHelper
 			return false;
 		}
 
-		$annotations = AnnotationHelper::getAnnotations($phpcsFile, $classDocCommentOpenPointer);
 		foreach ($aliasAnnotationNames as $aliasAnnotationName) {
-			if (!array_key_exists($aliasAnnotationName, $annotations)) {
-				continue;
-			}
+			$annotations = AnnotationHelper::getAnnotations($phpcsFile, $classDocCommentOpenPointer, $aliasAnnotationName);
 
-			/** @var TypeAliasAnnotation|TypeImportAnnotation $aliasAnnotation */
-			foreach ($annotations[$aliasAnnotationName] as $aliasAnnotation) {
+			foreach ($annotations as $aliasAnnotation) {
 				if ($aliasAnnotation->isInvalid()) {
 					continue;
 				}
 
-				if ($aliasAnnotation->getAlias() === $typeHint) {
+				$aliasAnnotationValue = $aliasAnnotation->getValue();
+
+				if ($aliasAnnotationValue instanceof TypeAliasTagValueNode && $aliasAnnotationValue->alias === $typeHint) {
+					return true;
+				}
+
+				if (!($aliasAnnotationValue instanceof TypeAliasImportTagValueNode)) {
+					continue;
+				}
+
+				if ($aliasAnnotationValue->importedAs === $typeHint) {
+					return true;
+				}
+
+				if ($aliasAnnotationValue->importedAlias === $typeHint) {
 					return true;
 				}
 			}

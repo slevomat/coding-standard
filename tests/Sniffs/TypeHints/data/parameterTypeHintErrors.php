@@ -281,6 +281,11 @@ class Whatever
 	{
 	}
 
+	/** @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint */
+	public function totallyUselessSuppress(?int $a)
+	{
+	}
+
 	/**
 	 * @param ?int $a
 	 */

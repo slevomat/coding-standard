@@ -3,12 +3,18 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
-use PHP_CodeSniffer\Util\Tokens;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
+use PHPStan\PhpDocParser\Ast\AbstractNodeVisitor;
+use PHPStan\PhpDocParser\Ast\Attribute;
+use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\NodeTraverser;
+use PHPStan\PhpDocParser\Ast\PhpDoc\Doctrine\DoctrineArgument;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TypelessParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ConditionalTypeForParameterNode;
 use PHPStan\PhpDocParser\Ast\Type\ConditionalTypeNode;
@@ -16,52 +22,14 @@ use PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\ObjectShapeItemNode;
 use PHPStan\PhpDocParser\Ast\Type\ObjectShapeNode;
-use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\ConstExprParser;
-use PHPStan\PhpDocParser\Parser\PhpDocParser;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
-use PHPStan\PhpDocParser\Parser\TypeParser;
-use PHPStan\PhpDocParser\Printer\Printer;
-use SlevomatCodingStandard\Helpers\Annotation\Annotation;
-use SlevomatCodingStandard\Helpers\Annotation\AssertAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\ExtendsAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\ImplementsAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\MethodAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\MixinAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\ParameterAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\ParameterOutAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\PropertyAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\ReturnAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\SelfOutAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\TemplateAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\ThrowsAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\TypeAliasAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\TypeImportAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\UseAnnotation;
-use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
-use function array_key_exists;
-use function array_merge;
-use function get_class;
+use function count;
 use function in_array;
-use function max;
-use function preg_match;
-use function preg_match_all;
-use function preg_replace;
+use function mb_strlen;
 use function sprintf;
-use function strlen;
 use function strtolower;
-use function substr;
-use function trim;
-use const T_DOC_COMMENT_CLOSE_TAG;
-use const T_DOC_COMMENT_STAR;
-use const T_DOC_COMMENT_STRING;
-use const T_DOC_COMMENT_TAG;
-use const T_DOC_COMMENT_WHITESPACE;
 
 /**
  * @internal
@@ -71,308 +39,39 @@ class AnnotationHelper
 
 	public const STATIC_ANALYSIS_PREFIXES = ['psalm', 'phpstan'];
 
-	private const MAPPING = [
-		'@param' => ParameterAnnotation::class,
-		'@return' => ReturnAnnotation::class,
-		'@var' => VariableAnnotation::class,
-		'@throws' => ThrowsAnnotation::class,
-		'@property' => PropertyAnnotation::class,
-		'@property-read' => PropertyAnnotation::class,
-		'@property-write' => PropertyAnnotation::class,
-		'@method' => MethodAnnotation::class,
-		'@template' => TemplateAnnotation::class,
-		'@template-covariant' => TemplateAnnotation::class,
-		'@extends' => ExtendsAnnotation::class,
-		'@template-extends' => ExtendsAnnotation::class,
-		'@implements' => ImplementsAnnotation::class,
-		'@template-implements' => ImplementsAnnotation::class,
-		'@use' => UseAnnotation::class,
-		'@template-use' => UseAnnotation::class,
-		'@type' => TypeAliasAnnotation::class,
-		'@import-type' => TypeImportAnnotation::class,
-		'@mixin' => MixinAnnotation::class,
-		'@assert' => AssertAnnotation::class,
-		'@assert-if-true' => AssertAnnotation::class,
-		'@assert-if-false' => AssertAnnotation::class,
-		'@param-out' => ParameterOutAnnotation::class,
-		'@self-out' => SelfOutAnnotation::class,
-		'@this-out' => SelfOutAnnotation::class,
-	];
-
 	/**
-	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|TypeAliasAnnotation|TypeImportAnnotation|AssertAnnotation|ParameterOutAnnotation|SelfOutAnnotation $annotation
-	 * @return list<TypeNode>
+	 * @return list<Annotation>
 	 */
-	public static function getAnnotationTypes(Annotation $annotation): array
+	public static function getAnnotations(File $phpcsFile, int $pointer, ?string $name = null): array
 	{
-		$annotationTypes = [];
-
-		if ($annotation instanceof MethodAnnotation) {
-			if ($annotation->getMethodReturnType() !== null) {
-				$annotationTypes[] = $annotation->getMethodReturnType();
-			}
-			foreach ($annotation->getMethodTemplateTypes() as $methodTemplateType) {
-				if ($methodTemplateType->bound !== null) {
-					$annotationTypes[] = $methodTemplateType->bound;
-				}
-				if ($methodTemplateType->default !== null) {
-					$annotationTypes[] = $methodTemplateType->default;
-				}
-			}
-			foreach ($annotation->getMethodParameters() as $methodParameterAnnotation) {
-				if ($methodParameterAnnotation->type === null) {
-					continue;
-				}
-
-				$annotationTypes[] = $methodParameterAnnotation->type;
-			}
-		} elseif ($annotation instanceof TemplateAnnotation) {
-			if ($annotation->getBound() !== null) {
-				$annotationTypes[] = $annotation->getBound();
-			}
-			if ($annotation->getDefault() !== null) {
-				$annotationTypes[] = $annotation->getDefault();
-			}
-		} elseif ($annotation instanceof TypeImportAnnotation) {
-			$annotationTypes[] = $annotation->getImportedFrom();
-		} elseif ($annotation->getType() !== null) {
-			$annotationTypes[] = $annotation->getType();
+		$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $pointer);
+		if ($docCommentOpenPointer === null) {
+			return [];
 		}
 
-		return $annotationTypes;
-	}
-
-	/**
-	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|AssertAnnotation|ParameterOutAnnotation|SelfOutAnnotation $annotation
-	 * @return list<ConstExprNode>
-	 */
-	public static function getAnnotationConstantExpressions(Annotation $annotation): array
-	{
-		$constantExpressions = [];
-
-		if ($annotation instanceof MethodAnnotation) {
-			foreach ($annotation->getMethodParameters() as $methodParameterAnnotation) {
-				if ($methodParameterAnnotation->defaultValue === null) {
-					continue;
-				}
-
-				$constantExpressions[] = $methodParameterAnnotation->defaultValue;
-			}
-		}
-
-		foreach (self::getAnnotationTypes($annotation) as $annotationType) {
-			foreach (AnnotationTypeHelper::getConstantTypeNodes($annotationType) as $constTypeNode) {
-				$constantExpressions[] = $constTypeNode->constExpr;
-			}
-		}
-
-		return $constantExpressions;
-	}
-
-	/**
-	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|AssertAnnotation|ParameterOutAnnotation|SelfOutAnnotation $annotation
-	 */
-	public static function fixAnnotationType(File $phpcsFile, Annotation $annotation, TypeNode $typeNode, TypeNode $fixedTypeNode): string
-	{
-		$fixedAnnotation = self::fixAnnotation($annotation, $typeNode, $fixedTypeNode);
-
-		return self::fix($phpcsFile, $annotation, $fixedAnnotation);
-	}
-
-	/**
-	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|AssertAnnotation|ParameterOutAnnotation|SelfOutAnnotation $annotation
-	 */
-	public static function fixAnnotationConstantFetchNode(
-		File $phpcsFile,
-		Annotation $annotation,
-		ConstFetchNode $node,
-		ConstFetchNode $fixedNode
-	): string
-	{
-		if ($annotation instanceof MethodAnnotation) {
-			$fixedContentNode = clone $annotation->getContentNode();
-
-			foreach ($fixedContentNode->parameters as $parameterNo => $parameterNode) {
-				if ($parameterNode->defaultValue === null) {
-					continue;
-				}
-
-				$fixedContentNode->parameters[$parameterNo] = clone $parameterNode;
-				$fixedContentNode->parameters[$parameterNo]->defaultValue = AnnotationConstantExpressionHelper::change(
-					$parameterNode->defaultValue,
-					$node,
-					$fixedNode
-				);
-			}
-
-			$fixedAnnotation = new MethodAnnotation(
-				$annotation->getName(),
-				$annotation->getStartPointer(),
-				$annotation->getEndPointer(),
-				$annotation->getContent(),
-				$fixedContentNode
-			);
-		} else {
-			$fixedAnnotation = $annotation;
-
-			foreach (self::getAnnotationTypes($annotation) as $annotationType) {
-				foreach (AnnotationTypeHelper::getConstantTypeNodes($annotationType) as $constTypeNode) {
-					foreach (AnnotationConstantExpressionHelper::getConstantFetchNodes($constTypeNode->constExpr) as $constFetchNode) {
-						if ($constFetchNode !== $node) {
-							continue;
-						}
-
-						$fixedConstTypeNode = new ConstTypeNode(
-							AnnotationConstantExpressionHelper::change($constTypeNode->constExpr, $node, $fixedNode)
-						);
-						$fixedAnnotation = self::fixAnnotation($annotation, $constTypeNode, $fixedConstTypeNode);
-						break 3;
-					}
-				}
-			}
-		}
-
-		return self::fix($phpcsFile, $annotation, $fixedAnnotation);
-	}
-
-	/**
-	 * @return list<VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|AssertAnnotation|GenericAnnotation|ParameterOutAnnotation|SelfOutAnnotation>
-	 */
-	public static function getAnnotationsByName(File $phpcsFile, int $pointer, string $annotationName): array
-	{
-		$annotations = self::getAnnotations($phpcsFile, $pointer);
-
-		return $annotations[$annotationName] ?? [];
-	}
-
-	/**
-	 * @return array<string, list<VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|AssertAnnotation|GenericAnnotation|ParameterOutAnnotation|SelfOutAnnotation>>
-	 */
-	public static function getAnnotations(File $phpcsFile, int $pointer): array
-	{
 		return SniffLocalCache::getAndSetIfNotCached(
 			$phpcsFile,
-			sprintf('annotations-%d', $pointer),
-			static function () use ($phpcsFile, $pointer): array {
+			sprintf('annotations-%d-%s', $docCommentOpenPointer, $name ?? 'all'),
+			static function () use ($phpcsFile, $docCommentOpenPointer, $name): array {
 				$annotations = [];
 
-				$docCommentOpenToken = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $pointer);
-				if ($docCommentOpenToken === null) {
-					return $annotations;
-				}
-
-				$annotationNameCodes = array_merge([T_DOC_COMMENT_TAG], Tokens::$phpcsCommentTokens);
-
-				$tokens = $phpcsFile->getTokens();
-				$i = $docCommentOpenToken + 1;
-				while ($i < $tokens[$docCommentOpenToken]['comment_closer']) {
-					if (!in_array($tokens[$i]['code'], $annotationNameCodes, true)) {
-						$i++;
-						continue;
-					}
-
-					$annotationStartPointer = $i;
-					$annotationEndPointer = $i;
-
-					// Fix for wrong PHPCS parsing
-					$parenthesesLevel = max((int) preg_match_all('~[({]~', $tokens[$i]['content']) - (int) preg_match_all(
-						'~[)}]~',
-						$tokens[$i]['content']
-					), 0);
-
-					$annotationCode = $tokens[$i]['content'];
-
-					for ($j = $i + 1; $j <= $tokens[$docCommentOpenToken]['comment_closer']; $j++) {
-						if ($tokens[$j]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
-							$i = $j;
-							break;
-						}
-
-						if (in_array($tokens[$j]['code'], $annotationNameCodes, true) && $parenthesesLevel === 0) {
-							$i = $j;
-							break;
-						}
-
-						if ($tokens[$j]['code'] === T_DOC_COMMENT_STAR) {
-							continue;
-						}
-
-						if (in_array($tokens[$j]['code'], array_merge([T_DOC_COMMENT_STRING], $annotationNameCodes), true)) {
-							$annotationEndPointer = $j;
-						} elseif ($tokens[$j]['code'] === T_DOC_COMMENT_WHITESPACE) {
-							if (array_key_exists($j - 1, $tokens) && $tokens[$j - 1]['code'] === T_DOC_COMMENT_STAR) {
-								continue;
-							}
-							if (array_key_exists($j + 1, $tokens) && $tokens[$j + 1]['code'] === T_DOC_COMMENT_STAR) {
-								continue;
-							}
-						}
-
-						$parenthesesLevel += (int) preg_match_all('~[({]~', $tokens[$j]['content']) - (int) preg_match_all(
-							'~[)}]~',
-							$tokens[$j]['content']
-						);
-						if ($parenthesesLevel < 0) {
-							$parenthesesLevel = 0;
-						}
-
-						$annotationCode .= $tokens[$j]['content'];
-					}
-
-					$annotationName = $tokens[$annotationStartPointer]['content'];
-					$annotationParameters = null;
-					$annotationContent = null;
-					if (preg_match('~^(@[-a-zA-Z\\\\:]+)(?:\((.*)\))?(?:\\s+(.+))?(,|$)~s', trim($annotationCode), $matches) !== 0) {
-						$annotationName = $matches[1];
-						$annotationParameters = trim($matches[2]);
-						if ($annotationParameters === '') {
-							$annotationParameters = null;
-						}
-						$annotationContent = trim($matches[3]);
-						if ($annotationContent === '') {
-							$annotationContent = null;
+				if ($name !== null) {
+					foreach (self::getAnnotations($phpcsFile, $docCommentOpenPointer) as $annotation) {
+						if ($annotation->getName() === $name) {
+							$annotations[] = $annotation;
 						}
 					}
+				} else {
+					$parsedDocComment = DocCommentHelper::parseDocComment($phpcsFile, $docCommentOpenPointer);
 
-					$className = null;
-					if (array_key_exists($annotationName, self::MAPPING)) {
-						$className = self::MAPPING[$annotationName];
-					} else {
-						foreach (self::STATIC_ANALYSIS_PREFIXES as $prefix) {
-							$annotationNameWithoutPrefix = preg_replace('~^@' . $prefix . '-~', '@', $annotationName);
-
-							if (!array_key_exists($annotationNameWithoutPrefix, self::MAPPING)) {
-								continue;
-							}
-
-							$className = self::MAPPING[$annotationNameWithoutPrefix];
-							break;
-						}
-					}
-
-					if ($className !== null) {
-						$parsedContent = null;
-						if ($annotationContent !== null) {
-							$parsedContent = self::parseAnnotationContent($annotationName, $annotationContent);
-							if ($parsedContent instanceof InvalidTagValueNode) {
-								$parsedContent = null;
-							} elseif (isset($parsedContent->description) && $parsedContent->description !== '') {
-								$parsedContent->description = substr($annotationContent, -strlen($parsedContent->description));
-							}
-						}
-
-						$annotation = new $className($annotationName, $annotationStartPointer, $annotationEndPointer, $annotationContent, $parsedContent);
-					} else {
-						$annotation = new GenericAnnotation(
-							$annotationName,
+					foreach ($parsedDocComment->getNode()->getTags() as $node) {
+						$annotationStartPointer = self::getStartPointer($phpcsFile, $parsedDocComment->getOpenPointer(), $node);
+						$annotations[] = new Annotation(
+							$node,
 							$annotationStartPointer,
-							$annotationEndPointer,
-							$annotationParameters,
-							$annotationContent
+							self::getEndPointer($phpcsFile, $parsedDocComment, $annotationStartPointer, $node)
 						);
 					}
-
-					$annotations[$annotationName][] = $annotation;
 				}
 
 				return $annotations;
@@ -381,7 +80,110 @@ class AnnotationHelper
 	}
 
 	/**
-	 * @param ReturnAnnotation|ParameterAnnotation|VariableAnnotation $annotation
+	 * @param class-string $type
+	 * @return list<Node>
+	 */
+	public static function getAnnotationNodesByType(Node $node, string $type): array
+	{
+		static $visitor;
+		static $traverser;
+
+		if ($visitor === null) {
+			$visitor = new class extends AbstractNodeVisitor {
+
+				/** @var class-string */
+				private $type;
+
+				/** @var list<Node> */
+				private $nodes = [];
+
+				/** @var list<Node> */
+				private $nodesToIgnore = [];
+
+				/**
+				 * @return Node|list<Node>|NodeTraverser::*|null
+				 */
+				public function enterNode(Node $node)
+				{
+					if ($this->type === IdentifierTypeNode::class) {
+						if ($node instanceof ArrayShapeItemNode || $node instanceof ObjectShapeItemNode) {
+							$this->nodesToIgnore[] = $node->keyName;
+						} elseif ($node instanceof DoctrineArgument) {
+							$this->nodesToIgnore[] = $node->key;
+						}
+					}
+
+					if ($node instanceof $this->type && !in_array($node, $this->nodesToIgnore, true)) {
+						$this->nodes[] = $node;
+					}
+
+					return null;
+				}
+
+				/**
+				 * @param class-string $type
+				 */
+				public function setType(string $type): void
+				{
+					$this->type = $type;
+				}
+
+				public function clean(): void
+				{
+					$this->nodes = [];
+					$this->nodesToIgnore = [];
+				}
+
+				/**
+				 * @return list<Node>
+				 */
+				public function getNodes(): array
+				{
+					return $this->nodes;
+				}
+
+			};
+		}
+
+		if ($traverser === null) {
+			$traverser = new NodeTraverser([$visitor]);
+		}
+
+		$visitor->setType($type);
+		$visitor->clean();
+
+		$traverser->traverse([$node]);
+
+		return $visitor->getNodes();
+	}
+
+	public static function fixAnnotation(
+		ParsedDocComment $parsedDocComment,
+		Annotation $annotation,
+		Node $nodeToFix,
+		Node $fixedNode
+	): string
+	{
+		$originalNode = $annotation->getNode();
+
+		/** @var PhpDocNode $newPhpDocNode */
+		$newPhpDocNode = PhpDocParserHelper::cloneNode($parsedDocComment->getNode());
+
+		foreach ($newPhpDocNode->getTags() as $node) {
+			if ($node->getAttribute(Attribute::ORIGINAL_NODE) === $originalNode) {
+				self::changeAnnotationNode($node, $nodeToFix, $fixedNode);
+				break;
+			}
+		}
+
+		return PhpDocParserHelper::getPrinter()->printFormatPreserving(
+			$newPhpDocNode,
+			$parsedDocComment->getNode(),
+			$parsedDocComment->getTokens()
+		);
+	}
+
+	/**
 	 * @param array<int, string> $traversableTypeHints
 	 */
 	public static function isAnnotationUseless(
@@ -399,15 +201,18 @@ class AnnotationHelper
 			return false;
 		}
 
-		if ($typeHint === null || $annotation->getContent() === null) {
+		if ($typeHint === null) {
 			return false;
 		}
 
-		if ($annotation->hasDescription()) {
+		/** @var ParamTagValueNode|TypelessParamTagValueNode|ReturnTagValueNode|VarTagValueNode $annotationValue */
+		$annotationValue = $annotation->getValue();
+
+		if ($annotationValue->description !== '') {
 			return false;
 		}
 
-		if ($annotation->getType() === null) {
+		if ($annotationValue instanceof TypelessParamTagValueNode) {
 			return true;
 		}
 
@@ -418,28 +223,30 @@ class AnnotationHelper
 			return false;
 		}
 
-		if (AnnotationTypeHelper::containsStaticOrThisType($annotation->getType())) {
+		$annotationType = $annotationValue->type;
+
+		if (AnnotationTypeHelper::containsStaticOrThisType($annotationType)) {
 			return false;
 		}
 
 		if (
-			AnnotationTypeHelper::containsJustTwoTypes($annotation->getType())
+			AnnotationTypeHelper::containsJustTwoTypes($annotationType)
 			|| (
 				$enableUnionTypeHint
 				&& (
-					$annotation->getType() instanceof UnionTypeNode
+					$annotationType instanceof UnionTypeNode
 					|| (
-						$annotation->getType() instanceof IdentifierTypeNode
-						&& TypeHintHelper::isUnofficialUnionTypeHint($annotation->getType()->name)
+						$annotationType instanceof IdentifierTypeNode
+						&& TypeHintHelper::isUnofficialUnionTypeHint($annotationType->name)
 					)
 				)
 			)
 			|| (
 				$enableIntersectionTypeHint
-				&& $annotation->getType() instanceof IntersectionTypeNode
+				&& $annotationType instanceof IntersectionTypeNode
 			)
 		) {
-			$annotationTypeHint = AnnotationTypeHelper::print($annotation->getType());
+			$annotationTypeHint = AnnotationTypeHelper::print($annotationType);
 			return TypeHintHelper::typeHintEqualsAnnotation(
 				$phpcsFile,
 				$functionPointer,
@@ -448,36 +255,33 @@ class AnnotationHelper
 			);
 		}
 
-		if ($annotation->getType() instanceof ObjectShapeNode) {
+		if ($annotationType instanceof ObjectShapeNode) {
 			return false;
 		}
 
-		if ($annotation->getType() instanceof ConstTypeNode) {
+		if ($annotationType instanceof ConstTypeNode) {
 			return false;
 		}
 
-		if ($annotation->getType() instanceof GenericTypeNode) {
+		if ($annotationType instanceof GenericTypeNode) {
 			return false;
 		}
 
-		if ($annotation->getType() instanceof CallableTypeNode) {
+		if ($annotationType instanceof CallableTypeNode) {
 			return false;
 		}
 
-		if ($annotation->getType() instanceof ConditionalTypeNode) {
+		if ($annotationType instanceof ConditionalTypeNode) {
 			return false;
 		}
 
-		if ($annotation->getType() instanceof ConditionalTypeForParameterNode) {
+		if ($annotationType instanceof ConditionalTypeForParameterNode) {
 			return false;
 		}
 
-		/** @var GenericTypeNode|IdentifierTypeNode|ThisTypeNode $annotationTypeNode */
-		$annotationTypeNode = $annotation->getType();
-
-		if ($annotationTypeNode instanceof IdentifierTypeNode) {
+		if ($annotationType instanceof IdentifierTypeNode) {
 			if (in_array(
-				strtolower($annotationTypeNode->name),
+				strtolower($annotationType->name),
 				['true', 'false', 'null'],
 				true
 			)) {
@@ -485,7 +289,7 @@ class AnnotationHelper
 			}
 
 			if (in_array(
-				strtolower($annotationTypeNode->name),
+				strtolower($annotationType->name),
 				['class-string', 'trait-string', 'callable-string', 'numeric-string', 'non-empty-string', 'non-falsy-string', 'literal-string', 'positive-int', 'negative-int'],
 				true
 			)) {
@@ -493,7 +297,7 @@ class AnnotationHelper
 			}
 		}
 
-		$annotationTypeHint = AnnotationTypeHelper::getTypeHintFromOneType($annotationTypeNode);
+		$annotationTypeHint = AnnotationTypeHelper::getTypeHintFromOneType($annotationType);
 		return TypeHintHelper::typeHintEqualsAnnotation(
 			$phpcsFile,
 			$functionPointer,
@@ -502,145 +306,102 @@ class AnnotationHelper
 		);
 	}
 
-	public static function getPhpDocPrinter(): Printer
+	private static function getStartPointer(File $phpcsFile, int $docCommentOpenPointer, PhpDocTagNode $annotationNode): int
 	{
-		static $phpDocPrinter;
+		$tokens = $phpcsFile->getTokens();
 
-		if ($phpDocPrinter === null) {
-			$phpDocPrinter = new Printer();
+		$tagStartLine = $tokens[$docCommentOpenPointer]['line'] + $annotationNode->getAttribute('startLine') - 1;
+
+		$searchPointer = $docCommentOpenPointer + 1;
+		for ($i = $docCommentOpenPointer + 1; $i < $tokens[$docCommentOpenPointer]['comment_closer']; $i++) {
+			if ($tagStartLine === $tokens[$i]['line']) {
+				$searchPointer = $i;
+				break;
+			}
 		}
 
-		return $phpDocPrinter;
+		return TokenHelper::findNext($phpcsFile, TokenHelper::$annotationTokenCodes, $searchPointer);
 	}
 
-	/**
-	 * @param VariableAnnotation|ParameterAnnotation|ReturnAnnotation|ThrowsAnnotation|PropertyAnnotation|MethodAnnotation|TemplateAnnotation|ExtendsAnnotation|ImplementsAnnotation|UseAnnotation|MixinAnnotation|TypeAliasAnnotation|TypeImportAnnotation|AssertAnnotation|ParameterOutAnnotation|SelfOutAnnotation $annotation
-	 */
-	private static function fixAnnotation(Annotation $annotation, TypeNode $typeNode, TypeNode $fixedTypeNode): Annotation
+	private static function getEndPointer(
+		File $phpcsFile,
+		ParsedDocComment $parsedDocComment,
+		int $annotationStartPointer,
+		PhpDocTagNode $annotationNode
+	): int
 	{
-		if ($annotation instanceof MethodAnnotation) {
-			$fixedContentNode = clone $annotation->getContentNode();
+		$tokens = $phpcsFile->getTokens();
 
-			if ($fixedContentNode->returnType !== null) {
-				$fixedContentNode->returnType = AnnotationTypeHelper::change($fixedContentNode->returnType, $typeNode, $fixedTypeNode);
+		$annotationContent = $parsedDocComment->getTokens()->getContentBetween(
+			$annotationNode->getAttribute(Attribute::START_INDEX),
+			$annotationNode->getAttribute(Attribute::END_INDEX) + 1
+		);
+		$annotationLength = mb_strlen($annotationContent, $phpcsFile->config->encoding);
+
+		$searchPointer = $annotationStartPointer;
+
+		$content = '';
+		for ($i = $annotationStartPointer; $i < count($tokens); $i++) {
+			$content .= $tokens[$i]['content'];
+
+			if (mb_strlen($content, $phpcsFile->config->encoding) >= $annotationLength) {
+				$searchPointer = $i;
+				break;
 			}
-			foreach ($fixedContentNode->templateTypes as $templateTypeNo => $templateTypeNode) {
-				$fixedContentNode->templateTypes[$templateTypeNo] = self::fixTemplateTagValueNode(
-					$templateTypeNode,
-					$typeNode,
-					$fixedTypeNode
-				);
-			}
-			foreach ($fixedContentNode->parameters as $parameterNo => $parameterNode) {
-				if ($parameterNode->type === null) {
-					continue;
+		}
+
+		return $searchPointer;
+	}
+
+	private static function changeAnnotationNode(PhpDocTagNode $tagNode, Node $nodeToChange, Node $changedNode): PhpDocTagNode
+	{
+		static $visitor;
+		static $traverser;
+
+		if ($visitor === null) {
+			$visitor = new class extends AbstractNodeVisitor {
+
+				/** @var Node */
+				private $nodeToChange;
+
+				/** @var Node */
+				private $changedNode;
+
+				/**
+				 * @return Node|list<Node>|NodeTraverser::*|null
+				 */
+				public function enterNode(Node $node)
+				{
+					if ($node->getAttribute(Attribute::ORIGINAL_NODE) === $this->nodeToChange) {
+						return $this->changedNode;
+					}
+
+					return null;
 				}
 
-				$fixedContentNode->parameters[$parameterNo] = clone $parameterNode;
-				$fixedContentNode->parameters[$parameterNo]->type = AnnotationTypeHelper::change(
-					$parameterNode->type,
-					$typeNode,
-					$fixedTypeNode
-				);
-			}
-		} elseif ($annotation instanceof TemplateAnnotation) {
-			$fixedContentNode = self::fixTemplateTagValueNode($annotation->getContentNode(), $typeNode, $fixedTypeNode);
-		} elseif ($annotation instanceof TypeImportAnnotation) {
-			$fixedContentNode = clone $annotation->getContentNode();
-			/** @var IdentifierTypeNode $fixedType */
-			$fixedType = AnnotationTypeHelper::change($annotation->getImportedFrom(), $typeNode, $fixedTypeNode);
-			$fixedContentNode->importedFrom = $fixedType;
-		} elseif (
-			$annotation instanceof ExtendsAnnotation
-			|| $annotation instanceof ImplementsAnnotation
-			|| $annotation instanceof UseAnnotation
-		) {
-			$fixedContentNode = clone $annotation->getContentNode();
-			/** @var GenericTypeNode $fixedType */
-			$fixedType = AnnotationTypeHelper::change($annotation->getType(), $typeNode, $fixedTypeNode);
-			$fixedContentNode->type = $fixedType;
-		} else {
-			$fixedContentNode = clone $annotation->getContentNode();
-			$fixedContentNode->type = AnnotationTypeHelper::change($annotation->getType(), $typeNode, $fixedTypeNode);
+				public function setNodeToChange(Node $nodeToChange): void
+				{
+					$this->nodeToChange = $nodeToChange;
+				}
+
+				public function setChangedNode(Node $changedNode): void
+				{
+					$this->changedNode = $changedNode;
+				}
+
+			};
 		}
 
-		$annotationClassName = get_class($annotation);
-
-		return new $annotationClassName(
-			$annotation->getName(),
-			$annotation->getStartPointer(),
-			$annotation->getEndPointer(),
-			$annotation->getContent(),
-			$fixedContentNode
-		);
-	}
-
-	private static function fixTemplateTagValueNode(
-		TemplateTagValueNode $node,
-		TypeNode $typeNode,
-		TypeNode $fixedTypeNode
-	): TemplateTagValueNode
-	{
-		$fixedNode = clone $node;
-
-		if ($fixedNode->bound !== null) {
-			$fixedNode->bound = AnnotationTypeHelper::change($node->bound, $typeNode, $fixedTypeNode);
-		}
-		if ($fixedNode->default !== null) {
-			$fixedNode->default = AnnotationTypeHelper::change($node->default, $typeNode, $fixedTypeNode);
+		if ($traverser === null) {
+			$traverser = new NodeTraverser([$visitor]);
 		}
 
-		return $fixedNode;
-	}
+		$visitor->setNodeToChange($nodeToChange);
+		$visitor->setChangedNode($changedNode);
 
-	private static function fix(File $phpcsFile, Annotation $annotation, Annotation $fixedAnnotation): string
-	{
-		$spaceAfterContent = '';
-		if (preg_match(
-			'~(\\s+)$~',
-			TokenHelper::getContent($phpcsFile, $annotation->getStartPointer(), $annotation->getEndPointer()),
-			$matches
-		) > 0) {
-			$spaceAfterContent = $matches[1];
-		}
+		[$changedTagNode] = $traverser->traverse([$tagNode]);
 
-		$fixedAnnotationContent = $fixedAnnotation->print() . $spaceAfterContent;
-
-		return preg_replace('~(\r\n|\n|\r)~', '\1 * ', $fixedAnnotationContent);
-	}
-
-	private static function parseAnnotationContent(string $annotationName, string $annotationContent): PhpDocTagValueNode
-	{
-		$annotationContentWithoutNewLines = preg_replace('~[\r\n]~', ' ', $annotationContent);
-
-		$tokens = new TokenIterator(self::getPhpDocLexer()->tokenize($annotationContentWithoutNewLines));
-		return self::getPhpDocParser()->parseTagValue($tokens, $annotationName);
-	}
-
-	private static function getPhpDocLexer(): Lexer
-	{
-		static $phpDocLexer;
-
-		if ($phpDocLexer === null) {
-			$phpDocLexer = new Lexer();
-		}
-
-		return $phpDocLexer;
-	}
-
-	private static function getPhpDocParser(): PhpDocParser
-	{
-		static $phpDocParser;
-
-		if ($phpDocParser === null) {
-			$constantExpressionParser = new ConstExprParser(true, true);
-			$phpDocParser = new PhpDocParser(
-				new TypeParser($constantExpressionParser, true),
-				$constantExpressionParser
-			);
-		}
-
-		return $phpDocParser;
+		return $changedTagNode;
 	}
 
 }

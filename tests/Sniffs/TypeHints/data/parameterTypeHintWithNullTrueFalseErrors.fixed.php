@@ -3,7 +3,7 @@
 class Whatever
 {
 
-	/***/
+	/** */
 	public function parameterNull(null $a)
 	{}
 
@@ -17,7 +17,7 @@ class Whatever
 	public function parameterFalse(false $a)
 	{}
 
-	/***/
+	/** */
 	public function parameterNullWithUselessAnnotation(null $a)
 	{}
 
