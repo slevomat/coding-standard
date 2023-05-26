@@ -3,7 +3,7 @@
 class Whatever
 {
 
-	/***/
+	/** */
 	private function simple(string|int $a)
 	{}
 
@@ -11,15 +11,15 @@ class Whatever
 	private function withTrue(string|bool $a)
 	{}
 
-	/***/
+	/** */
 	private function withFalse(string|false $a)
 	{}
 
-	/***/
+	/** */
 	private function withNull(?string $a)
 	{}
 
-	/***/
+	/** */
 	private function moreWithNull(int|string|null $a)
 	{}
 
@@ -39,23 +39,23 @@ class Whatever
 	private function unionWithMixedArray(string|array $a = null)
 	{}
 
-	/***/
+	/** */
 	private function scalar(string|int|float|bool $a)
 	{}
 
-	/***/
+	/** */
 	private function scalarNullable(string|int|float|bool|null $a)
 	{}
 
-	/***/
+	/** */
 	private function numeric(int|float $a)
 	{}
 
-	/***/
+	/** */
 	private function numericNullable(int|float|null $a)
 	{}
 
-	/***/
+	/** */
 	private function scalarAndnumericNullable(string|int|float|bool|null $a)
 	{}
 

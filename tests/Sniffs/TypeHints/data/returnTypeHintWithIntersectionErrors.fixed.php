@@ -9,7 +9,7 @@ class Whatever
 	{
 	}
 
-	/***/
+	/** */
 	public function three(): Foo&Bar&Boo
 	{
 	}

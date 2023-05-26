@@ -193,7 +193,7 @@ abstract class Whatever
 	{
 	}
 
-	/***/
+	/** */
 	public function oneLineDocComment(): string
 	{
 	}
@@ -243,12 +243,12 @@ abstract class Whatever
 	{
 	}
 
-	/***/
+	/** */
 	public function returnsMixed(): mixed
 	{
 	}
 
-	/***/
+	/** */
 	public function returnsNullableMixed(): mixed
 	{
 	}

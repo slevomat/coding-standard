@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\PHP;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -12,7 +13,7 @@ use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
+use SlevomatCodingStandard\Helpers\Annotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
@@ -86,22 +87,24 @@ class RequireExplicitAssertionSniff implements Sniff
 			$codePointer = $firstPointerOnPreviousLine;
 		}
 
-		$variableAnnotations = AnnotationHelper::getAnnotationsByName($phpcsFile, $docCommentOpenPointer, '@var');
+		/** @var list<Annotation<VarTagValueNode>> $variableAnnotations */
+		$variableAnnotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer, '@var');
 		if (count($variableAnnotations) === 0) {
 			return;
 		}
 
-		/** @var VariableAnnotation $variableAnnotation */
 		foreach (array_reverse($variableAnnotations) as $variableAnnotation) {
 			if ($variableAnnotation->isInvalid()) {
 				continue;
 			}
 
-			if ($variableAnnotation->getVariableName() === null) {
+			$variableName = $variableAnnotation->getValue()->variableName;
+
+			if ($variableName === '') {
 				continue;
 			}
 
-			$variableAnnotationType = $variableAnnotation->getType();
+			$variableAnnotationType = $variableAnnotation->getValue()->type;
 
 			if (
 				$variableAnnotationType instanceof UnionTypeNode
@@ -119,7 +122,7 @@ class RequireExplicitAssertionSniff implements Sniff
 			/** @var IdentifierTypeNode|ThisTypeNode|UnionTypeNode|GenericTypeNode $variableAnnotationType */
 			$variableAnnotationType = $variableAnnotationType;
 
-			$assertion = $this->createAssert($variableAnnotation->getVariableName(), $variableAnnotationType);
+			$assertion = $this->createAssert($variableName, $variableAnnotationType);
 
 			if ($assertion === null) {
 				continue;
@@ -131,7 +134,7 @@ class RequireExplicitAssertionSniff implements Sniff
 					continue;
 				}
 
-				if ($variableAnnotation->getVariableName() !== $tokens[$codePointer]['content']) {
+				if ($variableName !== $tokens[$codePointer]['content']) {
 					continue;
 				}
 
@@ -144,7 +147,7 @@ class RequireExplicitAssertionSniff implements Sniff
 				$variablePointerInList = TokenHelper::findNextContent(
 					$phpcsFile,
 					T_VARIABLE,
-					$variableAnnotation->getVariableName(),
+					$variableName,
 					$listParenthesisOpener + 1,
 					$tokens[$listParenthesisOpener]['parenthesis_closer']
 				);
@@ -164,7 +167,7 @@ class RequireExplicitAssertionSniff implements Sniff
 				$variablePointerInList = TokenHelper::findNextContent(
 					$phpcsFile,
 					T_VARIABLE,
-					$variableAnnotation->getVariableName(),
+					$variableName,
 					$codePointer + 1,
 					$tokens[$codePointer]['bracket_closer']
 				);
@@ -184,7 +187,7 @@ class RequireExplicitAssertionSniff implements Sniff
 					$variablePointerInWhile = TokenHelper::findNextContent(
 						$phpcsFile,
 						T_VARIABLE,
-						$variableAnnotation->getVariableName(),
+						$variableName,
 						$tokens[$codePointer]['parenthesis_opener'] + 1,
 						$tokens[$codePointer]['parenthesis_closer']
 					);
@@ -206,7 +209,7 @@ class RequireExplicitAssertionSniff implements Sniff
 					$variablePointerInForeach = TokenHelper::findNextContent(
 						$phpcsFile,
 						T_VARIABLE,
-						$variableAnnotation->getVariableName(),
+						$variableName,
 						$asPointer + 1,
 						$tokens[$codePointer]['parenthesis_closer']
 					);

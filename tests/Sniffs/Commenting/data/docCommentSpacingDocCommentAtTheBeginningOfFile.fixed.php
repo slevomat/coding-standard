@@ -1,4 +1,7 @@
 <?php
 /**
- * @var string $title
+ * @return string
  */
+function foo()
+{
+}

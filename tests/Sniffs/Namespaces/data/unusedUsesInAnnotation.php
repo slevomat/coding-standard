@@ -112,7 +112,7 @@ class Boo
 	 */
 	public function foo()
 	{
-		/** @var XXX\UsedClass() $usedClass */
+		/** @var XXX\UsedClass $usedClass */
 	}
 
 	/**

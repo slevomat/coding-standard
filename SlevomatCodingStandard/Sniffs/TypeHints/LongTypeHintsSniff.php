@@ -5,9 +5,8 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use SlevomatCodingStandard\Helpers\Annotation\GenericAnnotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
-use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
+use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use function sprintf;
 use function strtolower;
@@ -36,59 +35,56 @@ class LongTypeHintsSniff implements Sniff
 	{
 		$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 
-		foreach ($annotations as $annotationName => $annotationByName) {
-			foreach ($annotationByName as $annotation) {
-				if ($annotation instanceof GenericAnnotation) {
+		foreach ($annotations as $annotation) {
+			/** @var list<IdentifierTypeNode> $identifierTypeNodes */
+			$identifierTypeNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), IdentifierTypeNode::class);
+
+			foreach ($identifierTypeNodes as $typeHintNode) {
+				$typeHint = $typeHintNode->name;
+
+				$lowercasedTypeHint = strtolower($typeHint);
+
+				$shortTypeHint = null;
+				if ($lowercasedTypeHint === 'integer') {
+					$shortTypeHint = 'int';
+				} elseif ($lowercasedTypeHint === 'boolean') {
+					$shortTypeHint = 'bool';
+				}
+
+				if ($shortTypeHint === null) {
 					continue;
 				}
 
-				if ($annotation->isInvalid()) {
+				$fix = $phpcsFile->addFixableError(sprintf(
+					'Expected "%s" but found "%s" in %s annotation.',
+					$shortTypeHint,
+					$typeHint,
+					$annotation->getName()
+				), $annotation->getStartPointer(), self::CODE_USED_LONG_TYPE_HINT);
+
+				if (!$fix) {
 					continue;
 				}
 
-				foreach (AnnotationHelper::getAnnotationTypes($annotation) as $annotationType) {
-					foreach (AnnotationTypeHelper::getIdentifierTypeNodes($annotationType) as $typeHintNode) {
-						$typeHint = AnnotationTypeHelper::getTypeHintFromNode($typeHintNode);
+				$parsedDocComment = DocCommentHelper::parseDocComment($phpcsFile, $docCommentOpenPointer);
 
-						$lowercasedTypeHint = strtolower($typeHint);
+				$fixedDocComment = AnnotationHelper::fixAnnotation(
+					$parsedDocComment,
+					$annotation,
+					$typeHintNode,
+					new IdentifierTypeNode($shortTypeHint)
+				);
 
-						$shortTypeHint = null;
-						if ($lowercasedTypeHint === 'integer') {
-							$shortTypeHint = 'int';
-						} elseif ($lowercasedTypeHint === 'boolean') {
-							$shortTypeHint = 'bool';
-						}
+				$phpcsFile->fixer->beginChangeset();
 
-						if ($shortTypeHint === null) {
-							continue;
-						}
+				$phpcsFile->fixer->replaceToken($parsedDocComment->getOpenPointer(), $fixedDocComment);
+				FixerHelper::removeBetweenIncluding(
+					$phpcsFile,
+					$parsedDocComment->getOpenPointer() + 1,
+					$parsedDocComment->getClosePointer()
+				);
 
-						$fix = $phpcsFile->addFixableError(sprintf(
-							'Expected "%s" but found "%s" in %s annotation.',
-							$shortTypeHint,
-							$typeHint,
-							$annotationName
-						), $annotation->getStartPointer(), self::CODE_USED_LONG_TYPE_HINT);
-
-						if (!$fix) {
-							continue;
-						}
-
-						$fixedAnnotationContent = AnnotationHelper::fixAnnotationType(
-							$phpcsFile,
-							$annotation,
-							$typeHintNode,
-							new IdentifierTypeNode($shortTypeHint)
-						);
-
-						$phpcsFile->fixer->beginChangeset();
-
-						$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $fixedAnnotationContent);
-						FixerHelper::removeBetweenIncluding($phpcsFile, $annotation->getStartPointer() + 1, $annotation->getEndPointer());
-
-						$phpcsFile->fixer->endChangeset();
-					}
-				}
+				$phpcsFile->fixer->endChangeset();
 			}
 		}
 	}

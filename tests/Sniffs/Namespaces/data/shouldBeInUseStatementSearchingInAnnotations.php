@@ -25,7 +25,7 @@ abstract class Bar
 	 */
 	public function noErrors()
 	{
-		/**@var*/
+		/** @var*/
 	}
 
 	/**

@@ -5,7 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
-use SlevomatCodingStandard\Helpers\Annotation\VariableAnnotation;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
@@ -319,16 +319,14 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 			return true;
 		}
 
-		foreach (AnnotationHelper::getAnnotations($phpcsFile, $propertyPointer) as $annotationType => $annotations) {
-			if (!in_array($annotationType, ['@var', '@phpstan-var', '@psalm-var'], true)) {
+		foreach (AnnotationHelper::getAnnotations($phpcsFile, $propertyPointer) as $annotation) {
+			$annotationValue = $annotation->getValue();
+			if (!$annotationValue instanceof VarTagValueNode) {
 				return true;
 			}
 
-			/** @var VariableAnnotation $annotation */
-			foreach ($annotations as $annotation) {
-				if ($annotation->hasDescription()) {
-					return true;
-				}
+			if ($annotationValue->description !== '') {
+				return true;
 			}
 		}
 

@@ -262,6 +262,7 @@
 					@codeCoverageIgnore,
 					@phpcsSuppress,
 					@dataProvider,
+					@template,
 					@link,
 					@var,
 					@param,

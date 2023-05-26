@@ -170,8 +170,8 @@ class Whatever
 	}
 
 	/**
-	 * @param $a
 	 * Some info
+	 * @param $a
 	 */
 	public function onlyParameterWithoutType(int $a): void
 	{

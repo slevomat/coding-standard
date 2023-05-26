@@ -3,7 +3,7 @@
 class Whatever
 {
 
-	/***/
+	/** */
 	public function returnsNever(): never
 	{}
 
