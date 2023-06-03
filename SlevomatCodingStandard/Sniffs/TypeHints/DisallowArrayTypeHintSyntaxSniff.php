@@ -63,10 +63,6 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 		$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 
 		foreach ($annotations as $annotation) {
-			if ($annotation->isInvalid()) {
-				continue;
-			}
-
 			$arrayTypeNodes = $this->getArrayTypeNodes($annotation->getValue());
 
 			foreach ($arrayTypeNodes as $arrayTypeNode) {
