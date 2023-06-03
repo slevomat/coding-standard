@@ -67,8 +67,6 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 				continue;
 			}
 
-			/** @var list<UnionTypeNode> $unionTypeNodes */
-			$unionTypeNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), UnionTypeNode::class);
 			$arrayTypeNodes = $this->getArrayTypeNodes($annotation->getValue());
 
 			foreach ($arrayTypeNodes as $arrayTypeNode) {
@@ -86,6 +84,9 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 				}
 
 				$parsedDocComment = DocCommentHelper::parseDocComment($phpcsFile, $docCommentOpenPointer);
+
+				/** @var list<UnionTypeNode> $unionTypeNodes */
+				$unionTypeNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), UnionTypeNode::class);
 
 				$unionTypeNode = $this->findUnionTypeThatContainsArrayType($arrayTypeNode, $unionTypeNodes);
 
