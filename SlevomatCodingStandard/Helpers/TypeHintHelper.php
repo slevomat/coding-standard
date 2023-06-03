@@ -341,10 +341,6 @@ class TypeHintHelper
 			$annotations = AnnotationHelper::getAnnotations($phpcsFile, $classDocCommentOpenPointer, $aliasAnnotationName);
 
 			foreach ($annotations as $aliasAnnotation) {
-				if ($aliasAnnotation->isInvalid()) {
-					continue;
-				}
-
 				$aliasAnnotationValue = $aliasAnnotation->getValue();
 
 				if ($aliasAnnotationValue instanceof TypeAliasTagValueNode && $aliasAnnotationValue->alias === $typeHint) {
