@@ -263,15 +263,14 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 			return;
 		}
 
-		$phpcsFile->fixer->beginChangeset();
-
-		$phpcsFile->fixer->replaceToken($conditionStartPointer, sprintf('%s?%s', $identificator, $identificatorDifference));
-
+		$conditionContent = sprintf('%s?%s', $identificator, $identificatorDifference);
 		if (strtolower($defaultContent) !== 'null') {
-			$phpcsFile->fixer->addContent($conditionStartPointer, sprintf(' ?? %s', $defaultContent));
+			$conditionContent .= sprintf(' ?? %s', $defaultContent);
 		}
 
-		FixerHelper::removeBetweenIncluding($phpcsFile, $conditionStartPointer + 1, $conditionEndPointer);
+		$phpcsFile->fixer->beginChangeset();
+
+		FixerHelper::change($phpcsFile, $conditionStartPointer, $conditionEndPointer, $conditionContent);
 
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -335,9 +334,12 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->replaceToken($conditionStartPointer, sprintf('%s?%s', $identificator, $identificatorDifference));
-
-		FixerHelper::removeBetweenIncluding($phpcsFile, $conditionStartPointer + 1, $nextIdentificatorEndPointer);
+		FixerHelper::change(
+			$phpcsFile,
+			$conditionStartPointer,
+			$nextIdentificatorEndPointer,
+			sprintf('%s?%s', $identificator, $identificatorDifference)
+		);
 
 		$phpcsFile->fixer->endChangeset();
 

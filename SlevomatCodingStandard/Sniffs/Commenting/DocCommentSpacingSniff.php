@@ -197,9 +197,7 @@ class DocCommentSpacingSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->replaceToken($docCommentOpenerPointer, '/**' . $phpcsFile->eolChar);
-
-		FixerHelper::removeBetween($phpcsFile, $docCommentOpenerPointer, $firstContentStartPointer);
+		FixerHelper::change($phpcsFile, $docCommentOpenerPointer, $firstContentStartPointer - 1, '/**' . $phpcsFile->eolChar);
 
 		for ($i = 1; $i <= $this->linesCountBeforeFirstContent; $i++) {
 			$phpcsFile->fixer->addContent($docCommentOpenerPointer, sprintf('%s *%s', $indentation, $phpcsFile->eolChar));
@@ -623,16 +621,18 @@ class DocCommentSpacingSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
+
 		if ($endOfLineBeforeFirstAnnotation === null) {
-			$phpcsFile->fixer->replaceToken($docCommentOpenerPointer, '/**' . $phpcsFile->eolChar . $fixedAnnotations);
-
-			FixerHelper::removeBetweenIncluding($phpcsFile, $docCommentOpenerPointer + 1, $docCommentContentEndPointer);
-
+			FixerHelper::change(
+				$phpcsFile,
+				$docCommentOpenerPointer,
+				$docCommentContentEndPointer,
+				'/**' . $phpcsFile->eolChar . $fixedAnnotations
+			);
 		} else {
-			$phpcsFile->fixer->replaceToken($endOfLineBeforeFirstAnnotation + 1, $fixedAnnotations);
-
-			FixerHelper::removeBetweenIncluding($phpcsFile, $endOfLineBeforeFirstAnnotation + 2, $docCommentContentEndPointer);
+			FixerHelper::change($phpcsFile, $endOfLineBeforeFirstAnnotation + 1, $docCommentContentEndPointer, $fixedAnnotations);
 		}
+
 		$phpcsFile->fixer->endChangeset();
 	}
 

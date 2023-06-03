@@ -140,8 +140,9 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($equalPointer, $operators[$tokens[$operatorPointer]['code']]);
-		FixerHelper::removeBetweenIncluding($phpcsFile, $equalPointer + 1, $operatorPointer);
+
+		FixerHelper::change($phpcsFile, $equalPointer, $operatorPointer, $operators[$tokens[$operatorPointer]['code']]);
+
 		$phpcsFile->fixer->endChangeset();
 	}
 

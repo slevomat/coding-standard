@@ -283,13 +283,13 @@ class YodaHelper
 		/** @var int $lastOldPointer */
 		$lastOldPointer = key($oldTokens);
 
-		FixerHelper::removeBetweenIncluding($phpcsFile, $firstOldPointer, $lastOldPointer);
-
-		$phpcsFile->fixer->addContent($firstOldPointer, implode('', array_map(static function (array $token): string {
+		$content = implode('', array_map(static function (array $token): string {
 			/** @var string $content */
 			$content = $token['content'];
 			return $content;
-		}, $newTokens)));
+		}, $newTokens));
+
+		FixerHelper::change($phpcsFile, $firstOldPointer, $lastOldPointer, $content);
 	}
 
 	/**

@@ -82,9 +82,7 @@ class RequireSingleLineMethodSignatureSniff extends AbstractMethodSignature
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->replaceToken($signatureStartPointer, $signature);
-
-		FixerHelper::removeBetweenIncluding($phpcsFile, $signatureStartPointer + 1, $signatureEndPointer);
+		FixerHelper::change($phpcsFile, $signatureStartPointer, $signatureEndPointer, $signature);
 
 		$phpcsFile->fixer->endChangeset();
 	}

@@ -76,8 +76,7 @@ class DisallowStringExpressionPropertyFetchSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->replaceToken($curlyBracketOpenerPointer, $matches[2]);
-		FixerHelper::removeBetweenIncluding($phpcsFile, $curlyBracketOpenerPointer + 1, $curlyBracketCloserPointer);
+		FixerHelper::change($phpcsFile, $curlyBracketOpenerPointer, $curlyBracketCloserPointer, $matches[2]);
 
 		$phpcsFile->fixer->endChangeset();
 	}

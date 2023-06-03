@@ -75,9 +75,7 @@ class RequireShortTernaryOperatorSniff implements Sniff
 		if ($tokens[$conditionStartPointer]['code'] === T_BOOLEAN_NOT) {
 			$phpcsFile->fixer->replaceToken($conditionStartPointer, '');
 
-			FixerHelper::removeBetweenIncluding($phpcsFile, $inlineThenPointer + 1, $inlineElseEndPointer);
-
-			$phpcsFile->fixer->addContent($inlineThenPointer, sprintf(': %s', $thenContent));
+			FixerHelper::change($phpcsFile, $inlineThenPointer, $inlineElseEndPointer, sprintf('?: %s', $thenContent));
 
 		} else {
 			FixerHelper::removeBetween($phpcsFile, $inlineThenPointer, $inlineElsePointer);

@@ -311,12 +311,11 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 								new IdentifierTypeNode(substr($reference->name, 1))
 							);
 
-							$phpcsFile->fixer->replaceToken($reference->parsedDocComment->getOpenPointer(), $fixedDocComment);
-
-							FixerHelper::removeBetweenIncluding(
+							FixerHelper::change(
 								$phpcsFile,
-								$reference->parsedDocComment->getOpenPointer() + 1,
-								$reference->parsedDocComment->getClosePointer()
+								$reference->parsedDocComment->getOpenPointer(),
+								$reference->parsedDocComment->getClosePointer(),
+								$fixedDocComment
 							);
 
 						} elseif ($reference->source === self::SOURCE_ANNOTATION_CONSTANT_FETCH) {
@@ -327,12 +326,11 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 								new ConstFetchNode(substr($reference->name, 1), $reference->constantFetchNode->name)
 							);
 
-							$phpcsFile->fixer->replaceToken($reference->parsedDocComment->getOpenPointer(), $fixedDocComment);
-
-							FixerHelper::removeBetweenIncluding(
+							FixerHelper::change(
 								$phpcsFile,
-								$reference->parsedDocComment->getOpenPointer() + 1,
-								$reference->parsedDocComment->getClosePointer()
+								$reference->parsedDocComment->getOpenPointer(),
+								$reference->parsedDocComment->getClosePointer(),
+								$fixedDocComment
 							);
 						} else {
 							$phpcsFile->fixer->replaceToken($startPointer, substr($tokens[$startPointer]['content'], 1));
@@ -515,11 +513,11 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 					new IdentifierTypeNode($nameToReference)
 				);
 
-				$phpcsFile->fixer->replaceToken($reference->parsedDocComment->getOpenPointer(), $fixedDocComment);
-				FixerHelper::removeBetweenIncluding(
+				FixerHelper::change(
 					$phpcsFile,
-					$reference->parsedDocComment->getOpenPointer() + 1,
-					$reference->parsedDocComment->getClosePointer()
+					$reference->parsedDocComment->getOpenPointer(),
+					$reference->parsedDocComment->getClosePointer(),
+					$fixedDocComment
 				);
 
 			} elseif ($reference->source === self::SOURCE_ANNOTATION_CONSTANT_FETCH) {
@@ -530,11 +528,11 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 					new ConstFetchNode($nameToReference, $reference->constantFetchNode->name)
 				);
 
-				$phpcsFile->fixer->replaceToken($reference->parsedDocComment->getOpenPointer(), $fixedDocComment);
-				FixerHelper::removeBetweenIncluding(
+				FixerHelper::change(
 					$phpcsFile,
-					$reference->parsedDocComment->getOpenPointer() + 1,
-					$reference->parsedDocComment->getClosePointer()
+					$reference->parsedDocComment->getOpenPointer(),
+					$reference->parsedDocComment->getClosePointer(),
+					$fixedDocComment
 				);
 
 			} elseif ($reference->source === self::SOURCE_ATTRIBUTE) {
@@ -544,11 +542,9 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 					$nameToReference,
 					$attributeContent
 				);
-				$phpcsFile->fixer->replaceToken($startPointer, $fixedAttributeContent);
-				FixerHelper::removeBetweenIncluding($phpcsFile, $startPointer + 1, $reference->endPointer);
+				FixerHelper::change($phpcsFile, $startPointer, $reference->endPointer, $fixedAttributeContent);
 			} else {
-				$phpcsFile->fixer->replaceToken($startPointer, $nameToReference);
-				FixerHelper::removeBetweenIncluding($phpcsFile, $startPointer + 1, $reference->endPointer);
+				FixerHelper::change($phpcsFile, $startPointer, $reference->endPointer, $nameToReference);
 			}
 		}
 

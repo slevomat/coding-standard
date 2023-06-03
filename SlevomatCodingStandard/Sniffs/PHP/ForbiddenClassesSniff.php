@@ -199,8 +199,9 @@ class ForbiddenClassesSniff implements Sniff
 				}
 
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->replaceToken($reference['startPointer'], $alternative);
-				FixerHelper::removeBetweenIncluding($phpcsFile, $reference['startPointer'] + 1, $reference['endPointer']);
+
+				FixerHelper::change($phpcsFile, $reference['startPointer'], $reference['endPointer'], $alternative);
+
 				$phpcsFile->fixer->endChangeset();
 			}
 		}

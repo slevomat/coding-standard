@@ -105,9 +105,7 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->replaceToken($startPointer, sprintf('%s ??', $variableContent));
-
-		FixerHelper::removeBetweenIncluding($phpcsFile, $startPointer + 1, $inlineElsePointer);
+		FixerHelper::change($phpcsFile, $startPointer, $inlineElsePointer, sprintf('%s ??', $variableContent));
 
 		$phpcsFile->fixer->endChangeset();
 	}

@@ -129,9 +129,7 @@ class FullyQualifiedExceptionsSniff implements Sniff
 
 			$phpcsFile->fixer->beginChangeset();
 
-			FixerHelper::removeBetweenIncluding($phpcsFile, $referencedName->getStartPointer(), $referencedName->getEndPointer());
-
-			$phpcsFile->fixer->addContent($referencedName->getStartPointer(), $fullyQualifiedName);
+			FixerHelper::change($phpcsFile, $referencedName->getStartPointer(), $referencedName->getEndPointer(), $fullyQualifiedName);
 
 			$phpcsFile->fixer->endChangeset();
 		}

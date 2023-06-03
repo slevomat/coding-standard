@@ -84,12 +84,11 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 
 				$phpcsFile->fixer->beginChangeset();
 
-				$phpcsFile->fixer->replaceToken($parsedDocComment->getOpenPointer(), $fixedDocComment);
-
-				FixerHelper::removeBetweenIncluding(
+				FixerHelper::change(
 					$phpcsFile,
-					$parsedDocComment->getOpenPointer() + 1,
-					$parsedDocComment->getClosePointer()
+					$parsedDocComment->getOpenPointer(),
+					$parsedDocComment->getClosePointer(),
+					$fixedDocComment
 				);
 
 				$phpcsFile->fixer->endChangeset();
@@ -146,12 +145,11 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 
 				$phpcsFile->fixer->beginChangeset();
 
-				$phpcsFile->fixer->replaceToken($parsedDocComment->getOpenPointer(), $fixedDocComment);
-
-				FixerHelper::removeBetweenIncluding(
+				FixerHelper::change(
 					$phpcsFile,
-					$parsedDocComment->getOpenPointer() + 1,
-					$parsedDocComment->getClosePointer()
+					$parsedDocComment->getOpenPointer(),
+					$parsedDocComment->getClosePointer(),
+					$fixedDocComment
 				);
 
 				$phpcsFile->fixer->endChangeset();

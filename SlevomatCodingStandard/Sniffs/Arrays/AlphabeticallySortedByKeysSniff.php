@@ -61,7 +61,7 @@ class AlphabeticallySortedByKeysSniff implements Sniff
 	/**
 	 * @param list<ArrayKeyValue> $keyValues
 	 */
-	private function fix(File $phpcsFile, array $keyValues): bool
+	private function fix(File $phpcsFile, array $keyValues): void
 	{
 		$pointerStart = $keyValues[0]->getPointerStart();
 		$pointerEnd = $keyValues[count($keyValues) - 1]->getPointerEnd();
@@ -78,9 +78,8 @@ class AlphabeticallySortedByKeysSniff implements Sniff
 		}, $keyValues));
 
 		$phpcsFile->fixer->beginChangeset();
-		FixerHelper::removeBetweenIncluding($phpcsFile, $pointerStart, $pointerEnd);
-		$phpcsFile->fixer->addContent($pointerStart, $content);
-		return $phpcsFile->fixer->endChangeset();
+		FixerHelper::change($phpcsFile, $pointerStart, $pointerEnd, $content);
+		$phpcsFile->fixer->endChangeset();
 	}
 
 }

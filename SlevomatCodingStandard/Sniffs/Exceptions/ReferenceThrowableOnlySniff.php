@@ -108,9 +108,8 @@ class ReferenceThrowableOnlySniff implements Sniff
 
 			$phpcsFile->fixer->beginChangeset();
 
-			FixerHelper::removeBetweenIncluding($phpcsFile, $referencedName->getStartPointer(), $referencedName->getEndPointer());
+			FixerHelper::change($phpcsFile, $referencedName->getStartPointer(), $referencedName->getEndPointer(), '\Throwable');
 
-			$phpcsFile->fixer->addContent($referencedName->getStartPointer(), '\Throwable');
 			$phpcsFile->fixer->endChangeset();
 		}
 	}

@@ -247,8 +247,12 @@ class AnnotationNameSniff implements Sniff
 				$match[1] + strlen($match[0])
 			);
 
-			$phpcsFile->fixer->replaceToken($docCommentOpenPointer, $fixedDocCommentContent);
-			FixerHelper::removeBetweenIncluding($phpcsFile, $docCommentOpenPointer + 1, $tokens[$docCommentOpenPointer]['comment_closer']);
+			FixerHelper::change(
+				$phpcsFile,
+				$docCommentOpenPointer,
+				$tokens[$docCommentOpenPointer]['comment_closer'],
+				$fixedDocCommentContent
+			);
 
 			$phpcsFile->fixer->endChangeset();
 		}

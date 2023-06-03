@@ -12,6 +12,12 @@ use function preg_match;
 class FixerHelper
 {
 
+	public static function change(File $phpcsFile, int $startPointer, int $endPointer, string $content): void
+	{
+		self::removeBetweenIncluding($phpcsFile, $startPointer, $endPointer);
+		$phpcsFile->fixer->replaceToken($startPointer, $content);
+	}
+
 	public static function removeBetween(File $phpcsFile, int $startPointer, int $endPointer): void
 	{
 		self::removeBetweenIncluding($phpcsFile, $startPointer + 1, $endPointer - 1);

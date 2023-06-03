@@ -193,9 +193,7 @@ class PropertyDeclarationSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->replaceToken($firstModifierPointer, $expectedModifiersFormatted);
-
-		FixerHelper::removeBetweenIncluding($phpcsFile, $firstModifierPointer + 1, $lastModifierPointer);
+		FixerHelper::change($phpcsFile, $firstModifierPointer, $lastModifierPointer, $expectedModifiersFormatted);
 
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -253,9 +251,7 @@ class PropertyDeclarationSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->replaceToken($firstModifierPointer, $expectedModifiersFormatted);
-
-		FixerHelper::removeBetweenIncluding($phpcsFile, $firstModifierPointer + 1, $lastModifierPointer);
+		FixerHelper::change($phpcsFile, $firstModifierPointer, $lastModifierPointer, $expectedModifiersFormatted);
 
 		$phpcsFile->fixer->endChangeset();
 	}
