@@ -30,6 +30,10 @@ use function in_array;
 use function sprintf;
 use function strlen;
 use function strtolower;
+use const T_DOC_COMMENT_STAR;
+use const T_DOC_COMMENT_STRING;
+use const T_DOC_COMMENT_TAG;
+use const T_DOC_COMMENT_WHITESPACE;
 
 /**
  * @internal
@@ -348,6 +352,39 @@ class AnnotationHelper
 				$searchPointer = $i;
 				break;
 			}
+		}
+
+		$nextPointer = $searchPointer;
+		while (true) {
+			$nextPointer = TokenHelper::findNext(
+				$phpcsFile,
+				[T_DOC_COMMENT_TAG, T_DOC_COMMENT_STRING],
+				$nextPointer + 1,
+				$parsedDocComment->getClosePointer()
+			);
+
+			if ($nextPointer === null) {
+				break;
+			}
+
+			if ($tokens[$nextPointer]['code'] === T_DOC_COMMENT_TAG) {
+				break;
+			}
+
+			if (
+				$tokens[$searchPointer]['line'] + 1 !== $tokens[$nextPointer]['line']
+				&& (
+					$tokens[$nextPointer - 1]['code'] === T_DOC_COMMENT_STAR
+					|| (
+						$tokens[$nextPointer - 1]['code'] === T_DOC_COMMENT_WHITESPACE
+						&& strlen($tokens[$nextPointer - 1]['content']) === 1
+					)
+				)
+			) {
+				break;
+			}
+
+			$searchPointer = $nextPointer;
 		}
 
 		return $searchPointer;
