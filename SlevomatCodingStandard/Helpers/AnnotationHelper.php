@@ -27,8 +27,8 @@ use PHPStan\PhpDocParser\Ast\Type\ObjectShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use function count;
 use function in_array;
-use function mb_strlen;
 use function sprintf;
+use function strlen;
 use function strtolower;
 
 /**
@@ -336,7 +336,7 @@ class AnnotationHelper
 			$annotationNode->getAttribute(Attribute::START_INDEX),
 			$annotationNode->getAttribute(Attribute::END_INDEX) + 1
 		);
-		$annotationLength = mb_strlen($annotationContent, $phpcsFile->config->encoding);
+		$annotationLength = strlen($annotationContent);
 
 		$searchPointer = $annotationStartPointer;
 
@@ -344,7 +344,7 @@ class AnnotationHelper
 		for ($i = $annotationStartPointer; $i < count($tokens); $i++) {
 			$content .= $tokens[$i]['content'];
 
-			if (mb_strlen($content, $phpcsFile->config->encoding) >= $annotationLength) {
+			if (strlen($content) >= $annotationLength) {
 				$searchPointer = $i;
 				break;
 			}
