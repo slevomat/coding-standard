@@ -96,7 +96,7 @@ class UnusedUsesSniffTest extends TestCase
 			'searchAnnotations' => false,
 		]);
 
-		self::assertSame(81, $report->getErrorCount());
+		self::assertSame(85, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Assert is not used in this file.');
 		self::assertSniffError(
@@ -203,6 +203,15 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertSniffError($report, 84, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Comma\After is not used in this file.');
 		self::assertSniffError($report, 85, UnusedUsesSniff::CODE_UNUSED_USE, 'Type ObjectShapeItem1 is not used in this file.');
 		self::assertSniffError($report, 86, UnusedUsesSniff::CODE_UNUSED_USE, 'Type ObjectShapeItem2 is not used in this file.');
+		self::assertSniffError($report, 87, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Doctrine\ORM\Mapping\Column is not used in this file.');
+		self::assertSniffError($report, 88, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Doctrine\ORM\Mapping\Entity is not used in this file.');
+		self::assertSniffError(
+			$report,
+			89,
+			UnusedUsesSniff::CODE_UNUSED_USE,
+			'Type Doctrine\ORM\Mapping\GeneratedValue is not used in this file.'
+		);
+		self::assertSniffError($report, 90, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Doctrine\ORM\Mapping\Id is not used in this file.');
 	}
 
 	public function testUsedUseInAnnotationWithEnabledSearchAnnotations(): void

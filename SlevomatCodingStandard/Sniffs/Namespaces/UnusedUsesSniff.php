@@ -157,6 +157,7 @@ class UnusedUsesSniff implements Sniff
 						$contentsToCheck = [];
 
 						if ($annotation->getValue() instanceof GenericTagValueNode) {
+							$contentsToCheck[] = $annotation->getName();
 							$contentsToCheck[] = $annotation->getValue()->value;
 						} else {
 							/** @var list<IdentifierTypeNode> $identifierTypeNodes */

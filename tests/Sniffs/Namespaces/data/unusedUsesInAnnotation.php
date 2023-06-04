@@ -84,6 +84,10 @@ use Something\Enum;
 use Comma\After;
 use ObjectShapeItem1;
 use ObjectShapeItem2;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
 
 /**
  * @ORM\Entity()
@@ -328,4 +332,16 @@ class ObjectShape
 	/** @var object{a: ObjectShapeItem1, b: object{c: ObjectShapeItem2}} */
 	public object $object;
 
+}
+
+/** @Entity */
+class DDC1514EntityB
+{
+	/**
+	 * @var int
+	 * @Id
+	 * @Column(type="integer")
+	 * @GeneratedValue
+	 */
+	public $id;
 }
