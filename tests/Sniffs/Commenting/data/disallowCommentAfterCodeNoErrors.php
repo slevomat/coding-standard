@@ -29,7 +29,21 @@ function () {
  */
 class Whatever
 {
+	public function doAnything()
+	{
+		/*
+		 Comment
+		 */
+		while (true) {
 
+		}
+	}
 }
 
 $match = Strings::match($address, /** @lang RegExp */'~^regexp$~');
+
+/** phpcs:disable Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps */
+class Something
+{
+
+}
