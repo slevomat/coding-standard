@@ -96,6 +96,9 @@ class Doctrine
 	 *                      lifetime: 600
 	 *                      cache_driver:
 	 *                          type: apc
+	 *
+	 *
+	 * @phpcs:enable
 	 */
 	public function method()
 	{

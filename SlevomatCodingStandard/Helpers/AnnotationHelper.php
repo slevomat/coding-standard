@@ -25,6 +25,7 @@ use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ObjectShapeItemNode;
 use PHPStan\PhpDocParser\Ast\Type\ObjectShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use function array_merge;
 use function count;
 use function in_array;
 use function sprintf;
@@ -32,7 +33,6 @@ use function strlen;
 use function strtolower;
 use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_STRING;
-use const T_DOC_COMMENT_TAG;
 use const T_DOC_COMMENT_WHITESPACE;
 
 /**
@@ -358,7 +358,7 @@ class AnnotationHelper
 		while (true) {
 			$nextPointer = TokenHelper::findNext(
 				$phpcsFile,
-				[T_DOC_COMMENT_TAG, T_DOC_COMMENT_STRING],
+				array_merge(TokenHelper::$annotationTokenCodes, [T_DOC_COMMENT_STRING]),
 				$nextPointer + 1,
 				$parsedDocComment->getClosePointer()
 			);
@@ -367,7 +367,7 @@ class AnnotationHelper
 				break;
 			}
 
-			if ($tokens[$nextPointer]['code'] === T_DOC_COMMENT_TAG) {
+			if (in_array($tokens[$nextPointer]['code'], TokenHelper::$annotationTokenCodes, true)) {
 				break;
 			}
 

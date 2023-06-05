@@ -17,6 +17,7 @@ use function array_flip;
 use function array_key_exists;
 use function array_keys;
 use function array_map;
+use function array_merge;
 use function array_values;
 use function asort;
 use function count;
@@ -139,7 +140,14 @@ class DocCommentSpacingSniff implements Sniff
 
 		$firstAnnotationPointer = $annotationsCount > 0 ? $annotations[0]->getStartPointer() : null;
 
-		$lastContentEndPointer = $annotationsCount > 0 ? $annotations[$annotationsCount - 1]->getEndPointer() : $firstContentEndPointer;
+		/** @var int $lastContentEndPointer */
+		$lastContentEndPointer = $annotationsCount > 0
+			? TokenHelper::findPrevious(
+				$phpcsFile,
+				array_merge(TokenHelper::$annotationTokenCodes, [T_DOC_COMMENT_STRING]),
+				$tokens[$docCommentOpenerPointer]['comment_closer'] - 1
+			)
+			: $firstContentEndPointer;
 
 		$this->checkLinesBeforeFirstContent($phpcsFile, $docCommentOpenerPointer, $firstContentStartPointer);
 		$this->checkLinesBetweenDescriptionAndFirstAnnotation(
