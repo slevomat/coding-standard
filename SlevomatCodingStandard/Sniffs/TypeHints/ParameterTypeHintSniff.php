@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TypelessParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
@@ -44,11 +45,13 @@ use function lcfirst;
 use function sprintf;
 use function strtolower;
 use const T_BITWISE_AND;
+use const T_COMMA;
 use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_DOC_COMMENT_STAR;
 use const T_ELLIPSIS;
 use const T_FUNCTION;
+use const T_OPEN_PARENTHESIS;
 use const T_VARIABLE;
 
 class ParameterTypeHintSniff implements Sniff
@@ -162,7 +165,30 @@ class ParameterTypeHintSniff implements Sniff
 			})
 		);
 
+		$tokens = $phpcsFile->getTokens();
+
+		$isConstructor = FunctionHelper::isMethod($phpcsFile, $functionPointer)
+			&& strtolower(FunctionHelper::getName($phpcsFile, $functionPointer)) === '__construct';
+
 		foreach ($parametersWithoutTypeHint as $parameterName) {
+			$isPropertyPromotion = false;
+
+			if ($isConstructor) {
+				$parameterPointer = TokenHelper::findNextContent(
+					$phpcsFile,
+					T_VARIABLE,
+					$parameterName,
+					$tokens[$functionPointer]['parenthesis_opener'],
+					$tokens[$functionPointer]['parenthesis_closer']
+				);
+
+				$pointerBeforeParameter = TokenHelper::findPrevious($phpcsFile, [T_COMMA, T_OPEN_PARENTHESIS], $parameterPointer - 1);
+
+				$visibilityPointer = TokenHelper::findNextEffective($phpcsFile, $pointerBeforeParameter + 1);
+
+				$isPropertyPromotion = in_array($tokens[$visibilityPointer]['code'], Tokens::$scopeModifiers, true);
+			}
+
 			if (
 				!array_key_exists($parameterName, $parametersAnnotations)
 				|| $parametersAnnotations[$parameterName]->getValue() instanceof TypelessParamTagValueNode
@@ -311,6 +337,10 @@ class ParameterTypeHintSniff implements Sniff
 			foreach ($typeHintsWithConvertedUnion as $typeHintNo => $typeHint) {
 				if ($canTryUnionTypeHint && $typeHint === 'false') {
 					continue;
+				}
+
+				if ($isPropertyPromotion && $typeHint === 'callable') {
+					continue 2;
 				}
 
 				if (!TypeHintHelper::isValidTypeHint(

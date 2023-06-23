@@ -331,7 +331,9 @@ class Promoted
 		/** @var array<int, string> */
 		public array $promoted,
 		/** @phpstan-var array<int, string> */
-		public array $promoted2
+		public array $promoted2,
+		/** @var callable */
+		private $callable,
 	)
 	{
 
