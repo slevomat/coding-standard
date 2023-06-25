@@ -125,3 +125,15 @@ class ClassWithAttribute
 class ClassWithAttributes
 {
 }
+
+/**** Invalid doccomment *****/
+class WithInvalidDocComment
+{
+
+	public function __construct()
+	{
+		/**** Invalid doccomment *****/
+		$var = 'var';
+	}
+
+}

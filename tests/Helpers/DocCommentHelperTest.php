@@ -391,6 +391,26 @@ class DocCommentHelperTest extends TestCase
 		}
 	}
 
+	public function testIsInlineWithInvalidDocComment(): void
+	{
+		self::assertFalse(
+			DocCommentHelper::isInline(
+				$this->getTestedCodeSnifferFile(),
+				$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 135, T_DOC_COMMENT_OPEN_TAG)
+			)
+		);
+	}
+
+	public function testHasInheritdocAnnotationWithInvalidDocComment(): void
+	{
+		self::assertFalse(
+			DocCommentHelper::hasInheritdocAnnotation(
+				$this->getTestedCodeSnifferFile(),
+				$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 129, T_DOC_COMMENT_OPEN_TAG)
+			)
+		);
+	}
+
 	private function getTestedCodeSnifferFile(): File
 	{
 		if ($this->testedCodeSnifferFile === null) {

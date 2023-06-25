@@ -68,13 +68,15 @@ class AnnotationHelper
 				} else {
 					$parsedDocComment = DocCommentHelper::parseDocComment($phpcsFile, $docCommentOpenPointer);
 
-					foreach ($parsedDocComment->getNode()->getTags() as $node) {
-						$annotationStartPointer = self::getStartPointer($phpcsFile, $parsedDocComment->getOpenPointer(), $node);
-						$annotations[] = new Annotation(
-							$node,
-							$annotationStartPointer,
-							self::getEndPointer($phpcsFile, $parsedDocComment, $annotationStartPointer, $node)
-						);
+					if ($parsedDocComment !== null) {
+						foreach ($parsedDocComment->getNode()->getTags() as $node) {
+							$annotationStartPointer = self::getStartPointer($phpcsFile, $parsedDocComment->getOpenPointer(), $node);
+							$annotations[] = new Annotation(
+								$node,
+								$annotationStartPointer,
+								self::getEndPointer($phpcsFile, $parsedDocComment, $annotationStartPointer, $node)
+							);
+						}
 					}
 				}
 

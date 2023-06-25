@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Helpers;
 use PHP_CodeSniffer\Files\File;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
+use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use function array_merge;
 use function count;
@@ -124,6 +125,10 @@ class DocCommentHelper
 
 		$parsedDocComment = self::parseDocComment($phpcsFile, $docCommentOpenPointer);
 
+		if ($parsedDocComment === null) {
+			return false;
+		}
+
 		foreach ($parsedDocComment->getNode()->children as $child) {
 			if ($child instanceof PhpDocTextNode && strtolower($child->text) === '{@inheritdoc}') {
 				return true;
@@ -227,6 +232,10 @@ class DocCommentHelper
 
 		$parsedDocComment = self::parseDocComment($phpcsFile, $docCommentOpenPointer);
 
+		if ($parsedDocComment === null) {
+			return false;
+		}
+
 		foreach ($parsedDocComment->getNode()->getTags() as $annotation) {
 			if (preg_match('~^@(?:(?:phpstan|psalm)-)?var~i', $annotation->name) === 1) {
 				return true;
@@ -236,24 +245,28 @@ class DocCommentHelper
 		return false;
 	}
 
-	public static function parseDocComment(File $phpcsFile, int $docCommentOpenPointer): ParsedDocComment
+	public static function parseDocComment(File $phpcsFile, int $docCommentOpenPointer): ?ParsedDocComment
 	{
 		return SniffLocalCache::getAndSetIfNotCached(
 			$phpcsFile,
 			sprintf('parsed-doc-comment-%d', $docCommentOpenPointer),
-			static function () use ($phpcsFile, $docCommentOpenPointer): ParsedDocComment {
+			static function () use ($phpcsFile, $docCommentOpenPointer): ?ParsedDocComment {
 				$docComment = self::getDocComment($phpcsFile, $docCommentOpenPointer);
 
 				$docCommentTokens = new TokenIterator(PhpDocParserHelper::getLexer()->tokenize($docComment));
 
-				$parsedDocComment = PhpDocParserHelper::getParser()->parse($docCommentTokens);
+				try {
+					$parsedDocComment = PhpDocParserHelper::getParser()->parse($docCommentTokens);
 
-				return new ParsedDocComment(
-					$docCommentOpenPointer,
-					$phpcsFile->getTokens()[$docCommentOpenPointer]['comment_closer'],
-					$parsedDocComment,
-					$docCommentTokens
-				);
+					return new ParsedDocComment(
+						$docCommentOpenPointer,
+						$phpcsFile->getTokens()[$docCommentOpenPointer]['comment_closer'],
+						$parsedDocComment,
+						$docCommentTokens
+					);
+				} catch (ParserException $e) {
+					return null;
+				}
 			}
 		);
 	}

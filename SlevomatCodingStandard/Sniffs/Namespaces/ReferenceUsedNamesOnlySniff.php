@@ -708,58 +708,61 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 			}
 
 			$parsedDocComment = DocCommentHelper::parseDocComment($phpcsFile, $docCommentOpenPointer);
-			$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 
-			foreach ($annotations as $annotation) {
-				/** @var list<IdentifierTypeNode> $identifierTypeNodes */
-				$identifierTypeNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), IdentifierTypeNode::class);
+			if ($parsedDocComment !== null) {
+				$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 
-				foreach ($identifierTypeNodes as $typeHintNode) {
-					$typeHint = $typeHintNode->name;
+				foreach ($annotations as $annotation) {
+					/** @var list<IdentifierTypeNode> $identifierTypeNodes */
+					$identifierTypeNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), IdentifierTypeNode::class);
 
-					$lowercasedTypeHint = strtolower($typeHint);
-					if (
-						TypeHintHelper::isSimpleTypeHint($lowercasedTypeHint)
-						|| TypeHintHelper::isSimpleUnofficialTypeHints($lowercasedTypeHint)
-						|| !TypeHelper::isTypeName($typeHint)
-					) {
-						continue;
+					foreach ($identifierTypeNodes as $typeHintNode) {
+						$typeHint = $typeHintNode->name;
+
+						$lowercasedTypeHint = strtolower($typeHint);
+						if (
+							TypeHintHelper::isSimpleTypeHint($lowercasedTypeHint)
+							|| TypeHintHelper::isSimpleUnofficialTypeHints($lowercasedTypeHint)
+							|| !TypeHelper::isTypeName($typeHint)
+						) {
+							continue;
+						}
+
+						$reference = new stdClass();
+						$reference->source = self::SOURCE_ANNOTATION;
+						$reference->parsedDocComment = $parsedDocComment;
+						$reference->annotation = $annotation;
+						$reference->nameNode = $typeHintNode;
+						$reference->name = $typeHint;
+						$reference->type = ReferencedName::TYPE_CLASS;
+						$reference->startPointer = $annotation->getStartPointer();
+						$reference->endPointer = null;
+						$reference->isClass = true;
+						$reference->isConstant = false;
+						$reference->isFunction = false;
+
+						$references[] = $reference;
 					}
 
-					$reference = new stdClass();
-					$reference->source = self::SOURCE_ANNOTATION;
-					$reference->parsedDocComment = $parsedDocComment;
-					$reference->annotation = $annotation;
-					$reference->nameNode = $typeHintNode;
-					$reference->name = $typeHint;
-					$reference->type = ReferencedName::TYPE_CLASS;
-					$reference->startPointer = $annotation->getStartPointer();
-					$reference->endPointer = null;
-					$reference->isClass = true;
-					$reference->isConstant = false;
-					$reference->isFunction = false;
+					/** @var list<ConstFetchNode> $constantFetchNodes */
+					$constantFetchNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), ConstFetchNode::class);
 
-					$references[] = $reference;
-				}
+					foreach ($constantFetchNodes as $constantFetchNode) {
+						$reference = new stdClass();
+						$reference->source = self::SOURCE_ANNOTATION_CONSTANT_FETCH;
+						$reference->parsedDocComment = $parsedDocComment;
+						$reference->annotation = $annotation;
+						$reference->constantFetchNode = $constantFetchNode;
+						$reference->name = $constantFetchNode->className;
+						$reference->type = ReferencedName::TYPE_CLASS;
+						$reference->startPointer = $annotation->getStartPointer();
+						$reference->endPointer = null;
+						$reference->isClass = true;
+						$reference->isConstant = false;
+						$reference->isFunction = false;
 
-				/** @var list<ConstFetchNode> $constantFetchNodes */
-				$constantFetchNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), ConstFetchNode::class);
-
-				foreach ($constantFetchNodes as $constantFetchNode) {
-					$reference = new stdClass();
-					$reference->source = self::SOURCE_ANNOTATION_CONSTANT_FETCH;
-					$reference->parsedDocComment = $parsedDocComment;
-					$reference->annotation = $annotation;
-					$reference->constantFetchNode = $constantFetchNode;
-					$reference->name = $constantFetchNode->className;
-					$reference->type = ReferencedName::TYPE_CLASS;
-					$reference->startPointer = $annotation->getStartPointer();
-					$reference->endPointer = null;
-					$reference->isClass = true;
-					$reference->isConstant = false;
-					$reference->isFunction = false;
-
-					$references[] = $reference;
+						$references[] = $reference;
+					}
 				}
 			}
 
