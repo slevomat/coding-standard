@@ -177,4 +177,18 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @SomeAnnotation
+	 */
+	public function specificAnnotation(): void
+	{
+	}
+
+	/**
+	 * @\SomeOtherAnnotation
+	 */
+	public function specificAnnotationInFQN(): void
+	{
+	}
+
 }

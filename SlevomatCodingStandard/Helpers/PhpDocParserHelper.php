@@ -22,7 +22,7 @@ class PhpDocParserHelper
 		static $lexer;
 
 		if ($lexer === null) {
-			$lexer = new Lexer();
+			$lexer = new Lexer(true);
 		}
 
 		return $lexer;
