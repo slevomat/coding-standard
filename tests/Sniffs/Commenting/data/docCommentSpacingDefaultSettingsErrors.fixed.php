@@ -90,4 +90,21 @@ class Doctrine
 	{
 	}
 
+	/**
+	 * @param string $a First line
+	 * Second line
+	 *
+	 * Third line
+	 * Forth line
+	 * @param string $b First line
+	 * Second line
+	 *
+	 * Third line
+	 * Forth line
+	 * @return void
+	 */
+	public function multiLineAnnotations($a, $b)
+	{
+	}
+
 }

@@ -160,4 +160,22 @@ class Doctrine
 	{
 	}
 
+	/**
+	 * @return void
+	 * @param string $a First line
+	 * Second line
+	 *
+	 * Third line
+	 * Forth line
+	 * @param string $b First line
+	 * Second line
+	 *
+	 * Third line
+	 * Forth line
+	 * @dataProvider
+	 */
+	public function multiLineAnnotations($a, $b)
+	{
+	}
+
 }

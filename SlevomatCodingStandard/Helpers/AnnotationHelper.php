@@ -25,15 +25,12 @@ use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ObjectShapeItemNode;
 use PHPStan\PhpDocParser\Ast\Type\ObjectShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use function array_merge;
 use function count;
 use function in_array;
 use function sprintf;
 use function strlen;
 use function strtolower;
-use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_STRING;
-use const T_DOC_COMMENT_WHITESPACE;
 
 /**
  * @internal
@@ -356,40 +353,18 @@ class AnnotationHelper
 			}
 		}
 
-		$nextPointer = $searchPointer;
-		while (true) {
-			$nextPointer = TokenHelper::findNext(
-				$phpcsFile,
-				array_merge(TokenHelper::$annotationTokenCodes, [T_DOC_COMMENT_STRING]),
-				$nextPointer + 1,
-				$parsedDocComment->getClosePointer()
-			);
+		$nextAnnotationStartPointer = TokenHelper::findNext(
+			$phpcsFile,
+			TokenHelper::$annotationTokenCodes,
+			$searchPointer + 1,
+			$parsedDocComment->getClosePointer()
+		);
 
-			if ($nextPointer === null) {
-				break;
-			}
+		$pointerAfter = $nextAnnotationStartPointer ?? $parsedDocComment->getClosePointer();
 
-			if (in_array($tokens[$nextPointer]['code'], TokenHelper::$annotationTokenCodes, true)) {
-				break;
-			}
+		$stringPointerBefore = TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_STRING, $pointerAfter - 1, $searchPointer);
 
-			if (
-				$tokens[$searchPointer]['line'] + 1 !== $tokens[$nextPointer]['line']
-				&& (
-					$tokens[$nextPointer - 1]['code'] === T_DOC_COMMENT_STAR
-					|| (
-						$tokens[$nextPointer - 1]['code'] === T_DOC_COMMENT_WHITESPACE
-						&& strlen($tokens[$nextPointer - 1]['content']) === 1
-					)
-				)
-			) {
-				break;
-			}
-
-			$searchPointer = $nextPointer;
-		}
-
-		return $searchPointer;
+		return $stringPointerBefore ?? $searchPointer;
 	}
 
 	private static function changeAnnotationNode(PhpDocTagNode $tagNode, Node $nodeToChange, Node $changedNode): PhpDocTagNode
