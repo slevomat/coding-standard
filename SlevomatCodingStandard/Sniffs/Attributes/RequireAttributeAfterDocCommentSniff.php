@@ -65,7 +65,7 @@ class RequireAttributeAfterDocCommentSniff implements Sniff
 		$attributeStartPointer = TokenHelper::findFirstTokenOnLine($phpcsFile, $firstAttributeOpenerPointer);
 
 		$fix = $phpcsFile->addFixableError(
-			'Attribute should be placed before documentation comment.',
+			'Attribute should be placed after documentation comment.',
 			$attributeOpenerPointer,
 			self::CODE_ATTRIBUTE_BEFORE_DOC_COMMENT
 		);
