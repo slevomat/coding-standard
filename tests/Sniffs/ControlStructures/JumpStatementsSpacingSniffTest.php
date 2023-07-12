@@ -292,6 +292,22 @@ class JumpStatementsSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testAtTheBeginnningOfFile(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/jumpStatementsSpacingAtTheBeginningOfFile.php');
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError(
+			$report,
+			1,
+			JumpStatementsSpacingSniff::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
+			'Expected 1 line before "return", found -1.'
+		);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testAtTheEndOfFile(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/jumpStatementsSpacingAtTheEndOfFile.php');
