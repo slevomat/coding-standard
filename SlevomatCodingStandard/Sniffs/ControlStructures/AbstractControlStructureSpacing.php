@@ -217,7 +217,9 @@ abstract class AbstractControlStructureSpacing implements Sniff
 			$phpcsFile->fixer->replaceToken($pointerBefore, '<?php');
 		}
 
-		FixerHelper::removeBetweenIncluding($phpcsFile, $pointerBefore + 1, $endOfLineBeforePointer);
+		if ($endOfLineBeforePointer !== null) {
+			FixerHelper::removeBetweenIncluding($phpcsFile, $pointerBefore + 1, $endOfLineBeforePointer);
+		}
 
 		$linesToAdd = $hasCommentWithLineEndBefore ? $requiredLinesCountBefore - 1 : $requiredLinesCountBefore;
 		for ($i = 0; $i <= $linesToAdd; $i++) {
