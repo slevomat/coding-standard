@@ -112,6 +112,10 @@ class DocCommentSpacingSniff implements Sniff
 
 		$parsedDocComment = DocCommentHelper::parseDocComment($phpcsFile, $docCommentOpenerPointer);
 
+		if ($parsedDocComment === null) {
+			return;
+		}
+
 		$firstContentStartPointer = $parsedDocComment->getNodeStartPointer($phpcsFile, $parsedDocComment->getNode()->children[0]);
 		$firstContentEndPointer = $parsedDocComment->getNodeEndPointer(
 			$phpcsFile,

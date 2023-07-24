@@ -13,6 +13,12 @@ class DocCommentSpacingSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testInvalidDocComment(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/docCommentSpacingInvalidDocComment.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
 	public function testInlineDocComment(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/docCommentSpacingInlineDocComment.php');
