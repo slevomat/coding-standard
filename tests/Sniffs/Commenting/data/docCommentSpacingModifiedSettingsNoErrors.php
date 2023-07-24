@@ -10,6 +10,8 @@
  *
  * Description
  *
+ * phpcs:disable SlevomatCodingStandard.Classes.RequireAbstractOrFinal.ClassNeitherAbstractNorFinal
+ *
  */
 class Whatever
 {

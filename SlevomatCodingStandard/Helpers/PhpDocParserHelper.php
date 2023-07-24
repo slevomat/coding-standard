@@ -42,6 +42,7 @@ class PhpDocParserHelper
 				true,
 				true,
 				$usedAttributes,
+				true,
 				true
 			);
 		}

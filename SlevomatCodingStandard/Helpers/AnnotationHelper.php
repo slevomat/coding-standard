@@ -25,12 +25,9 @@ use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ObjectShapeItemNode;
 use PHPStan\PhpDocParser\Ast\Type\ObjectShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use function count;
 use function in_array;
 use function sprintf;
-use function strlen;
 use function strtolower;
-use const T_DOC_COMMENT_STRING;
 
 /**
  * @internal
@@ -67,11 +64,11 @@ class AnnotationHelper
 
 					if ($parsedDocComment !== null) {
 						foreach ($parsedDocComment->getNode()->getTags() as $node) {
-							$annotationStartPointer = self::getStartPointer($phpcsFile, $parsedDocComment->getOpenPointer(), $node);
+							$annotationStartPointer = $parsedDocComment->getNodeStartPointer($phpcsFile, $node);
 							$annotations[] = new Annotation(
 								$node,
 								$annotationStartPointer,
-								self::getEndPointer($phpcsFile, $parsedDocComment, $annotationStartPointer, $node)
+								$parsedDocComment->getNodeEndPointer($phpcsFile, $node, $annotationStartPointer)
 							);
 						}
 					}
@@ -307,64 +304,6 @@ class AnnotationHelper
 			$typeHint->getTypeHintWithoutNullabilitySymbol(),
 			$annotationTypeHint
 		);
-	}
-
-	private static function getStartPointer(File $phpcsFile, int $docCommentOpenPointer, PhpDocTagNode $annotationNode): int
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		$tagStartLine = $tokens[$docCommentOpenPointer]['line'] + $annotationNode->getAttribute('startLine') - 1;
-
-		$searchPointer = $docCommentOpenPointer + 1;
-		for ($i = $docCommentOpenPointer + 1; $i < $tokens[$docCommentOpenPointer]['comment_closer']; $i++) {
-			if ($tagStartLine === $tokens[$i]['line']) {
-				$searchPointer = $i;
-				break;
-			}
-		}
-
-		return TokenHelper::findNext($phpcsFile, TokenHelper::$annotationTokenCodes, $searchPointer);
-	}
-
-	private static function getEndPointer(
-		File $phpcsFile,
-		ParsedDocComment $parsedDocComment,
-		int $annotationStartPointer,
-		PhpDocTagNode $annotationNode
-	): int
-	{
-		$tokens = $phpcsFile->getTokens();
-
-		$annotationContent = $parsedDocComment->getTokens()->getContentBetween(
-			$annotationNode->getAttribute(Attribute::START_INDEX),
-			$annotationNode->getAttribute(Attribute::END_INDEX) + 1
-		);
-		$annotationLength = strlen($annotationContent);
-
-		$searchPointer = $annotationStartPointer;
-
-		$content = '';
-		for ($i = $annotationStartPointer; $i < count($tokens); $i++) {
-			$content .= $tokens[$i]['content'];
-
-			if (strlen($content) >= $annotationLength) {
-				$searchPointer = $i;
-				break;
-			}
-		}
-
-		$nextAnnotationStartPointer = TokenHelper::findNext(
-			$phpcsFile,
-			TokenHelper::$annotationTokenCodes,
-			$searchPointer + 1,
-			$parsedDocComment->getClosePointer()
-		);
-
-		$pointerAfter = $nextAnnotationStartPointer ?? $parsedDocComment->getClosePointer();
-
-		$stringPointerBefore = TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_STRING, $pointerAfter - 1, $searchPointer);
-
-		return $stringPointerBefore ?? $searchPointer;
 	}
 
 	private static function changeAnnotationNode(PhpDocTagNode $tagNode, Node $nodeToChange, Node $changedNode): PhpDocTagNode
