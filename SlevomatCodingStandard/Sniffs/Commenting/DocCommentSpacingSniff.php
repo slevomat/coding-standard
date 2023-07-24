@@ -17,7 +17,6 @@ use function array_flip;
 use function array_key_exists;
 use function array_keys;
 use function array_map;
-use function array_merge;
 use function array_values;
 use function asort;
 use function count;
@@ -35,7 +34,6 @@ use function trim;
 use function usort;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_DOC_COMMENT_STAR;
-use const T_DOC_COMMENT_STRING;
 use const T_DOC_COMMENT_WHITESPACE;
 
 class DocCommentSpacingSniff implements Sniff
@@ -103,34 +101,23 @@ class DocCommentSpacingSniff implements Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
-		$firstContentStartPointer = TokenHelper::findNextExcluding(
+		if (TokenHelper::findNextExcluding(
 			$phpcsFile,
 			[T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STAR],
 			$docCommentOpenerPointer + 1,
 			$tokens[$docCommentOpenerPointer]['comment_closer']
-		);
-
-		if ($firstContentStartPointer === null) {
+		) === null) {
 			return;
 		}
 
-		$firstContentEndPointer = $firstContentStartPointer;
-		$actualPointer = $firstContentStartPointer;
-		do {
-			/** @var int $actualPointer */
-			$actualPointer = TokenHelper::findNextExcluding(
-				$phpcsFile,
-				[T_DOC_COMMENT_STAR, T_DOC_COMMENT_WHITESPACE],
-				$actualPointer + 1,
-				$tokens[$docCommentOpenerPointer]['comment_closer'] + 1
-			);
+		$parsedDocComment = DocCommentHelper::parseDocComment($phpcsFile, $docCommentOpenerPointer);
 
-			if ($tokens[$actualPointer]['code'] !== T_DOC_COMMENT_STRING) {
-				break;
-			}
-
-			$firstContentEndPointer = $actualPointer;
-		} while (true);
+		$firstContentStartPointer = $parsedDocComment->getNodeStartPointer($phpcsFile, $parsedDocComment->getNode()->children[0]);
+		$firstContentEndPointer = $parsedDocComment->getNodeEndPointer(
+			$phpcsFile,
+			$parsedDocComment->getNode()->children[0],
+			$firstContentStartPointer
+		);
 
 		$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenerPointer);
 		usort($annotations, static function (Annotation $a, Annotation $b): int {
@@ -142,11 +129,7 @@ class DocCommentSpacingSniff implements Sniff
 
 		/** @var int $lastContentEndPointer */
 		$lastContentEndPointer = $annotationsCount > 0
-			? TokenHelper::findPrevious(
-				$phpcsFile,
-				array_merge(TokenHelper::$annotationTokenCodes, [T_DOC_COMMENT_STRING]),
-				$tokens[$docCommentOpenerPointer]['comment_closer'] - 1
-			)
+			? $annotations[$annotationsCount - 1]->getEndPointer()
 			: $firstContentEndPointer;
 
 		$this->checkLinesBeforeFirstContent($phpcsFile, $docCommentOpenerPointer, $firstContentStartPointer);

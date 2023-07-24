@@ -191,4 +191,14 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @param string $parameter
+	 *   Some parameter
+	 * @return string
+	 *   Some return value
+	 */
+	public function descriptionOnNextLine()
+	{
+	}
+
 }
