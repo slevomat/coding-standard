@@ -12,6 +12,7 @@ use function count;
 use function in_array;
 use function preg_match;
 use function sprintf;
+use function stripos;
 use function strtolower;
 use function trim;
 use const T_ABSTRACT;
@@ -130,7 +131,7 @@ class DocCommentHelper
 		}
 
 		foreach ($parsedDocComment->getNode()->children as $child) {
-			if ($child instanceof PhpDocTextNode && strtolower($child->text) === '{@inheritdoc}') {
+			if ($child instanceof PhpDocTextNode && stripos($child->text, '{@inheritdoc}') !== false) {
 				return true;
 			}
 

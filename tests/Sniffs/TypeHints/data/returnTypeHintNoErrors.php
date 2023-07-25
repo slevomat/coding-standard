@@ -22,6 +22,15 @@ abstract class Whatever
 	}
 
 	/**
+	 * Description.
+	 *
+	 * {@inheritDoc}
+	 */
+	public function hasDescriptionAndInheritDocAnnotation()
+	{
+	}
+
+	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
 	 */
 	private function isSniffCodeAnyTypeHintSuppressed()

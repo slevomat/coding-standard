@@ -11,9 +11,18 @@ class Whatever
 	/**
 	 * {@inheritdoc}
 	 */
-	public function hasInheritdocAnnotation()
+	public function hasInheritDocAnnotation()
 	{
 
+	}
+
+	/**
+	 * Description.
+	 *
+	 * {@inheritDoc}
+	 */
+	public function hasDescriptionAndInheritDocAnnotation()
+	{
 	}
 
 	/**
