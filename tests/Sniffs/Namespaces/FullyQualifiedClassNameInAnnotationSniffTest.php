@@ -528,4 +528,13 @@ class FullyQualifiedClassNameInAnnotationSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testIgnoredAnnotationNames(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedClassNameInAnnotationErrors.php', [
+			'ignoredAnnotationNames' => ['@return', '@param', '@var'],
+		]);
+
+		self::assertSame(41, $report->getErrorCount());
+	}
+
 }
