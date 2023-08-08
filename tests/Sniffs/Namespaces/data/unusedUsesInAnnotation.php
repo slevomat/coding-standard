@@ -88,6 +88,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Entity()
@@ -344,4 +345,11 @@ class DDC1514EntityB
 	 * @GeneratedValue
 	 */
 	public $id;
+}
+
+/**
+ * @OA\Tag(name="
+ * ")
+ */
+class AnnotationWithMultiLinesStringArguments {
 }

@@ -68,6 +68,8 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertNoSniffError($report, 29);
 
 		self::assertNoSniffError($report, 30);
+
+		self::assertNoSniffError($report, 91);
 	}
 
 	public function testUnusedUseWithMultipleNamespaces(): void
@@ -96,7 +98,7 @@ class UnusedUsesSniffTest extends TestCase
 			'searchAnnotations' => false,
 		]);
 
-		self::assertSame(85, $report->getErrorCount());
+		self::assertSame(86, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Assert is not used in this file.');
 		self::assertSniffError(
