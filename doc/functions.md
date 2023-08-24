@@ -57,6 +57,10 @@ Sniff provides the following settings:
 
 This sniff disallows usage of named arguments.
 
+#### SlevomatCodingStandard.Functions.NamedArgumentSpacing 🔧
+
+Checks spacing in named argument.
+
 #### SlevomatCodingStandard.Functions.DisallowTrailingCommaInCall 🔧
 
 This sniff disallows trailing commas in multi-line calls.
