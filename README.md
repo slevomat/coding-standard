@@ -126,6 +126,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/squizlabs/PHP_
  - [SlevomatCodingStandard.Functions.DisallowTrailingCommaInClosureUse](doc/functions.md#slevomatcodingstandardfunctionsdisallowtrailingcommainclosureuse-) 🔧
  - [SlevomatCodingStandard.Functions.DisallowTrailingCommaInDeclaration](doc/functions.md#slevomatcodingstandardfunctionsdisallowtrailingcommaindeclaration-) 🔧
  - [SlevomatCodingStandard.Functions.FunctionLength](doc/functions.md#slevomatcodingstandardfunctionsfunctionlength)
+ - [SlevomatCodingStandard.Functions.NamedArgumentSpacing](doc/functions.md#slevomatcodingstandardfunctionsnamedargumentspacing-) 🔧
  - [SlevomatCodingStandard.Functions.RequireArrowFunction](doc/functions.md#slevomatcodingstandardfunctionsrequirearrowfunction-) 🔧
  - [SlevomatCodingStandard.Functions.RequireMultiLineCall](doc/functions.md#slevomatcodingstandardfunctionsrequiremultilinecall-) 🔧
  - [SlevomatCodingStandard.Functions.RequireSingleLineCall](doc/functions.md#slevomatcodingstandardfunctionsrequiresinglelinecall-) 🔧
