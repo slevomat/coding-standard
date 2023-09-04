@@ -23,6 +23,7 @@ use const T_COMMENT;
 use const T_CONST;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_EQUAL;
+use const T_FINAL;
 use const T_FN;
 use const T_FOREACH;
 use const T_LIST;
@@ -89,7 +90,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 
 			if (in_array(
 				$tokens[$pointerAfterCommentClosePointer]['code'],
-				[T_PRIVATE, T_PROTECTED, T_PUBLIC, T_READONLY, T_CONST],
+				[T_PRIVATE, T_PROTECTED, T_PUBLIC, T_READONLY, T_FINAL, T_CONST],
 				true
 			)) {
 				return;

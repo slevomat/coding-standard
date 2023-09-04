@@ -1,4 +1,4 @@
-<?php // lint >= 8.1
+<?php // lint >= 8.2
 
 /**
  * @var string
@@ -32,6 +32,14 @@ class Foo
 
 	/** @var string */
 	static $static;
+
+	/**
+	 * @var list<MyEnum> For PHPStorm
+	 */
+	final public const ENUM_LIST = [
+		MyEnum::One,
+		MyEnum::Two,
+	];
 
 	public function __construct()
 	{
