@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.2
 
 abstract class Foo {
 	public const Foo = 'bar';
@@ -52,4 +52,13 @@ class TestClass
 	use TestTrait;
 
 	private const CONSTANT_2 = 'bar';
+}
+
+enum A: string
+{
+	public const X = [];
+
+	case A = 'a';
+
+	case B = 'b';
 }

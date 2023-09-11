@@ -10,6 +10,7 @@ use function count;
 use function in_array;
 use function sprintf;
 use const T_CONST;
+use const T_ENUM_CASE;
 use const T_FUNCTION;
 use const T_USE;
 use const T_VARIABLE;
@@ -56,7 +57,7 @@ class ConstantSpacingSniff extends AbstractPropertyConstantAndEnumCaseSpacing
 			return true;
 		}
 
-		$nextPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE, T_USE], $pointer + 1);
+		$nextPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_ENUM_CASE, T_CONST, T_VARIABLE, T_USE], $pointer + 1);
 
 		return $tokens[$nextPointer]['code'] === T_CONST;
 	}
