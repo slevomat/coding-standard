@@ -1245,4 +1245,10 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testReservedWord(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/referenceUsedNamesReservedWord.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
 }

@@ -184,6 +184,10 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 			$canonicalName = NamespaceHelper::normalizeToCanonicalName($name);
 			$unqualifiedName = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($name);
 
+			if (in_array(strtolower($unqualifiedName), ['true', 'false', 'null'], true)) {
+				continue;
+			}
+
 			$collidingUseStatementUniqueId = UseStatement::getUniqueId($reference->type, $unqualifiedName);
 
 			$isPartialUse = false;
