@@ -17,6 +17,7 @@ use function array_map;
 use function sprintf;
 use function strtolower;
 use const T_OPEN_TAG;
+use const T_OPEN_USE_GROUP;
 
 /**
  * @internal
@@ -61,6 +62,10 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 	public function process(File $phpcsFile, $openTagPointer): void
 	{
 		if (TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $openTagPointer - 1) !== null) {
+			return;
+		}
+
+		if (TokenHelper::findNext($phpcsFile, T_OPEN_USE_GROUP, $openTagPointer) !== null) {
 			return;
 		}
 

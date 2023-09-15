@@ -77,4 +77,14 @@ class FullyQualifiedGlobalConstantsSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testIgnoreGroupUseDeclaration(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsIgnoreGroupUse.php');
+
+		self::assertNoSniffErrorInFile($report);
+		self::assertNoSniffWarningInFile($report);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
