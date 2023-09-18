@@ -47,3 +47,9 @@ function undefinedVariable()
 	$b = $a ? true : false;
 	$a[] = 2;
 }
+
+function notImportedViaGlobalStatement()
+{
+	static $something, $value, $somethingElse;
+	$value[] = 'a';
+}
