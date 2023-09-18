@@ -17,7 +17,7 @@ class DisallowImplicitArrayCreationSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/disallowImplicitArrayCreationErrors.php');
 
-		self::assertSame(8, $report->getErrorCount());
+		self::assertSame(9, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, DisallowImplicitArrayCreationSniff::CODE_IMPLICIT_ARRAY_CREATION_USED);
 		self::assertSniffError($report, 7, DisallowImplicitArrayCreationSniff::CODE_IMPLICIT_ARRAY_CREATION_USED);
@@ -27,6 +27,7 @@ class DisallowImplicitArrayCreationSniffTest extends TestCase
 		self::assertSniffError($report, 36, DisallowImplicitArrayCreationSniff::CODE_IMPLICIT_ARRAY_CREATION_USED);
 		self::assertSniffError($report, 41, DisallowImplicitArrayCreationSniff::CODE_IMPLICIT_ARRAY_CREATION_USED);
 		self::assertSniffError($report, 48, DisallowImplicitArrayCreationSniff::CODE_IMPLICIT_ARRAY_CREATION_USED);
+		self::assertSniffError($report, 54, DisallowImplicitArrayCreationSniff::CODE_IMPLICIT_ARRAY_CREATION_USED);
 	}
 
 }

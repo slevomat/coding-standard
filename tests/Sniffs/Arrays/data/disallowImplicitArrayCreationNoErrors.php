@@ -90,3 +90,9 @@ function staticVariable()
 	static $value;
 	$value[] = true;
 }
+
+function importedViaGlobalStatement()
+{
+	global $something, $value, $somethingElse;
+	$value[] = 'a';
+}
