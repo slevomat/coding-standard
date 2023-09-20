@@ -49,4 +49,10 @@ class AssignmentInConditionSniffTest extends TestCase
 		}
 	}
 
+	public function testLiveCoding(): void
+	{
+		$resultFile = self::checkFile(__DIR__ . '/data/assignmentsInConditionsLiveCoding.php');
+		self::assertNoSniffErrorInFile($resultFile);
+	}
+
 }
