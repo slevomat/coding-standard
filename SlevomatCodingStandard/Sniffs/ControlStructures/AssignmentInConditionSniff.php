@@ -42,6 +42,7 @@ class AssignmentInConditionSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 		$token = $tokens[$conditionStartPointer];
+
 		if ($token['code'] === T_DO) {
 			$whilePointer = TokenHelper::findNext($phpcsFile, T_WHILE, $token['scope_closer'] + 1);
 			$whileToken = $tokens[$whilePointer];
@@ -53,6 +54,14 @@ class AssignmentInConditionSniff implements Sniff
 			$parenthesisCloser = $token['parenthesis_closer'];
 			$type = $token['code'] === T_IF ? 'if' : 'elseif';
 		}
+
+		if (
+			$parenthesisOpener === null
+			|| $parenthesisCloser === null
+		) {
+			return;
+		}
+
 		$this->processCondition($phpcsFile, $parenthesisOpener, $parenthesisCloser, $type);
 	}
 
