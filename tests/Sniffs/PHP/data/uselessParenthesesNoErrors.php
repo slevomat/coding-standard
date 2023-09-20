@@ -177,4 +177,3 @@ $anotherObject = new ($object->getClassName());
 return true
 	? 100
 	: (int) ((100 <=> 50) * 100);
-

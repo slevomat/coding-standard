@@ -122,6 +122,10 @@ class UselessParenthesesSniff implements Sniff
 			return;
 		}
 
+		if (!array_key_exists('parenthesis_closer', $tokens[$parenthesisOpenerPointer])) {
+			return;
+		}
+
 		/** @var int $pointerBeforeParenthesisOpener */
 		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
 		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], array_merge(
@@ -386,7 +390,7 @@ class UselessParenthesesSniff implements Sniff
 			} while (true);
 		} else {
 			$nextPointer = TokenHelper::findNext($phpcsFile, T_OPEN_PARENTHESIS, $notBooleanNotOperatorPointer + 1);
-			if ($nextPointer === null) {
+			if ($nextPointer === null || !isset($tokens[$nextPointer]['parenthesis_closer'])) {
 				return;
 			}
 
