@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_key_exists;
 use function in_array;
 use function preg_replace;
 use function rtrim;
@@ -59,6 +60,15 @@ abstract class AbstractLineCondition implements Sniff
 	protected function shouldBeSkipped(File $phpcsFile, int $controlStructurePointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
+
+		if (
+			!array_key_exists('parenthesis_opener', $tokens[$controlStructurePointer])
+			|| $tokens[$controlStructurePointer]['parenthesis_opener'] === null
+			|| !array_key_exists('parenthesis_closer', $tokens[$controlStructurePointer])
+			|| $tokens[$controlStructurePointer]['parenthesis_closer'] === null
+		) {
+			return true;
+		}
 
 		if ($tokens[$controlStructurePointer]['code'] === T_WHILE) {
 			$isPartOfDo = $this->isPartOfDo($phpcsFile, $controlStructurePointer);

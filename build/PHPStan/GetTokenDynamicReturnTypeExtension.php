@@ -11,6 +11,7 @@ use PHPStan\Type\Constant\ConstantArrayTypeBuilder;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
@@ -46,6 +47,7 @@ class GetTokenDynamicReturnTypeExtension implements DynamicMethodReturnTypeExten
 			$stringType = new StringType();
 			$integerType = new IntegerType();
 			$stringIntegerUnion = new UnionType([$stringType, $integerType]);
+			$nullableInteger = new UnionType([new NullType(), $integerType]);
 
 			$baseArrayBuilder = ConstantArrayTypeBuilder::createEmpty();
 			$baseArrayBuilder->setOffsetValueType(new ConstantStringType('content'), $stringType);
@@ -65,8 +67,8 @@ class GetTokenDynamicReturnTypeExtension implements DynamicMethodReturnTypeExten
 			$arrayBuilder->setOffsetValueType(new ConstantStringType('length'), $integerType);
 			$arrayBuilder->setOffsetValueType(new ConstantStringType('level'), $integerType);
 			$arrayBuilder->setOffsetValueType(new ConstantStringType('conditions'), new ArrayType($integerType, $stringIntegerUnion));
-			$arrayBuilder->setOffsetValueType(new ConstantStringType('parenthesis_opener'), $integerType);
-			$arrayBuilder->setOffsetValueType(new ConstantStringType('parenthesis_closer'), $integerType);
+			$arrayBuilder->setOffsetValueType(new ConstantStringType('parenthesis_opener'), $nullableInteger);
+			$arrayBuilder->setOffsetValueType(new ConstantStringType('parenthesis_closer'), $nullableInteger);
 			$arrayBuilder->setOffsetValueType(new ConstantStringType('parenthesis_owner'), $integerType);
 			$arrayBuilder->setOffsetValueType(new ConstantStringType('scope_condition'), $integerType);
 			$arrayBuilder->setOffsetValueType(new ConstantStringType('scope_opener'), $integerType);

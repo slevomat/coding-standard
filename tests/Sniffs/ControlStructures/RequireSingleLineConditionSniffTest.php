@@ -98,4 +98,10 @@ class RequireSingleLineConditionSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testNoErrorsLiveCoding(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireSingleLineConditionLiveCoding.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
 }
