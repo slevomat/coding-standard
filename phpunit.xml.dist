@@ -13,6 +13,13 @@
 	stopOnDefect="true"
 	executionOrder="defects"
 	cacheDirectory="temp/phpunit-cache"
+	displayDetailsOnTestsThatTriggerErrors="true"
+	displayDetailsOnTestsThatTriggerWarnings="true"
+	displayDetailsOnTestsThatTriggerNotices="true"
+	displayDetailsOnTestsThatTriggerDeprecations="true"
+	failOnWarning="true"
+	failOnNotice="true"
+	failOnDeprecation="true"
 >
 	<testsuites>
 		<testsuite name="Slevomat Coding Standard">
