@@ -3,8 +3,10 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use function array_filter;
 use function array_reverse;
 use function array_slice;
+use function array_values;
 use function count;
 use function defined;
 use function explode;
@@ -35,8 +37,18 @@ class NamespaceHelper
 	 */
 	public static function getAllNamespacesPointers(File $phpcsFile): array
 	{
-		$lazyValue = static function () use ($phpcsFile): array {
-			return TokenHelper::findNextAll($phpcsFile, T_NAMESPACE, 0);
+		$tokens = $phpcsFile->getTokens();
+		$lazyValue = static function () use ($phpcsFile, $tokens): array {
+			$all = TokenHelper::findNextAll($phpcsFile, T_NAMESPACE, 0);
+			$all = array_filter(
+				$all,
+				static function ($pointer) use ($phpcsFile, $tokens) {
+					$next = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
+					return $next === null || $tokens[$next]['code'] !== T_NS_SEPARATOR;
+				}
+			);
+
+			return array_values($all);
 		};
 
 		return SniffLocalCache::getAndSetIfNotCached($phpcsFile, 'namespacePointers', $lazyValue);

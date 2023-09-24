@@ -294,4 +294,10 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testUnusedUseNamespaceOperatorNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/unusedUsesNamespaceOperatorNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
 }
