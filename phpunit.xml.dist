@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <phpunit
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
+	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd"
 	bootstrap="tests/bootstrap.php"
 	colors="true"
 	backupGlobals="false"
@@ -26,10 +26,12 @@
 			<directory suffix="Test.php">./tests/</directory>
 		</testsuite>
 	</testsuites>
-	<coverage>
+	<source>
 		<include>
 			<directory suffix=".php">SlevomatCodingStandard</directory>
 		</include>
+	</source>
+	<coverage>
 		<report>
 			<clover outputFile="temp/coverage.xml"/>
 			<html outputDirectory="temp/coverage"/>
