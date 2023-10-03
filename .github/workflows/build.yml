@@ -41,6 +41,7 @@ jobs:
         with:
           coverage: "none"
           php-version: "${{ matrix.php-version }}"
+          ini-values: error_reporting=-1, display_errors=On, zend.assertions=1
 
       - name: "Reset composer platform"
         if: matrix.php-version == '7.2' || matrix.php-version == '7.3' || matrix.php-version == '7.4'
@@ -77,6 +78,7 @@ jobs:
         with:
           coverage: "none"
           php-version: "${{ matrix.php-version }}"
+          ini-values: error_reporting=-1, display_errors=On, zend.assertions=1
 
       - name: "Install dependencies"
         uses: "ramsey/composer-install@v2"
@@ -152,6 +154,7 @@ jobs:
           coverage: "none"
           php-version: "${{ matrix.php-version }}"
           extensions: mbstring
+          ini-values: error_reporting=-1, display_errors=On, zend.assertions=1
 
       - name: "Reset composer platform"
         if: matrix.php-version == '7.2' || matrix.php-version == '7.3' || matrix.php-version == '7.4' || matrix.php-version == '8.0'
@@ -188,6 +191,7 @@ jobs:
         with:
           coverage: "pcov"
           php-version: "${{ matrix.php-version }}"
+          ini-values: error_reporting=-1, display_errors=On, zend.assertions=1
 
       - name: "Install dependencies"
         uses: "ramsey/composer-install@v2"
