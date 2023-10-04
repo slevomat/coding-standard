@@ -120,15 +120,15 @@ class RequireNonCapturingCatchSniff implements Sniff
 
 		for ($i = $firstPointerInCode; $i <= $codeEndPointer; $i++) {
 			if ($tokens[$i]['code'] === T_VARIABLE) {
+				if ($tokens[$i]['content'] !== $variableName) {
+					continue;
+				}
+
 				if (ParameterHelper::isParameter($phpcsFile, $i)) {
 					continue;
 				}
 
 				if (!ScopeHelper::isInSameScope($phpcsFile, $firstPointerInCode, $i)) {
-					continue;
-				}
-
-				if ($tokens[$i]['content'] !== $variableName) {
 					continue;
 				}
 
