@@ -29,3 +29,17 @@ function () {
 
 	}
 };
+
+function () {
+	try {
+	} catch (\ErrorException $exception) {
+		try {
+
+		} catch (\Throwable) {
+
+		}
+
+		echo $exception;
+	}
+
+};

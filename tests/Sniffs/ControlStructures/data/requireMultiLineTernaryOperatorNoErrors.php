@@ -43,3 +43,5 @@ $a = $b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' ? 'bbbb' : 'ccccccccccccc';
 
 // phpcs:disable ABC
 $a = $b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' ? 'bbbb' : 'ccccccccccccc';
+
+$a = $b === 'bbbbbbbbbbbbbb' ? 'bbbb' : doSomething([], $c);

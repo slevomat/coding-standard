@@ -117,6 +117,13 @@ abstract class WithoutErrors
 	{
 	}
 
+	public function withAnnonymous($parameter)
+	{
+		return function () use ($parameter) {
+
+		};
+	}
+
 }
 
 enum Gender: string
