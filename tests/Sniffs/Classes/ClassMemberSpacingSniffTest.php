@@ -32,7 +32,7 @@ class ClassMemberSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
-	public function testErrorsWithModifiedLinecCount(): void
+	public function testErrorsWithModifiedLinesCount(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/classMemberSpacingErrors.php', [
 			'linesCountBetweenMembers' => 2,
