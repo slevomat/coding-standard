@@ -292,7 +292,7 @@ class JumpStatementsSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
-	public function testAtTheBeginnningOfFile(): void
+	public function testAtTheBeginningOfFile(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/jumpStatementsSpacingAtTheBeginningOfFile.php');
 

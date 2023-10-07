@@ -117,7 +117,7 @@ abstract class WithoutErrors
 	{
 	}
 
-	public function withAnnonymous($parameter)
+	public function withAnonymous($parameter)
 	{
 		return function () use ($parameter) {
 
