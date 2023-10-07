@@ -208,3 +208,15 @@ jobs:
           files: temp/coverage.xml
           flags: unittests
           fail_ci_if_error: true
+
+  typos-check:
+    name: "Typos"
+
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v3"
+
+      - name: "Search for misspellings"
+        uses: "crate-ci/typos@v1.16.17"
