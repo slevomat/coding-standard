@@ -69,7 +69,7 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
-		[$pointerBeforeIdentical, $pointerAfterIdentical] = $this->getIndenticalData($phpcsFile, $identicalPointer);
+		[$pointerBeforeIdentical, $pointerAfterIdentical] = $this->getIdenticalData($phpcsFile, $identicalPointer);
 
 		if ($tokens[$pointerBeforeIdentical]['code'] !== T_NULL && $tokens[$pointerAfterIdentical]['code'] !== T_NULL) {
 			return $identicalPointer + 1;
@@ -155,7 +155,7 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 			);
 
 			if ($previousIdenticalPointer !== null) {
-				[$pointerBeforePreviousIdentical, $pointerAfterPreviousIdentical] = $this->getIndenticalData(
+				[$pointerBeforePreviousIdentical, $pointerAfterPreviousIdentical] = $this->getIdenticalData(
 					$phpcsFile,
 					$previousIdenticalPointer
 				);
@@ -477,7 +477,7 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 	/**
 	 * @return array{0: int, 1: int}
 	 */
-	private function getIndenticalData(File $phpcsFile, int $identicalPointer): array
+	private function getIdenticalData(File $phpcsFile, int $identicalPointer): array
 	{
 		/** @var int $pointerBeforeIdentical */
 		$pointerBeforeIdentical = TokenHelper::findPreviousEffective($phpcsFile, $identicalPointer - 1);
