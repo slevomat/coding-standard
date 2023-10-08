@@ -22,7 +22,7 @@ class NamedArgumentSpacingSniffTest extends TestCase
 		self::assertSniffError(
 			$report,
 			3,
-			NamedArgumentSpacingSniff::CODE_WHITESPACE_BEFORE_COLOR,
+			NamedArgumentSpacingSniff::CODE_WHITESPACE_BEFORE_COLON,
 			'There must be no whitespace between named argument "search" and colon.'
 		);
 		self::assertSniffError(

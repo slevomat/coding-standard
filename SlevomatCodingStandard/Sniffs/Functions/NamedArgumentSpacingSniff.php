@@ -13,7 +13,7 @@ use const T_WHITESPACE;
 class NamedArgumentSpacingSniff implements Sniff
 {
 
-	public const CODE_WHITESPACE_BEFORE_COLOR = 'WhitespaceBeforeColon';
+	public const CODE_WHITESPACE_BEFORE_COLON = 'WhitespaceBeforeColon';
 	public const CODE_NO_WHITESPACE_AFTER_COLON = 'NoWhitespaceAfterColon';
 
 	/**
@@ -43,7 +43,7 @@ class NamedArgumentSpacingSniff implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				sprintf('There must be no whitespace between named argument "%s" and colon.', $parameterName),
 				$colonPointer,
-				self::CODE_WHITESPACE_BEFORE_COLOR
+				self::CODE_WHITESPACE_BEFORE_COLON
 			);
 			if ($fix) {
 				$phpcsFile->fixer->replaceToken($colonPointer - 1, '');
