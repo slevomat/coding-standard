@@ -12,8 +12,8 @@ parameters:
 		- %currentWorkingDirectory%/SlevomatCodingStandard
 
 	bootstrapFiles:
-		- %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/autoload.php
-		- %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/src/Util/Tokens.php
+		- %currentWorkingDirectory%/vendor/phpcsstandards/php_codesniffer/autoload.php
+		- %currentWorkingDirectory%/vendor/phpcsstandards/php_codesniffer/src/Util/Tokens.php
 	excludePaths:
 		- %currentWorkingDirectory%/tests/*/data/*
 	ignoreErrors:
