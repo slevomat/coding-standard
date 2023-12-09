@@ -6,7 +6,7 @@
 [![Code coverage](https://codecov.io/gh/slevomat/coding-standard/branch/master/graph/badge.svg)](https://codecov.io/gh/slevomat/coding-standard)
 ![PHPStan](https://img.shields.io/badge/style-level%207-brightgreen.svg?&label=phpstan)
 
-Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/phpcsstandards/PHP_CodeSniffer) provides sniffs that fall into three categories:
+Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/PHPCSStandards/PHP_CodeSniffer) provides sniffs that fall into three categories:
 
 * Functional - improving the safety and behaviour of code
 * Cleaning - detecting dead code
@@ -249,7 +249,7 @@ However it is not a recommended way to use Slevomat Coding Standard, because you
 
 ## Fixing errors automatically
 
-Sniffs in this standard marked by the 🔧 symbol support [automatic fixing of coding standard violations](https://github.com/phpcsstandards/PHP_CodeSniffer/wiki/Fixing-Errors-Automatically). To fix your code automatically, run phpcbf instead of phpcs:
+Sniffs in this standard marked by the 🔧 symbol support [automatic fixing of coding standard violations](https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Fixing-Errors-Automatically). To fix your code automatically, run phpcbf instead of phpcs:
 
 ```
 vendor/bin/phpcbf --standard=ruleset.xml --extensions=php --tab-width=4 -sp src tests
