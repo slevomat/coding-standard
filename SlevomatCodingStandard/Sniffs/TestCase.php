@@ -21,6 +21,7 @@ use function sprintf;
 use function strlen;
 use function strpos;
 use function substr;
+use function version_compare;
 use const PHP_EOL;
 
 /**
@@ -44,6 +45,16 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$codeSniffer->init();
 
 		if (count($sniffProperties) > 0) {
+			/** @phpstan-ignore-next-line */
+			if (version_compare(Config::VERSION, '3.8.0', '>=')) {
+				foreach ($sniffProperties as $name => $value) {
+					$sniffProperties[$name] = [
+						'value' => $value,
+						'scope' => 'sniff',
+					];
+				}
+			}
+
 			$codeSniffer->ruleset->ruleset[self::getSniffName()]['properties'] = $sniffProperties;
 		}
 
