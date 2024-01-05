@@ -128,3 +128,7 @@ function ($b) {
 	--$a;
 	return $b;
 };
+
+function ($s): string {
+	return (string) ++$s;
+};

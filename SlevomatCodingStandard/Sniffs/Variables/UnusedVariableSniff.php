@@ -656,7 +656,8 @@ class UnusedVariableSniff implements Sniff
 				[T_STRING_CONCAT, T_ECHO, T_RETURN, T_EXIT, T_PRINT, T_COMMA, T_EMPTY, T_EVAL, T_YIELD],
 				Tokens::$operators,
 				Tokens::$assignmentTokens,
-				Tokens::$booleanOperators
+				Tokens::$booleanOperators,
+				Tokens::$castTokens
 			),
 			true
 		);
