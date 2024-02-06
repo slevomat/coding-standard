@@ -29,6 +29,8 @@ use ReferenceClass;
 use ClassWithStaticVariable;
 use ClassWithConstant;
 use function Psl\Type\null;
+use InstantiableClass1;
+use InstantiableClass2;
 
 class TestClass implements FirstInterface, SecondInterface
 {
@@ -59,6 +61,11 @@ class TestClass implements FirstInterface, SecondInterface
 		);
 
 		echo "test {$wrapper->escape(ClassWithConstant::FOO)}";
+
+		echo "{$_(new InstantiableClass1())}";
+		echo <<<DOC
+{$_(new InstantiableClass2())}
+DOC;
 
 		return new NewObject();
 	}

@@ -35,6 +35,9 @@ use const T_GOTO;
 use const T_HEREDOC;
 use const T_IMPLEMENTS;
 use const T_INSTANCEOF;
+use const T_NAME_FULLY_QUALIFIED;
+use const T_NAME_QUALIFIED;
+use const T_NAME_RELATIVE;
 use const T_NAMESPACE;
 use const T_NEW;
 use const T_NS_SEPARATOR;
@@ -51,6 +54,7 @@ use const T_TYPE_INTERSECTION;
 use const T_TYPE_UNION;
 use const T_USE;
 use const T_VARIABLE;
+use const T_WHITESPACE;
 
 /**
  * @internal
@@ -494,6 +498,31 @@ class ReferencedNameHelper
 				}
 
 				$referencedNames[] = $referencedName;
+			} elseif (is_array($token) && $token[0] === T_NEW) {
+				$referencedName = '';
+				$tmpPosition = $position + 1;
+				while (true) {
+					if (!is_array($subTokens[$tmpPosition])) {
+						break;
+					}
+					if ($subTokens[$tmpPosition][0] === T_WHITESPACE) {
+						$tmpPosition++;
+						continue;
+					}
+					if (!in_array(
+						$subTokens[$tmpPosition][0],
+						[T_STRING, T_NS_SEPARATOR, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED, T_NAME_RELATIVE],
+						true
+					)) {
+						break;
+					}
+
+					$referencedName .= $subTokens[$tmpPosition][1];
+					$tmpPosition++;
+				}
+				if ($referencedName !== '') {
+					$referencedNames[] = $referencedName;
+				}
 			}
 		}
 
