@@ -196,10 +196,12 @@ class SomeController
 
 <<<XML
 	<string>Hello world and {$this->wrap(ClassInHeredoc::EXAMPLE)}</string>
+    {$_(new \Some\OtherClassInHeredoc())}
 XML;
 
 "foo {$db->quote(ClassInDoubleQuote::SOME_CONSTANT)}";
 "foo $db->quote(FakeClassInDoubleQuote::SOME_CONSTANT)";
+"{$_(new \Some\OtherClassInDoubleQuote ?? "")}";
 
 $script .= "// @see \Foo\Bar::func()
 		\$hasDefaultValue = $hasDefaultValue;
