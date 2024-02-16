@@ -18,6 +18,14 @@ try {
 	echo "Exception message: {$exception->getMessage()}";
 }
 
+try {
+} catch (Throwable $e) {
+} finally {
+	if (isset($e)) {
+	    echo $e->getMessage();
+	}
+}
+
 function () {
 	try {
 	} catch (\ErrorException $exception) {
