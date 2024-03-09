@@ -33,4 +33,8 @@ class Whatever
 	{
 	}
 
+	public function onlyParameterWithSimpleArrayType(array $a): void
+	{
+	}
+
 }

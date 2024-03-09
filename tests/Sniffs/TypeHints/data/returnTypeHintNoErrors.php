@@ -55,6 +55,7 @@ abstract class Whatever
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation
 	 * @return array
 	 */
 	private function isSniffCodeMissingTravesableTypeHintSpecificationSuppressed(): array

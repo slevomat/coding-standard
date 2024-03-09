@@ -73,7 +73,6 @@ class Whatever
 	}
 
 	/**
-	 * @param array $a
 	 */
 	public function missingItemsSpecification(array $a)
 	{

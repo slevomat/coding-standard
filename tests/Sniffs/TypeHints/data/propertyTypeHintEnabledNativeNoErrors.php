@@ -26,6 +26,7 @@ class Whatever
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingTraversableTypeHintSpecification
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.UselessAnnotation
 	 * @var array
 	 */
 	private array $isSniffCodeMissingTravesableTypeHintSpecificationSuppressed;

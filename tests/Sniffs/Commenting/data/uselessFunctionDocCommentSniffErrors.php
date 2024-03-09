@@ -55,4 +55,11 @@ class Whatever
 	{
 	}
 
+	/**
+	 * @param array $a
+	 */
+	public function onlyParameterWithSimpleArrayType(array $a): void
+	{
+	}
+
 }

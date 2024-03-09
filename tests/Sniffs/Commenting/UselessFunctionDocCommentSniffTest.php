@@ -19,7 +19,7 @@ class UselessFunctionDocCommentSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/uselessFunctionDocCommentSniffErrors.php');
 
-		self::assertSame(7, $report->getErrorCount());
+		self::assertSame(8, $report->getErrorCount());
 
 		self::assertSniffError($report, 10, UselessFunctionDocCommentSniff::CODE_USELESS_DOC_COMMENT);
 		self::assertSniffError($report, 18, UselessFunctionDocCommentSniff::CODE_USELESS_DOC_COMMENT);
@@ -28,6 +28,7 @@ class UselessFunctionDocCommentSniffTest extends TestCase
 		self::assertSniffError($report, 39, UselessFunctionDocCommentSniff::CODE_USELESS_DOC_COMMENT);
 		self::assertSniffError($report, 47, UselessFunctionDocCommentSniff::CODE_USELESS_DOC_COMMENT);
 		self::assertSniffError($report, 54, UselessFunctionDocCommentSniff::CODE_USELESS_DOC_COMMENT);
+		self::assertSniffError($report, 61, UselessFunctionDocCommentSniff::CODE_USELESS_DOC_COMMENT);
 
 		self::assertAllFixedInFile($report);
 	}

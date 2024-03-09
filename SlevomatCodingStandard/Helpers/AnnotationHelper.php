@@ -216,14 +216,20 @@ class AnnotationHelper
 			return true;
 		}
 
-		if (TypeHintHelper::isTraversableType(
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint->getTypeHintWithoutNullabilitySymbol()),
-			$traversableTypeHints
-		)) {
+		$annotationType = $annotationValue->type;
+
+		if (
+			TypeHintHelper::isTraversableType(
+				TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint->getTypeHintWithoutNullabilitySymbol()),
+				$traversableTypeHints
+			)
+			&& !(
+				$annotationType instanceof IdentifierTypeNode
+				&& TypeHintHelper::isSimpleIterableTypeHint(strtolower($annotationType->name))
+			)
+		) {
 			return false;
 		}
-
-		$annotationType = $annotationValue->type;
 
 		if (AnnotationTypeHelper::containsStaticOrThisType($annotationType)) {
 			return false;

@@ -67,7 +67,6 @@ abstract class Whatever
 	}
 
 	/**
-	 * @return array
 	 */
 	public function missingItemsSpecification(): array
 	{

@@ -31,9 +31,6 @@ class Whatever
 
 	public array $missingAnnotationForTraversable;
 
-	/**
-	 * @var array
-	 */
 	public array $missingItemsSpecification;
 
 	/**
