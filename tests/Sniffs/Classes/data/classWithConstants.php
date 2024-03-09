@@ -1,4 +1,4 @@
-<?php // lint >= 8.1
+<?php // lint >= 8.3
 
 class ClassWithConstants
 {
@@ -9,6 +9,8 @@ class ClassWithConstants
 	protected const PROTECTED_FOO = null;
 	private const PRIVATE_FOO = null;
 	private const PRIVATE_BAR = null;
+
+	const int PUBLIC_INT_CONST = 1;
 
 	public function __construct()
 	{
