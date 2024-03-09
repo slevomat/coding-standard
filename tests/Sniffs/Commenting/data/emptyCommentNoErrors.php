@@ -41,3 +41,6 @@
 $some = 'sample_code';
 // phpcs:enable
  */
+
+/* not empty
+multiline comment */
