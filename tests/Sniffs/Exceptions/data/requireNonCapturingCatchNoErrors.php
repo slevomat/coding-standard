@@ -43,3 +43,25 @@ function () {
 	}
 
 };
+
+function () {
+	try {
+	} catch (Throwable $e) {
+	} finally {
+		if (isset($e)) {
+		    echo $e->getMessage();
+		}
+	}
+};
+
+function () {
+    do {
+        try {
+
+        } catch (\Throwable $e) {
+
+        }
+    } while (true);
+
+    throw $e;
+};

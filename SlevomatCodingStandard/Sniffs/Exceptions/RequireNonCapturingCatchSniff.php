@@ -11,12 +11,12 @@ use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\VariableHelper;
-use function array_keys;
 use function array_reverse;
 use function count;
 use function in_array;
 use const T_CATCH;
 use const T_DOUBLE_QUOTED_STRING;
+use const T_FINALLY;
 use const T_HEREDOC;
 use const T_VARIABLE;
 use const T_WHITESPACE;
@@ -76,11 +76,26 @@ class RequireNonCapturingCatchSniff implements Sniff
 
 		$tryEndPointer = CatchHelper::getTryEndPointer($phpcsFile, $catchPointer);
 
-		if ($tokens[$tryEndPointer]['conditions'] !== []) {
-			$lastConditionPointer = array_reverse(array_keys($tokens[$tryEndPointer]['conditions']))[0];
-			$nextScopeEnd = $tokens[$lastConditionPointer]['scope_closer'];
-		} else {
-			$nextScopeEnd = count($tokens) - 1;
+		$possibleFinallyPointer = $tokens[$tryEndPointer]['scope_condition'];
+		if (
+			$tokens[$possibleFinallyPointer]['code'] === T_FINALLY
+			&& $this->isVariableUsedInCodePart(
+				$phpcsFile,
+				$tokens[$possibleFinallyPointer]['scope_opener'],
+				$tokens[$possibleFinallyPointer]['scope_closer'],
+				$variableName
+			)
+		) {
+			return;
+		}
+
+		$nextScopeEnd = count($tokens) - 1;
+
+		foreach (array_reverse($tokens[$tryEndPointer]['conditions'], true) as $conditionPointer => $conditionCode) {
+			if (in_array($conditionCode, TokenHelper::$functionTokenCodes, true)) {
+				$nextScopeEnd = $tokens[$conditionPointer]['scope_closer'];
+				break;
+			}
 		}
 
 		if ($this->isVariableUsedInCodePart($phpcsFile, $tryEndPointer, $nextScopeEnd, $variableName)) {
