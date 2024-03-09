@@ -32,10 +32,7 @@ class UseDoesNotStartWithBackslashSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $usePointer): void
 	{
-		if (
-			UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer)
-			|| UseStatementHelper::isTraitUse($phpcsFile, $usePointer)
-		) {
+		if (!UseStatementHelper::isImportUse($phpcsFile, $usePointer)) {
 			return;
 		}
 

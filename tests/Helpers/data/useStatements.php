@@ -29,6 +29,9 @@ function () use ($test) {
 
 };
 
+function whatever() {
+}
+
 use Zero;
 
 class MyClass

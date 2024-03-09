@@ -3,6 +3,12 @@
 class Foo
 {
 
-	use BarTrait;
+	use BarTrait {
+		BarTrait::foo as private;
+	}
+
+	use FooTrait {
+		FooTrait::bar as private;
+	}
 
 }

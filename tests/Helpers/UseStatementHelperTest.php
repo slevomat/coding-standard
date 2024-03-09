@@ -13,20 +13,24 @@ class UseStatementHelperTest extends TestCase
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/anonymousFunction.php');
 		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
-		self::assertTrue(UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer));
+		self::assertFalse(UseStatementHelper::isImportUse($phpcsFile, $usePointer));
 	}
 
 	public function testIsNotAnonymousFunctionUse(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/useStatements.php');
 		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
-		self::assertFalse(UseStatementHelper::isAnonymousFunctionUse($phpcsFile, $usePointer));
+		self::assertTrue(UseStatementHelper::isImportUse($phpcsFile, $usePointer));
 	}
 
 	public function testIsTraitUse(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithTrait.php');
 		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, 0);
+		self::assertTrue(UseStatementHelper::isTraitUse($phpcsFile, $usePointer));
+
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithTrait.php');
+		$usePointer = TokenHelper::findNext($phpcsFile, T_USE, $usePointer + 1);
 		self::assertTrue(UseStatementHelper::isTraitUse($phpcsFile, $usePointer));
 	}
 

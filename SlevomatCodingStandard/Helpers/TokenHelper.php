@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use function array_key_exists;
 use function array_merge;
 use function count;
+use const T_ANON_CLASS;
 use const T_ARRAY;
 use const T_ARRAY_HINT;
 use const T_BREAK;
@@ -70,6 +71,15 @@ class TokenHelper
 	/** @var array<int, (int|string)> */
 	public static $typeKeywordTokenCodes = [
 		T_CLASS,
+		T_TRAIT,
+		T_INTERFACE,
+		T_ENUM,
+	];
+
+	/** @var array<int, (int|string)> */
+	public static $typeWithAnonymousClassKeywordTokenCodes = [
+		T_CLASS,
+		T_ANON_CLASS,
 		T_TRAIT,
 		T_INTERFACE,
 		T_ENUM,

@@ -15,12 +15,10 @@ use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use function array_key_exists;
-use function array_merge;
 use function in_array;
 use function sprintf;
 use function str_repeat;
 use const T_ABSTRACT;
-use const T_ANON_CLASS;
 use const T_AS;
 use const T_ATTRIBUTE_END;
 use const T_CLOSE_CURLY_BRACKET;
@@ -52,8 +50,7 @@ class ClassMemberSpacingSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		/** @phpstan-var array<int, (int|string)> */
-		return array_merge(TokenHelper::$typeKeywordTokenCodes, [T_ANON_CLASS]);
+		return TokenHelper::$typeWithAnonymousClassKeywordTokenCodes;
 	}
 
 	/**
