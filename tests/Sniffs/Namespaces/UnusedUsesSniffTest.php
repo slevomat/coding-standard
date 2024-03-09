@@ -68,6 +68,7 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertNoSniffError($report, 29);
 
 		self::assertNoSniffError($report, 30);
+		self::assertNoSniffError($report, 31);
 
 		self::assertNoSniffError($report, 91);
 	}

@@ -28,6 +28,7 @@ use EnumClass;
 use ReferenceClass;
 use ClassWithStaticVariable;
 use ClassWithConstant;
+use function Psl\Type\null;
 
 class TestClass implements FirstInterface, SecondInterface
 {
@@ -67,3 +68,5 @@ class TestClass implements FirstInterface, SecondInterface
 	}
 
 }
+
+null();
