@@ -1,4 +1,4 @@
-<?php // lint >= 7.3
+<?php // lint >= 7.4
 
 max(
 	0,
@@ -97,6 +97,14 @@ class SelfStaticParent extends Whatever
 call(
 	function () {
 	},
+);
+
+call(
+	fn () => 1,
+);
+
+call(
+	fn (array $array) => $array['key'],
 );
 
 call(

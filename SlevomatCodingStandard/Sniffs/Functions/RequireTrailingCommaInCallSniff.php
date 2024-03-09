@@ -11,7 +11,6 @@ use function array_merge;
 use function in_array;
 use const T_CLOSE_PARENTHESIS;
 use const T_COMMA;
-use const T_FN;
 use const T_ISSET;
 use const T_OPEN_PARENTHESIS;
 use const T_PARENT;
@@ -80,13 +79,6 @@ class RequireTrailingCommaInCallSniff implements Sniff
 		}
 
 		if ($tokens[$parenthesisCloserPointer]['line'] === $tokens[$pointerBeforeParenthesisCloser]['line']) {
-			return;
-		}
-
-		if (
-			array_key_exists('scope_condition', $tokens[$pointerBeforeParenthesisCloser])
-			&& $tokens[$tokens[$pointerBeforeParenthesisCloser]['scope_condition']]['code'] === T_FN
-		) {
 			return;
 		}
 
