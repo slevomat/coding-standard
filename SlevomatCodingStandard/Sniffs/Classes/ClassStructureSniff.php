@@ -5,10 +5,13 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
+use SlevomatCodingStandard\Helpers\AnnotationHelper;
+use SlevomatCodingStandard\Helpers\AttributeHelper;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
+use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -18,16 +21,21 @@ use function array_flip;
 use function array_key_exists;
 use function array_keys;
 use function array_merge;
+use function array_shift;
 use function array_values;
 use function assert;
 use function implode;
 use function in_array;
+use function ltrim;
 use function preg_replace;
 use function preg_split;
 use function sprintf;
 use function str_repeat;
 use function strtolower;
+use function substr;
+use const PREG_SPLIT_NO_EMPTY;
 use const T_ABSTRACT;
+use const T_ATTRIBUTE_END;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CONST;
 use const T_ENUM_CASE;
@@ -181,8 +189,14 @@ class ClassStructureSniff implements Sniff
 		'__debuginfo' => self::GROUP_MAGIC_METHODS,
 	];
 
+	/** @var array<string, string> */
+	public array $methodGroups = [];
+
 	/** @var list<string> */
 	public array $groups = [];
+
+	/** @var array<string, list<array{name: string|null, attributes: array<string>, annotations: array<string>}>>|null */
+	private ?array $normalizedMethodGroups = null;
 
 	/** @var array<string, int>|null */
 	private ?array $normalizedGroups = null;
@@ -342,6 +356,12 @@ class ClassStructureSniff implements Sniff
 					return self::SPECIAL_METHODS[$name];
 				}
 
+				$methodGroup = $this->resolveMethodGroup($phpcsFile, $pointer, $name);
+
+				if ($methodGroup !== null) {
+					return $methodGroup;
+				}
+
 				$visibility = $this->getVisibilityForToken($phpcsFile, $pointer);
 				$isStatic = $this->isMemberStatic($phpcsFile, $pointer);
 				$isFinal = $this->isMethodFinal($phpcsFile, $pointer);
@@ -389,6 +409,109 @@ class ClassStructureSniff implements Sniff
 						return $isStatic ? self::GROUP_PRIVATE_STATIC_PROPERTIES : self::GROUP_PRIVATE_PROPERTIES;
 				}
 		}
+	}
+
+	private function resolveMethodGroup(File $phpcsFile, int $pointer, string $method): ?string
+	{
+		foreach ($this->getNormalizedMethodGroups() as $group => $methodRequirements) {
+			foreach ($methodRequirements as $methodRequirement) {
+				if ($methodRequirement['name'] !== null && $method !== strtolower($methodRequirement['name'])) {
+					continue;
+				}
+
+				if (
+					$this->hasRequiredAnnotations($phpcsFile, $pointer, $methodRequirement['annotations'])
+					&& $this->hasRequiredAttributes($phpcsFile, $pointer, $methodRequirement['attributes'])
+				) {
+					return $group;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param array<string> $requiredAnnotations
+	 */
+	private function hasRequiredAnnotations(File $phpcsFile, int $pointer, array $requiredAnnotations): bool
+	{
+		if ($requiredAnnotations === []) {
+			return true;
+		}
+
+		$annotations = [];
+
+		foreach (AnnotationHelper::getAnnotations($phpcsFile, $pointer) as $annotation) {
+			$annotations[$annotation->getName()] = true;
+		}
+
+		foreach ($requiredAnnotations as $requiredAnnotation) {
+			if (!array_key_exists('@' . $requiredAnnotation, $annotations)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * @param array<string> $requiredAttributes
+	 */
+	private function hasRequiredAttributes(File $phpcsFile, int $pointer, array $requiredAttributes): bool
+	{
+		if ($requiredAttributes === []) {
+			return true;
+		}
+
+		$attributesClassNames = $this->getAttributeClassNamesForToken($phpcsFile, $pointer);
+
+		foreach ($requiredAttributes as $requiredAttribute) {
+			if (!array_key_exists(strtolower($requiredAttribute), $attributesClassNames)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * @return array<string, string>
+	 */
+	private function getAttributeClassNamesForToken(File $phpcsFile, int $pointer): array
+	{
+		$tokens = $phpcsFile->getTokens();
+		$attributePointer = null;
+		$attributes = [];
+
+		while (true) {
+			$attributeEndPointerCandidate = TokenHelper::findPrevious(
+				$phpcsFile,
+				[T_ATTRIBUTE_END, T_SEMICOLON, T_CLOSE_CURLY_BRACKET, T_OPEN_CURLY_BRACKET],
+				$attributePointer ?? $pointer - 1,
+			);
+
+			if (
+				$attributeEndPointerCandidate === null
+				|| $tokens[$attributeEndPointerCandidate]['code'] !== T_ATTRIBUTE_END
+			) {
+				break;
+			}
+
+			$attributePointer = $tokens[$attributeEndPointerCandidate]['attribute_opener'];
+
+			foreach (AttributeHelper::getAttributes($phpcsFile, $attributePointer) as $attribute) {
+				$attributeClass = NamespaceHelper::resolveClassName(
+					$phpcsFile,
+					$attribute->getName(),
+					$attribute->getStartPointer(),
+				);
+				$attributeClass = ltrim($attributeClass, '\\');
+				$attributes[strtolower($attributeClass)] = $attributeClass;
+			}
+		}
+
+		return $attributes;
 	}
 
 	private function getVisibilityForToken(File $phpcsFile, int $pointer): int
@@ -552,6 +675,43 @@ class ClassStructureSniff implements Sniff
 	}
 
 	/**
+	 * @return array<string, list<array{name: string|null, attributes: array<string>, annotations: array<string>}>>
+	 */
+	private function getNormalizedMethodGroups(): array
+	{
+		if ($this->normalizedMethodGroups === null) {
+			$this->normalizedMethodGroups = [];
+			$methodGroups = SniffSettingsHelper::normalizeAssociativeArray($this->methodGroups);
+
+			foreach ($methodGroups as $group => $groupDefinition) {
+				$group = strtolower((string) $group);
+				$this->normalizedMethodGroups[$group] = [];
+				$methodDefinitions = preg_split('~\\s*,\\s*~', (string) $groupDefinition, -1, PREG_SPLIT_NO_EMPTY);
+				/** @var list<string> $methodDefinitions */
+				foreach ($methodDefinitions as $methodDefinition) {
+					$tokens = preg_split('~(?=[#@])~', $methodDefinition);
+					/** @var list<string> $tokens */
+					$method = array_shift($tokens);
+					$methodRequirement = [
+						'name' => $method !== '' ? $method : null,
+						'attributes' => [],
+						'annotations' => [],
+					];
+
+					foreach ($tokens as $token) {
+						$key = $token[0] === '#' ? 'attributes' : 'annotations';
+						$methodRequirement[$key][] = substr($token, 1);
+					}
+
+					$this->normalizedMethodGroups[$group][] = $methodRequirement;
+				}
+			}
+		}
+
+		return $this->normalizedMethodGroups;
+	}
+
+	/**
 	 * @return array<string, int>
 	 */
 	private function getNormalizedGroups(): array
@@ -589,11 +749,12 @@ class ClassStructureSniff implements Sniff
 				self::GROUP_MAGIC_METHODS,
 			];
 
+			$normalizedMethodGroups = $this->getNormalizedMethodGroups();
 			$normalizedGroupsWithShortcuts = [];
 			$order = 1;
 			foreach (SniffSettingsHelper::normalizeArray($this->groups) as $groupsString) {
 				/** @var list<string> $groups */
-				$groups = preg_split('~\\s*,\\s*~', strtolower($groupsString));
+				$groups = preg_split('~\\s*,\\s*~', strtolower($groupsString), -1, PREG_SPLIT_NO_EMPTY);
 				foreach ($groups as $groupOrShortcut) {
 					$groupOrShortcut = preg_replace('~\\s+~', ' ', $groupOrShortcut);
 
@@ -601,6 +762,7 @@ class ClassStructureSniff implements Sniff
 						!in_array($groupOrShortcut, $supportedGroups, true)
 						&& !array_key_exists($groupOrShortcut, self::SHORTCUTS)
 						&& $groupOrShortcut !== self::GROUP_INVOKE_METHOD
+						&& !array_key_exists($groupOrShortcut, $normalizedMethodGroups)
 					) {
 						throw new UnsupportedClassGroupException($groupOrShortcut);
 					}
@@ -613,7 +775,11 @@ class ClassStructureSniff implements Sniff
 
 			$normalizedGroups = [];
 			foreach ($normalizedGroupsWithShortcuts as $groupOrShortcut => $groupOrder) {
-				if (in_array($groupOrShortcut, $supportedGroups, true) || $groupOrShortcut === self::GROUP_INVOKE_METHOD) {
+				if (
+					in_array($groupOrShortcut, $supportedGroups, true)
+					|| $groupOrShortcut === self::GROUP_INVOKE_METHOD
+					|| array_key_exists($groupOrShortcut, $normalizedMethodGroups)
+				) {
 					$normalizedGroups[$groupOrShortcut] = $groupOrder;
 				} else {
 					foreach ($this->unpackShortcut($groupOrShortcut, $supportedGroups) as $group) {
@@ -629,12 +795,16 @@ class ClassStructureSniff implements Sniff
 				}
 			}
 
-			if ($normalizedGroups === []) {
+			if ($normalizedGroups === [] && $normalizedMethodGroups === []) {
 				$normalizedGroups = array_flip($supportedGroups);
 			} else {
-				$missingGroups = array_values(array_diff($supportedGroups, array_keys($normalizedGroups)));
+				$missingGroups = array_diff(
+					array_merge($supportedGroups, array_keys($normalizedMethodGroups)),
+					array_keys($normalizedGroups),
+				);
+
 				if ($missingGroups !== []) {
-					throw new MissingClassGroupsException($missingGroups);
+					throw new MissingClassGroupsException(array_values($missingGroups));
 				}
 			}
 

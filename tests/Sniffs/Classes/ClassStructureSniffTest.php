@@ -26,6 +26,45 @@ class ClassStructureSniffTest extends TestCase
 		'protected static final methods',
 	];
 
+	private const METHOD_GROUPS = [
+		'phpunit before class' => 'setUpBeforeClass, @beforeClass, #PHPUnit\Framework\Attributes\BeforeClass',
+		'phpunit after class' => 'tearDownAfterClass, @afterClass, #PHPUnit\Framework\Attributes\AfterClass',
+		'phpunit before' => 'setUp, @before, #PHPUnit\Framework\Attributes\Before',
+		'phpunit after' => 'tearDown, @after, #PHPUnit\Framework\Attributes\After',
+	];
+
+	private const METHOD_GROUP_RULES = [
+		'uses',
+		'public constants',
+		'protected constants',
+		'private constants',
+		'enum cases',
+		'public static properties',
+		'protected static properties',
+		'private static properties',
+		'public properties',
+		'protected properties',
+		'private properties',
+		'constructor',
+		'static constructors',
+		'destructor',
+		'phpunit before class',
+		'phpunit after class',
+		'phpunit before',
+		'phpunit after',
+		'public methods, public final methods',
+		'public abstract methods',
+		'public static methods, public static final methods',
+		'public static abstract methods',
+		'magic methods',
+		'protected methods, protected final methods',
+		'protected abstract methods',
+		'protected static methods, protected static final methods',
+		'protected static abstract methods',
+		'private methods',
+		'private static methods',
+	];
+
 	public function testNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/classStructureSniffNoErrors.php');
@@ -144,6 +183,38 @@ class ClassStructureSniffTest extends TestCase
 		);
 
 		self::assertSame(10, $report->getErrorCount());
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testNoErrorsWithMethodGroupRules(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/classStructureSniffNoErrorsWithMethodGroupRules.php',
+			[
+				'methodGroups' => self::METHOD_GROUPS,
+				'groups' => self::METHOD_GROUP_RULES,
+			],
+		);
+
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testErrorsWithMethodGroupRules(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/classStructureSniffErrorsWithMethodGroupRules.php',
+			[
+				'methodGroups' => self::METHOD_GROUPS,
+				'groups' => self::METHOD_GROUP_RULES,
+			],
+		);
+
+		self::assertSame(5, $report->getErrorCount());
+		self::assertSniffError($report, 22, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 33, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 44, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 48, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 67, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertAllFixedInFile($report);
 	}
 

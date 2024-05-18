@@ -45,6 +45,7 @@ Checks that class/trait/interface members are in the correct order.
 Sniff provides the following settings:
 
 * `groups`: order of groups. Use multiple groups in one `<element value="">` to not differentiate among them. You can use specific groups or shortcuts.
+* `methodGroups`: custom method groups. Define a custom group for special methods based on their name, annotation, or attribute.
 
 **List of supported groups**:
 uses,
@@ -63,6 +64,10 @@ constants, properties, static properties, methods, all public methods, all prote
 ```xml
 <rule ref="SlevomatCodingStandard.Classes.ClassStructure">
 	<properties>
+		<property name="methodGroups" type="array">
+			<element key="phpunit before" value="setUp, @before, #PHPUnit\Framework\Attributes\Before"/>
+		</property>
+
 		<property name="groups" type="array">
 			<element value="uses"/>
 
@@ -77,6 +82,9 @@ constants, properties, static properties, methods, all public methods, all prote
 
 			<!-- Constructor is first, then all public methods, then protected/private methods and magic methods are last -->
 			<element value="constructor"/>
+
+			<!-- PHPUnit's before hooks are placed before all other public methods using a custom method group regardless their visibility -->
+			<element value="phpunit before"/>
 			<element value="all public methods"/>
 			<element value="methods"/>
 			<element value="magic methods"/>
