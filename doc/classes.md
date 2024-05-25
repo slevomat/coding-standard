@@ -113,10 +113,6 @@ Disallows multi constant definition.
 
 Disallows multi property definition.
 
-#### SlevomatCodingStandard.Classes.DisallowMultiPropertyDefinition 🔧
-
-Disallows multi property definition.
-
 #### SlevomatCodingStandard.Classes.DisallowStringExpressionPropertyFetch 🔧
 
 Disallows string expression property fetch `$object->{'foo'}` when the property name is compatible with identifier access.
