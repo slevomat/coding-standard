@@ -17,6 +17,10 @@ Reports `@deprecated` annotations without description.
 
 Sniff disallows comments after code at the same line.
 
+#### SlevomatCodingStandard.Commenting.DisallowOneLinePropertyDocComment 🔧
+
+Sniff disallows one-line doc comments for properties.
+
 #### SlevomatCodingStandard.Commenting.ForbiddenAnnotations 🔧
 
 Reports forbidden annotations. No annotations are forbidden by default, the configuration is completely up to the user. It's recommended to forbid obsolete and inappropriate annotations like:
