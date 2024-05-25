@@ -19,7 +19,7 @@ Sniff disallows comments after code at the same line.
 
 #### SlevomatCodingStandard.Commenting.DisallowOneLinePropertyDocComment 🔧
 
-Sniff disallows one-line doc comments for properties.
+Sniff disallows one-line comments for properties.
 
 #### SlevomatCodingStandard.Commenting.ForbiddenAnnotations 🔧
 
