@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\CommentHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -12,6 +13,7 @@ use function str_repeat;
 use function strlen;
 use function substr;
 use function substr_count;
+use const T_COMMENT;
 use const T_DECLARE;
 use const T_LNUMBER;
 use const T_OPEN_TAG;
@@ -180,7 +182,22 @@ class DeclareStrictTypesSniff implements Sniff
 			}
 		} else {
 			$declareOnFirstLine = $tokens[$declarePointer]['line'] === $tokens[$openTagPointer]['line'];
-			$linesCountBefore = $declareOnFirstLine ? 0 : substr_count($whitespaceBefore, $phpcsFile->eolChar) - 1;
+			$whitespaceLinesBeforeDeclare = $this->linesCountBeforeDeclare;
+			$linesCountBefore = 0;
+
+			if (!$declareOnFirstLine) {
+				$linesCountBefore = substr_count($whitespaceBefore, $phpcsFile->eolChar);
+
+				if (
+					$tokens[$pointerBeforeDeclare]['code'] === T_COMMENT
+					&& CommentHelper::isLineComment($phpcsFile, $pointerBeforeDeclare)
+				) {
+					$whitespaceLinesBeforeDeclare--;
+				} else {
+					$linesCountBefore--;
+				}
+			}
+
 			if ($declareOnFirstLine || $linesCountBefore !== $this->linesCountBeforeDeclare) {
 				$fix = $phpcsFile->addFixableError(
 					sprintf(
@@ -201,7 +218,7 @@ class DeclareStrictTypesSniff implements Sniff
 
 					FixerHelper::removeBetween($phpcsFile, $pointerBeforeDeclare, $declarePointer);
 
-					for ($i = 0; $i <= $this->linesCountBeforeDeclare; $i++) {
+					for ($i = 0; $i <= $whitespaceLinesBeforeDeclare; $i++) {
 						$phpcsFile->fixer->addNewline($pointerBeforeDeclare);
 					}
 					$phpcsFile->fixer->endChangeset();
