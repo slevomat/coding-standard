@@ -161,6 +161,14 @@ class DeclareStrictTypesSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testDeclareStrictWithLineCommentAbove(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/declareStrictTypesWithLineCommentAbove.php', [
+			'linesCountBeforeDeclare' => 1,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
 	public function testDeclareStrictWithTicks(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/declareStrictTypesWithTicks.php', [
@@ -228,6 +236,14 @@ class DeclareStrictTypesSniffTest extends TestCase
 	public function testFixableCommentBefore(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesCommentBefore.php', [
+			'linesCountBeforeDeclare' => 1,
+		], [DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE]);
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testFixableLineCommentBefore(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/fixableDeclareStrictTypesLineCommentBefore.php', [
 			'linesCountBeforeDeclare' => 1,
 		], [DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE]);
 		self::assertAllFixedInFile($report);
