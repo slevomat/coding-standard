@@ -130,6 +130,14 @@ Sniff provides the following settings:
 * `allowFallbackGlobalConstants`: allows using global constants via fallback name without `use` (i.e. `PHP_VERSION`).
 * `allowPartialUses`: allows using and referencing whole namespaces.
 
+#### SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash 🔧
+
+Disallows leading backslash in use statement:
+
+```php
+use \Foo\Bar;
+```
+
 #### SlevomatCodingStandard.Namespaces.UseFromSameNamespace 🔧
 
 Sniff prohibits uses from the same namespace:
@@ -138,14 +146,6 @@ Sniff prohibits uses from the same namespace:
 namespace Foo;
 
 use Foo\Bar;
-```
-
-#### SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash 🔧
-
-Disallows leading backslash in use statement:
-
-```php
-use \Foo\Bar;
 ```
 
 #### SlevomatCodingStandard.Namespaces.UseSpacing 🔧
