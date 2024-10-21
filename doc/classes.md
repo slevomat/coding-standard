@@ -143,6 +143,7 @@ Disallows using public properties.
 This sniff provides the following setting:
 
 * `checkPromoted`: will check promoted properties too.
+* `allowReadonly`: will allow readonly properties (default value is false).
 
 #### SlevomatCodingStandard.Classes.MethodSpacing 🔧
 

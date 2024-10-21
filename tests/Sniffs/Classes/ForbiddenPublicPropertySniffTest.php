@@ -7,42 +7,77 @@ use SlevomatCodingStandard\Sniffs\TestCase;
 class ForbiddenPublicPropertySniffTest extends TestCase
 {
 
-	public function testNoErrors(): void
+	public function testDefault(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/forbiddenPublicPropertyNoErrors.php');
-		self::assertNoSniffErrorInFile($report);
+		$report = self::checkFile(__DIR__ . '/data/forbiddenPublicProperty.php');
+
+		self::assertSniffError($report, 5, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertSniffError($report, 6, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertNoSniffError($report, 7);
+		self::assertNoSniffError($report, 8);
 	}
 
-	public function testErrors(): void
+	public function testReadonly(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/forbiddenPublicPropertyErrors.php');
-
-		self::assertSame(3, $report->getErrorCount());
+		$report = self::checkFile(__DIR__ . '/data/forbiddenPublicPropertyReadonly.php');
 
 		self::assertSniffError($report, 5, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
 		self::assertSniffError($report, 6, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
 		self::assertSniffError($report, 7, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertSniffError($report, 8, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertSniffError($report, 9, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertNoSniffError($report, 12);
+		self::assertNoSniffError($report, 13);
+		self::assertNoSniffError($report, 21);
 	}
 
-	public function testPromotedNoErrors(): void
+	public function testReadonlyPromoted(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/forbiddenPublicPropertyPromotedNoErrors.php', [
+		$report = self::checkFile(__DIR__ . '/data/forbiddenPublicPropertyReadonly.php', [
 			'checkPromoted' => true,
 		]);
-		self::assertNoSniffErrorInFile($report);
-	}
-
-	public function testPromotedErrors(): void
-	{
-		$report = self::checkFile(__DIR__ . '/data/forbiddenPublicPropertyPromotedErrors.php', [
-			'checkPromoted' => true,
-		]);
-
-		self::assertSame(4, $report->getErrorCount());
 
 		self::assertSniffError($report, 5, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertSniffError($report, 6, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertSniffError($report, 7, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertSniffError($report, 8, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertSniffError($report, 9, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertSniffError($report, 12, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
 		self::assertSniffError($report, 13, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
-		self::assertSniffError($report, 14, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertNoSniffError($report, 21);
+	}
+
+	public function testReadonlyAllowed(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/forbiddenPublicPropertyReadonly.php', [
+			'allowReadonly' => true,
+		]);
+
+		self::assertSniffError($report, 5, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertSniffError($report, 6, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertNoSniffError($report, 7);
+		self::assertNoSniffError($report, 8);
+		self::assertSniffError($report, 9, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertNoSniffError($report, 12);
+		self::assertNoSniffError($report, 13);
+		self::assertNoSniffError($report, 21);
+	}
+
+	public function testReadonlyAllowedPromoted(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/forbiddenPublicPropertyReadonly.php', [
+			'allowReadonly' => true,
+			'checkPromoted' => true,
+		]);
+
+		self::assertSniffError($report, 5, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertSniffError($report, 6, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertNoSniffError($report, 7);
+		self::assertNoSniffError($report, 8);
+		self::assertSniffError($report, 9, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertSniffError($report, 12, ForbiddenPublicPropertySniff::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		self::assertNoSniffError($report, 13);
+		self::assertNoSniffError($report, 21);
 	}
 
 }
