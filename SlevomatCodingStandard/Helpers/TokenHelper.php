@@ -8,7 +8,6 @@ use function array_merge;
 use function count;
 use const T_ANON_CLASS;
 use const T_ARRAY;
-use const T_ARRAY_HINT;
 use const T_BREAK;
 use const T_CALLABLE;
 use const T_CLASS;
@@ -502,7 +501,6 @@ class TokenHelper
 				[
 					T_SELF,
 					T_PARENT,
-					T_ARRAY_HINT,
 					T_CALLABLE,
 					T_FALSE,
 					T_TRUE,
