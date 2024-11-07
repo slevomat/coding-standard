@@ -69,23 +69,6 @@ class DisallowOneLinePropertyDocCommentSniff implements Sniff
 		$commentWhitespacePointer = TokenHelper::findPrevious($phpcsFile, [T_WHITESPACE], $docCommentStartPointer);
 		$indent = ($commentWhitespacePointer !== null ? $tokens[$commentWhitespacePointer]['content'] : '') . ' ';
 
-		/** empty comment is not split into start & end tokens properly */
-		if ($tokens[$docCommentStartPointer]['content'] === '/***/') {
-			$phpcsFile->fixer->beginChangeset();
-
-			$phpcsFile->fixer->replaceToken($docCommentStartPointer, '/**');
-			$phpcsFile->fixer->addNewline($docCommentStartPointer);
-			$phpcsFile->fixer->addContent($docCommentStartPointer, $indent);
-			$phpcsFile->fixer->addContent($docCommentStartPointer, '*');
-			$phpcsFile->fixer->addNewline($docCommentStartPointer);
-			$phpcsFile->fixer->addContent($docCommentStartPointer, $indent);
-			$phpcsFile->fixer->addContent($docCommentStartPointer, '*/');
-
-			$phpcsFile->fixer->endChangeset();
-
-			return;
-		}
-
 		$phpcsFile->fixer->beginChangeset();
 
 		$phpcsFile->fixer->addNewline($docCommentStartPointer);
