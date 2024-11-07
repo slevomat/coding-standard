@@ -55,8 +55,7 @@ constructor, static constructors, destructor, magic methods,
 public methods, protected methods, private methods,
 public final methods, public static final methods, protected final methods, protected static final methods,
 public abstract methods, public static abstract methods, protected abstract methods, protected static abstract methods,
-public static methods, protected static methods, private static methods,
-private methods
+public static methods, protected static methods, private static methods
 
 **List of supported shortcuts**:
 constants, properties, static properties, methods, all public methods, all protected methods, all private methods, static methods, final methods, abstract methods
