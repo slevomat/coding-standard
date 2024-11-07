@@ -6,8 +6,6 @@ includes:
 parameters:
 	level: 7
 
-	checkGenericClassInNonGenericObjectType: false
-
 	paths:
 		- %currentWorkingDirectory%/SlevomatCodingStandard
 
@@ -17,6 +15,7 @@ parameters:
 	excludePaths:
 		- %currentWorkingDirectory%/tests/*/data/*
 	ignoreErrors:
+		- identifier: missingType.generics
 		- "#Offset '(bracket|scope|parenthesis|comment|attribute)_(opener|closer)' does not exist#"
 		- "#Offset '(conditions|scope_condition)' does not exist#"
 		-
