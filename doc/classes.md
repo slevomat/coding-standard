@@ -9,14 +9,6 @@ Sniff provides the following settings:
 * `spacesCountBeforeColon`: the number of spaces before `:`.
 * `spacesCountBeforeType`: the number of spaces before type.
 
-#### SlevomatCodingStandard.Classes.ClassLength
-
-Disallows long classes. This sniff provides the following settings:
-
-* `includeComments`: should comments be included in the count (default value is false).
-* `includeWhitespace`: should empty lines be included in the count (default value is false).
-* `maxLinesLength`: specifies max allowed function lines length (default value is 250).
-
 #### SlevomatCodingStandard.Classes.ClassConstantVisibility 🔧
 
 In PHP 7.1+ it's possible to declare [visibility of class constants](https://wiki.php.net/rfc/class_const_visibility). In a similar vein to optional declaration of visibility for properties and methods which is actually required in sane coding standards, this sniff also requires declaring visibility for all class constants.
@@ -29,6 +21,14 @@ Sniff provides the following settings:
 const FOO = 1; // visibility missing!
 public const BAR = 2; // correct
 ```
+
+#### SlevomatCodingStandard.Classes.ClassLength
+
+Disallows long classes. This sniff provides the following settings:
+
+* `includeComments`: should comments be included in the count (default value is false).
+* `includeWhitespace`: should empty lines be included in the count (default value is false).
+* `maxLinesLength`: specifies max allowed function lines length (default value is 250).
 
 #### SlevomatCodingStandard.Classes.ClassMemberSpacing 🔧
 
