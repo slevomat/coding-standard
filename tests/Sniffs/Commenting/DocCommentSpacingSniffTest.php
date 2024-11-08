@@ -159,7 +159,7 @@ class DocCommentSpacingSniffTest extends TestCase
 			DocCommentSpacingSniff::CODE_INCORRECT_ORDER_OF_ANNOTATIONS_IN_GROUP,
 		]);
 
-		self::assertSame(13, $report->getErrorCount());
+		self::assertSame(15, $report->getErrorCount());
 
 		self::assertSniffError($report, 12, DocCommentSpacingSniff::CODE_INCORRECT_ORDER_OF_ANNOTATIONS_GROUPS);
 		self::assertSniffError($report, 23, DocCommentSpacingSniff::CODE_INCORRECT_ANNOTATIONS_GROUP);
@@ -172,8 +172,9 @@ class DocCommentSpacingSniffTest extends TestCase
 		self::assertSniffError($report, 95, DocCommentSpacingSniff::CODE_INCORRECT_ANNOTATIONS_GROUP);
 		self::assertSniffError($report, 105, DocCommentSpacingSniff::CODE_INCORRECT_ANNOTATIONS_GROUP);
 		self::assertSniffError($report, 118, DocCommentSpacingSniff::CODE_INCORRECT_ANNOTATIONS_GROUP);
-		self::assertSniffError($report, 133, DocCommentSpacingSniff::CODE_INCORRECT_ANNOTATIONS_GROUP);
-		self::assertSniffError($report, 164, DocCommentSpacingSniff::CODE_INCORRECT_ANNOTATIONS_GROUP);
+		self::assertSniffError($report, 125, DocCommentSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_ANNOTATIONS_GROUPS);
+		self::assertSniffError($report, 138, DocCommentSpacingSniff::CODE_INCORRECT_ANNOTATIONS_GROUP);
+		self::assertSniffError($report, 169, DocCommentSpacingSniff::CODE_INCORRECT_ANNOTATIONS_GROUP);
 
 		self::assertAllFixedInFile($report);
 	}
