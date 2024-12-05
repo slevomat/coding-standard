@@ -47,3 +47,8 @@ class WhateverOverridden extends Whatever
 	}
 
 }
+
+/**
+ * This MUST be the last docblock in the test file and there must not be any code
+ * after this line for the test to be valid.
+ */
