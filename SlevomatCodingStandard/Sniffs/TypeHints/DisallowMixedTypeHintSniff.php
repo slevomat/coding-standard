@@ -83,7 +83,7 @@ class DisallowMixedTypeHintSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $docCommentOpenPointer + 1);
 
-		if ($tokens[$nextPointer]['code'] !== T_ATTRIBUTE) {
+		if ($nextPointer === null || $tokens[$nextPointer]['code'] !== T_ATTRIBUTE) {
 			return false;
 		}
 
