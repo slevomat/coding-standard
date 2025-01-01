@@ -34,7 +34,7 @@ class EnumCaseSpacingSniff extends AbstractPropertyConstantAndEnumCaseSpacing
 
 		$nextPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE, T_USE, T_ENUM_CASE], $pointer + 1);
 
-		return $tokens[$nextPointer]['code'] === T_ENUM_CASE;
+		return $nextPointer !== null && $tokens[$nextPointer]['code'] === T_ENUM_CASE;
 	}
 
 	protected function addError(File $phpcsFile, int $pointer, int $minExpectedLines, int $maxExpectedLines, int $found): bool

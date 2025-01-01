@@ -44,3 +44,10 @@ enum TestClass
 
 	case BAR;
 }
+
+enum TestClass1
+{
+	case FOO;
+
+	use TestTrait;
+}
