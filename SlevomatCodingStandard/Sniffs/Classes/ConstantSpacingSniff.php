@@ -59,7 +59,7 @@ class ConstantSpacingSniff extends AbstractPropertyConstantAndEnumCaseSpacing
 
 		$nextPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_ENUM_CASE, T_CONST, T_VARIABLE, T_USE], $pointer + 1);
 
-		return $tokens[$nextPointer]['code'] === T_CONST;
+		return $nextPointer !== null && $tokens[$nextPointer]['code'] === T_CONST;
 	}
 
 	protected function addError(File $phpcsFile, int $pointer, int $minExpectedLines, int $maxExpectedLines, int $found): bool

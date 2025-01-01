@@ -54,6 +54,13 @@ class TestClass
 	private const CONSTANT_2 = 'bar';
 }
 
+class TestClass1
+{
+	public const CONSTANT_1 = 'foo';
+
+	use TestTrait;
+}
+
 enum A: string
 {
 	public const X = [];
@@ -61,4 +68,11 @@ enum A: string
 	case A = 'a';
 
 	case B = 'b';
+}
+
+enum B: string
+{
+	public const X = [];
+
+	case A = 'a';
 }
