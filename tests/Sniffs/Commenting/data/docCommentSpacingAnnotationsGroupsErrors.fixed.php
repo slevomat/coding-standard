@@ -126,6 +126,14 @@ class Whatever
 		return [];
 	}
 
+	/**
+	 * @see self::method()
+	 * @link https://example.com
+	 */
+	public function sameLine()
+	{
+	}
+
 }
 
 class Doctrine
