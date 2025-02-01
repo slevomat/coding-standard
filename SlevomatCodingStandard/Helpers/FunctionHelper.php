@@ -91,6 +91,7 @@ class FunctionHelper
 		'is_string',
 		'ord',
 		'sizeof',
+		'sprintf',
 		'strlen',
 		'strval',
 	];
