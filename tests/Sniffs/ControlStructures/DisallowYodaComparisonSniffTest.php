@@ -22,7 +22,8 @@ class DisallowYodaComparisonSniffTest extends TestCase
 			self::assertSniffError($report, $lineNumber, DisallowYodaComparisonSniff::CODE_DISALLOWED_YODA_COMPARISON);
 		}
 
-		self::assertSniffError($report, 41, DisallowYodaComparisonSniff::CODE_DISALLOWED_YODA_COMPARISON);
+		self::assertSniffError($report, 39, DisallowYodaComparisonSniff::CODE_DISALLOWED_YODA_COMPARISON);
+		self::assertSniffError($report, 45, DisallowYodaComparisonSniff::CODE_DISALLOWED_YODA_COMPARISON);
 	}
 
 	public function testFixable(): void

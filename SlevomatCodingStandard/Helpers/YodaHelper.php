@@ -23,7 +23,6 @@ use const T_BOOL_CAST;
 use const T_BOOLEAN_AND;
 use const T_BOOLEAN_OR;
 use const T_CASE;
-use const T_CLOSE_CURLY_BRACKET;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSE_SHORT_ARRAY;
 use const T_COALESCE;
@@ -343,7 +342,6 @@ class YodaHelper
 				T_COLON => true,
 				T_RETURN => true,
 				T_COMMA => true,
-				T_CLOSE_CURLY_BRACKET => true,
 				T_MATCH_ARROW => true,
 				T_FN_ARROW => true,
 			];

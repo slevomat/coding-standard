@@ -36,6 +36,10 @@ $param === A::TYPE_A or A::TYPE_B === $param;
 A::TYPE_A === $param xor $param === A::TYPE_B;
 $x = [$a, $b, $c] === $username;
 
+if (null === $row->{self::NAME}) {
+    return 0;
+}
+
 function ($condition, $actual) {
 	return match ($condition) {
 		'anything' => 1 === $actual,

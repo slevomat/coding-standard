@@ -70,6 +70,10 @@ if (null === $env = $parameters['env']) {
 	// ...
 }
 
+if ($row->{self::NAME} === null) {
+    return 0;
+}
+
 function ($condition, $actual) {
 	return match ($condition) {
 		'anything' => $actual === 1,
