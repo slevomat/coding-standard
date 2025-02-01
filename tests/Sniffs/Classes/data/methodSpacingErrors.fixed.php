@@ -54,4 +54,10 @@ abstract class Whatever
 
 	}
 
+	#[MyAttribute]
+	public function seventhMethod()
+	{
+
+	}
+
 }

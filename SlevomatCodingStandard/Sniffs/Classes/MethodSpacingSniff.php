@@ -14,6 +14,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function sprintf;
 use function str_repeat;
+use const T_ATTRIBUTE;
 use const T_FUNCTION;
 use const T_SEMICOLON;
 
@@ -62,17 +63,29 @@ class MethodSpacingSniff implements Sniff
 			return;
 		}
 
+		$nextMethodAttributeStartPointer = null;
 		$nextMethodDocCommentStartPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $nextMethodPointer);
+
 		if (
 			$nextMethodDocCommentStartPointer !== null
 			&& $tokens[$tokens[$nextMethodDocCommentStartPointer]['comment_closer']]['line'] + 1 !== $tokens[$nextMethodPointer]['line']
 		) {
 			$nextMethodDocCommentStartPointer = null;
+		} else {
+			$nextMethodAttributeStartPointer = TokenHelper::findPrevious(
+				$phpcsFile,
+				T_ATTRIBUTE,
+				$nextMethodPointer - 1,
+				$methodEndPointer
+			);
 		}
 
 		$nextMethodFirstLinePointer = $tokens[$nextMethodPointer]['line'] === $tokens[$methodEndPointer]['line']
 			? TokenHelper::findNextEffective($phpcsFile, $methodEndPointer + 1)
-			: TokenHelper::findFirstTokenOnLine($phpcsFile, $nextMethodDocCommentStartPointer ?? $nextMethodPointer);
+			: TokenHelper::findFirstTokenOnLine(
+				$phpcsFile,
+				$nextMethodDocCommentStartPointer ?? $nextMethodAttributeStartPointer ?? $nextMethodPointer
+			);
 
 		if (TokenHelper::findNextNonWhitespace($phpcsFile, $methodEndPointer + 1, $nextMethodFirstLinePointer) !== null) {
 			return;

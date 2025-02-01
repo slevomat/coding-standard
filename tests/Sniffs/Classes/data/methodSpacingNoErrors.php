@@ -99,4 +99,9 @@ abstract class Whatever
 		return [$anonymousClassA, $anonymousClassB];
 	}
 
+	#[MyAttribute]
+	public function sixthMethod()
+	{
+	}
+
 }
