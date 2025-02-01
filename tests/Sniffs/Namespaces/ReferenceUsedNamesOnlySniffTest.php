@@ -1251,4 +1251,12 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testDisabledWhenNoNamespace(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/referenceUsedNamesOnlyDisabledWhenNoNamespace.php', [
+			'allowWhenNoNamespace' => false,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
 }

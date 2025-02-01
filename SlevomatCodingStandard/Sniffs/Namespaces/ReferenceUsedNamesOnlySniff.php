@@ -86,6 +86,9 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	/** @var bool */
 	public $allowFallbackGlobalConstants = true;
 
+	/** @var bool */
+	public $allowWhenNoNamespace = true;
+
 	/** @var list<string> */
 	public $specialExceptionNames = [];
 
@@ -140,6 +143,12 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 			return;
 		}
 
+		$namespacePointers = NamespaceHelper::getAllNamespacesPointers($phpcsFile);
+
+		if ($namespacePointers === [] && !$this->allowWhenNoNamespace) {
+			return;
+		}
+
 		$tokens = $phpcsFile->getTokens();
 
 		$references = $this->getReferences($phpcsFile, $openTagPointer);
@@ -170,8 +179,6 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 				$classReference->startPointer
 			);
 		}
-
-		$namespacePointers = NamespaceHelper::getAllNamespacesPointers($phpcsFile);
 
 		$referenceErrors = [];
 

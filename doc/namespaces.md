@@ -129,6 +129,7 @@ Sniff provides the following settings:
 * `allowFallbackGlobalFunctions`: allows using global functions via fallback name without `use` (i.e. `phpversion()`).
 * `allowFallbackGlobalConstants`: allows using global constants via fallback name without `use` (i.e. `PHP_VERSION`).
 * `allowPartialUses`: allows using and referencing whole namespaces.
+* `allowWhenNoNamespace` (default: `true`): force even when there's no namespace in the file.
 
 #### SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash 🔧
 
