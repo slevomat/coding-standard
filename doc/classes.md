@@ -26,9 +26,9 @@ public const BAR = 2; // correct
 
 Disallows long classes. This sniff provides the following settings:
 
-* `includeComments`: should comments be included in the count (default value is false).
-* `includeWhitespace`: should empty lines be included in the count (default value is false).
-* `maxLinesLength`: specifies max allowed function lines length (default value is 250).
+* `includeComments` (default: `false`): should comments be included in the count.
+* `includeWhitespace` (default: `false`): should empty lines be included in the count.
+* `maxLinesLength` (default: `250`): specifies max allowed function lines length.
 
 #### SlevomatCodingStandard.Classes.ClassMemberSpacing 🔧
 
@@ -142,8 +142,8 @@ Disallows using public properties.
 
 This sniff provides the following setting:
 
-* `checkPromoted`: will check promoted properties too.
-* `allowReadonly`: will allow readonly properties (default value is false).
+* `checkPromoted` (default: `false`): will check promoted properties too.
+* `allowReadonly` (default: `false`): will allow readonly properties.
 
 #### SlevomatCodingStandard.Classes.MethodSpacing 🔧
 
