@@ -22,27 +22,27 @@ class RequireOnlyStandaloneIncrementAndDecrementOperatorsSniffTest extends TestC
 		self::assertSniffError(
 			$report,
 			3,
-			RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff::CODE_POST_INCREMENT_OPERATOR_NOT_USED_STANDALONE
+			RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff::CODE_POST_INCREMENT_OPERATOR_NOT_USED_STANDALONE,
 		);
 		self::assertSniffError(
 			$report,
 			4,
-			RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff::CODE_PRE_INCREMENT_OPERATOR_NOT_USED_STANDALONE
+			RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff::CODE_PRE_INCREMENT_OPERATOR_NOT_USED_STANDALONE,
 		);
 		self::assertSniffError(
 			$report,
 			7,
-			RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff::CODE_POST_DECREMENT_OPERATOR_NOT_USED_STANDALONE
+			RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff::CODE_POST_DECREMENT_OPERATOR_NOT_USED_STANDALONE,
 		);
 		self::assertSniffError(
 			$report,
 			7,
-			RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff::CODE_PRE_DECREMENT_OPERATOR_NOT_USED_STANDALONE
+			RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff::CODE_PRE_DECREMENT_OPERATOR_NOT_USED_STANDALONE,
 		);
 		self::assertSniffError(
 			$report,
 			10,
-			RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff::CODE_POST_INCREMENT_OPERATOR_NOT_USED_STANDALONE
+			RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff::CODE_POST_INCREMENT_OPERATOR_NOT_USED_STANDALONE,
 		);
 	}
 

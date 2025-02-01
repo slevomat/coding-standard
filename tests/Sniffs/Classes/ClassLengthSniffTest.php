@@ -26,7 +26,7 @@ class ClassLengthSniffTest extends TestCase
 			$report,
 			5,
 			ClassLengthSniff::CODE_CLASS_TOO_LONG,
-			'Your class is too long. Currently using 13 lines. Can be up to 5 lines.'
+			'Your class is too long. Currently using 13 lines. Can be up to 5 lines.',
 		);
 	}
 

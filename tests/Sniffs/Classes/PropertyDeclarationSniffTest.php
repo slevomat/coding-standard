@@ -61,7 +61,7 @@ class PropertyDeclarationSniffTest extends TestCase
 			$report,
 			6,
 			PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BEFORE_TYPE_HINT,
-			'There must be exactly one space before type hint of property $promotion1.'
+			'There must be exactly one space before type hint of property $promotion1.',
 		);
 		self::assertSniffError($report, 6, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PROPERTY);
 		self::assertSniffError($report, 6, PropertyDeclarationSniff::CODE_INCORRECT_ORDER_OF_MODIFIERS);
@@ -69,7 +69,7 @@ class PropertyDeclarationSniffTest extends TestCase
 			$report,
 			6,
 			PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BEFORE_TYPE_HINT,
-			'There must be exactly one space before type hint of property $promotion2.'
+			'There must be exactly one space before type hint of property $promotion2.',
 		);
 		self::assertSniffError($report, 16, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BEFORE_TYPE_HINT);
 		self::assertSniffError($report, 16, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PROPERTY);
@@ -113,13 +113,13 @@ class PropertyDeclarationSniffTest extends TestCase
 			$report,
 			10,
 			PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_MODIFIERS,
-			'There must be exactly one space between modifiers of property $three.'
+			'There must be exactly one space between modifiers of property $three.',
 		);
 		self::assertSniffError(
 			$report,
 			10,
 			PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_MODIFIERS,
-			'There must be exactly one space between modifiers of property $four.'
+			'There must be exactly one space between modifiers of property $four.',
 		);
 		self::assertSniffError($report, 20, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_MODIFIERS);
 		self::assertSniffError($report, 21, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_MODIFIERS);

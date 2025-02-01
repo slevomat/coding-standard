@@ -20,8 +20,7 @@ use PHPStan\Type\UnionType;
 class GetTokenDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
 
-	/** @var ArrayType|null */
-	private $arrayType;
+	private ?ArrayType $arrayType = null;
 
 	public function getClass(): string
 	{

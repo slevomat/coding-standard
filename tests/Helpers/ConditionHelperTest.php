@@ -40,8 +40,8 @@ class ConditionHelperTest extends TestCase
 			ConditionHelper::conditionReturnsBoolean(
 				$phpcsFile,
 				$tokens[$ifPointer]['parenthesis_opener'] + 1,
-				$tokens[$ifPointer]['parenthesis_closer'] - 1
-			)
+				$tokens[$ifPointer]['parenthesis_closer'] - 1,
+			),
 		);
 	}
 

@@ -64,8 +64,8 @@ class DocCommentHelper
 			TokenHelper::getContent(
 				$phpcsFile,
 				$docCommentOpenToken,
-				$phpcsFile->getTokens()[$docCommentOpenToken]['comment_closer']
-			)
+				$phpcsFile->getTokens()[$docCommentOpenToken]['comment_closer'],
+			),
 		);
 	}
 
@@ -85,7 +85,7 @@ class DocCommentHelper
 			$phpcsFile,
 			[T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STAR],
 			$docCommentOpenPointer + 1,
-			$tokens[$docCommentOpenPointer]['comment_closer']
+			$tokens[$docCommentOpenPointer]['comment_closer'],
 		);
 
 		if ($descriptionStartPointer === null) {
@@ -100,7 +100,7 @@ class DocCommentHelper
 			$phpcsFile,
 			[T_DOC_COMMENT_TAG, T_DOC_COMMENT_CLOSE_TAG],
 			$descriptionStartPointer + 1,
-			$tokens[$docCommentOpenPointer]['comment_closer'] + 1
+			$tokens[$docCommentOpenPointer]['comment_closer'] + 1,
 		);
 
 		/** @var list<Comment> $comments */
@@ -163,14 +163,14 @@ class DocCommentHelper
 				$found = TokenHelper::findPrevious(
 					$phpcsFile,
 					[T_DOC_COMMENT_CLOSE_TAG, T_SEMICOLON, T_CLOSE_CURLY_BRACKET, T_OPEN_CURLY_BRACKET],
-					$pointer - 1
+					$pointer - 1,
 				);
 				if ($found !== null && $tokens[$found]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
 					return $tokens[$found]['comment_opener'];
 				}
 
 				return null;
-			}
+			},
 		);
 	}
 
@@ -195,7 +195,7 @@ class DocCommentHelper
 			if (in_array(
 				$tokens[$i]['code'],
 				[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_VAR, T_READONLY, T_FINAL, T_STATIC, T_ABSTRACT, T_WHITESPACE],
-				true
+				true,
 			)) {
 				continue;
 			}
@@ -203,7 +203,7 @@ class DocCommentHelper
 			if (in_array(
 				$tokens[$i]['code'],
 				array_merge([T_FUNCTION, T_VARIABLE, T_CONST], TokenHelper::$typeKeywordTokenCodes),
-				true
+				true,
 			)) {
 				$docCommentOwnerPointer = $i;
 			}
@@ -225,7 +225,7 @@ class DocCommentHelper
 			&& in_array(
 				$tokens[$nextPointer]['code'],
 				[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM],
-				true
+				true,
 			)
 		) {
 			return false;
@@ -263,12 +263,12 @@ class DocCommentHelper
 						$docCommentOpenPointer,
 						$phpcsFile->getTokens()[$docCommentOpenPointer]['comment_closer'],
 						$parsedDocComment,
-						$docCommentTokens
+						$docCommentTokens,
 					);
 				} catch (ParserException $e) {
 					return null;
 				}
-			}
+			},
 		);
 	}
 

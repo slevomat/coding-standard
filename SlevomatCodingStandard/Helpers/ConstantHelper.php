@@ -44,9 +44,7 @@ class ConstantHelper
 		$previousConstantPointer = 0;
 
 		return array_map(
-			static function (int $constantPointer) use ($phpcsFile): string {
-				return self::getName($phpcsFile, $constantPointer);
-			},
+			static fn (int $constantPointer): string => self::getName($phpcsFile, $constantPointer),
 			array_values(array_filter(
 				iterator_to_array(self::getAllConstantPointers($phpcsFile, $previousConstantPointer)),
 				static function (int $constantPointer) use ($phpcsFile): bool {
@@ -55,8 +53,8 @@ class ConstantHelper
 					}
 
 					return true;
-				}
-			))
+				},
+			)),
 		);
 	}
 

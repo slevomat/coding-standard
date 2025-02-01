@@ -23,10 +23,10 @@ class ForbiddenAnnotationsSniff implements Sniff
 	public const CODE_ANNOTATION_FORBIDDEN = 'AnnotationForbidden';
 
 	/** @var list<string> */
-	public $forbiddenAnnotations = [];
+	public array $forbiddenAnnotations = [];
 
 	/** @var list<string>|null */
-	private $normalizedForbiddenAnnotations;
+	private ?array $normalizedForbiddenAnnotations = null;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -56,7 +56,7 @@ class ForbiddenAnnotationsSniff implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				sprintf('Use of annotation %s is forbidden.', $annotation->getName()),
 				$annotation->getStartPointer(),
-				self::CODE_ANNOTATION_FORBIDDEN
+				self::CODE_ANNOTATION_FORBIDDEN,
 			);
 			if (!$fix) {
 				continue;
@@ -66,7 +66,7 @@ class ForbiddenAnnotationsSniff implements Sniff
 				$phpcsFile,
 				T_DOC_COMMENT_STAR,
 				$annotation->getStartPointer() - 1,
-				$docCommentOpenPointer
+				$docCommentOpenPointer,
 			);
 			$annotationStartPointer = $starPointer ?? $annotation->getStartPointer();
 
@@ -74,7 +74,7 @@ class ForbiddenAnnotationsSniff implements Sniff
 			$nextPointer = TokenHelper::findNext(
 				$phpcsFile,
 				[T_DOC_COMMENT_TAG, T_DOC_COMMENT_CLOSE_TAG],
-				$annotation->getEndPointer() + 1
+				$annotation->getEndPointer() + 1,
 			);
 			if ($tokens[$nextPointer]['code'] === T_DOC_COMMENT_TAG) {
 				$nextPointer = TokenHelper::findPrevious($phpcsFile, T_DOC_COMMENT_STAR, $nextPointer - 1);
@@ -85,7 +85,7 @@ class ForbiddenAnnotationsSniff implements Sniff
 				$pointerBeforeWhitespace = TokenHelper::findPreviousExcluding(
 					$phpcsFile,
 					[T_DOC_COMMENT_WHITESPACE, T_DOC_COMMENT_STAR],
-					$annotationStartPointer - 1
+					$annotationStartPointer - 1,
 				);
 				/** @var int $annotationStartPointer */
 				$annotationStartPointer = TokenHelper::findNext($phpcsFile, T_DOC_COMMENT_STAR, $pointerBeforeWhitespace + 1);

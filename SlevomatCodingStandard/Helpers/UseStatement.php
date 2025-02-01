@@ -15,23 +15,17 @@ class UseStatement
 	public const TYPE_FUNCTION = ReferencedName::TYPE_FUNCTION;
 	public const TYPE_CONSTANT = ReferencedName::TYPE_CONSTANT;
 
-	/** @var string */
-	private $nameAsReferencedInFile;
+	private string $nameAsReferencedInFile;
 
-	/** @var string */
-	private $normalizedNameAsReferencedInFile;
+	private string $normalizedNameAsReferencedInFile;
 
-	/** @var string */
-	private $fullyQualifiedTypeName;
+	private string $fullyQualifiedTypeName;
 
-	/** @var int */
-	private $usePointer;
+	private int $usePointer;
 
-	/** @var string */
-	private $type;
+	private string $type;
 
-	/** @var string|null */
-	private $alias;
+	private ?string $alias = null;
 
 	public function __construct(
 		string $nameAsReferencedInFile,

@@ -70,7 +70,7 @@ abstract class AbstractRequireOneLineDocComment implements Sniff
 				$phpcsFile,
 				[T_DOC_COMMENT_WHITESPACE],
 				$startingPointer + 1,
-				$docCommentEndPointer + 1
+				$docCommentEndPointer + 1,
 			);
 
 			if ($tokens[$currentLinePointer]['line'] === $tokens[$nextEffectivePointer]['line']) {
@@ -97,7 +97,7 @@ abstract class AbstractRequireOneLineDocComment implements Sniff
 				T_DOC_COMMENT_STAR,
 			],
 			$docCommentStartPointer + 1,
-			$docCommentEndPointer
+			$docCommentEndPointer,
 		);
 		$contentEndPointer = TokenHelper::findPreviousExcluding(
 			$phpcsFile,
@@ -106,7 +106,7 @@ abstract class AbstractRequireOneLineDocComment implements Sniff
 				T_DOC_COMMENT_STAR,
 			],
 			$docCommentEndPointer - 1,
-			$docCommentStartPointer
+			$docCommentStartPointer,
 		);
 
 		if ($contentStartPointer === null) {

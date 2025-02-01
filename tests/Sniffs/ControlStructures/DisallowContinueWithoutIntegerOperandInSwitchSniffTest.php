@@ -22,12 +22,12 @@ class DisallowContinueWithoutIntegerOperandInSwitchSniffTest extends TestCase
 		self::assertSniffError(
 			$report,
 			6,
-			DisallowContinueWithoutIntegerOperandInSwitchSniff::CODE_DISALLOWED_CONTINUE_WITHOUT_INTEGER_OPERAND_IN_SWITCH
+			DisallowContinueWithoutIntegerOperandInSwitchSniff::CODE_DISALLOWED_CONTINUE_WITHOUT_INTEGER_OPERAND_IN_SWITCH,
 		);
 		self::assertSniffError(
 			$report,
 			12,
-			DisallowContinueWithoutIntegerOperandInSwitchSniff::CODE_DISALLOWED_CONTINUE_WITHOUT_INTEGER_OPERAND_IN_SWITCH
+			DisallowContinueWithoutIntegerOperandInSwitchSniff::CODE_DISALLOWED_CONTINUE_WITHOUT_INTEGER_OPERAND_IN_SWITCH,
 		);
 
 		self::assertAllFixedInFile($report);

@@ -59,7 +59,7 @@ class UselessAliasSniff implements Sniff
 				$fix = $phpcsFile->addFixableError(
 					sprintf('Useless alias "%s" for use of "%s".', $useStatement->getAlias(), $useStatement->getFullyQualifiedTypeName()),
 					$useStatement->getPointer(),
-					self::CODE_USELESS_ALIAS
+					self::CODE_USELESS_ALIAS,
 				);
 
 				if (!$fix) {

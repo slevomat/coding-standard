@@ -68,14 +68,14 @@ class AnnotationHelper
 							$annotations[] = new Annotation(
 								$node,
 								$annotationStartPointer,
-								$parsedDocComment->getNodeEndPointer($phpcsFile, $node, $annotationStartPointer)
+								$parsedDocComment->getNodeEndPointer($phpcsFile, $node, $annotationStartPointer),
 							);
 						}
 					}
 				}
 
 				return $annotations;
-			}
+			},
 		);
 	}
 
@@ -92,13 +92,13 @@ class AnnotationHelper
 			$visitor = new class extends AbstractNodeVisitor {
 
 				/** @var class-string */
-				private $type;
+				private string $type;
 
 				/** @var list<Node> */
-				private $nodes = [];
+				private array $nodes = [];
 
 				/** @var list<Node> */
-				private $nodesToIgnore = [];
+				private array $nodesToIgnore = [];
 
 				/**
 				 * @return Node|list<Node>|NodeTraverser::*|null
@@ -179,7 +179,7 @@ class AnnotationHelper
 		return PhpDocParserHelper::getPrinter()->printFormatPreserving(
 			$newPhpDocNode,
 			$parsedDocComment->getNode(),
-			$parsedDocComment->getTokens()
+			$parsedDocComment->getTokens(),
 		);
 	}
 
@@ -221,7 +221,7 @@ class AnnotationHelper
 		if (
 			TypeHintHelper::isTraversableType(
 				TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHint->getTypeHintWithoutNullabilitySymbol()),
-				$traversableTypeHints
+				$traversableTypeHints,
 			)
 			&& !(
 				$annotationType instanceof IdentifierTypeNode
@@ -257,7 +257,7 @@ class AnnotationHelper
 				$phpcsFile,
 				$functionPointer,
 				$typeHint->getTypeHint(),
-				$annotationTypeHint
+				$annotationTypeHint,
 			);
 		}
 
@@ -289,7 +289,7 @@ class AnnotationHelper
 			if (in_array(
 				strtolower($annotationType->name),
 				['true', 'false', 'null'],
-				true
+				true,
 			)) {
 				return $enableStandaloneNullTrueFalseTypeHints;
 			}
@@ -297,7 +297,7 @@ class AnnotationHelper
 			if (in_array(
 				strtolower($annotationType->name),
 				['class-string', 'trait-string', 'callable-string', 'numeric-string', 'non-empty-string', 'non-falsy-string', 'literal-string', 'positive-int', 'negative-int'],
-				true
+				true,
 			)) {
 				return false;
 			}
@@ -308,7 +308,7 @@ class AnnotationHelper
 			$phpcsFile,
 			$functionPointer,
 			$typeHint->getTypeHintWithoutNullabilitySymbol(),
-			$annotationTypeHint
+			$annotationTypeHint,
 		);
 	}
 
@@ -320,11 +320,9 @@ class AnnotationHelper
 		if ($visitor === null) {
 			$visitor = new class extends AbstractNodeVisitor {
 
-				/** @var Node */
-				private $nodeToChange;
+				private Node $nodeToChange;
 
-				/** @var Node */
-				private $changedNode;
+				private Node $changedNode;
 
 				public function enterNode(Node $node): ?Node
 				{

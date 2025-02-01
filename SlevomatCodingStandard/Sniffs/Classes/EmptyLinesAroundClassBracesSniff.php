@@ -26,11 +26,9 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 
 	public const CODE_INCORRECT_EMPTY_LINES_BEFORE_CLOSING_BRACE = 'IncorrectEmptyLinesBeforeClosingBrace';
 
-	/** @var int */
-	public $linesCountAfterOpeningBrace = 1;
+	public int $linesCountAfterOpeningBrace = 1;
 
-	/** @var int */
-	public $linesCountBeforeClosingBrace = 1;
+	public int $linesCountBeforeClosingBrace = 1;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -73,13 +71,13 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 				$openerPointer,
 				$lines === 0
 					? self::CODE_NO_EMPTY_LINE_AFTER_OPENING_BRACE
-					: self::CODE_MULTIPLE_EMPTY_LINES_AFTER_OPENING_BRACE
+					: self::CODE_MULTIPLE_EMPTY_LINES_AFTER_OPENING_BRACE,
 			);
 		} else {
 			$fix = $phpcsFile->addFixableError(sprintf(
 				'There must be exactly %d empty lines after %s opening brace.',
 				$this->linesCountAfterOpeningBrace,
-				$typeToken['content']
+				$typeToken['content'],
 			), $openerPointer, self::CODE_INCORRECT_EMPTY_LINES_AFTER_OPENING_BRACE);
 		}
 
@@ -125,13 +123,13 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 				$closerPointer,
 				$lines === 0
 					? self::CODE_NO_EMPTY_LINE_BEFORE_CLOSING_BRACE
-					: self::CODE_MULTIPLE_EMPTY_LINES_BEFORE_CLOSING_BRACE
+					: self::CODE_MULTIPLE_EMPTY_LINES_BEFORE_CLOSING_BRACE,
 			);
 		} else {
 			$fix = $phpcsFile->addFixableError(sprintf(
 				'There must be exactly %d empty lines before %s closing brace.',
 				$this->linesCountBeforeClosingBrace,
-				$typeToken['content']
+				$typeToken['content'],
 			), $closerPointer, self::CODE_INCORRECT_EMPTY_LINES_BEFORE_CLOSING_BRACE);
 		}
 
@@ -149,7 +147,7 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 			FixerHelper::removeBetween(
 				$phpcsFile,
 				$previousPointerBeforeClosingBrace + $this->linesCountBeforeClosingBrace + 1,
-				$closerPointer
+				$closerPointer,
 			);
 		}
 

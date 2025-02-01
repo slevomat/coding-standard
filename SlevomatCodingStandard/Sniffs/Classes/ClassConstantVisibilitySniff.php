@@ -23,8 +23,7 @@ class ClassConstantVisibilitySniff implements Sniff
 
 	public const CODE_MISSING_CONSTANT_VISIBILITY = 'MissingConstantVisibility';
 
-	/** @var bool */
-	public $fixable = false;
+	public bool $fixable = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -69,7 +68,7 @@ class ClassConstantVisibilitySniff implements Sniff
 		$message = sprintf(
 			'Constant %s::%s visibility missing.',
 			ClassHelper::getFullyQualifiedName($phpcsFile, $classPointer),
-			$tokens[$namePointer]['content']
+			$tokens[$namePointer]['content'],
 		);
 
 		if ($this->fixable) {

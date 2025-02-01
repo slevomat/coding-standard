@@ -43,13 +43,13 @@ class ForbiddenClassesSniffTest extends TestCase
 			$report,
 			9,
 			ForbiddenClassesSniff::CODE_FORBIDDEN_INTERFACE,
-			'Usage of \FooNamespace\SecondImplementedInterface interface is forbidden, use \BarNamespace\SecondImplementedInterface instead'
+			'Usage of \FooNamespace\SecondImplementedInterface interface is forbidden, use \BarNamespace\SecondImplementedInterface instead',
 		);
 		self::assertSniffError(
 			$report,
 			9,
 			ForbiddenClassesSniff::CODE_FORBIDDEN_INTERFACE,
-			'Usage of \ThirdImplementedInterface interface is forbidden.'
+			'Usage of \ThirdImplementedInterface interface is forbidden.',
 		);
 		self::assertSniffError($report, 13, ForbiddenClassesSniff::CODE_FORBIDDEN_TRAIT);
 		self::assertSniffError($report, 14, ForbiddenClassesSniff::CODE_FORBIDDEN_TRAIT);
@@ -67,13 +67,13 @@ class ForbiddenClassesSniffTest extends TestCase
 			$report,
 			49,
 			ForbiddenClassesSniff::CODE_FORBIDDEN_CLASS,
-			'Usage of \DB class is forbidden, use \TypeORM\DB instead'
+			'Usage of \DB class is forbidden, use \TypeORM\DB instead',
 		);
 		self::assertSniffError(
 			$report,
 			49,
 			ForbiddenClassesSniff::CODE_FORBIDDEN_CLASS,
-			'Usage of \UserModel class is forbidden, use \MyApp\Models\User instead'
+			'Usage of \UserModel class is forbidden, use \MyApp\Models\User instead',
 		);
 		self::assertSniffError($report, 52, ForbiddenClassesSniff::CODE_FORBIDDEN_CLASS);
 		self::assertSniffError($report, 58, ForbiddenClassesSniff::CODE_FORBIDDEN_CLASS);

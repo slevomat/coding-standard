@@ -147,10 +147,10 @@ class AnnotationNameSniff implements Sniff
 	];
 
 	/** @var list<string>|null */
-	public $annotations;
+	public ?array $annotations = null;
 
 	/** @var array<string, string>|null */
-	private $normalizedAnnotations;
+	private ?array $normalizedAnnotations = null;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -188,7 +188,7 @@ class AnnotationNameSniff implements Sniff
 			$fullyQualifiedAnnotationName = NamespaceHelper::resolveClassName(
 				$phpcsFile,
 				$annotationNameWithoutAtSign,
-				$annotation->getStartPointer()
+				$annotation->getStartPointer(),
 			);
 
 			if (NamespaceHelper::normalizeToCanonicalName($fullyQualifiedAnnotationName) !== $annotationNameWithoutAtSign) {
@@ -198,7 +198,7 @@ class AnnotationNameSniff implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				sprintf('Annotation name is incorrect. Expected %s, found %s.', $correctAnnotationName, $annotation->getName()),
 				$annotation->getStartPointer(),
-				self::CODE_ANNOTATION_NAME_INCORRECT
+				self::CODE_ANNOTATION_NAME_INCORRECT,
 			);
 			if (!$fix) {
 				continue;
@@ -219,7 +219,7 @@ class AnnotationNameSniff implements Sniff
 			'~\{(' . implode('|', $correctAnnotationNames) . ')\}~i',
 			$docCommentContent,
 			$matches,
-			PREG_OFFSET_CAPTURE
+			PREG_OFFSET_CAPTURE,
 		) === 0) {
 			return;
 		}
@@ -234,7 +234,7 @@ class AnnotationNameSniff implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				sprintf('Annotation name is incorrect. Expected %s, found %s.', $correctAnnotationName, $match[0]),
 				$docCommentOpenPointer,
-				self::CODE_ANNOTATION_NAME_INCORRECT
+				self::CODE_ANNOTATION_NAME_INCORRECT,
 			);
 			if (!$fix) {
 				continue;
@@ -244,14 +244,14 @@ class AnnotationNameSniff implements Sniff
 
 			$fixedDocCommentContent = substr($docCommentContent, 0, $match[1]) . $correctAnnotationName . substr(
 				$docCommentContent,
-				$match[1] + strlen($match[0])
+				$match[1] + strlen($match[0]),
 			);
 
 			FixerHelper::change(
 				$phpcsFile,
 				$docCommentOpenPointer,
 				$tokens[$docCommentOpenPointer]['comment_closer'],
-				$fixedDocCommentContent
+				$fixedDocCommentContent,
 			);
 
 			$phpcsFile->fixer->endChangeset();
@@ -268,9 +268,10 @@ class AnnotationNameSniff implements Sniff
 		}
 
 		if ($this->annotations !== null) {
-			$annotationNames = array_map(static function (string $annotationName): string {
-				return ltrim($annotationName, '@');
-			}, SniffSettingsHelper::normalizeArray($this->annotations));
+			$annotationNames = array_map(
+				static fn (string $annotationName): string => ltrim($annotationName, '@'),
+				SniffSettingsHelper::normalizeArray($this->annotations),
+			);
 		} else {
 			$annotationNames = array_merge(self::STANDARD_ANNOTATIONS, self::PHPUNIT_ANNOTATIONS, self::STATIC_ANALYSIS_ANNOTATIONS);
 
@@ -285,13 +286,12 @@ class AnnotationNameSniff implements Sniff
 			}
 		}
 
-		$annotationNames = array_map(static function (string $annotationName): string {
-			return '@' . $annotationName;
-		}, array_unique($annotationNames));
+		$annotationNames = array_map(static fn (string $annotationName): string => '@' . $annotationName, array_unique($annotationNames));
 
-		$this->normalizedAnnotations = array_combine(array_map(static function (string $annotationName): string {
-			return strtolower($annotationName);
-		}, $annotationNames), $annotationNames);
+		$this->normalizedAnnotations = array_combine(
+			array_map(static fn (string $annotationName): string => strtolower($annotationName), $annotationNames),
+			$annotationNames,
+		);
 
 		return $this->normalizedAnnotations;
 	}

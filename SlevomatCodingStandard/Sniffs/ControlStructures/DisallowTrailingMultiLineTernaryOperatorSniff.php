@@ -47,7 +47,7 @@ class DisallowTrailingMultiLineTernaryOperatorSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Ternary operator should be reformatted as leading the line.',
 			$inlineThenPointer,
-			self::CODE_TRAILING_MULTI_LINE_TERNARY_OPERATOR_USED
+			self::CODE_TRAILING_MULTI_LINE_TERNARY_OPERATOR_USED,
 		);
 
 		if (!$fix) {
@@ -64,8 +64,8 @@ class DisallowTrailingMultiLineTernaryOperatorSniff implements Sniff
 		$indentation = IndentationHelper::addIndentation(
 			IndentationHelper::getIndentation(
 				$phpcsFile,
-				TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $inlineThenPointer)
-			)
+				TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $inlineThenPointer),
+			),
 		);
 
 		$phpcsFile->fixer->beginChangeset();

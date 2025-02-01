@@ -35,11 +35,9 @@ class AlphabeticallySortedUsesSniff implements Sniff
 
 	public const CODE_INCORRECT_ORDER = 'IncorrectlyOrderedUses';
 
-	/** @var bool */
-	public $psr12Compatible = true;
+	public bool $psr12Compatible = true;
 
-	/** @var bool */
-	public $caseSensitive = false;
+	public bool $caseSensitive = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -92,7 +90,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 						$errorParameters = [
 							sprintf(
 								'Use statements should be sorted alphabetically. The first wrong one is %s.',
-								$useStatement->getFullyQualifiedTypeName()
+								$useStatement->getFullyQualifiedTypeName(),
 							),
 							$useStatement->getPointer(),
 							self::CODE_INCORRECT_ORDER,
@@ -152,7 +150,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 			$commentsBefore[$useStatement->getPointer()] = TokenHelper::getContent(
 				$phpcsFile,
 				$commentStartPointer,
-				$pointerBeforeUseStatement
+				$pointerBeforeUseStatement,
 			);
 
 			if ($firstPointer === $useStatement->getPointer()) {
@@ -160,9 +158,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 			}
 		}
 
-		uasort($useStatements, function (UseStatement $a, UseStatement $b): int {
-			return $this->compareUseStatements($a, $b);
-		});
+		uasort($useStatements, fn (UseStatement $a, UseStatement $b): int => $this->compareUseStatements($a, $b));
 
 		$phpcsFile->fixer->beginChangeset();
 
@@ -193,9 +189,9 @@ class AlphabeticallySortedUsesSniff implements Sniff
 					$commentBefore,
 					$useTypeFormatted,
 					$useStatement->getFullyQualifiedTypeName(),
-					$useStatement->getNameAsReferencedInFile()
+					$useStatement->getNameAsReferencedInFile(),
 				);
-			}, $useStatements))
+			}, $useStatements)),
 		);
 		$phpcsFile->fixer->endChangeset();
 	}

@@ -23,37 +23,37 @@ class MethodSpacingSniffTest extends TestCase
 			$report,
 			6,
 			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
-			'Expected 1 blank line after method, found 0.'
+			'Expected 1 blank line after method, found 0.',
 		);
 		self::assertSniffError(
 			$report,
 			10,
 			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
-			'Expected 1 blank line after method, found 2.'
+			'Expected 1 blank line after method, found 2.',
 		);
 		self::assertSniffError(
 			$report,
 			16,
 			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
-			'Expected 1 blank line after method, found 0.'
+			'Expected 1 blank line after method, found 0.',
 		);
 		self::assertSniffError(
 			$report,
 			24,
 			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
-			'Expected 1 blank line after method, found 0.'
+			'Expected 1 blank line after method, found 0.',
 		);
 		self::assertSniffError(
 			$report,
 			35,
 			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
-			'Expected 1 blank line after method, found 2.'
+			'Expected 1 blank line after method, found 2.',
 		);
 		self::assertSniffError(
 			$report,
 			50,
 			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
-			'Expected 1 blank line after method, found 3.'
+			'Expected 1 blank line after method, found 3.',
 		);
 
 		self::assertAllFixedInFile($report);
@@ -72,31 +72,31 @@ class MethodSpacingSniffTest extends TestCase
 			$report,
 			6,
 			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
-			'Expected 2 blank lines after method, found 0.'
+			'Expected 2 blank lines after method, found 0.',
 		);
 		self::assertSniffError(
 			$report,
 			16,
 			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
-			'Expected 2 blank lines after method, found 0.'
+			'Expected 2 blank lines after method, found 0.',
 		);
 		self::assertSniffError(
 			$report,
 			19,
 			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
-			'Expected 2 blank lines after method, found 1.'
+			'Expected 2 blank lines after method, found 1.',
 		);
 		self::assertSniffError(
 			$report,
 			24,
 			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
-			'Expected 2 blank lines after method, found 0.'
+			'Expected 2 blank lines after method, found 0.',
 		);
 		self::assertSniffError(
 			$report,
 			50,
 			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
-			'Expected 2 blank lines after method, found 3.'
+			'Expected 2 blank lines after method, found 3.',
 		);
 	}
 
@@ -122,19 +122,19 @@ class MethodSpacingSniffTest extends TestCase
 			$report,
 			6,
 			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
-			'Expected 2 to 4 blank lines after method, found 0.'
+			'Expected 2 to 4 blank lines after method, found 0.',
 		);
 		self::assertSniffError(
 			$report,
 			10,
 			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
-			'Expected 2 to 4 blank lines after method, found 5.'
+			'Expected 2 to 4 blank lines after method, found 5.',
 		);
 		self::assertSniffError(
 			$report,
 			19,
 			MethodSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
-			'Expected 2 to 4 blank lines after method, found 0.'
+			'Expected 2 to 4 blank lines after method, found 0.',
 		);
 
 		self::assertAllFixedInFile($report);

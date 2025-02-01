@@ -19,11 +19,9 @@ class AttributeAndTargetSpacingSniff implements Sniff
 
 	public const CODE_INCORRECT_LINES_COUNT_BETWEEN_ATTRIBUTE_AND_TARGET = 'IncorrectLinesCountBetweenAttributeAndTarget';
 
-	/** @var int */
-	public $linesCount = 0;
+	public int $linesCount = 0;
 
-	/** @var bool */
-	public $allowOnSameLine = false;
+	public bool $allowOnSameLine = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -83,7 +81,7 @@ class AttributeAndTargetSpacingSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			$errorMessage,
 			$attributeOpenerPointer,
-			self::CODE_INCORRECT_LINES_COUNT_BETWEEN_ATTRIBUTE_AND_TARGET
+			self::CODE_INCORRECT_LINES_COUNT_BETWEEN_ATTRIBUTE_AND_TARGET,
 		);
 
 		if (!$fix) {
@@ -93,7 +91,7 @@ class AttributeAndTargetSpacingSniff implements Sniff
 		if ($areOnSameLine) {
 			$indentation = IndentationHelper::getIndentation(
 				$phpcsFile,
-				TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $pointerAfter)
+				TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $pointerAfter),
 			);
 
 			$phpcsFile->fixer->beginChangeset();

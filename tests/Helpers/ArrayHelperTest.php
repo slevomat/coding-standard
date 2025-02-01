@@ -32,14 +32,14 @@ class ArrayHelperTest extends TestCase
 				self::assertSame(
 					$keyValueInfoExpect['indent'],
 					$keyValue->getIndent(),
-					sprintf('indent not same: keyValue %s', $i)
+					sprintf('indent not same: keyValue %s', $i),
 				);
 			}
 			if (array_key_exists('key', $keyValueInfoExpect)) {
 				self::assertSame(
 					$keyValueInfoExpect['key'],
 					$keyValue->getKey(),
-					sprintf('key not same: keyValue %s', $i)
+					sprintf('key not same: keyValue %s', $i),
 				);
 			}
 			if (array_key_exists('pointerArrow', $keyValueInfoExpect)) {
@@ -48,11 +48,11 @@ class ArrayHelperTest extends TestCase
 					? self::assertSame(
 						'=>',
 						$tokens[$actual]['content'],
-						sprintf('pointerArrow does not point to "=>": keyValue %s', $i)
+						sprintf('pointerArrow does not point to "=>": keyValue %s', $i),
 					)
 					: self::assertNull(
 						$actual,
-						sprintf('pointerArrow not null: keyValue %s', $i)
+						sprintf('pointerArrow not null: keyValue %s', $i),
 					);
 			}
 			if (array_key_exists('pointerComma', $keyValueInfoExpect)) {
@@ -61,18 +61,18 @@ class ArrayHelperTest extends TestCase
 					? self::assertSame(
 						',',
 						$tokens[$actual]['content'],
-						sprintf('pointerComma does not point to ",": keyValue %s', $i)
+						sprintf('pointerComma does not point to ",": keyValue %s', $i),
 					)
 					: self::assertNull(
 						$actual,
-						sprintf('pointerComma not null: keyValue %s', $i)
+						sprintf('pointerComma not null: keyValue %s', $i),
 					);
 			}
 
 			self::assertSame(
 				$keyValueInfoExpect['content'],
 				$keyValue->getContent($phpcsFile),
-				sprintf('raw content not same: keyValue %s', $i)
+				sprintf('raw content not same: keyValue %s', $i),
 			);
 			// build expected normalized content... this works for our example data
 			$contentNormalizedExpect = trim($keyValueInfoExpect['content']);
@@ -82,7 +82,7 @@ class ArrayHelperTest extends TestCase
 			self::assertSame(
 				$contentNormalizedExpect,
 				$keyValue->getContent($phpcsFile, true),
-				sprintf('normalized content not same: keyValue %s', $i)
+				sprintf('normalized content not same: keyValue %s', $i),
 			);
 		}
 	}

@@ -18,7 +18,7 @@ class EmptyLinesAroundClassBracesSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/classBracesNoEmptyLineAfterOpeningBrace.php',
 			[],
-			[EmptyLinesAroundClassBracesSniff::CODE_NO_EMPTY_LINE_AFTER_OPENING_BRACE]
+			[EmptyLinesAroundClassBracesSniff::CODE_NO_EMPTY_LINE_AFTER_OPENING_BRACE],
 		);
 
 		self::assertSame(1, $report->getErrorCount());
@@ -33,7 +33,7 @@ class EmptyLinesAroundClassBracesSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/classBracesMultipleEmptyLinesAfterOpeningBrace.php',
 			[],
-			[EmptyLinesAroundClassBracesSniff::CODE_MULTIPLE_EMPTY_LINES_AFTER_OPENING_BRACE]
+			[EmptyLinesAroundClassBracesSniff::CODE_MULTIPLE_EMPTY_LINES_AFTER_OPENING_BRACE],
 		);
 
 		self::assertSame(1, $report->getErrorCount());
@@ -48,7 +48,7 @@ class EmptyLinesAroundClassBracesSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/classBracesNoEmptyLineBeforeClosingBrace.php',
 			[],
-			[EmptyLinesAroundClassBracesSniff::CODE_NO_EMPTY_LINE_BEFORE_CLOSING_BRACE]
+			[EmptyLinesAroundClassBracesSniff::CODE_NO_EMPTY_LINE_BEFORE_CLOSING_BRACE],
 		);
 
 		self::assertSame(1, $report->getErrorCount());
@@ -63,7 +63,7 @@ class EmptyLinesAroundClassBracesSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/classBracesMultipleEmptyLinesBeforeClosingBrace.php',
 			[],
-			[EmptyLinesAroundClassBracesSniff::CODE_MULTIPLE_EMPTY_LINES_BEFORE_CLOSING_BRACE]
+			[EmptyLinesAroundClassBracesSniff::CODE_MULTIPLE_EMPTY_LINES_BEFORE_CLOSING_BRACE],
 		);
 
 		self::assertSame(1, $report->getErrorCount());
@@ -88,7 +88,7 @@ class EmptyLinesAroundClassBracesSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/classBracesOneEmptyLineAfterOpeningBraceWithZeroExpected.php',
 			['linesCountAfterOpeningBrace' => 0],
-			[EmptyLinesAroundClassBracesSniff::CODE_INCORRECT_EMPTY_LINES_AFTER_OPENING_BRACE]
+			[EmptyLinesAroundClassBracesSniff::CODE_INCORRECT_EMPTY_LINES_AFTER_OPENING_BRACE],
 		);
 
 		self::assertSame(1, $report->getErrorCount());
@@ -103,7 +103,7 @@ class EmptyLinesAroundClassBracesSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/classBracesOneEmptyLineBeforeClosingBraceWithZeroExpected.php',
 			['linesCountBeforeClosingBrace' => 0],
-			[EmptyLinesAroundClassBracesSniff::CODE_INCORRECT_EMPTY_LINES_BEFORE_CLOSING_BRACE]
+			[EmptyLinesAroundClassBracesSniff::CODE_INCORRECT_EMPTY_LINES_BEFORE_CLOSING_BRACE],
 		);
 
 		self::assertSame(1, $report->getErrorCount());
@@ -128,7 +128,7 @@ class EmptyLinesAroundClassBracesSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/classBracesOneEmptyLineAfterOpeningBraceWithTwoExpected.php',
 			['linesCountAfterOpeningBrace' => 2],
-			[EmptyLinesAroundClassBracesSniff::CODE_INCORRECT_EMPTY_LINES_AFTER_OPENING_BRACE]
+			[EmptyLinesAroundClassBracesSniff::CODE_INCORRECT_EMPTY_LINES_AFTER_OPENING_BRACE],
 		);
 
 		self::assertSame(1, $report->getErrorCount());
@@ -143,7 +143,7 @@ class EmptyLinesAroundClassBracesSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/classBracesOneEmptyLineBeforeClosingBraceWithTwoExpected.php',
 			['linesCountBeforeClosingBrace' => 2],
-			[EmptyLinesAroundClassBracesSniff::CODE_INCORRECT_EMPTY_LINES_BEFORE_CLOSING_BRACE]
+			[EmptyLinesAroundClassBracesSniff::CODE_INCORRECT_EMPTY_LINES_BEFORE_CLOSING_BRACE],
 		);
 
 		self::assertSame(1, $report->getErrorCount());

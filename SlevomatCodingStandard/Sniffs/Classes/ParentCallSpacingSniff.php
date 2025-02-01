@@ -25,17 +25,13 @@ use const T_YIELD_FROM;
 class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 {
 
-	/** @var int */
-	public $linesCountBefore = 1;
+	public int $linesCountBefore = 1;
 
-	/** @var int */
-	public $linesCountBeforeFirst = 0;
+	public int $linesCountBeforeFirst = 0;
 
-	/** @var int */
-	public $linesCountAfter = 1;
+	public int $linesCountAfter = 1;
 
-	/** @var int */
-	public $linesCountAfterLast = 0;
+	public int $linesCountAfterLast = 0;
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
@@ -63,7 +59,7 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 			Tokens::$assignmentTokens,
 			Tokens::$equalityTokens,
 			Tokens::$booleanOperators,
-			[T_RETURN, T_YIELD, T_YIELD_FROM, T_COLON, T_STRING_CONCAT, T_INLINE_THEN, T_INLINE_ELSE, T_COALESCE, T_MATCH_ARROW]
+			[T_RETURN, T_YIELD, T_YIELD_FROM, T_COLON, T_STRING_CONCAT, T_INLINE_THEN, T_INLINE_ELSE, T_COALESCE, T_MATCH_ARROW],
 		);
 		if (in_array($tokens[$previousPointer]['code'], $tokensToIgnore, true)) {
 			return;

@@ -22,23 +22,21 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 	public const CODE_REQUIRED_MULTI_LINE_SIGNATURE = 'RequiredMultiLineSignature';
 	private const DEFAULT_MIN_LINE_LENGTH = 121;
 
-	/** @var int|null */
-	public $minLineLength = null;
+	public ?int $minLineLength = null;
 
-	/** @var int|null */
-	public $minParametersCount = null;
+	public ?int $minParametersCount = null;
 
 	/** @var list<string> */
-	public $includedMethodPatterns = [];
+	public array $includedMethodPatterns = [];
 
 	/** @var list<string>|null */
-	public $includedMethodNormalizedPatterns;
+	public ?array $includedMethodNormalizedPatterns = null;
 
 	/** @var list<string> */
-	public $excludedMethodPatterns = [];
+	public array $excludedMethodPatterns = [];
 
 	/** @var list<string>|null */
-	public $excludedMethodNormalizedPatterns;
+	public ?array $excludedMethodNormalizedPatterns = null;
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
@@ -117,7 +115,7 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 				$phpcsFile,
 				T_COMMA,
 				$parameter['token'] - 1,
-				$tokens[$methodPointer]['parenthesis_opener']
+				$tokens[$methodPointer]['parenthesis_opener'],
 			);
 			if ($pointerBeforeParameter === null) {
 				$pointerBeforeParameter = $tokens[$methodPointer]['parenthesis_opener'];

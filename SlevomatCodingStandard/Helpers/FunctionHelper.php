@@ -108,7 +108,7 @@ class FunctionHelper
 			$phpcsFile,
 			T_STRING,
 			$functionPointer + 1,
-			$tokens[$functionPointer]['parenthesis_opener']
+			$tokens[$functionPointer]['parenthesis_opener'],
 		)]['content'];
 	}
 
@@ -120,7 +120,7 @@ class FunctionHelper
 		if (self::isMethod($phpcsFile, $functionPointer)) {
 			foreach (array_reverse(
 				$phpcsFile->getTokens()[$functionPointer]['conditions'],
-				true
+				true,
 			) as $conditionPointer => $conditionTokenCode) {
 				if ($conditionTokenCode === T_ANON_CLASS) {
 					return sprintf('class@anonymous::%s', $name);
@@ -131,7 +131,7 @@ class FunctionHelper
 						'%s%s::%s',
 						NamespaceHelper::NAMESPACE_SEPARATOR,
 						ClassHelper::getName($phpcsFile, $conditionPointer),
-						$name
+						$name,
 					);
 					break;
 				}
@@ -216,7 +216,7 @@ class FunctionHelper
 			$pointerBeforeVariable = TokenHelper::findPreviousExcluding(
 				$phpcsFile,
 				array_merge(TokenHelper::$ineffectiveTokenCodes, [T_BITWISE_AND, T_ELLIPSIS]),
-				$i - 1
+				$i - 1,
 			);
 
 			if (!in_array($tokens[$pointerBeforeVariable]['code'], TokenHelper::getTypeHintTokenCodes(), true)) {
@@ -456,15 +456,11 @@ class FunctionHelper
 		$previousFunctionPointer = 0;
 
 		return array_map(
-			static function (int $functionPointer) use ($phpcsFile): string {
-				return self::getName($phpcsFile, $functionPointer);
-			},
+			static fn (int $functionPointer): string => self::getName($phpcsFile, $functionPointer),
 			array_values(array_filter(
 				iterator_to_array(self::getAllFunctionOrMethodPointers($phpcsFile, $previousFunctionPointer)),
-				static function (int $functionOrMethodPointer) use ($phpcsFile): bool {
-					return !self::isMethod($phpcsFile, $functionOrMethodPointer);
-				}
-			))
+				static fn (int $functionOrMethodPointer): bool => !self::isMethod($phpcsFile, $functionOrMethodPointer),
+			)),
 		);
 	}
 

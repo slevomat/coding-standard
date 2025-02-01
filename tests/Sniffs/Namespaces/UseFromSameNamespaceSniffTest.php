@@ -38,7 +38,7 @@ class UseFromSameNamespaceSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/fixableUseFromSameNamespace.php',
 			[],
-			[UseFromSameNamespaceSniff::CODE_USE_FROM_SAME_NAMESPACE]
+			[UseFromSameNamespaceSniff::CODE_USE_FROM_SAME_NAMESPACE],
 		);
 		self::assertAllFixedInFile($report);
 	}

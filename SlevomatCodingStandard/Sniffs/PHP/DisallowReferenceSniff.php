@@ -60,7 +60,7 @@ class DisallowReferenceSniff implements Sniff
 					$phpcsFile->addError(
 						'Passing by reference is disallowed.',
 						$referencePointer,
-						self::CODE_DISALLOWED_PASSING_BY_REFERENCE
+						self::CODE_DISALLOWED_PASSING_BY_REFERENCE,
 					);
 					return;
 				}
@@ -74,7 +74,7 @@ class DisallowReferenceSniff implements Sniff
 				$phpcsFile->addError(
 					'Inheriting variable by reference is disallowed.',
 					$referencePointer,
-					self::CODE_DISALLOWED_INHERITING_VARIABLE_BY_REFERENCE
+					self::CODE_DISALLOWED_INHERITING_VARIABLE_BY_REFERENCE,
 				);
 				return;
 			}

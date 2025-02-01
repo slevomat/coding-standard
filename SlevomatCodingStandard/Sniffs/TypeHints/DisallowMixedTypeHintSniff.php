@@ -43,7 +43,7 @@ class DisallowMixedTypeHintSniff implements Sniff
 		if (SuppressHelper::isSniffSuppressed(
 			$phpcsFile,
 			$docCommentOpenPointer,
-			$this->getSniffName(self::CODE_DISALLOWED_MIXED_TYPE_HINT)
+			$this->getSniffName(self::CODE_DISALLOWED_MIXED_TYPE_HINT),
 		)) {
 			return;
 		}
@@ -68,7 +68,7 @@ class DisallowMixedTypeHintSniff implements Sniff
 				$phpcsFile->addError(
 					'Usage of "mixed" type hint is disallowed.',
 					$annotation->getStartPointer(),
-					self::CODE_DISALLOWED_MIXED_TYPE_HINT
+					self::CODE_DISALLOWED_MIXED_TYPE_HINT,
 				);
 			}
 		}
@@ -89,10 +89,8 @@ class DisallowMixedTypeHintSniff implements Sniff
 		}
 
 		$attributeNames = array_map(
-			static function (Attribute $name): string {
-				return $name->getName();
-			},
-			AttributeHelper::getAttributes($phpcsFile, $nextPointer)
+			static fn (Attribute $name): string => $name->getName(),
+			AttributeHelper::getAttributes($phpcsFile, $nextPointer),
 		);
 
 		return in_array('Override', $attributeNames, true) || in_array('\Override', $attributeNames, true);

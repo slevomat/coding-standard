@@ -30,7 +30,7 @@ class RequireYodaComparisonSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/fixableRequireYodaComparisons.php',
 			[],
-			[RequireYodaComparisonSniff::CODE_REQUIRED_YODA_COMPARISON]
+			[RequireYodaComparisonSniff::CODE_REQUIRED_YODA_COMPARISON],
 		);
 		self::assertAllFixedInFile($report);
 	}

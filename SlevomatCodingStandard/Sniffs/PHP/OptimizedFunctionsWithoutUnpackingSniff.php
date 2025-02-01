@@ -92,7 +92,7 @@ class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
 		$nextTokenAfterSeparatorPointer = TokenHelper::findNextEffective(
 			$phpcsFile,
 			$lastArgumentSeparatorPointer + 1,
-			$closeBracketPointer
+			$closeBracketPointer,
 		);
 
 		if ($tokens[$nextTokenAfterSeparatorPointer]['code'] !== T_ELLIPSIS) {
@@ -107,7 +107,7 @@ class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
 		$phpcsFile->addError(
 			sprintf('Function %s is specialized by PHP and should not use argument unpacking.', $invokedName),
 			$nextTokenAfterSeparatorPointer,
-			self::CODE_UNPACKING_USED
+			self::CODE_UNPACKING_USED,
 		);
 	}
 

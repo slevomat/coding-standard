@@ -45,7 +45,7 @@ class DisallowStringExpressionPropertyFetchSniff implements Sniff
 			$phpcsFile,
 			T_CONSTANT_ENCAPSED_STRING,
 			$curlyBracketOpenerPointer + 1,
-			$curlyBracketCloserPointer
+			$curlyBracketCloserPointer,
 		) !== null) {
 			return;
 		}
@@ -59,7 +59,7 @@ class DisallowStringExpressionPropertyFetchSniff implements Sniff
 		if (preg_match(
 			'~^(["\'])([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\1$~',
 			$tokens[$curlyBracketOpenerPointer + 1]['content'],
-			$matches
+			$matches,
 		) !== 1) {
 			return;
 		}
@@ -67,7 +67,7 @@ class DisallowStringExpressionPropertyFetchSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'String expression property fetch is disallowed, use identifier property fetch.',
 			$curlyBracketOpenerPointer,
-			self::CODE_DISALLOWED_STRING_EXPRESSION_PROPERTY_FETCH
+			self::CODE_DISALLOWED_STRING_EXPRESSION_PROPERTY_FETCH,
 		);
 
 		if (!$fix) {

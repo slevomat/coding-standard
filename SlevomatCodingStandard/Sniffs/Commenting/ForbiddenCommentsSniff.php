@@ -20,7 +20,7 @@ class ForbiddenCommentsSniff implements Sniff
 	public const CODE_COMMENT_FORBIDDEN = 'CommentForbidden';
 
 	/** @var list<string> */
-	public $forbiddenCommentPatterns = [];
+	public array $forbiddenCommentPatterns = [];
 
 	/**
 	 * @return array<int, (int|string)>
@@ -59,7 +59,7 @@ class ForbiddenCommentsSniff implements Sniff
 				$fix = $phpcsFile->addFixableError(
 					sprintf('Documentation comment contains forbidden comment "%s".', $comment->getContent()),
 					$comment->getPointer(),
-					self::CODE_COMMENT_FORBIDDEN
+					self::CODE_COMMENT_FORBIDDEN,
 				);
 
 				if (!$fix) {
@@ -95,7 +95,7 @@ class ForbiddenCommentsSniff implements Sniff
 						'',
 						$tokens[$pointerBeforeDocComment]['content'],
 						-1,
-						$replacedCount
+						$replacedCount,
 					);
 					if ($replacedCount !== 0) {
 						$phpcsFile->fixer->replaceToken($pointerBeforeDocComment, $contentBeforeWithoutSpaces);
@@ -104,7 +104,7 @@ class ForbiddenCommentsSniff implements Sniff
 					FixerHelper::removeBetweenIncluding(
 						$phpcsFile,
 						$docCommentOpenPointer,
-						$tokens[$docCommentOpenPointer]['comment_closer']
+						$tokens[$docCommentOpenPointer]['comment_closer'],
 					);
 
 					$pointerAfterDocComment = $tokens[$docCommentOpenPointer]['comment_closer'] + 1;
@@ -114,7 +114,7 @@ class ForbiddenCommentsSniff implements Sniff
 							'',
 							$tokens[$pointerAfterDocComment]['content'],
 							-1,
-							$replacedCount
+							$replacedCount,
 						);
 						if ($replacedCount !== 0) {
 							$phpcsFile->fixer->replaceToken($pointerAfterDocComment, $contentAfterWithoutSpaces);

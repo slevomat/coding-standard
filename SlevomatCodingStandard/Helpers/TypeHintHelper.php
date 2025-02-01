@@ -238,7 +238,7 @@ class TypeHintHelper
 			if (self::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $typeHintParts[$i]) !== self::getFullyQualifiedTypeHint(
 				$phpcsFile,
 				$functionPointer,
-				$typeHintInAnnotationParts[$i]
+				$typeHintInAnnotationParts[$i],
 			)) {
 				return false;
 			}
@@ -252,7 +252,7 @@ class TypeHintHelper
 		$previousPointer = TokenHelper::findPreviousExcluding(
 			$phpcsFile,
 			array_merge([T_WHITESPACE], TokenHelper::getTypeHintTokenCodes()),
-			$endPointer - 1
+			$endPointer - 1,
 		);
 		return TokenHelper::findNextNonWhitespace($phpcsFile, $previousPointer + 1);
 	}
@@ -404,9 +404,7 @@ class TypeHintHelper
 		$convertedHints = array_unique($convertedHints);
 
 		if (count($convertedHints) > 1) {
-			$convertedHints = array_map(static function (string $part): string {
-				return self::isVoidTypeHint($part) ? 'null' : $part;
-			}, $convertedHints);
+			$convertedHints = array_map(static fn (string $part): string => self::isVoidTypeHint($part) ? 'null' : $part, $convertedHints);
 		}
 
 		sort($convertedHints);

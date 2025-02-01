@@ -45,7 +45,7 @@ class RequireSelfReferenceSniff implements Sniff
 
 		$referencedNames = array_merge(
 			ReferencedNameHelper::getAllReferencedNames($phpcsFile, $openTagPointer),
-			ReferencedNameHelper::getAllReferencedNamesInAttributes($phpcsFile, $openTagPointer)
+			ReferencedNameHelper::getAllReferencedNamesInAttributes($phpcsFile, $openTagPointer),
 		);
 
 		foreach ($referencedNames as $referencedName) {
@@ -72,7 +72,7 @@ class RequireSelfReferenceSniff implements Sniff
 			$resolvedName = NamespaceHelper::resolveClassName(
 				$phpcsFile,
 				$referencedName->getNameAsReferencedInFile(),
-				$referencedName->getStartPointer()
+				$referencedName->getStartPointer(),
 			);
 
 			if ($className !== $resolvedName) {
@@ -82,7 +82,7 @@ class RequireSelfReferenceSniff implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				'"self" for local reference is required.',
 				$referencedName->getStartPointer(),
-				self::CODE_REQUIRED_SELF_REFERENCE
+				self::CODE_REQUIRED_SELF_REFERENCE,
 			);
 			if (!$fix) {
 				continue;
@@ -96,12 +96,12 @@ class RequireSelfReferenceSniff implements Sniff
 				$attributeContent = TokenHelper::getContent(
 					$phpcsFile,
 					$referencedName->getStartPointer(),
-					$referencedName->getEndPointer()
+					$referencedName->getEndPointer(),
 				);
 				$fixedAttributeContent = preg_replace(
 					'~(?<=\W)' . preg_quote($referencedName->getNameAsReferencedInFile(), '~') . '(?=\W)~',
 					'self',
-					$attributeContent
+					$attributeContent,
 				);
 				$phpcsFile->fixer->replaceToken($referencedName->getStartPointer(), $fixedAttributeContent);
 

@@ -23,31 +23,31 @@ class RequireSingleLineConditionSniffTest extends TestCase
 			$report,
 			4,
 			RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION,
-			'Condition of "if" should be placed on a single line.'
+			'Condition of "if" should be placed on a single line.',
 		);
 		self::assertSniffError(
 			$report,
 			9,
 			RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION,
-			'Condition of "elseif" should be placed on a single line.'
+			'Condition of "elseif" should be placed on a single line.',
 		);
 		self::assertSniffError(
 			$report,
 			16,
 			RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION,
-			'Condition of "while" should be placed on a single line.'
+			'Condition of "while" should be placed on a single line.',
 		);
 		self::assertSniffError(
 			$report,
 			25,
 			RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION,
-			'Condition of "do-while" should be placed on a single line.'
+			'Condition of "do-while" should be placed on a single line.',
 		);
 		self::assertSniffError(
 			$report,
 			30,
 			RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION,
-			'Condition of "if" should be placed on a single line.'
+			'Condition of "if" should be placed on a single line.',
 		);
 
 		self::assertAllFixedInFile($report);

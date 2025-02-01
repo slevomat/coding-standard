@@ -14,7 +14,7 @@ class ForbiddenCommentsSniffTest extends TestCase
 
 		self::checkFile(
 			__DIR__ . '/data/noForbiddenComments.php',
-			['forbiddenCommentPatterns' => ['invalidPattern']]
+			['forbiddenCommentPatterns' => ['invalidPattern']],
 		);
 	}
 

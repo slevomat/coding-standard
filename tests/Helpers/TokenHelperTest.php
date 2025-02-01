@@ -122,7 +122,7 @@ class TokenHelperTest extends TestCase
 			T_OPEN_TAG,
 			1,
 			$phpcsFile,
-			TokenHelper::findPreviousEffective($phpcsFile, TokenHelper::findNext($phpcsFile, T_CLASS, 0) - 1)
+			TokenHelper::findPreviousEffective($phpcsFile, TokenHelper::findNext($phpcsFile, T_CLASS, 0) - 1),
 		);
 	}
 
@@ -133,7 +133,7 @@ class TokenHelperTest extends TestCase
 			T_OPEN_TAG,
 			1,
 			$phpcsFile,
-			TokenHelper::findPreviousEffective($phpcsFile, TokenHelper::findNext($phpcsFile, T_CLASS, 0) - 1)
+			TokenHelper::findPreviousEffective($phpcsFile, TokenHelper::findNext($phpcsFile, T_CLASS, 0) - 1),
 		);
 	}
 
@@ -265,7 +265,7 @@ class TokenHelperTest extends TestCase
 			T_DOC_COMMENT_WHITESPACE,
 			4,
 			$phpcsFile,
-			TokenHelper::findFirstTokenOnNextLine($phpcsFile, $docBlockTokenPointer)
+			TokenHelper::findFirstTokenOnNextLine($phpcsFile, $docBlockTokenPointer),
 		);
 	}
 

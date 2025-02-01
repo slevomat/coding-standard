@@ -27,8 +27,7 @@ class ReferenceSpacingSniff implements Sniff
 
 	public const CODE_INCORRECT_SPACES_AFTER_REFERENCE = 'IncorrectSpacesAfterReference';
 
-	/** @var int */
-	public $spacesCountAfterReference = 0;
+	public int $spacesCountAfterReference = 0;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -67,7 +66,7 @@ class ReferenceSpacingSniff implements Sniff
 			: sprintf(
 				'There must be exactly %d whitespace%s after reference.',
 				$this->spacesCountAfterReference,
-				$this->spacesCountAfterReference !== 1 ? 's' : ''
+				$this->spacesCountAfterReference !== 1 ? 's' : '',
 			);
 
 		$fix = $phpcsFile->addFixableError($errorMessage, $referencePointer, self::CODE_INCORRECT_SPACES_AFTER_REFERENCE);

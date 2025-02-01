@@ -24,49 +24,49 @@ class AnnotationNameSniffTest extends TestCase
 			$report,
 			4,
 			AnnotationNameSniff::CODE_ANNOTATION_NAME_INCORRECT,
-			'Annotation name is incorrect. Expected @deprecated, found @Deprecated.'
+			'Annotation name is incorrect. Expected @deprecated, found @Deprecated.',
 		);
 		self::assertSniffError(
 			$report,
 			10,
 			AnnotationNameSniff::CODE_ANNOTATION_NAME_INCORRECT,
-			'Annotation name is incorrect. Expected @param, found @pArAm.'
+			'Annotation name is incorrect. Expected @param, found @pArAm.',
 		);
 		self::assertSniffError(
 			$report,
 			11,
 			AnnotationNameSniff::CODE_ANNOTATION_NAME_INCORRECT,
-			'Annotation name is incorrect. Expected @phpstan-return, found @PHPSTAN-return.'
+			'Annotation name is incorrect. Expected @phpstan-return, found @PHPSTAN-return.',
 		);
 		self::assertSniffError(
 			$report,
 			18,
 			AnnotationNameSniff::CODE_ANNOTATION_NAME_INCORRECT,
-			'Annotation name is incorrect. Expected @inheritDoc, found @inheritdoc.'
+			'Annotation name is incorrect. Expected @inheritDoc, found @inheritdoc.',
 		);
 		self::assertSniffError(
 			$report,
 			17,
 			AnnotationNameSniff::CODE_ANNOTATION_NAME_INCORRECT,
-			'Annotation name is incorrect. Expected @inheritDoc, found @inheritdoc.'
+			'Annotation name is incorrect. Expected @inheritDoc, found @inheritdoc.',
 		);
 		self::assertSniffError(
 			$report,
 			17,
 			AnnotationNameSniff::CODE_ANNOTATION_NAME_INCORRECT,
-			'Annotation name is incorrect. Expected @inheritDoc, found @INHERITDOC.'
+			'Annotation name is incorrect. Expected @inheritDoc, found @INHERITDOC.',
 		);
 		self::assertSniffError(
 			$report,
 			26,
 			AnnotationNameSniff::CODE_ANNOTATION_NAME_INCORRECT,
-			'Annotation name is incorrect. Expected @inheritDoc, found @inheritdoc.'
+			'Annotation name is incorrect. Expected @inheritDoc, found @inheritdoc.',
 		);
 		self::assertSniffError(
 			$report,
 			31,
 			AnnotationNameSniff::CODE_ANNOTATION_NAME_INCORRECT,
-			'Annotation name is incorrect. Expected @inheritDoc, found @inheritdoc.'
+			'Annotation name is incorrect. Expected @inheritDoc, found @inheritdoc.',
 		);
 
 		self::assertAllFixedInFile($report);
@@ -103,25 +103,25 @@ class AnnotationNameSniffTest extends TestCase
 			$report,
 			4,
 			AnnotationNameSniff::CODE_ANNOTATION_NAME_INCORRECT,
-			'Annotation name is incorrect. Expected @Deprecated, found @deprecated.'
+			'Annotation name is incorrect. Expected @Deprecated, found @deprecated.',
 		);
 		self::assertSniffError(
 			$report,
 			10,
 			AnnotationNameSniff::CODE_ANNOTATION_NAME_INCORRECT,
-			'Annotation name is incorrect. Expected @PARAM, found @param.'
+			'Annotation name is incorrect. Expected @PARAM, found @param.',
 		);
 		self::assertSniffError(
 			$report,
 			11,
 			AnnotationNameSniff::CODE_ANNOTATION_NAME_INCORRECT,
-			'Annotation name is incorrect. Expected @PHPSTAN-RETURN, found @phpstan-return.'
+			'Annotation name is incorrect. Expected @PHPSTAN-RETURN, found @phpstan-return.',
 		);
 		self::assertSniffError(
 			$report,
 			18,
 			AnnotationNameSniff::CODE_ANNOTATION_NAME_INCORRECT,
-			'Annotation name is incorrect. Expected @inheritdoc, found @inheritDoc.'
+			'Annotation name is incorrect. Expected @inheritdoc, found @inheritDoc.',
 		);
 
 		self::assertAllFixedInFile($report);

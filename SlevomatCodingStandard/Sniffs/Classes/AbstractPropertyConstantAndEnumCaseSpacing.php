@@ -33,17 +33,13 @@ use const T_VARIABLE;
 abstract class AbstractPropertyConstantAndEnumCaseSpacing implements Sniff
 {
 
-	/** @var int */
-	public $minLinesCountBeforeWithComment = 1;
+	public int $minLinesCountBeforeWithComment = 1;
 
-	/** @var int */
-	public $maxLinesCountBeforeWithComment = 1;
+	public int $maxLinesCountBeforeWithComment = 1;
 
-	/** @var int */
-	public $minLinesCountBeforeWithoutComment = 0;
+	public int $minLinesCountBeforeWithoutComment = 0;
 
-	/** @var int */
-	public $maxLinesCountBeforeWithoutComment = 1;
+	public int $maxLinesCountBeforeWithoutComment = 1;
 
 	abstract protected function isNextMemberValid(File $phpcsFile, int $pointer): bool;
 
@@ -73,7 +69,7 @@ abstract class AbstractPropertyConstantAndEnumCaseSpacing implements Sniff
 		$nextFunctionPointer = TokenHelper::findNext(
 			$phpcsFile,
 			[T_FUNCTION, T_ENUM_CASE, T_CONST, T_VARIABLE, T_USE],
-			$firstOnLinePointer + 1
+			$firstOnLinePointer + 1,
 		);
 		if (
 			$nextFunctionPointer === null

@@ -127,7 +127,7 @@ class TypeHintHelperTest extends TestCase
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
 		self::assertSame(
 			'void',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, (string) $returnAnnotation->getValue()->type)
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, (string) $returnAnnotation->getValue()->type),
 		);
 	}
 
@@ -139,7 +139,7 @@ class TypeHintHelperTest extends TestCase
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 		self::assertSame(
 			'\FooNamespace\FooClass',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint())
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()),
 		);
 	}
 
@@ -153,7 +153,7 @@ class TypeHintHelperTest extends TestCase
 
 		self::assertSame(
 			'\Doctrine\Common\Collections\ArrayCollection',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, (string) $parameterAnnotation->getValue()->type)
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, (string) $parameterAnnotation->getValue()->type),
 		);
 	}
 
@@ -165,7 +165,7 @@ class TypeHintHelperTest extends TestCase
 		$parameterTypeHint = FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer)['$parameter'];
 		self::assertSame(
 			'\Doctrine\Common\Collections\ArrayCollection',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint())
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()),
 		);
 	}
 
@@ -178,7 +178,7 @@ class TypeHintHelperTest extends TestCase
 
 		self::assertSame(
 			'\FooNamespace\FooClass',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, (string) $returnAnnotation->getValue()->type)
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, (string) $returnAnnotation->getValue()->type),
 		);
 	}
 
@@ -201,7 +201,7 @@ class TypeHintHelperTest extends TestCase
 
 		self::assertSame(
 			'\Doctrine\ORM\Mapping\Id',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, (string) $parameterAnnotation->getValue()->type)
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, (string) $parameterAnnotation->getValue()->type),
 		);
 	}
 
@@ -213,7 +213,7 @@ class TypeHintHelperTest extends TestCase
 		$parameterTypeHint = FunctionHelper::getParametersTypeHints($phpcsFile, $methodPointer)['$parameter'];
 		self::assertSame(
 			'\Doctrine\ORM\Mapping\Id',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint->getTypeHint())
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint->getTypeHint()),
 		);
 	}
 
@@ -225,7 +225,7 @@ class TypeHintHelperTest extends TestCase
 		$returnAnnotation = FunctionHelper::findReturnAnnotation($phpcsFile, $functionPointer);
 		self::assertSame(
 			'void',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, (string) $returnAnnotation->getValue()->type)
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, (string) $returnAnnotation->getValue()->type),
 		);
 	}
 
@@ -237,7 +237,7 @@ class TypeHintHelperTest extends TestCase
 		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $functionPointer);
 		self::assertSame(
 			'\FooClass',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint())
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $returnTypeHint->getTypeHint()),
 		);
 	}
 
@@ -251,7 +251,7 @@ class TypeHintHelperTest extends TestCase
 
 		self::assertSame(
 			'\Doctrine\Common\Collections\ArrayCollection',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, (string) $parameterAnnotation->getValue()->type)
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, (string) $parameterAnnotation->getValue()->type),
 		);
 	}
 
@@ -263,7 +263,7 @@ class TypeHintHelperTest extends TestCase
 		$parameterTypeHint = FunctionHelper::getParametersTypeHints($phpcsFile, $functionPointer)['$parameter'];
 		self::assertSame(
 			'\Doctrine\Common\Collections\ArrayCollection',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint())
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $functionPointer, $parameterTypeHint->getTypeHint()),
 		);
 	}
 
@@ -276,7 +276,7 @@ class TypeHintHelperTest extends TestCase
 
 		self::assertSame(
 			'\FooClass',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, (string) $returnAnnotation->getValue()->type)
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, (string) $returnAnnotation->getValue()->type),
 		);
 	}
 
@@ -299,7 +299,7 @@ class TypeHintHelperTest extends TestCase
 
 		self::assertSame(
 			'\Doctrine\ORM\Mapping\Id',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, (string) $parameterAnnotation->getValue()->type)
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, (string) $parameterAnnotation->getValue()->type),
 		);
 	}
 
@@ -311,7 +311,7 @@ class TypeHintHelperTest extends TestCase
 		$parameterTypeHint = FunctionHelper::getParametersTypeHints($phpcsFile, $methodPointer)['$parameter'];
 		self::assertSame(
 			'\Doctrine\ORM\Mapping\Id',
-			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint->getTypeHint())
+			TypeHintHelper::getFullyQualifiedTypeHint($phpcsFile, $methodPointer, $parameterTypeHint->getTypeHint()),
 		);
 	}
 
@@ -396,8 +396,8 @@ class TypeHintHelperTest extends TestCase
 				$phpcsFile,
 				$functionPointer,
 				$returnTypeHint->getTypeHint(),
-				AnnotationTypeHelper::print($returnAnnotation->getValue()->type)
-			)
+				AnnotationTypeHelper::print($returnAnnotation->getValue()->type),
+			),
 		);
 	}
 

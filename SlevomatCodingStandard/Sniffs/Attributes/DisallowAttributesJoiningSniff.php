@@ -42,7 +42,7 @@ class DisallowAttributesJoiningSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			sprintf('%d attributes are joined.', $attributeCount),
 			$attributeOpenerPointer,
-			self::CODE_DISALLOWED_ATTRIBUTES_JOINING
+			self::CODE_DISALLOWED_ATTRIBUTES_JOINING,
 		);
 
 		if (!$fix) {

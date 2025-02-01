@@ -53,7 +53,7 @@ class TernaryOperatorHelper
 			$pointer = TokenHelper::findNext(
 				$phpcsFile,
 				[T_INLINE_ELSE, T_OPEN_PARENTHESIS, T_OPEN_SHORT_ARRAY, T_OPEN_SQUARE_BRACKET],
-				$pointer + 1
+				$pointer + 1,
 			);
 
 			if ($tokens[$pointer]['code'] === T_OPEN_PARENTHESIS) {
@@ -83,7 +83,7 @@ class TernaryOperatorHelper
 			$pointerBeforeCondition = TokenHelper::findPrevious(
 				$phpcsFile,
 				[T_EQUAL, T_DOUBLE_ARROW, T_COMMA, T_RETURN, T_THROW, T_CASE, T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO, T_OPEN_SQUARE_BRACKET, T_OPEN_SHORT_ARRAY, T_OPEN_PARENTHESIS],
-				$pointerBeforeCondition - 1
+				$pointerBeforeCondition - 1,
 			);
 
 			if (
@@ -116,7 +116,7 @@ class TernaryOperatorHelper
 			$pointerAfterInlineElseEnd = TokenHelper::findNext(
 				$phpcsFile,
 				[T_SEMICOLON, T_COLON, T_COMMA, T_DOUBLE_ARROW, T_CLOSE_PARENTHESIS, T_CLOSE_SHORT_ARRAY, T_CLOSE_SQUARE_BRACKET, T_COALESCE],
-				$pointerAfterInlineElseEnd + 1
+				$pointerAfterInlineElseEnd + 1,
 			);
 
 			if ($pointerAfterInlineElseEnd === null) {
@@ -136,7 +136,7 @@ class TernaryOperatorHelper
 					$phpcsFile,
 					[T_OPEN_PARENTHESIS, T_OPEN_SHORT_ARRAY],
 					$pointerAfterInlineElseEnd - 1,
-					$inlineThenPointer
+					$inlineThenPointer,
 				);
 
 				if ($previousPointer === null) {
@@ -162,7 +162,7 @@ class TernaryOperatorHelper
 					$phpcsFile,
 					T_OPEN_SHORT_ARRAY,
 					$pointerAfterInlineElseEnd - 1,
-					$inlineThenPointer
+					$inlineThenPointer,
 				);
 				if ($previousPointer === null) {
 					break;

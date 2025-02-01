@@ -32,11 +32,9 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 
 	public const CODE_REQUIRED_SINGLE_LINE_CALL = 'RequiredSingleLineCall';
 
-	/** @var int */
-	public $maxLineLength = 120;
+	public int $maxLineLength = 120;
 
-	/** @var bool */
-	public $ignoreWithComplexParameter = true;
+	public bool $ignoreWithComplexParameter = true;
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
@@ -67,7 +65,7 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 			$phpcsFile,
 			array_merge(TokenHelper::$inlineCommentTokenCodes, Tokens::$heredocTokens),
 			$parenthesisOpenerPointer + 1,
-			$parenthesisCloserPointer
+			$parenthesisCloserPointer,
 		) !== null) {
 			return;
 		}
@@ -88,7 +86,7 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 					$phpcsFile,
 					[T_CLOSURE, T_FN, T_OPEN_SHORT_ARRAY],
 					$parenthesisOpenerPointer + 1,
-					$parenthesisCloserPointer
+					$parenthesisCloserPointer,
 				) !== null
 			) {
 				return;
@@ -102,7 +100,7 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 					$phpcsFile,
 					$nameTokenCodes,
 					$callSearchStartPointer,
-					$parenthesisCloserPointer
+					$parenthesisCloserPointer,
 				);
 				if ($innerStringPointer === null) {
 					break;

@@ -128,7 +128,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 					'Foo\SomeError',
 				],
 				'ignoredNames' => $ignoredNames,
-			]
+			],
 		);
 		self::assertNoSniffError($report, 12);
 	}
@@ -143,7 +143,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			__DIR__ . '/data/shouldBeInUseStatement.php',
 			[
 				'ignoredNames' => $ignoredNames,
-			]
+			],
 		);
 		self::assertSniffError($report, 13, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Some\CommonException');
 		self::assertSniffError($report, 14, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Exception');
@@ -160,7 +160,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			__DIR__ . '/data/fullyQualifiedExtends.php',
 			[
 				'ignoredNames' => $ignoredNames,
-			]
+			],
 		);
 		self::assertSniffError($report, 3, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Lorem\Dolor');
 		self::assertNoSniffError($report, 8);
@@ -176,13 +176,13 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			__DIR__ . '/data/fullyQualifiedImplements.php',
 			[
 				'ignoredNames' => $ignoredNames,
-			]
+			],
 		);
 		self::assertSniffError(
 			$report,
 			3,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE,
-			'\SomeClass'
+			'\SomeClass',
 		);
 		self::assertSniffError($report, 3, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Some\OtherClass');
 		self::assertNoSniffError($report, 8);
@@ -199,7 +199,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			[
 				'allowFullyQualifiedExceptions' => true,
 				'ignoredNames' => $ignoredNames,
-			]
+			],
 		);
 		self::assertSame(1, $report->getErrorCount());
 		self::assertSniffError($report, 28, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Foo\BarError');
@@ -216,7 +216,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			[
 				'allowFullyQualifiedExceptions' => false,
 				'ignoredNames' => $ignoredNames,
-			]
+			],
 		);
 		self::assertSniffError($report, 16, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Some\Exception');
 		self::assertNoSniffError($report, 3);
@@ -233,7 +233,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			[
 				'allowFullyQualifiedExceptions' => false,
 				'ignoredNames' => $ignoredNames,
-			]
+			],
 		);
 		self::assertSniffError($report, 19, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Some\Other\Exception');
 		self::assertNoSniffError($report, 6);
@@ -250,31 +250,31 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			[
 				'allowFullyQualifiedExceptions' => false,
 				'ignoredNames' => $ignoredNames,
-			]
+			],
 		);
 		self::assertSniffError(
 			$report,
 			20,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'\Some\Other\DifferentException'
+			'\Some\Other\DifferentException',
 		);
 		self::assertSniffError(
 			$report,
 			22,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE,
-			'\Throwable'
+			'\Throwable',
 		);
 		self::assertSniffError(
 			$report,
 			24,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE,
-			'\Exception'
+			'\Exception',
 		);
 		self::assertSniffError(
 			$report,
 			26,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE,
-			'\TypeError'
+			'\TypeError',
 		);
 		self::assertSniffError($report, 28, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Foo\BarError');
 		self::assertNoSniffError($report, 7);
@@ -293,7 +293,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			[
 				'allowPartialUses' => false,
 				'ignoredNames' => $ignoredNames,
-			]
+			],
 		);
 		self::assertSniffError($report, 7, ReferenceUsedNamesOnlySniff::CODE_PARTIAL_USE, 'SomeFramework\ObjectPrototype');
 		self::assertNoSniffError($report, 6);
@@ -310,7 +310,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			[
 				'allowPartialUses' => true,
 				'ignoredNames' => $ignoredNames,
-			]
+			],
 		);
 		self::assertNoSniffError($report, 6);
 		self::assertNoSniffError($report, 7);
@@ -322,7 +322,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			__DIR__ . '/data/partialUsesWithoutNamespace.php',
 			[
 				'allowPartialUses' => true,
-			]
+			],
 		);
 
 		self::assertNoSniffErrorInFile($report);
@@ -341,7 +341,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 					'Foo',
 				],
 				'ignoredNames' => $ignoredNames,
-			]
+			],
 		);
 
 		self::assertSniffError($report, 3, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME, '\Foo\Bar');
@@ -359,7 +359,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			__DIR__ . '/data/multipleFullyQualifiedImplements.php',
 			[
 				'ignoredNames' => $ignoredNames,
-			]
+			],
 		);
 		self::assertSniffError($report, 3, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE, '\Bar');
 		self::assertSniffError($report, 3, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE, '\Baz');
@@ -376,7 +376,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			__DIR__ . '/data/referencingFullyQualifiedNameInFileWithoutNamespace.php',
 			[
 				'ignoredNames' => $ignoredNames,
-			]
+			],
 		);
 
 		self::assertSniffError($report, 3, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME_WITHOUT_NAMESPACE, '\Foo');
@@ -415,7 +415,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			[
 				'allowFullyQualifiedExceptions' => $allowFullyQualifiedExceptions,
 				'ignoredNames' => $ignoredNames,
-			]
+			],
 		);
 		self::assertNoSniffError($report, 3);
 		self::assertNoSniffError($report, 7);
@@ -427,7 +427,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/ignoredNames.php',
-			['allowFullyQualifiedExceptions' => true]
+			['allowFullyQualifiedExceptions' => true],
 		);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -463,7 +463,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			[
 				'allowFullyQualifiedExceptions' => $allowFullyQualifiedExceptions,
 				'ignoredNames' => $ignoredNames,
-			]
+			],
 		);
 		self::assertNoSniffError($report, 5);
 		self::assertNoSniffError($report, 9);
@@ -475,7 +475,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/ignoredNamesInNamespace.php',
-			['allowFullyQualifiedExceptions' => true]
+			['allowFullyQualifiedExceptions' => true],
 		);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -488,7 +488,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 				'allowFullyQualifiedGlobalClasses' => true,
 				'allowFullyQualifiedGlobalFunctions' => false,
 				'allowFullyQualifiedGlobalConstants' => false,
-			]
+			],
 		);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -501,7 +501,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 				'allowFullyQualifiedGlobalClasses' => false,
 				'allowFullyQualifiedGlobalFunctions' => true,
 				'allowFullyQualifiedGlobalConstants' => false,
-			]
+			],
 		);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -514,7 +514,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 				'allowFullyQualifiedGlobalClasses' => false,
 				'allowFullyQualifiedGlobalFunctions' => false,
 				'allowFullyQualifiedGlobalConstants' => true,
-			]
+			],
 		);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -534,7 +534,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/notFixableReferenceViaFullyQualifiedName.php',
 			[],
-			[ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME]
+			[ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME],
 		);
 		self::assertAllFixedInFile($report);
 	}
@@ -544,7 +544,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/partlyFixableReferenceViaFullyQualifiedName.php',
 			[],
-			[ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME]
+			[ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME],
 		);
 		self::assertAllFixedInFile($report);
 	}
@@ -565,7 +565,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/collidingClassNameDifferentNamespaces.php',
-			['allowFullyQualifiedNameForCollidingClasses' => true]
+			['allowFullyQualifiedNameForCollidingClasses' => true],
 		);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -574,7 +574,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/collidingClassNameDifferentNamespaces.php',
-			['allowFullyQualifiedNameForCollidingClasses' => false]
+			['allowFullyQualifiedNameForCollidingClasses' => false],
 		);
 
 		self::assertSame(2, $report->getErrorCount());
@@ -587,7 +587,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/collidingClassNameDifferentNamespacesMoreClasses.php',
-			['allowFullyQualifiedNameForCollidingClasses' => true]
+			['allowFullyQualifiedNameForCollidingClasses' => true],
 		);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -596,7 +596,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/collidingClassNameDifferentNamespacesMoreClasses.php',
-			['allowFullyQualifiedNameForCollidingClasses' => false]
+			['allowFullyQualifiedNameForCollidingClasses' => false],
 		);
 
 		self::assertSame(4, $report->getErrorCount());
@@ -617,7 +617,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 				'allowFullyQualifiedGlobalClasses' => true,
 				'allowFullyQualifiedGlobalFunctions' => true,
 				'allowFullyQualifiedGlobalConstants' => true,
-			]
+			],
 		);
 
 		self::assertAllFixedInFile($report);
@@ -627,7 +627,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/collidingClassNameExtends.php',
-			['allowFullyQualifiedNameForCollidingClasses' => true]
+			['allowFullyQualifiedNameForCollidingClasses' => true],
 		);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -636,7 +636,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/collidingClassNameExtends.php',
-			['allowFullyQualifiedNameForCollidingClasses' => false]
+			['allowFullyQualifiedNameForCollidingClasses' => false],
 		);
 		self::assertSame(1, $report->getErrorCount());
 		self::assertSniffError($report, 5, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
@@ -646,7 +646,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/collidingFullyQualifiedFunctionNames.php',
-			['allowFullyQualifiedNameForCollidingFunctions' => true]
+			['allowFullyQualifiedNameForCollidingFunctions' => true],
 		);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -655,7 +655,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/collidingFullyQualifiedFunctionNames.php',
-			['allowFullyQualifiedNameForCollidingFunctions' => false]
+			['allowFullyQualifiedNameForCollidingFunctions' => false],
 		);
 
 		self::assertSame(2, $report->getErrorCount());
@@ -668,7 +668,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/collidingFullyQualifiedConstantNames.php',
-			['allowFullyQualifiedNameForCollidingConstants' => true]
+			['allowFullyQualifiedNameForCollidingConstants' => true],
 		);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -677,7 +677,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/collidingFullyQualifiedConstantNames.php',
-			['allowFullyQualifiedNameForCollidingConstants' => false]
+			['allowFullyQualifiedNameForCollidingConstants' => false],
 		);
 
 		self::assertSame(2, $report->getErrorCount());
@@ -686,13 +686,13 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			$report,
 			14,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Constant \PHP_VERSION should not be referenced via a fully qualified name, but via a use statement.'
+			'Constant \PHP_VERSION should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			14,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Constant \A\SOMETHING should not be referenced via a fully qualified name, but via a use statement.'
+			'Constant \A\SOMETHING should not be referenced via a fully qualified name, but via a use statement.',
 		);
 	}
 
@@ -704,7 +704,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 				'allowFallbackGlobalFunctions' => false,
 				'allowFullyQualifiedNameForCollidingFunctions' => true,
 				'allowFullyQualifiedGlobalFunctions' => true,
-			]
+			],
 		);
 
 		self::assertSame(1, $report->getErrorCount());
@@ -719,7 +719,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 				'allowFallbackGlobalFunctions' => false,
 				'allowFullyQualifiedNameForCollidingFunctions' => true,
 				'allowFullyQualifiedGlobalFunctions' => false,
-			]
+			],
 		);
 
 		self::assertSame(1, $report->getErrorCount());
@@ -732,7 +732,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			__DIR__ . '/data/shouldBeInUseStatementSearchingInAnnotations.php',
 			[
 				'searchAnnotations' => false,
-			]
+			],
 		);
 
 		self::assertNoSniffErrorInFile($report);
@@ -749,7 +749,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 				'allowFullyQualifiedNameForCollidingClasses' => true,
 				'allowFullyQualifiedExceptions' => false,
 				'namespacesRequiredToUse' => ['Foo'],
-			]
+			],
 		);
 
 		self::assertSame(63, $report->getErrorCount());
@@ -758,187 +758,187 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			$report,
 			9,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			10,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			15,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			19,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			34,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\ArrayObject should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\ArrayObject should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			36,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Something should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Something should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			37,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Exception should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Exception should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			41,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Traversable should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Traversable should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			47,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Something should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Something should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			54,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Something should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Something should not be referenced via a fully qualified name, but via a use statement.',
 		);
 
 		self::assertSniffError(
 			$report,
 			43,
 			ReferenceUsedNamesOnlySniff::CODE_PARTIAL_USE,
-			'Partial use statements are not allowed, but referencing BlaBla\Foo found.'
+			'Partial use statements are not allowed, but referencing BlaBla\Foo found.',
 		);
 
 		self::assertSniffError(
 			$report,
 			70,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			75,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			78,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\ArrayObject should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\ArrayObject should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			81,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			84,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			87,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			90,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			93,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\ArrayObject should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\ArrayObject should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			93,
 			ReferenceUsedNamesOnlySniff::CODE_PARTIAL_USE,
-			'Partial use statements are not allowed, but referencing BlaBla\Foo found.'
+			'Partial use statements are not allowed, but referencing BlaBla\Foo found.',
 		);
 		self::assertSniffError(
 			$report,
 			93,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\ArrayObject should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\ArrayObject should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			96,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.',
 		);
 
 		self::assertSniffError(
 			$report,
 			105,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\ArrayObject should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\ArrayObject should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			105,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.',
 		);
 
 		self::assertSniffError(
 			$report,
 			114,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			117,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.',
 		);
 
 		self::assertSniffError(
 			$report,
 			121,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			122,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\DateTime should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			122,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\ArrayObject should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\ArrayObject should not be referenced via a fully qualified name, but via a use statement.',
 		);
 
 		self::assertSniffError(
 			$report,
 			132,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Test\Bla\Whatever should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Test\Bla\Whatever should not be referenced via a fully qualified name, but via a use statement.',
 		);
 
 		self::assertNoSniffError($report, 138);
@@ -947,181 +947,181 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			$report,
 			145,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Anything should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Anything should not be referenced via a fully qualified name, but via a use statement.',
 		);
 
 		self::assertSniffError(
 			$report,
 			153,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Conditional1 should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Conditional1 should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			153,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Conditional2 should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Conditional2 should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			153,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Conditional3 should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Conditional3 should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			153,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Conditional4 should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Conditional4 should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			153,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Conditional5 should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Conditional5 should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			153,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Conditional6 should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Conditional6 should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			153,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Conditional7 should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Conditional7 should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			160,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Conditional8 should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Conditional8 should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			160,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Conditional9 should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Conditional9 should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			160,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Conditional10 should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Conditional10 should not be referenced via a fully qualified name, but via a use statement.',
 		);
 
 		self::assertSniffError(
 			$report,
 			172,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\OffsetAccessType should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\OffsetAccessType should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			172,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\OffsetAccessOffset should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\OffsetAccessOffset should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			172,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\OffsetAccessType2 should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\OffsetAccessType2 should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			172,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\OffsetAccessOffset2 should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\OffsetAccessOffset2 should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			172,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\OffsetAccessType3 should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\OffsetAccessType3 should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			172,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\OffsetAccessOffset3 should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\OffsetAccessOffset3 should not be referenced via a fully qualified name, but via a use statement.',
 		);
 
 		self::assertSniffError(
 			$report,
 			183,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Assertion should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Assertion should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			190,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Assertion should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Assertion should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			197,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Assertion should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Assertion should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			204,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Assertion should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Assertion should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			211,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Assertion should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Assertion should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			218,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Assertion should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Assertion should not be referenced via a fully qualified name, but via a use statement.',
 		);
 
 		self::assertSniffError(
 			$report,
 			229,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Anything should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Anything should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			229,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Something should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Something should not be referenced via a fully qualified name, but via a use statement.',
 		);
 
 		self::assertSniffError(
 			$report,
 			237,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Anything should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Anything should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			237,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\Something should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\Something should not be referenced via a fully qualified name, but via a use statement.',
 		);
 
 		self::assertSniffError(
 			$report,
 			246,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\ObjectShapeItem1 should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\ObjectShapeItem1 should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			246,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Foo\ObjectShapeItem2 should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Foo\ObjectShapeItem2 should not be referenced via a fully qualified name, but via a use statement.',
 		);
 
 		self::assertAllFixedInFile($report);
@@ -1134,7 +1134,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			[
 				'allowFallbackGlobalFunctions' => false,
 				'allowFallbackGlobalConstants' => false,
-			]
+			],
 		);
 
 		self::assertNoSniffErrorInFile($report);
@@ -1206,25 +1206,25 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 			$report,
 			8,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Whatever\Anything should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Whatever\Anything should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			8,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Constant \PHP_VERSION should not be referenced via a fully qualified name, but via a use statement.'
+			'Constant \PHP_VERSION should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			12,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Doctrine\Column should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Doctrine\Column should not be referenced via a fully qualified name, but via a use statement.',
 		);
 		self::assertSniffError(
 			$report,
 			18,
 			ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME,
-			'Class \Nette\DI\Attributes\Inject should not be referenced via a fully qualified name, but via a use statement.'
+			'Class \Nette\DI\Attributes\Inject should not be referenced via a fully qualified name, but via a use statement.',
 		);
 
 		self::assertAllFixedInFile($report);

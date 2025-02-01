@@ -56,10 +56,10 @@ class DisallowOneLinePropertyDocCommentSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
 				'Found one-line comment for property %s, use multi-line comment instead.',
-				PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer)
+				PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer),
 			),
 			$docCommentStartPointer,
-			self::CODE_ONE_LINE_PROPERTY_COMMENT
+			self::CODE_ONE_LINE_PROPERTY_COMMENT,
 		);
 
 		if (!$fix) {
@@ -78,7 +78,7 @@ class DisallowOneLinePropertyDocCommentSniff implements Sniff
 		if ($docCommentEndPointer - 1 !== $docCommentStartPointer) {
 			$phpcsFile->fixer->replaceToken(
 				$docCommentEndPointer - 1,
-				rtrim($phpcsFile->fixer->getTokenContent($docCommentEndPointer - 1), ' ')
+				rtrim($phpcsFile->fixer->getTokenContent($docCommentEndPointer - 1), ' '),
 			);
 		}
 

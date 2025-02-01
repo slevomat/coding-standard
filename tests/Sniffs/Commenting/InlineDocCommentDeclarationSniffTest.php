@@ -23,27 +23,27 @@ class InlineDocCommentDeclarationSniffTest extends TestCase
 			$report,
 			11,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
-			'Invalid inline documentation comment format "@var $a string[]", expected "@var string[] $a".'
+			'Invalid inline documentation comment format "@var $a string[]", expected "@var string[] $a".',
 		);
 		self::assertSniffError(
 			$report,
 			17,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
-			'Invalid inline documentation comment format "@var $c", expected "@var type $c Optional description".'
+			'Invalid inline documentation comment format "@var $c", expected "@var type $c Optional description".',
 		);
 
 		self::assertSniffError(
 			$report,
 			20,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
-			'Invalid inline documentation comment format "@var $d iterable|array|\Traversable Lorem ipsum", expected "@var type $d Optional description".'
+			'Invalid inline documentation comment format "@var $d iterable|array|\Traversable Lorem ipsum", expected "@var type $d Optional description".',
 		);
 
 		self::assertSniffError(
 			$report,
 			23,
 			InlineDocCommentDeclarationSniff::CODE_INVALID_FORMAT,
-			'Invalid inline documentation comment format "@var $f string", expected "@var string $f".'
+			'Invalid inline documentation comment format "@var $f string", expected "@var string $f".',
 		);
 
 		self::assertSniffError($report, 33, InlineDocCommentDeclarationSniff::CODE_INVALID_COMMENT_TYPE);
@@ -69,102 +69,102 @@ class InlineDocCommentDeclarationSniffTest extends TestCase
 			$report,
 			91,
 			InlineDocCommentDeclarationSniff::CODE_MISSING_VARIABLE,
-			'Missing variable $unknown before or after the documentation comment.'
+			'Missing variable $unknown before or after the documentation comment.',
 		);
 
 		self::assertSniffError(
 			$report,
 			93,
 			InlineDocCommentDeclarationSniff::CODE_MISSING_VARIABLE,
-			'Missing variable $unknownA before or after the documentation comment.'
+			'Missing variable $unknownA before or after the documentation comment.',
 		);
 		self::assertSniffError(
 			$report,
 			96,
 			InlineDocCommentDeclarationSniff::CODE_MISSING_VARIABLE,
-			'Missing variable $unknownB before or after the documentation comment.'
+			'Missing variable $unknownB before or after the documentation comment.',
 		);
 		self::assertSniffError(
 			$report,
 			99,
 			InlineDocCommentDeclarationSniff::CODE_MISSING_VARIABLE,
-			'Missing variable $unknownC before or after the documentation comment.'
+			'Missing variable $unknownC before or after the documentation comment.',
 		);
 		self::assertSniffError(
 			$report,
 			102,
 			InlineDocCommentDeclarationSniff::CODE_MISSING_VARIABLE,
-			'Missing variable $unknownD before or after the documentation comment.'
+			'Missing variable $unknownD before or after the documentation comment.',
 		);
 		self::assertSniffError(
 			$report,
 			106,
 			InlineDocCommentDeclarationSniff::CODE_MISSING_VARIABLE,
-			'Missing variable $unknownE before or after the documentation comment.'
+			'Missing variable $unknownE before or after the documentation comment.',
 		);
 
 		self::assertSniffError(
 			$report,
 			112,
 			InlineDocCommentDeclarationSniff::CODE_MISSING_VARIABLE,
-			'Missing variable $unknownAA before or after the documentation comment.'
+			'Missing variable $unknownAA before or after the documentation comment.',
 		);
 		self::assertSniffError(
 			$report,
 			115,
 			InlineDocCommentDeclarationSniff::CODE_MISSING_VARIABLE,
-			'Missing variable $unknownBB before or after the documentation comment.'
+			'Missing variable $unknownBB before or after the documentation comment.',
 		);
 		self::assertSniffError(
 			$report,
 			118,
 			InlineDocCommentDeclarationSniff::CODE_MISSING_VARIABLE,
-			'Missing variable $unknownCC before or after the documentation comment.'
+			'Missing variable $unknownCC before or after the documentation comment.',
 		);
 		self::assertSniffError(
 			$report,
 			121,
 			InlineDocCommentDeclarationSniff::CODE_MISSING_VARIABLE,
-			'Missing variable $unknownDD before or after the documentation comment.'
+			'Missing variable $unknownDD before or after the documentation comment.',
 		);
 		self::assertSniffError(
 			$report,
 			125,
 			InlineDocCommentDeclarationSniff::CODE_MISSING_VARIABLE,
-			'Missing variable $unknownEE before or after the documentation comment.'
+			'Missing variable $unknownEE before or after the documentation comment.',
 		);
 
 		self::assertSniffError(
 			$report,
 			132,
 			InlineDocCommentDeclarationSniff::CODE_MISSING_VARIABLE,
-			'Missing variable $unknownX before or after the documentation comment.'
+			'Missing variable $unknownX before or after the documentation comment.',
 		);
 
 		self::assertSniffError(
 			$report,
 			134,
 			InlineDocCommentDeclarationSniff::CODE_NO_ASSIGNMENT,
-			'No assignment to $noAssignmentX variable before or after the documentation comment.'
+			'No assignment to $noAssignmentX variable before or after the documentation comment.',
 		);
 		self::assertSniffError(
 			$report,
 			137,
 			InlineDocCommentDeclarationSniff::CODE_NO_ASSIGNMENT,
-			'No assignment to $noAssignmentY variable before or after the documentation comment.'
+			'No assignment to $noAssignmentY variable before or after the documentation comment.',
 		);
 		self::assertSniffError(
 			$report,
 			140,
 			InlineDocCommentDeclarationSniff::CODE_NO_ASSIGNMENT,
-			'No assignment to $noAssignmentZ variable before or after the documentation comment.'
+			'No assignment to $noAssignmentZ variable before or after the documentation comment.',
 		);
 
 		self::assertSniffError(
 			$report,
 			145,
 			InlineDocCommentDeclarationSniff::CODE_MISSING_VARIABLE,
-			'Missing variable $unknownParameter before or after the documentation comment.'
+			'Missing variable $unknownParameter before or after the documentation comment.',
 		);
 
 		self::assertAllFixedInFile($report);

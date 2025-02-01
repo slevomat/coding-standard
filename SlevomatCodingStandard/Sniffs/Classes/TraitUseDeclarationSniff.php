@@ -61,7 +61,7 @@ class TraitUseDeclarationSniff implements Sniff
 			$phpcsFile->addError(
 				'Multiple traits per use statement are forbidden.',
 				$usePointer,
-				self::CODE_MULTIPLE_TRAITS_PER_DECLARATION
+				self::CODE_MULTIPLE_TRAITS_PER_DECLARATION,
 			);
 			return;
 		}
@@ -69,7 +69,7 @@ class TraitUseDeclarationSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Multiple traits per use statement are forbidden.',
 			$usePointer,
-			self::CODE_MULTIPLE_TRAITS_PER_DECLARATION
+			self::CODE_MULTIPLE_TRAITS_PER_DECLARATION,
 		);
 
 		if (!$fix) {

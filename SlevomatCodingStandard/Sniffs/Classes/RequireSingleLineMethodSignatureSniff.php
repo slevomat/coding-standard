@@ -17,20 +17,19 @@ class RequireSingleLineMethodSignatureSniff extends AbstractMethodSignature
 
 	public const CODE_REQUIRED_SINGLE_LINE_SIGNATURE = 'RequiredSingleLineSignature';
 
-	/** @var int */
-	public $maxLineLength = 120;
+	public int $maxLineLength = 120;
 
 	/** @var list<string> */
-	public $includedMethodPatterns = [];
+	public array $includedMethodPatterns = [];
 
 	/** @var list<string>|null */
-	public $includedMethodNormalizedPatterns;
+	public ?array $includedMethodNormalizedPatterns = null;
 
 	/** @var list<string> */
-	public $excludedMethodPatterns = [];
+	public array $excludedMethodPatterns = [];
 
 	/** @var list<string>|null */
-	public $excludedMethodNormalizedPatterns;
+	public ?array $excludedMethodNormalizedPatterns = null;
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint

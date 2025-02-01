@@ -56,7 +56,7 @@ class DisallowLateStaticBindingForConstantsSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Late static binding for constants is disallowed.',
 			$staticPointer,
-			self::CODE_DISALLOWED_LATE_STATIC_BINDING_FOR_CONSTANT
+			self::CODE_DISALLOWED_LATE_STATIC_BINDING_FOR_CONSTANT,
 		);
 
 		if (!$fix) {

@@ -14,12 +14,12 @@ final class RequireSingleLineMethodSignatureSniffTest extends TestCase
 
 		self::checkFile(
 			__DIR__ . '/data/requireSingleLineMethodSignatureNoErrors.php',
-			['includedMethodPatterns' => ['invalidPattern']]
+			['includedMethodPatterns' => ['invalidPattern']],
 		);
 
 		self::checkFile(
 			__DIR__ . '/data/requireSingleLineMethodSignatureNoErrors.php',
-			['excludedMethodPatterns' => ['invalidPattern']]
+			['excludedMethodPatterns' => ['invalidPattern']],
 		);
 	}
 

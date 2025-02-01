@@ -133,7 +133,7 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 			T_VARIABLE,
 			$variableName,
 			$tokens[$functionPointer]['parenthesis_opener'] + 1,
-			$tokens[$functionPointer]['parenthesis_closer']
+			$tokens[$functionPointer]['parenthesis_closer'],
 		);
 		return $parameterPointer !== null;
 	}
@@ -147,7 +147,7 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 			$phpcsFile,
 			T_USE,
 			$tokens[$closurePointer]['parenthesis_closer'] + 1,
-			$tokens[$closurePointer]['scope_opener']
+			$tokens[$closurePointer]['scope_opener'],
 		);
 		if ($usePointer === null) {
 			return false;
@@ -160,7 +160,7 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 			T_VARIABLE,
 			$variableName,
 			$parenthesisOpenerPointer + 1,
-			$tokens[$parenthesisOpenerPointer]['parenthesis_closer']
+			$tokens[$parenthesisOpenerPointer]['parenthesis_closer'],
 		);
 		return $inheritedVariablePointer !== null;
 	}
@@ -222,7 +222,7 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 			$phpcsFile,
 			[T_OPEN_PARENTHESIS, T_OPEN_SHORT_ARRAY, T_OPEN_SQUARE_BRACKET],
 			$variablePointer - 1,
-			$scopeOpenerPointer
+			$scopeOpenerPointer,
 		);
 		if ($parenthesisOpenerPointer === null) {
 			return false;

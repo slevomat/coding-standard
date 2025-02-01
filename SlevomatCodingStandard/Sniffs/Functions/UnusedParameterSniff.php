@@ -52,7 +52,7 @@ class UnusedParameterSniff implements Sniff
 				$phpcsFile,
 				T_VARIABLE,
 				$currentPointer,
-				$tokens[$functionPointer]['parenthesis_closer']
+				$tokens[$functionPointer]['parenthesis_closer'],
 			);
 			if ($parameterPointer === null) {
 				break;
@@ -62,7 +62,7 @@ class UnusedParameterSniff implements Sniff
 				$phpcsFile,
 				array_merge([T_COMMA], Tokens::$scopeModifiers),
 				$parameterPointer - 1,
-				$tokens[$functionPointer]['parenthesis_opener']
+				$tokens[$functionPointer]['parenthesis_opener'],
 			);
 
 			if ($previousPointer !== null && in_array($tokens[$previousPointer]['code'], Tokens::$scopeModifiers, true)) {
@@ -79,7 +79,7 @@ class UnusedParameterSniff implements Sniff
 				$phpcsFile->addError(
 					sprintf('Unused parameter %s.', $tokens[$parameterPointer]['content']),
 					$parameterPointer,
-					self::CODE_UNUSED_PARAMETER
+					self::CODE_UNUSED_PARAMETER,
 				);
 			} else {
 				$suppressUseless = false;
@@ -95,7 +95,7 @@ class UnusedParameterSniff implements Sniff
 		$phpcsFile->addError(
 			sprintf('Useless %s %s', SuppressHelper::ANNOTATION, self::NAME),
 			$functionPointer,
-			self::CODE_USELESS_SUPPRESS
+			self::CODE_USELESS_SUPPRESS,
 		);
 	}
 

@@ -114,8 +114,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 				$line,
 				PHP_EOL,
 				self::getFormattedErrors($errors[$line]),
-				PHP_EOL
-			)
+				PHP_EOL,
+			),
 		);
 	}
 
@@ -139,8 +139,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 				$line,
 				PHP_EOL,
 				self::getFormattedErrors($errors[$line]),
-				PHP_EOL
-			)
+				PHP_EOL,
+			),
 		);
 	}
 
@@ -154,8 +154,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 				$line,
 				PHP_EOL . PHP_EOL,
 				isset($errors[$line]) ? self::getFormattedErrors($errors[$line]) : '',
-				PHP_EOL
-			)
+				PHP_EOL,
+			),
 		);
 	}
 
@@ -226,11 +226,16 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 	 */
 	private static function getFormattedErrors(array $errors): string
 	{
-		return implode(PHP_EOL, array_map(static function (array $errors): string {
-			return implode(PHP_EOL, array_map(static function (array $error): string {
-				return sprintf("\t%s: %s", $error['source'], $error['message']);
-			}, $errors));
-		}, $errors));
+		return implode(
+			PHP_EOL,
+			array_map(
+				static fn (array $errors): string => implode(
+					PHP_EOL,
+					array_map(static fn (array $error): string => sprintf("\t%s: %s", $error['source'], $error['message']), $errors),
+				),
+				$errors,
+			),
+		);
 	}
 
 }

@@ -53,7 +53,7 @@ class ConditionHelper
 		$tokens = $phpcsFile->getTokens();
 
 		$conditionContent = strtolower(
-			trim(TokenHelper::getContent($phpcsFile, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer))
+			trim(TokenHelper::getContent($phpcsFile, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer)),
 		);
 
 		if ($conditionContent === 'false' || $conditionContent === 'true') {
@@ -68,10 +68,10 @@ class ConditionHelper
 				array_merge(
 					[T_OPEN_PARENTHESIS, T_LESS_THAN, T_GREATER_THAN],
 					Tokens::$booleanOperators,
-					Tokens::$equalityTokens
+					Tokens::$equalityTokens,
 				),
 				$actualPointer,
-				$conditionBoundaryEndPointer + 1
+				$conditionBoundaryEndPointer + 1,
 			);
 
 			if ($actualPointer === null) {
@@ -119,7 +119,7 @@ class ConditionHelper
 				? TokenHelper::getContent(
 					$phpcsFile,
 					$conditionBoundaryStartPointer,
-					$conditionStartPointer - 1
+					$conditionStartPointer - 1,
 				)
 				: '',
 			self::getNegativeConditionPart($phpcsFile, $conditionStartPointer, $conditionEndPointer, $nested),
@@ -127,9 +127,9 @@ class ConditionHelper
 				? TokenHelper::getContent(
 					$phpcsFile,
 					$conditionEndPointer + 1,
-					$conditionBoundaryEndPointer
+					$conditionBoundaryEndPointer,
 				)
-				: ''
+				: '',
 		);
 	}
 
@@ -156,7 +156,7 @@ class ConditionHelper
 			$phpcsFile,
 			Tokens::$booleanOperators,
 			$conditionBoundaryStartPointer,
-			$conditionBoundaryEndPointer + 1
+			$conditionBoundaryEndPointer + 1,
 		);
 
 		if ($tokens[$pointerAfterConditionStart]['code'] === T_BOOLEAN_NOT) {
@@ -169,7 +169,7 @@ class ConditionHelper
 				$pointerAfterParenthesisCloser = TokenHelper::findNextEffective(
 					$phpcsFile,
 					$tokens[$pointerAfterBooleanNot]['parenthesis_closer'] + 1,
-					$conditionBoundaryEndPointer + 1
+					$conditionBoundaryEndPointer + 1,
 				);
 				if (
 					$pointerAfterParenthesisCloser === null
@@ -178,7 +178,7 @@ class ConditionHelper
 					return TokenHelper::getContent(
 						$phpcsFile,
 						$pointerAfterBooleanNot + 1,
-						$tokens[$pointerAfterBooleanNot]['parenthesis_closer'] - 1
+						$tokens[$pointerAfterBooleanNot]['parenthesis_closer'] - 1,
 					);
 				}
 			}
@@ -196,7 +196,7 @@ class ConditionHelper
 			$phpcsFile,
 			[T_INSTANCEOF, T_BITWISE_AND, T_COALESCE, T_INLINE_THEN],
 			$conditionBoundaryStartPointer,
-			$conditionBoundaryEndPointer + 1
+			$conditionBoundaryEndPointer + 1,
 		) !== null) {
 			return sprintf('!(%s)', $condition);
 		}
@@ -226,7 +226,7 @@ class ConditionHelper
 			$phpcsFile,
 			[T_IS_EQUAL, T_IS_NOT_EQUAL, T_IS_IDENTICAL, T_IS_NOT_IDENTICAL, T_IS_SMALLER_OR_EQUAL, T_IS_GREATER_OR_EQUAL, T_LESS_THAN, T_GREATER_THAN],
 			$conditionBoundaryStartPointer,
-			$conditionBoundaryEndPointer + 1
+			$conditionBoundaryEndPointer + 1,
 		);
 		if ($comparisonPointer !== null) {
 			$comparisonReplacements = [
@@ -297,7 +297,7 @@ class ConditionHelper
 				$phpcsFile,
 				array_merge([T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS], Tokens::$booleanOperators),
 				$actualPointer,
-				$conditionBoundaryEndPointer + 1
+				$conditionBoundaryEndPointer + 1,
 			);
 
 			if ($actualPointer === null) {
@@ -348,7 +348,7 @@ class ConditionHelper
 			$phpcsFile,
 			$nestedConditionStartPointer,
 			$conditionBoundaryEndPointer,
-			true
+			true,
 		);
 	}
 

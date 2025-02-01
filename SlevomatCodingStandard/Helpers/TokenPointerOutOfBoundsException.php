@@ -12,11 +12,9 @@ use function sprintf;
 class TokenPointerOutOfBoundsException extends Exception
 {
 
-	/** @var int */
-	private $pointer;
+	private int $pointer;
 
-	/** @var int */
-	private $lastTokenPointer;
+	private int $lastTokenPointer;
 
 	public function __construct(int $pointer, int $lastTokenPointer, ?Throwable $previous = null)
 	{
@@ -24,10 +22,10 @@ class TokenPointerOutOfBoundsException extends Exception
 			sprintf(
 				'Attempted access to token pointer %d, last token pointer is %d',
 				$pointer,
-				$lastTokenPointer
+				$lastTokenPointer,
 			),
 			0,
-			$previous
+			$previous,
 		);
 
 		$this->pointer = $pointer;

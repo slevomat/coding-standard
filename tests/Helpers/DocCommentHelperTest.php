@@ -9,22 +9,21 @@ use const T_DOC_COMMENT_OPEN_TAG;
 class DocCommentHelperTest extends TestCase
 {
 
-	/** @var File */
-	private $testedCodeSnifferFile;
+	private ?File $testedCodeSnifferFile = null;
 
 	public function testClassHasDocComment(): void
 	{
 		self::assertTrue(
 			DocCommentHelper::hasDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithDocCommentAndDescription')
-			)
+				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithDocCommentAndDescription'),
+			),
 		);
 		self::assertTrue(
 			DocCommentHelper::hasDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithDocComment')
-			)
+				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithDocComment'),
+			),
 		);
 	}
 
@@ -34,14 +33,14 @@ class DocCommentHelperTest extends TestCase
 			"/**\n * Class WithDocComment\n *\n * @see https://www.slevomat.cz\n */",
 			DocCommentHelper::getDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithDocCommentAndDescription')
-			)
+				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithDocCommentAndDescription'),
+			),
 		);
 		self::assertNull(
 			DocCommentHelper::getDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithoutDocComment')
-			)
+				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithoutDocComment'),
+			),
 		);
 	}
 
@@ -50,8 +49,8 @@ class DocCommentHelperTest extends TestCase
 		self::assertFalse(
 			DocCommentHelper::hasDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithoutDocComment')
-			)
+				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithoutDocComment'),
+			),
 		);
 	}
 
@@ -60,14 +59,14 @@ class DocCommentHelperTest extends TestCase
 		self::assertTrue(
 			DocCommentHelper::hasDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'EmptyDocComment')
-			)
+				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'EmptyDocComment'),
+			),
 		);
 		self::assertNull(
 			DocCommentHelper::getDocCommentDescription(
 				$this->getTestedCodeSnifferFile(),
-				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'EmptyDocComment')
-			)
+				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'EmptyDocComment'),
+			),
 		);
 	}
 
@@ -76,8 +75,8 @@ class DocCommentHelperTest extends TestCase
 		self::assertTrue(
 			DocCommentHelper::hasDocCommentDescription(
 				$this->getTestedCodeSnifferFile(),
-				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithDocCommentAndDescription')
-			)
+				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithDocCommentAndDescription'),
+			),
 		);
 	}
 
@@ -86,14 +85,14 @@ class DocCommentHelperTest extends TestCase
 		self::assertFalse(
 			DocCommentHelper::hasDocCommentDescription(
 				$this->getTestedCodeSnifferFile(),
-				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithDocComment')
-			)
+				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithDocComment'),
+			),
 		);
 		self::assertFalse(
 			DocCommentHelper::hasDocCommentDescription(
 				$this->getTestedCodeSnifferFile(),
-				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithoutDocComment')
-			)
+				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'WithoutDocComment'),
+			),
 		);
 	}
 
@@ -102,14 +101,14 @@ class DocCommentHelperTest extends TestCase
 		self::assertTrue(
 			DocCommentHelper::hasDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITH_DOC_COMMENT_AND_DESCRIPTION')
-			)
+				$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITH_DOC_COMMENT_AND_DESCRIPTION'),
+			),
 		);
 		self::assertTrue(
 			DocCommentHelper::hasDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITH_DOC_COMMENT')
-			)
+				$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITH_DOC_COMMENT'),
+			),
 		);
 	}
 
@@ -118,8 +117,8 @@ class DocCommentHelperTest extends TestCase
 		self::assertFalse(
 			DocCommentHelper::hasDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITHOUT_DOC_COMMENT')
-			)
+				$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITHOUT_DOC_COMMENT'),
+			),
 		);
 	}
 
@@ -128,8 +127,8 @@ class DocCommentHelperTest extends TestCase
 		self::assertTrue(
 			DocCommentHelper::hasDocCommentDescription(
 				$this->getTestedCodeSnifferFile(),
-				$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITH_DOC_COMMENT_AND_DESCRIPTION')
-			)
+				$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITH_DOC_COMMENT_AND_DESCRIPTION'),
+			),
 		);
 	}
 
@@ -138,14 +137,14 @@ class DocCommentHelperTest extends TestCase
 		self::assertFalse(
 			DocCommentHelper::hasDocCommentDescription(
 				$this->getTestedCodeSnifferFile(),
-				$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITH_DOC_COMMENT')
-			)
+				$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITH_DOC_COMMENT'),
+			),
 		);
 		self::assertFalse(
 			DocCommentHelper::hasDocCommentDescription(
 				$this->getTestedCodeSnifferFile(),
-				$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITHOUT_DOC_COMMENT')
-			)
+				$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITHOUT_DOC_COMMENT'),
+			),
 		);
 	}
 
@@ -154,14 +153,14 @@ class DocCommentHelperTest extends TestCase
 		self::assertTrue(
 			DocCommentHelper::hasDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withDocCommentAndDescription')
-			)
+				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withDocCommentAndDescription'),
+			),
 		);
 		self::assertTrue(
 			DocCommentHelper::hasDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withDocComment')
-			)
+				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withDocComment'),
+			),
 		);
 	}
 
@@ -170,8 +169,8 @@ class DocCommentHelperTest extends TestCase
 		self::assertFalse(
 			DocCommentHelper::hasDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withoutDocComment')
-			)
+				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withoutDocComment'),
+			),
 		);
 	}
 
@@ -180,14 +179,14 @@ class DocCommentHelperTest extends TestCase
 		self::assertFalse(
 			DocCommentHelper::hasDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'propertyWithoutDocCommentInClassWithDocComment')
-			)
+				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'propertyWithoutDocCommentInClassWithDocComment'),
+			),
 		);
 		self::assertTrue(
 			DocCommentHelper::hasDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'PropertyDoesNotHaveDocCommentButClassHas')
-			)
+				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'PropertyDoesNotHaveDocCommentButClassHas'),
+			),
 		);
 	}
 
@@ -196,8 +195,8 @@ class DocCommentHelperTest extends TestCase
 		self::assertTrue(
 			DocCommentHelper::hasDocCommentDescription(
 				$this->getTestedCodeSnifferFile(),
-				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withDocCommentAndDescription')
-			)
+				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withDocCommentAndDescription'),
+			),
 		);
 	}
 
@@ -206,14 +205,14 @@ class DocCommentHelperTest extends TestCase
 		self::assertFalse(
 			DocCommentHelper::hasDocCommentDescription(
 				$this->getTestedCodeSnifferFile(),
-				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withDocComment')
-			)
+				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withDocComment'),
+			),
 		);
 		self::assertFalse(
 			DocCommentHelper::hasDocCommentDescription(
 				$this->getTestedCodeSnifferFile(),
-				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withoutDocComment')
-			)
+				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withoutDocComment'),
+			),
 		);
 	}
 
@@ -222,8 +221,8 @@ class DocCommentHelperTest extends TestCase
 		self::assertTrue(
 			DocCommentHelper::hasDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'legacyWithDocComment')
-			)
+				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'legacyWithDocComment'),
+			),
 		);
 	}
 
@@ -232,14 +231,14 @@ class DocCommentHelperTest extends TestCase
 		self::assertTrue(
 			DocCommentHelper::hasDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withDocCommentAndDescription')
-			)
+				$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withDocCommentAndDescription'),
+			),
 		);
 		self::assertTrue(
 			DocCommentHelper::hasDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withDocComment')
-			)
+				$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withDocComment'),
+			),
 		);
 	}
 
@@ -248,8 +247,8 @@ class DocCommentHelperTest extends TestCase
 		self::assertFalse(
 			DocCommentHelper::hasDocComment(
 				$this->getTestedCodeSnifferFile(),
-				$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withoutDocComment')
-			)
+				$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withoutDocComment'),
+			),
 		);
 	}
 
@@ -258,8 +257,8 @@ class DocCommentHelperTest extends TestCase
 		self::assertTrue(
 			DocCommentHelper::hasDocCommentDescription(
 				$this->getTestedCodeSnifferFile(),
-				$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withDocCommentAndDescription')
-			)
+				$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withDocCommentAndDescription'),
+			),
 		);
 	}
 
@@ -268,14 +267,14 @@ class DocCommentHelperTest extends TestCase
 		self::assertFalse(
 			DocCommentHelper::hasDocCommentDescription(
 				$this->getTestedCodeSnifferFile(),
-				$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withDocComment')
-			)
+				$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withDocComment'),
+			),
 		);
 		self::assertFalse(
 			DocCommentHelper::hasDocCommentDescription(
 				$this->getTestedCodeSnifferFile(),
-				$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withoutDocComment')
-			)
+				$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withoutDocComment'),
+			),
 		);
 	}
 
@@ -286,9 +285,9 @@ class DocCommentHelperTest extends TestCase
 			$this->stringifyComments(
 				DocCommentHelper::getDocCommentDescription(
 					$this->getTestedCodeSnifferFile(),
-					$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITH_DOC_COMMENT_AND_DESCRIPTION')
-				)
-			)
+					$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'WITH_DOC_COMMENT_AND_DESCRIPTION'),
+				),
+			),
 		);
 	}
 
@@ -299,9 +298,9 @@ class DocCommentHelperTest extends TestCase
 			$this->stringifyComments(
 				DocCommentHelper::getDocCommentDescription(
 					$this->getTestedCodeSnifferFile(),
-					$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withDocCommentAndDescription')
-				)
-			)
+					$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'withDocCommentAndDescription'),
+				),
+			),
 		);
 	}
 
@@ -312,9 +311,9 @@ class DocCommentHelperTest extends TestCase
 			$this->stringifyComments(
 				DocCommentHelper::getDocCommentDescription(
 					$this->getTestedCodeSnifferFile(),
-					$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withDocCommentAndDescription')
-				)
-			)
+					$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), 'withDocCommentAndDescription'),
+				),
+			),
 		);
 	}
 
@@ -325,9 +324,9 @@ class DocCommentHelperTest extends TestCase
 			$this->stringifyComments(
 				DocCommentHelper::getDocCommentDescription(
 					$this->getTestedCodeSnifferFile(),
-					$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 3, T_DOC_COMMENT_OPEN_TAG)
-				)
-			)
+					$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 3, T_DOC_COMMENT_OPEN_TAG),
+				),
+			),
 		);
 	}
 
@@ -338,9 +337,9 @@ class DocCommentHelperTest extends TestCase
 			$this->stringifyComments(
 				DocCommentHelper::getDocCommentDescription(
 					$this->getTestedCodeSnifferFile(),
-					$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 5, T_DOC_COMMENT_OPEN_TAG)
-				)
-			)
+					$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 5, T_DOC_COMMENT_OPEN_TAG),
+				),
+			),
 		);
 	}
 
@@ -349,8 +348,8 @@ class DocCommentHelperTest extends TestCase
 		self::assertNull(
 			DocCommentHelper::findDocCommentOwnerPointer(
 				$this->getTestedCodeSnifferFile(),
-				$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 3, T_DOC_COMMENT_OPEN_TAG)
-			)
+				$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 3, T_DOC_COMMENT_OPEN_TAG),
+			),
 		);
 	}
 
@@ -359,8 +358,8 @@ class DocCommentHelperTest extends TestCase
 		self::assertNotNull(
 			DocCommentHelper::findDocCommentOwnerPointer(
 				$this->getTestedCodeSnifferFile(),
-				$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 111, T_DOC_COMMENT_OPEN_TAG)
-			)
+				$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 111, T_DOC_COMMENT_OPEN_TAG),
+			),
 		);
 	}
 
@@ -369,8 +368,8 @@ class DocCommentHelperTest extends TestCase
 		self::assertNotNull(
 			DocCommentHelper::findDocCommentOwnerPointer(
 				$this->getTestedCodeSnifferFile(),
-				$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 119, T_DOC_COMMENT_OPEN_TAG)
-			)
+				$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 119, T_DOC_COMMENT_OPEN_TAG),
+			),
 		);
 	}
 
@@ -380,13 +379,13 @@ class DocCommentHelperTest extends TestCase
 
 		foreach ([3, 10, 18, 32, 46, 51, 76, 99] as $line) {
 			self::assertFalse(
-				DocCommentHelper::isInline($phpcsFile, $this->findPointerByLineAndType($phpcsFile, $line, T_DOC_COMMENT_OPEN_TAG))
+				DocCommentHelper::isInline($phpcsFile, $this->findPointerByLineAndType($phpcsFile, $line, T_DOC_COMMENT_OPEN_TAG)),
 			);
 		}
 
 		foreach ([96] as $line) {
 			self::assertTrue(
-				DocCommentHelper::isInline($phpcsFile, $this->findPointerByLineAndType($phpcsFile, $line, T_DOC_COMMENT_OPEN_TAG))
+				DocCommentHelper::isInline($phpcsFile, $this->findPointerByLineAndType($phpcsFile, $line, T_DOC_COMMENT_OPEN_TAG)),
 			);
 		}
 	}
@@ -396,8 +395,8 @@ class DocCommentHelperTest extends TestCase
 		self::assertFalse(
 			DocCommentHelper::isInline(
 				$this->getTestedCodeSnifferFile(),
-				$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 135, T_DOC_COMMENT_OPEN_TAG)
-			)
+				$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 135, T_DOC_COMMENT_OPEN_TAG),
+			),
 		);
 	}
 
@@ -406,8 +405,8 @@ class DocCommentHelperTest extends TestCase
 		self::assertFalse(
 			DocCommentHelper::hasInheritdocAnnotation(
 				$this->getTestedCodeSnifferFile(),
-				$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 129, T_DOC_COMMENT_OPEN_TAG)
-			)
+				$this->findPointerByLineAndType($this->getTestedCodeSnifferFile(), 129, T_DOC_COMMENT_OPEN_TAG),
+			),
 		);
 	}
 
@@ -425,9 +424,7 @@ class DocCommentHelperTest extends TestCase
 	 */
 	private function stringifyComments(array $comments): array
 	{
-		return array_map(static function (Comment $comment): string {
-			return $comment->getContent();
-		}, $comments);
+		return array_map(static fn (Comment $comment): string => $comment->getContent(), $comments);
 	}
 
 }

@@ -23,19 +23,19 @@ class NamedArgumentSpacingSniffTest extends TestCase
 			$report,
 			3,
 			NamedArgumentSpacingSniff::CODE_WHITESPACE_BEFORE_COLON,
-			'There must be no whitespace between named argument "search" and colon.'
+			'There must be no whitespace between named argument "search" and colon.',
 		);
 		self::assertSniffError(
 			$report,
 			4,
 			NamedArgumentSpacingSniff::CODE_NO_WHITESPACE_AFTER_COLON,
-			'There must be exactly one space after colon in named argument "search".'
+			'There must be exactly one space after colon in named argument "search".',
 		);
 		self::assertSniffError(
 			$report,
 			4,
 			NamedArgumentSpacingSniff::CODE_NO_WHITESPACE_AFTER_COLON,
-			'There must be exactly one space after colon in named argument "subject".'
+			'There must be exactly one space after colon in named argument "subject".',
 		);
 
 		self::assertAllFixedInFile($report);

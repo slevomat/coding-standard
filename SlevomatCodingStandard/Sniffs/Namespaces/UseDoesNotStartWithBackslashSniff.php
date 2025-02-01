@@ -59,7 +59,7 @@ class UseDoesNotStartWithBackslashSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Use statement cannot start with a backslash.',
 			$nextTokenPointer,
-			self::CODE_STARTS_WITH_BACKSLASH
+			self::CODE_STARTS_WITH_BACKSLASH,
 		);
 
 		if (!$fix) {

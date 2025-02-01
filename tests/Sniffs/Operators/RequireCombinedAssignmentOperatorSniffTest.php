@@ -23,73 +23,73 @@ class RequireCombinedAssignmentOperatorSniffTest extends TestCase
 			$report,
 			8,
 			RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGNMENT_OPERATOR,
-			'Use "&=" operator instead of "=" and "&".'
+			'Use "&=" operator instead of "=" and "&".',
 		);
 		self::assertSniffError(
 			$report,
 			9,
 			RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGNMENT_OPERATOR,
-			'Use "|=" operator instead of "=" and "|".'
+			'Use "|=" operator instead of "=" and "|".',
 		);
 		self::assertSniffError(
 			$report,
 			10,
 			RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGNMENT_OPERATOR,
-			'Use ".=" operator instead of "=" and ".".'
+			'Use ".=" operator instead of "=" and ".".',
 		);
 		self::assertSniffError(
 			$report,
 			11,
 			RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGNMENT_OPERATOR,
-			'Use "/=" operator instead of "=" and "/".'
+			'Use "/=" operator instead of "=" and "/".',
 		);
 		self::assertSniffError(
 			$report,
 			12,
 			RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGNMENT_OPERATOR,
-			'Use "-=" operator instead of "=" and "-".'
+			'Use "-=" operator instead of "=" and "-".',
 		);
 		self::assertSniffError(
 			$report,
 			13,
 			RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGNMENT_OPERATOR,
-			'Use "**=" operator instead of "=" and "**".'
+			'Use "**=" operator instead of "=" and "**".',
 		);
 		self::assertSniffError(
 			$report,
 			14,
 			RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGNMENT_OPERATOR,
-			'Use "%=" operator instead of "=" and "%".'
+			'Use "%=" operator instead of "=" and "%".',
 		);
 		self::assertSniffError(
 			$report,
 			15,
 			RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGNMENT_OPERATOR,
-			'Use "*=" operator instead of "=" and "*".'
+			'Use "*=" operator instead of "=" and "*".',
 		);
 		self::assertSniffError(
 			$report,
 			16,
 			RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGNMENT_OPERATOR,
-			'Use "+=" operator instead of "=" and "+".'
+			'Use "+=" operator instead of "=" and "+".',
 		);
 		self::assertSniffError(
 			$report,
 			17,
 			RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGNMENT_OPERATOR,
-			'Use "<<=" operator instead of "=" and "<<".'
+			'Use "<<=" operator instead of "=" and "<<".',
 		);
 		self::assertSniffError(
 			$report,
 			18,
 			RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGNMENT_OPERATOR,
-			'Use ">>=" operator instead of "=" and ">>".'
+			'Use ">>=" operator instead of "=" and ">>".',
 		);
 		self::assertSniffError(
 			$report,
 			19,
 			RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGNMENT_OPERATOR,
-			'Use "^=" operator instead of "=" and "^".'
+			'Use "^=" operator instead of "=" and "^".',
 		);
 
 		self::assertSniffError($report, 20, RequireCombinedAssignmentOperatorSniff::CODE_REQUIRED_COMBINED_ASSIGNMENT_OPERATOR);

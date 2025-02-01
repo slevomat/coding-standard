@@ -38,7 +38,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		self::assertSame(
 			$code,
 			$token['code'],
-			$expectedTokenName !== null ? sprintf('Expected %s, actual token is %s', $expectedTokenName, $token['type']) : ''
+			$expectedTokenName !== null ? sprintf('Expected %s, actual token is %s', $expectedTokenName, $token['type']) : '',
 		);
 		self::assertSame($line, $token['line']);
 	}
@@ -191,7 +191,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		if (!isset($tokens[$tokenPointer])) {
 			throw new TokenPointerOutOfBoundsException(
 				$tokenPointer,
-				TokenHelper::getLastTokenPointer($phpcsFile)
+				TokenHelper::getLastTokenPointer($phpcsFile),
 			);
 		}
 

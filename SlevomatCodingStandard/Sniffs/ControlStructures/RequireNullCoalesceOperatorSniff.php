@@ -92,7 +92,7 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Use null coalesce operator instead of ternary operator.',
 			$inlineThenPointer,
-			self::CODE_NULL_COALESCE_OPERATOR_NOT_USED
+			self::CODE_NULL_COALESCE_OPERATOR_NOT_USED,
 		);
 		if (!$fix) {
 			return;
@@ -142,7 +142,7 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 
 		$pointerBeforeCondition = TokenHelper::findPreviousEffective(
 			$phpcsFile,
-			($isYodaCondition ? $pointerBeforeIdenticalOperator : $variableStartPointer) - 1
+			($isYodaCondition ? $pointerBeforeIdenticalOperator : $variableStartPointer) - 1,
 		);
 
 		if (in_array($tokens[$pointerBeforeCondition]['code'], Tokens::$booleanOperators, true)) {
@@ -152,7 +152,7 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 		/** @var int $inlineThenPointer */
 		$inlineThenPointer = TokenHelper::findNextEffective(
 			$phpcsFile,
-			($isYodaCondition ? $variableEndPointer : $pointerAfterIdenticalOperator) + 1
+			($isYodaCondition ? $variableEndPointer : $pointerAfterIdenticalOperator) + 1,
 		);
 		if ($tokens[$inlineThenPointer]['code'] !== T_INLINE_THEN) {
 			return;
@@ -168,12 +168,12 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 		/** @var int $compareToStartPointer */
 		$compareToStartPointer = TokenHelper::findNextEffective(
 			$phpcsFile,
-			($tokens[$identicalOperator]['code'] === T_IS_IDENTICAL ? $inlineElsePointer : $inlineThenPointer) + 1
+			($tokens[$identicalOperator]['code'] === T_IS_IDENTICAL ? $inlineElsePointer : $inlineThenPointer) + 1,
 		);
 		/** @var int $compareToEndPointer */
 		$compareToEndPointer = TokenHelper::findPreviousEffective(
 			$phpcsFile,
-			($tokens[$identicalOperator]['code'] === T_IS_IDENTICAL ? $pointerAfterInlineElseEnd : $inlineElsePointer) - 1
+			($tokens[$identicalOperator]['code'] === T_IS_IDENTICAL ? $pointerAfterInlineElseEnd : $inlineElsePointer) - 1,
 		);
 
 		$compareToContent = IdentificatorHelper::getContent($phpcsFile, $compareToStartPointer, $compareToEndPointer);
@@ -185,7 +185,7 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Use null coalesce operator instead of ternary operator.',
 			$inlineThenPointer,
-			self::CODE_NULL_COALESCE_OPERATOR_NOT_USED
+			self::CODE_NULL_COALESCE_OPERATOR_NOT_USED,
 		);
 
 		if (!$fix) {

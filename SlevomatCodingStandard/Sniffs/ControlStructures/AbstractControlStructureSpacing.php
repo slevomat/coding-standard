@@ -81,7 +81,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 	protected const KEYWORD_YIELD_FROM = 'yield_from';
 
 	/** @var array<(string|int)>|null */
-	private $tokensToCheck;
+	private ?array $tokensToCheck = null;
 
 	/**
 	 * @return list<string>
@@ -191,12 +191,12 @@ abstract class AbstractControlStructureSpacing implements Sniff
 				$requiredLinesCountBefore,
 				$requiredLinesCountBefore === 1 ? '' : 's',
 				$tokens[$controlStructurePointer]['content'],
-				$actualLinesCountBefore
+				$actualLinesCountBefore,
 			),
 			$controlStructurePointer,
 			$isFirstControlStructure
 				? self::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_CONTROL_STRUCTURE
-				: self::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE
+				: self::CODE_INCORRECT_LINES_COUNT_BEFORE_CONTROL_STRUCTURE,
 		);
 
 		if (!$fix) {
@@ -207,7 +207,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 			$phpcsFile,
 			T_WHITESPACE,
 			$phpcsFile->eolChar,
-			$controlStructureStartPointer - 1
+			$controlStructureStartPointer - 1,
 		);
 
 		$phpcsFile->fixer->beginChangeset();
@@ -261,11 +261,13 @@ abstract class AbstractControlStructureSpacing implements Sniff
 		$isCommentAfterOnSameLine = false;
 		$pointerAfter = $notWhitespacePointerAfter;
 
-		$isControlStructureEndAfterPointer = static function (int $pointer) use ($tokens, $controlStructurePointer): bool {
-			return in_array($tokens[$controlStructurePointer]['code'], [T_CASE, T_DEFAULT], true)
+		$isControlStructureEndAfterPointer = static fn (int $pointer): bool => in_array(
+			$tokens[$controlStructurePointer]['code'],
+			[T_CASE, T_DEFAULT],
+			true,
+		)
 				? $tokens[$pointer]['code'] === T_CLOSE_CURLY_BRACKET
 				: in_array($tokens[$pointer]['code'], [T_CLOSE_CURLY_BRACKET, T_CASE, T_DEFAULT], true);
-		};
 
 		if ($hasCommentAfter) {
 			if ($tokens[$notWhitespacePointerAfter]['line'] === $tokens[$controlStructureEndPointer]['line'] + 1) {
@@ -299,12 +301,12 @@ abstract class AbstractControlStructureSpacing implements Sniff
 				$requiredLinesCountAfter,
 				$requiredLinesCountAfter === 1 ? '' : 's',
 				$tokens[$controlStructurePointer]['content'],
-				$actualLinesCountAfter
+				$actualLinesCountAfter,
 			),
 			$controlStructurePointer,
 			$isLastControlStructure
 				? self::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_CONTROL_STRUCTURE
-				: self::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE
+				: self::CODE_INCORRECT_LINES_COUNT_AFTER_CONTROL_STRUCTURE,
 		);
 
 		if (!$fix) {
@@ -369,13 +371,11 @@ abstract class AbstractControlStructureSpacing implements Sniff
 
 					return $supportedTokens[$keyword];
 				},
-				SniffSettingsHelper::normalizeArray($this->getKeywordsToCheck())
+				SniffSettingsHelper::normalizeArray($this->getKeywordsToCheck()),
 			);
 
 			if (count($this->tokensToCheck) === 0) {
-				$this->tokensToCheck = array_map(static function (string $keyword) use ($supportedTokens) {
-					return $supportedTokens[$keyword];
-				}, $supportedKeywords);
+				$this->tokensToCheck = array_map(static fn (string $keyword) => $supportedTokens[$keyword], $supportedKeywords);
 			}
 		}
 
@@ -393,7 +393,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 
 			$pointerAfterParenthesisCloser = TokenHelper::findNextEffective(
 				$phpcsFile,
-				$tokens[$controlStructurePointer]['parenthesis_closer'] + 1
+				$tokens[$controlStructurePointer]['parenthesis_closer'] + 1,
 			);
 			if ($pointerAfterParenthesisCloser !== null && $tokens[$pointerAfterParenthesisCloser]['code'] === T_COLON) {
 				throw new Exception('"if" without curly braces is not supported.');
@@ -455,7 +455,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 				$phpcsFile,
 				[T_CASE, T_DEFAULT],
 				$controlStructurePointer + 1,
-				$tokens[$switchPointer]['scope_closer']
+				$tokens[$switchPointer]['scope_closer'],
 			);
 
 			foreach ($pointers as $pointer) {
@@ -468,7 +468,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 						$pointerBeforeCaseOrDefault = TokenHelper::findPreviousExcluding(
 							$phpcsFile,
 							T_WHITESPACE,
-							$pointerBeforeCaseOrDefault - 1
+							$pointerBeforeCaseOrDefault - 1,
 						);
 					}
 
@@ -482,7 +482,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 		$nextPointer = TokenHelper::findNext(
 			$phpcsFile,
 			[T_SEMICOLON, T_ANON_CLASS, T_CLOSURE, T_FN, T_OPEN_SHORT_ARRAY],
-			$controlStructurePointer + 1
+			$controlStructurePointer + 1,
 		);
 		if ($tokens[$nextPointer]['code'] === T_SEMICOLON) {
 			return $nextPointer;

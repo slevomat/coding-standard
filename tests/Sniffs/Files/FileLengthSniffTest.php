@@ -26,7 +26,7 @@ class FileLengthSniffTest extends TestCase
 			$report,
 			1,
 			FileLengthSniff::CODE_FILE_TOO_LONG,
-			'Your file is too long. Currently using 12 lines. Can be up to 5 lines.'
+			'Your file is too long. Currently using 12 lines. Can be up to 5 lines.',
 		);
 	}
 

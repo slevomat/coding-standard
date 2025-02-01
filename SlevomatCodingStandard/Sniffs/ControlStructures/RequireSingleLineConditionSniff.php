@@ -15,11 +15,9 @@ class RequireSingleLineConditionSniff extends AbstractLineCondition
 
 	public const CODE_REQUIRED_SINGLE_LINE_CONDITION = 'RequiredSingleLineCondition';
 
-	/** @var int */
-	public $maxLineLength = 120;
+	public int $maxLineLength = 120;
 
-	/** @var bool */
-	public $alwaysForSimpleConditions = true;
+	public bool $alwaysForSimpleConditions = true;
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
@@ -46,7 +44,7 @@ class RequireSingleLineConditionSniff extends AbstractLineCondition
 			$phpcsFile,
 			TokenHelper::$inlineCommentTokenCodes,
 			$parenthesisOpenerPointer + 1,
-			$parenthesisCloserPointer
+			$parenthesisCloserPointer,
 		) !== null) {
 			return;
 		}
@@ -60,7 +58,7 @@ class RequireSingleLineConditionSniff extends AbstractLineCondition
 			$phpcsFile,
 			Tokens::$booleanOperators,
 			$parenthesisOpenerPointer + 1,
-			$parenthesisCloserPointer
+			$parenthesisCloserPointer,
 		) === null;
 
 		if (!$this->shouldReportError($lineLength, $isSimpleCondition)) {
@@ -70,10 +68,10 @@ class RequireSingleLineConditionSniff extends AbstractLineCondition
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
 				'Condition of "%s" should be placed on a single line.',
-				$this->getControlStructureName($phpcsFile, $controlStructurePointer)
+				$this->getControlStructureName($phpcsFile, $controlStructurePointer),
 			),
 			$controlStructurePointer,
-			self::CODE_REQUIRED_SINGLE_LINE_CONDITION
+			self::CODE_REQUIRED_SINGLE_LINE_CONDITION,
 		);
 
 		if (!$fix) {

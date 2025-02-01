@@ -102,7 +102,7 @@ class StrictCallSniff implements Sniff
 			$strictParameterValue = TokenHelper::getContent(
 				$phpcsFile,
 				$commaPointers[self::FUNCTIONS[$functionName] - 2] + 1,
-				($hasTrailingComma ? $lastCommaPointer : $parenthesisCloserPointer) - 1
+				($hasTrailingComma ? $lastCommaPointer : $parenthesisCloserPointer) - 1,
 			);
 
 			if (strtolower(trim($strictParameterValue)) !== 'false') {
@@ -112,14 +112,14 @@ class StrictCallSniff implements Sniff
 			$phpcsFile->addError(
 				sprintf('Strict parameter should be set to true in %s() call.', $functionName),
 				$stringPointer,
-				self::CODE_NON_STRICT_COMPARISON
+				self::CODE_NON_STRICT_COMPARISON,
 			);
 
 		} elseif ($parametersCount === self::FUNCTIONS[$functionName] - 1) {
 			$phpcsFile->addError(
 				sprintf('Strict parameter missing in %s() call.', $functionName),
 				$stringPointer,
-				self::CODE_STRICT_PARAMETER_MISSING
+				self::CODE_STRICT_PARAMETER_MISSING,
 			);
 		}
 	}

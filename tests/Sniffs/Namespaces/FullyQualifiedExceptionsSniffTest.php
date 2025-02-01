@@ -93,7 +93,7 @@ class FullyQualifiedExceptionsSniffTest extends TestCase
 					'Foo\SomeError',
 					'Lorem\Ipsum\SomeOtherError',
 				],
-			]
+			],
 		);
 
 		// Throwing used exception

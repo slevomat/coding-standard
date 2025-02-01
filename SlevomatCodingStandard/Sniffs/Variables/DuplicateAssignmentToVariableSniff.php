@@ -63,7 +63,7 @@ class DuplicateAssignmentToVariableSniff implements Sniff
 		$phpcsFile->addError(
 			sprintf('Duplicate assignment to variable %s.', $tokens[$secondVariablePointer]['content']),
 			$secondVariablePointer,
-			self::CODE_DUPLICATE_ASSIGNMENT
+			self::CODE_DUPLICATE_ASSIGNMENT,
 		);
 	}
 

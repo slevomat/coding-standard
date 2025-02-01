@@ -11,17 +11,13 @@ use function substr;
 class TypeHint
 {
 
-	/** @var string */
-	private $typeHint;
+	private string $typeHint;
 
-	/** @var bool */
-	private $nullable;
+	private bool $nullable;
 
-	/** @var int */
-	private $startPointer;
+	private int $startPointer;
 
-	/** @var int */
-	private $endPointer;
+	private int $endPointer;
 
 	public function __construct(string $typeHint, bool $nullable, int $startPointer, int $endPointer)
 	{

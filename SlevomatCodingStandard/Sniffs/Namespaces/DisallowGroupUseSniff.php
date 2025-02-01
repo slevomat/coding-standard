@@ -30,7 +30,7 @@ class DisallowGroupUseSniff implements Sniff
 		$phpcsFile->addError(
 			'Group use declaration is disallowed, use single use for every import.',
 			$usePointer,
-			self::CODE_DISALLOWED_GROUP_USE
+			self::CODE_DISALLOWED_GROUP_USE,
 		);
 	}
 

@@ -22,17 +22,13 @@ class ArrowFunctionDeclarationSniff implements Sniff
 	public const CODE_INCORRECT_SPACES_BEFORE_ARROW = 'IncorrectSpacesBeforeArrow';
 	public const CODE_INCORRECT_SPACES_AFTER_ARROW = 'IncorrectSpacesAfterArrow';
 
-	/** @var int */
-	public $spacesCountAfterKeyword = 1;
+	public int $spacesCountAfterKeyword = 1;
 
-	/** @var int */
-	public $spacesCountBeforeArrow = 1;
+	public int $spacesCountBeforeArrow = 1;
 
-	/** @var int */
-	public $spacesCountAfterArrow = 1;
+	public int $spacesCountAfterArrow = 1;
 
-	/** @var bool */
-	public $allowMultiLine = false;
+	public bool $allowMultiLine = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -87,7 +83,7 @@ class ArrowFunctionDeclarationSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			$this->formatErrorMessage('after "fn" keyword', $this->spacesCountAfterKeyword),
 			$arrowFunctionPointer,
-			self::CODE_INCORRECT_SPACES_AFTER_KEYWORD
+			self::CODE_INCORRECT_SPACES_AFTER_KEYWORD,
 		);
 		if (!$fix) {
 			return;
@@ -121,7 +117,7 @@ class ArrowFunctionDeclarationSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			$this->formatErrorMessage('before =>', $this->spacesCountBeforeArrow),
 			$arrowPointer,
-			self::CODE_INCORRECT_SPACES_BEFORE_ARROW
+			self::CODE_INCORRECT_SPACES_BEFORE_ARROW,
 		);
 		if (!$fix) {
 			return;
@@ -149,7 +145,7 @@ class ArrowFunctionDeclarationSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			$this->formatErrorMessage('after =>', $this->spacesCountAfterArrow),
 			$arrowPointer,
-			self::CODE_INCORRECT_SPACES_AFTER_ARROW
+			self::CODE_INCORRECT_SPACES_AFTER_ARROW,
 		);
 		if (!$fix) {
 			return;

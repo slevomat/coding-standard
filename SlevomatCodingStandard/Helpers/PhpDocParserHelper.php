@@ -39,7 +39,7 @@ class PhpDocParserHelper
 			$parser = new PhpDocParser(
 				$config,
 				new TypeParser($config, $constantExpressionParser),
-				$constantExpressionParser
+				$constantExpressionParser,
 			);
 		}
 

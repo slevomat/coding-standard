@@ -15,8 +15,7 @@ class DisallowShortTernaryOperatorSniff implements Sniff
 
 	public const CODE_DISALLOWED_SHORT_TERNARY_OPERATOR = 'DisallowedShortTernaryOperator';
 
-	/** @var bool */
-	public $fixable = true;
+	public bool $fixable = true;
 
 	/**
 	 * @return array<int, (int|string)>

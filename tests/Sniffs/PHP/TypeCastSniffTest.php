@@ -23,7 +23,7 @@ class TypeCastSniffTest extends TestCase
 			$report,
 			3,
 			TypeCastSniff::CODE_FORBIDDEN_CAST_USED,
-			'Cast "(unset)" is forbidden, use "unset(...)" or assign "null" instead.'
+			'Cast "(unset)" is forbidden, use "unset(...)" or assign "null" instead.',
 		);
 		self::assertSniffError($report, 4, TypeCastSniff::CODE_FORBIDDEN_CAST_USED, 'Cast "(binary)" is forbidden and has no effect.');
 

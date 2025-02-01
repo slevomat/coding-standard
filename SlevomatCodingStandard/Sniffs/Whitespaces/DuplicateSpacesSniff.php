@@ -31,20 +31,15 @@ class DuplicateSpacesSniff implements Sniff
 
 	public const CODE_DUPLICATE_SPACES = 'DuplicateSpaces';
 
-	/** @var bool */
-	public $ignoreSpacesBeforeAssignment = false;
+	public bool $ignoreSpacesBeforeAssignment = false;
 
-	/** @var bool */
-	public $ignoreSpacesInAnnotation = false;
+	public bool $ignoreSpacesInAnnotation = false;
 
-	/** @var bool */
-	public $ignoreSpacesInComment = false;
+	public bool $ignoreSpacesInComment = false;
 
-	/** @var bool */
-	public $ignoreSpacesInParameters = false;
+	public bool $ignoreSpacesInParameters = false;
 
-	/** @var bool */
-	public $ignoreSpacesInMatch = false;
+	public bool $ignoreSpacesInMatch = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -145,7 +140,7 @@ class DuplicateSpacesSniff implements Sniff
 			$indentationWithoutTabs = str_replace(
 				IndentationHelper::TAB_INDENT,
 				$tabWidth === 0 ? IndentationHelper::SPACES_INDENT : str_repeat(' ', $tabWidth),
-				$indentation
+				$indentation,
 			);
 
 			$position = $tokens[$whitespacePointer]['column'] + $offset - strlen($indentation) + strlen($indentationWithoutTabs);
@@ -153,7 +148,7 @@ class DuplicateSpacesSniff implements Sniff
 			$fixable = $phpcsFile->addFixableError(
 				sprintf('Duplicate spaces at position %d.', $position),
 				$whitespacePointer,
-				self::CODE_DUPLICATE_SPACES
+				self::CODE_DUPLICATE_SPACES,
 			);
 
 			if ($fixable) {

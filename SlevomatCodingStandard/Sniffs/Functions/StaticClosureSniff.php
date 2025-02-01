@@ -62,7 +62,7 @@ class StaticClosureSniff implements Sniff
 			T_VARIABLE,
 			'$this',
 			$closureScopeOpenerPointer + 1,
-			$closureScopeCloserPointer
+			$closureScopeCloserPointer,
 		);
 		if ($thisPointer !== null) {
 			return;
@@ -72,7 +72,7 @@ class StaticClosureSniff implements Sniff
 			$phpcsFile,
 			T_DOUBLE_QUOTED_STRING,
 			$closureScopeOpenerPointer + 1,
-			$closureScopeCloserPointer
+			$closureScopeCloserPointer,
 		);
 		foreach ($stringPointers as $stringPointer) {
 			if (VariableHelper::isUsedInScopeInString($phpcsFile, '$this', $stringPointer)) {
@@ -88,7 +88,7 @@ class StaticClosureSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Closure not using "$this" should be declared static.',
 			$closurePointer,
-			self::CODE_CLOSURE_NOT_STATIC
+			self::CODE_CLOSURE_NOT_STATIC,
 		);
 
 		if (!$fix) {

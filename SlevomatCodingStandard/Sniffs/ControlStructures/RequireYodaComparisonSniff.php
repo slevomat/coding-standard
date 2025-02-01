@@ -23,8 +23,7 @@ class RequireYodaComparisonSniff implements Sniff
 
 	public const CODE_REQUIRED_YODA_COMPARISON = 'RequiredYodaComparison';
 
-	/** @var bool */
-	public $alwaysVariableOnRight = false;
+	public bool $alwaysVariableOnRight = false;
 
 	/**
 	 * @return array<int, (int|string)>

@@ -35,7 +35,7 @@ class DisallowNonCapturingCatchSniff implements Sniff
 			$phpcsFile,
 			T_VARIABLE,
 			$tokens[$catchPointer]['parenthesis_opener'],
-			$tokens[$catchPointer]['parenthesis_closer']
+			$tokens[$catchPointer]['parenthesis_closer'],
 		);
 
 		if ($variablePointer === null) {

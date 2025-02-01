@@ -12,7 +12,7 @@ class NamespaceDeclarationSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/namespaceDeclarationInvalidWhitespaceAfterNamespaceNoErrors.php',
 			[],
-			[NamespaceDeclarationSniff::CODE_INVALID_WHITESPACE_AFTER_NAMESPACE]
+			[NamespaceDeclarationSniff::CODE_INVALID_WHITESPACE_AFTER_NAMESPACE],
 		);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -22,7 +22,7 @@ class NamespaceDeclarationSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/namespaceDeclarationInvalidWhitespaceAfterNamespaceErrors.php',
 			[],
-			[NamespaceDeclarationSniff::CODE_INVALID_WHITESPACE_AFTER_NAMESPACE]
+			[NamespaceDeclarationSniff::CODE_INVALID_WHITESPACE_AFTER_NAMESPACE],
 		);
 
 		self::assertSame(3, $report->getErrorCount());
@@ -31,19 +31,19 @@ class NamespaceDeclarationSniffTest extends TestCase
 			$report,
 			3,
 			NamespaceDeclarationSniff::CODE_INVALID_WHITESPACE_AFTER_NAMESPACE,
-			'Expected one space after namespace statement, found 5.'
+			'Expected one space after namespace statement, found 5.',
 		);
 		self::assertSniffError(
 			$report,
 			5,
 			NamespaceDeclarationSniff::CODE_INVALID_WHITESPACE_AFTER_NAMESPACE,
-			'Expected one space after namespace statement, found tab.'
+			'Expected one space after namespace statement, found tab.',
 		);
 		self::assertSniffError(
 			$report,
 			7,
 			NamespaceDeclarationSniff::CODE_INVALID_WHITESPACE_AFTER_NAMESPACE,
-			'Expected one space after namespace statement.'
+			'Expected one space after namespace statement.',
 		);
 
 		self::assertAllFixedInFile($report);
@@ -54,7 +54,7 @@ class NamespaceDeclarationSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/namespaceDeclarationDisallowedContentBetweenNamespaceNameAndSemicolonNoErrors.php',
 			[],
-			[NamespaceDeclarationSniff::CODE_DISALLOWED_CONTENT_BETWEEN_NAMESPACE_NAME_AND_SEMICOLON]
+			[NamespaceDeclarationSniff::CODE_DISALLOWED_CONTENT_BETWEEN_NAMESPACE_NAME_AND_SEMICOLON],
 		);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -64,7 +64,7 @@ class NamespaceDeclarationSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/namespaceDeclarationDisallowedContentBetweenNamespaceNameAndSemicolonErrors.php',
 			[],
-			[NamespaceDeclarationSniff::CODE_DISALLOWED_CONTENT_BETWEEN_NAMESPACE_NAME_AND_SEMICOLON]
+			[NamespaceDeclarationSniff::CODE_DISALLOWED_CONTENT_BETWEEN_NAMESPACE_NAME_AND_SEMICOLON],
 		);
 
 		self::assertSame(3, $report->getErrorCount());
@@ -81,7 +81,7 @@ class NamespaceDeclarationSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/namespaceDeclarationDisallowedBracketedSyntaxNoErrors.php',
 			[],
-			[NamespaceDeclarationSniff::CODE_DISALLOWED_BRACKETED_SYNTAX]
+			[NamespaceDeclarationSniff::CODE_DISALLOWED_BRACKETED_SYNTAX],
 		);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -91,7 +91,7 @@ class NamespaceDeclarationSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/namespaceDeclarationDisallowedBracketedSyntaxErrors.php',
 			[],
-			[NamespaceDeclarationSniff::CODE_DISALLOWED_BRACKETED_SYNTAX]
+			[NamespaceDeclarationSniff::CODE_DISALLOWED_BRACKETED_SYNTAX],
 		);
 
 		self::assertSame(2, $report->getErrorCount());

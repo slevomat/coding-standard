@@ -92,7 +92,7 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 			if (in_array(
 				$tokens[$pointerAfterOperator]['code'],
 				[T_CONSTANT_ENCAPSED_STRING, T_DOUBLE_QUOTED_STRING, T_START_HEREDOC, T_START_NOWDOC],
-				true
+				true,
 			)) {
 				return;
 			}
@@ -124,7 +124,7 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 		$errorMessage = sprintf(
 			'Use "%s" operator instead of "=" and "%s".',
 			$operators[$tokens[$operatorPointer]['code']],
-			$tokens[$operatorPointer]['content']
+			$tokens[$operatorPointer]['content'],
 		);
 
 		if (!$isFixable) {

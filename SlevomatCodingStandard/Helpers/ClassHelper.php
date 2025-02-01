@@ -110,9 +110,7 @@ class ClassHelper
 	 */
 	private static function getAllClassPointers(File $phpcsFile): array
 	{
-		$lazyValue = static function () use ($phpcsFile): array {
-			return TokenHelper::findNextAll($phpcsFile, TokenHelper::$typeWithAnonymousClassKeywordTokenCodes, 0);
-		};
+		$lazyValue = static fn (): array => TokenHelper::findNextAll($phpcsFile, TokenHelper::$typeWithAnonymousClassKeywordTokenCodes, 0);
 
 		return SniffLocalCache::getAndSetIfNotCached($phpcsFile, 'classPointers', $lazyValue);
 	}

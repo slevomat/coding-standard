@@ -54,7 +54,7 @@ class RequireOneLinePropertyDocCommentSniff extends AbstractRequireOneLineDocCom
 		return $phpcsFile->addFixableError(
 			sprintf($error, PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer)),
 			$docCommentStartPointer,
-			self::CODE_MULTI_LINE_PROPERTY_COMMENT
+			self::CODE_MULTI_LINE_PROPERTY_COMMENT,
 		);
 	}
 

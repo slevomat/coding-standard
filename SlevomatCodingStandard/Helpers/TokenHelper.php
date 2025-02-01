@@ -62,13 +62,13 @@ class TokenHelper
 {
 
 	/** @var array<int, (int|string)> */
-	public static $arrayTokenCodes = [
+	public static array $arrayTokenCodes = [
 		T_ARRAY,
 		T_OPEN_SHORT_ARRAY,
 	];
 
 	/** @var array<int, (int|string)> */
-	public static $typeKeywordTokenCodes = [
+	public static array $typeKeywordTokenCodes = [
 		T_CLASS,
 		T_TRAIT,
 		T_INTERFACE,
@@ -76,7 +76,7 @@ class TokenHelper
 	];
 
 	/** @var array<int, (int|string)> */
-	public static $typeWithAnonymousClassKeywordTokenCodes = [
+	public static array $typeWithAnonymousClassKeywordTokenCodes = [
 		T_CLASS,
 		T_ANON_CLASS,
 		T_TRAIT,
@@ -85,7 +85,7 @@ class TokenHelper
 	];
 
 	/** @var array<int, (int|string)> */
-	public static $ineffectiveTokenCodes = [
+	public static array $ineffectiveTokenCodes = [
 		T_WHITESPACE,
 		T_COMMENT,
 		T_DOC_COMMENT,
@@ -103,7 +103,7 @@ class TokenHelper
 	];
 
 	/** @var array<int, (int|string)> */
-	public static $annotationTokenCodes = [
+	public static array $annotationTokenCodes = [
 		T_DOC_COMMENT_TAG,
 		T_PHPCS_DISABLE,
 		T_PHPCS_ENABLE,
@@ -113,7 +113,7 @@ class TokenHelper
 	];
 
 	/** @var array<int, (int|string)> */
-	public static $inlineCommentTokenCodes = [
+	public static array $inlineCommentTokenCodes = [
 		T_COMMENT,
 		T_PHPCS_DISABLE,
 		T_PHPCS_ENABLE,
@@ -123,7 +123,7 @@ class TokenHelper
 	];
 
 	/** @var array<int, (int|string)> */
-	public static $earlyExitTokenCodes = [
+	public static array $earlyExitTokenCodes = [
 		T_RETURN,
 		T_CONTINUE,
 		T_BREAK,
@@ -132,14 +132,14 @@ class TokenHelper
 	];
 
 	/** @var array<int, (int|string)> */
-	public static $functionTokenCodes = [
+	public static array $functionTokenCodes = [
 		T_FUNCTION,
 		T_CLOSURE,
 		T_FN,
 	];
 
 	/** @var array<int, (int|string)> */
-	public static $propertyModifiersTokenCodes = [
+	public static array $propertyModifiersTokenCodes = [
 		T_VAR,
 		T_PUBLIC,
 		T_PROTECTED,
@@ -424,7 +424,7 @@ class TokenHelper
 			$phpcsFile,
 			[T_WHITESPACE, T_DOC_COMMENT_WHITESPACE],
 			$phpcsFile->eolChar,
-			$pointer
+			$pointer,
 		);
 		if ($newLinePointerOnPreviousLine === null) {
 			return null;
@@ -434,7 +434,7 @@ class TokenHelper
 			$phpcsFile,
 			[T_WHITESPACE, T_DOC_COMMENT_WHITESPACE],
 			$phpcsFile->eolChar,
-			$newLinePointerOnPreviousLine - 1
+			$newLinePointerOnPreviousLine - 1,
 		);
 		if ($newLinePointerBeforePreviousLine === null) {
 			return null;
@@ -505,7 +505,7 @@ class TokenHelper
 					T_FALSE,
 					T_TRUE,
 					T_NULL,
-				]
+				],
 			);
 		}
 
@@ -522,7 +522,7 @@ class TokenHelper
 		if ($typeHintTokenCodes === null) {
 			$typeHintTokenCodes = array_merge(
 				self::getOnlyTypeHintTokenCodes(),
-				[T_TYPE_UNION, T_TYPE_INTERSECTION]
+				[T_TYPE_UNION, T_TYPE_INTERSECTION],
 			);
 		}
 

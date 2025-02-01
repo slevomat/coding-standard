@@ -15,26 +15,26 @@ class ClassHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithNamespace.php');
 		self::assertSame(
 			'\FooNamespace\FooClass',
-			ClassHelper::getFullyQualifiedName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooClass'))
+			ClassHelper::getFullyQualifiedName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooClass')),
 		);
 		self::assertSame('FooClass', ClassHelper::getName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooClass')));
 		self::assertSame(
 			'\FooNamespace\FooInterface',
-			ClassHelper::getFullyQualifiedName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooInterface'))
+			ClassHelper::getFullyQualifiedName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooInterface')),
 		);
 		self::assertSame('FooInterface', ClassHelper::getName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooInterface')));
 		self::assertSame(
 			'\FooNamespace\FooTrait',
-			ClassHelper::getFullyQualifiedName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooTrait'))
+			ClassHelper::getFullyQualifiedName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooTrait')),
 		);
 		self::assertSame('FooTrait', ClassHelper::getName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooTrait')));
 		self::assertSame(
 			'class@anonymous',
-			ClassHelper::getFullyQualifiedName($phpcsFile, $this->findPointerByLineAndType($phpcsFile, 20, T_ANON_CLASS))
+			ClassHelper::getFullyQualifiedName($phpcsFile, $this->findPointerByLineAndType($phpcsFile, 20, T_ANON_CLASS)),
 		);
 		self::assertSame(
 			'class@anonymous',
-			ClassHelper::getName($phpcsFile, $this->findPointerByLineAndType($phpcsFile, 20, T_ANON_CLASS))
+			ClassHelper::getName($phpcsFile, $this->findPointerByLineAndType($phpcsFile, 20, T_ANON_CLASS)),
 		);
 	}
 
@@ -43,26 +43,26 @@ class ClassHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithoutNamespace.php');
 		self::assertSame(
 			'\FooClass',
-			ClassHelper::getFullyQualifiedName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooClass'))
+			ClassHelper::getFullyQualifiedName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooClass')),
 		);
 		self::assertSame('FooClass', ClassHelper::getName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooClass')));
 		self::assertSame(
 			'\FooInterface',
-			ClassHelper::getFullyQualifiedName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooInterface'))
+			ClassHelper::getFullyQualifiedName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooInterface')),
 		);
 		self::assertSame('FooInterface', ClassHelper::getName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooInterface')));
 		self::assertSame(
 			'\FooTrait',
-			ClassHelper::getFullyQualifiedName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooTrait'))
+			ClassHelper::getFullyQualifiedName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooTrait')),
 		);
 		self::assertSame('FooTrait', ClassHelper::getName($phpcsFile, $this->findClassPointerByName($phpcsFile, 'FooTrait')));
 		self::assertSame(
 			'class@anonymous',
-			ClassHelper::getFullyQualifiedName($phpcsFile, $this->findPointerByLineAndType($phpcsFile, 18, T_ANON_CLASS))
+			ClassHelper::getFullyQualifiedName($phpcsFile, $this->findPointerByLineAndType($phpcsFile, 18, T_ANON_CLASS)),
 		);
 		self::assertSame(
 			'class@anonymous',
-			ClassHelper::getName($phpcsFile, $this->findPointerByLineAndType($phpcsFile, 18, T_ANON_CLASS))
+			ClassHelper::getName($phpcsFile, $this->findPointerByLineAndType($phpcsFile, 18, T_ANON_CLASS)),
 		);
 	}
 

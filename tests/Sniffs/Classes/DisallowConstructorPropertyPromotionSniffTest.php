@@ -23,31 +23,31 @@ class DisallowConstructorPropertyPromotionSniffTest extends TestCase
 			$report,
 			6,
 			DisallowConstructorPropertyPromotionSniff::CODE_DISALLOWED_CONSTRUCTOR_PROPERTY_PROMOTION,
-			'Constructor property promotion is disallowed, promotion of property $a found.'
+			'Constructor property promotion is disallowed, promotion of property $a found.',
 		);
 		self::assertSniffError(
 			$report,
 			6,
 			DisallowConstructorPropertyPromotionSniff::CODE_DISALLOWED_CONSTRUCTOR_PROPERTY_PROMOTION,
-			'Constructor property promotion is disallowed, promotion of property $b found.'
+			'Constructor property promotion is disallowed, promotion of property $b found.',
 		);
 		self::assertSniffError(
 			$report,
 			17,
 			DisallowConstructorPropertyPromotionSniff::CODE_DISALLOWED_CONSTRUCTOR_PROPERTY_PROMOTION,
-			'Constructor property promotion is disallowed, promotion of property $a found.'
+			'Constructor property promotion is disallowed, promotion of property $a found.',
 		);
 		self::assertSniffError(
 			$report,
 			18,
 			DisallowConstructorPropertyPromotionSniff::CODE_DISALLOWED_CONSTRUCTOR_PROPERTY_PROMOTION,
-			'Constructor property promotion is disallowed, promotion of property $b found.'
+			'Constructor property promotion is disallowed, promotion of property $b found.',
 		);
 		self::assertSniffError(
 			$report,
 			19,
 			DisallowConstructorPropertyPromotionSniff::CODE_DISALLOWED_CONSTRUCTOR_PROPERTY_PROMOTION,
-			'Constructor property promotion is disallowed, promotion of property $c found.'
+			'Constructor property promotion is disallowed, promotion of property $c found.',
 		);
 	}
 

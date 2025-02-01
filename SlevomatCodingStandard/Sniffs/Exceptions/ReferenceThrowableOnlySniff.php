@@ -59,7 +59,7 @@ class ReferenceThrowableOnlySniff implements Sniff
 			$resolvedName = NamespaceHelper::resolveClassName(
 				$phpcsFile,
 				$referencedName->getNameAsReferencedInFile(),
-				$referencedName->getStartPointer()
+				$referencedName->getStartPointer(),
 			);
 			if ($resolvedName !== '\\Exception') {
 				continue;
@@ -73,7 +73,7 @@ class ReferenceThrowableOnlySniff implements Sniff
 				$previousPointer = TokenHelper::findPreviousExcluding(
 					$phpcsFile,
 					array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::getNameTokenCodes(), [T_BITWISE_OR]),
-					$previousPointer - 1
+					$previousPointer - 1,
 				);
 			}
 			if ($tokens[$previousPointer]['code'] === T_OPEN_PARENTHESIS) {
@@ -90,7 +90,7 @@ class ReferenceThrowableOnlySniff implements Sniff
 					&& SuppressHelper::isSniffSuppressed(
 						$phpcsFile,
 						$openParenthesisOpenerPointer,
-						sprintf('%s.%s', self::NAME, self::CODE_REFERENCED_GENERAL_EXCEPTION)
+						sprintf('%s.%s', self::NAME, self::CODE_REFERENCED_GENERAL_EXCEPTION),
 					)
 				) {
 					continue;
@@ -100,7 +100,7 @@ class ReferenceThrowableOnlySniff implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				$message,
 				$referencedName->getStartPointer(),
-				self::CODE_REFERENCED_GENERAL_EXCEPTION
+				self::CODE_REFERENCED_GENERAL_EXCEPTION,
 			);
 			if (!$fix) {
 				continue;

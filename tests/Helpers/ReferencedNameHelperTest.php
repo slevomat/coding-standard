@@ -220,7 +220,7 @@ class ReferencedNameHelperTest extends TestCase
 			self::assertSame($expectedName, $names[$no]->getNameAsReferencedInFile());
 			self::assertTrue(
 				$names[$no]->isClass(),
-				sprintf('%s should be class, but %s found', $names[$no]->getNameAsReferencedInFile(), $names[$no]->getType())
+				sprintf('%s should be class, but %s found', $names[$no]->getNameAsReferencedInFile(), $names[$no]->getType()),
 			);
 		}
 	}

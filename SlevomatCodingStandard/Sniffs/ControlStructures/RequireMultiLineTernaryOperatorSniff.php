@@ -25,11 +25,9 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 
 	public const CODE_MULTI_LINE_TERNARY_OPERATOR_NOT_USED = 'MultiLineTernaryOperatorNotUsed';
 
-	/** @var int */
-	public $lineLengthLimit = 0;
+	public int $lineLengthLimit = 0;
 
-	/** @var int|null */
-	public $minExpressionsLength = null;
+	public ?int $minExpressionsLength = null;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -90,7 +88,7 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Ternary operator should be reformatted to more lines.',
 			$inlineThenPointer,
-			self::CODE_MULTI_LINE_TERNARY_OPERATOR_NOT_USED
+			self::CODE_MULTI_LINE_TERNARY_OPERATOR_NOT_USED,
 		);
 
 		if (!$fix) {
@@ -125,7 +123,7 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 			$possibleEndOfLinePointer = TokenHelper::findPrevious(
 				$phpcsFile,
 				array_merge([T_WHITESPACE, T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO], TokenHelper::$inlineCommentTokenCodes),
-				$startPointer
+				$startPointer,
 			);
 			if (
 				$tokens[$possibleEndOfLinePointer]['code'] === T_WHITESPACE
@@ -167,7 +165,7 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 		if (strlen($actualIndentation) !== 0) {
 			return $actualIndentation . (substr(
 				$actualIndentation,
-				-1
+				-1,
 			) === IndentationHelper::TAB_INDENT ? IndentationHelper::TAB_INDENT : IndentationHelper::SPACES_INDENT);
 		}
 

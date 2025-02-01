@@ -36,8 +36,7 @@ class NegationOperatorSpacingSniff implements Sniff
 
 	public const CODE_INVALID_SPACE_AFTER_MINUS = 'InvalidSpaceAfterMinus';
 
-	/** @var int */
-	public $spacesCount = 0;
+	public int $spacesCount = 0;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -79,7 +78,7 @@ class NegationOperatorSpacingSniff implements Sniff
 				T_NUM_STRING,
 				T_TRAIT_C,
 				T_VARIABLE,
-			]
+			],
 		);
 
 		if (in_array($tokens[$previousEffective]['code'], $possibleOperandTypes, true)) {
@@ -103,10 +102,10 @@ class NegationOperatorSpacingSniff implements Sniff
 				'Expected exactly %d space after "%s", %d found.',
 				$this->spacesCount,
 				$tokens[$pointer]['content'],
-				$numberOfSpaces
+				$numberOfSpaces,
 			),
 			$pointer,
-			self::CODE_INVALID_SPACE_AFTER_MINUS
+			self::CODE_INVALID_SPACE_AFTER_MINUS,
 		);
 
 		if (!$fix) {

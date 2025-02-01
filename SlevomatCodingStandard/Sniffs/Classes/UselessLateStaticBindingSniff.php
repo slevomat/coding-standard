@@ -57,7 +57,7 @@ class UselessLateStaticBindingSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Useless late static binding because class is final.',
 			$staticPointer,
-			self::CODE_USELESS_LATE_STATIC_BINDING
+			self::CODE_USELESS_LATE_STATIC_BINDING,
 		);
 
 		if (!$fix) {

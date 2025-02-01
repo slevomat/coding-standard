@@ -28,14 +28,11 @@ class UseSpacingSniff implements Sniff
 	public const CODE_INCORRECT_LINES_COUNT_BETWEEN_DIFFERENT_TYPES_OF_USE = 'IncorrectLinesCountBetweenDifferentTypeOfUse';
 	public const CODE_INCORRECT_LINES_COUNT_AFTER_LAST_USE = 'IncorrectLinesCountAfterLastUse';
 
-	/** @var int */
-	public $linesCountBeforeFirstUse = 1;
+	public int $linesCountBeforeFirstUse = 1;
 
-	/** @var int */
-	public $linesCountBetweenUseTypes = 0;
+	public int $linesCountBetweenUseTypes = 0;
 
-	/** @var int */
-	public $linesCountAfterLastUse = 1;
+	public int $linesCountAfterLastUse = 1;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -107,10 +104,10 @@ class UseSpacingSniff implements Sniff
 				'Expected %d line%s before first use statement, found %d.',
 				$this->linesCountBeforeFirstUse,
 				$this->linesCountBeforeFirstUse === 1 ? '' : 's',
-				$actualLinesCountBeforeFirstUse
+				$actualLinesCountBeforeFirstUse,
 			),
 			$firstUse->getPointer(),
-			self::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_USE
+			self::CODE_INCORRECT_LINES_COUNT_BEFORE_FIRST_USE,
 		);
 
 		if (!$fix) {
@@ -167,10 +164,10 @@ class UseSpacingSniff implements Sniff
 				'Expected %d line%s after last use statement, found %d.',
 				$this->linesCountAfterLastUse,
 				$this->linesCountAfterLastUse === 1 ? '' : 's',
-				$actualLinesCountAfterLastUse
+				$actualLinesCountAfterLastUse,
 			),
 			$lastUse->getPointer(),
-			self::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_USE
+			self::CODE_INCORRECT_LINES_COUNT_AFTER_LAST_USE,
 		);
 
 		if (!$fix) {
@@ -241,10 +238,10 @@ class UseSpacingSniff implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
 					'Expected 0 lines between same types of use statement, found %d.',
-					$actualLinesCountAfterPreviousUse
+					$actualLinesCountAfterPreviousUse,
 				),
 				$use->getPointer(),
-				self::CODE_INCORRECT_LINES_COUNT_BETWEEN_SAME_TYPES_OF_USE
+				self::CODE_INCORRECT_LINES_COUNT_BETWEEN_SAME_TYPES_OF_USE,
 			);
 
 			if (!$fix) {
@@ -313,10 +310,10 @@ class UseSpacingSniff implements Sniff
 					'Expected %d line%s between different types of use statement, found %d.',
 					$this->linesCountBetweenUseTypes,
 					$this->linesCountBetweenUseTypes === 1 ? '' : 's',
-					$actualLinesCountAfterPreviousUse
+					$actualLinesCountAfterPreviousUse,
 				),
 				$use->getPointer(),
-				self::CODE_INCORRECT_LINES_COUNT_BETWEEN_DIFFERENT_TYPES_OF_USE
+				self::CODE_INCORRECT_LINES_COUNT_BETWEEN_DIFFERENT_TYPES_OF_USE,
 			);
 
 			if (!$fix) {

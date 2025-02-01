@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Slevomat Coding Standard" xsi:noNamespaceSchemaLocation="../vendor/squizlabs/php_codesniffer/phpcs.xsd">
-	<config name="php_version" value="70100"/>
+	<config name="php_version" value="70400"/>
 	<arg name="extensions" value="php"/>
 	<arg name="tab-width" value="4"/>
 	<arg name="cache" value="./../temp/phpcs"/>
@@ -364,15 +364,12 @@
 		</properties>
 	</rule>
 
-	<rule ref="SlevomatCodingStandard.Functions.DisallowArrowFunction"/>
 	<rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
 	<rule ref="SlevomatCodingStandard.Functions.DisallowNamedArguments"/>
-	<rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInCall"/>
-	<rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInClosureUse"/>
-	<rule ref="SlevomatCodingStandard.Functions.DisallowTrailingCommaInDeclaration"/>
 	<rule ref="SlevomatCodingStandard.Functions.NamedArgumentSpacing"/>
 	<rule ref="SlevomatCodingStandard.Functions.StaticClosure"/>
 	<rule ref="SlevomatCodingStandard.Functions.StrictCall"/>
+	<rule ref="SlevomatCodingStandard.Functions.RequireArrowFunction"/>
 	<rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall">
 		<properties>
 			<property name="minLineLength" value="141"/>
@@ -383,6 +380,9 @@
 			<property name="maxLineLength" value="140"/>
 		</properties>
 	</rule>
+	<rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall"/>
+	<rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInClosureUse"/>
+	<rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInDeclaration"/>
 	<rule ref="SlevomatCodingStandard.Functions.UselessParameterDefaultValue"/>
 	<rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure"/>
 	<rule ref="SlevomatCodingStandard.Functions.UnusedParameter"/>

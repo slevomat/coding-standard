@@ -40,7 +40,7 @@ class SuppressHelper
 
 				return $carry;
 			},
-			false
+			false,
 		);
 	}
 
@@ -63,7 +63,7 @@ class SuppressHelper
 		$pointerBefore = TokenHelper::findPrevious(
 			$phpcsFile,
 			[T_DOC_COMMENT_OPEN_TAG, T_DOC_COMMENT_STAR],
-			$suppressAnnotation->getStartPointer() - 1
+			$suppressAnnotation->getStartPointer() - 1,
 		);
 
 		$changeStart = $tokens[$pointerBefore]['code'] === T_DOC_COMMENT_STAR ? $pointerBefore : $suppressAnnotation->getStartPointer();
@@ -72,7 +72,7 @@ class SuppressHelper
 		$changeEnd = TokenHelper::findNext(
 			$phpcsFile,
 			[T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR],
-			$suppressAnnotation->getEndPointer() + 1
+			$suppressAnnotation->getEndPointer() + 1,
 		) - 1;
 
 		$phpcsFile->fixer->beginChangeset();

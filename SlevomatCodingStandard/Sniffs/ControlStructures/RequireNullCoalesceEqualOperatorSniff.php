@@ -18,8 +18,7 @@ class RequireNullCoalesceEqualOperatorSniff implements Sniff
 
 	public const CODE_REQUIRED_NULL_COALESCE_EQUAL_OPERATOR = 'RequiredNullCoalesceEqualOperator';
 
-	/** @var bool|null */
-	public $enable = null;
+	public ?bool $enable = null;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -82,7 +81,7 @@ class RequireNullCoalesceEqualOperatorSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Use "??=" operator instead of "=" and "??".',
 			$equalPointer,
-			self::CODE_REQUIRED_NULL_COALESCE_EQUAL_OPERATOR
+			self::CODE_REQUIRED_NULL_COALESCE_EQUAL_OPERATOR,
 		);
 
 		if (!$fix) {

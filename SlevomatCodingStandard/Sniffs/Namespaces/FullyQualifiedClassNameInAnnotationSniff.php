@@ -26,7 +26,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 	public const CODE_NON_FULLY_QUALIFIED_CLASS_NAME = 'NonFullyQualifiedClassName';
 
 	/** @var list<string> */
-	public $ignoredAnnotationNames = [];
+	public array $ignoredAnnotationNames = [];
 
 	/**
 	 * @return array<int, (int|string)>
@@ -78,7 +78,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 				$fix = $phpcsFile->addFixableError(sprintf(
 					'Class name %s in %s should be referenced via a fully qualified name.',
 					$fullyQualifiedTypeHint,
-					$annotationName
+					$annotationName,
 				), $annotation->getStartPointer(), self::CODE_NON_FULLY_QUALIFIED_CLASS_NAME);
 
 				if (!$fix) {
@@ -91,7 +91,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 					$parsedDocComment,
 					$annotation,
 					$typeHintNode,
-					new IdentifierTypeNode($fullyQualifiedTypeHint)
+					new IdentifierTypeNode($fullyQualifiedTypeHint),
 				);
 
 				$phpcsFile->fixer->beginChangeset();
@@ -100,7 +100,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 					$phpcsFile,
 					$parsedDocComment->getOpenPointer(),
 					$parsedDocComment->getClosePointer(),
-					$fixedDocComment
+					$fixedDocComment,
 				);
 
 				$phpcsFile->fixer->endChangeset();
@@ -132,7 +132,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 					'%s name %s in %s should be referenced via a fully qualified name.',
 					$isClassConstant ? 'Class' : 'Constant',
 					$fullyQualifiedTypeHint,
-					$annotationName
+					$annotationName,
 				), $annotation->getStartPointer(), self::CODE_NON_FULLY_QUALIFIED_CLASS_NAME);
 
 				if (!$fix) {
@@ -152,7 +152,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 					$parsedDocComment,
 					$annotation,
 					$constantFetchNode,
-					$fixedConstantFetchNode
+					$fixedConstantFetchNode,
 				);
 
 				$phpcsFile->fixer->beginChangeset();
@@ -161,7 +161,7 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 					$phpcsFile,
 					$parsedDocComment->getOpenPointer(),
 					$parsedDocComment->getClosePointer(),
-					$fixedDocComment
+					$fixedDocComment,
 				);
 
 				$phpcsFile->fixer->endChangeset();

@@ -60,7 +60,7 @@ class UselessConstantTypeHintSniff implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				'Useless @var annotation.',
 				$annotation->getStartPointer(),
-				self::CODE_USELESS_VAR_ANNOTATION
+				self::CODE_USELESS_VAR_ANNOTATION,
 			);
 
 			/** @var int $fixerStart */
@@ -68,7 +68,7 @@ class UselessConstantTypeHintSniff implements Sniff
 				$phpcsFile,
 				T_DOC_COMMENT_WHITESPACE,
 				$phpcsFile->eolChar,
-				$annotation->getStartPointer() - 1
+				$annotation->getStartPointer() - 1,
 			);
 			$fixerEnd = $annotation->getEndPointer();
 		}

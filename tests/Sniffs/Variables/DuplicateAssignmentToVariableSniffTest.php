@@ -23,7 +23,7 @@ class DuplicateAssignmentToVariableSniffTest extends TestCase
 			$report,
 			3,
 			DuplicateAssignmentToVariableSniff::CODE_DUPLICATE_ASSIGNMENT,
-			'Duplicate assignment to variable $a.'
+			'Duplicate assignment to variable $a.',
 		);
 	}
 

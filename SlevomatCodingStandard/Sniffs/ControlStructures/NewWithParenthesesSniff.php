@@ -74,7 +74,7 @@ class NewWithParenthesesSniff implements Sniff
 					T_CLOSE_PARENTHESIS,
 					T_DOUBLE_ARROW,
 				],
-				$shouldBeOpenParenthesisPointer
+				$shouldBeOpenParenthesisPointer,
 			);
 
 			if (
@@ -98,7 +98,7 @@ class NewWithParenthesesSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Usage of "new" without parentheses is disallowed.',
 			$newPointer,
-			self::CODE_MISSING_PARENTHESES
+			self::CODE_MISSING_PARENTHESES,
 		);
 		if (!$fix) {
 			return;

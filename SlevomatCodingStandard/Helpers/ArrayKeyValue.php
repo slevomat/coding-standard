@@ -19,26 +19,19 @@ use const T_WHITESPACE;
 class ArrayKeyValue
 {
 
-	/** @var int */
-	private $pointerStart;
+	private int $pointerStart;
 
-	/** @var int */
-	private $pointerEnd;
+	private int $pointerEnd;
 
-	/** @var ?string */
-	private $indent = null;
+	private ?string $indent = null;
 
-	/** @var ?string */
-	private $key = null;
+	private ?string $key = null;
 
-	/** @var ?int */
-	private $pointerArrow = null;
+	private ?int $pointerArrow = null;
 
-	/** @var ?int */
-	private $pointerComma = null;
+	private ?int $pointerComma = null;
 
-	/** @var bool */
-	private $unpacking = false;
+	private bool $unpacking = false;
 
 	public function __construct(File $phpcsFile, int $pointerStart, int $pointerEnd)
 	{
@@ -155,13 +148,13 @@ class ArrayKeyValue
 		}
 		$haveIndent = $firstNonWhitespace !== null && TokenHelper::findFirstNonWhitespaceOnLine(
 			$phpcsFile,
-			$firstNonWhitespace
+			$firstNonWhitespace,
 		) === $firstNonWhitespace;
 		$this->indent = $haveIndent
 			? TokenHelper::getContent(
 				$phpcsFile,
 				TokenHelper::findFirstTokenOnLine($phpcsFile, $firstNonWhitespace),
-				$firstNonWhitespace - 1
+				$firstNonWhitespace - 1,
 			)
 			: null;
 		$this->key = $this->pointerArrow !== null

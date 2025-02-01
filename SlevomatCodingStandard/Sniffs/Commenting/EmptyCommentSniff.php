@@ -97,7 +97,7 @@ class EmptyCommentSniff implements Sniff
 			$fixedWhitespaceAfterComment = preg_replace(
 				'~^[ \\t]*' . $phpcsFile->eolChar . '~',
 				'',
-				$tokens[$whitespacePointerAfterComment]['content']
+				$tokens[$whitespacePointerAfterComment]['content'],
 			);
 			$phpcsFile->fixer->replaceToken($whitespacePointerAfterComment, $fixedWhitespaceAfterComment);
 		}

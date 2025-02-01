@@ -55,7 +55,7 @@ class UnusedInheritedVariablePassedToClosureSniff implements Sniff
 				$phpcsFile,
 				T_VARIABLE,
 				$currentPointer,
-				$tokens[$parenthesisOpenerPointer]['parenthesis_closer']
+				$tokens[$parenthesisOpenerPointer]['parenthesis_closer'],
 			);
 			if ($variablePointer === null) {
 				break;
@@ -67,7 +67,7 @@ class UnusedInheritedVariablePassedToClosureSniff implements Sniff
 				$parenthesisOpenerPointer,
 				$tokens[$parenthesisOpenerPointer]['parenthesis_closer'],
 				$variablePointer,
-				$closurePointer
+				$closurePointer,
 			);
 
 			$currentPointer = $variablePointer + 1;
@@ -92,7 +92,7 @@ class UnusedInheritedVariablePassedToClosureSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			sprintf('Unused inherited variable %s passed to closure.', $tokens[$variablePointer]['content']),
 			$variablePointer,
-			self::CODE_UNUSED_INHERITED_VARIABLE
+			self::CODE_UNUSED_INHERITED_VARIABLE,
 		);
 
 		if (!$fix) {

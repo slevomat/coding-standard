@@ -14,12 +14,12 @@ final class RequireMultiLineMethodSignatureSniffTest extends TestCase
 
 		self::checkFile(
 			__DIR__ . '/data/requireMultiLineMethodSignatureNoErrors.php',
-			['includedMethodPatterns' => ['invalidPattern']]
+			['includedMethodPatterns' => ['invalidPattern']],
 		);
 
 		self::checkFile(
 			__DIR__ . '/data/requireMultiLineMethodSignatureNoErrors.php',
-			['excludedMethodPatterns' => ['invalidPattern']]
+			['excludedMethodPatterns' => ['invalidPattern']],
 		);
 	}
 
@@ -29,7 +29,7 @@ final class RequireMultiLineMethodSignatureSniffTest extends TestCase
 
 		self::checkFile(
 			__DIR__ . '/data/requireMultiLineMethodSignatureNoErrors.php',
-			['minLineLength' => 100, 'minParametersCount' => 2]
+			['minLineLength' => 100, 'minParametersCount' => 2],
 		);
 	}
 
@@ -58,7 +58,7 @@ final class RequireMultiLineMethodSignatureSniffTest extends TestCase
 			__DIR__ . '/data/requireMultiLineMethodSignatureBasedOnParamCountErrors.php',
 			[
 				'minParametersCount' => 2,
-			]
+			],
 		);
 		self::assertSame(2, $report->getErrorCount());
 

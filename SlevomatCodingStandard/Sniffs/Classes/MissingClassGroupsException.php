@@ -15,8 +15,8 @@ class MissingClassGroupsException extends Exception
 		parent::__construct(
 			sprintf(
 				'You need configure all class groups. These groups are missing from your configuration: %s.',
-				implode(', ', $groups)
-			)
+				implode(', ', $groups),
+			),
 		);
 	}
 

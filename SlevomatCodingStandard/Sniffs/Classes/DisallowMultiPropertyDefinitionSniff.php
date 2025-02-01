@@ -90,7 +90,7 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Use of multi property definition is disallowed.',
 			$visibilityPointer,
-			self::CODE_DISALLOWED_MULTI_PROPERTY_DEFINITION
+			self::CODE_DISALLOWED_MULTI_PROPERTY_DEFINITION,
 		);
 		if (!$fix) {
 			return;
@@ -153,8 +153,8 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 						: '',
 					$indentation,
 					$visibility,
-					$typeHint !== null ? sprintf(' %s', $typeHint) : ''
-				)
+					$typeHint !== null ? sprintf(' %s', $typeHint) : '',
+				),
 			);
 
 			FixerHelper::removeBetween($phpcsFile, $commaPointer, $data[$commaPointer]['pointerAfterComma']);

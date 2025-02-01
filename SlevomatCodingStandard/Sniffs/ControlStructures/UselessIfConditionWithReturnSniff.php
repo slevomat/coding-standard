@@ -24,8 +24,7 @@ class UselessIfConditionWithReturnSniff implements Sniff
 
 	public const CODE_USELESS_IF_CONDITION = 'UselessIfCondition';
 
-	/** @var bool */
-	public $assumeAllConditionExpressionsAreAlreadyBoolean = false;
+	public bool $assumeAllConditionExpressionsAreAlreadyBoolean = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -55,19 +54,17 @@ class UselessIfConditionWithReturnSniff implements Sniff
 			return;
 		}
 
-		$newCondition = static function () use ($phpcsFile, $tokens, $ifBooleanPointer, $ifPointer): string {
-			return strtolower($tokens[$ifBooleanPointer]['content']) === 'true'
+		$newCondition = static fn (): string => strtolower($tokens[$ifBooleanPointer]['content']) === 'true'
 				? TokenHelper::getContent(
 					$phpcsFile,
 					$tokens[$ifPointer]['parenthesis_opener'] + 1,
-					$tokens[$ifPointer]['parenthesis_closer'] - 1
+					$tokens[$ifPointer]['parenthesis_closer'] - 1,
 				)
 				: ConditionHelper::getNegativeCondition(
 					$phpcsFile,
 					$tokens[$ifPointer]['parenthesis_opener'] + 1,
-					$tokens[$ifPointer]['parenthesis_closer'] - 1
+					$tokens[$ifPointer]['parenthesis_closer'] - 1,
 				);
-		};
 
 		$elsePointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$ifPointer]['scope_closer'] + 1);
 
@@ -157,7 +154,7 @@ class UselessIfConditionWithReturnSniff implements Sniff
 		return ConditionHelper::conditionReturnsBoolean(
 			$phpcsFile,
 			$tokens[$ifPointer]['parenthesis_opener'] + 1,
-			$tokens[$ifPointer]['parenthesis_closer'] - 1
+			$tokens[$ifPointer]['parenthesis_closer'] - 1,
 		);
 	}
 

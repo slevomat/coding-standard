@@ -31,7 +31,7 @@ class DisallowYodaComparisonSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/fixableDisallowYodaComparisons.php',
 			[],
-			[DisallowYodaComparisonSniff::CODE_DISALLOWED_YODA_COMPARISON]
+			[DisallowYodaComparisonSniff::CODE_DISALLOWED_YODA_COMPARISON],
 		);
 		self::assertAllFixedInFile($report);
 	}

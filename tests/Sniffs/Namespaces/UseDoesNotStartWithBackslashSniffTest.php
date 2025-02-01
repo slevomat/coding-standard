@@ -29,7 +29,7 @@ class UseDoesNotStartWithBackslashSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/fixableUseDoesNotStartWithBackslash.php',
 			[],
-			[UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH]
+			[UseDoesNotStartWithBackslashSniff::CODE_STARTS_WITH_BACKSLASH],
 		);
 		self::assertAllFixedInFile($report);
 	}

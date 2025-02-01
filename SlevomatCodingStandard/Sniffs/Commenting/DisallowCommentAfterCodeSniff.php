@@ -102,12 +102,12 @@ class DisallowCommentAfterCodeSniff implements Sniff
 			&& in_array(
 				$tokens[$tokens[$firstNonWhiteSpacePointerBeforeComment]['scope_condition']]['code'],
 				[T_ELSEIF, T_ELSE, T_CLOSURE],
-				true
+				true,
 			)
 		) {
 			$phpcsFile->fixer->addContent(
 				$firstNonWhiteSpacePointerBeforeComment,
-				$phpcsFile->eolChar . IndentationHelper::addIndentation($indentation) . $commentContent
+				$phpcsFile->eolChar . IndentationHelper::addIndentation($indentation) . $commentContent,
 			);
 		} elseif ($tokens[$firstNonWhitespacePointerOnLine]['code'] === T_CLOSE_CURLY_BRACKET) {
 			$phpcsFile->fixer->addContent($firstNonWhiteSpacePointerBeforeComment, $phpcsFile->eolChar . $indentation . $commentContent);
@@ -115,7 +115,7 @@ class DisallowCommentAfterCodeSniff implements Sniff
 			$prevNonStringToken = TokenHelper::findPreviousExcluding(
 				$phpcsFile,
 				[T_WHITESPACE] + Tokens::$stringTokens,
-				$firstPointerOnLine - 1
+				$firstPointerOnLine - 1,
 			);
 			$firstTokenOnNonStringTokenLine = TokenHelper::findFirstTokenOnLine($phpcsFile, $prevNonStringToken);
 			$firstNonWhitespacePointerOnNonStringTokenLine = TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $prevNonStringToken);

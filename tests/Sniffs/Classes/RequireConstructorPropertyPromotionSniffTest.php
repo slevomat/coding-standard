@@ -27,43 +27,43 @@ class RequireConstructorPropertyPromotionSniffTest extends TestCase
 			$report,
 			6,
 			RequireConstructorPropertyPromotionSniff::CODE_REQUIRED_CONSTRUCTOR_PROPERTY_PROMOTION,
-			'Required promotion of property $a.'
+			'Required promotion of property $a.',
 		);
 		self::assertSniffError(
 			$report,
 			11,
 			RequireConstructorPropertyPromotionSniff::CODE_REQUIRED_CONSTRUCTOR_PROPERTY_PROMOTION,
-			'Required promotion of property $b.'
+			'Required promotion of property $b.',
 		);
 		self::assertSniffError(
 			$report,
 			13,
 			RequireConstructorPropertyPromotionSniff::CODE_REQUIRED_CONSTRUCTOR_PROPERTY_PROMOTION,
-			'Required promotion of property $c.'
+			'Required promotion of property $c.',
 		);
 		self::assertSniffError(
 			$report,
 			18,
 			RequireConstructorPropertyPromotionSniff::CODE_REQUIRED_CONSTRUCTOR_PROPERTY_PROMOTION,
-			'Required promotion of property $e.'
+			'Required promotion of property $e.',
 		);
 		self::assertSniffError(
 			$report,
 			20,
 			RequireConstructorPropertyPromotionSniff::CODE_REQUIRED_CONSTRUCTOR_PROPERTY_PROMOTION,
-			'Required promotion of property $f.'
+			'Required promotion of property $f.',
 		);
 		self::assertSniffError(
 			$report,
 			23,
 			RequireConstructorPropertyPromotionSniff::CODE_REQUIRED_CONSTRUCTOR_PROPERTY_PROMOTION,
-			'Required promotion of property $g.'
+			'Required promotion of property $g.',
 		);
 		self::assertSniffError(
 			$report,
 			44,
 			RequireConstructorPropertyPromotionSniff::CODE_REQUIRED_CONSTRUCTOR_PROPERTY_PROMOTION,
-			'Required promotion of property $from.'
+			'Required promotion of property $from.',
 		);
 
 		self::assertAllFixedInFile($report);

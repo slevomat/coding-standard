@@ -30,17 +30,13 @@ class DeclareStrictTypesSniff implements Sniff
 
 	public const CODE_INCORRECT_WHITESPACE_AFTER_DECLARE = 'IncorrectWhitespaceAfterDeclare';
 
-	/** @var bool */
-	public $declareOnFirstLine = false;
+	public bool $declareOnFirstLine = false;
 
-	/** @var int */
-	public $linesCountBeforeDeclare = 1;
+	public int $linesCountBeforeDeclare = 1;
 
-	/** @var int */
-	public $linesCountAfterDeclare = 1;
+	public int $linesCountAfterDeclare = 1;
 
-	/** @var int */
-	public $spacesCountAroundEqualsSign = 1;
+	public int $spacesCountAroundEqualsSign = 1;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -73,13 +69,13 @@ class DeclareStrictTypesSniff implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				sprintf('Missing declare(%s).', $this->getStrictTypeDeclaration()),
 				$openTagPointer,
-				self::CODE_DECLARE_STRICT_TYPES_MISSING
+				self::CODE_DECLARE_STRICT_TYPES_MISSING,
 			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
 				$phpcsFile->fixer->addContent(
 					$openTagPointer,
-					sprintf('declare(%s);%s', $this->getStrictTypeDeclaration(), $phpcsFile->eolChar)
+					sprintf('declare(%s);%s', $this->getStrictTypeDeclaration(), $phpcsFile->eolChar),
 				);
 				$phpcsFile->fixer->endChangeset();
 			}
@@ -100,13 +96,13 @@ class DeclareStrictTypesSniff implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				sprintf('Missing declare(%s).', $this->getStrictTypeDeclaration()),
 				$declarePointer,
-				self::CODE_DECLARE_STRICT_TYPES_MISSING
+				self::CODE_DECLARE_STRICT_TYPES_MISSING,
 			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
 				$phpcsFile->fixer->addContentBefore(
 					$tokens[$declarePointer]['parenthesis_closer'],
-					', ' . $this->getStrictTypeDeclaration()
+					', ' . $this->getStrictTypeDeclaration(),
 				);
 				$phpcsFile->fixer->endChangeset();
 			}
@@ -120,10 +116,10 @@ class DeclareStrictTypesSniff implements Sniff
 				sprintf(
 					'Expected %s, found %s.',
 					$this->getStrictTypeDeclaration(),
-					TokenHelper::getContent($phpcsFile, $strictTypesPointer, $numberPointer)
+					TokenHelper::getContent($phpcsFile, $strictTypesPointer, $numberPointer),
 				),
 				$declarePointer,
-				self::CODE_DECLARE_STRICT_TYPES_MISSING
+				self::CODE_DECLARE_STRICT_TYPES_MISSING,
 			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
@@ -140,10 +136,10 @@ class DeclareStrictTypesSniff implements Sniff
 				sprintf(
 					'Expected %s, found %s.',
 					$format,
-					$strictTypesContent
+					$strictTypesContent,
 				),
 				$strictTypesPointer,
-				self::CODE_INCORRECT_STRICT_TYPES_FORMAT
+				self::CODE_INCORRECT_STRICT_TYPES_FORMAT,
 			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
@@ -170,7 +166,7 @@ class DeclareStrictTypesSniff implements Sniff
 				$fix = $phpcsFile->addFixableError(
 					'There must be a single space between the PHP open tag and declare statement.',
 					$declarePointer,
-					self::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE
+					self::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE,
 				);
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
@@ -204,10 +200,10 @@ class DeclareStrictTypesSniff implements Sniff
 						'Expected %d line%s before declare statement, found %d.',
 						$this->linesCountBeforeDeclare,
 						$this->linesCountBeforeDeclare === 1 ? '' : 's',
-						$linesCountBefore
+						$linesCountBefore,
 					),
 					$declarePointer,
-					self::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE
+					self::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE,
 				);
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
@@ -247,10 +243,10 @@ class DeclareStrictTypesSniff implements Sniff
 				'Expected %d line%s after declare statement, found %d.',
 				$this->linesCountAfterDeclare,
 				$this->linesCountAfterDeclare === 1 ? '' : 's',
-				$linesCountAfter
+				$linesCountAfter,
 			),
 			$declarePointer,
-			self::CODE_INCORRECT_WHITESPACE_AFTER_DECLARE
+			self::CODE_INCORRECT_WHITESPACE_AFTER_DECLARE,
 		);
 		if (!$fix) {
 			return;
@@ -272,7 +268,7 @@ class DeclareStrictTypesSniff implements Sniff
 		return sprintf(
 			'strict_types%s=%s1',
 			str_repeat(' ', $this->spacesCountAroundEqualsSign),
-			str_repeat(' ', $this->spacesCountAroundEqualsSign)
+			str_repeat(' ', $this->spacesCountAroundEqualsSign),
 		);
 	}
 

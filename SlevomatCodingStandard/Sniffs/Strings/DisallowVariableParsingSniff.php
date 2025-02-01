@@ -24,14 +24,11 @@ class DisallowVariableParsingSniff implements Sniff
 
 	public const CODE_DISALLOWED_SIMPLE_SYNTAX = 'DisallowedSimpleSyntax';
 
-	/** @var bool */
-	public $disallowDollarCurlySyntax = true;
+	public bool $disallowDollarCurlySyntax = true;
 
-	/** @var bool */
-	public $disallowCurlyDollarSyntax = false;
+	public bool $disallowCurlyDollarSyntax = false;
 
-	/** @var bool */
-	public $disallowSimpleSyntax = false;
+	public bool $disallowSimpleSyntax = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -82,10 +79,10 @@ class DisallowVariableParsingSniff implements Sniff
 						$phpcsFile->addError(
 							sprintf(
 								'Using variable syntax "${...}" inside string is disallowed as syntax "${...}" is deprecated as of PHP 8.2, found "%s".',
-								$usedVariable
+								$usedVariable,
 							),
 							$stringPointer,
-							self::CODE_DISALLOWED_DOLLAR_CURLY_SYNTAX
+							self::CODE_DISALLOWED_DOLLAR_CURLY_SYNTAX,
 						);
 
 						break;
@@ -107,10 +104,10 @@ class DisallowVariableParsingSniff implements Sniff
 					$phpcsFile->addError(
 						sprintf(
 							'Using variable syntax "{$...}" inside string is disallowed, found "{%s}".',
-							$usedVariable
+							$usedVariable,
 						),
 						$stringPointer,
-						self::CODE_DISALLOWED_CURLY_DOLLAR_SYNTAX
+						self::CODE_DISALLOWED_CURLY_DOLLAR_SYNTAX,
 					);
 				} elseif ($this->disallowSimpleSyntax) {
 					$error = true;
@@ -132,10 +129,10 @@ class DisallowVariableParsingSniff implements Sniff
 						$phpcsFile->addError(
 							sprintf(
 								'Using variable syntax "$..." inside string is disallowed, found "%s".',
-								$this->getTokenContent($stringToken)
+								$this->getTokenContent($stringToken),
 							),
 							$stringPointer,
-							self::CODE_DISALLOWED_SIMPLE_SYNTAX
+							self::CODE_DISALLOWED_SIMPLE_SYNTAX,
 						);
 					}
 				}

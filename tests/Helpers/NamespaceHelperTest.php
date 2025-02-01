@@ -61,7 +61,7 @@ class NamespaceHelperTest extends TestCase
 	{
 		self::assertSame(
 			sprintf('\\%s', $typeName),
-			NamespaceHelper::getFullyQualifiedTypeName($typeName)
+			NamespaceHelper::getFullyQualifiedTypeName($typeName),
 		);
 	}
 
@@ -142,7 +142,7 @@ class NamespaceHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/namespacedFile.php');
 		$namespace = NamespaceHelper::findCurrentNamespaceName(
 			$phpcsFile,
-			TokenHelper::getLastTokenPointer($phpcsFile)
+			TokenHelper::getLastTokenPointer($phpcsFile),
 		);
 		self::assertSame('Foo\Bar', $namespace);
 	}
@@ -153,8 +153,8 @@ class NamespaceHelperTest extends TestCase
 		self::assertNull(
 			NamespaceHelper::findCurrentNamespaceName(
 				$phpcsFile,
-				TokenHelper::getLastTokenPointer($phpcsFile)
-			)
+				TokenHelper::getLastTokenPointer($phpcsFile),
+			),
 		);
 	}
 
@@ -163,7 +163,7 @@ class NamespaceHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/multipleNamespaces.php');
 		$namespace = NamespaceHelper::findCurrentNamespaceName(
 			$phpcsFile,
-			TokenHelper::getLastTokenPointer($phpcsFile)
+			TokenHelper::getLastTokenPointer($phpcsFile),
 		);
 		self::assertSame('Lorem\Ipsum', $namespace);
 	}
@@ -181,11 +181,11 @@ class NamespaceHelperTest extends TestCase
 
 		self::assertSame(
 			'\Something\Foo',
-			NamespaceHelper::resolveClassName($phpcsFile, 'Foo', $this->findPointerByLineAndType($phpcsFile, 7, T_STRING))
+			NamespaceHelper::resolveClassName($phpcsFile, 'Foo', $this->findPointerByLineAndType($phpcsFile, 7, T_STRING)),
 		);
 		self::assertSame(
 			'\Anything\Foo',
-			NamespaceHelper::resolveClassName($phpcsFile, 'Foo', $this->findPointerByLineAndType($phpcsFile, 16, T_STRING))
+			NamespaceHelper::resolveClassName($phpcsFile, 'Foo', $this->findPointerByLineAndType($phpcsFile, 16, T_STRING)),
 		);
 	}
 

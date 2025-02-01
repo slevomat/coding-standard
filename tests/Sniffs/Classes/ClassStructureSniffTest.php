@@ -79,7 +79,7 @@ class ClassStructureSniffTest extends TestCase
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/classStructureSniffNoErrorsWithDifferentRules.php',
-			['groups' => self::DIFFERENT_RULES]
+			['groups' => self::DIFFERENT_RULES],
 		);
 
 		self::assertNoSniffErrorInFile($report);
@@ -89,7 +89,7 @@ class ClassStructureSniffTest extends TestCase
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/classStructureSniffErrorsWithDifferentRules.php',
-			['groups' => self::DIFFERENT_RULES]
+			['groups' => self::DIFFERENT_RULES],
 		);
 
 		self::assertSame(16, $report->getErrorCount());
@@ -138,7 +138,7 @@ class ClassStructureSniffTest extends TestCase
 					'methods',
 					'magic methods',
 				],
-			]
+			],
 		);
 
 		self::assertSame(10, $report->getErrorCount());
@@ -150,7 +150,7 @@ class ClassStructureSniffTest extends TestCase
 		try {
 			self::checkFile(
 				__DIR__ . '/data/classStructureSniffNoErrors.php',
-				['groups' => ['whatever']]
+				['groups' => ['whatever']],
 			);
 			self::fail();
 		} catch (UnsupportedClassGroupException $e) {
@@ -163,7 +163,7 @@ class ClassStructureSniffTest extends TestCase
 		try {
 			self::checkFile(
 				__DIR__ . '/data/classStructureSniffNoErrors.php',
-				['groups' => ['uses']]
+				['groups' => ['uses']],
 			);
 			self::fail();
 		} catch (MissingClassGroupsException $e) {

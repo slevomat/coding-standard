@@ -23,11 +23,9 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 	public const CODE_SPACE_BEFORE_ARRAY_CLOSE = 'SpaceBeforeArrayClose';
 	public const CODE_SPACE_IN_EMPTY_ARRAY = 'SpaceInEmptyArray';
 
-	/** @var int */
-	public $spacesAroundBrackets = 0;
+	public int $spacesAroundBrackets = 0;
 
-	/** @var bool */
-	public $enableEmptyArrayCheck = false;
+	public bool $enableEmptyArrayCheck = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -187,7 +185,7 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 		$error = sprintf(
 			'Expected 0 spaces between "%s" and comma, %d found.',
 			$tokens[$comma - 2]['content'],
-			$tokens[$comma - 1]['length']
+			$tokens[$comma - 1]['length'],
 		);
 		$fix = $phpcsFile->addFixableError($error, $comma, self::CODE_SPACE_BEFORE_COMMA);
 		if (!$fix) {

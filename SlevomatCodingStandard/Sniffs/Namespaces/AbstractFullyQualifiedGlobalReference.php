@@ -28,16 +28,16 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 	public const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified';
 
 	/** @var list<string> */
-	public $exclude = [];
+	public array $exclude = [];
 
 	/** @var list<string> */
-	public $include = [];
+	public array $include = [];
 
 	/** @var list<string>|null */
-	private $normalizedExclude;
+	private ?array $normalizedExclude = null;
 
 	/** @var list<string>|null */
-	private $normalizedInclude;
+	private ?array $normalizedInclude = null;
 
 	abstract protected function getNotFullyQualifiedMessage(): string;
 
@@ -118,7 +118,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				sprintf($this->getNotFullyQualifiedMessage(), $tokens[$namePointer]['content']),
 				$namePointer,
-				self::CODE_NON_FULLY_QUALIFIED
+				self::CODE_NON_FULLY_QUALIFIED,
 			);
 			if (!$fix) {
 				continue;
@@ -161,9 +161,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 		$names = SniffSettingsHelper::normalizeArray($names);
 
 		if (!$this->isCaseSensitive()) {
-			$names = array_map(static function (string $name): string {
-				return strtolower($name);
-			}, $names);
+			$names = array_map(static fn (string $name): string => strtolower($name), $names);
 		}
 
 		return $names;

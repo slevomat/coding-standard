@@ -110,7 +110,7 @@ class UnusedUsesSniffTest extends TestCase
 			$report,
 			6,
 			UnusedUsesSniff::CODE_UNUSED_USE,
-			'Type Doctrine\ORM\Mapping (as ORM) is not used in this file.'
+			'Type Doctrine\ORM\Mapping (as ORM) is not used in this file.',
 		);
 		self::assertSniffError($report, 8, UnusedUsesSniff::CODE_UNUSED_USE, 'Type X is not used in this file.');
 		self::assertSniffError($report, 9, UnusedUsesSniff::CODE_UNUSED_USE, 'Type XX is not used in this file.');
@@ -119,19 +119,19 @@ class UnusedUsesSniffTest extends TestCase
 			$report,
 			11,
 			UnusedUsesSniff::CODE_UNUSED_USE,
-			'Type Doctrine\Common\Collections\Collection is not used in this file.'
+			'Type Doctrine\Common\Collections\Collection is not used in this file.',
 		);
 		self::assertSniffError(
 			$report,
 			12,
 			UnusedUsesSniff::CODE_UNUSED_USE,
-			'Type Doctrine\ORM\Mapping\Property is not used in this file.'
+			'Type Doctrine\ORM\Mapping\Property is not used in this file.',
 		);
 		self::assertSniffError(
 			$report,
 			13,
 			UnusedUsesSniff::CODE_UNUSED_USE,
-			'Type ProxyManager\Proxy\GhostObjectInterface is not used in this file.'
+			'Type ProxyManager\Proxy\GhostObjectInterface is not used in this file.',
 		);
 		self::assertSniffError($report, 14, UnusedUsesSniff::CODE_UNUSED_USE, 'Type InvalidArgumentException is not used in this file.');
 		self::assertSniffError($report, 15, UnusedUsesSniff::CODE_UNUSED_USE, 'Type LengthException is not used in this file.');
@@ -140,7 +140,7 @@ class UnusedUsesSniffTest extends TestCase
 			$report,
 			17,
 			UnusedUsesSniff::CODE_UNUSED_USE,
-			'Type Symfony\Component\Validator\Constraints (as Assert2) is not used in this file.'
+			'Type Symfony\Component\Validator\Constraints (as Assert2) is not used in this file.',
 		);
 		self::assertSniffError($report, 18, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Foo\Boo\A is not used in this file.');
 		self::assertSniffError($report, 19, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Foo\Boo\B is not used in this file.');
@@ -216,7 +216,7 @@ class UnusedUsesSniffTest extends TestCase
 			$report,
 			89,
 			UnusedUsesSniff::CODE_UNUSED_USE,
-			'Type Doctrine\ORM\Mapping\GeneratedValue is not used in this file.'
+			'Type Doctrine\ORM\Mapping\GeneratedValue is not used in this file.',
 		);
 		self::assertSniffError($report, 90, UnusedUsesSniff::CODE_UNUSED_USE, 'Type Doctrine\ORM\Mapping\Id is not used in this file.');
 	}

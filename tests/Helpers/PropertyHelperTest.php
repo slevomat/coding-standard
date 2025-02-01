@@ -9,8 +9,7 @@ use const T_VARIABLE;
 class PropertyHelperTest extends TestCase
 {
 
-	/** @var File */
-	private $testedCodeSnifferFile;
+	private ?File $testedCodeSnifferFile = null;
 
 	/**
 	 * @return list<array{0: string, 1: bool}>
@@ -238,7 +237,7 @@ class PropertyHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/propertyWithNamespace.php');
 		self::assertSame(
 			'\FooNamespace\FooClass::$fooProperty',
-			PropertyHelper::getFullyQualifiedName($phpcsFile, $this->findPropertyPointerByName($phpcsFile, 'fooProperty'))
+			PropertyHelper::getFullyQualifiedName($phpcsFile, $this->findPropertyPointerByName($phpcsFile, 'fooProperty')),
 		);
 	}
 
@@ -247,7 +246,7 @@ class PropertyHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/propertyWithoutNamespace.php');
 		self::assertSame(
 			'\FooClass::$fooProperty',
-			PropertyHelper::getFullyQualifiedName($phpcsFile, $this->findPropertyPointerByName($phpcsFile, 'fooProperty'))
+			PropertyHelper::getFullyQualifiedName($phpcsFile, $this->findPropertyPointerByName($phpcsFile, 'fooProperty')),
 		);
 	}
 
@@ -256,7 +255,7 @@ class PropertyHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/propertyInAnonymousClass.php');
 		self::assertSame(
 			'class@anonymous::$fooProperty',
-			PropertyHelper::getFullyQualifiedName($phpcsFile, $this->findPropertyPointerByName($phpcsFile, 'fooProperty'))
+			PropertyHelper::getFullyQualifiedName($phpcsFile, $this->findPropertyPointerByName($phpcsFile, 'fooProperty')),
 		);
 	}
 

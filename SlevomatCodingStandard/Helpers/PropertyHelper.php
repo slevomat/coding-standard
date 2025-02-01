@@ -40,7 +40,7 @@ class PropertyHelper
 		$previousPointer = TokenHelper::findPreviousExcluding(
 			$phpcsFile,
 			array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::getTypeHintTokenCodes(), [T_NULLABLE]),
-			$variablePointer - 1
+			$variablePointer - 1,
 		);
 
 		if ($tokens[$previousPointer]['code'] === T_STATIC) {
@@ -67,7 +67,7 @@ class PropertyHelper
 		$functionPointer = TokenHelper::findPrevious(
 			$phpcsFile,
 			array_merge(TokenHelper::$functionTokenCodes, [T_SEMICOLON, T_CLOSE_CURLY_BRACKET, T_OPEN_CURLY_BRACKET]),
-			$variablePointer - 1
+			$variablePointer - 1,
 		);
 		if (
 			$functionPointer !== null
@@ -88,14 +88,14 @@ class PropertyHelper
 		$propertyStartPointer = TokenHelper::findPrevious(
 			$phpcsFile,
 			[T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR, T_STATIC, T_READONLY],
-			$propertyPointer - 1
+			$propertyPointer - 1,
 		);
 
 		$typeHintEndPointer = TokenHelper::findPrevious(
 			$phpcsFile,
 			TokenHelper::getTypeHintTokenCodes(),
 			$propertyPointer - 1,
-			$propertyStartPointer
+			$propertyStartPointer,
 		);
 		if ($typeHintEndPointer === null) {
 			return null;

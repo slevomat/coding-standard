@@ -123,8 +123,8 @@ class CognitiveSniffTest extends TestCase
 				'Cognitive complexity for "%s" is %s but has to be less than or equal to %s.',
 				$functionName,
 				$expectedComplexity,
-				$expectedComplexity - 1
-			)
+				$expectedComplexity - 1,
+			),
 		);
 	}
 
@@ -148,8 +148,8 @@ class CognitiveSniffTest extends TestCase
 				'Cognitive complexity for "%s" is %s but has to be less than or equal to %s.',
 				$functionName,
 				$expectedComplexity,
-				$expectedComplexity - 2
-			)
+				$expectedComplexity - 2,
+			),
 		);
 	}
 
@@ -182,8 +182,8 @@ class CognitiveSniffTest extends TestCase
 				'Cognitive complexity for "%s" is %s but has to be less than or equal to %s.',
 				$warnInfo['func'],
 				$warnInfo['complexity'],
-				5
-			)
+				5,
+			),
 		);
 		self::assertSniffError(
 			$report,
@@ -193,8 +193,8 @@ class CognitiveSniffTest extends TestCase
 				'Cognitive complexity for "%s" is %s but has to be less than or equal to %s.',
 				$errorInfo['func'],
 				$errorInfo['complexity'],
-				5
-			)
+				5,
+			),
 		);
 	}
 
@@ -230,8 +230,8 @@ class CognitiveSniffTest extends TestCase
 				'Cognitive complexity for "%s" is %s but has to be less than or equal to %s.',
 				$functionName,
 				$expectedComplexity,
-				$expectedComplexity - 1
-			)
+				$expectedComplexity - 1,
+			),
 		);
 	}
 

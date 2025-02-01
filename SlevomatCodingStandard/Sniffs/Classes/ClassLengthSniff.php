@@ -18,14 +18,11 @@ class ClassLengthSniff implements Sniff
 
 	public const CODE_CLASS_TOO_LONG = 'ClassTooLong';
 
-	/** @var int */
-	public $maxLinesLength = 250;
+	public int $maxLinesLength = 250;
 
-	/** @var bool */
-	public $includeComments = false;
+	public bool $includeComments = false;
 
-	/** @var bool */
-	public $includeWhitespace = false;
+	public bool $includeWhitespace = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -46,9 +43,7 @@ class ClassLengthSniff implements Sniff
 			FunctionHelper::LINE_INCLUDE_COMMENT => $this->includeComments,
 			FunctionHelper::LINE_INCLUDE_WHITESPACE => $this->includeWhitespace,
 		]));
-		$flags = array_reduce($flags, static function ($carry, $flag): int {
-			return $carry | $flag;
-		}, 0);
+		$flags = array_reduce($flags, static fn ($carry, $flag): int => $carry | $flag, 0);
 
 		$length = FunctionHelper::getLineCount($phpcsFile, $pointer, $flags);
 

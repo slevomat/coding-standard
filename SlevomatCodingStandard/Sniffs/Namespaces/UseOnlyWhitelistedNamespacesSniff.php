@@ -15,14 +15,13 @@ class UseOnlyWhitelistedNamespacesSniff implements Sniff
 
 	public const CODE_NON_FULLY_QUALIFIED = 'NonFullyQualified';
 
-	/** @var bool */
-	public $allowUseFromRootNamespace = false;
+	public bool $allowUseFromRootNamespace = false;
 
 	/** @var list<string> */
-	public $namespacesRequiredToUse = [];
+	public array $namespacesRequiredToUse = [];
 
 	/** @var list<string>|null */
-	private $normalizedNamespacesRequiredToUse;
+	private ?array $normalizedNamespacesRequiredToUse = null;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -59,7 +58,7 @@ class UseOnlyWhitelistedNamespacesSniff implements Sniff
 
 		$phpcsFile->addError(sprintf(
 			'Type %s should not be used, but referenced via a fully qualified name.',
-			$className
+			$className,
 		), $usePointer, self::CODE_NON_FULLY_QUALIFIED);
 	}
 

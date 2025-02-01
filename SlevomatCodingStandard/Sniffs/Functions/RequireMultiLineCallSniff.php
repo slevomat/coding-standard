@@ -28,8 +28,7 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 
 	public const CODE_REQUIRED_MULTI_LINE_CALL = 'RequiredMultiLineCall';
 
-	/** @var int */
-	public $minLineLength = 121;
+	public int $minLineLength = 121;
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
@@ -61,7 +60,7 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 			$phpcsFile,
 			[T_COMMA, T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS, T_OPEN_SHORT_ARRAY, T_CLOSE_SHORT_ARRAY],
 			$parenthesisOpenerPointer + 1,
-			$parenthesisCloserPointer
+			$parenthesisCloserPointer,
 		);
 		foreach ($pointers as $pointer) {
 			if (in_array($tokens[$pointer]['code'], [T_OPEN_PARENTHESIS, T_OPEN_SHORT_ARRAY], true)) {
@@ -121,7 +120,7 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 			$lineStart,
 			$lineEnd,
 			count($parametersPointers),
-			strlen(IndentationHelper::convertTabsToSpaces($phpcsFile, $oneIndentation))
+			strlen(IndentationHelper::convertTabsToSpaces($phpcsFile, $oneIndentation)),
 		)) {
 			return;
 		}
@@ -205,7 +204,7 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 				&& $tokens[$tokens[$pointerAfterStringPointerAfter]['parenthesis_closer']]['line'] === $tokens[$stringPointer]['line']
 				&& $tokens[$pointerAfterStringPointerAfter]['parenthesis_closer'] !== TokenHelper::findNextEffective(
 					$phpcsFile,
-					$pointerAfterStringPointerAfter + 1
+					$pointerAfterStringPointerAfter + 1,
 				)
 			) {
 				return true;

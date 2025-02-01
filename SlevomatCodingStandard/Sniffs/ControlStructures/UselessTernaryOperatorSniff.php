@@ -19,8 +19,7 @@ class UselessTernaryOperatorSniff implements Sniff
 
 	public const CODE_USELESS_TERNARY_OPERATOR = 'UselessTernaryOperator';
 
-	/** @var bool */
-	public $assumeAllConditionExpressionsAreAlreadyBoolean = false;
+	public bool $assumeAllConditionExpressionsAreAlreadyBoolean = false;
 
 	/**
 	 * @return array<int, (int|string)>

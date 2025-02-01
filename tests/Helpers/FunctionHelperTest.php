@@ -14,12 +14,12 @@ class FunctionHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionWithNamespace.php');
 		self::assertSame(
 			'\FooNamespace\fooFunction',
-			FunctionHelper::getFullyQualifiedName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooFunction'))
+			FunctionHelper::getFullyQualifiedName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooFunction')),
 		);
 		self::assertSame('fooFunction', FunctionHelper::getName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooFunction')));
 		self::assertSame(
 			'\FooNamespace\FooClass::fooMethod',
-			FunctionHelper::getFullyQualifiedName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod'))
+			FunctionHelper::getFullyQualifiedName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod')),
 		);
 		self::assertSame('fooMethod', FunctionHelper::getName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod')));
 	}
@@ -29,12 +29,12 @@ class FunctionHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionWithoutNamespace.php');
 		self::assertSame(
 			'fooFunction',
-			FunctionHelper::getFullyQualifiedName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooFunction'))
+			FunctionHelper::getFullyQualifiedName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooFunction')),
 		);
 		self::assertSame('fooFunction', FunctionHelper::getName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooFunction')));
 		self::assertSame(
 			'\FooClass::fooMethod',
-			FunctionHelper::getFullyQualifiedName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod'))
+			FunctionHelper::getFullyQualifiedName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod')),
 		);
 		self::assertSame('fooMethod', FunctionHelper::getName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod')));
 	}
@@ -44,7 +44,7 @@ class FunctionHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionInAnonymousClass.php');
 		self::assertSame(
 			'class@anonymous::fooMethod',
-			FunctionHelper::getFullyQualifiedName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod'))
+			FunctionHelper::getFullyQualifiedName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod')),
 		);
 		self::assertSame('fooMethod', FunctionHelper::getName($phpcsFile, $this->findFunctionPointerByName($phpcsFile, 'fooMethod')));
 	}
@@ -242,12 +242,12 @@ class FunctionHelperTest extends TestCase
 				self::assertSame(
 					$expectedParameterTypeHint->getTypeHint(),
 					$parameterTypeHint->getTypeHint(),
-					sprintf('Parameter %s', $expectedParameterName)
+					sprintf('Parameter %s', $expectedParameterName),
 				);
 				self::assertSame(
 					$expectedParameterTypeHint->isNullable(),
 					$parameterTypeHint->isNullable(),
-					sprintf('Nullable parameter %s', $expectedParameterName)
+					sprintf('Nullable parameter %s', $expectedParameterName),
 				);
 			}
 		}
@@ -270,7 +270,7 @@ class FunctionHelperTest extends TestCase
 			self::assertSame(
 				$expectedParameterTypeHint->getTypeHint(),
 				$parameterTypeHint->getTypeHint(),
-				$parameterTypeHint->getTypeHint()
+				$parameterTypeHint->getTypeHint(),
 			);
 			self::assertSame($expectedParameterTypeHint->isNullable(), $parameterTypeHint->isNullable(), $parameterTypeHint->getTypeHint());
 		}
@@ -305,7 +305,7 @@ class FunctionHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionReturnsValueOrNot.php');
 		self::assertSame(
 			$returnsValue,
-			FunctionHelper::returnsValue($phpcsFile, $this->findFunctionPointerByName($phpcsFile, $functionName))
+			FunctionHelper::returnsValue($phpcsFile, $this->findFunctionPointerByName($phpcsFile, $functionName)),
 		);
 	}
 
@@ -330,7 +330,7 @@ class FunctionHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/closureReturnsValueOrNot.php');
 		self::assertSame(
 			$returnsValue,
-			FunctionHelper::returnsValue($phpcsFile, $this->findPointerByLineAndType($phpcsFile, $line, T_CLOSURE))
+			FunctionHelper::returnsValue($phpcsFile, $this->findPointerByLineAndType($phpcsFile, $line, T_CLOSURE)),
 		);
 	}
 
@@ -412,9 +412,10 @@ class FunctionHelperTest extends TestCase
 
 		$functionPointer = $this->findFunctionPointerByName($phpcsFile, 'withAnnotations');
 
-		$parametersAnnotations = array_map(static function (Annotation $annotation): string {
-			return (string) $annotation->getValue();
-		}, FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer));
+		$parametersAnnotations = array_map(
+			static fn (Annotation $annotation): string => (string) $annotation->getValue(),
+			FunctionHelper::getParametersAnnotations($phpcsFile, $functionPointer),
+		);
 		self::assertSame([
 			'string $a',
 			'int $b',
@@ -441,17 +442,17 @@ class FunctionHelperTest extends TestCase
 		self::assertSame(7, FunctionHelper::getFunctionLengthInLines(
 			$phpcsFile,
 			$functionPointer,
-			FunctionHelper::LINE_INCLUDE_COMMENT
+			FunctionHelper::LINE_INCLUDE_COMMENT,
 		));
 		self::assertSame(3, FunctionHelper::getFunctionLengthInLines(
 			$phpcsFile,
 			$functionPointer,
-			FunctionHelper::LINE_INCLUDE_WHITESPACE
+			FunctionHelper::LINE_INCLUDE_WHITESPACE,
 		));
 		self::assertSame(8, FunctionHelper::getFunctionLengthInLines(
 			$phpcsFile,
 			$functionPointer,
-			FunctionHelper::LINE_INCLUDE_COMMENT | FunctionHelper::LINE_INCLUDE_WHITESPACE
+			FunctionHelper::LINE_INCLUDE_COMMENT | FunctionHelper::LINE_INCLUDE_WHITESPACE,
 		));
 	}
 

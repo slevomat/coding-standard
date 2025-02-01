@@ -15,7 +15,7 @@ class UseOnlyWhitelistedNamespacesSniffTest extends TestCase
 				'namespacesRequiredToUse' => [
 					'Foo',
 				],
-			]
+			],
 		);
 
 		self::assertSniffError($report, 5, UseOnlyWhitelistedNamespacesSniff::CODE_NON_FULLY_QUALIFIED, 'Dolor');
@@ -47,7 +47,7 @@ class UseOnlyWhitelistedNamespacesSniffTest extends TestCase
 					'Foo',
 				],
 				'allowUseFromRootNamespace' => true,
-			]
+			],
 		);
 
 		self::assertNoSniffError($report, 5);

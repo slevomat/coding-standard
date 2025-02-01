@@ -42,7 +42,7 @@ class DeprecatedAnnotationDeclarationSniff implements Sniff
 			$phpcsFile->addError(
 				'Deprecated annotation must have a description.',
 				$annotation->getStartPointer(),
-				self::MISSING_DESCRIPTION
+				self::MISSING_DESCRIPTION,
 			);
 		}
 	}

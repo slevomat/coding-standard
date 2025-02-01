@@ -27,8 +27,7 @@ class RequireTernaryOperatorSniff implements Sniff
 
 	public const CODE_TERNARY_OPERATOR_NOT_USED = 'TernaryOperatorNotUsed';
 
-	/** @var bool */
-	public $ignoreMultiLine = false;
+	public bool $ignoreMultiLine = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -231,7 +230,7 @@ class RequireTernaryOperatorSniff implements Sniff
 				T_WHITESPACE,
 				$phpcsFile->eolChar,
 				$firstContentPointer + 1,
-				$semicolonPointer
+				$semicolonPointer,
 			) !== null) {
 				return false;
 			}
@@ -248,7 +247,7 @@ class RequireTernaryOperatorSniff implements Sniff
 			$phpcsFile,
 			Tokens::$commentTokens,
 			$tokens[$scopeOwnerPointer]['scope_opener'] + 1,
-			$tokens[$scopeOwnerPointer]['scope_closer']
+			$tokens[$scopeOwnerPointer]['scope_closer'],
 		) !== null;
 	}
 
@@ -259,7 +258,7 @@ class RequireTernaryOperatorSniff implements Sniff
 			$phpcsFile,
 			[T_LOGICAL_AND, T_LOGICAL_OR, T_LOGICAL_XOR],
 			$tokens[$scopeOwnerPointer]['parenthesis_opener'] + 1,
-			$tokens[$scopeOwnerPointer]['parenthesis_closer']
+			$tokens[$scopeOwnerPointer]['parenthesis_closer'],
 		) !== null;
 	}
 

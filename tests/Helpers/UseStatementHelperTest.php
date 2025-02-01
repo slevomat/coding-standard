@@ -94,7 +94,7 @@ class UseStatementHelperTest extends TestCase
 		$lerdorfIsBarConstantUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $loremIpsumUsePointer + 1);
 		self::assertSame(
 			'Lerdorf\IS_BAR',
-			UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $lerdorfIsBarConstantUsePointer)
+			UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $lerdorfIsBarConstantUsePointer),
 		);
 
 		$rasmusFooConstantUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $lerdorfIsBarConstantUsePointer + 1);
@@ -103,7 +103,7 @@ class UseStatementHelperTest extends TestCase
 		$lerdorfIsBarFunctionUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $rasmusFooConstantUsePointer + 1);
 		self::assertSame(
 			'Lerdorf\isBar',
-			UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $lerdorfIsBarFunctionUsePointer)
+			UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $lerdorfIsBarFunctionUsePointer),
 		);
 
 		$rasmusFooFunctionUsePointer = TokenHelper::findNext($phpcsFile, T_USE, $lerdorfIsBarFunctionUsePointer + 1);
@@ -122,7 +122,7 @@ class UseStatementHelperTest extends TestCase
 			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CLASS, 'Baz')],
 			false,
 			false,
-			null
+			null,
 		);
 		self::assertUseStatement(
 			'Foo',
@@ -130,7 +130,7 @@ class UseStatementHelperTest extends TestCase
 			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CLASS, 'Foo')],
 			false,
 			false,
-			null
+			null,
 		);
 		self::assertUseStatement(
 			'Lorem\Ipsum',
@@ -138,7 +138,7 @@ class UseStatementHelperTest extends TestCase
 			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CLASS, 'LoremIpsum')],
 			false,
 			false,
-			'LoremIpsum'
+			'LoremIpsum',
 		);
 		self::assertUseStatement(
 			'Zero',
@@ -146,7 +146,7 @@ class UseStatementHelperTest extends TestCase
 			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CLASS, 'Zero')],
 			false,
 			false,
-			null
+			null,
 		);
 		self::assertUseStatement(
 			'Rasmus\FOO',
@@ -154,7 +154,7 @@ class UseStatementHelperTest extends TestCase
 			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CONSTANT, 'FOO')],
 			false,
 			true,
-			null
+			null,
 		);
 		self::assertUseStatement(
 			'Rasmus\foo',
@@ -162,7 +162,7 @@ class UseStatementHelperTest extends TestCase
 			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_FUNCTION, 'foo')],
 			true,
 			false,
-			null
+			null,
 		);
 		self::assertUseStatement(
 			'Lerdorf\IS_BAR',
@@ -170,7 +170,7 @@ class UseStatementHelperTest extends TestCase
 			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CONSTANT, 'IS_BAR')],
 			false,
 			true,
-			null
+			null,
 		);
 		self::assertUseStatement(
 			'Lerdorf\isBar',
@@ -178,7 +178,7 @@ class UseStatementHelperTest extends TestCase
 			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_FUNCTION, 'isBar')],
 			true,
 			false,
-			null
+			null,
 		);
 	}
 

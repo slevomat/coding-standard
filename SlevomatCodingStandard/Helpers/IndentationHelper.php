@@ -97,7 +97,7 @@ class IndentationHelper
 		return preg_replace_callback('~^(\t+)~', static function (array $matches) use ($phpcsFile): string {
 			$indentation = str_repeat(
 				' ',
-				$phpcsFile->config->tabWidth !== 0 ? $phpcsFile->config->tabWidth : self::DEFAULT_INDENTATION_WIDTH
+				$phpcsFile->config->tabWidth !== 0 ? $phpcsFile->config->tabWidth : self::DEFAULT_INDENTATION_WIDTH,
 			);
 			return str_repeat($indentation, strlen($matches[1]));
 		}, $code);

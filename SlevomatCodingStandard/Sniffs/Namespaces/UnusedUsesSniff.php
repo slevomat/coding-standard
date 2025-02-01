@@ -40,20 +40,19 @@ class UnusedUsesSniff implements Sniff
 
 	public const CODE_UNUSED_USE = 'UnusedUse';
 
-	/** @var bool */
-	public $searchAnnotations = false;
+	public bool $searchAnnotations = false;
 
 	/** @var list<string> */
-	public $ignoredAnnotationNames = [];
+	public array $ignoredAnnotationNames = [];
 
 	/** @var list<string> */
-	public $ignoredAnnotations = [];
+	public array $ignoredAnnotations = [];
 
 	/** @var list<string>|null */
-	private $normalizedIgnoredAnnotationNames;
+	private ?array $normalizedIgnoredAnnotationNames = null;
 
 	/** @var list<string>|null */
-	private $normalizedIgnoredAnnotations;
+	private ?array $normalizedIgnoredAnnotations = null;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -129,7 +128,7 @@ class UnusedUsesSniff implements Sniff
 				$pointerBeforeUseStatements = $this->firstPointerBefore(
 					$docCommentOpenPointer - 1,
 					$pointersBeforeUseStatements,
-					$startPointer
+					$startPointer,
 				);
 
 				if (!array_key_exists($pointerBeforeUseStatements, $fileUnusedNames)) {
@@ -163,12 +162,12 @@ class UnusedUsesSniff implements Sniff
 							/** @var list<IdentifierTypeNode> $identifierTypeNodes */
 							$identifierTypeNodes = AnnotationHelper::getAnnotationNodesByType(
 								$annotation->getNode(),
-								IdentifierTypeNode::class
+								IdentifierTypeNode::class,
 							);
 							/** @var list<DoctrineAnnotation> $doctrineAnnotations */
 							$doctrineAnnotations = AnnotationHelper::getAnnotationNodesByType(
 								$annotation->getNode(),
-								DoctrineAnnotation::class
+								DoctrineAnnotation::class,
 							);
 							/** @var list<ConstFetchNode> $constFetchNodes */
 							$constFetchNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), ConstFetchNode::class);
@@ -193,18 +192,17 @@ class UnusedUsesSniff implements Sniff
 
 									return $doctrineAnnotation->name;
 								}, $doctrineAnnotations),
-								array_map(static function (ConstFetchNode $constFetchNode): string {
-									return $constFetchNode->className;
-								}, $constFetchNodes)
-							), static function (?string $content): bool {
-								return $content !== null;
-							});
+								array_map(
+									static fn (ConstFetchNode $constFetchNode): string => $constFetchNode->className,
+									$constFetchNodes,
+								),
+							), static fn (?string $content): bool => $content !== null);
 						}
 
 						foreach ($contentsToCheck as $contentToCheck) {
 							if (preg_match(
 								'~(?<=^|[^a-z\\\\])(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|::|\\\\|\||\[|$)~im',
-								$contentToCheck
+								$contentToCheck,
 							) === 0) {
 								continue;
 							}
@@ -230,7 +228,7 @@ class UnusedUsesSniff implements Sniff
 				}
 				$fix = $phpcsFile->addFixableError(sprintf(
 					'Type %s is not used in this file.',
-					$fullName
+					$fullName,
 				), $unusedUse->getPointer(), self::CODE_UNUSED_USE);
 				if (!$fix) {
 					continue;
@@ -260,7 +258,7 @@ class UnusedUsesSniff implements Sniff
 					'@throws',
 					'@property',
 					'@method',
-				]
+				],
 			);
 		}
 

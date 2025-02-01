@@ -19,17 +19,13 @@ use const T_DOC_COMMENT_STRING;
 class ParsedDocComment
 {
 
-	/** @var int */
-	private $openPointer;
+	private int $openPointer;
 
-	/** @var int */
-	private $closePointer;
+	private int $closePointer;
 
-	/** @var PhpDocNode */
-	private $node;
+	private PhpDocNode $node;
 
-	/** @var TokenIterator */
-	private $tokens;
+	private TokenIterator $tokens;
 
 	public function __construct(int $openPointer, int $closePointer, PhpDocNode $node, TokenIterator $tokens)
 	{
@@ -82,7 +78,7 @@ class ParsedDocComment
 
 		$content = trim($this->tokens->getContentBetween(
 			$node->getAttribute(Attribute::START_INDEX),
-			$node->getAttribute(Attribute::END_INDEX) + 1
+			$node->getAttribute(Attribute::END_INDEX) + 1,
 		));
 		$length = strlen($content);
 
@@ -101,7 +97,7 @@ class ParsedDocComment
 		return TokenHelper::findPrevious(
 			$phpcsFile,
 			array_merge(TokenHelper::$annotationTokenCodes, [T_DOC_COMMENT_STRING]),
-			$searchPointer
+			$searchPointer,
 		);
 	}
 

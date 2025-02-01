@@ -20,14 +20,11 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 
 	public const CODE_REQUIRED_MULTI_LINE_CONDITION = 'RequiredMultiLineCondition';
 
-	/** @var int */
-	public $minLineLength = 121;
+	public int $minLineLength = 121;
 
-	/** @var bool */
-	public $booleanOperatorOnPreviousLine = false;
+	public bool $booleanOperatorOnPreviousLine = false;
 
-	/** @var bool */
-	public $alwaysSplitAllConditionParts = false;
+	public bool $alwaysSplitAllConditionParts = false;
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
@@ -50,7 +47,7 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 			$phpcsFile,
 			Tokens::$booleanOperators,
 			$parenthesisOpenerPointer + 1,
-			$parenthesisCloserPointer
+			$parenthesisCloserPointer,
 		);
 
 		if ($booleanOperatorPointers === []) {
@@ -78,10 +75,10 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 		$fix = $phpcsFile->addFixableError(
 			sprintf(
 				'Condition of "%s" should be split to more lines so each condition part is on its own line.',
-				$this->getControlStructureName($phpcsFile, $controlStructurePointer)
+				$this->getControlStructureName($phpcsFile, $controlStructurePointer),
 			),
 			$controlStructurePointer,
-			self::CODE_REQUIRED_MULTI_LINE_CONDITION
+			self::CODE_REQUIRED_MULTI_LINE_CONDITION,
 		);
 
 		if (!$fix) {
@@ -92,7 +89,7 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 			$phpcsFile,
 			$conditionStartsOnNewLine
 				? $conditionStartPointer
-				: TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $parenthesisOpenerPointer)
+				: TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $parenthesisOpenerPointer),
 		);
 
 		$conditionIndentation = $conditionStartsOnNewLine
@@ -114,7 +111,7 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 					$phpcsFile,
 					Tokens::$booleanOperators,
 					$i + 1,
-					$tokens[$i]['parenthesis_closer']
+					$tokens[$i]['parenthesis_closer'],
 				) !== null;
 
 				$innerConditionLevel++;
@@ -124,14 +121,14 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 
 					$phpcsFile->fixer->addContent(
 						$i,
-						$phpcsFile->eolChar . IndentationHelper::addIndentation($conditionIndentation, $innerConditionLevel)
+						$phpcsFile->eolChar . IndentationHelper::addIndentation($conditionIndentation, $innerConditionLevel),
 					);
 
 					FixerHelper::removeWhitespaceBefore($phpcsFile, $tokens[$i]['parenthesis_closer']);
 
 					$phpcsFile->fixer->addContentBefore(
 						$tokens[$i]['parenthesis_closer'],
-						$phpcsFile->eolChar . IndentationHelper::addIndentation($conditionIndentation, $innerConditionLevel - 1)
+						$phpcsFile->eolChar . IndentationHelper::addIndentation($conditionIndentation, $innerConditionLevel - 1),
 					);
 				}
 

@@ -8,11 +8,9 @@ namespace SlevomatCodingStandard\Helpers;
 class Comment
 {
 
-	/** @var int */
-	private $pointer;
+	private int $pointer;
 
-	/** @var string */
-	private $content;
+	private string $content;
 
 	public function __construct(int $pointer, string $content)
 	{

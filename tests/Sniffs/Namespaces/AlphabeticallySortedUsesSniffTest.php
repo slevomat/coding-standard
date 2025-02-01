@@ -13,7 +13,7 @@ class AlphabeticallySortedUsesSniffTest extends TestCase
 			self::checkFile(__DIR__ . '/data/incorrectOrder.php'),
 			5,
 			AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER,
-			'Second\FooObject'
+			'Second\FooObject',
 		);
 	}
 
@@ -23,21 +23,21 @@ class AlphabeticallySortedUsesSniffTest extends TestCase
 			self::checkFile(__DIR__ . '/data/incorrectOrderIntertwinedWithClasses.php'),
 			18,
 			AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER,
-			'Delta'
+			'Delta',
 		);
 	}
 
 	public function testCorrectOrderIgnoresUsesAfterClassesTraitsAndInterfaces(): void
 	{
 		self::assertNoSniffErrorInFile(
-			self::checkFile(__DIR__ . '/data/correctOrder.php')
+			self::checkFile(__DIR__ . '/data/correctOrder.php'),
 		);
 	}
 
 	public function testCorrectOrderOfSimilarNamespaces(): void
 	{
 		self::assertNoSniffErrorInFile(
-			self::checkFile(__DIR__ . '/data/correctOrderSimilarNamespaces.php')
+			self::checkFile(__DIR__ . '/data/correctOrderSimilarNamespaces.php'),
 		);
 	}
 
@@ -46,7 +46,7 @@ class AlphabeticallySortedUsesSniffTest extends TestCase
 		self::assertNoSniffErrorInFile(
 			self::checkFile(__DIR__ . '/data/correctOrderSimilarNamespacesCaseSensitive.php', [
 				'caseSensitive' => true,
-			])
+			]),
 		);
 	}
 
@@ -56,7 +56,7 @@ class AlphabeticallySortedUsesSniffTest extends TestCase
 			self::checkFile(__DIR__ . '/data/incorrectOrderSimilarNamespaces.php'),
 			6,
 			AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER,
-			'Foo\Bar'
+			'Foo\Bar',
 		);
 	}
 
@@ -71,7 +71,7 @@ class AlphabeticallySortedUsesSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/alphabeticalMultiPartUseNotFixable.php',
 			[],
-			[AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER]
+			[AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER],
 		);
 
 		self::assertSniffError($report, 6, AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER, 'B');
@@ -84,7 +84,7 @@ class AlphabeticallySortedUsesSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/alphabeticalGroupUseNotFixable.php',
 			[],
-			[AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER]
+			[AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER],
 		);
 
 		self::assertNoSniffErrorInFile($report);
@@ -97,7 +97,7 @@ class AlphabeticallySortedUsesSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/fixableAlphabeticalSortedUses.php',
 			[],
-			[AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER]
+			[AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER],
 		);
 		self::assertAllFixedInFile($report);
 	}
@@ -107,7 +107,7 @@ class AlphabeticallySortedUsesSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/fixableAlphabeticalSortedUsesWithCommentBeforeFirst.php',
 			[],
-			[AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER]
+			[AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER],
 		);
 		self::assertAllFixedInFile($report);
 	}
@@ -117,7 +117,7 @@ class AlphabeticallySortedUsesSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/fixableAlphabeticalSortedUsesWithDocComment.php',
 			[],
-			[AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER]
+			[AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER],
 		);
 		self::assertAllFixedInFile($report);
 	}

@@ -15,17 +15,13 @@ class RequireNumericLiteralSeparatorSniff implements Sniff
 
 	public const CODE_REQUIRED_NUMERIC_LITERAL_SEPARATOR = 'RequiredNumericLiteralSeparator';
 
-	/** @var bool|null */
-	public $enable = null;
+	public ?bool $enable = null;
 
-	/** @var int */
-	public $minDigitsBeforeDecimalPoint = 4;
+	public int $minDigitsBeforeDecimalPoint = 4;
 
-	/** @var int */
-	public $minDigitsAfterDecimalPoint = 4;
+	public int $minDigitsAfterDecimalPoint = 4;
 
-	/** @var bool */
-	public $ignoreOctalNumbers = true;
+	public bool $ignoreOctalNumbers = true;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -75,7 +71,7 @@ class RequireNumericLiteralSeparatorSniff implements Sniff
 		$phpcsFile->addError(
 			'Use of numeric literal separator is required.',
 			$numberPointer,
-			self::CODE_REQUIRED_NUMERIC_LITERAL_SEPARATOR
+			self::CODE_REQUIRED_NUMERIC_LITERAL_SEPARATOR,
 		);
 	}
 

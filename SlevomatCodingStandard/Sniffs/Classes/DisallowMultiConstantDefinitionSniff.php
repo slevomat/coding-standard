@@ -65,7 +65,7 @@ class DisallowMultiConstantDefinitionSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Use of multi constant definition is disallowed.',
 			$constantPointer,
-			self::CODE_DISALLOWED_MULTI_CONSTANT_DEFINITION
+			self::CODE_DISALLOWED_MULTI_CONSTANT_DEFINITION,
 		);
 		if (!$fix) {
 			return;
@@ -113,8 +113,8 @@ class DisallowMultiConstantDefinitionSniff implements Sniff
 						? sprintf('%s%s%s', $indentation, $docComment, $phpcsFile->eolChar)
 						: '',
 					$indentation,
-					$visibility !== null ? sprintf('%s ', $visibility) : ''
-				)
+					$visibility !== null ? sprintf('%s ', $visibility) : '',
+				),
 			);
 
 			FixerHelper::removeBetween($phpcsFile, $commaPointer, $data[$commaPointer]['pointerAfterComma']);

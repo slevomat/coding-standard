@@ -38,19 +38,19 @@ class ForbiddenClassesSniff implements Sniff
 	public const CODE_FORBIDDEN_TRAIT = 'ForbiddenTrait';
 
 	/** @var array<string, (string|null)> */
-	public $forbiddenClasses = [];
+	public array $forbiddenClasses = [];
 
 	/** @var array<string, (string|null)> */
-	public $forbiddenExtends = [];
+	public array $forbiddenExtends = [];
 
 	/** @var array<string, (string|null)> */
-	public $forbiddenInterfaces = [];
+	public array $forbiddenInterfaces = [];
 
 	/** @var array<string, (string|null)> */
-	public $forbiddenTraits = [];
+	public array $forbiddenTraits = [];
 
 	/** @var list<string> */
-	private static $keywordReferences = ['self', 'parent', 'static'];
+	private static array $keywordReferences = ['self', 'parent', 'static'];
 
 	/**
 	 * @return array<int, (int|string)>
@@ -103,7 +103,7 @@ class ForbiddenClassesSniff implements Sniff
 			$endTokenPointer = TokenHelper::findNext(
 				$phpcsFile,
 				[T_SEMICOLON, T_OPEN_CURLY_BRACKET],
-				$tokenPointer
+				$tokenPointer,
 			);
 			$references = $this->getAllReferences($phpcsFile, $tokenPointer, $endTokenPointer);
 
@@ -116,7 +116,7 @@ class ForbiddenClassesSniff implements Sniff
 					$tokenPointer,
 					$references,
 					$this->forbiddenTraits,
-					$tokens[$endTokenPointer]['code'] !== T_OPEN_CURLY_BRACKET
+					$tokens[$endTokenPointer]['code'] !== T_OPEN_CURLY_BRACKET,
 				);
 			}
 		} elseif (in_array($token['code'], [T_NEW, T_EXTENDS], true)) {
@@ -127,7 +127,7 @@ class ForbiddenClassesSniff implements Sniff
 				$phpcsFile,
 				$tokenPointer,
 				$references,
-				$token['code'] === T_NEW ? $this->forbiddenClasses : $this->forbiddenExtends
+				$token['code'] === T_NEW ? $this->forbiddenClasses : $this->forbiddenExtends,
 			);
 		} elseif ($token['code'] === T_DOUBLE_COLON && !$this->isTraitsConflictResolutionToken($token)) {
 			$startTokenPointer = TokenHelper::findPreviousExcluding($phpcsFile, $nameTokens, $tokenPointer - 1);
@@ -170,7 +170,7 @@ class ForbiddenClassesSniff implements Sniff
 				$phpcsFile->addError(
 					sprintf('Usage of %s %s is forbidden.', $reference['fullyQualifiedName'], $nameType),
 					$reference['startPointer'],
-					$code
+					$code,
 				);
 			} elseif (!$isFixable) {
 				$phpcsFile->addError(
@@ -178,10 +178,10 @@ class ForbiddenClassesSniff implements Sniff
 						'Usage of %s %s is forbidden, use %s instead.',
 						$reference['fullyQualifiedName'],
 						$nameType,
-						$alternative
+						$alternative,
 					),
 					$reference['startPointer'],
-					$code
+					$code,
 				);
 			} else {
 				$fix = $phpcsFile->addFixableError(
@@ -189,10 +189,10 @@ class ForbiddenClassesSniff implements Sniff
 						'Usage of %s %s is forbidden, use %s instead.',
 						$reference['fullyQualifiedName'],
 						$nameType,
-						$alternative
+						$alternative,
 					),
 					$reference['startPointer'],
-					$code
+					$code,
 				);
 				if (!$fix) {
 					continue;

@@ -89,7 +89,7 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 			$nullableSymbolPointer = TokenHelper::findPreviousEffective(
 				$phpcsFile,
 				$typeHintStartPointer - 1,
-				$tokens[$functionPointer]['parenthesis_opener']
+				$tokens[$functionPointer]['parenthesis_opener'],
 			);
 
 			if ($nullableSymbolPointer !== null && $tokens[$nullableSymbolPointer]['code'] === T_NULLABLE) {
@@ -103,7 +103,7 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				sprintf('Parameter %s has null default value, but is not marked as nullable.', $parameterName),
 				$i,
-				self::CODE_NULLABILITY_TYPE_MISSING
+				self::CODE_NULLABILITY_TYPE_MISSING,
 			);
 
 			if (!$fix) {

@@ -36,7 +36,7 @@ class UnusedParameterSniffTest extends TestCase
 			$report,
 			77,
 			UnusedParameterSniff::CODE_USELESS_SUPPRESS,
-			'Useless @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter'
+			'Useless @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter',
 		);
 	}
 

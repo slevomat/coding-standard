@@ -105,22 +105,20 @@ class CognitiveSniff implements Sniff
 	 * @deprecated
 	 * @var ?int maximum allowed complexity
 	 */
-	public $maxComplexity = null;
+	public ?int $maxComplexity = null;
 
 	/** @var int complexity which will raise warning */
-	public $warningThreshold = 6;
+	public int $warningThreshold = 6;
 
 	/** @var int complexity which will raise error */
-	public $errorThreshold = 6;
+	public int $errorThreshold = 6;
 
-	/** @var int */
-	private $cognitiveComplexity = 0;
+	private int $cognitiveComplexity = 0;
 
 	/** @var int|string */
 	private $lastBooleanOperator = 0;
 
-	/** @var File */
-	private $phpcsFile;
+	private File $phpcsFile;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -235,9 +233,9 @@ class CognitiveSniff implements Sniff
 			if (!$addNestingIncrement) {
 				continue;
 			}
-			$measuredNestingLevel = count(array_filter($levelStack, static function (array $token) {
-				return in_array($token['code'], self::NESTING_INCREMENTS, true);
-			}));
+			$measuredNestingLevel = count(
+				array_filter($levelStack, static fn (array $token) => in_array($token['code'], self::NESTING_INCREMENTS, true)),
+			);
 			if ($isNestingToken) {
 				$measuredNestingLevel--;
 			}

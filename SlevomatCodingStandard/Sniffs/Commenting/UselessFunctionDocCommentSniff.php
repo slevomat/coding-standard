@@ -23,10 +23,10 @@ class UselessFunctionDocCommentSniff implements Sniff
 	public const CODE_USELESS_DOC_COMMENT = 'UselessDocComment';
 
 	/** @var list<string> */
-	public $traversableTypeHints = [];
+	public array $traversableTypeHints = [];
 
 	/** @var list<string>|null */
-	private $normalizedTraversableTypeHints;
+	private ?array $normalizedTraversableTypeHints = null;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -66,7 +66,7 @@ class UselessFunctionDocCommentSniff implements Sniff
 				$functionPointer,
 				$returnTypeHint,
 				$returnAnnotation,
-				$this->getTraversableTypeHints()
+				$this->getTraversableTypeHints(),
 			)
 		) {
 			return;
@@ -85,7 +85,7 @@ class UselessFunctionDocCommentSniff implements Sniff
 				$functionPointer,
 				$parameterTypeHints[$parameterName],
 				$parameterAnnotation,
-				$this->getTraversableTypeHints()
+				$this->getTraversableTypeHints(),
 			)) {
 				return;
 			}
@@ -101,10 +101,10 @@ class UselessFunctionDocCommentSniff implements Sniff
 			sprintf(
 				'%s %s() does not need documentation comment.',
 				FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
-				FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer)
+				FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
 			),
 			$functionPointer,
-			self::CODE_USELESS_DOC_COMMENT
+			self::CODE_USELESS_DOC_COMMENT,
 		);
 		if (!$fix) {
 			return;
@@ -131,11 +131,12 @@ class UselessFunctionDocCommentSniff implements Sniff
 	private function getTraversableTypeHints(): array
 	{
 		if ($this->normalizedTraversableTypeHints === null) {
-			$this->normalizedTraversableTypeHints = array_map(static function (string $typeHint): string {
-				return NamespaceHelper::isFullyQualifiedName($typeHint)
-					? $typeHint
-					: sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint);
-			}, SniffSettingsHelper::normalizeArray($this->traversableTypeHints));
+			$this->normalizedTraversableTypeHints = array_map(
+				static fn (string $typeHint): string => NamespaceHelper::isFullyQualifiedName($typeHint)
+						? $typeHint
+						: sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint),
+				SniffSettingsHelper::normalizeArray($this->traversableTypeHints),
+			);
 		}
 		return $this->normalizedTraversableTypeHints;
 	}

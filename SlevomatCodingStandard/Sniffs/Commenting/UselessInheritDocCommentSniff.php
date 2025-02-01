@@ -57,7 +57,7 @@ class UselessInheritDocCommentSniff implements Sniff
 			$docCommentOwnerPointer = TokenHelper::findNext(
 				$phpcsFile,
 				array_merge(TokenHelper::$functionTokenCodes, TokenHelper::getTypeHintTokenCodes(), [T_ATTRIBUTE]),
-				$searchPointer
+				$searchPointer,
 			);
 
 			if ($docCommentOwnerPointer === null) {
@@ -98,7 +98,7 @@ class UselessInheritDocCommentSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Useless documentation comment with @inheritDoc.',
 			$docCommentOpenPointer,
-			self::CODE_USELESS_INHERIT_DOC_COMMENT
+			self::CODE_USELESS_INHERIT_DOC_COMMENT,
 		);
 
 		if (!$fix) {

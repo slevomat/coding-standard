@@ -13,14 +13,11 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 class Annotation
 {
 
-	/** @var PhpDocTagNode */
-	private $node;
+	private PhpDocTagNode $node;
 
-	/** @var int */
-	private $startPointer;
+	private int $startPointer;
 
-	/** @var int */
-	private $endPointer;
+	private int $endPointer;
 
 	public function __construct(PhpDocTagNode $node, int $startPointer, int $endPointer)
 	{

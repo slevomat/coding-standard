@@ -41,7 +41,7 @@ class UselessIfConditionWithReturnSniffTest extends TestCase
 			__DIR__ . '/data/uselessIfConditionWithReturnErrorsWithAssumeAllConditionExpressionsAreAlreadyBooleanEnabled.php',
 			[
 				'assumeAllConditionExpressionsAreAlreadyBoolean' => true,
-			]
+			],
 		);
 
 		self::assertSame(2, $report->getErrorCount());

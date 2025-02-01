@@ -22,24 +22,18 @@ class LineLengthSniff implements Sniff
 
 	/**
 	 * The limit that the length of a line must not exceed.
-	 *
-	 * @var int
 	 */
-	public $lineLengthLimit = 120;
+	public int $lineLengthLimit = 120;
 
 	/**
 	 * Whether or not to ignore comment lines.
-	 *
-	 * @var bool
 	 */
-	public $ignoreComments = false;
+	public bool $ignoreComments = false;
 
 	/**
 	 * Whether or not to ignore import lines (use).
-	 *
-	 * @var bool
 	 */
-	public $ignoreImports = true;
+	public bool $ignoreImports = true;
 
 	/**
 	 * @return array<int, (int|string)>

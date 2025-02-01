@@ -23,13 +23,13 @@ class FilepathNamespaceExtractor
 {
 
 	/** @var array<string, string> */
-	private $rootNamespaces;
+	private array $rootNamespaces;
 
 	/** @var array<string, bool> dir(string) => true(bool) */
-	private $skipDirs;
+	private array $skipDirs;
 
 	/** @var list<string> */
-	private $extensions;
+	private array $extensions;
 
 	/**
 	 * @param array<string, string> $rootNamespaces directory(string) => namespace
@@ -40,9 +40,7 @@ class FilepathNamespaceExtractor
 	{
 		$this->rootNamespaces = $rootNamespaces;
 		$this->skipDirs = array_fill_keys($skipDirs, true);
-		$this->extensions = array_map(static function (string $extension): string {
-			return strtolower($extension);
-		}, $extensions);
+		$this->extensions = array_map(static fn (string $extension): string => strtolower($extension), $extensions);
 	}
 
 	public function getTypeNameFromProjectPath(string $path): ?string
@@ -78,9 +76,7 @@ class FilepathNamespaceExtractor
 
 		array_unshift($pathParts, $rootNamespace);
 
-		$typeName = implode('\\', array_filter($pathParts, function (string $pathPart): bool {
-			return !isset($this->skipDirs[$pathPart]);
-		}));
+		$typeName = implode('\\', array_filter($pathParts, fn (string $pathPart): bool => !isset($this->skipDirs[$pathPart])));
 
 		return substr($typeName, 0, -strlen('.' . $extension));
 	}

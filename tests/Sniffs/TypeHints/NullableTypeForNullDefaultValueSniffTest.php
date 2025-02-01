@@ -42,7 +42,7 @@ class NullableTypeForNullDefaultValueSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/fixableNullableTypeForNullDefaultValue.php',
 			[],
-			[NullableTypeForNullDefaultValueSniff::CODE_NULLABILITY_TYPE_MISSING]
+			[NullableTypeForNullDefaultValueSniff::CODE_NULLABILITY_TYPE_MISSING],
 		);
 		self::assertAllFixedInFile($report);
 	}

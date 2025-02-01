@@ -57,7 +57,7 @@ class DisallowMultipleAttributesPerLineSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Multiple attributes per line are disallowed.',
 			$nextAttributeOpenerPointer,
-			self::CODE_DISALLOWED_MULTIPLE_ATTRIBUTES_PER_LINE
+			self::CODE_DISALLOWED_MULTIPLE_ATTRIBUTES_PER_LINE,
 		);
 
 		if (!$fix) {
@@ -67,7 +67,7 @@ class DisallowMultipleAttributesPerLineSniff implements Sniff
 		$nonWhitespacePointerBefore = TokenHelper::findPreviousNonWhitespace($phpcsFile, $nextAttributeOpenerPointer - 1);
 		$indentation = IndentationHelper::getIndentation(
 			$phpcsFile,
-			TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $attributeOpenerPointer)
+			TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $attributeOpenerPointer),
 		);
 
 		$phpcsFile->fixer->beginChangeset();

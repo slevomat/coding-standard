@@ -183,13 +183,11 @@ class YodaHelper
 	 */
 	public static function getDynamismForTokens(array $tokens, array $sideTokens): ?int
 	{
-		$sideTokens = array_values(array_filter($sideTokens, static function (array $token): bool {
-			return !in_array(
-				$token['code'],
-				[T_WHITESPACE, T_COMMENT, T_DOC_COMMENT, T_NS_SEPARATOR, T_PLUS, T_MINUS, T_INT_CAST, T_DOUBLE_CAST, T_STRING_CAST, T_ARRAY_CAST, T_OBJECT_CAST, T_BOOL_CAST, T_UNSET_CAST],
-				true
-			);
-		}));
+		$sideTokens = array_values(array_filter($sideTokens, static fn (array $token): bool => !in_array(
+			$token['code'],
+			[T_WHITESPACE, T_COMMENT, T_DOC_COMMENT, T_NS_SEPARATOR, T_PLUS, T_MINUS, T_INT_CAST, T_DOUBLE_CAST, T_STRING_CAST, T_ARRAY_CAST, T_OBJECT_CAST, T_BOOL_CAST, T_UNSET_CAST],
+			true,
+		)));
 
 		$sideTokensCount = count($sideTokens);
 

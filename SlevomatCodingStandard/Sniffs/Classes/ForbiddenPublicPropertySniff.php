@@ -22,11 +22,9 @@ final class ForbiddenPublicPropertySniff implements Sniff
 
 	public const CODE_FORBIDDEN_PUBLIC_PROPERTY = 'ForbiddenPublicProperty';
 
-	/** @var bool */
-	public $allowReadonly = false;
+	public bool $allowReadonly = false;
 
-	/** @var bool */
-	public $checkPromoted = false;
+	public bool $checkPromoted = false;
 
 	/**
 	 * @return array<int, (int|string)>

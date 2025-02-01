@@ -25,32 +25,24 @@ use const T_YIELD_FROM;
 class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 {
 
-	/** @var int */
-	public $linesCountBefore = 1;
+	public int $linesCountBefore = 1;
 
-	/** @var int */
-	public $linesCountBeforeFirst = 0;
+	public int $linesCountBeforeFirst = 0;
 
-	/** @var int|null */
-	public $linesCountBeforeWhenFirstInCaseOrDefault = null;
+	public ?int $linesCountBeforeWhenFirstInCaseOrDefault = null;
 
-	/** @var int */
-	public $linesCountAfter = 1;
+	public int $linesCountAfter = 1;
 
-	/** @var int */
-	public $linesCountAfterLast = 0;
+	public int $linesCountAfterLast = 0;
 
-	/** @var int|null */
-	public $linesCountAfterWhenLastInCaseOrDefault = null;
+	public ?int $linesCountAfterWhenLastInCaseOrDefault = null;
 
-	/** @var int|null */
-	public $linesCountAfterWhenLastInLastCaseOrDefault = null;
+	public ?int $linesCountAfterWhenLastInLastCaseOrDefault = null;
 
-	/** @var bool */
-	public $allowSingleLineYieldStacking = true;
+	public bool $allowSingleLineYieldStacking = true;
 
 	/** @var list<string> */
-	public $jumpStatements = [];
+	public array $jumpStatements = [];
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
@@ -61,15 +53,15 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 		$this->linesCountBefore = SniffSettingsHelper::normalizeInteger($this->linesCountBefore);
 		$this->linesCountBeforeFirst = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirst);
 		$this->linesCountBeforeWhenFirstInCaseOrDefault = SniffSettingsHelper::normalizeNullableInteger(
-			$this->linesCountBeforeWhenFirstInCaseOrDefault
+			$this->linesCountBeforeWhenFirstInCaseOrDefault,
 		);
 		$this->linesCountAfter = SniffSettingsHelper::normalizeInteger($this->linesCountAfter);
 		$this->linesCountAfterLast = SniffSettingsHelper::normalizeInteger($this->linesCountAfterLast);
 		$this->linesCountAfterWhenLastInCaseOrDefault = SniffSettingsHelper::normalizeNullableInteger(
-			$this->linesCountAfterWhenLastInCaseOrDefault
+			$this->linesCountAfterWhenLastInCaseOrDefault,
 		);
 		$this->linesCountAfterWhenLastInLastCaseOrDefault = SniffSettingsHelper::normalizeNullableInteger(
-			$this->linesCountAfterWhenLastInLastCaseOrDefault
+			$this->linesCountAfterWhenLastInLastCaseOrDefault,
 		);
 
 		if ($this->isOneOfYieldSpecialCases($phpcsFile, $jumpStatementPointer)) {
@@ -234,7 +226,7 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 		return !in_array(
 			$tokens[$pointerBefore]['code'],
 			[T_SEMICOLON, T_COLON, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_OPEN_TAG],
-			true
+			true,
 		);
 	}
 

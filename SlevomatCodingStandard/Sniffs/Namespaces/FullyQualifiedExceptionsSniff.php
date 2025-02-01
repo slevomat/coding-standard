@@ -24,16 +24,16 @@ class FullyQualifiedExceptionsSniff implements Sniff
 	public const CODE_NON_FULLY_QUALIFIED_EXCEPTION = 'NonFullyQualifiedException';
 
 	/** @var list<string> */
-	public $specialExceptionNames = [];
+	public array $specialExceptionNames = [];
 
 	/** @var list<string> */
-	public $ignoredNames = [];
+	public array $ignoredNames = [];
 
 	/** @var list<string>|null */
-	private $normalizedSpecialExceptionNames;
+	private ?array $normalizedSpecialExceptionNames = null;
 
 	/** @var list<string>|null */
-	private $normalizedIgnoredNames;
+	private ?array $normalizedIgnoredNames = null;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -75,7 +75,7 @@ class FullyQualifiedExceptionsSniff implements Sniff
 						!StringHelper::endsWith($useStatement->getFullyQualifiedTypeName(), 'Exception')
 						&& $useStatement->getFullyQualifiedTypeName() !== Throwable::class
 						&& (!StringHelper::endsWith($useStatement->getFullyQualifiedTypeName(), 'Error') || NamespaceHelper::hasNamespace(
-							$useStatement->getFullyQualifiedTypeName()
+							$useStatement->getFullyQualifiedTypeName(),
 						))
 						&& !in_array($useStatement->getFullyQualifiedTypeName(), $this->getSpecialExceptionNames(), true)
 					)
@@ -119,7 +119,7 @@ class FullyQualifiedExceptionsSniff implements Sniff
 
 			$fix = $phpcsFile->addFixableError(sprintf(
 				'Exception %s should be referenced via a fully qualified name.',
-				$name
+				$name,
 			), $pointer, self::CODE_NON_FULLY_QUALIFIED_EXCEPTION);
 			if (!$fix) {
 				continue;

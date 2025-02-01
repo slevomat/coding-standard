@@ -40,7 +40,7 @@ class DisallowNumericLiteralSeparatorSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Use of numeric literal separator is disallowed.',
 			$numberPointer,
-			self::CODE_DISALLOWED_NUMERIC_LITERAL_SEPARATOR
+			self::CODE_DISALLOWED_NUMERIC_LITERAL_SEPARATOR,
 		);
 
 		if (!$fix) {

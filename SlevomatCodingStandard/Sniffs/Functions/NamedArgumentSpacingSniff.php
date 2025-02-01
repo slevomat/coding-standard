@@ -43,7 +43,7 @@ class NamedArgumentSpacingSniff implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				sprintf('There must be no whitespace between named argument "%s" and colon.', $parameterName),
 				$colonPointer,
-				self::CODE_WHITESPACE_BEFORE_COLON
+				self::CODE_WHITESPACE_BEFORE_COLON,
 			);
 			if ($fix) {
 				$phpcsFile->fixer->replaceToken($colonPointer - 1, '');
@@ -62,7 +62,7 @@ class NamedArgumentSpacingSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			sprintf('There must be exactly one space after colon in named argument "%s".', $parameterName),
 			$colonPointer,
-			self::CODE_NO_WHITESPACE_AFTER_COLON
+			self::CODE_NO_WHITESPACE_AFTER_COLON,
 		);
 
 		if (!$fix) {

@@ -17,14 +17,11 @@ class FunctionLengthSniff implements Sniff
 
 	public const CODE_FUNCTION_LENGTH = 'FunctionLength';
 
-	/** @var int */
-	public $maxLinesLength = 20;
+	public int $maxLinesLength = 20;
 
-	/** @var bool */
-	public $includeComments = false;
+	public bool $includeComments = false;
 
-	/** @var bool */
-	public $includeWhitespace = false;
+	public bool $includeWhitespace = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -46,9 +43,7 @@ class FunctionLengthSniff implements Sniff
 			FunctionHelper::LINE_INCLUDE_COMMENT => $this->includeComments,
 			FunctionHelper::LINE_INCLUDE_WHITESPACE => $this->includeWhitespace,
 		]));
-		$flags = array_reduce($flags, static function ($carry, $flag): int {
-			return $carry | $flag;
-		}, 0);
+		$flags = array_reduce($flags, static fn ($carry, $flag): int => $carry | $flag, 0);
 
 		$length = FunctionHelper::getFunctionLengthInLines($file, $functionPointer, $flags);
 
@@ -59,7 +54,7 @@ class FunctionLengthSniff implements Sniff
 		$errorMessage = sprintf(
 			'Your function is too long. Currently using %d lines. Can be up to %d lines.',
 			$length,
-			$this->maxLinesLength
+			$this->maxLinesLength,
 		);
 
 		$file->addError($errorMessage, $functionPointer, self::CODE_FUNCTION_LENGTH);

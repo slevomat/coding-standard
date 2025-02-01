@@ -23,11 +23,9 @@ class MethodSpacingSniff implements Sniff
 
 	public const CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS = 'IncorrectLinesCountBetweenMethods';
 
-	/** @var int */
-	public $minLinesCount = 1;
+	public int $minLinesCount = 1;
 
-	/** @var int */
-	public $maxLinesCount = 1;
+	public int $maxLinesCount = 1;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -76,7 +74,7 @@ class MethodSpacingSniff implements Sniff
 				$phpcsFile,
 				T_ATTRIBUTE,
 				$nextMethodPointer - 1,
-				$methodEndPointer
+				$methodEndPointer,
 			);
 		}
 
@@ -84,7 +82,7 @@ class MethodSpacingSniff implements Sniff
 			? TokenHelper::findNextEffective($phpcsFile, $methodEndPointer + 1)
 			: TokenHelper::findFirstTokenOnLine(
 				$phpcsFile,
-				$nextMethodDocCommentStartPointer ?? $nextMethodAttributeStartPointer ?? $nextMethodPointer
+				$nextMethodDocCommentStartPointer ?? $nextMethodAttributeStartPointer ?? $nextMethodPointer,
 			);
 
 		if (TokenHelper::findNextNonWhitespace($phpcsFile, $methodEndPointer + 1, $nextMethodFirstLinePointer) !== null) {
@@ -110,7 +108,7 @@ class MethodSpacingSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			sprintf($errorMessage, $this->minLinesCount, $this->maxLinesCount, $linesBetween ?? 0),
 			$methodPointer,
-			self::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS
+			self::CODE_INCORRECT_LINES_COUNT_BETWEEN_METHODS,
 		);
 
 		if (!$fix) {
@@ -124,8 +122,8 @@ class MethodSpacingSniff implements Sniff
 				$methodEndPointer,
 				$phpcsFile->eolChar . str_repeat($phpcsFile->eolChar, $this->minLinesCount) . IndentationHelper::getIndentation(
 					$phpcsFile,
-					TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $methodPointer)
-				)
+					TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $methodPointer),
+				),
 			);
 
 			FixerHelper::removeBetween($phpcsFile, $methodEndPointer, $nextMethodFirstLinePointer);

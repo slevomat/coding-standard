@@ -47,7 +47,7 @@ class RequireAbstractOrFinalSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'All classes should be declared using either the "abstract" or "final" keyword.',
 			$classPointer,
-			self::CODE_NO_ABSTRACT_OR_FINAL
+			self::CODE_NO_ABSTRACT_OR_FINAL,
 		);
 
 		if (!$fix) {

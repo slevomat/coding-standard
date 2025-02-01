@@ -17,7 +17,7 @@ final class SniffLocalCache
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
 	 * @var array<int, array<string, mixed>>
 	 */
-	private static $cache = [];
+	private static array $cache = [];
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint

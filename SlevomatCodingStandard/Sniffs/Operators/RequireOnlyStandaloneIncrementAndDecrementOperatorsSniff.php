@@ -97,7 +97,7 @@ class RequireOnlyStandaloneIncrementAndDecrementOperatorsSniff implements Sniff
 		if (!in_array(
 			$tokens[$pointerBeforeInstructionStart]['code'],
 			[T_SEMICOLON, T_COLON, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_OPEN_TAG],
-			true
+			true,
 		)) {
 			return false;
 		}

@@ -49,7 +49,7 @@ class AttributeHelper
 
 		if ($tokens[$attributeOpenerPointer]['code'] !== T_ATTRIBUTE) {
 			throw new InvalidArgumentException(
-				sprintf('Token %d must be attribute, %s given.', $attributeOpenerPointer, $tokens[$attributeOpenerPointer]['type'])
+				sprintf('Token %d must be attribute, %s given.', $attributeOpenerPointer, $tokens[$attributeOpenerPointer]['type']),
 			);
 		}
 
@@ -68,7 +68,7 @@ class AttributeHelper
 			$attributeNameEndPointer = TokenHelper::findNextExcluding(
 				$phpcsFile,
 				TokenHelper::getNameTokenCodes(),
-				$attributeNameStartPointer + 1
+				$attributeNameStartPointer + 1,
 			) - 1;
 			$attributeName = TokenHelper::getContent($phpcsFile, $attributeNameStartPointer, $attributeNameEndPointer);
 
@@ -79,7 +79,7 @@ class AttributeHelper
 					$attributeOpenerPointer,
 					$attributeName,
 					$attributeNameStartPointer,
-					$attributeNameEndPointer
+					$attributeNameEndPointer,
 				);
 				break;
 			}
@@ -89,7 +89,7 @@ class AttributeHelper
 					$attributeOpenerPointer,
 					$attributeName,
 					$attributeNameStartPointer,
-					$attributeNameEndPointer
+					$attributeNameEndPointer,
 				);
 
 				$actualPointer = $pointerAfterAttributeName;
@@ -104,14 +104,14 @@ class AttributeHelper
 					TokenHelper::getContent(
 						$phpcsFile,
 						$pointerAfterAttributeName,
-						$tokens[$pointerAfterAttributeName]['parenthesis_closer']
-					)
+						$tokens[$pointerAfterAttributeName]['parenthesis_closer'],
+					),
 				);
 
 				$actualPointer = TokenHelper::findNextEffective(
 					$phpcsFile,
 					$tokens[$pointerAfterAttributeName]['parenthesis_closer'] + 1,
-					$attributeCloserPointer
+					$attributeCloserPointer,
 				);
 
 				continue;

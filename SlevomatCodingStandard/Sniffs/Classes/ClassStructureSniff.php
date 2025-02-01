@@ -181,10 +181,10 @@ class ClassStructureSniff implements Sniff
 	];
 
 	/** @var list<string> */
-	public $groups = [];
+	public array $groups = [];
 
 	/** @var array<string, int>|null */
-	private $normalizedGroups;
+	private ?array $normalizedGroups = null;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -226,19 +226,17 @@ class ClassStructureSniff implements Sniff
 
 			$expectedGroups = array_filter(
 				$groupsOrder,
-				static function (int $order) use ($groupsOrder, $expectedGroup): bool {
-					return $order >= $groupsOrder[$expectedGroup];
-				}
+				static fn (int $order): bool => $order >= $groupsOrder[$expectedGroup],
 			);
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
 					'The placement of "%s" group is invalid. Last group was "%s" and one of these is expected after it: %s',
 					$group,
 					$expectedGroup,
-					implode(', ', array_keys($expectedGroups))
+					implode(', ', array_keys($expectedGroups)),
 				),
 				$groupFirstMemberPointer,
-				self::CODE_INCORRECT_GROUP_ORDER
+				self::CODE_INCORRECT_GROUP_ORDER,
 			);
 			if (!$fix) {
 				continue;
@@ -274,7 +272,7 @@ class ClassStructureSniff implements Sniff
 				$phpcsFile,
 				$groupTokenTypes,
 				($currentToken['scope_closer'] ?? $currentTokenPointer) + 1,
-				$rootScopeToken['scope_closer']
+				$rootScopeToken['scope_closer'],
 			);
 			if ($currentTokenPointer === null) {
 				break;
@@ -394,7 +392,7 @@ class ClassStructureSniff implements Sniff
 		$previousPointer = TokenHelper::findPrevious(
 			$phpcsFile,
 			array_merge(Tokens::$scopeModifiers, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON]),
-			$pointer - 1
+			$pointer - 1,
 		);
 
 		/** @var int $visibilityPointer */
@@ -409,7 +407,7 @@ class ClassStructureSniff implements Sniff
 		$previousPointer = TokenHelper::findPrevious(
 			$phpcsFile,
 			[T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_STATIC],
-			$pointer - 1
+			$pointer - 1,
 		);
 		return $phpcsFile->getTokens()[$previousPointer]['code'] === T_STATIC;
 	}
@@ -419,7 +417,7 @@ class ClassStructureSniff implements Sniff
 		$previousPointer = TokenHelper::findPrevious(
 			$phpcsFile,
 			[T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_FINAL],
-			$pointer - 1
+			$pointer - 1,
 		);
 		return $phpcsFile->getTokens()[$previousPointer]['code'] === T_FINAL;
 	}
@@ -429,7 +427,7 @@ class ClassStructureSniff implements Sniff
 		$previousPointer = TokenHelper::findPrevious(
 			$phpcsFile,
 			[T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON, T_ABSTRACT],
-			$pointer - 1
+			$pointer - 1,
 		);
 		return $phpcsFile->getTokens()[$previousPointer]['code'] === T_ABSTRACT;
 	}

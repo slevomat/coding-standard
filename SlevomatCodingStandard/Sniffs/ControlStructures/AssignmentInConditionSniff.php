@@ -19,8 +19,7 @@ class AssignmentInConditionSniff implements Sniff
 
 	public const CODE_ASSIGNMENT_IN_CONDITION = 'AssignmentInCondition';
 
-	/** @var bool */
-	public $ignoreAssignmentsInsideFunctionCalls = false;
+	public bool $ignoreAssignmentsInsideFunctionCalls = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -93,7 +92,7 @@ class AssignmentInConditionSniff implements Sniff
 				$phpcsFile,
 				TokenHelper::getOnlyNameTokenCodes(),
 				$insideParenthesis,
-				$parenthesisOpener
+				$parenthesisOpener,
 			);
 			if ($functionCall !== null) {
 				continue;
@@ -108,7 +107,7 @@ class AssignmentInConditionSniff implements Sniff
 		$phpcsFile->addError(
 			sprintf('Assignment in %s condition is not allowed.', $conditionType),
 			$equalsTokenPointer,
-			self::CODE_ASSIGNMENT_IN_CONDITION
+			self::CODE_ASSIGNMENT_IN_CONDITION,
 		);
 	}
 

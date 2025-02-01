@@ -42,8 +42,7 @@ class ClassMemberSpacingSniff implements Sniff
 
 	public const CODE_INCORRECT_COUNT_OF_BLANK_LINES_BETWEEN_MEMBERS = 'IncorrectCountOfBlankLinesBetweenMembers';
 
-	/** @var int */
-	public $linesCountBetweenMembers = 1;
+	public int $linesCountBetweenMembers = 1;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -72,7 +71,7 @@ class ClassMemberSpacingSniff implements Sniff
 			$memberPointer = $this->findNextMember(
 				$phpcsFile,
 				$classPointer,
-				$previousMemberPointer ?? $tokens[$classPointer]['scope_opener']
+				$previousMemberPointer ?? $tokens[$classPointer]['scope_opener'],
 			);
 
 			if ($memberPointer === null) {
@@ -121,7 +120,7 @@ class ClassMemberSpacingSniff implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				sprintf($errorMessage, $this->linesCountBetweenMembers, $actualLinesCount),
 				$memberPointer,
-				self::CODE_INCORRECT_COUNT_OF_BLANK_LINES_BETWEEN_MEMBERS
+				self::CODE_INCORRECT_COUNT_OF_BLANK_LINES_BETWEEN_MEMBERS,
 			);
 			if (!$fix) {
 				continue;
@@ -129,7 +128,7 @@ class ClassMemberSpacingSniff implements Sniff
 
 			$newLines = str_repeat(
 				$phpcsFile->eolChar,
-				$this->linesCountBetweenMembers + ($hasCommentWithNewLineAfterPreviousMember ? 0 : 1)
+				$this->linesCountBetweenMembers + ($hasCommentWithNewLineAfterPreviousMember ? 0 : 1),
 			);
 
 			$firstPointerOnMemberLine = TokenHelper::findFirstTokenOnLine($phpcsFile, $memberStartPointer);
@@ -155,7 +154,7 @@ class ClassMemberSpacingSniff implements Sniff
 				$phpcsFile,
 				[T_USE, T_CONST, T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC, T_FUNCTION, T_ENUM_CASE],
 				$memberPointer + 1,
-				$tokens[$classPointer]['scope_closer']
+				$tokens[$classPointer]['scope_closer'],
 			);
 
 			if ($memberPointer === null) {
@@ -242,7 +241,7 @@ class ClassMemberSpacingSniff implements Sniff
 			$firstCodePointer = TokenHelper::findPrevious(
 				$phpcsFile,
 				[T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_ABSTRACT, T_FINAL, T_SEMICOLON, T_CLOSE_CURLY_BRACKET],
-				$firstCodePointer - 1
+				$firstCodePointer - 1,
 			);
 
 			if (in_array($tokens[$firstCodePointer]['code'], [T_SEMICOLON, T_CLOSE_CURLY_BRACKET], true)) {

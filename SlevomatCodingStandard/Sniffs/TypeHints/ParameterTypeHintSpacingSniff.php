@@ -70,7 +70,7 @@ class ParameterTypeHintSpacingSniff implements Sniff
 				$phpcsFile,
 				$typeHintTokenCodes,
 				$parameterPointer - 1,
-				$attributeCloserPointer ?? $parameterStartPointer
+				$attributeCloserPointer ?? $parameterStartPointer,
 			);
 			if ($typeHintEndPointer === null) {
 				continue;
@@ -87,17 +87,17 @@ class ParameterTypeHintSpacingSniff implements Sniff
 				$phpcsFile,
 				array_keys($nextTokenNames),
 				$typeHintEndPointer + 1,
-				$parameterEndPointer + 1
+				$parameterEndPointer + 1,
 			);
 
 			if ($tokens[$typeHintEndPointer + 1]['code'] !== T_WHITESPACE) {
 				$fix = $phpcsFile->addFixableError(
 					sprintf(
 						'There must be exactly one space between parameter type hint and %s.',
-						$nextTokenNames[$tokens[$nextTokenPointer]['code']]
+						$nextTokenNames[$tokens[$nextTokenPointer]['code']],
 					),
 					$typeHintEndPointer,
-					self::CODE_NO_SPACE_BETWEEN_TYPE_HINT_AND_PARAMETER
+					self::CODE_NO_SPACE_BETWEEN_TYPE_HINT_AND_PARAMETER,
 				);
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
@@ -108,10 +108,10 @@ class ParameterTypeHintSpacingSniff implements Sniff
 				$fix = $phpcsFile->addFixableError(
 					sprintf(
 						'There must be exactly one space between parameter type hint and %s.',
-						$nextTokenNames[$tokens[$nextTokenPointer]['code']]
+						$nextTokenNames[$tokens[$nextTokenPointer]['code']],
 					),
 					$typeHintEndPointer,
-					self::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PARAMETER
+					self::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PARAMETER,
 				);
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
@@ -136,10 +136,10 @@ class ParameterTypeHintSpacingSniff implements Sniff
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
 					'There must be no whitespace between parameter type hint nullability symbol and parameter type hint of parameter %s.',
-					$parameterName
+					$parameterName,
 				),
 				$typeHintStartPointer,
-				self::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL
+				self::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL,
 			);
 			if (!$fix) {
 				continue;

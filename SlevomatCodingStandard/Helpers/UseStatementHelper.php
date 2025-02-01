@@ -50,7 +50,7 @@ class UseStatementHelper
 		$previousPointer = TokenHelper::findPrevious(
 			$phpcsFile,
 			[T_OPEN_TAG, T_DECLARE, T_NAMESPACE, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET],
-			$usePointer
+			$usePointer,
 		);
 
 		if (in_array($tokens[$previousPointer]['code'], [T_OPEN_TAG, T_DECLARE, T_NAMESPACE], true)) {
@@ -191,7 +191,7 @@ class UseStatementHelper
 					self::getFullyQualifiedTypeNameFromUse($phpcsFile, $usePointer),
 					$usePointer,
 					$type,
-					self::getAlias($phpcsFile, $usePointer)
+					self::getAlias($phpcsFile, $usePointer),
 				);
 				$useStatements[$pointerBeforeUseStatements][UseStatement::getUniqueId($type, $name)] = $useStatement;
 			}

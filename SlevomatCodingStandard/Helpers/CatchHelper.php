@@ -56,7 +56,7 @@ class CatchHelper
 				$phpcsFile,
 				array_merge([T_BITWISE_OR], $nameTokenCodes),
 				$nameEndPointer + 1,
-				$catchParenthesisCloserPointer
+				$catchParenthesisCloserPointer,
 			);
 			if ($nameStartPointer === null) {
 				break;
@@ -73,7 +73,7 @@ class CatchHelper
 			$caughtTypes[] = NamespaceHelper::resolveClassName(
 				$phpcsFile,
 				TokenHelper::getContent($phpcsFile, $nameStartPointer, $nameEndPointer),
-				$catchParenthesisOpenerPointer
+				$catchParenthesisOpenerPointer,
 			);
 		} while (true);
 

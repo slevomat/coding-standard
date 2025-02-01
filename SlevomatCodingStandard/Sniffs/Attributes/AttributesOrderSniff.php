@@ -28,10 +28,9 @@ class AttributesOrderSniff implements Sniff
 	public const CODE_INCORRECT_ORDER = 'IncorrectOrder';
 
 	/** @var list<string> */
-	public $order = [];
+	public array $order = [];
 
-	/** @var bool */
-	public $orderAlphabetically = false;
+	public bool $orderAlphabetically = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -90,9 +89,13 @@ class AttributesOrderSniff implements Sniff
 			$actualOrder = $attributesGroups;
 			$expectedOrder = $actualOrder;
 
-			uasort($expectedOrder, static function (array $attributesGroup1, array $attributesGroup2): int {
-				return strnatcmp($attributesGroup1[0]->getName(), $attributesGroup2[0]->getName());
-			});
+			uasort(
+				$expectedOrder,
+				static fn (array $attributesGroup1, array $attributesGroup2): int => strnatcmp(
+					$attributesGroup1[0]->getName(),
+					$attributesGroup2[0]->getName(),
+				),
+			);
 
 		} else {
 			$actualOrder = [];
@@ -140,7 +143,7 @@ class AttributesOrderSniff implements Sniff
 			$attributesGroupsContent[$attributesGroupNo] = TokenHelper::getContent(
 				$phpcsFile,
 				$attributesGroup[0]->getAttributePointer(),
-				$tokens[$attributesGroup[0]->getAttributePointer()]['attribute_closer']
+				$tokens[$attributesGroup[0]->getAttributePointer()]['attribute_closer'],
 			);
 		}
 
@@ -183,9 +186,7 @@ class AttributesOrderSniff implements Sniff
 	 */
 	private function normalizeOrder(array $order): array
 	{
-		return array_map(function (string $item): string {
-			return $this->normalizeAttributeName(trim($item));
-		}, $order);
+		return array_map(fn (string $item): string => $this->normalizeAttributeName(trim($item)), $order);
 	}
 
 	private function normalizeAttributeName(string $name): string

@@ -28,7 +28,7 @@ class FunctionLengthSniffTest extends TestCase
 			__DIR__ . '/data/functionLengthErrors.php',
 			[
 				'includeComments' => true,
-			]
+			],
 		);
 
 		self::assertSame(1, $report->getErrorCount());
@@ -42,7 +42,7 @@ class FunctionLengthSniffTest extends TestCase
 			__DIR__ . '/data/functionLengthErrors.php',
 			[
 				'includeWhitespace' => true,
-			]
+			],
 		);
 
 		self::assertSame(1, $report->getErrorCount());

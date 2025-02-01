@@ -28,31 +28,30 @@ class TypeNameMatchesFileNameSniff implements Sniff
 	public const CODE_NO_MATCH_BETWEEN_TYPE_NAME_AND_FILE_NAME = 'NoMatchBetweenTypeNameAndFileName';
 
 	/** @var array<string, string> */
-	public $rootNamespaces = [];
+	public array $rootNamespaces = [];
 
 	/** @var list<string> */
-	public $skipDirs = [];
+	public array $skipDirs = [];
 
 	/** @var list<string> */
-	public $ignoredNamespaces = [];
+	public array $ignoredNamespaces = [];
 
 	/** @var list<string> */
-	public $extensions = ['php'];
+	public array $extensions = ['php'];
 
 	/** @var array<string, string>|null */
-	private $normalizedRootNamespaces;
+	private ?array $normalizedRootNamespaces = null;
 
 	/** @var list<string>|null */
-	private $normalizedSkipDirs;
+	private ?array $normalizedSkipDirs = null;
 
 	/** @var list<string>|null */
-	private $normalizedIgnoredNamespaces;
+	private ?array $normalizedIgnoredNamespaces = null;
 
 	/** @var list<string>|null */
-	private $normalizedExtensions;
+	private ?array $normalizedExtensions = null;
 
-	/** @var FilepathNamespaceExtractor */
-	private $namespaceExtractor;
+	private ?FilepathNamespaceExtractor $namespaceExtractor = null;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -99,10 +98,10 @@ class TypeNameMatchesFileNameSniff implements Sniff
 				'%s name %s does not match filepath %s.',
 				ucfirst($tokens[$typePointer]['content']),
 				$typeName,
-				$phpcsFile->getFilename()
+				$phpcsFile->getFilename(),
 			),
 			$namePointer,
-			self::CODE_NO_MATCH_BETWEEN_TYPE_NAME_AND_FILE_NAME
+			self::CODE_NO_MATCH_BETWEEN_TYPE_NAME_AND_FILE_NAME,
 		);
 	}
 
@@ -178,7 +177,7 @@ class TypeNameMatchesFileNameSniff implements Sniff
 			$this->namespaceExtractor = new FilepathNamespaceExtractor(
 				$this->getRootNamespaces(),
 				$this->getSkipDirs(),
-				$this->getExtensions()
+				$this->getExtensions(),
 			);
 		}
 

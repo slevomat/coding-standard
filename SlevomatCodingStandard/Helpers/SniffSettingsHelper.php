@@ -39,12 +39,8 @@ class SniffSettingsHelper
 	 */
 	public static function normalizeArray(array $settings): array
 	{
-		$settings = array_map(static function (string $value): string {
-			return trim($value);
-		}, $settings);
-		$settings = array_filter($settings, static function (string $value): bool {
-			return $value !== '';
-		});
+		$settings = array_map(static fn (string $value): string => trim($value), $settings);
+		$settings = array_filter($settings, static fn (string $value): bool => $value !== '');
 		return array_values($settings);
 	}
 

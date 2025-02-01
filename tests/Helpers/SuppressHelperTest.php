@@ -9,8 +9,7 @@ class SuppressHelperTest extends TestCase
 
 	private const CHECK_NAME = 'Sniff.Sniff.Sniff.check';
 
-	/** @var File */
-	private $testedCodeSnifferFile;
+	private ?File $testedCodeSnifferFile = null;
 
 	public function testClassIsSuppressed(): void
 	{
@@ -18,8 +17,8 @@ class SuppressHelperTest extends TestCase
 			SuppressHelper::isSniffSuppressed(
 				$this->getTestedCodeSnifferFile(),
 				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'IsSuppressed'),
-				self::CHECK_NAME
-			)
+				self::CHECK_NAME,
+			),
 		);
 	}
 
@@ -29,8 +28,8 @@ class SuppressHelperTest extends TestCase
 			SuppressHelper::isSniffSuppressed(
 				$this->getTestedCodeSnifferFile(),
 				$this->findClassPointerByName($this->getTestedCodeSnifferFile(), 'IsNotSuppressed'),
-				self::CHECK_NAME
-			)
+				self::CHECK_NAME,
+			),
 		);
 	}
 
@@ -40,8 +39,8 @@ class SuppressHelperTest extends TestCase
 			SuppressHelper::isSniffSuppressed(
 				$this->getTestedCodeSnifferFile(),
 				$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'IS_SUPPRESSED'),
-				self::CHECK_NAME
-			)
+				self::CHECK_NAME,
+			),
 		);
 	}
 
@@ -51,8 +50,8 @@ class SuppressHelperTest extends TestCase
 			SuppressHelper::isSniffSuppressed(
 				$this->getTestedCodeSnifferFile(),
 				$this->findConstantPointerByName($this->getTestedCodeSnifferFile(), 'IS_NOT_SUPPRESSED'),
-				self::CHECK_NAME
-			)
+				self::CHECK_NAME,
+			),
 		);
 	}
 
@@ -62,8 +61,8 @@ class SuppressHelperTest extends TestCase
 			SuppressHelper::isSniffSuppressed(
 				$this->getTestedCodeSnifferFile(),
 				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'isSuppressed'),
-				self::CHECK_NAME
-			)
+				self::CHECK_NAME,
+			),
 		);
 	}
 
@@ -73,8 +72,8 @@ class SuppressHelperTest extends TestCase
 			SuppressHelper::isSniffSuppressed(
 				$this->getTestedCodeSnifferFile(),
 				$this->findPropertyPointerByName($this->getTestedCodeSnifferFile(), 'isNotSuppressed'),
-				self::CHECK_NAME
-			)
+				self::CHECK_NAME,
+			),
 		);
 	}
 
@@ -101,8 +100,8 @@ class SuppressHelperTest extends TestCase
 			SuppressHelper::isSniffSuppressed(
 				$this->getTestedCodeSnifferFile(),
 				$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), $name),
-				self::CHECK_NAME
-			)
+				self::CHECK_NAME,
+			),
 		);
 	}
 
@@ -127,8 +126,8 @@ class SuppressHelperTest extends TestCase
 			SuppressHelper::isSniffSuppressed(
 				$this->getTestedCodeSnifferFile(),
 				$this->findFunctionPointerByName($this->getTestedCodeSnifferFile(), $name),
-				self::CHECK_NAME
-			)
+				self::CHECK_NAME,
+			),
 		);
 	}
 

@@ -12,14 +12,13 @@ use function sprintf;
 class EmptyFileException extends Exception
 {
 
-	/** @var string */
-	private $filename;
+	private string $filename;
 
 	public function __construct(string $filename, ?Throwable $previous = null)
 	{
 		parent::__construct(sprintf(
 			'File %s is empty',
-			$filename
+			$filename,
 		), 0, $previous);
 
 		$this->filename = $filename;

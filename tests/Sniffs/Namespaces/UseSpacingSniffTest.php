@@ -180,7 +180,7 @@ class UseSpacingSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/useSpacingSameUseTypesErrors.php',
 			[],
-			[UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_SAME_TYPES_OF_USE]
+			[UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_SAME_TYPES_OF_USE],
 		);
 
 		self::assertSame(3, $report->getErrorCount());

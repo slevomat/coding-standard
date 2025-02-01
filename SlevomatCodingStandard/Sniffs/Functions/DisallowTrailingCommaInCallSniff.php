@@ -24,8 +24,7 @@ class DisallowTrailingCommaInCallSniff implements Sniff
 
 	public const CODE_DISALLOWED_TRAILING_COMMA = 'DisallowedTrailingComma';
 
-	/** @var bool */
-	public $onlySingleLine = false;
+	public bool $onlySingleLine = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -54,9 +53,9 @@ class DisallowTrailingCommaInCallSniff implements Sniff
 			$tokens[$pointerBeforeParenthesisOpener]['code'],
 			array_merge(
 				TokenHelper::getOnlyNameTokenCodes(),
-				[T_VARIABLE, T_ISSET, T_UNSET, T_CLOSE_PARENTHESIS, T_SELF, T_STATIC, T_PARENT]
+				[T_VARIABLE, T_ISSET, T_UNSET, T_CLOSE_PARENTHESIS, T_SELF, T_STATIC, T_PARENT],
 			),
-			true
+			true,
 		)) {
 			return;
 		}
@@ -75,7 +74,7 @@ class DisallowTrailingCommaInCallSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Trailing comma after the last parameter in function call is disallowed.',
 			$pointerBeforeParenthesisCloser,
-			self::CODE_DISALLOWED_TRAILING_COMMA
+			self::CODE_DISALLOWED_TRAILING_COMMA,
 		);
 
 		if (!$fix) {

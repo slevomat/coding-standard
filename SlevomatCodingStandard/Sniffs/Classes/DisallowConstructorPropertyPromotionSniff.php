@@ -45,7 +45,7 @@ class DisallowConstructorPropertyPromotionSniff implements Sniff
 			$phpcsFile,
 			[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY],
 			$tokens[$functionPointer]['parenthesis_opener'] + 1,
-			$tokens[$functionPointer]['parenthesis_closer']
+			$tokens[$functionPointer]['parenthesis_closer'],
 		);
 
 		if ($modifierPointers === []) {
@@ -58,10 +58,10 @@ class DisallowConstructorPropertyPromotionSniff implements Sniff
 			$phpcsFile->addError(
 				sprintf(
 					'Constructor property promotion is disallowed, promotion of property %s found.',
-					$tokens[$variablePointer]['content']
+					$tokens[$variablePointer]['content'],
 				),
 				$variablePointer,
-				self::CODE_DISALLOWED_CONSTRUCTOR_PROPERTY_PROMOTION
+				self::CODE_DISALLOWED_CONSTRUCTOR_PROPERTY_PROMOTION,
 			);
 		}
 	}

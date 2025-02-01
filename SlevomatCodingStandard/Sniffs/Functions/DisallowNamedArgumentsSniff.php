@@ -33,7 +33,7 @@ class DisallowNamedArgumentsSniff implements Sniff
 		$phpcsFile->addError(
 			sprintf('Named arguments are disallowed, usage of named argument "%s" found.', $tokens[$argumentNamePointer]['content']),
 			$argumentNamePointer,
-			self::CODE_DISALLOWED_NAMED_ARGUMENT
+			self::CODE_DISALLOWED_NAMED_ARGUMENT,
 		);
 	}
 

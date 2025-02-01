@@ -13,20 +13,16 @@ use const T_WHILE;
 class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacing
 {
 
-	/** @var int */
-	public $linesCountBefore = 1;
+	public int $linesCountBefore = 1;
 
-	/** @var int */
-	public $linesCountBeforeFirst = 0;
+	public int $linesCountBeforeFirst = 0;
 
-	/** @var int */
-	public $linesCountAfter = 1;
+	public int $linesCountAfter = 1;
 
-	/** @var int */
-	public $linesCountAfterLast = 0;
+	public int $linesCountAfterLast = 0;
 
 	/** @var list<string> */
-	public $controlStructures = [];
+	public array $controlStructures = [];
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint

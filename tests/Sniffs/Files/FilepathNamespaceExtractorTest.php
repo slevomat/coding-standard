@@ -113,7 +113,7 @@ class FilepathNamespaceExtractorTest extends TestCase
 				'tests' => 'Slevomat',
 			],
 			['components', 'forms', 'model', 'models', 'services', 'stubs', 'data'],
-			$extensions
+			$extensions,
 		);
 		$path = str_replace('/', DIRECTORY_SEPARATOR, $path);
 		self::assertSame($expectedNamespace, $extractor->getTypeNameFromProjectPath($path));

@@ -65,7 +65,7 @@ class NewWithoutParenthesesSniff implements Sniff
 					T_CLOSE_PARENTHESIS,
 					T_DOUBLE_ARROW,
 				],
-				$parenthesisOpenerPointer
+				$parenthesisOpenerPointer,
 			);
 
 			if (
@@ -97,7 +97,7 @@ class NewWithoutParenthesesSniff implements Sniff
 		FixerHelper::removeBetweenIncluding(
 			$phpcsFile,
 			$parenthesisOpenerPointer,
-			$tokens[$parenthesisOpenerPointer]['parenthesis_closer']
+			$tokens[$parenthesisOpenerPointer]['parenthesis_closer'],
 		);
 
 		$phpcsFile->fixer->endChangeset();

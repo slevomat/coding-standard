@@ -20,11 +20,9 @@ class BackedEnumTypeSpacingSniff implements Sniff
 
 	public const CODE_INCORRECT_SPACES_BEFORE_TYPE = 'IncorrectSpacesBeforeType';
 
-	/** @var int */
-	public $spacesCountBeforeColon = 0;
+	public int $spacesCountBeforeColon = 0;
 
-	/** @var int */
-		public $spacesCountBeforeType = 1;
+	public int $spacesCountBeforeType = 1;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -68,7 +66,7 @@ class BackedEnumTypeSpacingSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			$this->formatErrorMessage('before colon', $this->spacesCountBeforeColon),
 			$colonPointer,
-			self::CODE_INCORRECT_SPACES_BEFORE_COLON
+			self::CODE_INCORRECT_SPACES_BEFORE_COLON,
 		);
 		if (!$fix) {
 			return;
@@ -96,7 +94,7 @@ class BackedEnumTypeSpacingSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			$this->formatErrorMessage('before type', $this->spacesCountBeforeType),
 			$typePointer,
-			self::CODE_INCORRECT_SPACES_BEFORE_TYPE
+			self::CODE_INCORRECT_SPACES_BEFORE_TYPE,
 		);
 		if (!$fix) {
 			return;

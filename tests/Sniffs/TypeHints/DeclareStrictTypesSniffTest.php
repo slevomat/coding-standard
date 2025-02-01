@@ -109,7 +109,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 			$report,
 			3,
 			DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE,
-			'There must be a single space between the PHP open tag and declare statement.'
+			'There must be a single space between the PHP open tag and declare statement.',
 		);
 	}
 
@@ -128,7 +128,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 			$report,
 			3,
 			DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_AFTER_DECLARE,
-			'Expected 1 line after declare statement, found 0.'
+			'Expected 1 line after declare statement, found 0.',
 		);
 	}
 
@@ -141,7 +141,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 			$report,
 			1,
 			DeclareStrictTypesSniff::CODE_INCORRECT_WHITESPACE_BEFORE_DECLARE,
-			'Expected 1 line before declare statement, found 0.'
+			'Expected 1 line before declare statement, found 0.',
 		);
 	}
 
@@ -254,7 +254,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/fixableDeclareStrictTypesIncorrectFormatOneSpace.php',
 			[],
-			[DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT]
+			[DeclareStrictTypesSniff::CODE_INCORRECT_STRICT_TYPES_FORMAT],
 		);
 		self::assertAllFixedInFile($report);
 	}
@@ -280,7 +280,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/fixableDeclareStrictTypesMissingWithTicks.php',
 			[],
-			[DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING]
+			[DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING],
 		);
 		self::assertAllFixedInFile($report);
 	}
@@ -290,7 +290,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/fixableDeclareStrictTypesDisabled.php',
 			[],
-			[DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING]
+			[DeclareStrictTypesSniff::CODE_DECLARE_STRICT_TYPES_MISSING],
 		);
 		self::assertAllFixedInFile($report);
 	}

@@ -17,8 +17,7 @@ class TrailingArrayCommaSniff implements Sniff
 
 	public const CODE_MISSING_TRAILING_COMMA = 'MissingTrailingComma';
 
-	/** @var bool|null */
-	public $enableAfterHeredoc = null;
+	public ?bool $enableAfterHeredoc = null;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -66,7 +65,7 @@ class TrailingArrayCommaSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Multi-line arrays must have a trailing comma after the last element.',
 			$pointerPreviousToClose,
-			self::CODE_MISSING_TRAILING_COMMA
+			self::CODE_MISSING_TRAILING_COMMA,
 		);
 		if (!$fix) {
 			return;

@@ -40,7 +40,7 @@ class DisallowEmptyFunctionSniff implements Sniff
 				$phpcsFile,
 				Tokens::$scopeModifiers,
 				$tokens[$functionPointer]['parenthesis_opener'] + 1,
-				$tokens[$functionPointer]['parenthesis_closer']
+				$tokens[$functionPointer]['parenthesis_closer'],
 			);
 
 			if ($propertyPromotion !== null) {
@@ -52,7 +52,7 @@ class DisallowEmptyFunctionSniff implements Sniff
 			$phpcsFile,
 			T_WHITESPACE,
 			$tokens[$functionPointer]['scope_opener'] + 1,
-			$tokens[$functionPointer]['scope_closer']
+			$tokens[$functionPointer]['scope_closer'],
 		);
 
 		if ($firstContent !== null) {
@@ -62,7 +62,7 @@ class DisallowEmptyFunctionSniff implements Sniff
 		$phpcsFile->addError(
 			'Empty function body must have at least a comment to explain why is empty.',
 			$functionPointer,
-			self::CODE_EMPTY_FUNCTION
+			self::CODE_EMPTY_FUNCTION,
 		);
 	}
 

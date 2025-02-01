@@ -8,20 +8,15 @@ namespace SlevomatCodingStandard\Helpers;
 class Attribute
 {
 
-	/** @var int */
-	private $attributePointer;
+	private int $attributePointer;
 
-	/** @var string */
-	private $name;
+	private string $name;
 
-	/** @var int */
-	private $startPointer;
+	private int $startPointer;
 
-	/** @var int */
-	private $endPointer;
+	private int $endPointer;
 
-	/** @var string|null */
-	private $content;
+	private ?string $content = null;
 
 	public function __construct(int $attributePointer, string $name, int $startPointer, int $endPointer, ?string $content = null)
 	{

@@ -27,8 +27,7 @@ class ModernClassNameReferenceSniff implements Sniff
 	public const CODE_CLASS_NAME_REFERENCED_VIA_MAGIC_CONSTANT = 'ClassNameReferencedViaMagicConstant';
 	public const CODE_CLASS_NAME_REFERENCED_VIA_FUNCTION_CALL = 'ClassNameReferencedViaFunctionCall';
 
-	/** @var bool|null */
-	public $enableOnObjects = null;
+	public ?bool $enableOnObjects = null;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -64,7 +63,7 @@ class ModernClassNameReferenceSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Class name referenced via magic constant.',
 			$pointer,
-			self::CODE_CLASS_NAME_REFERENCED_VIA_MAGIC_CONSTANT
+			self::CODE_CLASS_NAME_REFERENCED_VIA_MAGIC_CONSTANT,
 		);
 
 		if (!$fix) {
@@ -105,7 +104,7 @@ class ModernClassNameReferenceSniff implements Sniff
 		$parameterPointer = TokenHelper::findNextEffective(
 			$phpcsFile,
 			$openParenthesisPointer + 1,
-			$tokens[$openParenthesisPointer]['parenthesis_closer']
+			$tokens[$openParenthesisPointer]['parenthesis_closer'],
 		);
 
 		$isObjectParameter = static function () use ($phpcsFile, $tokens, $openParenthesisPointer, $parameterPointer): bool {
@@ -158,7 +157,7 @@ class ModernClassNameReferenceSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			sprintf('Class name referenced via call of function %s().', $functionName),
 			$functionPointer,
-			self::CODE_CLASS_NAME_REFERENCED_VIA_FUNCTION_CALL
+			self::CODE_CLASS_NAME_REFERENCED_VIA_FUNCTION_CALL,
 		);
 
 		if (!$fix) {

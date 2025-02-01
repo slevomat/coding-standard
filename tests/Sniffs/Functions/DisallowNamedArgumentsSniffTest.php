@@ -23,37 +23,37 @@ class DisallowNamedArgumentsSniffTest extends TestCase
 			$report,
 			3,
 			DisallowNamedArgumentsSniff::CODE_DISALLOWED_NAMED_ARGUMENT,
-			'Named arguments are disallowed, usage of named argument "a" found.'
+			'Named arguments are disallowed, usage of named argument "a" found.',
 		);
 		self::assertSniffError(
 			$report,
 			3,
 			DisallowNamedArgumentsSniff::CODE_DISALLOWED_NAMED_ARGUMENT,
-			'Named arguments are disallowed, usage of named argument "b" found.'
+			'Named arguments are disallowed, usage of named argument "b" found.',
 		);
 		self::assertSniffError(
 			$report,
 			6,
 			DisallowNamedArgumentsSniff::CODE_DISALLOWED_NAMED_ARGUMENT,
-			'Named arguments are disallowed, usage of named argument "a" found.'
+			'Named arguments are disallowed, usage of named argument "a" found.',
 		);
 		self::assertSniffError(
 			$report,
 			7,
 			DisallowNamedArgumentsSniff::CODE_DISALLOWED_NAMED_ARGUMENT,
-			'Named arguments are disallowed, usage of named argument "b" found.'
+			'Named arguments are disallowed, usage of named argument "b" found.',
 		);
 		self::assertSniffError(
 			$report,
 			12,
 			DisallowNamedArgumentsSniff::CODE_DISALLOWED_NAMED_ARGUMENT,
-			'Named arguments are disallowed, usage of named argument "a" found.'
+			'Named arguments are disallowed, usage of named argument "a" found.',
 		);
 		self::assertSniffError(
 			$report,
 			12,
 			DisallowNamedArgumentsSniff::CODE_DISALLOWED_NAMED_ARGUMENT,
-			'Named arguments are disallowed, usage of named argument "b" found.'
+			'Named arguments are disallowed, usage of named argument "b" found.',
 		);
 	}
 

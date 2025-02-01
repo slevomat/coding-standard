@@ -16,8 +16,7 @@ class DisallowTrailingCommaInClosureUseSniff implements Sniff
 
 	public const CODE_DISALLOWED_TRAILING_COMMA = 'DisallowedTrailingComma';
 
-	/** @var bool */
-	public $onlySingleLine = false;
+	public bool $onlySingleLine = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -52,7 +51,7 @@ class DisallowTrailingCommaInClosureUseSniff implements Sniff
 			$phpcsFile,
 			T_WHITESPACE,
 			$tokens[$useParenthesisOpenerPointer]['parenthesis_closer'] - 1,
-			$useParenthesisOpenerPointer
+			$useParenthesisOpenerPointer,
 		);
 
 		if ($tokens[$pointerBeforeUseParenthesisCloser]['code'] !== T_COMMA) {
@@ -66,7 +65,7 @@ class DisallowTrailingCommaInClosureUseSniff implements Sniff
 		$fix = $phpcsFile->addFixableError(
 			'Trailing comma after the last inherited variable in "use" of closure declaration is disallowed.',
 			$pointerBeforeUseParenthesisCloser,
-			self::CODE_DISALLOWED_TRAILING_COMMA
+			self::CODE_DISALLOWED_TRAILING_COMMA,
 		);
 
 		if (!$fix) {

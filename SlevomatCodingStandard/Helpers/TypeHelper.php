@@ -21,7 +21,7 @@ class TypeHelper
 	{
 		$result = preg_match(
 			'~^\\\\?([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)(\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*$~',
-			$typeName
+			$typeName,
 		);
 		if ($result === false) {
 			// @codeCoverageIgnoreStart

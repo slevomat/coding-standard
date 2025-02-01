@@ -23,74 +23,74 @@ class ParameterTypeHintSpacingSniffTest extends TestCase
 			$report,
 			3,
 			ParameterTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL,
-			'There must be no whitespace between parameter type hint nullability symbol and parameter type hint of parameter $a.'
+			'There must be no whitespace between parameter type hint nullability symbol and parameter type hint of parameter $a.',
 		);
 		self::assertSniffError(
 			$report,
 			3,
 			ParameterTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_TYPE_HINT_AND_PARAMETER,
-			'There must be exactly one space between parameter type hint and parameter $a.'
+			'There must be exactly one space between parameter type hint and parameter $a.',
 		);
 		self::assertSniffError(
 			$report,
 			3,
 			ParameterTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL,
-			'There must be no whitespace between parameter type hint nullability symbol and parameter type hint of parameter $b.'
+			'There must be no whitespace between parameter type hint nullability symbol and parameter type hint of parameter $b.',
 		);
 		self::assertSniffError(
 			$report,
 			3,
 			ParameterTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PARAMETER,
-			'There must be exactly one space between parameter type hint and reference sign of parameter $b.'
+			'There must be exactly one space between parameter type hint and reference sign of parameter $b.',
 		);
 		self::assertSniffError(
 			$report,
 			3,
 			ParameterTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL,
-			'There must be no whitespace between parameter type hint nullability symbol and parameter type hint of parameter $c.'
+			'There must be no whitespace between parameter type hint nullability symbol and parameter type hint of parameter $c.',
 		);
 		self::assertSniffError(
 			$report,
 			3,
 			ParameterTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PARAMETER,
-			'There must be exactly one space between parameter type hint and varadic parameter $c.'
+			'There must be exactly one space between parameter type hint and varadic parameter $c.',
 		);
 
 		self::assertSniffError(
 			$report,
 			16,
 			ParameterTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL,
-			'There must be no whitespace between parameter type hint nullability symbol and parameter type hint of parameter $a.'
+			'There must be no whitespace between parameter type hint nullability symbol and parameter type hint of parameter $a.',
 		);
 		self::assertSniffError(
 			$report,
 			16,
 			ParameterTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_TYPE_HINT_AND_PARAMETER,
-			'There must be exactly one space between parameter type hint and parameter $a.'
+			'There must be exactly one space between parameter type hint and parameter $a.',
 		);
 		self::assertSniffError(
 			$report,
 			16,
 			ParameterTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL,
-			'There must be no whitespace between parameter type hint nullability symbol and parameter type hint of parameter $b.'
+			'There must be no whitespace between parameter type hint nullability symbol and parameter type hint of parameter $b.',
 		);
 		self::assertSniffError(
 			$report,
 			16,
 			ParameterTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PARAMETER,
-			'There must be exactly one space between parameter type hint and reference sign of parameter $b.'
+			'There must be exactly one space between parameter type hint and reference sign of parameter $b.',
 		);
 		self::assertSniffError(
 			$report,
 			16,
 			ParameterTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL,
-			'There must be no whitespace between parameter type hint nullability symbol and parameter type hint of parameter $c.'
+			'There must be no whitespace between parameter type hint nullability symbol and parameter type hint of parameter $c.',
 		);
 		self::assertSniffError(
 			$report,
 			16,
 			ParameterTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PARAMETER,
-			'There must be exactly one space between parameter type hint and varadic parameter $c.'
+			'There must be exactly one space between parameter type hint and varadic parameter $c.',
 		);
 	}
 
@@ -99,7 +99,7 @@ class ParameterTypeHintSpacingSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/fixableParameterTypeHintSpacingNoSpaceBetweenTypeHintAndParameter.php',
 			[],
-			[ParameterTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_TYPE_HINT_AND_PARAMETER]
+			[ParameterTypeHintSpacingSniff::CODE_NO_SPACE_BETWEEN_TYPE_HINT_AND_PARAMETER],
 		);
 		self::assertAllFixedInFile($report);
 	}
@@ -109,7 +109,7 @@ class ParameterTypeHintSpacingSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/fixableParameterTypeHintSpacingMultipleSpacesBetweenTypeHintAndParameter.php',
 			[],
-			[ParameterTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PARAMETER]
+			[ParameterTypeHintSpacingSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PARAMETER],
 		);
 		self::assertAllFixedInFile($report);
 	}
@@ -119,7 +119,7 @@ class ParameterTypeHintSpacingSniffTest extends TestCase
 		$report = self::checkFile(
 			__DIR__ . '/data/fixableParameterTypeHintSpacingWhitespaceAfterNullabilitySymbol.php',
 			[],
-			[ParameterTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL]
+			[ParameterTypeHintSpacingSniff::CODE_WHITESPACE_AFTER_NULLABILITY_SYMBOL],
 		);
 		self::assertAllFixedInFile($report);
 	}

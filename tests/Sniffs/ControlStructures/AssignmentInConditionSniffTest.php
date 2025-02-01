@@ -29,7 +29,7 @@ class AssignmentInConditionSniffTest extends TestCase
 			__DIR__ . '/data/noAssignmentsInConditionsIgnoreAssignmentsInsideFunctionCalls.php',
 			[
 				'ignoreAssignmentsInsideFunctionCalls' => true,
-			]
+			],
 		);
 		self::assertNoSniffErrorInFile($report);
 	}
@@ -40,7 +40,7 @@ class AssignmentInConditionSniffTest extends TestCase
 			__DIR__ . '/data/allAssignmentsInConditions.php',
 			[
 				'ignoreAssignmentsInsideFunctionCalls' => true,
-			]
+			],
 		);
 
 		self::assertEquals(7, $resultFile->getErrorCount());

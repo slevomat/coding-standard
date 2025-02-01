@@ -45,7 +45,7 @@ class NamespaceHelper
 				static function ($pointer) use ($phpcsFile, $tokens) {
 					$next = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
 					return $next === null || $tokens[$next]['code'] !== T_NS_SEPARATOR;
-				}
+				},
 			);
 
 			return array_values($all);
@@ -102,7 +102,7 @@ class NamespaceHelper
 		$namespaceNameEndPointer = TokenHelper::findNextExcluding(
 			$phpcsFile,
 			TokenHelper::getNameTokenCodes(),
-			$namespaceNameStartPointer + 1
+			$namespaceNameStartPointer + 1,
 		) - 1;
 
 		return TokenHelper::getContent($phpcsFile, $namespaceNameStartPointer, $namespaceNameEndPointer);
@@ -150,7 +150,7 @@ class NamespaceHelper
 	{
 		return StringHelper::startsWith(
 			self::normalizeToCanonicalName($typeName) . '\\',
-			$namespace . '\\'
+			$namespace . '\\',
 		);
 	}
 
@@ -181,7 +181,7 @@ class NamespaceHelper
 				self::NAMESPACE_SEPARATOR,
 				$useStatements[$firstPartUniqueId]->getFullyQualifiedTypeName(),
 				self::NAMESPACE_SEPARATOR,
-				implode(self::NAMESPACE_SEPARATOR, array_slice($nameParts, 1))
+				implode(self::NAMESPACE_SEPARATOR, array_slice($nameParts, 1)),
 			);
 		}
 

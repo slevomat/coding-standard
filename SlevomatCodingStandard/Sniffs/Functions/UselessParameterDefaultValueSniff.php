@@ -63,7 +63,7 @@ class UselessParameterDefaultValueSniff implements Sniff
 				$fix = $phpcsFile->addFixableError(
 					sprintf('Useless default value of parameter %s.', $parameter['name']),
 					$parameter['token'],
-					self::CODE_USELESS_PARAMETER_DEFAULT_VALUE
+					self::CODE_USELESS_PARAMETER_DEFAULT_VALUE,
 				);
 
 				if (!$fix) {
