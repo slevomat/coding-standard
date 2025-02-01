@@ -467,6 +467,7 @@ class UselessParenthesesSniff implements Sniff
 		if (
 			in_array($tokens[$pointerBeforeParenthesisOpener]['code'], Tokens::$booleanOperators, true)
 			|| in_array($tokens[$pointerAfterParenthesisCloser]['code'], Tokens::$booleanOperators, true)
+			|| $tokens[$pointerBeforeParenthesisOpener]['code'] === T_BOOLEAN_NOT
 		) {
 			return;
 		}
