@@ -190,10 +190,10 @@ class AnnotationTypeHelper
 			return true;
 		}
 
-		if ($typeNode instanceof ArrayShapeNode) {
-			foreach ($typeNode->items as $arrayShapeItemNode) {
+		if ($typeNode instanceof ArrayShapeNode || $typeNode instanceof ObjectShapeNode) {
+			foreach ($typeNode->items as $innerItemNode) {
 				if (!self::containsItemsSpecificationForTraversable(
-					$arrayShapeItemNode->valueType,
+					$innerItemNode->valueType,
 					$phpcsFile,
 					$pointer,
 					$traversableTypeHints,

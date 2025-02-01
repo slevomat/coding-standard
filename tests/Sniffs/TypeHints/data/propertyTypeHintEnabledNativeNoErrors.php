@@ -168,6 +168,11 @@ class Whatever
 	/** @var \Foo::INTEGER $a */
 	public $constTypeNode;
 
+	/**
+	 * @var WeakMap<static, object{a: int}> https://phpstan.org/writing-php-code/phpdoc-types#object-shapes
+	 */
+	public WeakMap $objectShapeInItems;
+
 	public function __construct(private $propertyPromotion)
 	{
 	}
