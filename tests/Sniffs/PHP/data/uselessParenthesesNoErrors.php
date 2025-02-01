@@ -177,6 +177,8 @@ $char = ($ord - 0xc0 >> 6) + ord($char[1]) - 0x80;
 
 $anotherObject = new ($object->getClassName());
 
+echo 'Hello' . ($foo) ? ' There' : $fn();
+
 // Must be last
 return true
 	? 100

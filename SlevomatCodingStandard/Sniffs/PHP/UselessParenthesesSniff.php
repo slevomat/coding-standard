@@ -232,6 +232,10 @@ class UselessParenthesesSniff implements Sniff
 			return;
 		}
 
+		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], self::OPERATORS, true)) {
+			return;
+		}
+
 		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], Tokens::$comparisonTokens, true)) {
 			return;
 		}
