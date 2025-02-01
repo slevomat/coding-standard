@@ -47,3 +47,63 @@ class UserEvent
 
     public User $user;
 }
+
+abstract class Test
+{
+    abstract public function begin(): static;
+
+    protected array $field = [];
+}
+
+class Test2
+{
+    public function begin(): static
+    {}
+
+    protected array $field = [];
+}
+
+abstract class Test3
+{
+    abstract public function begin(): static|null;
+
+    protected array $field = [];
+}
+
+class Test4
+{
+    public function begin(): static|null
+    {}
+
+    protected array $field = [];
+}
+
+class Test5
+{
+    public function begin(): false|static|null
+    {}
+
+    protected array $field = [];
+}
+
+class Test6
+{
+    public function begin(): static&null
+    {}
+
+    protected array $field = [];
+}
+
+class Tes7
+{
+    public static function begin(): static
+    {
+        return new static();
+    }
+
+    protected array $field = [];
+
+    final private function __construct()
+    {
+    }
+}

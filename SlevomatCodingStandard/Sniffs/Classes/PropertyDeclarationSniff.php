@@ -25,11 +25,16 @@ use const T_CONST;
 use const T_DOUBLE_COLON;
 use const T_FUNCTION;
 use const T_NULLABLE;
+use const T_OPEN_CURLY_BRACKET;
+use const T_OPEN_PARENTHESIS;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
 use const T_READONLY;
+use const T_SEMICOLON;
 use const T_STATIC;
+use const T_TYPE_INTERSECTION;
+use const T_TYPE_UNION;
 use const T_VAR;
 use const T_VARIABLE;
 use const T_WHITESPACE;
@@ -94,6 +99,16 @@ class PropertyDeclarationSniff implements Sniff
 
 		if ($tokens[$nextPointer]['code'] === T_DOUBLE_COLON) {
 			// Ignore static::
+			return;
+		}
+
+		if ($tokens[$nextPointer]['code'] === T_OPEN_PARENTHESIS) {
+			// Ignore static()
+			return;
+		}
+
+		if (in_array($tokens[$nextPointer]['code'], [T_OPEN_CURLY_BRACKET, T_SEMICOLON, T_TYPE_UNION, T_TYPE_INTERSECTION], true)) {
+			// Ignore "static" as return type hint of method
 			return;
 		}
 
