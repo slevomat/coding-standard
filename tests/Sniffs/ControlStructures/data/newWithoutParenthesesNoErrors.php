@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.3
 
 $foo = new \DateTimeImmutable;
 
@@ -29,6 +29,10 @@ $classNamesInObject->xoo = 'Xoo';
 $aoo = new $classNamesInObject->xoo;
 
 $coo = new class {
+
+};
+
+$coo = new readonly class {
 
 };
 

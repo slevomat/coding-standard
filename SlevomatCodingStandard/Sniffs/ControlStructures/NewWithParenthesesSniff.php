@@ -18,6 +18,7 @@ use const T_INLINE_ELSE;
 use const T_INLINE_THEN;
 use const T_NEW;
 use const T_OPEN_PARENTHESIS;
+use const T_READONLY;
 use const T_SEMICOLON;
 
 class NewWithParenthesesSniff implements Sniff
@@ -49,7 +50,7 @@ class NewWithParenthesesSniff implements Sniff
 			$nextPointer = AttributeHelper::getAttributeTarget($phpcsFile, $nextPointer);
 		}
 
-		if ($tokens[$nextPointer]['code'] === T_ANON_CLASS) {
+		if ($tokens[$nextPointer]['code'] === T_ANON_CLASS || $tokens[$nextPointer]['code'] === T_READONLY) {
 			return;
 		}
 
