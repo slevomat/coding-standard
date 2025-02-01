@@ -82,6 +82,11 @@ class ReferencedNameHelperTest extends TestCase
 			['object', true, false],
 			['DateTime', false, false],
 			['DateTimeImmutable', false, false],
+			['\ForeachIterator1', false, false],
+			['\ForeachValue1', false, false],
+			['\ForeachIterator2', false, false],
+			['\ForeachKey', false, false],
+			['\ForeachValue2', false, false],
 		];
 
 		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);

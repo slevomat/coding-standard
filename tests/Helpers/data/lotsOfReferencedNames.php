@@ -221,3 +221,11 @@ echo "something{$a([DateTime::class, 'format'])}";
 echo "something{$a(
 	[DateTimeImmutable::class, 'format']
 )}";
+
+foreach (\ForeachIterator1::$items as \ForeachValue1::$value) {
+
+}
+
+foreach (\ForeachIterator2::$items as \ForeachKey::$key => \ForeachValue2::$value) {
+
+}

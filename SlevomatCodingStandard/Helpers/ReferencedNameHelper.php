@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
+use function array_key_exists;
 use function array_merge;
 use function array_reverse;
 use function array_values;
@@ -326,7 +327,6 @@ class ReferencedNameHelper
 
 		$skipTokenCodes = [
 			T_FUNCTION,
-			T_AS,
 			T_DOUBLE_COLON,
 			T_OBJECT_OPERATOR,
 			T_NULLSAFE_OBJECT_OPERATOR,
@@ -386,6 +386,11 @@ class ReferencedNameHelper
 		);
 
 		if (!$isProbablyReferencedName) {
+			return false;
+		}
+
+		if ($previousToken['code'] === T_AS && !array_key_exists('nested_parenthesis', $previousToken)) {
+			// "as" in "use" statement
 			return false;
 		}
 

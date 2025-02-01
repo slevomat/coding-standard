@@ -19,6 +19,12 @@ class Bar extends \ObjectPrototype implements \Iterator
 		\Boo\FOO;
 		min(1, 2);
 		PHP_VERSION;
+		foreach (\Foo\BarTwo::$values as \Foo\BarTwo::$value) {
+			echo \Foo\BarTwo::$value;
+		}
+		foreach (\Foo\BarTwo::$values as \Foo\BarTwo::$key => \Foo\BarTwo::$value) {
+			echo \Foo\BarTwo::$key . \Foo\BarTwo::$value;
+		}
 	}
 
 	public function foo(\Doctrine\ORM\Mapping\Column $doctrineColumn): \Nette\ObjectPrototype

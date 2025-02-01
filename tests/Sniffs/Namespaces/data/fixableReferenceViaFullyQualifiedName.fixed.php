@@ -11,6 +11,7 @@ use function Boo\foo;
 use const Boo\FOO;
 use function min;
 use const PHP_VERSION;
+use Foo\BarTwo;
 
 class Bar extends ObjectPrototype implements Iterator
 {
@@ -27,6 +28,12 @@ class Bar extends ObjectPrototype implements Iterator
 		FOO;
 		min(1, 2);
 		PHP_VERSION;
+		foreach (BarTwo::$values as BarTwo::$value) {
+			echo BarTwo::$value;
+		}
+		foreach (BarTwo::$values as BarTwo::$key => BarTwo::$value) {
+			echo BarTwo::$key . BarTwo::$value;
+		}
 	}
 
 	public function foo(DoctrineColumn $doctrineColumn): \Nette\ObjectPrototype
