@@ -1,5 +1,14 @@
 ## Type hints
 
+#### SlevomatCodingStandard.TypeHints.ClassConstantTypeHint 🔧
+
+* Checks for missing typehints in case they can be declared natively.
+* Reports useless `@var` annotation (or whole documentation comment) because the type of constant is always clear.
+
+Sniff provides the following settings:
+
+* `enableNativeTypeHint`: enforces native typehint. It's on by default if you're on PHP 8.3+
+
 #### SlevomatCodingStandard.TypeHints.DeclareStrictTypes 🔧
 
 Enforces having `declare(strict_types = 1)` at the top of each PHP file. Allows configuring how many newlines should be between the `<?php` opening tag and the `declare` statement.
