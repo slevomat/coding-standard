@@ -158,6 +158,10 @@ class D
 	{
 	}
 
+	public function __invoke()
+	{
+	}
+
 	public function __get($name)
 	{
 	}

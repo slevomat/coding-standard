@@ -123,4 +123,8 @@ trait Tr
 	{
 	}
 
+	public function __invoke()
+	{
+	}
+
 }

@@ -107,6 +107,10 @@ trait Tr
 	{
 	}
 
+	public function __invoke()
+	{
+	}
+
 	public final function publicFinal()
 	{
 	}

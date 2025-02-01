@@ -18,6 +18,7 @@ class ClassStructureSniffTest extends TestCase
 		'public abstract methods, public methods, protected abstract methods, protected methods, private methods',
 		'constructor, destructor',
 		'static constructors',
+		'invoke method',
 		'methods',
 		'public final methods',
 		'public static final methods',
@@ -92,7 +93,7 @@ class ClassStructureSniffTest extends TestCase
 			['groups' => self::DIFFERENT_RULES],
 		);
 
-		self::assertSame(16, $report->getErrorCount());
+		self::assertSame(17, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 12, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
@@ -111,6 +112,7 @@ class ClassStructureSniffTest extends TestCase
 		self::assertSniffError($report, 114, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 118, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 122, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 126, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 
 		self::assertAllFixedInFile($report);
 	}

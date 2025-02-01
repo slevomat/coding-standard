@@ -60,6 +60,7 @@ class ClassStructureSniff implements Sniff
 	private const GROUP_CONSTRUCTOR = 'constructor';
 	private const GROUP_STATIC_CONSTRUCTORS = 'static constructors';
 	private const GROUP_DESTRUCTOR = 'destructor';
+	private const GROUP_INVOKE_METHOD = 'invoke method';
 	private const GROUP_MAGIC_METHODS = 'magic methods';
 	private const GROUP_PUBLIC_METHODS = 'public methods';
 	private const GROUP_PUBLIC_ABSTRACT_METHODS = 'public abstract methods';
@@ -174,7 +175,7 @@ class ClassStructureSniff implements Sniff
 		'__serialize' => self::GROUP_MAGIC_METHODS,
 		'__unserialize' => self::GROUP_MAGIC_METHODS,
 		'__tostring' => self::GROUP_MAGIC_METHODS,
-		'__invoke' => self::GROUP_MAGIC_METHODS,
+		'__invoke' => self::GROUP_INVOKE_METHOD,
 		'__set_state' => self::GROUP_MAGIC_METHODS,
 		'__clone' => self::GROUP_MAGIC_METHODS,
 		'__debuginfo' => self::GROUP_MAGIC_METHODS,
@@ -216,6 +217,11 @@ class ClassStructureSniff implements Sniff
 			}
 
 			[$groupFirstMemberPointer, $groupLastMemberPointer, $group] = $nextGroup;
+
+			// Use "magic methods" group for __invoke() when "invoke" group is not explicitly defined
+			if ($group === self::GROUP_INVOKE_METHOD && !array_key_exists($group, $groupsOrder)) {
+				$group = self::GROUP_MAGIC_METHODS;
+			}
 
 			if ($groupsOrder[$group] >= ($groupsOrder[$expectedGroup] ?? 0)) {
 				$groupsFirstMembers[$group] = $groupFirstMemberPointer;
@@ -594,6 +600,7 @@ class ClassStructureSniff implements Sniff
 					if (
 						!in_array($groupOrShortcut, $supportedGroups, true)
 						&& !array_key_exists($groupOrShortcut, self::SHORTCUTS)
+						&& $groupOrShortcut !== self::GROUP_INVOKE_METHOD
 					) {
 						throw new UnsupportedClassGroupException($groupOrShortcut);
 					}
@@ -606,7 +613,7 @@ class ClassStructureSniff implements Sniff
 
 			$normalizedGroups = [];
 			foreach ($normalizedGroupsWithShortcuts as $groupOrShortcut => $groupOrder) {
-				if (in_array($groupOrShortcut, $supportedGroups, true)) {
+				if (in_array($groupOrShortcut, $supportedGroups, true) || $groupOrShortcut === self::GROUP_INVOKE_METHOD) {
 					$normalizedGroups[$groupOrShortcut] = $groupOrder;
 				} else {
 					foreach ($this->unpackShortcut($groupOrShortcut, $supportedGroups) as $group) {

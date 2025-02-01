@@ -51,7 +51,7 @@ uses,
 enum cases,
 public constants, protected constants, private constants,
 public properties, public static properties, protected properties, protected static properties, private properties, private static properties,
-constructor, static constructors, destructor, magic methods,
+constructor, static constructors, destructor, magic methods, invoke method
 public methods, protected methods, private methods,
 public final methods, public static final methods, protected final methods, protected static final methods,
 public abstract methods, public static abstract methods, protected abstract methods, protected static abstract methods,
