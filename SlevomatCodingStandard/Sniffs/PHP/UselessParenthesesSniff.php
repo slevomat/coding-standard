@@ -60,6 +60,7 @@ use const T_REQUIRE;
 use const T_REQUIRE_ONCE;
 use const T_SELF;
 use const T_SEMICOLON;
+use const T_SL;
 use const T_SR;
 use const T_STATIC;
 use const T_STRING_CAST;
@@ -472,6 +473,8 @@ class UselessParenthesesSniff implements Sniff
 			return;
 		}
 
+		$complicatedOperators = [T_INLINE_THEN, T_COALESCE, T_BITWISE_AND, T_BITWISE_OR, T_BITWISE_XOR, T_SL, T_SR];
+
 		$operatorsPointers = [];
 		$actualStartPointer = $parenthesisOpenerPointer + 1;
 		while (true) {
@@ -479,7 +482,8 @@ class UselessParenthesesSniff implements Sniff
 				$phpcsFile,
 				array_merge(
 					self::OPERATORS,
-					[T_OPEN_PARENTHESIS, T_INLINE_THEN, T_COALESCE, T_BITWISE_AND, T_BITWISE_OR, T_BITWISE_XOR],
+					[T_OPEN_PARENTHESIS],
+					$complicatedOperators,
 					Tokens::$comparisonTokens
 				),
 				$actualStartPointer,
@@ -490,7 +494,7 @@ class UselessParenthesesSniff implements Sniff
 				break;
 			}
 
-			if (in_array($tokens[$pointer]['code'], [T_INLINE_THEN, T_COALESCE, T_BITWISE_AND, T_BITWISE_OR, T_BITWISE_XOR], true)) {
+			if (in_array($tokens[$pointer]['code'], $complicatedOperators, true)) {
 				return;
 			}
 

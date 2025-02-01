@@ -172,6 +172,9 @@ match ($code) {
 
 $char = (0xF0 & ord('1')) >> 4;
 
+$char = ($ord - 0xc0 << 6) + ord($char[1]) - 0x80;
+$char = ($ord - 0xc0 >> 6) + ord($char[1]) - 0x80;
+
 $anotherObject = new ($object->getClassName());
 
 // Must be last
