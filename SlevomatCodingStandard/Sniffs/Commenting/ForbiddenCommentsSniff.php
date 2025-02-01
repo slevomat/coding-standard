@@ -9,7 +9,6 @@ use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use function array_key_exists;
-use function is_array;
 use function preg_match;
 use function preg_replace;
 use function sprintf;
@@ -85,9 +84,8 @@ class ForbiddenCommentsSniff implements Sniff
 
 				$docCommentContent = '';
 				for ($i = $docCommentOpenPointer + 1; $i < $tokens[$docCommentOpenPointer]['comment_closer']; $i++) {
-					/** @var string|array<(string|int)> $token */
 					$token = $phpcsFile->fixer->getTokenContent($i);
-					$docCommentContent .= is_array($token) ? $token['content'] : $token;
+					$docCommentContent .= $token;
 				}
 
 				if (preg_match('~^[\\s\*]*$~', $docCommentContent) !== 0) {

@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Files\File;
 use function array_filter;
 use function array_map;
 use function array_reverse;
+use function array_values;
 use function iterator_to_array;
 use function sprintf;
 use const T_CONST;
@@ -46,7 +47,7 @@ class ConstantHelper
 			static function (int $constantPointer) use ($phpcsFile): string {
 				return self::getName($phpcsFile, $constantPointer);
 			},
-			array_filter(
+			array_values(array_filter(
 				iterator_to_array(self::getAllConstantPointers($phpcsFile, $previousConstantPointer)),
 				static function (int $constantPointer) use ($phpcsFile): bool {
 					foreach (array_reverse($phpcsFile->getTokens()[$constantPointer]['conditions']) as $conditionTokenCode) {
@@ -55,7 +56,7 @@ class ConstantHelper
 
 					return true;
 				}
-			)
+			))
 		);
 	}
 

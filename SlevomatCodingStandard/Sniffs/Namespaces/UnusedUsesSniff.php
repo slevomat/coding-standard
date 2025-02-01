@@ -196,7 +196,9 @@ class UnusedUsesSniff implements Sniff
 								array_map(static function (ConstFetchNode $constFetchNode): string {
 									return $constFetchNode->className;
 								}, $constFetchNodes)
-							));
+							), static function (?string $content): bool {
+								return $content !== null;
+							});
 						}
 
 						foreach ($contentsToCheck as $contentToCheck) {

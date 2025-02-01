@@ -160,7 +160,7 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 				private $nodes = [];
 
 				/**
-				 * @return Node|list<Node>|NodeTraverser::*|null
+				 * @return NodeTraverser::DONT_TRAVERSE_CHILDREN|null
 				 */
 				public function enterNode(Node $node)
 				{

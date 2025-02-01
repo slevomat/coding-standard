@@ -85,7 +85,7 @@ class ReturnTypeHintSniff implements Sniff
 	/** @var list<string> */
 	public $traversableTypeHints = [];
 
-	/** @var array<int, string>|null */
+	/** @var list<string>|null */
 	private $normalizedTraversableTypeHints;
 
 	/**
@@ -715,7 +715,7 @@ class ReturnTypeHintSniff implements Sniff
 	}
 
 	/**
-	 * @return array<int, string>
+	 * @return list<string>
 	 */
 	private function getTraversableTypeHints(): array
 	{

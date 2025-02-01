@@ -14,6 +14,7 @@ use function array_map;
 use function array_merge;
 use function array_pop;
 use function array_reverse;
+use function array_values;
 use function in_array;
 use function iterator_to_array;
 use function preg_match;
@@ -457,12 +458,12 @@ class FunctionHelper
 			static function (int $functionPointer) use ($phpcsFile): string {
 				return self::getName($phpcsFile, $functionPointer);
 			},
-			array_filter(
+			array_values(array_filter(
 				iterator_to_array(self::getAllFunctionOrMethodPointers($phpcsFile, $previousFunctionPointer)),
 				static function (int $functionOrMethodPointer) use ($phpcsFile): bool {
 					return !self::isMethod($phpcsFile, $functionOrMethodPointer);
 				}
-			)
+			))
 		);
 	}
 

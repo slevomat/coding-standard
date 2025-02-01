@@ -16,6 +16,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHint;
 use function array_filter;
 use function array_reverse;
+use function array_values;
 use function count;
 use function in_array;
 use function sprintf;
@@ -300,7 +301,7 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		return array_filter(
+		return array_values(array_filter(
 			TokenHelper::findNextAll(
 				$phpcsFile,
 				T_VARIABLE,
@@ -310,7 +311,7 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 			static function (int $variablePointer) use ($phpcsFile): bool {
 				return PropertyHelper::isProperty($phpcsFile, $variablePointer);
 			}
-		);
+		));
 	}
 
 	private function isPropertyDocCommentUseful(File $phpcsFile, int $propertyPointer): bool

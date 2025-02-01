@@ -87,7 +87,7 @@ class ParameterTypeHintSniff implements Sniff
 	/** @var list<string> */
 	public $traversableTypeHints = [];
 
-	/** @var array<int, string>|null */
+	/** @var list<string>|null */
 	private $normalizedTraversableTypeHints;
 
 	/**

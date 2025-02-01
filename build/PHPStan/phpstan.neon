@@ -16,10 +16,10 @@ parameters:
 		- %currentWorkingDirectory%/tests/*/data/*
 	ignoreErrors:
 		- identifier: missingType.generics
-		- "#Offset '(bracket|scope|parenthesis|comment|attribute)_(opener|closer)' does not exist#"
-		- "#Offset '(conditions|scope_condition)' does not exist#"
+		- "#Offset '(bracket|scope|parenthesis|comment|attribute)_(opener|closer)' (does|might) not exist#"
+		- "#Offset '(conditions|scope_condition)' might not exist#"
 		-
-			message: '#Offset ''nested_parenthesis'' does not exist on array#'
+			message: '#Offset ''nested_parenthesis'' (does|might) not exist on array#'
 			count: 1
 			path: %currentWorkingDirectory%/SlevomatCodingStandard/Sniffs/ControlStructures/AssignmentInConditionSniff.php
 

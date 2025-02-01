@@ -201,8 +201,8 @@ class ClassStructureSniff implements Sniff
 	public function process(File $phpcsFile, $pointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
-		/** @var array{scope_closer: int, level: int} $rootScopeToken */
 		$rootScopeToken = $tokens[$pointer];
+		assert(array_key_exists('scope_opener', $rootScopeToken));
 
 		$groupsOrder = $this->getNormalizedGroups();
 
@@ -627,7 +627,7 @@ class ClassStructureSniff implements Sniff
 			if ($normalizedGroups === []) {
 				$normalizedGroups = array_flip($supportedGroups);
 			} else {
-				$missingGroups = array_diff($supportedGroups, array_keys($normalizedGroups));
+				$missingGroups = array_values(array_diff($supportedGroups, array_keys($normalizedGroups)));
 				if ($missingGroups !== []) {
 					throw new MissingClassGroupsException($missingGroups);
 				}

@@ -123,7 +123,7 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param array<int, string> $traversableTypeHints
+	 * @param list<string> $traversableTypeHints
 	 */
 	public static function containsTraversableType(TypeNode $typeNode, File $phpcsFile, int $pointer, array $traversableTypeHints): bool
 	{
@@ -170,7 +170,7 @@ class AnnotationTypeHelper
 	}
 
 	/**
-	 * @param array<int, string> $traversableTypeHints
+	 * @param list<string> $traversableTypeHints
 	 */
 	public static function containsItemsSpecificationForTraversable(
 		TypeNode $typeNode,
@@ -353,7 +353,7 @@ class AnnotationTypeHelper
 
 	/**
 	 * @param UnionTypeNode|IntersectionTypeNode $typeNode
-	 * @param array<int, string> $traversableTypeHints
+	 * @param list<string> $traversableTypeHints
 	 * @return list<string>
 	 */
 	public static function getTraversableTypeHintsFromType(

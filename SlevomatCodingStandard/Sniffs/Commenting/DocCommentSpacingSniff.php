@@ -520,7 +520,6 @@ class DocCommentSpacingSniff implements Sniff
 			$positionsMappedToGroups = array_keys($annotationsGroupsPositions);
 			$tmp = array_values($annotationsGroupsPositions);
 			asort($tmp);
-			/** @var list<int> $normalizedAnnotationsGroupsPositions */
 			$normalizedAnnotationsGroupsPositions = array_combine(array_keys($positionsMappedToGroups), array_keys($tmp));
 
 			foreach ($normalizedAnnotationsGroupsPositions as $normalizedAnnotationsGroupPosition => $sortedAnnotationsGroupPosition) {
@@ -690,7 +689,7 @@ class DocCommentSpacingSniff implements Sniff
 			$sortedAnnotationsGroups[] = $annotationsNotInAnyGroup;
 		}
 
-		return $sortedAnnotationsGroups;
+		return array_values($sortedAnnotationsGroups);
 	}
 
 	private function isAnnotationNameInAnnotationNamespace(string $annotationNamespace, string $annotationName): bool

@@ -184,7 +184,7 @@ class AnnotationHelper
 	}
 
 	/**
-	 * @param array<int, string> $traversableTypeHints
+	 * @param list<string> $traversableTypeHints
 	 */
 	public static function isAnnotationUseless(
 		File $phpcsFile,
@@ -326,10 +326,7 @@ class AnnotationHelper
 				/** @var Node */
 				private $changedNode;
 
-				/**
-				 * @return Node|list<Node>|NodeTraverser::*|null
-				 */
-				public function enterNode(Node $node)
+				public function enterNode(Node $node): ?Node
 				{
 					if ($node->getAttribute(Attribute::ORIGINAL_NODE) === $this->nodeToChange) {
 						return $this->changedNode;

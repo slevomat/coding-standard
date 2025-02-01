@@ -235,8 +235,8 @@ class YodaHelper
 		}
 
 		if (array_key_exists(0, $sideTokens)) {
-			/** @var int $sideTokenCode */
 			$sideTokenCode = $sideTokens[0]['code'];
+			/** @phpstan-ignore argument.type */
 			if (array_key_exists($sideTokenCode, $dynamism)) {
 				return $dynamism[$sideTokenCode];
 			}

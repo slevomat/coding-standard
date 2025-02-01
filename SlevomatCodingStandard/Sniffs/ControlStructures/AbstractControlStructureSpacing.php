@@ -13,7 +13,6 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use Throwable;
 use function array_key_exists;
 use function array_map;
-use function array_values;
 use function count;
 use function in_array;
 use function sprintf;
@@ -362,7 +361,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 				self::KEYWORD_YIELD_FROM => T_YIELD_FROM,
 			];
 
-			$this->tokensToCheck = array_values(array_map(
+			$this->tokensToCheck = array_map(
 				static function (string $keyword) use ($supportedKeywords, $supportedTokens) {
 					if (!in_array($keyword, $supportedKeywords, true)) {
 						throw new UnsupportedKeywordException($keyword);
@@ -371,7 +370,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 					return $supportedTokens[$keyword];
 				},
 				SniffSettingsHelper::normalizeArray($this->getKeywordsToCheck())
-			));
+			);
 
 			if (count($this->tokensToCheck) === 0) {
 				$this->tokensToCheck = array_map(static function (string $keyword) use ($supportedTokens) {

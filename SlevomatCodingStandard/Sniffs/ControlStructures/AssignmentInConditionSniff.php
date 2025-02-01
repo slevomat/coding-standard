@@ -80,9 +80,9 @@ class AssignmentInConditionSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		foreach ($equalsTokenPointers as $equalsTokenPointer) {
+			/** @var non-empty-list<int> $parenthesisStarts */
 			$parenthesisStarts = array_keys($tokens[$equalsTokenPointer]['nested_parenthesis']);
 
-			/** @var int $insideParenthesis */
 			$insideParenthesis = max($parenthesisStarts);
 			if ($insideParenthesis === $parenthesisOpener) {
 				$this->error($phpcsFile, $conditionType, $equalsTokenPointer);

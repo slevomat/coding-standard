@@ -6,5 +6,5 @@ parameters:
 		- %currentWorkingDirectory%/tests
 
 	ignoreErrors!:
-		- "#Offset '(bracket|scope|parenthesis|comment)_(opener|closer)' does not exist#"
+		- "#Offset '(bracket|scope|parenthesis|comment)_(opener|closer)' (does|might) not exist#"
 

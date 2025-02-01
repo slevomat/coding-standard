@@ -25,7 +25,7 @@ class UselessFunctionDocCommentSniff implements Sniff
 	/** @var list<string> */
 	public $traversableTypeHints = [];
 
-	/** @var array<int, string>|null */
+	/** @var list<string>|null */
 	private $normalizedTraversableTypeHints;
 
 	/**
@@ -126,7 +126,7 @@ class UselessFunctionDocCommentSniff implements Sniff
 	}
 
 	/**
-	 * @return array<int, string>
+	 * @return list<string>
 	 */
 	private function getTraversableTypeHints(): array
 	{

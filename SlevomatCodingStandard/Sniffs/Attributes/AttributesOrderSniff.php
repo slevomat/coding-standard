@@ -10,6 +10,7 @@ use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use UnexpectedValueException;
 use function array_keys;
+use function array_map;
 use function asort;
 use function count;
 use function ltrim;
@@ -182,11 +183,9 @@ class AttributesOrderSniff implements Sniff
 	 */
 	private function normalizeOrder(array $order): array
 	{
-		foreach ($order as $itemNo => $item) {
-			$order[$itemNo] = $this->normalizeAttributeName(trim($item));
-		}
-
-		return $order;
+		return array_map(function (string $item): string {
+			return $this->normalizeAttributeName(trim($item));
+		}, $order);
 	}
 
 	private function normalizeAttributeName(string $name): string
