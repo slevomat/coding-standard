@@ -1,4 +1,4 @@
-<?php // lint >= 8.1
+<?php // lint >= 8.4
 
 class Whatever
 {
@@ -86,15 +86,7 @@ class Test5
     protected array $field = [];
 }
 
-class Test6
-{
-    public function begin(): static&null
-    {}
-
-    protected array $field = [];
-}
-
-class Tes7
+class Tes6
 {
     public static function begin(): static
     {

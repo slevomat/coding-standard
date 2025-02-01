@@ -33,7 +33,6 @@ use const T_PUBLIC;
 use const T_READONLY;
 use const T_SEMICOLON;
 use const T_STATIC;
-use const T_TYPE_INTERSECTION;
 use const T_TYPE_UNION;
 use const T_VAR;
 use const T_VARIABLE;
@@ -105,7 +104,7 @@ class PropertyDeclarationSniff implements Sniff
 			return;
 		}
 
-		if (in_array($tokens[$nextPointer]['code'], [T_OPEN_CURLY_BRACKET, T_SEMICOLON, T_TYPE_UNION, T_TYPE_INTERSECTION], true)) {
+		if (in_array($tokens[$nextPointer]['code'], [T_OPEN_CURLY_BRACKET, T_SEMICOLON, T_TYPE_UNION], true)) {
 			// Ignore "static" as return type hint of method
 			return;
 		}
