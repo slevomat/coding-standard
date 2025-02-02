@@ -59,6 +59,14 @@ $x = ($a + $b * 3);
 $x = $b + (100 - $c);
 $x = $b * (100 / $c);
 
+$remoteAddress = (new RemoteAddress());
+$remotedAddresses = [
+	(new RemoteAddress())
+];
+$remotedAddresses = [
+	(new RemoteAddress()),
+];
+
 function () {
 	return [
 		'a' => ('aa' . 'bb'),

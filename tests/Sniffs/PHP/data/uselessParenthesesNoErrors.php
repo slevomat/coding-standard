@@ -80,8 +80,6 @@ class ClassWithClosure
 	}
 }
 
-$response = (new Response())->withStatus(200);
-
 $a = $b / (100 + $c);
 $a = (100 - $b) * $c;
 $a = ('100' . '000') * $c;
@@ -178,6 +176,9 @@ $char = ($ord - 0xc0 >> 6) + ord($char[1]) - 0x80;
 $anotherObject = new ($object->getClassName());
 
 echo 'Hello' . ($foo) ? ' There' : $fn();
+
+$response = (new Response())->withStatus(200);
+$ip = (new RemoteAddress())?->getIpAddress();
 
 // Must be last
 return true
