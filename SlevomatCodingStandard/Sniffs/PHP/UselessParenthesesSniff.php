@@ -234,10 +234,6 @@ class UselessParenthesesSniff implements Sniff
 			return;
 		}
 
-		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], self::OPERATORS, true)) {
-			return;
-		}
-
 		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], Tokens::$comparisonTokens, true)) {
 			return;
 		}
@@ -328,9 +324,13 @@ class UselessParenthesesSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$newPointer = TokenHelper::findNextEffective($phpcsFile, $parenthesisOpenerPointer + 1);
-		if ($tokens[$newPointer]['code'] === T_NEW) {
+		$pointerAfterParenthesis = TokenHelper::findNextEffective($phpcsFile, $parenthesisOpenerPointer + 1);
+		if ($tokens[$pointerAfterParenthesis]['code'] === T_NEW) {
 			// Check in other method
+			return;
+		}
+
+		if ($tokens[$pointerAfterParenthesis]['code'] === T_OPEN_PARENTHESIS) {
 			return;
 		}
 

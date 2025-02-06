@@ -59,6 +59,9 @@ $x = ($a + $b * 3);
 $x = $b + (100 - $c);
 $x = $b * (100 / $c);
 
+echo 'Hello' . ($foo) ? ' There' : $fn();
+echo 'Hello' . (($foo) ? ' There' : $fn());
+
 $remoteAddress = (new RemoteAddress());
 $remotedAddresses = [
 	(new RemoteAddress())
