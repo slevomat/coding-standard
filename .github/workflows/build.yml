@@ -42,10 +42,6 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           ini-values: error_reporting=-1, display_errors=On, zend.assertions=1
 
-      - name: "Reset composer platform"
-        if: matrix.php-version == '7.4'
-        run: "composer config --unset platform"
-
       - name: "Install dependencies"
         uses: "ramsey/composer-install@v3"
         with:
@@ -154,10 +150,6 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           extensions: mbstring
           ini-values: error_reporting=-1, display_errors=On, zend.assertions=1
-
-      - name: "Reset composer platform"
-        if: matrix.php-version == '7.4' || matrix.php-version == '8.0'
-        run: "composer config --unset platform"
 
       - name: "Install dependencies"
         uses: "ramsey/composer-install@v3"
