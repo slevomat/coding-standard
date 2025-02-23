@@ -3,6 +3,10 @@
 class Whatever
 {
 
+	use Anything {
+		doSomething as public;
+	}
+
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint
 	 */
