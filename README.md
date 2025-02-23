@@ -175,6 +175,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/PHPCSStandards
  - [SlevomatCodingStandard.PHP.UselessParentheses](doc/php.md#slevomatcodingstandardphpuselessparentheses-) 🔧
  - [SlevomatCodingStandard.PHP.UselessSemicolon](doc/php.md#slevomatcodingstandardphpuselesssemicolon-) 🔧
  - [SlevomatCodingStandard.Strings.DisallowVariableParsing](doc/strings.md#slevomatcodingstandardstringsdisallowvariableparsing)
+ - [SlevomatCodingStandard.TypeHints.ClassConstantTypeHint](doc/type-hints.md#slevomatcodingstandardtypehintsclassconstanttypehint-) 🔧
  - [SlevomatCodingStandard.TypeHints.DeclareStrictTypes](doc/type-hints.md#slevomatcodingstandardtypehintsdeclarestricttypes-) 🔧
  - [SlevomatCodingStandard.TypeHints.DisallowArrayTypeHintSyntax](doc/type-hints.md#slevomatcodingstandardtypehintsdisallowarraytypehintsyntax-) 🔧
  - [SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint](doc/type-hints.md#slevomatcodingstandardtypehintsdisallowmixedtypehint)
