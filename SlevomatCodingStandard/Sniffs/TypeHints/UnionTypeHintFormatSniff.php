@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\DeprecatedSniff;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
@@ -22,7 +23,10 @@ use const T_TYPE_UNION;
 use const T_VARIABLE;
 use const T_WHITESPACE;
 
-class UnionTypeHintFormatSniff implements Sniff
+/**
+ * @deprecated
+ */
+class UnionTypeHintFormatSniff implements Sniff, DeprecatedSniff
 {
 
 	public const CODE_DISALLOWED_WHITESPACE = 'DisallowedWhitespace';
@@ -45,6 +49,30 @@ class UnionTypeHintFormatSniff implements Sniff
 	public ?string $shortNullable = null;
 
 	public ?string $nullPosition = null;
+
+	/**
+	 * @codeCoverageIgnore
+	 */
+	public function getDeprecationVersion(): string
+	{
+		return 'Slevomat Coding Standard 8.16.0';
+	}
+
+	/**
+	 * @codeCoverageIgnore
+	 */
+	public function getRemovalVersion(): string
+	{
+		return 'Slevomat Coding Standard 9.0.0';
+	}
+
+	/**
+	 * @codeCoverageIgnore
+	 */
+	public function getDeprecationMessage(): string
+	{
+		return 'Use SlevomatCodingStandard.TypeHints.DNFTypeHintFormat instead.';
+	}
 
 	/**
 	 * @return array<int, (int|string)>
