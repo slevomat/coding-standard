@@ -81,7 +81,6 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 
 				$parsedDocComment = DocCommentHelper::parseDocComment($phpcsFile, $docCommentOpenPointer);
 
-				/** @var list<UnionTypeNode> $unionTypeNodes */
 				$unionTypeNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), UnionTypeNode::class);
 
 				$unionTypeNode = $this->findUnionTypeThatContainsArrayType($arrayTypeNode, $unionTypeNodes);

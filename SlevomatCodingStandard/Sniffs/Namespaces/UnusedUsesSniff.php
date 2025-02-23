@@ -159,17 +159,14 @@ class UnusedUsesSniff implements Sniff
 							$contentsToCheck[] = $annotation->getName();
 							$contentsToCheck[] = $annotation->getValue()->value;
 						} else {
-							/** @var list<IdentifierTypeNode> $identifierTypeNodes */
 							$identifierTypeNodes = AnnotationHelper::getAnnotationNodesByType(
 								$annotation->getNode(),
 								IdentifierTypeNode::class,
 							);
-							/** @var list<DoctrineAnnotation> $doctrineAnnotations */
 							$doctrineAnnotations = AnnotationHelper::getAnnotationNodesByType(
 								$annotation->getNode(),
 								DoctrineAnnotation::class,
 							);
-							/** @var list<ConstFetchNode> $constFetchNodes */
 							$constFetchNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), ConstFetchNode::class);
 
 							$contentsToCheck = array_filter(array_merge(

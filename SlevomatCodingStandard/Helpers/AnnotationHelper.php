@@ -9,7 +9,6 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\NodeTraverser;
 use PHPStan\PhpDocParser\Ast\PhpDoc\Doctrine\DoctrineArgument;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TypelessParamTagValueNode;
@@ -80,8 +79,9 @@ class AnnotationHelper
 	}
 
 	/**
-	 * @param class-string $type
-	 * @return list<Node>
+	 * @template T
+	 * @param class-string<T> $type
+	 * @return list<T>
 	 */
 	public static function getAnnotationNodesByType(Node $node, string $type): array
 	{
@@ -166,7 +166,6 @@ class AnnotationHelper
 	{
 		$originalNode = $annotation->getNode();
 
-		/** @var PhpDocNode $newPhpDocNode */
 		$newPhpDocNode = PhpDocParserHelper::cloneNode($parsedDocComment->getNode());
 
 		foreach ($newPhpDocNode->getTags() as $node) {

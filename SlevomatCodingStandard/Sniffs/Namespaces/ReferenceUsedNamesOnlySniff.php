@@ -716,7 +716,6 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 				$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 
 				foreach ($annotations as $annotation) {
-					/** @var list<IdentifierTypeNode> $identifierTypeNodes */
 					$identifierTypeNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), IdentifierTypeNode::class);
 
 					foreach ($identifierTypeNodes as $typeHintNode) {
@@ -747,7 +746,6 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 						$references[] = $reference;
 					}
 
-					/** @var list<ConstFetchNode> $constantFetchNodes */
 					$constantFetchNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), ConstFetchNode::class);
 
 					foreach ($constantFetchNodes as $constantFetchNode) {

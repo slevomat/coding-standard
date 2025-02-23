@@ -55,7 +55,6 @@ class DisallowMixedTypeHintSniff implements Sniff
 		$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 
 		foreach ($annotations as $annotation) {
-			/** @var list<IdentifierTypeNode> $identifierTypeNodes */
 			$identifierTypeNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), IdentifierTypeNode::class);
 
 			foreach ($identifierTypeNodes as $typeHintNode) {

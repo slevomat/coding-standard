@@ -48,7 +48,6 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 		$this->ignoredAnnotationNames = SniffSettingsHelper::normalizeArray($this->ignoredAnnotationNames);
 
 		foreach ($annotations as $annotation) {
-			/** @var list<IdentifierTypeNode> $identifierTypeNodes */
 			$identifierTypeNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), IdentifierTypeNode::class);
 
 			$annotationName = $annotation->getName();
@@ -106,7 +105,6 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 				$phpcsFile->fixer->endChangeset();
 			}
 
-			/** @var list<ConstFetchNode> $constantFetchNodes */
 			$constantFetchNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), ConstFetchNode::class);
 
 			foreach ($constantFetchNodes as $constantFetchNode) {

@@ -40,7 +40,6 @@ class NullTypeHintOnLastPositionSniff implements Sniff
 		$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 
 		foreach ($annotations as $annotation) {
-			/** @var list<UnionTypeNode> $unionTypeNodes */
 			$unionTypeNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), UnionTypeNode::class);
 
 			foreach ($unionTypeNodes as $unionTypeNode) {
