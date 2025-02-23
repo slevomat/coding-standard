@@ -68,7 +68,8 @@ class PropertyTypeHintSniff implements Sniff
 
 	private const NAME = 'SlevomatCodingStandard.TypeHints.PropertyTypeHint';
 
-	public ?bool $enableNativeTypeHint = null;
+	/** @deprecated */
+	public bool $enableNativeTypeHint = true;
 
 	public ?bool $enableMixedTypeHint = null;
 
@@ -104,7 +105,6 @@ class PropertyTypeHintSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $pointer): void
 	{
-		$this->enableNativeTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableNativeTypeHint, 70400);
 		$this->enableMixedTypeHint = $this->enableNativeTypeHint
 			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableMixedTypeHint, 80000)
 			: false;

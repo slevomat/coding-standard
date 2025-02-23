@@ -83,7 +83,6 @@ This sniff can cause an error if you're overriding or implementing a parent meth
 
 Sniff provides the following settings:
 
-* `enableNativeTypeHint`: enforces to transform `@var int` into native `int` typehint. It's on by default if you're on PHP 7.4+
 * `enableMixedTypeHint`: enforces to transform `@var mixed` into native `mixed` typehint. It's on by default if you're on PHP 8.0+. It can be enabled only when `enableNativeTypeHint` is enabled too.
 * `enableUnionTypeHint`: enforces to transform `@var string|int` into native `string|int` typehint. It's on by default if you're on PHP 8.0+. It can be enabled only when `enableNativeTypeHint` is enabled too.
 * `enableIntersectionTypeHint`: enforces to transform `@var Foo&Bar` into native `Foo&Bar` typehint. It's on by default if you're on PHP 8.1+. It can be enabled only when `enableNativeTypeHint` is enabled too.

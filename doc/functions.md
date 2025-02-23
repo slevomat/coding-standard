@@ -34,7 +34,6 @@ Requires arrow functions.
 Sniff provides the following settings:
 
 * `allowNested` (default: `true`)
-* `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 7.4 or higher.
 
 #### SlevomatCodingStandard.Functions.RequireMultiLineCall 🔧
 

@@ -6,7 +6,6 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\ScopeHelper;
-use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function count;
 use const T_BITWISE_AND;
@@ -25,7 +24,8 @@ class RequireArrowFunctionSniff implements Sniff
 
 	public bool $allowNested = true;
 
-	public ?bool $enable = null;
+	/** @deprecated */
+	public bool $enable = true;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -43,12 +43,6 @@ class RequireArrowFunctionSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $closurePointer): void
 	{
-		$this->enable = SniffSettingsHelper::isEnabledByPhpVersion($this->enable, 70400);
-
-		if (!$this->enable) {
-			return;
-		}
-
 		$tokens = $phpcsFile->getTokens();
 
 		$returnPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$closurePointer]['scope_opener'] + 1);
