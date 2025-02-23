@@ -174,6 +174,14 @@ class FunctionHelperTest extends TestCase
 					'$d' => new TypeHint('string|int|float', false, 0, 0),
 				],
 			],
+			[
+				'dnf',
+				[
+					'$a' => new TypeHint('(A&B)|C|D', false, 0, 0),
+					'$b' => new TypeHint('A|(B&C)|D', false, 0, 0),
+					'$c' => new TypeHint('A|B|(C&D)', false, 0, 0),
+				],
+			],
 		];
 	}
 

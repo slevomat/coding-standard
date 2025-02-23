@@ -1,4 +1,4 @@
-<?php // lint >= 8.0
+<?php // lint >= 8.2
 
 namespace FooNamespace;
 
@@ -21,5 +21,13 @@ abstract class FooClass
 
 	public function unionTypeHints(string|int $a, int|false $b, null|int $c, string | int | float $d)
 	{}
+
+	public function dnf(
+		(A&B)|C|D $a,
+		A|(B&C)|D $b,
+		A|B|(C&D) $c,
+	) {
+
+	}
 
 }
