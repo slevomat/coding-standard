@@ -178,6 +178,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/PHPCSStandards
  - [SlevomatCodingStandard.TypeHints.DeclareStrictTypes](doc/type-hints.md#slevomatcodingstandardtypehintsdeclarestricttypes-) 🔧
  - [SlevomatCodingStandard.TypeHints.DisallowArrayTypeHintSyntax](doc/type-hints.md#slevomatcodingstandardtypehintsdisallowarraytypehintsyntax-) 🔧
  - [SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint](doc/type-hints.md#slevomatcodingstandardtypehintsdisallowmixedtypehint)
+ - [SlevomatCodingStandard.TypeHints.DNFTypeHintFormat](doc/type-hints.md#slevomatcodingstandardtypehintsdnftypehintformat-) 🔧
  - [SlevomatCodingStandard.TypeHints.LongTypeHints](doc/type-hints.md#slevomatcodingstandardtypehintslongtypehints-) 🔧
  - [SlevomatCodingStandard.TypeHints.NullTypeHintOnLastPosition](doc/type-hints.md#slevomatcodingstandardtypehintsnulltypehintonlastposition-) 🔧
  - [SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue](doc/type-hints.md#slevomatcodingstandardtypehintsnullabletypefornulldefaultvalue-) 🔧🚧

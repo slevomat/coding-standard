@@ -50,7 +50,9 @@ use const T_STRING;
 use const T_THROW;
 use const T_TRAIT;
 use const T_TRUE;
+use const T_TYPE_CLOSE_PARENTHESIS;
 use const T_TYPE_INTERSECTION;
+use const T_TYPE_OPEN_PARENTHESIS;
 use const T_TYPE_UNION;
 use const T_VAR;
 use const T_WHITESPACE;
@@ -522,7 +524,7 @@ class TokenHelper
 		if ($typeHintTokenCodes === null) {
 			$typeHintTokenCodes = array_merge(
 				self::getOnlyTypeHintTokenCodes(),
-				[T_TYPE_UNION, T_TYPE_INTERSECTION],
+				[T_TYPE_UNION, T_TYPE_INTERSECTION, T_TYPE_OPEN_PARENTHESIS, T_TYPE_CLOSE_PARENTHESIS],
 			);
 		}
 
