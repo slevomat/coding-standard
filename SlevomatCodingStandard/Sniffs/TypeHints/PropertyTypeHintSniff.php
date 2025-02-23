@@ -105,18 +105,13 @@ class PropertyTypeHintSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $pointer): void
 	{
-		$this->enableMixedTypeHint = $this->enableNativeTypeHint
-			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableMixedTypeHint, 80000)
-			: false;
-		$this->enableUnionTypeHint = $this->enableNativeTypeHint
-			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableUnionTypeHint, 80000)
-			: false;
-		$this->enableIntersectionTypeHint = $this->enableNativeTypeHint
-			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableIntersectionTypeHint, 80100)
-			: false;
-		$this->enableStandaloneNullTrueFalseTypeHints = $this->enableNativeTypeHint
-			? SniffSettingsHelper::isEnabledByPhpVersion($this->enableStandaloneNullTrueFalseTypeHints, 80200)
-			: false;
+		$this->enableMixedTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableMixedTypeHint, 80000);
+		$this->enableUnionTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableUnionTypeHint, 80000);
+		$this->enableIntersectionTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableIntersectionTypeHint, 80100);
+		$this->enableStandaloneNullTrueFalseTypeHints = SniffSettingsHelper::isEnabledByPhpVersion(
+			$this->enableStandaloneNullTrueFalseTypeHints,
+			80200,
+		);
 
 		$tokens = $phpcsFile->getTokens();
 
@@ -206,9 +201,7 @@ class PropertyTypeHintSniff implements Sniff
 			if (!$isSuppressedAnyTypeHint) {
 				$phpcsFile->addError(
 					sprintf(
-						$this->enableNativeTypeHint
-							? 'Property %s does not have native type hint nor @var annotation for its value.'
-							: 'Property %s does not have @var annotation for its value.',
+						'Property %s does not have native type hint nor @var annotation for its value.',
 						PropertyHelper::getFullyQualifiedName($phpcsFile, $propertyPointer),
 					),
 					$propertyPointer,
@@ -216,10 +209,6 @@ class PropertyTypeHintSniff implements Sniff
 				);
 			}
 
-			return;
-		}
-
-		if (!$this->enableNativeTypeHint) {
 			return;
 		}
 
