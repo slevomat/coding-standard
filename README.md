@@ -2,7 +2,7 @@
 
 [![Latest version](https://img.shields.io/packagist/v/slevomat/coding-standard.svg?colorB=007EC6)](https://packagist.org/packages/slevomat/coding-standard)
 [![Downloads](https://img.shields.io/packagist/dt/slevomat/coding-standard.svg?colorB=007EC6)](https://packagist.org/packages/slevomat/coding-standard)
-[![Build status](https://github.com/slevomat/coding-standard/workflows/Build/badge.svg?branch=master)](https://github.com/slevomat/coding-standard/actions?query=workflow%3ABuild+branch%3Amaster)
+[![Build status](https://github.com/slevomat/coding-standard/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/slevomat/coding-standard/actions?query=workflow%3ABuild+branch%3Amaster)
 [![Code coverage](https://codecov.io/gh/slevomat/coding-standard/branch/master/graph/badge.svg)](https://codecov.io/gh/slevomat/coding-standard)
 ![PHPStan](https://img.shields.io/badge/style-level%207-brightgreen.svg?&label=phpstan)
 
