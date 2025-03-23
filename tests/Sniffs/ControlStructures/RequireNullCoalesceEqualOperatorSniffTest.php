@@ -9,7 +9,9 @@ class RequireNullCoalesceEqualOperatorSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/requireNullCoalesceEqualOperatorNoErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/requireNullCoalesceEqualOperatorNoErrors.php', [
+			'enable' => true,
+		]);
 		self::assertNoSniffErrorInFile($report);
 	}
 
@@ -17,7 +19,7 @@ class RequireNullCoalesceEqualOperatorSniffTest extends TestCase
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/requireNullCoalesceEqualOperatorErrors.php',
-			[],
+			['enable' => true],
 			[RequireNullCoalesceEqualOperatorSniff::CODE_REQUIRED_NULL_COALESCE_EQUAL_OPERATOR],
 		);
 
@@ -28,6 +30,17 @@ class RequireNullCoalesceEqualOperatorSniffTest extends TestCase
 		}
 
 		self::assertAllFixedInFile($report);
+	}
+
+	public function testShouldNotReportIfSniffIsDisabled(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/requireNullCoalesceEqualOperatorErrors.php',
+			['enable' => false],
+			[RequireNullCoalesceEqualOperatorSniff::CODE_REQUIRED_NULL_COALESCE_EQUAL_OPERATOR],
+		);
+
+		self::assertNoSniffErrorInFile($report);
 	}
 
 }

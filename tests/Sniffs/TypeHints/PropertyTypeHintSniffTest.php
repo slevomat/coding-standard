@@ -7,9 +7,36 @@ use SlevomatCodingStandard\Sniffs\TestCase;
 class PropertyTypeHintSniffTest extends TestCase
 {
 
+	public function testDisabledNativeNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintDisabledNativeNoErrors.php', [
+			'enableNativeTypeHint' => false,
+		]);
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testDisabledNativeErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintDisabledNativeErrors.php', [
+			'enableNativeTypeHint' => false,
+			'traversableTypeHints' => ['Traversable', '\ArrayIterator'],
+		]);
+
+		self::assertSame(5, $report->getErrorCount());
+
+		self::assertSniffError($report, 9, PropertyTypeHintSniff::CODE_MISSING_ANY_TYPE_HINT);
+		self::assertSniffError($report, 11, PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION);
+		self::assertSniffError($report, 14, PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION);
+		self::assertSniffError($report, 17, PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION);
+		self::assertSniffError($report, 23, PropertyTypeHintSniff::CODE_MISSING_ANY_TYPE_HINT);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testEnabledNativeNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintEnabledNativeNoErrors.php', [
+			'enableNativeTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => false,
 			'enableIntersectionTypeHint' => false,
@@ -22,6 +49,7 @@ class PropertyTypeHintSniffTest extends TestCase
 	public function testEnabledNativeErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintEnabledNativeErrors.php', [
+			'enableNativeTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => false,
 			'enableIntersectionTypeHint' => false,
@@ -92,6 +120,7 @@ class PropertyTypeHintSniffTest extends TestCase
 	public function testEnabledNativeWithUnionNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintEnabledNativeWithUnionNoErrors.php', [
+			'enableNativeTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => true,
 			'enableIntersectionTypeHint' => false,
@@ -104,6 +133,7 @@ class PropertyTypeHintSniffTest extends TestCase
 	public function testEnabledNativeWithUnionErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintEnabledNativeWithUnionErrors.php', [
+			'enableNativeTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => true,
 			'enableIntersectionTypeHint' => false,
@@ -133,6 +163,7 @@ class PropertyTypeHintSniffTest extends TestCase
 	public function testEnabledNativeWithIntersectionNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintEnabledNativeWithIntersectionNoErrors.php', [
+			'enableNativeTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => false,
 			'enableIntersectionTypeHint' => true,
@@ -145,6 +176,7 @@ class PropertyTypeHintSniffTest extends TestCase
 	public function testEnabledNativeWithIntersectionErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintEnabledNativeWithIntersectionErrors.php', [
+			'enableNativeTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => false,
 			'enableIntersectionTypeHint' => true,
@@ -163,6 +195,7 @@ class PropertyTypeHintSniffTest extends TestCase
 	public function testWithNullTrueFalseErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintWithNullTrueFalseErrors.php', [
+			'enableNativeTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => true,
 			'enableIntersectionTypeHint' => true,

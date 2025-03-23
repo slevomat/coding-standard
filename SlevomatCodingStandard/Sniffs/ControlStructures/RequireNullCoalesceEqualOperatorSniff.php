@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_COALESCE;
 use const T_EQUAL;
@@ -17,8 +18,7 @@ class RequireNullCoalesceEqualOperatorSniff implements Sniff
 
 	public const CODE_REQUIRED_NULL_COALESCE_EQUAL_OPERATOR = 'RequiredNullCoalesceEqualOperator';
 
-	/** @deprecated */
-	public bool $enable = true;
+	public ?bool $enable = null;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -36,6 +36,12 @@ class RequireNullCoalesceEqualOperatorSniff implements Sniff
 	 */
 	public function process(File $phpcsFile, $equalPointer): void
 	{
+		$this->enable = SniffSettingsHelper::isEnabledByPhpVersion($this->enable, 70400);
+
+		if (!$this->enable) {
+			return;
+		}
+
 		/** @var int $variableStartPointer */
 		$variableStartPointer = TokenHelper::findNextEffective($phpcsFile, $equalPointer + 1);
 		$variableEndPointer = IdentificatorHelper::findEndPointer($phpcsFile, $variableStartPointer);
