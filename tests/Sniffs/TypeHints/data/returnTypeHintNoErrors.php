@@ -22,6 +22,16 @@ abstract class Whatever
 	}
 
 	/**
+	 * @deprecated
+	 *
+	 * {@inheritdoc}
+	 */
+	private function hasInheritdocAnnotationWithOtherAnnotation()
+	{
+		return true;
+	}
+
+	/**
 	 * Description.
 	 *
 	 * {@inheritDoc}

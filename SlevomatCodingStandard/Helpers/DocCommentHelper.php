@@ -131,11 +131,17 @@ class DocCommentHelper
 		}
 
 		foreach ($parsedDocComment->getNode()->children as $child) {
-			if ($child instanceof PhpDocTextNode && stripos($child->text, '{@inheritdoc}') !== false) {
-				return true;
+			if ($child instanceof PhpDocTagNode) {
+				if (strtolower($child->name) === '@inheritdoc') {
+					return true;
+				}
+
+				if (stripos((string) $child->value, '{@inheritdoc}') !== false) {
+					return true;
+				}
 			}
 
-			if ($child instanceof PhpDocTagNode && strtolower($child->name) === '@inheritdoc') {
+			if ($child instanceof PhpDocTextNode && stripos($child->text, '{@inheritdoc}') !== false) {
 				return true;
 			}
 		}
