@@ -434,3 +434,10 @@ function ($i) {
 function ($i) {
 	yield ++$i;
 };
+
+function () {
+	$numericIndex = 0;
+	while (true) {
+	    return null ?: $numericIndex++;
+	}
+};

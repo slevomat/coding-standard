@@ -42,6 +42,7 @@ use const T_GLOBAL;
 use const T_HEREDOC;
 use const T_IF;
 use const T_INC;
+use const T_INLINE_ELSE;
 use const T_LIST;
 use const T_MINUS_EQUAL;
 use const T_MOD_EQUAL;
@@ -462,6 +463,11 @@ class UnusedVariableSniff implements Sniff
 				T_CONCAT_EQUAL,
 			], true)) {
 				continue;
+			}
+
+			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $i - 1);
+			if ($tokens[$previousPointer]['code'] === T_INLINE_ELSE) {
+				return true;
 			}
 
 			$parenthesisOwnerPointer = $this->findNestedParenthesisWithOwner($phpcsFile, $i);
