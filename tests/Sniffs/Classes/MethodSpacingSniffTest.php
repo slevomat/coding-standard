@@ -17,7 +17,7 @@ class MethodSpacingSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/methodSpacingErrors.php');
 
-		self::assertSame(6, $report->getErrorCount());
+		self::assertSame(7, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -66,7 +66,7 @@ class MethodSpacingSniffTest extends TestCase
 			'maxLinesCount' => 2,
 		]);
 
-		self::assertSame(5, $report->getErrorCount());
+		self::assertSame(6, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,

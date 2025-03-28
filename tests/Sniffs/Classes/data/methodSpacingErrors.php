@@ -61,3 +61,22 @@ abstract class Whatever
 	}
 
 }
+
+
+class Test
+{
+
+	public function method1(): void
+	{
+	}
+	#[FirstAttribute]
+	public function method2(): void
+	{
+	}
+	#[FirstAttribute]
+	#[AnotherAttribute]
+	public function method3(): void
+	{
+	}
+
+}
