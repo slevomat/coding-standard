@@ -60,4 +60,13 @@ abstract class Whatever
 
 	}
 
+
+
+
+	#[MyAttribute]
+	#[MyAttribute2]
+	public function eighthMethod()
+	{
+	}
+
 }
