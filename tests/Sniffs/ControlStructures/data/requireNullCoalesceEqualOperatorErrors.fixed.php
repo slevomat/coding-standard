@@ -19,3 +19,13 @@ $this->${'a'}[0]->$$b[1][2]::$c[3][4][5]->{" $d"} ??= true;
 \Whatever\Something::$anything ??= 1;
 
 $object->anything ??= 0;
+
+$f ??= 1;
+
+function () use ($g) {
+	$g ??= true;
+};
+
+$h ??= doSomething(
+	'something',
+);
