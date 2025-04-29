@@ -67,4 +67,12 @@ class ClassStructureSniffErrorsWithMethodGroupRulesData
 	protected function afterUsingAnnotation()
 	{
 	}
+
+	public function injectFoo($foo)
+	{
+	}
+
+	public function inject($foo)
+	{
+	}
 }

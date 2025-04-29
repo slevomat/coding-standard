@@ -10,6 +10,14 @@ class ClassStructureSniffNoErrorsWithMethodGroupRulesData
 	{
 	}
 
+	public function inject($foo)
+	{
+	}
+
+	public function injectFoo($foo)
+	{
+	}
+
 	public static function setUpBeforeClass()
 	{
 	}

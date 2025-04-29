@@ -27,6 +27,8 @@ class ClassStructureSniffTest extends TestCase
 	];
 
 	private const METHOD_GROUPS = [
+		'inject method' => 'inject',
+		'inject methods' => 'inject*',
 		'phpunit before class' => 'setUpBeforeClass, @beforeClass, #PHPUnit\Framework\Attributes\BeforeClass',
 		'phpunit after class' => 'tearDownAfterClass, @afterClass, #PHPUnit\Framework\Attributes\AfterClass',
 		'phpunit before' => 'setUp, @before, #PHPUnit\Framework\Attributes\Before',
@@ -48,6 +50,8 @@ class ClassStructureSniffTest extends TestCase
 		'constructor',
 		'static constructors',
 		'destructor',
+		'inject method',
+		'inject methods',
 		'phpunit before class',
 		'phpunit after class',
 		'phpunit before',
@@ -209,12 +213,14 @@ class ClassStructureSniffTest extends TestCase
 			],
 		);
 
-		self::assertSame(5, $report->getErrorCount());
+		self::assertSame(7, $report->getErrorCount());
 		self::assertSniffError($report, 22, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 33, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 44, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 48, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 67, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 71, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 75, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertAllFixedInFile($report);
 	}
 
