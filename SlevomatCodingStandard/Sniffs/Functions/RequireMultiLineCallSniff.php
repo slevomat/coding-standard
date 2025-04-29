@@ -107,7 +107,7 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 			$lineEnd = $this->getLineEnd($phpcsFile, $parenthesisCloserPointer);
 			$lineLength = strlen($lineStart . $call . $lineEnd);
 		} else {
-			$lineEnd = $this->getLineEnd($phpcsFile, $parenthesisOpenerPointer);
+			$lineEnd = $this->getLineEnd($phpcsFile, $parenthesisOpenerPointer + 1);
 			$lineLength = strlen($lineStart . $lineEnd);
 		}
 
