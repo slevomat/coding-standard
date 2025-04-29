@@ -34,3 +34,7 @@ printf(
 $array = array_merge([], array_map(function (): string {
 	return 'very looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong value';
 }, []));
+
+$array = array_map(['a loooooooooooooooooong value that exactly fits into the line length limit'], function (): string {
+	return 'foo';
+});
