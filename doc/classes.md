@@ -65,6 +65,8 @@ constants, properties, static properties, methods, all public methods, all prote
 <rule ref="SlevomatCodingStandard.Classes.ClassStructure">
 	<properties>
 		<property name="methodGroups" type="array">
+			<element key="inject method" value="inject"/>
+			<element key="inject methods" value="inject*"/>
 			<element key="phpunit before" value="setUp, @before, #PHPUnit\Framework\Attributes\Before"/>
 		</property>
 
@@ -80,13 +82,21 @@ constants, properties, static properties, methods, all public methods, all prote
 			<!-- You don't care about the order among the properties. The same can be done with "properties" shortcut -->
 			<element value="public properties, protected properties, private properties"/>
 
-			<!-- Constructor is first, then all public methods, then protected/private methods and magic methods are last -->
+			<!-- Constructor is first -->
 			<element value="constructor"/>
 
-			<!-- PHPUnit's before hooks are placed before all other public methods using a custom method group regardless their visibility -->
+			<!-- Then inject method followed by all other inject methods based on their prefix using a custom method group regardless their visibility -->
+			<element value="inject method"/>
+			<element value="inject methods"/>
+
+			<!-- PHPUnit's before hooks are placed before all other public methods using a custom method group -->
 			<element value="phpunit before"/>
+
+			<!-- Then all public methods, followed by protected/private methods -->
 			<element value="all public methods"/>
 			<element value="methods"/>
+
+			<!-- Magic methods are last -->
 			<element value="magic methods"/>
 		</property>
 	</properties>

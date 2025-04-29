@@ -14,6 +14,7 @@ use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
+use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_diff;
 use function array_filter;
@@ -415,8 +416,18 @@ class ClassStructureSniff implements Sniff
 	{
 		foreach ($this->getNormalizedMethodGroups() as $group => $methodRequirements) {
 			foreach ($methodRequirements as $methodRequirement) {
-				if ($methodRequirement['name'] !== null && $method !== strtolower($methodRequirement['name'])) {
-					continue;
+				if ($methodRequirement['name'] !== null) {
+					$requiredName = strtolower($methodRequirement['name']);
+
+					if (StringHelper::endsWith($requiredName, '*')) {
+						$methodNamePrefix = substr($requiredName, 0, -1);
+
+						if ($method === $methodNamePrefix || !StringHelper::startsWith($method, $methodNamePrefix)) {
+							continue;
+						}
+					} elseif ($method !== $requiredName) {
+						continue;
+					}
 				}
 
 				if (
