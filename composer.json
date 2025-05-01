@@ -21,8 +21,8 @@
 	"require-dev": {
 		"phing/phing": "3.0.1",
 		"php-parallel-lint/php-parallel-lint": "1.4.0",
-		"phpstan/phpstan": "2.1.12",
-		"phpstan/phpstan-deprecation-rules": "2.0.1",
+		"phpstan/phpstan": "2.1.13",
+		"phpstan/phpstan-deprecation-rules": "2.0.2",
 		"phpstan/phpstan-phpunit": "2.0.6",
 		"phpstan/phpstan-strict-rules": "2.0.4",
 		"phpunit/phpunit": "9.6.8|10.5.45|11.4.4|11.5.17|12.1.3"
