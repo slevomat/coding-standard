@@ -120,7 +120,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 
 		if ($this->allowDocCommentAboveReturn) {
 			$pointerAfterCommentClosePointer = TokenHelper::findNextEffective($phpcsFile, $commentClosePointer + 1);
-			if ($tokens[$pointerAfterCommentClosePointer]['code'] === T_RETURN) {
+			if ($pointerAfterCommentClosePointer === null || $tokens[$pointerAfterCommentClosePointer]['code'] === T_RETURN) {
 				return;
 			}
 		}
