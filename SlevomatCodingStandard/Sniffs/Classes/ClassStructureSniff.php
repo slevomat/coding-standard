@@ -698,10 +698,10 @@ class ClassStructureSniff implements Sniff
 				$group = strtolower((string) $group);
 				$this->normalizedMethodGroups[$group] = [];
 				$methodDefinitions = preg_split('~\\s*,\\s*~', (string) $groupDefinition, -1, PREG_SPLIT_NO_EMPTY);
-				/** @var list<string> $methodDefinitions */
+				/** @var list<non-empty-string> $methodDefinitions */
 				foreach ($methodDefinitions as $methodDefinition) {
 					$tokens = preg_split('~(?=[#@])~', $methodDefinition);
-					/** @var list<string> $tokens */
+					/** @var non-empty-list<string> $tokens */
 					$method = array_shift($tokens);
 					$methodRequirement = [
 						'name' => $method !== '' ? $method : null,
@@ -764,7 +764,7 @@ class ClassStructureSniff implements Sniff
 			$normalizedGroupsWithShortcuts = [];
 			$order = 1;
 			foreach (SniffSettingsHelper::normalizeArray($this->groups) as $groupsString) {
-				/** @var list<string> $groups */
+				/** @var list<non-empty-string> $groups */
 				$groups = preg_split('~\\s*,\\s*~', strtolower($groupsString), -1, PREG_SPLIT_NO_EMPTY);
 				foreach ($groups as $groupOrShortcut) {
 					$groupOrShortcut = preg_replace('~\\s+~', ' ', $groupOrShortcut);
