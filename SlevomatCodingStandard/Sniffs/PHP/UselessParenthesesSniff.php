@@ -16,6 +16,7 @@ use function in_array;
 use const T_ANON_CLASS;
 use const T_ARRAY_CAST;
 use const T_BITWISE_AND;
+use const T_BITWISE_NOT;
 use const T_BITWISE_OR;
 use const T_BITWISE_XOR;
 use const T_BOOL_CAST;
@@ -161,6 +162,7 @@ class UselessParenthesesSniff implements Sniff
 				T_BOOL_CAST,
 				T_UNSET_CAST,
 				T_MATCH,
+				T_BITWISE_NOT,
 			],
 		), true)
 		) {

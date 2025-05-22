@@ -180,6 +180,8 @@ echo 'Hello' . ($foo ? ' There' : $fn());
 $response = (new Response())->withStatus(200);
 $ip = (new RemoteAddress())?->getIpAddress();
 
+echo ~(1 - 1);
+
 // Must be last
 return true
 	? 100
