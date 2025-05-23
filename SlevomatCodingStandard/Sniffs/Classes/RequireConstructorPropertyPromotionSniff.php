@@ -201,7 +201,11 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 					TokenHelper::findNextNonWhitespace($phpcsFile, $propertyEndPointer + 1),
 				);
 
-				$pointerBeforeParameterStart = TokenHelper::findPrevious($phpcsFile, [T_COMMA, T_OPEN_PARENTHESIS], $parameterPointer - 1);
+				$pointerBeforeParameterStart = TokenHelper::findPrevious(
+					$phpcsFile,
+					[T_COMMA, T_OPEN_PARENTHESIS, T_ATTRIBUTE_END],
+					$parameterPointer - 1,
+				);
 				$parameterStartPointer = TokenHelper::findNextEffective($phpcsFile, $pointerBeforeParameterStart + 1);
 
 				$parameterEqualPointer = TokenHelper::findNextEffective($phpcsFile, $parameterPointer + 1);

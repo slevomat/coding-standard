@@ -53,3 +53,21 @@ class DontKnow
 	}
 
 }
+
+class Credentials
+{
+
+	private string $login;
+	private string $password;
+
+	public function __construct(
+		#[\SensitiveParameter]
+		string $login,
+		#[\SensitiveParameter]
+		string $password
+	) {
+		$this->login = $login;
+		$this->password = $password;
+	}
+
+}
