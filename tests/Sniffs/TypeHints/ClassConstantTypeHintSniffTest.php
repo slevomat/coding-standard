@@ -43,6 +43,22 @@ class ClassConstantTypeHintSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testNativeTypeHintPrivateErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/classConstantTypeHintNativePrivateErrors.php', [
+			'enableNativeTypeHint' => true,
+			'fixableNativeTypeHint' => 'private',
+		]);
+
+		self::assertSame(4, $report->getErrorCount());
+
+		foreach (range(6, 9) as $line) {
+			self::assertSniffError($report, $line, ClassConstantTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
+		}
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testUselessDocCommentNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/classConstantTypeHintUselessDocCommentNoErrors.php', [
