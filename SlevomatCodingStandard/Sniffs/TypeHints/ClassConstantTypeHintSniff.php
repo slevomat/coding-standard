@@ -13,6 +13,7 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function count;
 use function sprintf;
+use const T_CLOSE_CURLY_BRACKET;
 use const T_CONST;
 use const T_CONSTANT_ENCAPSED_STRING;
 use const T_DNUMBER;
@@ -22,7 +23,10 @@ use const T_FALSE;
 use const T_LNUMBER;
 use const T_MINUS;
 use const T_NULL;
+use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_SHORT_ARRAY;
+use const T_PRIVATE;
+use const T_SEMICOLON;
 use const T_START_HEREDOC;
 use const T_START_NOWDOC;
 use const T_TRUE;
@@ -34,7 +38,13 @@ class ClassConstantTypeHintSniff implements Sniff
 	public const CODE_USELESS_DOC_COMMENT = 'UselessDocComment';
 	public const CODE_USELESS_VAR_ANNOTATION = 'UselessVarAnnotation';
 
+	private const YES = 'yes';
+	private const NO = 'no';
+	private const PRIVATE = 'private';
+
 	public ?bool $enableNativeTypeHint = null;
+
+	public string $fixableNativeTypeHint = self::YES;
 
 	/** @var array<int|string, string> */
 	private static array $tokenToTypeHintMapping = [
@@ -113,7 +123,14 @@ class ClassConstantTypeHintSniff implements Sniff
 			self::CODE_MISSING_NATIVE_TYPE_HINT,
 		];
 
-		if ($typeHint === null) {
+		if (
+			$typeHint === null
+			|| $this->fixableNativeTypeHint === self::NO
+			|| (
+				$this->fixableNativeTypeHint === self::PRIVATE
+				&& !$this->isConstantPrivate($phpcsFile, $constantPointer)
+			)
+		) {
 			$phpcsFile->addError(...$errorParameters);
 			return;
 		}
@@ -191,6 +208,18 @@ class ClassConstantTypeHintSniff implements Sniff
 		$equalPointer = TokenHelper::findNext($phpcsFile, T_EQUAL, $constantPointer + 1);
 
 		return TokenHelper::findPreviousEffective($phpcsFile, $equalPointer - 1);
+	}
+
+	private function isConstantPrivate(File $phpcsFile, int $constantPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+		$previousPointer = TokenHelper::findPrevious(
+			$phpcsFile,
+			[T_PRIVATE, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON],
+			$constantPointer - 1,
+		);
+
+		return $previousPointer !== null && $tokens[$previousPointer]['code'] === T_PRIVATE;
 	}
 
 }
