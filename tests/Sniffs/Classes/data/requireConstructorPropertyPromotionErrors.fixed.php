@@ -28,3 +28,16 @@ class DontKnow
 	}
 
 }
+
+class Credentials
+{
+
+	public function __construct(
+		#[\SensitiveParameter]
+		private string $login,
+		#[\SensitiveParameter]
+		private string $password
+	) {
+	}
+
+}
