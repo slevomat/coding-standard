@@ -42,7 +42,15 @@ class Whatever
 
 	final const THIRD = 'third';
 
-	readonly int $forth;
+	readonly int $fourth;
+
+	/**
+	 * @return void
+	 */
+
+	public function fifth()
+	{
+	}
 
 }
 

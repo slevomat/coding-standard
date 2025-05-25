@@ -94,7 +94,7 @@ abstract class WithoutErrors
 	 *
 	 * @var string
 	 */
-	protected $forth;
+	protected $fourth;
 	// @codingStandardsIgnoreEnd
 
 	#[SomeAttribute]
@@ -124,6 +124,11 @@ abstract class WithoutErrors
 		};
 	}
 
+	/**
+	 * @var string
+	 */
+
+	protected $fifth;
 }
 
 enum Gender: string
