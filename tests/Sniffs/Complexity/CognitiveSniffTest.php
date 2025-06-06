@@ -86,6 +86,12 @@ class CognitiveSniffTest extends TestCase
 				'ternaryTest',
 				3,
 			],
+			[
+				__DIR__ . '/data/cognitive/doWhile.php',
+				3,
+				'doWhile',
+				9,
+			],
 		];
 	}
 

@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
+use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_filter;
 use function array_pop;
 use function array_splice;
@@ -28,6 +29,7 @@ use const T_GOTO;
 use const T_IF;
 use const T_INLINE_ELSE;
 use const T_INLINE_THEN;
+use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_PARENTHESIS;
 use const T_SEMICOLON;
 use const T_SWITCH;
@@ -248,6 +250,16 @@ class CognitiveSniff implements Sniff
 		return $this->cognitiveComplexity;
 	}
 
+	protected function isPartOfDo(File $phpcsFile, int $whilePointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$parenthesisCloserPointer = $tokens[$whilePointer]['parenthesis_closer'];
+		$pointerAfterParenthesisCloser = TokenHelper::findNextEffective($phpcsFile, $parenthesisCloserPointer + 1);
+
+		return $tokens[$pointerAfterParenthesisCloser]['code'] !== T_OPEN_CURLY_BRACKET;
+	}
+
 	/**
 	 * Keep track of consecutive matching boolean operators, that don't receive increment.
 	 *
@@ -286,7 +298,9 @@ class CognitiveSniff implements Sniff
 		$code = $token['code'];
 
 		if (isset(self::INCREMENTS[$code])) {
-			return true;
+			return $token['code'] === T_WHILE
+				? !$this->isPartOfDo($this->phpcsFile, $position)
+				: true;
 		}
 
 		// B1. ternary operator
