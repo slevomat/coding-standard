@@ -41,7 +41,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 			define('PHP_CODESNIFFER_CBF', false);
 		}
 		$codeSniffer = new Runner();
-		$codeSniffer->config = new Config(array_merge(['-s'], $cliArgs));
+		$codeSniffer->config = new Config(array_merge(['-s', '--tab-width=4'], $cliArgs));
 		$codeSniffer->init();
 
 		if (count($sniffProperties) > 0) {
