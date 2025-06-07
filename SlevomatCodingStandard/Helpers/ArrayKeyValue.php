@@ -3,11 +3,14 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use function array_reverse;
+use function current;
 use function in_array;
 use function ltrim;
 use function rtrim;
 use function strpos;
 use function trim;
+use const T_CLOSURE;
 use const T_COMMA;
 use const T_DOUBLE_ARROW;
 use const T_ELLIPSIS;
@@ -119,6 +122,10 @@ class ArrayKeyValue
 			}
 
 			if ($token['code'] === T_DOUBLE_ARROW) {
+				if (current(array_reverse($token['conditions'])) === T_CLOSURE) {
+					continue;
+				}
+
 				$this->pointerArrow = $i;
 				continue;
 			}
