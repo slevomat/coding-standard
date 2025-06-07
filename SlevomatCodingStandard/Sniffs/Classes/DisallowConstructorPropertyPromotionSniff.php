@@ -4,13 +4,12 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_values;
 use function sprintf;
 use function strtolower;
 use const T_FUNCTION;
-use const T_PRIVATE;
-use const T_PROTECTED;
-use const T_PUBLIC;
 use const T_READONLY;
 use const T_VARIABLE;
 
@@ -43,7 +42,7 @@ class DisallowConstructorPropertyPromotionSniff implements Sniff
 
 		$modifierPointers = TokenHelper::findNextAll(
 			$phpcsFile,
-			[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY],
+			[...array_values(Tokens::$scopeModifiers), T_READONLY],
 			$tokens[$functionPointer]['parenthesis_opener'] + 1,
 			$tokens[$functionPointer]['parenthesis_closer'],
 		);

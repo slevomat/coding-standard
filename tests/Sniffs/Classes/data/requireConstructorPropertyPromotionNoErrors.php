@@ -1,4 +1,4 @@
-<?php // lint >= 8.0
+<?php // lint >= 8.4
 
 abstract class Test {
 	abstract public function __construct($x);
@@ -131,6 +131,24 @@ class Foo
 		} else {
 			$this->formattedOpeningHours = $openingHours;
 		}
+	}
+
+}
+
+class Hooks
+{
+
+	public string $email {
+		get => 'mailto:' . $this->email;
+		set (string $value) {
+			$this->email = $value;
+		}
+	}
+
+
+	public function __construct(string $email)
+	{
+		$this->email = $email;
 	}
 
 }

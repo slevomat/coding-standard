@@ -36,17 +36,17 @@ class DisallowSuperGlobalVariableSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $variablePointer
+	 * @param int $pointer
 	 */
-	public function process(File $phpcsFile, $variablePointer): void
+	public function process(File $phpcsFile, $pointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		if (!in_array($tokens[$variablePointer]['content'], self::SUPER_GLOBALS, true)) {
+		if (!in_array($tokens[$pointer]['content'], self::SUPER_GLOBALS, true)) {
 			return;
 		}
 
-		$phpcsFile->addError('Use of super global variable is disallowed.', $variablePointer, self::CODE_DISALLOWED_SUPER_GLOBAL_VARIABLE);
+		$phpcsFile->addError('Use of super global variable is disallowed.', $pointer, self::CODE_DISALLOWED_SUPER_GLOBAL_VARIABLE);
 	}
 
 }

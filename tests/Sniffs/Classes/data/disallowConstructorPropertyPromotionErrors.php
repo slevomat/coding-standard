@@ -1,4 +1,4 @@
-<?php // lint >= 8.1
+<?php // lint >= 8.4
 
 class Whatever
 {
@@ -17,6 +17,8 @@ class Anything
 		public int $a,
 		private float $b,
 		readonly int $c,
+		protected(set) bool $d,
+		private(set) bool $e,
 	)
 	{
 

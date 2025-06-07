@@ -1,4 +1,4 @@
-<?php // lint >= 8.1
+<?php // lint >= 8.4
 
 class A
 {
@@ -241,5 +241,20 @@ class Foo
 	private const KE = 599981;
 	use SettingsTrait {
 		SettingsTrait::__construct as private __settingsConstruct;
+	}
+}
+
+class Foo
+{
+	private $p5;
+	protected $p3;
+	protected private(set) int $p4;
+	public protected(set) bool $p2;
+	public $p1;
+	public string $email {
+		get => 'mailto:' . $this->email;
+		set (string $value) {
+			$this->email = $value;
+		}
 	}
 }

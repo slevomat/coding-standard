@@ -1,4 +1,4 @@
-<?php // lint >= 8.1
+<?php // lint >= 8.4
 
 class Whatever
 {
@@ -192,5 +192,8 @@ class Whatever
 
 	/** @var int */
 	static $staticProperty;
+
+	/** @var int */
+	final $finalProperty;
 
 }

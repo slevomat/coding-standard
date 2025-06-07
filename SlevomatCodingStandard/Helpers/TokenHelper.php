@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use function array_key_exists;
 use function array_merge;
 use function count;
+use const T_ABSTRACT;
 use const T_ANON_CLASS;
 use const T_ARRAY;
 use const T_BREAK;
@@ -24,6 +25,7 @@ use const T_DOC_COMMENT_WHITESPACE;
 use const T_ENUM;
 use const T_EXIT;
 use const T_FALSE;
+use const T_FINAL;
 use const T_FN;
 use const T_FUNCTION;
 use const T_INTERFACE;
@@ -40,8 +42,11 @@ use const T_PHPCS_IGNORE;
 use const T_PHPCS_IGNORE_FILE;
 use const T_PHPCS_SET;
 use const T_PRIVATE;
+use const T_PRIVATE_SET;
 use const T_PROTECTED;
+use const T_PROTECTED_SET;
 use const T_PUBLIC;
+use const T_PUBLIC_SET;
 use const T_READONLY;
 use const T_RETURN;
 use const T_SELF;
@@ -62,6 +67,22 @@ use const T_WHITESPACE;
  */
 class TokenHelper
 {
+
+	public const MODIFIERS_TOKEN_CODES = [
+		T_FINAL,
+		T_ABSTRACT,
+		T_VAR,
+		T_PUBLIC,
+		T_PUBLIC_SET,
+		T_PROTECTED,
+		T_PROTECTED_SET,
+		T_PRIVATE,
+		T_PRIVATE_SET,
+		T_READONLY,
+		T_STATIC,
+	];
+
+	public const PROPERTY_MODIFIERS_TOKEN_CODES = self::MODIFIERS_TOKEN_CODES;
 
 	/** @var array<int, (int|string)> */
 	public static array $arrayTokenCodes = [
@@ -138,16 +159,6 @@ class TokenHelper
 		T_FUNCTION,
 		T_CLOSURE,
 		T_FN,
-	];
-
-	/** @var array<int, (int|string)> */
-	public static array $propertyModifiersTokenCodes = [
-		T_VAR,
-		T_PUBLIC,
-		T_PROTECTED,
-		T_PRIVATE,
-		T_READONLY,
-		T_STATIC,
 	];
 
 	/**

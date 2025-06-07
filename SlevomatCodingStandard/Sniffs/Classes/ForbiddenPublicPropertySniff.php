@@ -4,17 +4,19 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use function array_merge;
+use function array_map;
+use function in_array;
+use const T_AS;
+use const T_FUNCTION;
 use const T_PRIVATE;
+use const T_PRIVATE_SET;
 use const T_PROTECTED;
+use const T_PROTECTED_SET;
 use const T_READONLY;
-use const T_SEMICOLON;
-use const T_VAR;
 use const T_VARIABLE;
 
 final class ForbiddenPublicPropertySniff implements Sniff
@@ -24,6 +26,8 @@ final class ForbiddenPublicPropertySniff implements Sniff
 
 	public bool $allowReadonly = false;
 
+	public bool $allowNonPublicSet = true;
+
 	public bool $checkPromoted = false;
 
 	/**
@@ -31,66 +35,83 @@ final class ForbiddenPublicPropertySniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return [T_VARIABLE];
+		return TokenHelper::PROPERTY_MODIFIERS_TOKEN_CODES;
 	}
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $variablePointer
+	 * @param int $pointer
 	 */
-	public function process(File $file, $variablePointer): void
+	public function process(File $phpcsFile, $pointer): void
 	{
-		if (!PropertyHelper::isProperty($file, $variablePointer, $this->checkPromoted)) {
+		$tokens = $phpcsFile->getTokens();
+
+		$asPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
+		if ($tokens[$asPointer]['code'] === T_AS) {
 			return;
 		}
 
-		// skip Sniff classes, they have public properties for configuration (unfortunately)
-		if ($this->isSniffClass($file, $variablePointer)) {
+		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
+		if (in_array($tokens[$nextPointer]['code'], TokenHelper::PROPERTY_MODIFIERS_TOKEN_CODES, true)) {
+			// We don't want to report the same property multiple times
 			return;
 		}
 
-		$scopeModifierToken = $this->getPropertyScopeModifier($file, $variablePointer);
-		if ($scopeModifierToken['code'] === T_PROTECTED || $scopeModifierToken['code'] === T_PRIVATE) {
+		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION], $pointer + 1);
+		if (
+			$propertyPointer === null
+			|| $tokens[$propertyPointer]['code'] !== T_VARIABLE
+			|| !PropertyHelper::isProperty($phpcsFile, $propertyPointer, $this->checkPromoted)
+		) {
 			return;
 		}
 
-		if ($this->allowReadonly && $this->isReadonlyProperty($file, $variablePointer)) {
+		// Skip sniff classes, they have public properties for configuration (unfortunately)
+		if ($this->isSniffClass($phpcsFile, $propertyPointer)) {
 			return;
 		}
 
-		$errorMessage = 'Do not use public properties. Use method access instead.';
-		$file->addError($errorMessage, $variablePointer, self::CODE_FORBIDDEN_PUBLIC_PROPERTY);
+		$propertyStartPointer = PropertyHelper::getStartPointer($phpcsFile, $propertyPointer);
+
+		$modifiersPointers = TokenHelper::findNextAll(
+			$phpcsFile,
+			TokenHelper::PROPERTY_MODIFIERS_TOKEN_CODES,
+			$propertyStartPointer,
+			$propertyPointer,
+		);
+		$modifiersCodes = array_map(static fn (int $modifierPointer) => $tokens[$modifierPointer]['code'], $modifiersPointers);
+
+		if (in_array(T_PROTECTED, $modifiersCodes, true) || in_array(T_PRIVATE, $modifiersCodes, true)) {
+			return;
+		}
+
+		if ($this->allowReadonly && in_array(T_READONLY, $modifiersCodes, true)) {
+			return;
+		}
+
+		if (
+			$this->allowNonPublicSet
+			&& (
+				in_array(T_PROTECTED_SET, $modifiersCodes, true)
+				|| in_array(T_PRIVATE_SET, $modifiersCodes, true)
+			)
+		) {
+			return;
+		}
+
+		$phpcsFile->addError(
+			'Do not use public properties. Use method access instead.',
+			$propertyPointer,
+			self::CODE_FORBIDDEN_PUBLIC_PROPERTY,
+		);
 	}
 
-	private function isSniffClass(File $file, int $position): bool
+	private function isSniffClass(File $phpcsFile, int $position): bool
 	{
-		$classTokenPosition = ClassHelper::getClassPointer($file, $position);
-		$classNameToken = ClassHelper::getName($file, $classTokenPosition);
+		$classTokenPosition = ClassHelper::getClassPointer($phpcsFile, $position);
+		$classNameToken = ClassHelper::getName($phpcsFile, $classTokenPosition);
 
 		return StringHelper::endsWith($classNameToken, 'Sniff');
-	}
-
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
-	 * @return array{code: int|string}
-	 */
-	private function getPropertyScopeModifier(File $file, int $position): array
-	{
-		$scopeModifierPosition = TokenHelper::findPrevious($file, array_merge([T_VAR], Tokens::$scopeModifiers), $position - 1);
-
-		return $file->getTokens()[$scopeModifierPosition];
-	}
-
-	private function isReadonlyProperty(File $file, int $position): bool
-	{
-		$readonlyPosition = TokenHelper::findPrevious($file, [T_READONLY], $position - 1);
-		if ($readonlyPosition === null) {
-			return false;
-		}
-
-		$semicolonPosition = TokenHelper::findNext($file, [T_SEMICOLON], $readonlyPosition + 1, $position - 1);
-
-		return $semicolonPosition === null;
 	}
 
 }

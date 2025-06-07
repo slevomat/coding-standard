@@ -43,11 +43,11 @@ use const T_COMMA;
 use const T_CONST;
 use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOC_COMMENT_STAR;
+use const T_FINAL;
 use const T_FUNCTION;
 use const T_PRIVATE;
 use const T_PROTECTED;
 use const T_PUBLIC;
-use const T_READONLY;
 use const T_SEMICOLON;
 use const T_STATIC;
 use const T_VAR;
@@ -89,12 +89,14 @@ class PropertyTypeHintSniff implements Sniff
 	 */
 	public function register(): array
 	{
+		// Other modifiers cannot be used without type hint
 		return [
 			T_VAR,
 			T_PUBLIC,
 			T_PROTECTED,
 			T_PRIVATE,
 			T_STATIC,
+			T_FINAL,
 		];
 	}
 
@@ -126,8 +128,8 @@ class PropertyTypeHintSniff implements Sniff
 		}
 
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
-		if (in_array($tokens[$nextPointer]['code'], [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC], true)) {
-			// We don't want to report the same property twice
+		if (in_array($tokens[$nextPointer]['code'], TokenHelper::PROPERTY_MODIFIERS_TOKEN_CODES, true)) {
+			// We don't want to report the same property multiple times
 			return;
 		}
 
@@ -394,12 +396,6 @@ class PropertyTypeHintSniff implements Sniff
 			}
 		}
 
-		$propertyStartPointer = TokenHelper::findPrevious(
-			$phpcsFile,
-			[T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR, T_STATIC, T_READONLY],
-			$propertyPointer - 1,
-		);
-
 		$tokens = $phpcsFile->getTokens();
 
 		$pointerAfterProperty = null;
@@ -408,7 +404,7 @@ class PropertyTypeHintSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->addContent($propertyStartPointer, sprintf(' %s', $propertyTypeHint));
+		$phpcsFile->fixer->addContentBefore($propertyPointer, sprintf('%s ', $propertyTypeHint));
 
 		if (
 			$pointerAfterProperty !== null

@@ -1,4 +1,15 @@
-<?php
+<?php // lint >= 8.4
+
+class TestSniff
+{
+	use TestTrait {
+		doSomething as public;
+		doSomethingElse as public;
+	}
+
+	var $var;
+	public $pub;
+}
 
 class Test
 {
@@ -6,10 +17,8 @@ class Test
 	public $pub;
 	protected $prot;
 	private $priv;
-}
+	public(set) string $pubSet;
 
-class TestSniff
-{
-	var $var;
-	public $pub;
+	public protected(set) int $protectedSet;
+	public private(set) int $privateSet;
 }

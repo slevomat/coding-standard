@@ -1,4 +1,4 @@
-<?php // lint >= 8.1
+<?php // lint >= 8.4
 
 class Whatever
 {
@@ -73,6 +73,32 @@ enum Gender: string
 			self::MALE->value => 'woman',
 			self::UNSPECIFIED->value => 'unspecified',
 		];
+	}
+
+}
+
+abstract class Something
+{
+
+	readonly private(set) public ?string $readonlyPublicPrivateSet;
+
+	public function __construct() {
+	}
+
+}
+
+class Hooks
+{
+
+	public string $email {
+		get => 'mailto:' . $this->email;
+		set (string $value) {
+			$this->email = $value;
+		}
+	}
+
+	public function __construct()
+	{
 	}
 
 }

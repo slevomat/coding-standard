@@ -1,4 +1,4 @@
-<?php // lint >= 8.1
+<?php // lint >= 8.4
 
 abstract class Foo {
 	/** @var string */
@@ -71,4 +71,22 @@ abstract class Bar {
 	private function such()
 	{
 	}
+}
+
+abstract class Something
+{
+
+	public final int $publicFinal = 0;
+
+	readonly private(set) public ?string $readonlyPublicPrivateSet;
+
+	static protected array $staticProtected = [];
+
+	public string $email {
+		get => 'mailto:' . $this->email;
+		set (string $value) {
+			$this->email = $value;
+		}
+	}
+
 }

@@ -1,4 +1,4 @@
-<?php // lint >= 7.4
+<?php // lint >= 8.4
 
 class Foo
 {
@@ -30,4 +30,6 @@ class Foo
 	;
 
 	private $aa = array('a', 'aa'), $bb = array('b', 'bb');
+
+	public private(set) readonly int $readonly1, $readonly2;
 }

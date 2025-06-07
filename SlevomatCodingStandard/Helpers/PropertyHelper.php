@@ -14,18 +14,18 @@ use function in_array;
 use function preg_match;
 use function preg_replace;
 use function sprintf;
+use const T_ABSTRACT;
 use const T_ANON_CLASS;
 use const T_CLOSE_CURLY_BRACKET;
+use const T_COMMA;
+use const T_FINAL;
 use const T_FUNCTION;
 use const T_NULLABLE;
 use const T_OPEN_CURLY_BRACKET;
-use const T_PRIVATE;
-use const T_PROTECTED;
-use const T_PUBLIC;
+use const T_OPEN_PARENTHESIS;
 use const T_READONLY;
 use const T_SEMICOLON;
 use const T_STATIC;
-use const T_VAR;
 
 /**
  * @internal
@@ -43,11 +43,19 @@ class PropertyHelper
 			$variablePointer - 1,
 		);
 
+		if (in_array($tokens[$previousPointer]['code'], [T_FINAL, T_ABSTRACT], true)) {
+			return true;
+		}
+
 		if ($tokens[$previousPointer]['code'] === T_STATIC) {
 			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
 		}
 
-		if (in_array($tokens[$previousPointer]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_VAR, T_READONLY], true)) {
+		if (in_array(
+			$tokens[$previousPointer]['code'],
+			[...array_values(Tokens::$scopeModifiers), T_READONLY],
+			true,
+		)) {
 			$constructorPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $previousPointer - 1);
 
 			if ($constructorPointer === null) {
@@ -76,20 +84,84 @@ class PropertyHelper
 			return false;
 		}
 
+		$previousParenthesisPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_PARENTHESIS, $variablePointer - 1);
+		if ($previousParenthesisPointer !== null && $tokens[$previousParenthesisPointer]['parenthesis_closer'] > $variablePointer) {
+			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousParenthesisPointer - 1);
+			if ($previousPointer !== null && in_array($tokens[$previousPointer]['content'], ['get', 'set'], true)) {
+				// Parameter of property hook
+				return false;
+			}
+		}
+
+		$previousCurlyBracketPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_CURLY_BRACKET, $variablePointer - 1);
+		if (
+			$previousCurlyBracketPointer !== null
+			&& $tokens[$previousCurlyBracketPointer]['bracket_closer'] > $variablePointer
+		) {
+			// Variable in content of property hook
+			if (!array_key_exists('scope_condition', $tokens[$previousCurlyBracketPointer])) {
+				return false;
+			}
+		}
+
 		$conditionCode = array_values($tokens[$variablePointer]['conditions'])[count($tokens[$variablePointer]['conditions']) - 1];
 
 		return in_array($conditionCode, Tokens::$ooScopeTokens, true);
+	}
+
+	public static function getStartPointer(File $phpcsFile, int $propertyPointer): int
+	{
+		$previousCodeEndPointer = TokenHelper::findPrevious(
+			$phpcsFile,
+			[
+				// Previous property or constant
+				T_SEMICOLON,
+				// Previous method or property with hooks
+				T_CLOSE_CURLY_BRACKET,
+				// Start of the class
+				T_OPEN_CURLY_BRACKET,
+				// Start of the constructor
+				T_OPEN_PARENTHESIS,
+				// Previous parameter in the constructor
+				T_COMMA,
+			],
+			$propertyPointer - 1,
+		);
+
+		$startPointer = TokenHelper::findPreviousEffective($phpcsFile, $propertyPointer - 1, $previousCodeEndPointer);
+
+		do {
+			$possibleStartPointer = TokenHelper::findPrevious(
+				$phpcsFile,
+				TokenHelper::PROPERTY_MODIFIERS_TOKEN_CODES,
+				$startPointer - 1,
+				$previousCodeEndPointer,
+			);
+
+			if ($possibleStartPointer === null) {
+				return $startPointer;
+			}
+
+			$startPointer = $possibleStartPointer;
+		} while (true);
+	}
+
+	public static function getEndPointer(File $phpcsFile, int $propertyPointer): int
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$endPointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_OPEN_CURLY_BRACKET], $propertyPointer + 1);
+
+		return $tokens[$endPointer]['code'] === T_OPEN_CURLY_BRACKET
+			? $tokens[$endPointer]['bracket_closer']
+			: $endPointer;
 	}
 
 	public static function findTypeHint(File $phpcsFile, int $propertyPointer): ?TypeHint
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$propertyStartPointer = TokenHelper::findPrevious(
-			$phpcsFile,
-			[T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR, T_STATIC, T_READONLY],
-			$propertyPointer - 1,
-		);
+		$propertyStartPointer = self::getStartPointer($phpcsFile, $propertyPointer);
 
 		$typeHintEndPointer = TokenHelper::findPrevious(
 			$phpcsFile,
