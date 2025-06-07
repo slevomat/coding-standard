@@ -56,11 +56,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $openTagPointer
-	 */
-	public function process(File $phpcsFile, $openTagPointer): void
+	public function process(File $phpcsFile, int $openTagPointer): void
 	{
 		if (TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $openTagPointer - 1) !== null) {
 			return;

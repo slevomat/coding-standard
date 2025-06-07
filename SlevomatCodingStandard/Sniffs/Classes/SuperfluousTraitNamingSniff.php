@@ -25,11 +25,7 @@ class SuperfluousTraitNamingSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $traitPointer
-	 */
-	public function process(File $phpcsFile, $traitPointer): void
+	public function process(File $phpcsFile, int $traitPointer): void
 	{
 		$traitName = ClassHelper::getName($phpcsFile, $traitPointer);
 

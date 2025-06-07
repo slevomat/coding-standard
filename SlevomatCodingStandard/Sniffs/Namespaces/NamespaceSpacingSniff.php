@@ -38,11 +38,7 @@ class NamespaceSpacingSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $namespacePointer
-	 */
-	public function process(File $phpcsFile, $namespacePointer): void
+	public function process(File $phpcsFile, int $namespacePointer): void
 	{
 		$this->linesCountBeforeNamespace = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeNamespace);
 		$this->linesCountAfterNamespace = SniffSettingsHelper::normalizeInteger($this->linesCountAfterNamespace);

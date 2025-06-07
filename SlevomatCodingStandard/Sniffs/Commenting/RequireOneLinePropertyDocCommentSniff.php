@@ -14,11 +14,7 @@ class RequireOneLinePropertyDocCommentSniff extends AbstractRequireOneLineDocCom
 
 	public const CODE_MULTI_LINE_PROPERTY_COMMENT = 'MultiLinePropertyComment';
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $docCommentStartPointer
-	 */
-	public function process(File $phpcsFile, $docCommentStartPointer): void
+	public function process(File $phpcsFile, int $docCommentStartPointer): void
 	{
 		$propertyPointer = TokenHelper::findNext($phpcsFile, T_VARIABLE, $docCommentStartPointer + 1);
 		if ($propertyPointer === null) {

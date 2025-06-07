@@ -115,7 +115,7 @@ class UseStatementHelperTest extends TestCase
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/useStatements.php');
 		$useStatements = UseStatementHelper::getFileUseStatements($phpcsFile)[0];
 		self::assertCount(8, $useStatements);
-		self::assertSame(3, $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CLASS, 'Baz')]->getPointer());
+		self::assertPointer(4, $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CLASS, 'Baz')]->getPointer());
 		self::assertUseStatement(
 			'Bar\Baz',
 			'Baz',

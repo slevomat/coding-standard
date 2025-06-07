@@ -133,11 +133,7 @@ class CognitiveSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $stackPtr
-	 */
-	public function process(File $phpcsFile, $stackPtr): void
+	public function process(File $phpcsFile, int $stackPtr): void
 	{
 		$this->phpcsFile = $phpcsFile;
 

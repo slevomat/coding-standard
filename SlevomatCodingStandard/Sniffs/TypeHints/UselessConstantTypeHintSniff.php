@@ -28,11 +28,7 @@ class UselessConstantTypeHintSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $constantPointer
-	 */
-	public function process(File $phpcsFile, $constantPointer): void
+	public function process(File $phpcsFile, int $constantPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

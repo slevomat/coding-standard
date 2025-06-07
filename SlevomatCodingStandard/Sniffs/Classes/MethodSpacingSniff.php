@@ -36,11 +36,7 @@ class MethodSpacingSniff implements Sniff
 		return [T_FUNCTION];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $methodPointer
-	 */
-	public function process(File $phpcsFile, $methodPointer): void
+	public function process(File $phpcsFile, int $methodPointer): void
 	{
 		$this->minLinesCount = SniffSettingsHelper::normalizeInteger($this->minLinesCount);
 		$this->maxLinesCount = SniffSettingsHelper::normalizeInteger($this->maxLinesCount);

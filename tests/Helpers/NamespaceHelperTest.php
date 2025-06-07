@@ -180,7 +180,8 @@ class NamespaceHelperTest extends TestCase
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/multipleNamespaces.php');
 		$namespaces = NamespaceHelper::getAllNamespacesPointers($phpcsFile);
-		self::assertEquals([2, 16], $namespaces);
+		self::assertPointer(3, $namespaces[0]);
+		self::assertPointer(17, $namespaces[1]);
 	}
 
 	public function testResolveClassNameWithMoreNamespaces(): void

@@ -46,11 +46,7 @@ class NegationOperatorSpacingSniff implements Sniff
 		return [T_MINUS];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $pointer
-	 */
-	public function process(File $phpcsFile, $pointer): void
+	public function process(File $phpcsFile, int $pointer): void
 	{
 		$this->spacesCount = SniffSettingsHelper::normalizeInteger($this->spacesCount);
 
@@ -59,7 +55,7 @@ class NegationOperatorSpacingSniff implements Sniff
 		$previousEffective = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
 
 		$possibleOperandTypes = [
-			...TokenHelper::ONLY_NAME_TOKEN_CODES,
+			...TokenHelper::NAME_TOKEN_CODES,
 			T_CONSTANT_ENCAPSED_STRING,
 			T_CLASS_C,
 			T_CLOSE_PARENTHESIS,

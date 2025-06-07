@@ -6,7 +6,6 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_NAMESPACE;
-use const T_NS_SEPARATOR;
 
 class RequireOneNamespaceInFileSniff implements Sniff
 {
@@ -23,34 +22,12 @@ class RequireOneNamespaceInFileSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $namespacePointer
-	 */
-	public function process(File $phpcsFile, $namespacePointer): void
+	public function process(File $phpcsFile, int $namespacePointer): void
 	{
-		$tokens = $phpcsFile->getTokens();
-
-		$pointerAfterNamespace = TokenHelper::findNextEffective($phpcsFile, $namespacePointer + 1);
-		if ($tokens[$pointerAfterNamespace]['code'] === T_NS_SEPARATOR) {
+		$previousNamespacePointer = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $namespacePointer - 1);
+		if ($previousNamespacePointer === null) {
 			return;
 		}
-
-		$previousNamespacePointer = $namespacePointer;
-		do {
-			$previousNamespacePointer = TokenHelper::findPrevious($phpcsFile, T_NAMESPACE, $previousNamespacePointer - 1);
-			if ($previousNamespacePointer === null) {
-				return;
-			}
-
-			$pointerAfterPreviousNamespace = TokenHelper::findNextEffective($phpcsFile, $previousNamespacePointer + 1);
-			if ($tokens[$pointerAfterPreviousNamespace]['code'] === T_NS_SEPARATOR) {
-				continue;
-			}
-
-			break;
-
-		} while (true);
 
 		$phpcsFile->addError('Only one namespace in a file is allowed.', $namespacePointer, self::CODE_MORE_NAMESPACES_IN_FILE);
 	}

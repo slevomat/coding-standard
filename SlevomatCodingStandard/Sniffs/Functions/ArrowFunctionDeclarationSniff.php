@@ -40,11 +40,7 @@ class ArrowFunctionDeclarationSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $arrowFunctionPointer
-	 */
-	public function process(File $phpcsFile, $arrowFunctionPointer): void
+	public function process(File $phpcsFile, int $arrowFunctionPointer): void
 	{
 		$this->spacesCountAfterKeyword = SniffSettingsHelper::normalizeInteger($this->spacesCountAfterKeyword);
 		$this->spacesCountBeforeArrow = SniffSettingsHelper::normalizeInteger($this->spacesCountBeforeArrow);

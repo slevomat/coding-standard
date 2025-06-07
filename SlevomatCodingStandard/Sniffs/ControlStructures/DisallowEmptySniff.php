@@ -21,11 +21,7 @@ class DisallowEmptySniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $emptyPointer
-	 */
-	public function process(File $phpcsFile, $emptyPointer): void
+	public function process(File $phpcsFile, int $emptyPointer): void
 	{
 		$phpcsFile->addError('Use of empty() is disallowed.', $emptyPointer, self::CODE_DISALLOWED_EMPTY);
 	}

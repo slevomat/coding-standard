@@ -45,7 +45,7 @@ class AttributeHelperTest extends TestCase
 		self::assertCount(count($expected), $attributes);
 
 		foreach ($attributes as $attributeNo => $attribute) {
-			self::assertSame(11, $attribute->getAttributePointer());
+			self::assertSame(10, $attribute->getAttributePointer());
 			self::assertSame($expected[$attributeNo][0], $attribute->getName());
 			self::assertSame($expected[$attributeNo][1], $attribute->getFullyQualifiedName());
 			self::assertSame($expected[$attributeNo][2], $attribute->getContent());

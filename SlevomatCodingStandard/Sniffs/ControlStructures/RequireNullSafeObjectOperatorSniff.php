@@ -54,11 +54,7 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $identicalPointer
-	 */
-	public function process(File $phpcsFile, $identicalPointer): int
+	public function process(File $phpcsFile, int $identicalPointer): int
 	{
 		$this->enable = SniffSettingsHelper::isEnabledByPhpVersion($this->enable, 80000);
 

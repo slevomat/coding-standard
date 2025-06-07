@@ -46,7 +46,7 @@ class CommentHelper
 				continue;
 			}
 
-			if (in_array($tokens[$i]['code'], Tokens::$phpcsCommentTokens, true)) {
+			if (in_array($tokens[$i]['code'], Tokens::PHPCS_ANNOTATION_TOKENS, true)) {
 				$commentEndPointer = $i;
 				continue;
 			}

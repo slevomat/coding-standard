@@ -27,11 +27,7 @@ class DuplicateAssignmentToVariableSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $assignmentPointer
-	 */
-	public function process(File $phpcsFile, $assignmentPointer): void
+	public function process(File $phpcsFile, int $assignmentPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

@@ -44,11 +44,7 @@ class UseSpacingSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $openTagPointer
-	 */
-	public function process(File $phpcsFile, $openTagPointer): void
+	public function process(File $phpcsFile, int $openTagPointer): void
 	{
 		$this->linesCountBeforeFirstUse = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirstUse);
 		$this->linesCountBetweenUseTypes = SniffSettingsHelper::normalizeInteger($this->linesCountBetweenUseTypes);

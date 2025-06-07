@@ -74,11 +74,7 @@ class DocCommentSpacingSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $docCommentOpenerPointer
-	 */
-	public function process(File $phpcsFile, $docCommentOpenerPointer): void
+	public function process(File $phpcsFile, int $docCommentOpenerPointer): void
 	{
 		$this->linesCountBeforeFirstContent = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirstContent);
 		$this->linesCountBetweenDescriptionAndAnnotations = SniffSettingsHelper::normalizeInteger(

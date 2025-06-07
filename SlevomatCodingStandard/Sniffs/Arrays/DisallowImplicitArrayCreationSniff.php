@@ -43,11 +43,7 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $bracketOpenerPointer
-	 */
-	public function process(File $phpcsFile, $bracketOpenerPointer): void
+	public function process(File $phpcsFile, int $bracketOpenerPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

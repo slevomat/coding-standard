@@ -40,11 +40,7 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 	/** @var list<string>|null */
 	public ?array $excludedMethodNormalizedPatterns = null;
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $methodPointer
-	 */
-	public function process(File $phpcsFile, $methodPointer): void
+	public function process(File $phpcsFile, int $methodPointer): void
 	{
 		$this->minLineLength = SniffSettingsHelper::normalizeNullableInteger($this->minLineLength);
 		$this->minParametersCount = SniffSettingsHelper::normalizeNullableInteger($this->minParametersCount);

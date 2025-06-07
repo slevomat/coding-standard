@@ -31,7 +31,6 @@ use const T_INTERFACE;
 use const T_NAME_FULLY_QUALIFIED;
 use const T_NAME_QUALIFIED;
 use const T_NAME_RELATIVE;
-use const T_NS_SEPARATOR;
 use const T_NULL;
 use const T_OPEN_SHORT_ARRAY;
 use const T_PARENT;
@@ -67,16 +66,11 @@ use const T_WHITESPACE;
 class TokenHelper
 {
 
-	public const ONLY_NAME_TOKEN_CODES = [
+	public const NAME_TOKEN_CODES = [
 		T_STRING,
 		T_NAME_FULLY_QUALIFIED,
 		T_NAME_QUALIFIED,
 		T_NAME_RELATIVE,
-	];
-
-	public const NAME_TOKEN_CODES = [
-		...self::ONLY_NAME_TOKEN_CODES,
-		T_NS_SEPARATOR,
 	];
 
 	public const ONLY_TYPE_HINT_TOKEN_CODES = [
@@ -462,9 +456,6 @@ class TokenHelper
 			$phpcsFile->eolChar,
 			$newLinePointerOnPreviousLine - 1,
 		);
-		if ($newLinePointerBeforePreviousLine === null) {
-			return null;
-		}
 
 		$nextPointer = self::findNextExcluding($phpcsFile, [T_WHITESPACE, T_DOC_COMMENT_WHITESPACE], $newLinePointerBeforePreviousLine + 1);
 

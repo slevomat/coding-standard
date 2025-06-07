@@ -27,11 +27,7 @@ class RequireNowdocSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $heredocStartPointer
-	 */
-	public function process(File $phpcsFile, $heredocStartPointer): void
+	public function process(File $phpcsFile, int $heredocStartPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

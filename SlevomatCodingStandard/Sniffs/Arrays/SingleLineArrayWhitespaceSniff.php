@@ -36,11 +36,7 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 		return TokenHelper::ARRAY_TOKEN_CODES;
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $stackPointer
-	 */
-	public function process(File $phpcsFile, $stackPointer): int
+	public function process(File $phpcsFile, int $stackPointer): int
 	{
 		$this->spacesAroundBrackets = SniffSettingsHelper::normalizeInteger($this->spacesAroundBrackets);
 

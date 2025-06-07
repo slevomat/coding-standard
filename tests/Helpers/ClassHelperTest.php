@@ -99,7 +99,7 @@ class ClassHelperTest extends TestCase
 
 		$whitespacePointer = $this->findPointerByLineAndType($phpcsFile, 5, T_WHITESPACE);
 		self::assertNotNull($whitespacePointer);
-		self::assertSame(2, ClassHelper::getClassPointer($phpcsFile, $whitespacePointer));
+		self::assertPointer(3, ClassHelper::getClassPointer($phpcsFile, $whitespacePointer));
 	}
 
 	public function testGetClassPointerWithMultipleClasses(): void
@@ -108,11 +108,11 @@ class ClassHelperTest extends TestCase
 
 		$methodInFooPointer = $this->findFunctionPointerByName($phpcsFile, 'methodInFoo');
 		self::assertNotNull($methodInFooPointer);
-		self::assertSame(2, ClassHelper::getClassPointer($phpcsFile, $methodInFooPointer));
+		self::assertPointer(3, ClassHelper::getClassPointer($phpcsFile, $methodInFooPointer));
 
 		$methodInBarPointer = $this->findFunctionPointerByName($phpcsFile, 'methodInBar');
 		self::assertNotNull($methodInBarPointer);
-		self::assertSame(28, ClassHelper::getClassPointer($phpcsFile, $methodInBarPointer));
+		self::assertPointer(29, ClassHelper::getClassPointer($phpcsFile, $methodInBarPointer));
 	}
 
 }

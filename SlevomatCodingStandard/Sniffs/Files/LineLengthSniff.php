@@ -44,11 +44,9 @@ class LineLengthSniff implements Sniff
 	}
 
 	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
 	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
-	 * @param int $pointer
 	 */
-	public function process(File $phpcsFile, $pointer): int
+	public function process(File $phpcsFile, int $pointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
 		for ($i = 0; $i < $phpcsFile->numTokens; $i++) {

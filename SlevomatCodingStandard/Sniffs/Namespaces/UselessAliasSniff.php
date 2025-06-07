@@ -29,11 +29,7 @@ class UselessAliasSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $openTagPointer
-	 */
-	public function process(File $phpcsFile, $openTagPointer): void
+	public function process(File $phpcsFile, int $openTagPointer): void
 	{
 		if (TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $openTagPointer - 1) !== null) {
 			return;
@@ -67,7 +63,7 @@ class UselessAliasSniff implements Sniff
 				}
 
 				$asPointer = TokenHelper::findNext($phpcsFile, T_AS, $useStatement->getPointer() + 1);
-				$nameEndPointer = TokenHelper::findPrevious($phpcsFile, TokenHelper::ONLY_NAME_TOKEN_CODES, $asPointer - 1);
+				$nameEndPointer = TokenHelper::findPrevious($phpcsFile, TokenHelper::NAME_TOKEN_CODES, $asPointer - 1);
 				$useSemicolonPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $asPointer + 1);
 
 				$phpcsFile->fixer->beginChangeset();

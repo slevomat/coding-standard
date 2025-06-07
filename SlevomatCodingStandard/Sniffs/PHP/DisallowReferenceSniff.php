@@ -35,11 +35,7 @@ class DisallowReferenceSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $referencePointer
-	 */
-	public function process(File $phpcsFile, $referencePointer): void
+	public function process(File $phpcsFile, int $referencePointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

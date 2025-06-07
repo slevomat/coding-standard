@@ -28,6 +28,19 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
 	private const UNKNOWN_PHP_TOKEN = 'UNKNOWN';
 
+	protected static function assertPointer(int $expectedPointer, int $actualPointer): void
+	{
+		self::assertSame(
+			$expectedPointer,
+			$actualPointer,
+			sprintf(
+				'Expected pointer %d, but got %d.',
+				$expectedPointer,
+				$actualPointer,
+			),
+		);
+	}
+
 	/**
 	 * @param int|string $code
 	 */

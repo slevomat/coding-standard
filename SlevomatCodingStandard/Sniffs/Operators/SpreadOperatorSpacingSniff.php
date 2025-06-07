@@ -29,11 +29,7 @@ class SpreadOperatorSpacingSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $spreadOperatorPointer
-	 */
-	public function process(File $phpcsFile, $spreadOperatorPointer): void
+	public function process(File $phpcsFile, int $spreadOperatorPointer): void
 	{
 		$this->spacesCountAfterOperator = SniffSettingsHelper::normalizeInteger($this->spacesCountAfterOperator);
 

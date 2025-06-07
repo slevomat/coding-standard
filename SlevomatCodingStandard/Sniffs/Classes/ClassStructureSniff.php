@@ -211,11 +211,7 @@ class ClassStructureSniff implements Sniff
 		return array_values(Tokens::$ooScopeTokens);
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $pointer
-	 */
-	public function process(File $phpcsFile, $pointer): int
+	public function process(File $phpcsFile, int $pointer): int
 	{
 		$tokens = $phpcsFile->getTokens();
 		$rootScopeToken = $tokens[$pointer];

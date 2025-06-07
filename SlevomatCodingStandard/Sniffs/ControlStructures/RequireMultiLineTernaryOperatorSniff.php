@@ -38,11 +38,7 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $inlineThenPointer
-	 */
-	public function process(File $phpcsFile, $inlineThenPointer): void
+	public function process(File $phpcsFile, int $inlineThenPointer): void
 	{
 		$this->lineLengthLimit = SniffSettingsHelper::normalizeInteger($this->lineLengthLimit);
 		$this->minExpressionsLength = SniffSettingsHelper::normalizeNullableInteger($this->minExpressionsLength);

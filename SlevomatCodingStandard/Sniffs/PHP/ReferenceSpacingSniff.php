@@ -39,11 +39,7 @@ class ReferenceSpacingSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $referencePointer
-	 */
-	public function process(File $phpcsFile, $referencePointer): void
+	public function process(File $phpcsFile, int $referencePointer): void
 	{
 		$this->spacesCountAfterReference = SniffSettingsHelper::normalizeInteger($this->spacesCountAfterReference);
 

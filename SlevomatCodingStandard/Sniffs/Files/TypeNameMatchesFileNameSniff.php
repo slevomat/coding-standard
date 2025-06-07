@@ -61,11 +61,7 @@ class TypeNameMatchesFileNameSniff implements Sniff
 		return TokenHelper::CLASS_TYPE_TOKEN_CODES;
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $typePointer
-	 */
-	public function process(File $phpcsFile, $typePointer): void
+	public function process(File $phpcsFile, int $typePointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

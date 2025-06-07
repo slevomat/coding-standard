@@ -16,7 +16,6 @@ use function strtolower;
 use const T_CLASS_C;
 use const T_DOUBLE_COLON;
 use const T_FUNCTION;
-use const T_NS_SEPARATOR;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
 use const T_VARIABLE;
@@ -36,15 +35,11 @@ class ModernClassNameReferenceSniff implements Sniff
 	{
 		return [
 			T_CLASS_C,
-			...TokenHelper::ONLY_NAME_TOKEN_CODES,
+			...TokenHelper::NAME_TOKEN_CODES,
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $pointer
-	 */
-	public function process(File $phpcsFile, $pointer): void
+	public function process(File $phpcsFile, int $pointer): void
 	{
 		$this->enableOnObjects = SniffSettingsHelper::isEnabledByPhpVersion($this->enableOnObjects, 80000);
 
@@ -164,9 +159,6 @@ class ModernClassNameReferenceSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		if ($tokens[$functionPointer - 1]['code'] === T_NS_SEPARATOR) {
-			FixerHelper::replace($phpcsFile, $functionPointer - 1, '');
-		}
 
 		FixerHelper::change($phpcsFile, $functionPointer, $tokens[$openParenthesisPointer]['parenthesis_closer'], $fixedContent);
 

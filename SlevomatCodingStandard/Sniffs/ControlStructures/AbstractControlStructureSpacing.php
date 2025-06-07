@@ -109,11 +109,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 		return $this->getTokensToCheck();
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $controlStructurePointer
-	 */
-	public function process(File $phpcsFile, $controlStructurePointer): void
+	public function process(File $phpcsFile, int $controlStructurePointer): void
 	{
 		$this->checkLinesBefore($phpcsFile, $controlStructurePointer);
 

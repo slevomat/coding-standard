@@ -31,11 +31,7 @@ class FileLengthSniff implements Sniff
 		return [T_OPEN_TAG];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $pointer
-	 */
-	public function process(File $phpcsFile, $pointer): void
+	public function process(File $phpcsFile, int $pointer): void
 	{
 		$this->maxLinesLength = SniffSettingsHelper::normalizeInteger($this->maxLinesLength);
 		$flags = array_keys(array_filter([

@@ -21,11 +21,7 @@ class DisallowArrowFunctionSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $arrowFunctionPointer
-	 */
-	public function process(File $phpcsFile, $arrowFunctionPointer): void
+	public function process(File $phpcsFile, int $arrowFunctionPointer): void
 	{
 		$phpcsFile->addError('Use of arrow function is disallowed.', $arrowFunctionPointer, self::CODE_DISALLOWED_ARROW_FUNCTION);
 	}

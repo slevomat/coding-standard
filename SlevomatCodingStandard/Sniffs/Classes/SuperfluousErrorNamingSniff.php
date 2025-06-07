@@ -27,11 +27,7 @@ class SuperfluousErrorNamingSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $classPointer
-	 */
-	public function process(File $phpcsFile, $classPointer): void
+	public function process(File $phpcsFile, int $classPointer): void
 	{
 		$className = ClassHelper::getName($phpcsFile, $classPointer);
 

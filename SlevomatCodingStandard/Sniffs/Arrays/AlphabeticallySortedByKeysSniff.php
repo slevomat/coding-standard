@@ -27,11 +27,7 @@ class AlphabeticallySortedByKeysSniff implements Sniff
 		return TokenHelper::ARRAY_TOKEN_CODES;
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $stackPointer
-	 */
-	public function process(File $phpcsFile, $stackPointer): void
+	public function process(File $phpcsFile, int $stackPointer): void
 	{
 		if (ArrayHelper::isMultiLine($phpcsFile, $stackPointer) === false) {
 			return;

@@ -45,11 +45,7 @@ abstract class AbstractPropertyConstantAndEnumCaseSpacing implements Sniff
 
 	abstract protected function addError(File $phpcsFile, int $pointer, int $min, int $max, int $found): bool;
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $pointer
-	 */
-	public function process(File $phpcsFile, $pointer): int
+	public function process(File $phpcsFile, int $pointer): int
 	{
 		$this->minLinesCountBeforeWithComment = SniffSettingsHelper::normalizeInteger($this->minLinesCountBeforeWithComment);
 		$this->maxLinesCountBeforeWithComment = SniffSettingsHelper::normalizeInteger($this->maxLinesCountBeforeWithComment);

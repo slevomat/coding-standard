@@ -44,11 +44,7 @@ class ClassMemberSpacingSniff implements Sniff
 		return TokenHelper::CLASS_TYPE_WITH_ANONYMOUS_CLASS_TOKEN_CODES;
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $classPointer
-	 */
-	public function process(File $phpcsFile, $classPointer): void
+	public function process(File $phpcsFile, int $classPointer): void
 	{
 		$this->linesCountBetweenMembers = SniffSettingsHelper::normalizeInteger($this->linesCountBetweenMembers);
 

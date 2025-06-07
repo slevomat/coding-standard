@@ -33,11 +33,7 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 
 	public int $linesCountAfterLast = 0;
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $parentPointer
-	 */
-	public function process(File $phpcsFile, $parentPointer): void
+	public function process(File $phpcsFile, int $parentPointer): void
 	{
 		$this->linesCountBefore = SniffSettingsHelper::normalizeInteger($this->linesCountBefore);
 		$this->linesCountBeforeFirst = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirst);

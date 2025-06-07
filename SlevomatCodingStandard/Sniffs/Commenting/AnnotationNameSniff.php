@@ -161,11 +161,7 @@ class AnnotationNameSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $docCommentOpenPointer
-	 */
-	public function process(File $phpcsFile, $docCommentOpenPointer): void
+	public function process(File $phpcsFile, int $docCommentOpenPointer): void
 	{
 		$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer);
 		$correctAnnotationNames = $this->getNormalizedAnnotationNames();

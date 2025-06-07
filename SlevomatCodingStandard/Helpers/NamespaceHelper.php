@@ -11,7 +11,6 @@ use function count;
 use function defined;
 use function explode;
 use function implode;
-use function in_array;
 use function ltrim;
 use function sprintf;
 use function strpos;
@@ -61,7 +60,7 @@ class NamespaceHelper
 
 	public static function isFullyQualifiedPointer(File $phpcsFile, int $pointer): bool
 	{
-		return in_array($phpcsFile->getTokens()[$pointer]['code'], [T_NS_SEPARATOR, T_NAME_FULLY_QUALIFIED], true);
+		return $phpcsFile->getTokens()[$pointer]['code'] === T_NAME_FULLY_QUALIFIED;
 	}
 
 	public static function getFullyQualifiedTypeName(string $typeName): string
