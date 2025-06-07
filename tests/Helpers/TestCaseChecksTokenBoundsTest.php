@@ -14,9 +14,9 @@ class TestCaseChecksTokenBoundsTest extends TestCase
 			self::assertTokenPointer(T_OPEN_TAG, 1, $phpcsFile, 5);
 			self::fail();
 		} catch (TokenPointerOutOfBoundsException $e) {
-			self::assertSame('Attempted access to token pointer 5, last token pointer is 0', $e->getMessage());
+			self::assertStringStartsWith('Attempted access to token pointer 5, last token pointer', $e->getMessage());
 			self::assertSame(5, $e->getPointer());
-			self::assertSame(0, $e->getLastTokenPointer());
+			self::assertPointer(1, $e->getLastTokenPointer());
 		}
 	}
 

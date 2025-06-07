@@ -4,8 +4,7 @@ namespace SlevomatCodingStandard\Helpers;
 
 use function count;
 use function sprintf;
-use const T_NS_SEPARATOR;
-use const T_STRING;
+use const T_NAME_FULLY_QUALIFIED;
 
 class ReferencedNameHelperTest extends TestCase
 {
@@ -154,9 +153,9 @@ class ReferencedNameHelperTest extends TestCase
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/referencedName.php');
 
-		$backslashTokenPointer = TokenHelper::findNext($phpcsFile, T_NS_SEPARATOR, 0);
+		$backslashTokenPointer = TokenHelper::findNext($phpcsFile, T_NAME_FULLY_QUALIFIED, 0);
 		$endTokenPointer = ReferencedNameHelper::getReferencedNameEndPointer($phpcsFile, $backslashTokenPointer);
-		self::assertTokenPointer(T_STRING, 3, $phpcsFile, $endTokenPointer);
+		self::assertTokenPointer(T_NAME_FULLY_QUALIFIED, 3, $phpcsFile, $endTokenPointer);
 	}
 
 	public function testReturnTypeHint(): void

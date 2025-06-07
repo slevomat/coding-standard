@@ -245,7 +245,7 @@ class TokenHelperTest extends TestCase
 
 		$firstNonWhiteSpaceTokenPointer = TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $comment);
 		self::assertTokenPointer(T_OPEN_TAG, 1, $phpcsFile, $firstNonWhiteSpaceTokenPointer);
-		self::assertSame('<?php ', $tokens[$firstNonWhiteSpaceTokenPointer]['content']);
+		self::assertSame('<?php', $tokens[$firstNonWhiteSpaceTokenPointer]['content']);
 	}
 
 	public function testFindFirstTokenOnNextLineEndingWithAComment(): void

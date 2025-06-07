@@ -18,17 +18,17 @@ class AttributeHelperTest extends TestCase
 		$attributes = AttributeHelper::getAttributes($phpcsFile, $firstAttributePointer);
 
 		$expected = [
-			4 => ['Attribute1', null],
-			7 => ['\\FQN\\Attribute2', "('var')"],
-			17 => ['Attribute3', "(option: PDO::class, option2: true, option3: 'False')"],
-			39 => ['\\Attribute4', '()'],
-			44 => ['Attribute5', null],
+			5 => ['Attribute1', null],
+			8 => ['\\FQN\\Attribute2', "('var')"],
+			15 => ['Attribute3', "(option: PDO::class, option2: true, option3: 'False')"],
+			37 => ['\\Attribute4', '()'],
+			41 => ['Attribute5', null],
 		];
 
 		self::assertCount(count($expected), $attributes);
 
 		foreach ($attributes as $attribute) {
-			self::assertSame(3, $attribute->getAttributePointer());
+			self::assertPointer(4, $attribute->getAttributePointer());
 			self::assertArrayHasKey($attribute->getStartPointer(), $expected);
 			self::assertSame($expected[$attribute->getStartPointer()][0], $attribute->getName());
 			self::assertSame($expected[$attribute->getStartPointer()][1], $attribute->getContent());

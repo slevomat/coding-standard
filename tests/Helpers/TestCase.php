@@ -11,6 +11,7 @@ use function get_defined_constants;
 use function is_int;
 use function sprintf;
 use function token_name;
+use function version_compare;
 use const T_CLASS;
 use const T_CONST;
 use const T_ENUM;
@@ -27,6 +28,24 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
 
 	private const UNKNOWN_PHP_TOKEN = 'UNKNOWN';
+
+	protected static function assertPointer(int $expectedPointer, int $actualPointer): void
+	{
+		// T_OPEN_TAG contains new line in PHPCS 3, but not in PHPCS 4
+		if (version_compare(Config::VERSION, '4.0.0', '<')) {
+			$expectedPointer --;
+		}
+
+		self::assertSame(
+			$expectedPointer,
+			$actualPointer,
+			sprintf(
+				'Expected pointer %d, but got %d.',
+				$expectedPointer,
+				$actualPointer,
+			),
+		);
+	}
 
 	/**
 	 * @param int|string $code
