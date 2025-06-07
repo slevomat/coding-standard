@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\ReferencedName;
 use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
@@ -125,7 +126,7 @@ abstract class AbstractFullyQualifiedGlobalReference implements Sniff
 			}
 
 			$phpcsFile->fixer->beginChangeset();
-			$phpcsFile->fixer->addContentBefore($namePointer, NamespaceHelper::NAMESPACE_SEPARATOR);
+			FixerHelper::addBefore($phpcsFile, $namePointer, NamespaceHelper::NAMESPACE_SEPARATOR);
 			$phpcsFile->fixer->endChangeset();
 		}
 	}

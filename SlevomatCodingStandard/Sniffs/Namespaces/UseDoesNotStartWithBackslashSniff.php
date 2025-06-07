@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
@@ -67,7 +68,11 @@ class UseDoesNotStartWithBackslashSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($nextTokenPointer, ltrim($tokens[$nextTokenPointer]['content'], '\\'));
+		FixerHelper::replace(
+			$phpcsFile,
+			$nextTokenPointer,
+			ltrim($tokens[$nextTokenPointer]['content'], '\\'),
+		);
 		$phpcsFile->fixer->endChangeset();
 	}
 

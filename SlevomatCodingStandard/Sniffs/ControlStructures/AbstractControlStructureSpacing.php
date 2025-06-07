@@ -213,11 +213,15 @@ abstract class AbstractControlStructureSpacing implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		if ($tokens[$pointerBefore]['code'] === T_OPEN_TAG) {
-			$phpcsFile->fixer->replaceToken($pointerBefore, '<?php');
+			FixerHelper::replace($phpcsFile, $pointerBefore, '<?php');
 		}
 
 		if ($endOfLineBeforePointer !== null) {
 			FixerHelper::removeBetweenIncluding($phpcsFile, $pointerBefore + 1, $endOfLineBeforePointer);
+		}
+
+		if ($tokens[$pointerBefore]['line'] === $tokens[$controlStructureStartPointer]['line']) {
+			FixerHelper::removeBetween($phpcsFile, $pointerBefore, $controlStructureStartPointer);
 		}
 
 		$linesToAdd = $hasCommentWithLineEndBefore ? $requiredLinesCountBefore - 1 : $requiredLinesCountBefore;

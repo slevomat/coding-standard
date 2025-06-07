@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Operators;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use function sprintf;
 use const T_IS_EQUAL;
 use const T_IS_NOT_EQUAL;
@@ -41,7 +42,7 @@ class DisallowEqualOperatorsSniff implements Sniff
 			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->replaceToken($operatorPointer, '===');
+				FixerHelper::replace($phpcsFile, $operatorPointer, '===');
 				$phpcsFile->fixer->endChangeset();
 			}
 		} else {
@@ -51,7 +52,7 @@ class DisallowEqualOperatorsSniff implements Sniff
 			), $operatorPointer, self::CODE_DISALLOWED_NOT_EQUAL_OPERATOR);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->replaceToken($operatorPointer, '!==');
+				FixerHelper::replace($phpcsFile, $operatorPointer, '!==');
 				$phpcsFile->fixer->endChangeset();
 			}
 		}

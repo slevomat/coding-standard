@@ -137,7 +137,7 @@ class ClassMemberSpacingSniff implements Sniff
 
 			$phpcsFile->fixer->beginChangeset();
 
-			$phpcsFile->fixer->addContent($previousMemberEndPointer, $newLines);
+			FixerHelper::add($phpcsFile, $previousMemberEndPointer, $newLines);
 
 			FixerHelper::removeBetween($phpcsFile, $previousMemberEndPointer, $firstPointerOnMemberLine);
 

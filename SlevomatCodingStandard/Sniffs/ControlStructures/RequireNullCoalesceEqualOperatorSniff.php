@@ -195,7 +195,7 @@ class RequireNullCoalesceEqualOperatorSniff implements Sniff
 
 		$codeStartPointer = TokenHelper::findNextEffective($phpcsFile, $equalPointer + 1);
 
-		$afterNullCoalesceEqualCode = IndentationHelper::fixIndentation(
+		$afterNullCoalesceEqualCode = IndentationHelper::removeIndentation(
 			$phpcsFile,
 			range($codeStartPointer, $semicolonPointer),
 			IndentationHelper::getIndentation($phpcsFile, $ifPointer),

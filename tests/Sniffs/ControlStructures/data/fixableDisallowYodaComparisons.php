@@ -71,7 +71,7 @@ if (null === $env = $parameters['env']) {
 }
 
 if (null === $row->{self::NAME}) {
-    return 0;
+	return 0;
 }
 
 function ($condition, $actual) {

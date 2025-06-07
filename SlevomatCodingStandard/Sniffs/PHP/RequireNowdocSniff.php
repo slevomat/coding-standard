@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\PHP;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function preg_match;
 use function preg_replace;
@@ -55,7 +56,7 @@ class RequireNowdocSniff implements Sniff
 		$nowdocStart = preg_replace('~^<<<"?(\w+)"?~', '<<<\'$1\'', $tokens[$heredocStartPointer]['content']);
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($heredocStartPointer, $nowdocStart);
+		FixerHelper::replace($phpcsFile, $heredocStartPointer, $nowdocStart);
 
 		foreach ($heredocContentPointers as $heredocContentPointer) {
 			$heredocContent = $tokens[$heredocContentPointer]['content'];
@@ -65,7 +66,7 @@ class RequireNowdocSniff implements Sniff
 				$heredocContent,
 			);
 
-			$phpcsFile->fixer->replaceToken($heredocContentPointer, $nowdocContent);
+			FixerHelper::replace($phpcsFile, $heredocContentPointer, $nowdocContent);
 		}
 
 		$phpcsFile->fixer->endChangeset();

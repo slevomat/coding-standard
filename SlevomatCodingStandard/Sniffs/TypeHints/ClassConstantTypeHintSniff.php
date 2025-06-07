@@ -142,7 +142,7 @@ class ClassConstantTypeHintSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->addContent($constantPointer, ' ' . $typeHint);
+		FixerHelper::add($phpcsFile, $constantPointer, ' ' . $typeHint);
 		$phpcsFile->fixer->endChangeset();
 	}
 

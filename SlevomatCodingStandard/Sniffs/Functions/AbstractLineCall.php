@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Sniffs\Functions;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function rtrim;
 use function trim;
@@ -47,7 +46,7 @@ abstract class AbstractLineCall implements Sniff
 	{
 		$firstPointerOnLine = TokenHelper::findFirstTokenOnLine($phpcsFile, $pointer);
 
-		return IndentationHelper::convertTabsToSpaces($phpcsFile, TokenHelper::getContent($phpcsFile, $firstPointerOnLine, $pointer));
+		return TokenHelper::getContent($phpcsFile, $firstPointerOnLine, $pointer);
 	}
 
 	protected function getCall(File $phpcsFile, int $parenthesisOpenerPointer, int $parenthesisCloserPointer): string

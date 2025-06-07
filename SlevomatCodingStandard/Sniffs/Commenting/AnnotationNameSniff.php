@@ -205,7 +205,7 @@ class AnnotationNameSniff implements Sniff
 
 			$phpcsFile->fixer->beginChangeset();
 
-			$phpcsFile->fixer->replaceToken($annotation->getStartPointer(), $correctAnnotationName);
+			FixerHelper::replace($phpcsFile, $annotation->getStartPointer(), $correctAnnotationName);
 
 			$phpcsFile->fixer->endChangeset();
 		}

@@ -10,13 +10,13 @@
 		return ['a', 'b'];
 	},
 	'anonymous' => new class {
-	    public function log($msg)
-	    {
-	        return [
-	        	'z' => 'z val',
-	        	'y' => 'y val',
-	        ];
-	    }
+		public function log($msg)
+		{
+			return [
+				'z' => 'z val',
+				'y' => 'y val',
+			];
+		}
 	},
 	'nested' => array(
 		'b2' => 'b2 val',

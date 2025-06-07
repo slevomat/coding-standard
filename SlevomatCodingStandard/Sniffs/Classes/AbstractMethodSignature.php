@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function assert;
 use function is_string;
@@ -59,11 +58,6 @@ abstract class AbstractMethodSignature implements Sniff
 		$signature = rtrim($signature);
 
 		return $signature;
-	}
-
-	protected function getSignatureWithoutTabs(File $phpcsFile, string $signature): string
-	{
-		return IndentationHelper::convertTabsToSpaces($phpcsFile, $signature);
 	}
 
 }

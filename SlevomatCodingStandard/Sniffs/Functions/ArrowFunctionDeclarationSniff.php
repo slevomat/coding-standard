@@ -166,7 +166,7 @@ class ArrowFunctionDeclarationSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		if ($requiredSpaces > 0) {
-			$phpcsFile->fixer->addContent($pointerBefore, str_repeat(' ', $requiredSpaces));
+			FixerHelper::add($phpcsFile, $pointerBefore, str_repeat(' ', $requiredSpaces));
 		}
 
 		FixerHelper::removeBetween($phpcsFile, $pointerBefore, $pointerAfter);

@@ -7,8 +7,8 @@ $value = $nullableValue ?? throw new InvalidArgumentException();
 $value = $falsableValue ?: throw new InvalidArgumentException();
 
 $value = !empty($array)
-    ? reset($array)
-    : throw new InvalidArgumentException();
+	? reset($array)
+	: throw new InvalidArgumentException();
 
 $condition && throw new Exception();
 $condition || throw new Exception();

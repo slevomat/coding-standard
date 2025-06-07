@@ -111,7 +111,7 @@ class RequireArrowFunctionSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($closurePointer, 'fn');
+		FixerHelper::replace($phpcsFile, $closurePointer, 'fn');
 
 		if ($nonWhitespacePointerAfterUseParenthesisCloser !== null) {
 			FixerHelper::removeBetween(
@@ -123,7 +123,7 @@ class RequireArrowFunctionSniff implements Sniff
 
 		FixerHelper::removeBetween($phpcsFile, $nonWhitespacePointerBeforeScopeOpener, $pointerAfterReturn);
 
-		$phpcsFile->fixer->addContent($nonWhitespacePointerBeforeScopeOpener, ' => ');
+		FixerHelper::add($phpcsFile, $nonWhitespacePointerBeforeScopeOpener, ' => ');
 
 		FixerHelper::removeBetweenIncluding($phpcsFile, $semicolonAfterReturn, $tokens[$closurePointer]['scope_closer']);
 

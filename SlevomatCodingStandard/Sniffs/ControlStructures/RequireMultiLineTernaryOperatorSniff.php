@@ -101,12 +101,9 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		FixerHelper::removeBetween($phpcsFile, $pointerBeforeInlineThen, $inlineThenPointer);
-
-		$phpcsFile->fixer->addContentBefore($inlineThenPointer, $phpcsFile->eolChar . $indentation);
-
+		FixerHelper::addBefore($phpcsFile, $inlineThenPointer, $phpcsFile->eolChar . $indentation);
 		FixerHelper::removeBetween($phpcsFile, $pointerBeforeInlineElse, $inlineElsePointer);
-
-		$phpcsFile->fixer->addContentBefore($inlineElsePointer, $phpcsFile->eolChar . $indentation);
+		FixerHelper::addBefore($phpcsFile, $inlineElsePointer, $phpcsFile->eolChar . $indentation);
 
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -161,15 +158,7 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 		$pointerAfterWhitespace = TokenHelper::findNextNonWhitespace($phpcsFile, $endOfLinePointer + 1);
 		$actualIndentation = TokenHelper::getContent($phpcsFile, $endOfLinePointer + 1, $pointerAfterWhitespace - 1);
 
-		if (strlen($actualIndentation) !== 0) {
-			return $actualIndentation . (substr(
-				$actualIndentation,
-				-1,
-			) === IndentationHelper::TAB_INDENT ? IndentationHelper::TAB_INDENT : IndentationHelper::SPACES_INDENT);
-		}
-
-		$tabPointer = TokenHelper::findPreviousContent($phpcsFile, T_WHITESPACE, IndentationHelper::TAB_INDENT, $endOfLinePointer - 1);
-		return $tabPointer !== null ? IndentationHelper::TAB_INDENT : IndentationHelper::SPACES_INDENT;
+		return IndentationHelper::addIndentation($phpcsFile, $actualIndentation);
 	}
 
 }

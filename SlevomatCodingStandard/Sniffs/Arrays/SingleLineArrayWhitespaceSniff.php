@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Arrays;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ArrayHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
@@ -111,7 +112,7 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 			return;
 		}
 
-		$phpcsFile->fixer->replaceToken($arrayStart + 1, '');
+		FixerHelper::replace($phpcsFile, $arrayStart + 1, '');
 	}
 
 	private function checkWhitespaceAfterOpeningBracket(File $phpcsFile, int $arrayStart): void
@@ -136,9 +137,13 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 		}
 
 		if ($spaceLength === 0) {
-			$phpcsFile->fixer->addContent($arrayStart, str_repeat(' ', $this->spacesAroundBrackets));
+			FixerHelper::add($phpcsFile, $arrayStart, str_repeat(' ', $this->spacesAroundBrackets));
 		} else {
-			$phpcsFile->fixer->replaceToken($whitespacePointer, str_repeat(' ', $this->spacesAroundBrackets));
+			FixerHelper::replace(
+				$phpcsFile,
+				$whitespacePointer,
+				str_repeat(' ', $this->spacesAroundBrackets),
+			);
 		}
 	}
 
@@ -164,9 +169,13 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 		}
 
 		if ($spaceLength === 0) {
-			$phpcsFile->fixer->addContentBefore($arrayEnd, str_repeat(' ', $this->spacesAroundBrackets));
+			FixerHelper::addBefore($phpcsFile, $arrayEnd, str_repeat(' ', $this->spacesAroundBrackets));
 		} else {
-			$phpcsFile->fixer->replaceToken($whitespacePointer, str_repeat(' ', $this->spacesAroundBrackets));
+			FixerHelper::replace(
+				$phpcsFile,
+				$whitespacePointer,
+				str_repeat(' ', $this->spacesAroundBrackets),
+			);
 		}
 	}
 
@@ -192,7 +201,7 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 			return;
 		}
 
-		$phpcsFile->fixer->replaceToken($comma - 1, '');
+		FixerHelper::replace($phpcsFile, $comma - 1, '');
 	}
 
 	private function checkWhitespaceAfterComma(File $phpcsFile, int $comma): void
@@ -203,7 +212,7 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 			$error = sprintf('Expected 1 space between comma and "%s", 0 found.', $tokens[$comma + 1]['content']);
 			$fix = $phpcsFile->addFixableError($error, $comma, self::CODE_SPACE_AFTER_COMMA);
 			if ($fix) {
-				$phpcsFile->fixer->addContent($comma, ' ');
+				FixerHelper::add($phpcsFile, $comma, ' ');
 			}
 
 			return;
@@ -220,7 +229,7 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 			return;
 		}
 
-		$phpcsFile->fixer->replaceToken($comma + 1, ' ');
+		FixerHelper::replace($phpcsFile, $comma + 1, ' ');
 	}
 
 }

@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
@@ -110,9 +111,9 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 			$phpcsFile->fixer->beginChangeset();
 
 			if (substr_count($typeHint, '|') > 0) {
-				$phpcsFile->fixer->addContent($typeHintEndPointer, '|null');
+				FixerHelper::add($phpcsFile, $typeHintEndPointer, '|null');
 			} else {
-				$phpcsFile->fixer->addContentBefore($typeHintStartPointer, '?');
+				FixerHelper::addBefore($phpcsFile, $typeHintStartPointer, '?');
 			}
 
 			$phpcsFile->fixer->endChangeset();

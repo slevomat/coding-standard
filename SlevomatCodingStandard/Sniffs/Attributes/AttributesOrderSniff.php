@@ -160,16 +160,16 @@ class AttributesOrderSniff implements Sniff
 		foreach (array_keys($expectedOrder) as $position => $attributesGroupNo) {
 			if ($areOnSameLine) {
 				if ($position !== 0) {
-					$phpcsFile->fixer->addContent($attributesStartPointer, ' ');
+					FixerHelper::add($phpcsFile, $attributesStartPointer, ' ');
 				}
 
-				$phpcsFile->fixer->addContent($attributesStartPointer, $attributesGroupsContent[$attributesGroupNo]);
+				FixerHelper::add($phpcsFile, $attributesStartPointer, $attributesGroupsContent[$attributesGroupNo]);
 			} else {
 				if ($position !== 0) {
-					$phpcsFile->fixer->addContent($attributesStartPointer, $indentation);
+					FixerHelper::add($phpcsFile, $attributesStartPointer, $indentation);
 				}
 
-				$phpcsFile->fixer->addContent($attributesStartPointer, $attributesGroupsContent[$attributesGroupNo]);
+				FixerHelper::add($phpcsFile, $attributesStartPointer, $attributesGroupsContent[$attributesGroupNo]);
 
 				if ($position !== count($attributesGroups) - 1) {
 					$phpcsFile->fixer->addNewline($attributesStartPointer);

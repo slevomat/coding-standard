@@ -49,19 +49,19 @@ function () {
 	} catch (Throwable $e) {
 	} finally {
 		if (isset($e)) {
-		    echo $e->getMessage();
+			echo $e->getMessage();
 		}
 	}
 };
 
 function () {
-    do {
-        try {
+	do {
+		try {
 
-        } catch (\Throwable $e) {
+		} catch (\Throwable $e) {
 
-        }
-    } while (true);
+		}
+	} while (true);
 
-    throw $e;
+	throw $e;
 };

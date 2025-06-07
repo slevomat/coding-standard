@@ -76,7 +76,7 @@ class RequireAttributeAfterDocCommentSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->addContentBefore($attributeStartPointer, $docComment);
+		FixerHelper::addBefore($phpcsFile, $attributeStartPointer, $docComment);
 
 		FixerHelper::removeBetweenIncluding($phpcsFile, $docCommentStartPointer, $docCommentEndPointer);
 

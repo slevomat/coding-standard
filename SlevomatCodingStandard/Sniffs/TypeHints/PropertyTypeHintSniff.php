@@ -401,13 +401,13 @@ class PropertyTypeHintSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->addContentBefore($propertyPointer, sprintf('%s ', $propertyTypeHint));
+		FixerHelper::addBefore($phpcsFile, $propertyPointer, sprintf('%s ', $propertyTypeHint));
 
 		if (
 			$pointerAfterProperty !== null
 			&& in_array($tokens[$pointerAfterProperty]['code'], [T_SEMICOLON, T_COMMA], true)
 		) {
-			$phpcsFile->fixer->addContent($propertyPointer, ' = null');
+			FixerHelper::add($phpcsFile, $propertyPointer, ' = null');
 		}
 
 		$phpcsFile->fixer->endChangeset();

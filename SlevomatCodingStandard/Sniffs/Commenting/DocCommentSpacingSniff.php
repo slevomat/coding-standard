@@ -188,10 +188,10 @@ class DocCommentSpacingSniff implements Sniff
 		FixerHelper::change($phpcsFile, $docCommentOpenerPointer, $firstContentStartPointer - 1, '/**' . $phpcsFile->eolChar);
 
 		for ($i = 1; $i <= $this->linesCountBeforeFirstContent; $i++) {
-			$phpcsFile->fixer->addContent($docCommentOpenerPointer, sprintf('%s *%s', $indentation, $phpcsFile->eolChar));
+			FixerHelper::add($phpcsFile, $docCommentOpenerPointer, sprintf('%s *%s', $indentation, $phpcsFile->eolChar));
 		}
 
-		$phpcsFile->fixer->addContentBefore($firstContentStartPointer, $indentation . ' * ');
+		FixerHelper::addBefore($phpcsFile, $firstContentStartPointer, $indentation . ' * ');
 
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -255,10 +255,10 @@ class DocCommentSpacingSniff implements Sniff
 		FixerHelper::removeBetween($phpcsFile, $firstContentEndPointer, $firstAnnotationPointer);
 
 		for ($i = 1; $i <= $this->linesCountBetweenDescriptionAndAnnotations; $i++) {
-			$phpcsFile->fixer->addContent($firstContentEndPointer, sprintf('%s *%s', $indentation, $phpcsFile->eolChar));
+			FixerHelper::add($phpcsFile, $firstContentEndPointer, sprintf('%s *%s', $indentation, $phpcsFile->eolChar));
 		}
 
-		$phpcsFile->fixer->addContentBefore($firstAnnotationPointer, $indentation . ' * ');
+		FixerHelper::addBefore($phpcsFile, $firstAnnotationPointer, $indentation . ' * ');
 
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -318,10 +318,10 @@ class DocCommentSpacingSniff implements Sniff
 			$phpcsFile->fixer->addNewline($previousAnnotation->getEndPointer());
 
 			for ($i = 1; $i <= $this->linesCountBetweenDifferentAnnotationsTypes; $i++) {
-				$phpcsFile->fixer->addContent($previousAnnotation->getEndPointer(), sprintf('%s *%s', $indentation, $phpcsFile->eolChar));
+				FixerHelper::add($phpcsFile, $previousAnnotation->getEndPointer(), sprintf('%s *%s', $indentation, $phpcsFile->eolChar));
 			}
 
-			$phpcsFile->fixer->addContentBefore($annotation->getStartPointer(), $indentation . ' * ');
+			FixerHelper::addBefore($phpcsFile, $annotation->getStartPointer(), $indentation . ' * ');
 
 			$phpcsFile->fixer->endChangeset();
 
@@ -414,13 +414,15 @@ class DocCommentSpacingSniff implements Sniff
 			);
 
 			for ($i = 1; $i <= $this->linesCountBetweenAnnotationsGroups; $i++) {
-				$phpcsFile->fixer->addContent(
+				FixerHelper::add(
+					$phpcsFile,
 					$lastAnnotationInPreviousGroup->getEndPointer(),
 					sprintf('%s *%s', $indentation, $phpcsFile->eolChar),
 				);
 			}
 
-			$phpcsFile->fixer->addContentBefore(
+			FixerHelper::addBefore(
+				$phpcsFile,
 				$firstAnnotationInActualGroup->getStartPointer(),
 				$indentation . ' * ',
 			);
@@ -745,10 +747,10 @@ class DocCommentSpacingSniff implements Sniff
 		$phpcsFile->fixer->addNewline($lastContentEndPointer);
 
 		for ($i = 1; $i <= $this->linesCountAfterLastContent; $i++) {
-			$phpcsFile->fixer->addContent($lastContentEndPointer, sprintf('%s *%s', $indentation, $phpcsFile->eolChar));
+			FixerHelper::add($phpcsFile, $lastContentEndPointer, sprintf('%s *%s', $indentation, $phpcsFile->eolChar));
 		}
 
-		$phpcsFile->fixer->addContentBefore($docCommentCloserPointer, $indentation . ' ');
+		FixerHelper::addBefore($phpcsFile, $docCommentCloserPointer, $indentation . ' ');
 
 		$phpcsFile->fixer->endChangeset();
 	}

@@ -42,8 +42,8 @@ class ShortListSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 		FixerHelper::removeBetweenIncluding($phpcsFile, $pointer, $startPointer - 1);
-		$phpcsFile->fixer->replaceToken($startPointer, '[');
-		$phpcsFile->fixer->replaceToken($endPointer, ']');
+		FixerHelper::replace($phpcsFile, $startPointer, '[');
+		FixerHelper::replace($phpcsFile, $endPointer, ']');
 		$phpcsFile->fixer->endChangeset();
 	}
 

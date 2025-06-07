@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AttributeHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_ANON_CLASS;
 use const T_ATTRIBUTE;
@@ -108,7 +109,7 @@ class NewWithParenthesesSniff implements Sniff
 		$classNameEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $shouldBeOpenParenthesisPointer - 1);
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->addContent($classNameEndPointer, '()');
+		FixerHelper::add($phpcsFile, $classNameEndPointer, '()');
 		$phpcsFile->fixer->endChangeset();
 	}
 

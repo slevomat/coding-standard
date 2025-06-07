@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -70,7 +71,7 @@ class ReturnTypeHintSpacingSniff implements Sniff
 				);
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
-					$phpcsFile->fixer->addContent($colonPointer, ' ');
+					FixerHelper::add($phpcsFile, $colonPointer, ' ');
 					$phpcsFile->fixer->endChangeset();
 				}
 			} elseif ($tokens[$colonPointer + 1]['content'] !== ' ') {
@@ -81,7 +82,7 @@ class ReturnTypeHintSpacingSniff implements Sniff
 				);
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
-					$phpcsFile->fixer->replaceToken($colonPointer + 1, ' ');
+					FixerHelper::replace($phpcsFile, $colonPointer + 1, ' ');
 					$phpcsFile->fixer->endChangeset();
 				}
 			}
@@ -94,7 +95,7 @@ class ReturnTypeHintSpacingSniff implements Sniff
 				);
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
-					$phpcsFile->fixer->addContent($colonPointer, ' ');
+					FixerHelper::add($phpcsFile, $colonPointer, ' ');
 					$phpcsFile->fixer->endChangeset();
 				}
 			} elseif ($tokens[$colonPointer + 1]['content'] !== ' ') {
@@ -105,7 +106,7 @@ class ReturnTypeHintSpacingSniff implements Sniff
 				);
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
-					$phpcsFile->fixer->replaceToken($colonPointer + 1, ' ');
+					FixerHelper::replace($phpcsFile, $colonPointer + 1, ' ');
 					$phpcsFile->fixer->endChangeset();
 				}
 			}
@@ -118,7 +119,7 @@ class ReturnTypeHintSpacingSniff implements Sniff
 				);
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
-					$phpcsFile->fixer->replaceToken($typeHintStartPointer + 1, '');
+					FixerHelper::replace($phpcsFile, $typeHintStartPointer + 1, '');
 					$phpcsFile->fixer->endChangeset();
 				}
 			}
@@ -147,7 +148,7 @@ class ReturnTypeHintSpacingSniff implements Sniff
 				);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->replaceToken($colonPointer - 1, $expectedSpaces);
+				FixerHelper::replace($phpcsFile, $colonPointer - 1, $expectedSpaces);
 				$phpcsFile->fixer->endChangeset();
 			}
 		} elseif ($tokens[$colonPointer - 1]['code'] === T_CLOSE_PARENTHESIS && $this->spacesCountBeforeColon !== 0) {
@@ -162,7 +163,7 @@ class ReturnTypeHintSpacingSniff implements Sniff
 			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContent($colonPointer - 1, $expectedSpaces);
+				FixerHelper::add($phpcsFile, $colonPointer - 1, $expectedSpaces);
 				$phpcsFile->fixer->endChangeset();
 			}
 		}

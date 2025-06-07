@@ -37,7 +37,7 @@ $param === A::TYPE_A xor A::TYPE_B === $param;
 $x = $username === [$a, $b, $c];
 
 if ($row->{self::NAME} === null) {
-    return 0;
+	return 0;
 }
 
 function ($condition, $actual) {

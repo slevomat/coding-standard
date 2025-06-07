@@ -36,16 +36,16 @@ use Zero;
 
 class MyClass
 {
-    public function __construct() {
-        if (
-            $this->valid(fn(): bool => 2 > 1)
-        ) {
+	public function __construct() {
+		if (
+			$this->valid(fn(): bool => 2 > 1)
+		) {
 
-        }
-    }
+		}
+	}
 
-    private function valid(callable $callable): bool
-    {
-        return $callable();
-    }
+	private function valid(callable $callable): bool
+	{
+		return $callable();
+	}
 }

@@ -198,7 +198,7 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->replaceToken($conditionStart, sprintf('%s ??', $variableContent));
+		FixerHelper::replace($phpcsFile, $conditionStart, sprintf('%s ??', $variableContent));
 
 		if ($tokens[$identicalOperator]['code'] === T_IS_IDENTICAL) {
 			FixerHelper::removeBetweenIncluding($phpcsFile, $conditionStart + 1, $inlineThenPointer);

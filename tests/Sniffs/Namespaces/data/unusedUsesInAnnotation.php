@@ -318,13 +318,13 @@ enum SomeEnum
 
 class CommaAfterAnnotation
 {
-    /**
-     * @After\A(property="Packages", type="array",
-     *     @After\B(type="object"),
-     * ),
-     * @After\C({"write-send"})
-     */
-    public int $packages;
+	/**
+	 * @After\A(property="Packages", type="array",
+	 *     @After\B(type="object"),
+	 * ),
+	 * @After\C({"write-send"})
+	 */
+	public int $packages;
 }
 
 class ObjectShape

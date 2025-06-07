@@ -73,7 +73,7 @@ class RequireShortTernaryOperatorSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		if ($tokens[$conditionStartPointer]['code'] === T_BOOLEAN_NOT) {
-			$phpcsFile->fixer->replaceToken($conditionStartPointer, '');
+			FixerHelper::replace($phpcsFile, $conditionStartPointer, '');
 
 			FixerHelper::change($phpcsFile, $inlineThenPointer, $inlineElseEndPointer, sprintf('?: %s', $thenContent));
 

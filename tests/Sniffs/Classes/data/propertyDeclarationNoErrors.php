@@ -40,62 +40,62 @@ interface SomeInterface
 
 class UserEvent
 {
-    public static function detailsUpdated(): self
-    {
-        return static::create(UserEventType::DetailsUpdated);
-    }
+	public static function detailsUpdated(): self
+	{
+		return static::create(UserEventType::DetailsUpdated);
+	}
 
-    public User $user;
+	public User $user;
 }
 
 abstract class Test
 {
-    abstract public function begin(): static;
+	abstract public function begin(): static;
 
-    protected array $field = [];
+	protected array $field = [];
 }
 
 class Test2
 {
-    public function begin(): static
-    {}
+	public function begin(): static
+	{}
 
-    protected array $field = [];
+	protected array $field = [];
 }
 
 abstract class Test3
 {
-    abstract public function begin(): static|null;
+	abstract public function begin(): static|null;
 
-    protected array $field = [];
+	protected array $field = [];
 }
 
 class Test4
 {
-    public function begin(): static|null
-    {}
+	public function begin(): static|null
+	{}
 
-    protected array $field = [];
+	protected array $field = [];
 }
 
 class Test5
 {
-    public function begin(): false|static|null
-    {}
+	public function begin(): false|static|null
+	{}
 
-    protected array $field = [];
+	protected array $field = [];
 }
 
 class Tes6
 {
-    public static function begin(): static
-    {
-        return new static();
-    }
+	public static function begin(): static
+	{
+		return new static();
+	}
 
-    protected array $field = [];
+	protected array $field = [];
 
-    final private function __construct()
-    {
-    }
+	final private function __construct()
+	{
+	}
 }

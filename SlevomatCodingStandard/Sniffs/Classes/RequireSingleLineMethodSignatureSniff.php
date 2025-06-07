@@ -52,7 +52,6 @@ class RequireSingleLineMethodSignatureSniff extends AbstractMethodSignature
 		}
 
 		$signature = $this->getSignature($phpcsFile, $signatureStartPointer, $signatureEndPointer);
-		$signatureWithoutTabIndentation = $this->getSignatureWithoutTabs($phpcsFile, $signature);
 		$methodName = FunctionHelper::getName($phpcsFile, $methodPointer);
 
 		if (
@@ -69,7 +68,7 @@ class RequireSingleLineMethodSignatureSniff extends AbstractMethodSignature
 			return;
 		}
 
-		if ($this->maxLineLength !== 0 && strlen($signatureWithoutTabIndentation) > $this->maxLineLength) {
+		if ($this->maxLineLength !== 0 && strlen($signature) > $this->maxLineLength) {
 			return;
 		}
 

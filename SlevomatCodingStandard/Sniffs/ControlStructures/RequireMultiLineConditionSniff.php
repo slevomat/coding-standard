@@ -94,7 +94,7 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 
 		$conditionIndentation = $conditionStartsOnNewLine
 			? $controlStructureIndentation
-			: IndentationHelper::addIndentation($controlStructureIndentation);
+			: IndentationHelper::addIndentation($phpcsFile, $controlStructureIndentation);
 
 		$innerConditionLevel = 0;
 
@@ -102,7 +102,7 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 
 		if (!$conditionStartsOnNewLine) {
 			FixerHelper::removeWhitespaceBefore($phpcsFile, $conditionStartPointer);
-			$phpcsFile->fixer->addContentBefore($conditionStartPointer, $phpcsFile->eolChar . $conditionIndentation);
+			FixerHelper::addBefore($phpcsFile, $conditionStartPointer, $phpcsFile->eolChar . $conditionIndentation);
 		}
 
 		for ($i = $conditionStartPointer; $i <= $conditionEndPointer; $i++) {
@@ -119,16 +119,22 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 				if ($containsBooleanOperator) {
 					FixerHelper::removeWhitespaceAfter($phpcsFile, $i);
 
-					$phpcsFile->fixer->addContent(
+					FixerHelper::add(
+						$phpcsFile,
 						$i,
-						$phpcsFile->eolChar . IndentationHelper::addIndentation($conditionIndentation, $innerConditionLevel),
+						$phpcsFile->eolChar . IndentationHelper::addIndentation($phpcsFile, $conditionIndentation, $innerConditionLevel),
 					);
 
 					FixerHelper::removeWhitespaceBefore($phpcsFile, $tokens[$i]['parenthesis_closer']);
 
-					$phpcsFile->fixer->addContentBefore(
+					FixerHelper::addBefore(
+						$phpcsFile,
 						$tokens[$i]['parenthesis_closer'],
-						$phpcsFile->eolChar . IndentationHelper::addIndentation($conditionIndentation, $innerConditionLevel - 1),
+						$phpcsFile->eolChar . IndentationHelper::addIndentation(
+							$phpcsFile,
+							$conditionIndentation,
+							$innerConditionLevel - 1,
+						),
 					);
 				}
 
@@ -146,11 +152,15 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 
 			$innerConditionIndentation = $conditionIndentation;
 			if ($innerConditionLevel > 0) {
-				$innerConditionIndentation = IndentationHelper::addIndentation($innerConditionIndentation, $innerConditionLevel);
+				$innerConditionIndentation = IndentationHelper::addIndentation(
+					$phpcsFile,
+					$innerConditionIndentation,
+					$innerConditionLevel,
+				);
 			}
 
 			if ($this->booleanOperatorOnPreviousLine) {
-				$phpcsFile->fixer->addContent($i, $phpcsFile->eolChar . $innerConditionIndentation);
+				FixerHelper::add($phpcsFile, $i, $phpcsFile->eolChar . $innerConditionIndentation);
 
 				FixerHelper::removeWhitespaceAfter($phpcsFile, $i);
 
@@ -160,12 +170,12 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 
 			FixerHelper::removeWhitespaceBefore($phpcsFile, $i);
 
-			$phpcsFile->fixer->addContentBefore($i, $phpcsFile->eolChar . $innerConditionIndentation);
+			FixerHelper::addBefore($phpcsFile, $i, $phpcsFile->eolChar . $innerConditionIndentation);
 		}
 
 		if (!$conditionEndsOnNewLine) {
 			FixerHelper::removeWhitespaceAfter($phpcsFile, $conditionEndPointer);
-			$phpcsFile->fixer->addContent($conditionEndPointer, $phpcsFile->eolChar . $controlStructureIndentation);
+			FixerHelper::add($phpcsFile, $conditionEndPointer, $phpcsFile->eolChar . $controlStructureIndentation);
 		}
 
 		$phpcsFile->fixer->endChangeset();

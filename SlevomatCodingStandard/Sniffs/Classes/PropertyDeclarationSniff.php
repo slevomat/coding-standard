@@ -302,7 +302,7 @@ class PropertyDeclarationSniff implements Sniff
 			$fix = $phpcsFile->addFixableError($errorMessage, $typeHintEndPointer, $errorCode);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContent($lastModifierPointer, ' ');
+				FixerHelper::add($phpcsFile, $lastModifierPointer, ' ');
 				$phpcsFile->fixer->endChangeset();
 			}
 		} elseif ($tokens[$lastModifierPointer + 1]['content'] !== ' ') {
@@ -320,7 +320,7 @@ class PropertyDeclarationSniff implements Sniff
 			$fix = $phpcsFile->addFixableError($errorMessage, $lastModifierPointer, $errorCode);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->replaceToken($lastModifierPointer + 1, ' ');
+				FixerHelper::replace($phpcsFile, $lastModifierPointer + 1, ' ');
 				$phpcsFile->fixer->endChangeset();
 			}
 		}
@@ -333,7 +333,7 @@ class PropertyDeclarationSniff implements Sniff
 			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContent($typeHintEndPointer, ' ');
+				FixerHelper::add($phpcsFile, $typeHintEndPointer, ' ');
 				$phpcsFile->fixer->endChangeset();
 			}
 		} elseif ($tokens[$typeHintEndPointer + 1]['content'] !== ' ') {
@@ -344,7 +344,7 @@ class PropertyDeclarationSniff implements Sniff
 			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->replaceToken($typeHintEndPointer + 1, ' ');
+				FixerHelper::replace($phpcsFile, $typeHintEndPointer + 1, ' ');
 				$phpcsFile->fixer->endChangeset();
 			}
 		}
@@ -367,7 +367,7 @@ class PropertyDeclarationSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($nullabilitySymbolPointer + 1, '');
+		FixerHelper::replace($phpcsFile, $nullabilitySymbolPointer + 1, '');
 		$phpcsFile->fixer->endChangeset();
 	}
 

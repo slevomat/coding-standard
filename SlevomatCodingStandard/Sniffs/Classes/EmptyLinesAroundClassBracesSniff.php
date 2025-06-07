@@ -96,7 +96,7 @@ class EmptyLinesAroundClassBracesSniff implements Sniff
 				if ($phpcsFile->fixer->getTokenContent($i) !== $phpcsFile->eolChar) {
 					break;
 				}
-				$phpcsFile->fixer->replaceToken($i, '');
+				FixerHelper::replace($phpcsFile, $i, '');
 			}
 		}
 

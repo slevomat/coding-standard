@@ -117,5 +117,5 @@ class Fooo
  * @return Anything
  */
 function () {
-    return anything();
+	return anything();
 };

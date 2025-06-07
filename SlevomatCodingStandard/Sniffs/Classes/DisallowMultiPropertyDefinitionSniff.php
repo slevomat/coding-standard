@@ -126,8 +126,8 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 
 		foreach ($commaPointers as $commaPointer) {
 			FixerHelper::removeBetween($phpcsFile, $data[$commaPointer]['pointerBeforeComma'], $commaPointer);
-
-			$phpcsFile->fixer->replaceToken(
+			FixerHelper::replace(
+				$phpcsFile,
 				$commaPointer,
 				sprintf(
 					';%s%s%s%s ',

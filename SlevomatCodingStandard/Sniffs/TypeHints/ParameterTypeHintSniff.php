@@ -421,7 +421,8 @@ class ParameterTypeHintSniff implements Sniff
 			} while (true);
 
 			$phpcsFile->fixer->beginChangeset();
-			$phpcsFile->fixer->addContentBefore(
+			FixerHelper::addBefore(
+				$phpcsFile,
 				$beforeParameterPointer,
 				sprintf('%s ', $parameterTypeHint),
 			);

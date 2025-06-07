@@ -188,8 +188,8 @@ function foo( $bar ) {
 }
 
 function boo($backtrace) {
-    for ($class = $backtrace[$frame]['class']; ($parent = get_parent_class($class)) !== false; $class = $parent);
-    return $class;
+	for ($class = $backtrace[$frame]['class']; ($parent = get_parent_class($class)) !== false; $class = $parent);
+	return $class;
 }
 
 function assignmentAsFunctionParameter() {

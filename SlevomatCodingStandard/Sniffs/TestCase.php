@@ -29,6 +29,8 @@ use const PHP_EOL;
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
 
+	private const TAB_WIDTH = 4;
+
 	/**
 	 * @param array<string, string|int|bool|array<int|string, (string|int|bool|null)>> $sniffProperties
 	 * @param list<string> $codesToCheck
@@ -40,7 +42,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 			define('PHP_CODESNIFFER_CBF', false);
 		}
 		$codeSniffer = new Runner();
-		$codeSniffer->config = new Config(array_merge(['-s', '--tab-width=4'], $cliArgs));
+		$codeSniffer->config = new Config(array_merge(['-s'], $cliArgs));
 		$codeSniffer->init();
 
 		if (count($sniffProperties) > 0) {
@@ -71,6 +73,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		}
 
 		$codeSniffer->ruleset->populateTokenListeners();
+		$codeSniffer->config->tabWidth = self::TAB_WIDTH;
 
 		$file = new LocalFile($filePath, $codeSniffer->ruleset, $codeSniffer->config);
 		$file->process();

@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Operators;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
@@ -110,12 +111,12 @@ class NegationOperatorSpacingSniff implements Sniff
 		}
 
 		if ($this->spacesCount > $numberOfSpaces) {
-			$phpcsFile->fixer->addContent($pointer, ' ');
+			FixerHelper::add($phpcsFile, $pointer, ' ');
 
 			return;
 		}
 
-		$phpcsFile->fixer->replaceToken($whitespacePointer, '');
+		FixerHelper::replace($phpcsFile, $whitespacePointer, '');
 	}
 
 }

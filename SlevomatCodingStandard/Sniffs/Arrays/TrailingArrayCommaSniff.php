@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Arrays;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ArrayHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
@@ -72,7 +73,7 @@ class TrailingArrayCommaSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->addContent($pointerPreviousToClose, ',');
+		FixerHelper::add($phpcsFile, $pointerPreviousToClose, ',');
 		$phpcsFile->fixer->endChangeset();
 	}
 

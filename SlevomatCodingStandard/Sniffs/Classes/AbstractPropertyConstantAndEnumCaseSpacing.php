@@ -105,7 +105,11 @@ abstract class AbstractPropertyConstantAndEnumCaseSpacing implements Sniff
 			$phpcsFile->fixer->beginChangeset();
 
 			if ($maxExpectedLines > 0) {
-				$phpcsFile->fixer->addContent($lastPointerOnLine, str_repeat($phpcsFile->eolChar, $maxExpectedLines));
+				FixerHelper::add(
+					$phpcsFile,
+					$lastPointerOnLine,
+					str_repeat($phpcsFile->eolChar, $maxExpectedLines),
+				);
 			}
 
 			FixerHelper::removeBetween($phpcsFile, $lastPointerOnLine, $firstPointerOnNextLine);

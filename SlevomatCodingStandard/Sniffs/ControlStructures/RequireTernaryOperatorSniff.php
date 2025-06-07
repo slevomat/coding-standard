@@ -114,12 +114,12 @@ class RequireTernaryOperatorSniff implements Sniff
 		$semicolonAfterReturnInElse = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $pointerAfterReturnInElse + 1);
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($ifPointer, 'return');
+		FixerHelper::replace($phpcsFile, $ifPointer, 'return');
 		if ($ifPointer + 1 === $tokens[$ifPointer]['parenthesis_opener']) {
-			$phpcsFile->fixer->addContent($ifPointer, ' ');
+			FixerHelper::add($phpcsFile, $ifPointer, ' ');
 		}
-		$phpcsFile->fixer->replaceToken($tokens[$ifPointer]['parenthesis_opener'], '');
-		$phpcsFile->fixer->replaceToken($tokens[$ifPointer]['parenthesis_closer'], ' ? ');
+		FixerHelper::replace($phpcsFile, $tokens[$ifPointer]['parenthesis_opener'], '');
+		FixerHelper::replace($phpcsFile, $tokens[$ifPointer]['parenthesis_closer'], ' ? ');
 
 		FixerHelper::removeBetween($phpcsFile, $tokens[$ifPointer]['parenthesis_closer'], $pointerAfterReturnInIf);
 

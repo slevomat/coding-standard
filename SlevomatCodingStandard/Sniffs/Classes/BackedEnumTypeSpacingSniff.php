@@ -76,7 +76,7 @@ class BackedEnumTypeSpacingSniff implements Sniff
 
 		FixerHelper::removeBetween($phpcsFile, $namePointer, $colonPointer);
 
-		$phpcsFile->fixer->addContentBefore($colonPointer, str_repeat(' ', $this->spacesCountBeforeColon));
+		FixerHelper::addBefore($phpcsFile, $colonPointer, str_repeat(' ', $this->spacesCountBeforeColon));
 
 		$phpcsFile->fixer->endChangeset();
 	}
@@ -104,7 +104,7 @@ class BackedEnumTypeSpacingSniff implements Sniff
 
 		FixerHelper::removeBetween($phpcsFile, $colonPointer, $typePointer);
 
-		$phpcsFile->fixer->addContentBefore($typePointer, str_repeat(' ', $this->spacesCountBeforeType));
+		FixerHelper::addBefore($phpcsFile, $typePointer, str_repeat(' ', $this->spacesCountBeforeType));
 
 		$phpcsFile->fixer->endChangeset();
 	}

@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Arrays;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ArrayHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
 
@@ -54,7 +55,7 @@ class MultiLineArrayEndBracketPlacementSniff implements Sniff
 			return;
 		}
 
-		$phpcsFile->fixer->addContent($arrayOpenerPointer, $phpcsFile->eolChar);
+		FixerHelper::add($phpcsFile, $arrayOpenerPointer, $phpcsFile->eolChar);
 	}
 
 }

@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Functions;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use const T_COMMA;
@@ -69,7 +70,7 @@ class RequireTrailingCommaInDeclarationSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->addContent($pointerBeforeParenthesisCloser, ',');
+		FixerHelper::add($phpcsFile, $pointerBeforeParenthesisCloser, ',');
 		$phpcsFile->fixer->endChangeset();
 	}
 

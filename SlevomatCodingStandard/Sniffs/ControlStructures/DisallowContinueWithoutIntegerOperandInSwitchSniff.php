@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_reverse;
 use function current;
@@ -56,7 +57,7 @@ class DisallowContinueWithoutIntegerOperandInSwitchSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($continuePointer, 'break');
+		FixerHelper::replace($phpcsFile, $continuePointer, 'break');
 		$phpcsFile->fixer->endChangeset();
 	}
 

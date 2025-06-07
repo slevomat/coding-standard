@@ -113,14 +113,14 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 
 		$firstNonWhitespaceOnLine = TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $stringPointer);
 		$indentation = IndentationHelper::getIndentation($phpcsFile, $firstNonWhitespaceOnLine);
-		$oneIndentation = IndentationHelper::getOneIndentationLevel($indentation);
+		$oneIndentation = IndentationHelper::getOneIndentationLevel($phpcsFile);
 
 		if (!$this->shouldReportError(
 			$lineLength,
 			$lineStart,
 			$lineEnd,
 			count($parametersPointers),
-			strlen(IndentationHelper::convertTabsToSpaces($phpcsFile, $oneIndentation)),
+			strlen($oneIndentation),
 		)) {
 			return;
 		}
@@ -143,23 +143,23 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 			return;
 		}
 
-		$parametersIndentation = IndentationHelper::addIndentation($indentation);
+		$parametersIndentation = IndentationHelper::addIndentation($phpcsFile, $indentation);
 
 		$phpcsFile->fixer->beginChangeset();
 
 		for ($i = $parenthesisOpenerPointer + 1; $i < $parenthesisCloserPointer; $i++) {
 			if (in_array($i, $parametersPointers, true)) {
 				FixerHelper::removeWhitespaceBefore($phpcsFile, $i);
-				$phpcsFile->fixer->addContentBefore($i, $phpcsFile->eolChar . $parametersIndentation);
+				FixerHelper::addBefore($phpcsFile, $i, $phpcsFile->eolChar . $parametersIndentation);
 			} elseif ($tokens[$i]['content'] === $phpcsFile->eolChar) {
-				$phpcsFile->fixer->addContent($i, $oneIndentation);
+				FixerHelper::add($phpcsFile, $i, $oneIndentation);
 			} else {
 				// Create conflict so inner calls are fixed in next loop
-				$phpcsFile->fixer->replaceToken($i, $tokens[$i]['content']);
+				FixerHelper::replace($phpcsFile, $i, $tokens[$i]['content']);
 			}
 		}
 
-		$phpcsFile->fixer->addContentBefore($parenthesisCloserPointer, $phpcsFile->eolChar . $indentation);
+		FixerHelper::addBefore($phpcsFile, $parenthesisCloserPointer, $phpcsFile->eolChar . $indentation);
 
 		$phpcsFile->fixer->endChangeset();
 	}

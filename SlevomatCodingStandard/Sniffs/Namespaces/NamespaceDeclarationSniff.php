@@ -68,9 +68,7 @@ class NamespaceDeclarationSniff implements Sniff
 			return;
 		}
 
-		$errorMessage = $tokens[$whitespacePointer]['content'][0] === "\t"
-			? 'Expected one space after namespace statement, found tab.'
-			: sprintf('Expected one space after namespace statement, found %d.', strlen($tokens[$whitespacePointer]['content']));
+		$errorMessage = sprintf('Expected one space after namespace statement, found %d.', strlen($tokens[$whitespacePointer]['content']));
 
 		$fix = $phpcsFile->addFixableError($errorMessage, $namespacePointer, self::CODE_INVALID_WHITESPACE_AFTER_NAMESPACE);
 
@@ -79,7 +77,7 @@ class NamespaceDeclarationSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($whitespacePointer, ' ');
+		FixerHelper::replace($phpcsFile, $whitespacePointer, ' ');
 		$phpcsFile->fixer->endChangeset();
 	}
 
@@ -139,8 +137,8 @@ class NamespaceDeclarationSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($tokens[$namespacePointer]['scope_opener'], ';');
-		$phpcsFile->fixer->replaceToken($tokens[$namespacePointer]['scope_closer'], '');
+		FixerHelper::replace($phpcsFile, $tokens[$namespacePointer]['scope_opener'], ';');
+		FixerHelper::replace($phpcsFile, $tokens[$namespacePointer]['scope_closer'], '');
 		$phpcsFile->fixer->endChangeset();
 	}
 

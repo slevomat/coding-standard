@@ -6,7 +6,6 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use function array_key_exists;
 use function in_array;
 use const T_CLOSE_PARENTHESIS;
 use const T_COMMA;
@@ -15,6 +14,7 @@ use const T_OPEN_PARENTHESIS;
 use const T_PARENT;
 use const T_SELF;
 use const T_STATIC;
+use const T_STRING;
 use const T_UNSET;
 use const T_VARIABLE;
 
@@ -43,16 +43,17 @@ class DisallowTrailingCommaInCallSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		if (array_key_exists('parenthesis_owner', $tokens[$parenthesisOpenerPointer])) {
-			return;
-		}
-
 		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
 		if (!in_array(
 			$tokens[$pointerBeforeParenthesisOpener]['code'],
-			[...TokenHelper::ONLY_NAME_TOKEN_CODES, T_VARIABLE, T_ISSET, T_UNSET, T_CLOSE_PARENTHESIS, T_SELF, T_STATIC, T_PARENT],
+			[...TokenHelper::ONLY_NAME_TOKEN_CODES, T_STRING, T_VARIABLE, T_ISSET, T_UNSET, T_CLOSE_PARENTHESIS, T_SELF, T_STATIC, T_PARENT],
 			true,
 		)) {
+			return;
+		}
+
+		$functionPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointerBeforeParenthesisOpener - 1);
+		if (in_array($tokens[$functionPointer]['code'], TokenHelper::FUNCTION_TOKEN_CODES, true)) {
 			return;
 		}
 
@@ -78,7 +79,7 @@ class DisallowTrailingCommaInCallSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($pointerBeforeParenthesisCloser, '');
+		FixerHelper::replace($phpcsFile, $pointerBeforeParenthesisCloser, '');
 
 		if ($tokens[$pointerBeforeParenthesisCloser]['line'] === $tokens[$parenthesisCloserPointer]['line']) {
 			FixerHelper::removeBetween($phpcsFile, $pointerBeforeParenthesisCloser, $parenthesisCloserPointer);

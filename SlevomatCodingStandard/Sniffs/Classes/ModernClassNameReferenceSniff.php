@@ -71,7 +71,7 @@ class ModernClassNameReferenceSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($pointer, 'self::class');
+		FixerHelper::replace($phpcsFile, $pointer, 'self::class');
 		$phpcsFile->fixer->endChangeset();
 	}
 
@@ -166,7 +166,7 @@ class ModernClassNameReferenceSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 		if ($tokens[$functionPointer - 1]['code'] === T_NS_SEPARATOR) {
-			$phpcsFile->fixer->replaceToken($functionPointer - 1, '');
+			FixerHelper::replace($phpcsFile, $functionPointer - 1, '');
 		}
 
 		FixerHelper::change($phpcsFile, $functionPointer, $tokens[$openParenthesisPointer]['parenthesis_closer'], $fixedContent);

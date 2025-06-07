@@ -108,8 +108,8 @@ call(
 );
 
 call(
-    OPTION_TASK_BUILD_YVES,
-    OPTION_TASK_BUILD_YVES_SHORT,
-    InputOption::VALUE_NONE,
-    'execute \'npm run\' to build the project resources of yves',
+	OPTION_TASK_BUILD_YVES,
+	OPTION_TASK_BUILD_YVES_SHORT,
+	InputOption::VALUE_NONE,
+	'execute \'npm run\' to build the project resources of yves',
 );

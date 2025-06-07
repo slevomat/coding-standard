@@ -178,7 +178,7 @@ class ReturnTypeHintSniff implements Sniff
 
 				if ($fix) {
 					$phpcsFile->fixer->beginChangeset();
-					$phpcsFile->fixer->replaceToken($returnTypeHint->getStartPointer(), 'never');
+					FixerHelper::replace($phpcsFile, $returnTypeHint->getStartPointer(), 'never');
 					$phpcsFile->fixer->endChangeset();
 				}
 			}
@@ -255,7 +255,8 @@ class ReturnTypeHintSniff implements Sniff
 						: 'void';
 
 					$phpcsFile->fixer->beginChangeset();
-					$phpcsFile->fixer->addContent(
+					FixerHelper::add(
+						$phpcsFile,
 						$phpcsFile->getTokens()[$functionPointer]['parenthesis_closer'],
 						sprintf(': %s', $fixedReturnType),
 					);
@@ -448,7 +449,8 @@ class ReturnTypeHintSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->addContent(
+		FixerHelper::add(
+			$phpcsFile,
 			$phpcsFile->getTokens()[$functionPointer]['parenthesis_closer'],
 			sprintf(': %s', $returnTypeHint),
 		);
@@ -630,7 +632,7 @@ class ReturnTypeHintSniff implements Sniff
 		$position = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$closurePointer]['scope_opener'] - 1, $closurePointer);
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->addContent($position, ': void');
+		FixerHelper::add($phpcsFile, $position, ': void');
 		$phpcsFile->fixer->endChangeset();
 	}
 

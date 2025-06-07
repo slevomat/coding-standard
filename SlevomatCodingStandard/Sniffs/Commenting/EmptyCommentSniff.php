@@ -80,7 +80,7 @@ class EmptyCommentSniff implements Sniff
 
 		FixerHelper::removeBetween($phpcsFile, $pointerBeforeWhitespaceBeforeComment, $commentStartPointer);
 
-		$phpcsFile->fixer->addContent($pointerBeforeWhitespaceBeforeComment, $fixedWhitespaceBeforeComment);
+		FixerHelper::add($phpcsFile, $pointerBeforeWhitespaceBeforeComment, $fixedWhitespaceBeforeComment);
 
 		FixerHelper::removeBetweenIncluding($phpcsFile, $commentStartPointer, $commentEndPointer);
 
@@ -99,7 +99,7 @@ class EmptyCommentSniff implements Sniff
 				'',
 				$tokens[$whitespacePointerAfterComment]['content'],
 			);
-			$phpcsFile->fixer->replaceToken($whitespacePointerAfterComment, $fixedWhitespaceAfterComment);
+			FixerHelper::replace($phpcsFile, $whitespacePointerAfterComment, $fixedWhitespaceAfterComment);
 		}
 
 		$phpcsFile->fixer->endChangeset();

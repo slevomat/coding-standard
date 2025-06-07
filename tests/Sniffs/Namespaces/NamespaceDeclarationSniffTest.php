@@ -37,7 +37,7 @@ class NamespaceDeclarationSniffTest extends TestCase
 			$report,
 			5,
 			NamespaceDeclarationSniff::CODE_INVALID_WHITESPACE_AFTER_NAMESPACE,
-			'Expected one space after namespace statement, found tab.',
+			'Expected one space after namespace statement, found 3.',
 		);
 		self::assertSniffError(
 			$report,

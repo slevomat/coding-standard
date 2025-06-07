@@ -68,7 +68,7 @@ A::TYPE_A === $param or $param === A::TYPE_B;
 $param === A::TYPE_A xor A::TYPE_B === $param;
 
 if ($row->{self::NAME} === null) {
-    return 0;
+	return 0;
 }
 
 function ($condition, $actual) {

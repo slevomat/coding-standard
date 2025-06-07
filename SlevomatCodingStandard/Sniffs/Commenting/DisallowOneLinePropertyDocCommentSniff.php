@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Commenting;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function rtrim;
@@ -72,17 +73,18 @@ class DisallowOneLinePropertyDocCommentSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		$phpcsFile->fixer->addNewline($docCommentStartPointer);
-		$phpcsFile->fixer->addContent($docCommentStartPointer, $indent);
-		$phpcsFile->fixer->addContent($docCommentStartPointer, '*');
+		FixerHelper::add($phpcsFile, $docCommentStartPointer, $indent);
+		FixerHelper::add($phpcsFile, $docCommentStartPointer, '*');
 
 		if ($docCommentEndPointer - 1 !== $docCommentStartPointer) {
-			$phpcsFile->fixer->replaceToken(
+			FixerHelper::replace(
+				$phpcsFile,
 				$docCommentEndPointer - 1,
 				rtrim($phpcsFile->fixer->getTokenContent($docCommentEndPointer - 1), ' '),
 			);
 		}
 
-		$phpcsFile->fixer->addContentBefore($docCommentEndPointer, $indent);
+		FixerHelper::addBefore($phpcsFile, $docCommentEndPointer, $indent);
 		$phpcsFile->fixer->addNewlineBefore($docCommentEndPointer);
 
 		$phpcsFile->fixer->endChangeset();

@@ -159,12 +159,12 @@ function logicalOrCondition($e, $number) {
 	}
 }
 
-function indentedBySpaces() {
-    if (true) {
-        doSomething();
-    } else {
-        return;
-    }
+function returnInElse() {
+	if (true) {
+		doSomething();
+	} else {
+		return;
+	}
 }
 
 function ifHasExitCodeToo() {

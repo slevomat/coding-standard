@@ -3,13 +3,13 @@
 [ /* inline comment */ // opening line comment
 	'a' => 'a val',  /* comment */
 	'anonymous' => new class {
-	    public function log($msg)
-	    {
-	        return [
-	        	'y' => 'y val',
-	        	'z' => 'z val',
-	        ];
-	    }
+		public function log($msg)
+		{
+			return [
+				'y' => 'y val',
+				'z' => 'z val',
+			];
+		}
 	},
 	'arrow' => fn($x) => array(
 		'x' => 'x val',

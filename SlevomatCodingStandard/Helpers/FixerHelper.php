@@ -12,10 +12,25 @@ use function preg_match;
 class FixerHelper
 {
 
+	public static function add(File $phpcsFile, int $pointer, string $content): void
+	{
+		$phpcsFile->fixer->addContent($pointer, IndentationHelper::convertSpacesToTabs($phpcsFile, $content));
+	}
+
+	public static function addBefore(File $phpcsFile, int $pointer, string $content): void
+	{
+		$phpcsFile->fixer->addContentBefore($pointer, IndentationHelper::convertSpacesToTabs($phpcsFile, $content));
+	}
+
+	public static function replace(File $phpcsFile, int $pointer, string $content): void
+	{
+		$phpcsFile->fixer->replaceToken($pointer, IndentationHelper::convertSpacesToTabs($phpcsFile, $content));
+	}
+
 	public static function change(File $phpcsFile, int $startPointer, int $endPointer, string $content): void
 	{
 		self::removeBetweenIncluding($phpcsFile, $startPointer, $endPointer);
-		$phpcsFile->fixer->replaceToken($startPointer, $content);
+		self::replace($phpcsFile, $startPointer, $content);
 	}
 
 	public static function removeBetween(File $phpcsFile, int $startPointer, int $endPointer): void
@@ -48,7 +63,7 @@ class FixerHelper
 				break;
 			}
 
-			$phpcsFile->fixer->replaceToken($i, '');
+			self::replace($phpcsFile, $i, '');
 		}
 	}
 

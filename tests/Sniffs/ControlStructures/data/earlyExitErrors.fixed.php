@@ -171,12 +171,12 @@ function logicalOrCondition($e, $number) {
 	doSomething();
 }
 
-function indentedBySpaces() {
-    if (false) {
-        return;
-    }
+function returnInElse() {
+	if (false) {
+		return;
+	}
 
-    doSomething();
+	doSomething();
 }
 
 function ifHasExitCodeToo() {

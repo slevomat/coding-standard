@@ -217,7 +217,7 @@ class RequireExplicitAssertionSniff implements Sniff
 				}
 
 				$pointerToAddAssertion = $tokens[$codePointer]['scope_opener'];
-				$indentation = IndentationHelper::addIndentation(IndentationHelper::getIndentation($phpcsFile, $codePointer));
+				$indentation = IndentationHelper::addIndentation($phpcsFile, IndentationHelper::getIndentation($phpcsFile, $codePointer));
 			}
 
 			$fix = $phpcsFile->addFixableError(
@@ -266,9 +266,9 @@ class RequireExplicitAssertionSniff implements Sniff
 				$pointerToAddAssertion < $docCommentClosePointer
 				&& array_key_exists($pointerAfterDocComment + 1, $tokens)
 			) {
-				$phpcsFile->fixer->addContentBefore($pointerAfterDocComment + 1, $indentation . $assertion . $phpcsFile->eolChar);
+				FixerHelper::addBefore($phpcsFile, $pointerAfterDocComment + 1, $indentation . $assertion . $phpcsFile->eolChar);
 			} else {
-				$phpcsFile->fixer->addContent($pointerToAddAssertion, $phpcsFile->eolChar . $indentation . $assertion);
+				FixerHelper::add($phpcsFile, $pointerToAddAssertion, $phpcsFile->eolChar . $indentation . $assertion);
 			}
 
 			$phpcsFile->fixer->endChangeset();

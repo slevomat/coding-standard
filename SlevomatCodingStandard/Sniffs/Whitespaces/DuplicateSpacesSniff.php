@@ -5,16 +5,13 @@ namespace SlevomatCodingStandard\Sniffs\Whitespaces;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
-use SlevomatCodingStandard\Helpers\IndentationHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\ParameterHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
 use function preg_match_all;
 use function preg_replace;
 use function sprintf;
-use function str_repeat;
-use function str_replace;
-use function strlen;
 use const PREG_OFFSET_CAPTURE;
 use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOC_COMMENT_OPEN_TAG;
@@ -131,19 +128,9 @@ class DuplicateSpacesSniff implements Sniff
 			return;
 		}
 
-		$tabWidth = $phpcsFile->config->tabWidth;
-
 		$fix = false;
 		foreach ($matches[0] as [$match, $offset]) {
-			$firstPointerOnLine = TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $whitespacePointer - 1);
-			$indentation = IndentationHelper::getIndentation($phpcsFile, $firstPointerOnLine);
-			$indentationWithoutTabs = str_replace(
-				IndentationHelper::TAB_INDENT,
-				$tabWidth === 0 ? IndentationHelper::SPACES_INDENT : str_repeat(' ', $tabWidth),
-				$indentation,
-			);
-
-			$position = $tokens[$whitespacePointer]['column'] + $offset - strlen($indentation) + strlen($indentationWithoutTabs);
+			$position = $tokens[$whitespacePointer]['column'] + $offset;
 
 			$fixable = $phpcsFile->addFixableError(
 				sprintf('Duplicate spaces at position %d.', $position),
@@ -162,7 +149,7 @@ class DuplicateSpacesSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->replaceToken($whitespacePointer, preg_replace('~ {2,}~', ' ', $content));
+		FixerHelper::replace($phpcsFile, $whitespacePointer, preg_replace('~ {2,}~', ' ', $content));
 
 		$phpcsFile->fixer->endChangeset();
 	}

@@ -143,10 +143,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 		$codeSniffer = new Runner();
 		$codeSniffer->config = new Config([
 			'-s',
-			'--tab-width=4',
 		]);
 		$codeSniffer->init();
 
+		$codeSniffer->config->tabWidth = 4;
 		$phpcsFile = new LocalFile($filename, $codeSniffer->ruleset, $codeSniffer->config);
 
 		$phpcsFile->process();

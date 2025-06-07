@@ -119,17 +119,21 @@ abstract class AbstractRequireOneLineDocComment implements Sniff
 		for ($i = $docCommentStartPointer + 1; $i < $docCommentEndPointer; $i++) {
 			if ($i >= $contentStartPointer && $i <= $contentEndPointer) {
 				if ($i === $contentEndPointer) {
-					$phpcsFile->fixer->replaceToken($i, rtrim($phpcsFile->fixer->getTokenContent($i), ' '));
+					FixerHelper::replace(
+						$phpcsFile,
+						$i,
+						rtrim($phpcsFile->fixer->getTokenContent($i), ' '),
+					);
 				}
 
 				continue;
 			}
 
-			$phpcsFile->fixer->replaceToken($i, '');
+			FixerHelper::replace($phpcsFile, $i, '');
 		}
 
-		$phpcsFile->fixer->addContentBefore($contentStartPointer, ' ');
-		$phpcsFile->fixer->addContentBefore($docCommentEndPointer, ' ');
+		FixerHelper::addBefore($phpcsFile, $contentStartPointer, ' ');
+		FixerHelper::addBefore($phpcsFile, $docCommentEndPointer, ' ');
 
 		$phpcsFile->fixer->endChangeset();
 	}

@@ -276,7 +276,7 @@ class TokenHelperTest extends TestCase
 		$forTokenPointer = TokenHelper::findNext($phpcsFile, T_FOR, 0);
 		$nextLineTokenPointer = TokenHelper::findFirstTokenOnNextLine($phpcsFile, $forTokenPointer);
 		self::assertTokenPointer(T_WHITESPACE, 4, $phpcsFile, $nextLineTokenPointer);
-		self::assertSame("\t", $tokens[$nextLineTokenPointer]['content']);
+		self::assertSame('    ', $tokens[$nextLineTokenPointer]['content']);
 		$fooTokenPointer = TokenHelper::findNextAnyToken($phpcsFile, $nextLineTokenPointer + 1);
 		self::assertTokenPointer(T_STRING, 4, $phpcsFile, $fooTokenPointer);
 		self::assertSame('foo', $tokens[$fooTokenPointer]['content']);

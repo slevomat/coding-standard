@@ -73,7 +73,7 @@ class DisallowTrailingCommaInClosureUseSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($pointerBeforeUseParenthesisCloser, '');
+		FixerHelper::replace($phpcsFile, $pointerBeforeUseParenthesisCloser, '');
 
 		if ($tokens[$pointerBeforeUseParenthesisCloser]['line'] === $tokens[$useParenthesisCloserPointer]['line']) {
 			FixerHelper::removeBetween($phpcsFile, $pointerBeforeUseParenthesisCloser, $useParenthesisCloserPointer);

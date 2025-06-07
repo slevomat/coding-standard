@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Functions;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function sprintf;
 use const T_COLON;
@@ -46,7 +47,7 @@ class NamedArgumentSpacingSniff implements Sniff
 				self::CODE_WHITESPACE_BEFORE_COLON,
 			);
 			if ($fix) {
-				$phpcsFile->fixer->replaceToken($colonPointer - 1, '');
+				FixerHelper::replace($phpcsFile, $colonPointer - 1, '');
 			}
 		}
 
@@ -70,9 +71,9 @@ class NamedArgumentSpacingSniff implements Sniff
 		}
 
 		if ($tokens[$whitespacePointer]['code'] === T_WHITESPACE) {
-			$phpcsFile->fixer->replaceToken($whitespacePointer, ' ');
+			FixerHelper::replace($phpcsFile, $whitespacePointer, ' ');
 		} else {
-			$phpcsFile->fixer->addContent($colonPointer, ' ');
+			FixerHelper::add($phpcsFile, $colonPointer, ' ');
 		}
 	}
 

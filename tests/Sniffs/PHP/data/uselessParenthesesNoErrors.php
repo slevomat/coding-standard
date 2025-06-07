@@ -164,8 +164,8 @@ $whatever = (null !== $a = $b->call());
 $key = ((array) $table->getPrimaryKey())[0];
 
 match ($code) {
-    1 => 'one',
-    2 => 'owo',
+	1 => 'one',
+	2 => 'owo',
 };
 
 $char = (0xF0 & ord('1')) >> 4;

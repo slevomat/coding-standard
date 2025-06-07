@@ -112,7 +112,7 @@ class TypeCastSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($pointer, '(' . self::INVALID_CASTS[$castNameLower] . ')');
+		FixerHelper::replace($phpcsFile, $pointer, '(' . self::INVALID_CASTS[$castNameLower] . ')');
 		$phpcsFile->fixer->endChangeset();
 	}
 

@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\ClassHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_keys;
 use function count;
@@ -75,7 +76,7 @@ class ClassConstantVisibilitySniff implements Sniff
 			$fix = $phpcsFile->addFixableError($message, $constantPointer, self::CODE_MISSING_CONSTANT_VISIBILITY);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContentBefore($constantPointer, 'public ');
+				FixerHelper::addBefore($phpcsFile, $constantPointer, 'public ');
 				$phpcsFile->fixer->endChangeset();
 			}
 		} else {

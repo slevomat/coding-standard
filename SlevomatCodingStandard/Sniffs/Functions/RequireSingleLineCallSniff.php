@@ -147,7 +147,7 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->addContent($parenthesisOpenerPointer, $call);
+		FixerHelper::add($phpcsFile, $parenthesisOpenerPointer, $call);
 
 		FixerHelper::removeBetween($phpcsFile, $parenthesisOpenerPointer, $parenthesisCloserPointer);
 

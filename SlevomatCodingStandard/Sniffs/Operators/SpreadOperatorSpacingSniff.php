@@ -61,7 +61,11 @@ class SpreadOperatorSpacingSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->addContent($spreadOperatorPointer, str_repeat(' ', $this->spacesCountAfterOperator));
+		FixerHelper::add(
+			$phpcsFile,
+			$spreadOperatorPointer,
+			str_repeat(' ', $this->spacesCountAfterOperator),
+		);
 		FixerHelper::removeBetween($phpcsFile, $spreadOperatorPointer, $pointerAfterWhitespace);
 
 		$phpcsFile->fixer->endChangeset();

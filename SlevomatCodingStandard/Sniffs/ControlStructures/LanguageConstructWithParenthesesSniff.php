@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\ControlStructures;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
 use function sprintf;
@@ -91,11 +92,11 @@ class LanguageConstructWithParenthesesSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($openParenthesisPointer, '');
+		FixerHelper::replace($phpcsFile, $openParenthesisPointer, '');
 		if ($tokens[$openParenthesisPointer - 1]['code'] !== T_WHITESPACE && $containsContentBetweenParentheses) {
-			$phpcsFile->fixer->addContent($openParenthesisPointer, ' ');
+			FixerHelper::add($phpcsFile, $openParenthesisPointer, ' ');
 		}
-		$phpcsFile->fixer->replaceToken($closeParenthesisPointer, '');
+		FixerHelper::replace($phpcsFile, $closeParenthesisPointer, '');
 		$phpcsFile->fixer->endChangeset();
 	}
 

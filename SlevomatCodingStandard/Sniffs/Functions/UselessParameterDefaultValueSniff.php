@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Functions;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function count;
@@ -76,7 +77,7 @@ class UselessParameterDefaultValueSniff implements Sniff
 
 				$phpcsFile->fixer->beginChangeset();
 				for ($k = $parameterPointer + 1; $k < $commaPointer; $k++) {
-					$phpcsFile->fixer->replaceToken($k, '');
+					FixerHelper::replace($phpcsFile, $k, '');
 				}
 				$phpcsFile->fixer->endChangeset();
 

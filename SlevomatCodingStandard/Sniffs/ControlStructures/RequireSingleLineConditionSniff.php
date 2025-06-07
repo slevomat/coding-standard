@@ -80,7 +80,7 @@ class RequireSingleLineConditionSniff extends AbstractLineCondition
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->addContent($parenthesisOpenerPointer, $condition);
+		FixerHelper::add($phpcsFile, $parenthesisOpenerPointer, $condition);
 
 		FixerHelper::removeBetween($phpcsFile, $parenthesisOpenerPointer, $parenthesisCloserPointer);
 

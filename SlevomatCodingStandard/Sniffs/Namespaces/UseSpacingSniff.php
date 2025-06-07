@@ -117,7 +117,7 @@ class UseSpacingSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		if ($tokens[$pointerBeforeFirstUse]['code'] === T_OPEN_TAG) {
-			$phpcsFile->fixer->replaceToken($pointerBeforeFirstUse, '<?php');
+			FixerHelper::replace($phpcsFile, $pointerBeforeFirstUse, '<?php');
 		}
 
 		FixerHelper::removeBetween($phpcsFile, $pointerBeforeFirstUse, $useStartPointer);

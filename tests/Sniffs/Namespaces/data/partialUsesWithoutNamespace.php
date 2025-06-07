@@ -6,10 +6,10 @@ use Psr\Log\LoggerInterface;
 
 class MyTestCase extends TestCase
 {
-    private LoggerInterface&m\MockInterface $loggerMock;
+	private LoggerInterface&m\MockInterface $loggerMock;
 
-    protected function setUp(): void
-    {
-        $this->loggerMock = m::mock(LoggerInterface::class);
-    }
+	protected function setUp(): void
+	{
+		$this->loggerMock = m::mock(LoggerInterface::class);
+	}
 }

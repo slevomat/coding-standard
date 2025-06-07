@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Numbers;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use function str_replace;
 use function strpos;
 use const T_DNUMBER;
@@ -48,7 +49,11 @@ class DisallowNumericLiteralSeparatorSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($numberPointer, str_replace('_', '', $tokens[$numberPointer]['content']));
+		FixerHelper::replace(
+			$phpcsFile,
+			$numberPointer,
+			str_replace('_', '', $tokens[$numberPointer]['content']),
+		);
 		$phpcsFile->fixer->endChangeset();
 	}
 

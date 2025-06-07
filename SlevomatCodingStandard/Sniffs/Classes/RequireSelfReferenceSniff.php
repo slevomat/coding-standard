@@ -103,10 +103,14 @@ class RequireSelfReferenceSniff implements Sniff
 					'self',
 					$attributeContent,
 				);
-				$phpcsFile->fixer->replaceToken($referencedName->getStartPointer(), $fixedAttributeContent);
+				FixerHelper::replace(
+					$phpcsFile,
+					$referencedName->getStartPointer(),
+					$fixedAttributeContent,
+				);
 
 			} else {
-				$phpcsFile->fixer->replaceToken($referencedName->getStartPointer(), 'self');
+				FixerHelper::replace($phpcsFile, $referencedName->getStartPointer(), 'self');
 			}
 
 			FixerHelper::removeBetweenIncluding($phpcsFile, $referencedName->getStartPointer() + 1, $referencedName->getEndPointer());

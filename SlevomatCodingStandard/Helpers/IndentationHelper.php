@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use function floor;
 use function in_array;
 use function ltrim;
 use function preg_replace_callback;
@@ -23,9 +24,6 @@ class IndentationHelper
 
 	public const DEFAULT_INDENTATION_WIDTH = 4;
 
-	public const TAB_INDENT = "\t";
-	public const SPACES_INDENT = '    ';
-
 	public static function getIndentation(File $phpcsFile, int $pointer): string
 	{
 		$firstPointerOnLine = TokenHelper::findFirstTokenOnLine($phpcsFile, $pointer);
@@ -33,24 +31,20 @@ class IndentationHelper
 		return TokenHelper::getContent($phpcsFile, $firstPointerOnLine, $pointer - 1);
 	}
 
-	public static function addIndentation(string $indentation, int $level = 1): string
+	public static function addIndentation(File $phpcsFile, string $indentation, int $level = 1): string
 	{
-		$whitespace = self::getOneIndentationLevel($indentation);
-
-		return $indentation . str_repeat($whitespace, $level);
+		return $indentation . str_repeat(self::getOneIndentationLevel($phpcsFile), $level);
 	}
 
-	public static function getOneIndentationLevel(string $indentation): string
+	public static function getOneIndentationLevel(File $phpcsFile): string
 	{
-		return $indentation === ''
-			? self::TAB_INDENT
-			: ($indentation[0] === self::TAB_INDENT ? self::TAB_INDENT : self::SPACES_INDENT);
+		return str_repeat(' ', $phpcsFile->config->tabWidth !== 0 ? $phpcsFile->config->tabWidth : self::DEFAULT_INDENTATION_WIDTH);
 	}
 
 	/**
 	 * @param list<int> $codePointers
 	 */
-	public static function fixIndentation(File $phpcsFile, array $codePointers, string $defaultIndentation): string
+	public static function removeIndentation(File $phpcsFile, array $codePointers, string $defaultIndentation): string
 	{
 		$tokens = $phpcsFile->getTokens();
 
@@ -58,6 +52,9 @@ class IndentationHelper
 
 		$code = '';
 		$inHeredoc = false;
+
+		$indentation = self::getOneIndentationLevel($phpcsFile);
+		$indentationLength = strlen($indentation);
 
 		foreach ($codePointers as $no => $codePointer) {
 			$content = $tokens[$codePointer]['content'];
@@ -71,10 +68,8 @@ class IndentationHelper
 			) {
 				if ($content === $phpcsFile->eolChar) {
 					// Nothing
-				} elseif ($content[0] === self::TAB_INDENT) {
-					$content = substr($content, 1);
-				} elseif (substr($content, 0, self::DEFAULT_INDENTATION_WIDTH) === self::SPACES_INDENT) {
-					$content = substr($content, self::DEFAULT_INDENTATION_WIDTH);
+				} elseif (substr($content, 0, $indentationLength) === $indentation) {
+					$content = substr($content, $indentationLength);
 				} else {
 					$content = $defaultIndentation . ltrim($content);
 				}
@@ -92,14 +87,19 @@ class IndentationHelper
 		return rtrim($code);
 	}
 
-	public static function convertTabsToSpaces(File $phpcsFile, string $code): string
+	public static function convertSpacesToTabs(File $phpcsFile, string $code): string
 	{
-		return preg_replace_callback('~^(\t+)~', static function (array $matches) use ($phpcsFile): string {
-			$indentation = str_repeat(
-				' ',
-				$phpcsFile->config->tabWidth !== 0 ? $phpcsFile->config->tabWidth : self::DEFAULT_INDENTATION_WIDTH,
-			);
-			return str_repeat($indentation, strlen($matches[1]));
+		// @codeCoverageIgnoreStart
+		if ($phpcsFile->config->tabWidth === 0) {
+			return $code;
+		}
+		// @codeCoverageIgnoreEnd
+
+		return preg_replace_callback('~^([ ]+)~m', static function (array $matches) use ($phpcsFile): string {
+			$tabsCount = (int) floor(strlen($matches[1]) / $phpcsFile->config->tabWidth);
+			$spacesCountToRemove = $tabsCount * $phpcsFile->config->tabWidth;
+
+			return str_repeat("\t", $tabsCount) . substr($matches[1], $spacesCountToRemove);
 		}, $code);
 	}
 

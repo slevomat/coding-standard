@@ -55,16 +55,16 @@ class UselessIfConditionWithReturnSniff implements Sniff
 		}
 
 		$newCondition = static fn (): string => strtolower($tokens[$ifBooleanPointer]['content']) === 'true'
-				? TokenHelper::getContent(
-					$phpcsFile,
-					$tokens[$ifPointer]['parenthesis_opener'] + 1,
-					$tokens[$ifPointer]['parenthesis_closer'] - 1,
-				)
-				: ConditionHelper::getNegativeCondition(
-					$phpcsFile,
-					$tokens[$ifPointer]['parenthesis_opener'] + 1,
-					$tokens[$ifPointer]['parenthesis_closer'] - 1,
-				);
+			? TokenHelper::getContent(
+				$phpcsFile,
+				$tokens[$ifPointer]['parenthesis_opener'] + 1,
+				$tokens[$ifPointer]['parenthesis_closer'] - 1,
+			)
+			: ConditionHelper::getNegativeCondition(
+				$phpcsFile,
+				$tokens[$ifPointer]['parenthesis_opener'] + 1,
+				$tokens[$ifPointer]['parenthesis_closer'] - 1,
+			);
 
 		$elsePointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$ifPointer]['scope_closer'] + 1);
 

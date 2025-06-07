@@ -66,7 +66,7 @@ class AlphabeticallySortedByKeysSniff implements Sniff
 		$pointerStart = $keyValues[0]->getPointerStart();
 		$pointerEnd = $keyValues[count($keyValues) - 1]->getPointerEnd();
 
-		// determine indent to use
+		// Determine indent to use
 		$indent = ArrayHelper::getIndentation($keyValues);
 
 		usort($keyValues, static fn ($a1, $a2) => strnatcasecmp((string) $a1->getKey(), (string) $a2->getKey()));

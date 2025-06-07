@@ -196,7 +196,7 @@ class SomeController
 
 <<<XML
 	<string>Hello world and {$this->wrap(ClassInHeredoc::EXAMPLE)}</string>
-    {$_(new \Some\OtherClassInHeredoc())}
+	{$_(new \Some\OtherClassInHeredoc())}
 XML;
 
 "foo {$db->quote(ClassInDoubleQuote::SOME_CONSTANT)}";

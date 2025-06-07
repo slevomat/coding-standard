@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function strtolower;
 use const T_DOUBLE_COLON;
@@ -64,7 +65,7 @@ class DisallowLateStaticBindingForConstantsSniff implements Sniff
 		}
 
 		$phpcsFile->fixer->beginChangeset();
-		$phpcsFile->fixer->replaceToken($staticPointer, 'self');
+		FixerHelper::replace($phpcsFile, $staticPointer, 'self');
 		$phpcsFile->fixer->endChangeset();
 	}
 

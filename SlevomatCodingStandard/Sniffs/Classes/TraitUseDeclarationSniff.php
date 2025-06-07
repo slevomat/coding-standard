@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function sprintf;
 use const T_ANON_CLASS;
 use const T_CLASS;
 use const T_COMMA;
@@ -92,7 +93,12 @@ class TraitUseDeclarationSniff implements Sniff
 		foreach ($otherCommaPointers as $otherCommaPointer) {
 			$pointerAfterComma = TokenHelper::findNextEffective($phpcsFile, $otherCommaPointer + 1);
 
-			FixerHelper::change($phpcsFile, $otherCommaPointer, $pointerAfterComma - 1, ';' . $phpcsFile->eolChar . $indentation . 'use ');
+			FixerHelper::change(
+				$phpcsFile,
+				$otherCommaPointer,
+				$pointerAfterComma - 1,
+				sprintf(';%s%suse ', $phpcsFile->eolChar, $indentation),
+			);
 		}
 
 		$phpcsFile->fixer->endChangeset();

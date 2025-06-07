@@ -97,14 +97,14 @@ class DisallowMultiConstantDefinitionSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->addContent($constantPointer, ' ');
+		FixerHelper::add($phpcsFile, $constantPointer, ' ');
 
 		FixerHelper::removeBetween($phpcsFile, $constantPointer, $pointerAfterConst);
 
 		foreach ($commaPointers as $commaPointer) {
 			FixerHelper::removeBetween($phpcsFile, $data[$commaPointer]['pointerBeforeComma'], $commaPointer);
-
-			$phpcsFile->fixer->replaceToken(
+			FixerHelper::replace(
+				$phpcsFile,
 				$commaPointer,
 				sprintf(
 					';%s%s%s%sconst ',

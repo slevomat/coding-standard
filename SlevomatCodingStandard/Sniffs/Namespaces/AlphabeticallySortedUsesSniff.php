@@ -164,7 +164,8 @@ class AlphabeticallySortedUsesSniff implements Sniff
 
 		FixerHelper::removeBetweenIncluding($phpcsFile, $firstPointer, $lastSemicolonPointer);
 
-		$phpcsFile->fixer->addContent(
+		FixerHelper::add(
+			$phpcsFile,
 			$firstPointer,
 			implode($phpcsFile->eolChar, array_map(static function (UseStatement $useStatement) use ($phpcsFile, $commentsBefore): string {
 				$unqualifiedName = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($useStatement->getFullyQualifiedTypeName());

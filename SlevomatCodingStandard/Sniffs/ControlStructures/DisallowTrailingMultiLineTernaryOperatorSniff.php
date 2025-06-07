@@ -62,6 +62,7 @@ class DisallowTrailingMultiLineTernaryOperatorSniff implements Sniff
 		$pointerAfterInlineElse = TokenHelper::findNextExcluding($phpcsFile, [T_WHITESPACE], $inlineElsePointer + 1);
 
 		$indentation = IndentationHelper::addIndentation(
+			$phpcsFile,
 			IndentationHelper::getIndentation(
 				$phpcsFile,
 				TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $inlineThenPointer),
@@ -73,14 +74,14 @@ class DisallowTrailingMultiLineTernaryOperatorSniff implements Sniff
 		FixerHelper::removeBetween($phpcsFile, $pointerBeforeInlineThen, $inlineThenPointer);
 		FixerHelper::removeBetween($phpcsFile, $inlineThenPointer, $pointerAfterInlineThen);
 
-		$phpcsFile->fixer->addContentBefore($inlineThenPointer, $phpcsFile->eolChar . $indentation);
-		$phpcsFile->fixer->addContentBefore($pointerAfterInlineThen, ' ');
+		FixerHelper::addBefore($phpcsFile, $inlineThenPointer, $phpcsFile->eolChar . $indentation);
+		FixerHelper::addBefore($phpcsFile, $pointerAfterInlineThen, ' ');
 
 		FixerHelper::removeBetween($phpcsFile, $pointerBeforeInlineElse, $inlineElsePointer);
 		FixerHelper::removeBetween($phpcsFile, $inlineElsePointer, $pointerAfterInlineElse);
 
-		$phpcsFile->fixer->addContentBefore($inlineElsePointer, $phpcsFile->eolChar . $indentation);
-		$phpcsFile->fixer->addContentBefore($pointerAfterInlineElse, ' ');
+		FixerHelper::addBefore($phpcsFile, $inlineElsePointer, $phpcsFile->eolChar . $indentation);
+		FixerHelper::addBefore($phpcsFile, $pointerAfterInlineElse, ' ');
 
 		$phpcsFile->fixer->endChangeset();
 	}

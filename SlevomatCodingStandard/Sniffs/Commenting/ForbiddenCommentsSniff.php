@@ -70,7 +70,7 @@ class ForbiddenCommentsSniff implements Sniff
 
 				$fixedDocComment = preg_replace($forbiddenCommentPattern, '', $comment->getContent());
 
-				$phpcsFile->fixer->replaceToken($comment->getPointer(), $fixedDocComment);
+				FixerHelper::replace($phpcsFile, $comment->getPointer(), $fixedDocComment);
 
 				for ($i = $comment->getPointer() - 1; $i > $docCommentOpenPointer; $i--) {
 					$contentWithoutSpaces = preg_replace('~ +$~', '', $tokens[$i]['content'], -1, $replacedCount);
@@ -79,7 +79,7 @@ class ForbiddenCommentsSniff implements Sniff
 						break;
 					}
 
-					$phpcsFile->fixer->replaceToken($i, $contentWithoutSpaces);
+					FixerHelper::replace($phpcsFile, $i, $contentWithoutSpaces);
 				}
 
 				$docCommentContent = '';
@@ -98,7 +98,7 @@ class ForbiddenCommentsSniff implements Sniff
 						$replacedCount,
 					);
 					if ($replacedCount !== 0) {
-						$phpcsFile->fixer->replaceToken($pointerBeforeDocComment, $contentBeforeWithoutSpaces);
+						FixerHelper::replace($phpcsFile, $pointerBeforeDocComment, $contentBeforeWithoutSpaces);
 					}
 
 					FixerHelper::removeBetweenIncluding(
@@ -117,7 +117,7 @@ class ForbiddenCommentsSniff implements Sniff
 							$replacedCount,
 						);
 						if ($replacedCount !== 0) {
-							$phpcsFile->fixer->replaceToken($pointerAfterDocComment, $contentAfterWithoutSpaces);
+							FixerHelper::replace($phpcsFile, $pointerAfterDocComment, $contentAfterWithoutSpaces);
 						}
 					}
 				}

@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Attributes;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\AttributeHelper;
+use SlevomatCodingStandard\Helpers\FixerHelper;
 use function count;
 use function sprintf;
 use const T_ATTRIBUTE;
@@ -55,15 +56,15 @@ class DisallowAttributesJoiningSniff implements Sniff
 			$previousAttribute = $attributes[$i - 1];
 			$attribute = $attributes[$i];
 
-			$phpcsFile->fixer->addContent($previousAttribute->getEndPointer(), ']');
+			FixerHelper::add($phpcsFile, $previousAttribute->getEndPointer(), ']');
 
 			for ($j = $previousAttribute->getEndPointer() + 1; $j < $attribute->getStartPointer(); $j++) {
 				if ($phpcsFile->fixer->getTokenContent($j) === ',') {
-					$phpcsFile->fixer->replaceToken($j, '');
+					FixerHelper::replace($phpcsFile, $j, '');
 				}
 			}
 
-			$phpcsFile->fixer->addContentBefore($attribute->getStartPointer(), '#[');
+			FixerHelper::addBefore($phpcsFile, $attribute->getStartPointer(), '#[');
 		}
 
 		$phpcsFile->fixer->endChangeset();

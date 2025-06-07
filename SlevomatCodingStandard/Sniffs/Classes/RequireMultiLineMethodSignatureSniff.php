@@ -75,7 +75,6 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 		}
 
 		$signature = $this->getSignature($phpcsFile, $signatureStartPointer, $signatureEndPointer);
-		$signatureWithoutTabIndentation = $this->getSignatureWithoutTabs($phpcsFile, $signature);
 		$methodName = FunctionHelper::getName($phpcsFile, $methodPointer);
 
 		if (
@@ -92,7 +91,7 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 			return;
 		}
 
-		if ($this->minLineLength !== null && $this->minLineLength !== 0 && strlen($signatureWithoutTabIndentation) < $this->minLineLength) {
+		if ($this->minLineLength !== null && $this->minLineLength !== 0 && strlen($signature) < $this->minLineLength) {
 			return;
 		}
 
@@ -121,12 +120,16 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 				$pointerBeforeParameter = $tokens[$methodPointer]['parenthesis_opener'];
 			}
 
-			$phpcsFile->fixer->addContent($pointerBeforeParameter, $phpcsFile->eolChar . IndentationHelper::addIndentation($indentation));
+			FixerHelper::add(
+				$phpcsFile,
+				$pointerBeforeParameter,
+				$phpcsFile->eolChar . IndentationHelper::addIndentation($phpcsFile, $indentation),
+			);
 
 			FixerHelper::removeWhitespaceAfter($phpcsFile, $pointerBeforeParameter);
 		}
 
-		$phpcsFile->fixer->addContentBefore($tokens[$methodPointer]['parenthesis_closer'], $phpcsFile->eolChar . $indentation);
+		FixerHelper::addBefore($phpcsFile, $tokens[$methodPointer]['parenthesis_closer'], $phpcsFile->eolChar . $indentation);
 
 		$phpcsFile->fixer->endChangeset();
 	}

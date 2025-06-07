@@ -221,10 +221,14 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 
 				FixerHelper::removeBetweenIncluding($phpcsFile, $pointerBeforeProperty, $pointerAfterProperty - 1);
 
-				$phpcsFile->fixer->addContentBefore($parameterStartPointer, sprintf('%s ', $modifiers));
+				FixerHelper::addBefore($phpcsFile, $parameterStartPointer, sprintf('%s ', $modifiers));
 
 				if (!$parameterHasDefaultValue && $propertyDefaultValue !== null) {
-					$phpcsFile->fixer->addContent($parameterPointer, sprintf(' = %s', $propertyDefaultValue));
+					FixerHelper::add(
+						$phpcsFile,
+						$parameterPointer,
+						sprintf(' = %s', $propertyDefaultValue),
+					);
 				}
 
 				FixerHelper::removeBetweenIncluding($phpcsFile, $pointerBeforeAssignment, $pointerAfterAssignment);

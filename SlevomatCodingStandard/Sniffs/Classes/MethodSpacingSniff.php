@@ -136,7 +136,8 @@ class MethodSpacingSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		if ($linesBetween === null) {
-			$phpcsFile->fixer->addContent(
+			FixerHelper::add(
+				$phpcsFile,
 				$methodEndPointer,
 				$phpcsFile->eolChar . str_repeat($phpcsFile->eolChar, $this->minLinesCount) . IndentationHelper::getIndentation(
 					$phpcsFile,
@@ -147,13 +148,21 @@ class MethodSpacingSniff implements Sniff
 			FixerHelper::removeBetween($phpcsFile, $methodEndPointer, $nextMethodFirstLinePointer);
 
 		} elseif ($linesBetween > $this->maxLinesCount) {
-			$phpcsFile->fixer->addContent($methodEndPointer, str_repeat($phpcsFile->eolChar, $this->maxLinesCount + 1));
+			FixerHelper::add(
+				$phpcsFile,
+				$methodEndPointer,
+				str_repeat($phpcsFile->eolChar, $this->maxLinesCount + 1),
+			);
 
 			$firstPointerOnNextMethodLine = TokenHelper::findFirstTokenOnLine($phpcsFile, $nextMethodFirstLinePointer);
 
 			FixerHelper::removeBetween($phpcsFile, $methodEndPointer, $firstPointerOnNextMethodLine);
 		} else {
-			$phpcsFile->fixer->addContent($methodEndPointer, str_repeat($phpcsFile->eolChar, $this->minLinesCount - $linesBetween));
+			FixerHelper::add(
+				$phpcsFile,
+				$methodEndPointer,
+				str_repeat($phpcsFile->eolChar, $this->minLinesCount - $linesBetween),
+			);
 		}
 
 		$phpcsFile->fixer->endChangeset();

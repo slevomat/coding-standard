@@ -216,7 +216,7 @@ class ArrayHelperTest extends TestCase
 				0,
 				[
 					'flags' => ['multi'],
-					'indentation' => "\t",
+					'indentation' => '    ',
 				],
 			],
 			[
@@ -224,7 +224,7 @@ class ArrayHelperTest extends TestCase
 				1,
 				[
 					'flags' => ['multi', 'short'],
-					'indentation' => "\t",
+					'indentation' => '    ',
 				],
 			],
 			[
@@ -232,7 +232,7 @@ class ArrayHelperTest extends TestCase
 				2,
 				[
 					'flags' => ['multi', 'notEmpty'],
-					'indentation' => "\t",
+					'indentation' => '    ',
 				],
 			],
 			[
@@ -240,7 +240,7 @@ class ArrayHelperTest extends TestCase
 				3,
 				[
 					'flags' => ['multi', 'notEmpty', 'short'],
-					'indentation' => "\t",
+					'indentation' => '    ',
 				],
 			],
 			[
@@ -248,7 +248,7 @@ class ArrayHelperTest extends TestCase
 				0,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'sorted'],
-					'indentation' => "\t",
+					'indentation' => '    ',
 				],
 			],
 			[
@@ -256,7 +256,7 @@ class ArrayHelperTest extends TestCase
 				1,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'sorted', 'short'],
-					'indentation' => "\t\t",
+					'indentation' => '        ',
 				],
 			],
 			[
@@ -264,7 +264,7 @@ class ArrayHelperTest extends TestCase
 				2,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'sorted', 'short'],
-					'indentation' => "\t",
+					'indentation' => '    ',
 				],
 			],
 			[
@@ -272,7 +272,7 @@ class ArrayHelperTest extends TestCase
 				3,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'sorted'],
-					'indentation' => "\t\t",
+					'indentation' => '        ',
 				],
 			],
 			[
@@ -280,7 +280,7 @@ class ArrayHelperTest extends TestCase
 				0,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty'],
-					'indentation' => "\t",
+					'indentation' => '    ',
 				],
 			],
 			[
@@ -288,7 +288,7 @@ class ArrayHelperTest extends TestCase
 				1,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'short'],
-					'indentation' => "\t\t",
+					'indentation' => '        ',
 				],
 			],
 			[
@@ -296,7 +296,7 @@ class ArrayHelperTest extends TestCase
 				2,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'short'],
-					'indentation' => "\t",
+					'indentation' => '    ',
 				],
 			],
 			[
@@ -304,7 +304,7 @@ class ArrayHelperTest extends TestCase
 				3,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty'],
-					'indentation' => "\t\t",
+					'indentation' => '        ',
 				],
 			],
 			[
@@ -328,7 +328,7 @@ class ArrayHelperTest extends TestCase
 				0,
 				[
 					'flags' => ['multi', 'notEmpty'],
-					'indentation' => "\t",
+					'indentation' => '    ',
 				],
 			],
 			[
@@ -336,7 +336,7 @@ class ArrayHelperTest extends TestCase
 				1,
 				[
 					'flags' => ['multi', 'notEmpty', 'short'],
-					'indentation' => "\t\t",
+					'indentation' => '        ',
 				],
 			],
 			[
@@ -344,7 +344,7 @@ class ArrayHelperTest extends TestCase
 				2,
 				[
 					'flags' => ['multi', 'notEmpty', 'short'],
-					'indentation' => "\t",
+					'indentation' => '    ',
 				],
 			],
 			[
@@ -352,7 +352,7 @@ class ArrayHelperTest extends TestCase
 				3,
 				[
 					'flags' => ['multi', 'notEmpty'],
-					'indentation' => "\t\t",
+					'indentation' => '        ',
 				],
 			],
 		];
@@ -369,59 +369,59 @@ class ArrayHelperTest extends TestCase
 				0,
 				[
 					'flags' => ['keyed', 'multi', 'notEmpty', 'short'],
-					'indentation' => "\t",
+					'indentation' => '    ',
 					'keyValues' => [
 						[
-							'content' => "	'b' => 'b val',  // comment\n"
-								. "					 // more 'b' comment\n",
-							'indent' => "\t",
+							'content' => "    'b' => 'b val',  // comment\n"
+								. "                     // more 'b' comment\n",
+							'indent' => '    ',
 							'key' => "'b'",
 							'pointerArrow' => true,
 						],
 						[
-							'content' => "	'a' . strtolower('param') => 'a val',  /* comment */\n",
-							'indent' => "\t",
+							'content' => "    'a' . strtolower('param') => 'a val',  /* comment */\n",
+							'indent' => '    ',
 							'key' => "'a' . strtolower('param')",
 							'pointerArrow' => true,
 						],
 						[
-							'content' => "	// closure comment\n"
-							. "	'closure' => static function (\$p1, \$p2) {\n"
-							. "		return ['a2', 'b2'];\n"
-							. "	},\n",
-							'indent' => "\t",
+							'content' => "    // closure comment\n"
+							. "    'closure' => static function (\$p1, \$p2) {\n"
+							. "        return ['a2', 'b2'];\n"
+							. "    },\n",
+							'indent' => '    ',
 							'key' => "'closure'",
 							'pointerArrow' => true,
 						],
 						[
-							'content' => "	'nested' => array(\n"
-							. "		'b3' => 'b3 val',\n"
-							. "		'a3' => 'a3 val',\n"
-							. "	),\n",
-							'indent' => "\t",
+							'content' => "    'nested' => array(\n"
+							. "        'b3' => 'b3 val',\n"
+							. "        'a3' => 'a3 val',\n"
+							. "    ),\n",
+							'indent' => '    ',
 							'key' => "'nested'",
 							'pointerArrow' => true,
 						],
 						[
-							'content' => "	'arrow' => fn(\$x) => strtolower(\$x),\n",
-							'indent' => "\t",
+							'content' => "    'arrow' => fn(\$x) => strtolower(\$x),\n",
+							'indent' => '    ',
 							'key' => "'arrow'",
 							'pointerArrow' => true,
 						],
 						[
-							'content' => "	'anonymous' => new class {\n"
-							. "		public function log(\$msg)\n"
-							. "		{\n"
-							. "			return true;\n"
-							. "		}\n"
-							. "	},\n",
-							'indent' => "\t",
+							'content' => "    'anonymous' => new class {\n"
+							. "        public function log(\$msg)\n"
+							. "        {\n"
+							. "            return true;\n"
+							. "        }\n"
+							. "    },\n",
+							'indent' => '    ',
 							'key' => "'anonymous'",
 							'pointerArrow' => true,
 						],
 						[
-							'content' => "	'foo', ",
-							'indent' => "\t",
+							'content' => "    'foo', ",
+							'indent' => '    ',
 							'key' => null,
 							'pointerArrow' => false,
 							'pointerComma' => true,
@@ -467,18 +467,18 @@ class ArrayHelperTest extends TestCase
 				[
 					// the nested array
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty'],
-					'indentation' => "\t\t",
+					'indentation' => '        ',
 					'keyValues' => [
 						[
-							'content' => "		'b3' => 'b3 val',\n",
-							'indent' => "\t\t",
+							'content' => "        'b3' => 'b3 val',\n",
+							'indent' => '        ',
 							'key' => "'b3'",
 							'pointerArrow' => true,
 							'pointerComma' => true,
 						],
 						[
-							'content' => "		'a3' => 'a3 val',\n",
-							'indent' => "\t\t",
+							'content' => "        'a3' => 'a3 val',\n",
+							'indent' => '        ',
 							'key' => "'a3'",
 							'pointerArrow' => true,
 							'pointerComma' => true,
@@ -491,10 +491,10 @@ class ArrayHelperTest extends TestCase
 				0,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'short', 'sorted'],
-					'indentation' => "\t",
+					'indentation' => '    ',
 					'keyValues' => [
 						[
-							'content' => "	'a' => 'a',\n",
+							'content' => "    'a' => 'a',\n",
 						],
 					],
 				],
@@ -504,10 +504,10 @@ class ArrayHelperTest extends TestCase
 				1,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'short', 'sorted'],
-					'indentation' => "\t",
+					'indentation' => '    ',
 					'keyValues' => [
 						[
-							'content' => "	'a' => 'a', // eol comment\n",
+							'content' => "    'a' => 'a', // eol comment\n",
 						],
 					],
 				],
@@ -517,11 +517,11 @@ class ArrayHelperTest extends TestCase
 				2,
 				[
 					'flags' => ['keyed', 'keyedAll', 'multi', 'notEmpty', 'short', 'sorted'],
-					'indentation' => "\t",
+					'indentation' => '    ',
 					'keyValues' => [
 						[
-							'content' => "	'a' => 'a', // eol comment\n"
-								. "				// continued\n",
+							'content' => "    'a' => 'a', // eol comment\n"
+								. "                // continued\n",
 						],
 					],
 				],

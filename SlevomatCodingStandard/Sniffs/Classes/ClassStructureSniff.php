@@ -639,7 +639,8 @@ class ClassStructureSniff implements Sniff
 		$linesBetween = $this->removeBlankLinesAfterMember($file, $previousMemberEndPointer, $groupStartPointer);
 
 		$newLines = str_repeat($file->eolChar, $linesBetween);
-		$file->fixer->addContentBefore($nextGroupMemberStartPointer, $groupContent . $newLines);
+
+		FixerHelper::addBefore($file, $nextGroupMemberStartPointer, $groupContent . $newLines);
 
 		$file->fixer->endChangeset();
 	}
@@ -701,7 +702,7 @@ class ClassStructureSniff implements Sniff
 			}
 
 			$linesToRemove++;
-			$phpcsFile->fixer->replaceToken($whitespacePointer, '');
+			FixerHelper::replace($phpcsFile, $whitespacePointer, '');
 			$whitespacePointer++;
 		}
 

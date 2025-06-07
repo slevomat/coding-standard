@@ -73,8 +73,7 @@ class DisallowMultipleAttributesPerLineSniff implements Sniff
 		$phpcsFile->fixer->beginChangeset();
 
 		FixerHelper::removeBetween($phpcsFile, $nonWhitespacePointerBefore, $nextAttributeOpenerPointer);
-
-		$phpcsFile->fixer->addContentBefore($nextAttributeOpenerPointer, $phpcsFile->eolChar . $indentation);
+		FixerHelper::addBefore($phpcsFile, $nextAttributeOpenerPointer, $phpcsFile->eolChar . $indentation);
 
 		$phpcsFile->fixer->endChangeset();
 	}

@@ -77,7 +77,7 @@ class ReferenceSpacingSniff implements Sniff
 
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->addContent($referencePointer, str_repeat(' ', $this->spacesCountAfterReference));
+		FixerHelper::add($phpcsFile, $referencePointer, str_repeat(' ', $this->spacesCountAfterReference));
 
 		FixerHelper::removeBetween($phpcsFile, $referencePointer, $pointerAfterWhitespace);
 

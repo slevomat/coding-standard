@@ -174,8 +174,8 @@ class UselessVariableSniff implements Sniff
 		if ($tokens[$assignmentPointer]['code'] === T_EQUAL) {
 			FixerHelper::change($phpcsFile, $previousVariablePointer, $assignmentPointer, 'return');
 		} else {
-			$phpcsFile->fixer->addContentBefore($previousVariablePointer, 'return ');
-			$phpcsFile->fixer->replaceToken($assignmentPointer, $assignmentFixerMapping[$tokens[$assignmentPointer]['code']]);
+			FixerHelper::addBefore($phpcsFile, $previousVariablePointer, 'return ');
+			FixerHelper::replace($phpcsFile, $assignmentPointer, $assignmentFixerMapping[$tokens[$assignmentPointer]['code']]);
 		}
 
 		FixerHelper::removeBetweenIncluding($phpcsFile, $previousVariableSemicolonPointer + 1, $returnSemicolonPointer);

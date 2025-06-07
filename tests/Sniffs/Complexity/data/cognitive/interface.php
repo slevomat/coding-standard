@@ -2,5 +2,5 @@
 
 interface SomeInterface
 {
-    function overriddenSymbolFrom(ClassJavaType $classType);
+	function overriddenSymbolFrom(ClassJavaType $classType);
 }

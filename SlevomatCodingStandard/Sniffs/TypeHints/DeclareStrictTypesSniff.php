@@ -73,9 +73,11 @@ class DeclareStrictTypesSniff implements Sniff
 			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContent(
+				FixerHelper::change(
+					$phpcsFile,
 					$openTagPointer,
-					sprintf('declare(%s);%s', $this->getStrictTypeDeclaration(), $phpcsFile->eolChar),
+					substr($tokens[$openTagPointer]['content'], -1) === $phpcsFile->eolChar ? $openTagPointer : $openTagPointer + 1,
+					sprintf('<?php declare(%s);%s', $this->getStrictTypeDeclaration(), $phpcsFile->eolChar),
 				);
 				$phpcsFile->fixer->endChangeset();
 			}
@@ -100,7 +102,8 @@ class DeclareStrictTypesSniff implements Sniff
 			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->addContentBefore(
+				FixerHelper::addBefore(
+					$phpcsFile,
 					$tokens[$declarePointer]['parenthesis_closer'],
 					', ' . $this->getStrictTypeDeclaration(),
 				);
@@ -123,7 +126,7 @@ class DeclareStrictTypesSniff implements Sniff
 			);
 			if ($fix) {
 				$phpcsFile->fixer->beginChangeset();
-				$phpcsFile->fixer->replaceToken($numberPointer, '1');
+				FixerHelper::replace($phpcsFile, $numberPointer, '1');
 				$phpcsFile->fixer->endChangeset();
 			}
 			return;
@@ -209,7 +212,7 @@ class DeclareStrictTypesSniff implements Sniff
 					$phpcsFile->fixer->beginChangeset();
 
 					if ($pointerBeforeDeclare === $openTagPointer) {
-						$phpcsFile->fixer->replaceToken($openTagPointer, '<?php');
+						FixerHelper::replace($phpcsFile, $openTagPointer, '<?php');
 					}
 
 					FixerHelper::removeBetween($phpcsFile, $pointerBeforeDeclare, $declarePointer);
