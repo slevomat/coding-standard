@@ -26,11 +26,7 @@ class SuperfluousInterfaceNamingSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $interfacePointer
-	 */
-	public function process(File $phpcsFile, $interfacePointer): void
+	public function process(File $phpcsFile, int $interfacePointer): void
 	{
 		$interfaceName = ClassHelper::getName($phpcsFile, $interfacePointer);
 

@@ -67,8 +67,8 @@ class ConditionHelper
 				$phpcsFile,
 				array_merge(
 					[T_OPEN_PARENTHESIS, T_LESS_THAN, T_GREATER_THAN],
-					Tokens::$booleanOperators,
-					Tokens::$equalityTokens,
+					Tokens::BOOLEAN_OPERATORS,
+					Tokens::EQUALITY_TOKENS,
 				),
 				$actualPointer,
 				$conditionBoundaryEndPointer + 1,
@@ -154,7 +154,7 @@ class ConditionHelper
 		$pointerAfterConditionStart = TokenHelper::findNextEffective($phpcsFile, $conditionBoundaryStartPointer);
 		$booleanPointers = TokenHelper::findNextAll(
 			$phpcsFile,
-			Tokens::$booleanOperators,
+			Tokens::BOOLEAN_OPERATORS,
 			$conditionBoundaryStartPointer,
 			$conditionBoundaryEndPointer + 1,
 		);
@@ -295,7 +295,7 @@ class ConditionHelper
 		do {
 			$actualPointer = TokenHelper::findNext(
 				$phpcsFile,
-				array_merge([T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS], Tokens::$booleanOperators),
+				array_merge([T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS], Tokens::BOOLEAN_OPERATORS),
 				$actualPointer,
 				$conditionBoundaryEndPointer + 1,
 			);

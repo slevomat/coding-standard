@@ -30,11 +30,7 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 
 	public int $minLineLength = 121;
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $stringPointer
-	 */
-	public function process(File $phpcsFile, $stringPointer): void
+	public function process(File $phpcsFile, int $stringPointer): void
 	{
 		$this->minLineLength = SniffSettingsHelper::normalizeInteger($this->minLineLength);
 
@@ -170,12 +166,7 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 
 		$searchStartPointer = TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $stringPointer);
 		while (true) {
-			$stringPointerBefore = TokenHelper::findNext(
-				$phpcsFile,
-				TokenHelper::ONLY_NAME_TOKEN_CODES,
-				$searchStartPointer,
-				$stringPointer,
-			);
+			$stringPointerBefore = TokenHelper::findNext($phpcsFile, TokenHelper::NAME_TOKEN_CODES, $searchStartPointer, $stringPointer);
 
 			if ($stringPointerBefore === null) {
 				break;
@@ -197,7 +188,7 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 		while (true) {
 			$stringPointerAfter = TokenHelper::findNext(
 				$phpcsFile,
-				TokenHelper::ONLY_NAME_TOKEN_CODES,
+				TokenHelper::NAME_TOKEN_CODES,
 				$searchStartPointer,
 				$lastPointerOnLine + 1,
 			);

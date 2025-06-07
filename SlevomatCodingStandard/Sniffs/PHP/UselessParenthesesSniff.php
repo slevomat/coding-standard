@@ -113,11 +113,7 @@ class UselessParenthesesSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $parenthesisOpenerPointer
-	 */
-	public function process(File $phpcsFile, $parenthesisOpenerPointer): void
+	public function process(File $phpcsFile, int $parenthesisOpenerPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

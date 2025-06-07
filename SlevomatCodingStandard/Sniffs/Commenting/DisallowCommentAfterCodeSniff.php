@@ -34,11 +34,7 @@ class DisallowCommentAfterCodeSniff implements Sniff
 		return [...TokenHelper::INLINE_COMMENT_TOKEN_CODES, T_DOC_COMMENT_OPEN_TAG];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $commentPointer
-	 */
-	public function process(File $phpcsFile, $commentPointer): void
+	public function process(File $phpcsFile, int $commentPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

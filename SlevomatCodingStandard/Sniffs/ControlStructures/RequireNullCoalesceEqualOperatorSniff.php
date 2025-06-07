@@ -44,11 +44,7 @@ class RequireNullCoalesceEqualOperatorSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $equalPointer
-	 */
-	public function process(File $phpcsFile, $equalPointer): void
+	public function process(File $phpcsFile, int $equalPointer): void
 	{
 		$this->enable = SniffSettingsHelper::isEnabledByPhpVersion($this->enable, 70400);
 

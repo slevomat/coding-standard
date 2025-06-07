@@ -44,11 +44,7 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 	/** @var list<string> */
 	public array $jumpStatements = [];
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $jumpStatementPointer
-	 */
-	public function process(File $phpcsFile, $jumpStatementPointer): void
+	public function process(File $phpcsFile, int $jumpStatementPointer): void
 	{
 		$this->linesCountBefore = SniffSettingsHelper::normalizeInteger($this->linesCountBefore);
 		$this->linesCountBeforeFirst = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirst);

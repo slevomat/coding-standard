@@ -26,11 +26,7 @@ class DisallowOneLinePropertyDocCommentSniff implements Sniff
 		return [T_VARIABLE];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $propertyPointer
-	 */
-	public function process(File $phpcsFile, $propertyPointer): void
+	public function process(File $phpcsFile, int $propertyPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

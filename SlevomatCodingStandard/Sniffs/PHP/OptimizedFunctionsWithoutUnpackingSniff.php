@@ -29,14 +29,10 @@ class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return TokenHelper::ONLY_NAME_TOKEN_CODES;
+		return TokenHelper::NAME_TOKEN_CODES;
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $pointer
-	 */
-	public function process(File $phpcsFile, $pointer): void
+	public function process(File $phpcsFile, int $pointer): void
 	{
 		$previousTokenPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
 		$openBracketPointer = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);

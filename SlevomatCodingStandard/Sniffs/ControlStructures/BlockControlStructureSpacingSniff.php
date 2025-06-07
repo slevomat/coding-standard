@@ -24,11 +24,7 @@ class BlockControlStructureSpacingSniff extends AbstractControlStructureSpacing
 	/** @var list<string> */
 	public array $controlStructures = [];
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $controlStructurePointer
-	 */
-	public function process(File $phpcsFile, $controlStructurePointer): void
+	public function process(File $phpcsFile, int $controlStructurePointer): void
 	{
 		$this->linesCountBefore = SniffSettingsHelper::normalizeInteger($this->linesCountBefore);
 		$this->linesCountBeforeFirst = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeFirst);

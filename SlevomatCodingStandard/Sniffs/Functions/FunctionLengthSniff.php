@@ -31,11 +31,7 @@ class FunctionLengthSniff implements Sniff
 		return [T_FUNCTION];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $functionPointer
-	 */
-	public function process(File $file, $functionPointer): void
+	public function process(File $phpcsFile, int $functionPointer): void
 	{
 		$this->maxLinesLength = SniffSettingsHelper::normalizeInteger($this->maxLinesLength);
 
@@ -45,7 +41,7 @@ class FunctionLengthSniff implements Sniff
 		]));
 		$flags = array_reduce($flags, static fn ($carry, $flag): int => $carry | $flag, 0);
 
-		$length = FunctionHelper::getFunctionLengthInLines($file, $functionPointer, $flags);
+		$length = FunctionHelper::getFunctionLengthInLines($phpcsFile, $functionPointer, $flags);
 
 		if ($length <= $this->maxLinesLength) {
 			return;
@@ -57,7 +53,7 @@ class FunctionLengthSniff implements Sniff
 			$this->maxLinesLength,
 		);
 
-		$file->addError($errorMessage, $functionPointer, self::CODE_FUNCTION_LENGTH);
+		$phpcsFile->addError($errorMessage, $functionPointer, self::CODE_FUNCTION_LENGTH);
 	}
 
 }

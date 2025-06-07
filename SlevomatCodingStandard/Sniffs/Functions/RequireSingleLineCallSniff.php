@@ -36,11 +36,7 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 
 	public bool $ignoreWithComplexParameter = true;
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $stringPointer
-	 */
-	public function process(File $phpcsFile, $stringPointer): void
+	public function process(File $phpcsFile, int $stringPointer): void
 	{
 		$this->maxLineLength = SniffSettingsHelper::normalizeInteger($this->maxLineLength);
 
@@ -97,7 +93,7 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 			while (true) {
 				$innerStringPointer = TokenHelper::findNext(
 					$phpcsFile,
-					TokenHelper::ONLY_NAME_TOKEN_CODES,
+					TokenHelper::NAME_TOKEN_CODES,
 					$callSearchStartPointer,
 					$parenthesisCloserPointer,
 				);

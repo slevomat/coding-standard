@@ -38,11 +38,7 @@ class UnusedParameterSniff implements Sniff
 		return TokenHelper::FUNCTION_TOKEN_CODES;
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $functionPointer
-	 */
-	public function process(File $phpcsFile, $functionPointer): void
+	public function process(File $phpcsFile, int $functionPointer): void
 	{
 		if (FunctionHelper::isAbstract($phpcsFile, $functionPointer)) {
 			return;

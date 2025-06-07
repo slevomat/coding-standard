@@ -32,11 +32,7 @@ class BackedEnumTypeSpacingSniff implements Sniff
 		return [T_ENUM];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $enumPointer
-	 */
-	public function process(File $phpcsFile, $enumPointer): void
+	public function process(File $phpcsFile, int $enumPointer): void
 	{
 		$this->spacesCountBeforeColon = SniffSettingsHelper::normalizeInteger($this->spacesCountBeforeColon);
 		$this->spacesCountBeforeType = SniffSettingsHelper::normalizeInteger($this->spacesCountBeforeType);

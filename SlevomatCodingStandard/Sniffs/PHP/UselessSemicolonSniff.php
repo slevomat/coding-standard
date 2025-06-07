@@ -36,11 +36,7 @@ class UselessSemicolonSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $semicolonPointer
-	 */
-	public function process(File $phpcsFile, $semicolonPointer): void
+	public function process(File $phpcsFile, int $semicolonPointer): void
 	{
 		$this->checkMultipleSemicolons($phpcsFile, $semicolonPointer);
 		$this->checkSemicolonAtTheBeginningOfScope($phpcsFile, $semicolonPointer);

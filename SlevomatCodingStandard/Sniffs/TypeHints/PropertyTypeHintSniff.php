@@ -100,11 +100,7 @@ class PropertyTypeHintSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $pointer
-	 */
-	public function process(File $phpcsFile, $pointer): void
+	public function process(File $phpcsFile, int $pointer): void
 	{
 		$this->enableNativeTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableNativeTypeHint, 70400);
 		$this->enableMixedTypeHint = $this->enableNativeTypeHint

@@ -23,11 +23,7 @@ class DisallowNonCapturingCatchSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $catchPointer
-	 */
-	public function process(File $phpcsFile, $catchPointer): void
+	public function process(File $phpcsFile, int $catchPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

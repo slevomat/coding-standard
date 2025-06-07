@@ -48,11 +48,7 @@ class DeclareStrictTypesSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $openTagPointer
-	 */
-	public function process(File $phpcsFile, $openTagPointer): void
+	public function process(File $phpcsFile, int $openTagPointer): void
 	{
 		$this->linesCountBeforeDeclare = SniffSettingsHelper::normalizeInteger($this->linesCountBeforeDeclare);
 		$this->linesCountAfterDeclare = SniffSettingsHelper::normalizeInteger($this->linesCountAfterDeclare);

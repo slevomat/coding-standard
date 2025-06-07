@@ -39,11 +39,7 @@ class DisallowYodaComparisonSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $comparisonTokenPointer
-	 */
-	public function process(File $phpcsFile, $comparisonTokenPointer): void
+	public function process(File $phpcsFile, int $comparisonTokenPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 		$leftSideTokens = YodaHelper::getLeftSideTokens($tokens, $comparisonTokenPointer);

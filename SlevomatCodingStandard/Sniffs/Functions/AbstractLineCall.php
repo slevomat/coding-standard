@@ -24,7 +24,7 @@ abstract class AbstractLineCall implements Sniff
 	 */
 	public function register(): array
 	{
-		return [...TokenHelper::ONLY_NAME_TOKEN_CODES, T_SELF, T_STATIC, T_PARENT];
+		return [...TokenHelper::NAME_TOKEN_CODES, T_SELF, T_STATIC, T_PARENT];
 	}
 
 	protected function isCall(File $phpcsFile, int $stringPointer): bool

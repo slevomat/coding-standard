@@ -29,11 +29,7 @@ abstract class AbstractRequireOneLineDocComment implements Sniff
 		return [T_DOC_COMMENT_OPEN_TAG];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $docCommentStartPointer
-	 */
-	public function process(File $phpcsFile, $docCommentStartPointer): void
+	public function process(File $phpcsFile, int $docCommentStartPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

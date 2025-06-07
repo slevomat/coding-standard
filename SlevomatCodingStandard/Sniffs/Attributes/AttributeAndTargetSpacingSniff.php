@@ -31,11 +31,7 @@ class AttributeAndTargetSpacingSniff implements Sniff
 		return [T_ATTRIBUTE];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $attributeOpenerPointer
-	 */
-	public function process(File $phpcsFile, $attributeOpenerPointer): void
+	public function process(File $phpcsFile, int $attributeOpenerPointer): void
 	{
 		$this->linesCount = SniffSettingsHelper::normalizeInteger($this->linesCount);
 

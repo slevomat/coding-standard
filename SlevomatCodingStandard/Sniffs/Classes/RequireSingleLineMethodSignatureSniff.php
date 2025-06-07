@@ -31,11 +31,7 @@ class RequireSingleLineMethodSignatureSniff extends AbstractMethodSignature
 	/** @var list<string>|null */
 	public ?array $excludedMethodNormalizedPatterns = null;
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $methodPointer
-	 */
-	public function process(File $phpcsFile, $methodPointer): void
+	public function process(File $phpcsFile, int $methodPointer): void
 	{
 		$this->maxLineLength = SniffSettingsHelper::normalizeInteger($this->maxLineLength);
 

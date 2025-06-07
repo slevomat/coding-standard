@@ -24,11 +24,7 @@ class ArrayAccessSniff implements Sniff
 		return [T_OPEN_SQUARE_BRACKET];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $stackPointer
-	 */
-	public function process(File $phpcsFile, $stackPointer): void
+	public function process(File $phpcsFile, int $stackPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

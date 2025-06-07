@@ -40,11 +40,7 @@ final class ForbiddenPublicPropertySniff implements Sniff
 		return TokenHelper::PROPERTY_MODIFIERS_TOKEN_CODES;
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $pointer
-	 */
-	public function process(File $phpcsFile, $pointer): void
+	public function process(File $phpcsFile, int $pointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

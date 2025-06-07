@@ -34,11 +34,7 @@ class NewWithoutParenthesesSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $newPointer
-	 */
-	public function process(File $phpcsFile, $newPointer): void
+	public function process(File $phpcsFile, int $newPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 		/** @var int $nextPointer */

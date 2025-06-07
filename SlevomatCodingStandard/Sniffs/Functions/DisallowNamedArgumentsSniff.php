@@ -22,11 +22,7 @@ class DisallowNamedArgumentsSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $argumentNamePointer
-	 */
-	public function process(File $phpcsFile, $argumentNamePointer): void
+	public function process(File $phpcsFile, int $argumentNamePointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

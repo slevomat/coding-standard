@@ -27,11 +27,7 @@ class UseDoesNotStartWithBackslashSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $usePointer
-	 */
-	public function process(File $phpcsFile, $usePointer): void
+	public function process(File $phpcsFile, int $usePointer): void
 	{
 		if (!UseStatementHelper::isImportUse($phpcsFile, $usePointer)) {
 			return;
@@ -43,7 +39,7 @@ class UseDoesNotStartWithBackslashSniff implements Sniff
 		$nextTokenPointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
 
 		if (
-			in_array($tokens[$nextTokenPointer]['code'], TokenHelper::ONLY_NAME_TOKEN_CODES, true)
+			in_array($tokens[$nextTokenPointer]['code'], TokenHelper::NAME_TOKEN_CODES, true)
 			&& (
 				$tokens[$nextTokenPointer]['content'] === 'function'
 				|| $tokens[$nextTokenPointer]['content'] === 'const'

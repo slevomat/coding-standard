@@ -28,11 +28,7 @@ class DisallowShortTernaryOperatorSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $inlineThenPointer
-	 */
-	public function process(File $phpcsFile, $inlineThenPointer): void
+	public function process(File $phpcsFile, int $inlineThenPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

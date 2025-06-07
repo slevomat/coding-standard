@@ -22,11 +22,7 @@ class ShortListSniff implements Sniff
 		return [T_LIST];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $pointer
-	 */
-	public function process(File $phpcsFile, $pointer): void
+	public function process(File $phpcsFile, int $pointer): void
 	{
 		$fix = $phpcsFile->addFixableError('list(...) is forbidden, use [...] instead.', $pointer, self::CODE_LONG_LIST_USED);
 

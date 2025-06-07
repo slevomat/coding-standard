@@ -26,11 +26,7 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 
 	public bool $alwaysSplitAllConditionParts = false;
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $controlStructurePointer
-	 */
-	public function process(File $phpcsFile, $controlStructurePointer): void
+	public function process(File $phpcsFile, int $controlStructurePointer): void
 	{
 		$this->minLineLength = SniffSettingsHelper::normalizeInteger($this->minLineLength);
 

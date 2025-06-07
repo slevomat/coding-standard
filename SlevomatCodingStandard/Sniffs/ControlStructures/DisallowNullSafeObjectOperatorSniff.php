@@ -21,11 +21,7 @@ class DisallowNullSafeObjectOperatorSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $operatorPointer
-	 */
-	public function process(File $phpcsFile, $operatorPointer): void
+	public function process(File $phpcsFile, int $operatorPointer): void
 	{
 		$phpcsFile->addError('Operator ?-> is disallowed.', $operatorPointer, self::CODE_DISALLOWED_NULL_SAFE_OBJECT_OPERATOR);
 	}

@@ -6,7 +6,6 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
-use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use function array_key_exists;
@@ -14,12 +13,9 @@ use function array_pop;
 use function count;
 use function in_array;
 use function is_array;
-use function min;
 use function sprintf;
 use function strlen;
 use function strtolower;
-use const PHP_INT_MAX;
-use const T_COMMA;
 use const T_DOUBLE_COLON;
 use const T_EXTENDS;
 use const T_IMPLEMENTS;
@@ -82,11 +78,7 @@ class ForbiddenClassesSniff implements Sniff
 		return $searchTokens;
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $tokenPointer
-	 */
-	public function process(File $phpcsFile, $tokenPointer): void
+	public function process(File $phpcsFile, int $tokenPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 		$token = $tokens[$tokenPointer];
@@ -137,7 +129,7 @@ class ForbiddenClassesSniff implements Sniff
 	}
 
 	/**
-	 * @param list<array{fullyQualifiedName: string, startPointer: int|null, endPointer: int|null}> $references
+	 * @param list<array{fullyQualifiedName: string, pointer: int}> $references
 	 * @param array<string, (string|null)> $forbiddenNames
 	 */
 	private function checkReferences(
@@ -168,7 +160,7 @@ class ForbiddenClassesSniff implements Sniff
 			if ($alternative === null) {
 				$phpcsFile->addError(
 					sprintf('Usage of %s %s is forbidden.', $reference['fullyQualifiedName'], $nameType),
-					$reference['startPointer'],
+					$reference['pointer'],
 					$code,
 				);
 			} elseif (!$isFixable) {
@@ -179,7 +171,7 @@ class ForbiddenClassesSniff implements Sniff
 						$nameType,
 						$alternative,
 					),
-					$reference['startPointer'],
+					$reference['pointer'],
 					$code,
 				);
 			} else {
@@ -190,7 +182,7 @@ class ForbiddenClassesSniff implements Sniff
 						$nameType,
 						$alternative,
 					),
-					$reference['startPointer'],
+					$reference['pointer'],
 					$code,
 				);
 				if (!$fix) {
@@ -199,7 +191,7 @@ class ForbiddenClassesSniff implements Sniff
 
 				$phpcsFile->fixer->beginChangeset();
 
-				FixerHelper::change($phpcsFile, $reference['startPointer'], $reference['endPointer'], $alternative);
+				FixerHelper::change($phpcsFile, $reference['pointer'], $reference['pointer'], $alternative);
 
 				$phpcsFile->fixer->endChangeset();
 			}
@@ -215,7 +207,7 @@ class ForbiddenClassesSniff implements Sniff
 	}
 
 	/**
-	 * @return list<array{fullyQualifiedName: string, startPointer: int|null, endPointer: int|null}>
+	 * @return list<array{fullyQualifiedName: string, pointer: int}>
 	 */
 	private function getAllReferences(File $phpcsFile, int $startPointer, int $endPointer): array
 	{
@@ -224,9 +216,8 @@ class ForbiddenClassesSniff implements Sniff
 		$references = [];
 
 		while ($startPointer < $endPointer) {
-			$nextComma = TokenHelper::findNext($phpcsFile, [T_COMMA], $startPointer + 1);
-			$nextSeparator = min($endPointer, $nextComma ?? PHP_INT_MAX);
-			$reference = ReferencedNameHelper::getReferenceName($phpcsFile, $startPointer, $nextSeparator - 1);
+			$referencePointer = TokenHelper::findNext($phpcsFile, TokenHelper::NAME_TOKEN_CODES, $startPointer);
+			$reference = $phpcsFile->getTokens()[$referencePointer]['content'];
 
 			if (
 				strlen($reference) !== 0
@@ -234,12 +225,11 @@ class ForbiddenClassesSniff implements Sniff
 			) {
 				$references[] = [
 					'fullyQualifiedName' => NamespaceHelper::resolveClassName($phpcsFile, $reference, $startPointer),
-					'startPointer' => TokenHelper::findNextEffective($phpcsFile, $startPointer, $endPointer),
-					'endPointer' => TokenHelper::findPreviousEffective($phpcsFile, $nextSeparator - 1, $startPointer),
+					'pointer' => $referencePointer,
 				];
 			}
 
-			$startPointer = $nextSeparator + 1;
+			$startPointer = $referencePointer + 1;
 		}
 
 		return $references;

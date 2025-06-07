@@ -82,11 +82,7 @@ class PropertyDeclarationSniff implements Sniff
 		return TokenHelper::PROPERTY_MODIFIERS_TOKEN_CODES;
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $modifierPointer
-	 */
-	public function process(File $phpcsFile, $modifierPointer): void
+	public function process(File $phpcsFile, int $modifierPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

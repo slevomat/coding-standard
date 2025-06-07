@@ -96,11 +96,7 @@ class ParameterTypeHintSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $functionPointer
-	 */
-	public function process(File $phpcsFile, $functionPointer): void
+	public function process(File $phpcsFile, int $functionPointer): void
 	{
 		$this->enableObjectTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableObjectTypeHint, 70200);
 		$this->enableMixedTypeHint = SniffSettingsHelper::isEnabledByPhpVersion($this->enableMixedTypeHint, 80000);

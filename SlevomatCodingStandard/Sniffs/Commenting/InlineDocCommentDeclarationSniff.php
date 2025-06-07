@@ -61,11 +61,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $commentOpenPointer
-	 */
-	public function process(File $phpcsFile, $commentOpenPointer): void
+	public function process(File $phpcsFile, int $commentOpenPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

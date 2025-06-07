@@ -25,11 +25,7 @@ class DisallowStringExpressionPropertyFetchSniff implements Sniff
 		return [T_OBJECT_OPERATOR];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $objectOperatorPointer
-	 */
-	public function process(File $phpcsFile, $objectOperatorPointer): void
+	public function process(File $phpcsFile, int $objectOperatorPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

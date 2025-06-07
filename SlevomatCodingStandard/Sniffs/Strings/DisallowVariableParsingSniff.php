@@ -41,11 +41,7 @@ class DisallowVariableParsingSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $stringPointer
-	 */
-	public function process(File $phpcsFile, $stringPointer): void
+	public function process(File $phpcsFile, int $stringPointer): void
 	{
 		if (!$this->disallowDollarCurlySyntax && !$this->disallowCurlyDollarSyntax && !$this->disallowSimpleSyntax) {
 			throw new UnexpectedValueException('No option is set.');

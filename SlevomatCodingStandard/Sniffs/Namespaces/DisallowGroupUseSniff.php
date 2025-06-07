@@ -21,11 +21,7 @@ class DisallowGroupUseSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $usePointer
-	 */
-	public function process(File $phpcsFile, $usePointer): void
+	public function process(File $phpcsFile, int $usePointer): void
 	{
 		$phpcsFile->addError(
 			'Group use declaration is disallowed, use single use for every import.',

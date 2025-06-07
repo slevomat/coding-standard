@@ -54,11 +54,7 @@ class LanguageConstructWithParenthesesSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $languageConstructPointer
-	 */
-	public function process(File $phpcsFile, $languageConstructPointer): void
+	public function process(File $phpcsFile, int $languageConstructPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 		/** @var int $openParenthesisPointer */

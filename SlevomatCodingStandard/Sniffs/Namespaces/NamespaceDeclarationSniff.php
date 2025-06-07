@@ -10,7 +10,6 @@ use function array_key_exists;
 use function sprintf;
 use function strlen;
 use const T_NAMESPACE;
-use const T_NS_SEPARATOR;
 use const T_SEMICOLON;
 use const T_WHITESPACE;
 
@@ -31,19 +30,8 @@ class NamespaceDeclarationSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $namespacePointer
-	 */
-	public function process(File $phpcsFile, $namespacePointer): void
+	public function process(File $phpcsFile, int $namespacePointer): void
 	{
-		$tokens = $phpcsFile->getTokens();
-
-		$pointerAfterNamespace = TokenHelper::findNextEffective($phpcsFile, $namespacePointer + 1);
-		if ($tokens[$pointerAfterNamespace]['code'] === T_NS_SEPARATOR) {
-			return;
-		}
-
 		$this->checkWhitespaceAfterNamespace($phpcsFile, $namespacePointer);
 		$this->checkDisallowedContentBetweenNamespaceNameAndSemicolon($phpcsFile, $namespacePointer);
 		$this->checkDisallowedBracketedSyntax($phpcsFile, $namespacePointer);

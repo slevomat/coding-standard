@@ -27,11 +27,7 @@ class DisallowLateStaticBindingForConstantsSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $staticPointer
-	 */
-	public function process(File $phpcsFile, $staticPointer): void
+	public function process(File $phpcsFile, int $staticPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

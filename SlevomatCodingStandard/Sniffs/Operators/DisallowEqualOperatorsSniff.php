@@ -26,11 +26,7 @@ class DisallowEqualOperatorsSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $operatorPointer
-	 */
-	public function process(File $phpcsFile, $operatorPointer): void
+	public function process(File $phpcsFile, int $operatorPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

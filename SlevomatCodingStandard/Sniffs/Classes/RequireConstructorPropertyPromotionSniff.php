@@ -58,11 +58,7 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 		return [T_FUNCTION];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $functionPointer
-	 */
-	public function process(File $phpcsFile, $functionPointer): void
+	public function process(File $phpcsFile, int $functionPointer): void
 	{
 		$this->enable = SniffSettingsHelper::isEnabledByPhpVersion($this->enable, 80000);
 

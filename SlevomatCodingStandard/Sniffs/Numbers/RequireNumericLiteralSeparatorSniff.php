@@ -34,11 +34,7 @@ class RequireNumericLiteralSeparatorSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $numberPointer
-	 */
-	public function process(File $phpcsFile, $numberPointer): void
+	public function process(File $phpcsFile, int $numberPointer): void
 	{
 		$this->enable = SniffSettingsHelper::isEnabledByPhpVersion($this->enable, 70400);
 		$this->minDigitsBeforeDecimalPoint = SniffSettingsHelper::normalizeInteger($this->minDigitsBeforeDecimalPoint);

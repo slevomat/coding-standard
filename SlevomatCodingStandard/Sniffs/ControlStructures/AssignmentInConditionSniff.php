@@ -33,11 +33,7 @@ class AssignmentInConditionSniff implements Sniff
 		];
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $conditionStartPointer
-	 */
-	public function process(File $phpcsFile, $conditionStartPointer): void
+	public function process(File $phpcsFile, int $conditionStartPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 		$token = $tokens[$conditionStartPointer];
@@ -88,12 +84,7 @@ class AssignmentInConditionSniff implements Sniff
 				continue;
 			}
 
-			$functionCall = TokenHelper::findPrevious(
-				$phpcsFile,
-				TokenHelper::ONLY_NAME_TOKEN_CODES,
-				$insideParenthesis,
-				$parenthesisOpener,
-			);
+			$functionCall = TokenHelper::findPrevious($phpcsFile, TokenHelper::NAME_TOKEN_CODES, $insideParenthesis, $parenthesisOpener);
 			if ($functionCall !== null) {
 				continue;
 			}
