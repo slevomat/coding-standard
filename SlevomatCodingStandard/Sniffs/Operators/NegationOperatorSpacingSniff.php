@@ -59,7 +59,7 @@ class NegationOperatorSpacingSniff implements Sniff
 		$previousEffective = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
 
 		$possibleOperandTypes = array_merge(
-			TokenHelper::getOnlyNameTokenCodes(),
+			TokenHelper::ONLY_NAME_TOKEN_CODES,
 			[
 				T_CONSTANT_ENCAPSED_STRING,
 				T_CLASS_C,

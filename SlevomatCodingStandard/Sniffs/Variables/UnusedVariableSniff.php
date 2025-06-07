@@ -170,13 +170,13 @@ class UnusedVariableSniff implements Sniff
 
 		$scopeOwnerPointer = ScopeHelper::getRootPointer($phpcsFile, $pointer - 1);
 		foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
-			if (in_array($conditionTokenCode, TokenHelper::$functionTokenCodes, true)) {
+			if (in_array($conditionTokenCode, TokenHelper::FUNCTION_TOKEN_CODES, true)) {
 				$scopeOwnerPointer = $conditionPointer;
 				break;
 			}
 		}
 
-		if (in_array($tokens[$scopeOwnerPointer]['code'], TokenHelper::$functionTokenCodes, true)) {
+		if (in_array($tokens[$scopeOwnerPointer]['code'], TokenHelper::FUNCTION_TOKEN_CODES, true)) {
 			if ($this->isStaticOrGlobalVariable($phpcsFile, $scopeOwnerPointer, $variableName)) {
 				return;
 			}
@@ -280,7 +280,7 @@ class UnusedVariableSniff implements Sniff
 
 		$possibleShortListCloserPointer = TokenHelper::findNextExcluding(
 			$phpcsFile,
-			array_merge(TokenHelper::$ineffectiveTokenCodes, [T_VARIABLE, T_COMMA]),
+			array_merge(TokenHelper::INEFFECTIVE_TOKEN_CODES, [T_VARIABLE, T_COMMA]),
 			$variablePointer + 1,
 		);
 		if ($tokens[$possibleShortListCloserPointer]['code'] === T_CLOSE_SHORT_ARRAY) {
@@ -380,7 +380,7 @@ class UnusedVariableSniff implements Sniff
 
 		$loopPointer = null;
 		foreach (array_reverse($tokens[$variablePointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
-			if (in_array($conditionTokenCode, TokenHelper::$functionTokenCodes, true)) {
+			if (in_array($conditionTokenCode, TokenHelper::FUNCTION_TOKEN_CODES, true)) {
 				break;
 			}
 

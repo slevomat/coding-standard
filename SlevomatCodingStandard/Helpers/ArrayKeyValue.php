@@ -116,7 +116,7 @@ class ArrayKeyValue
 		for ($i = $this->pointerStart; $i <= $this->pointerEnd; $i++) {
 			$token = $tokens[$i];
 
-			if (in_array($token['code'], TokenHelper::$arrayTokenCodes, true)) {
+			if (in_array($token['code'], TokenHelper::ARRAY_TOKEN_CODES, true)) {
 				$i = ArrayHelper::openClosePointers($token)[1];
 				continue;
 			}
@@ -149,7 +149,7 @@ class ArrayKeyValue
 				$firstNonWhitespace = $i;
 			}
 
-			if (in_array($token['code'], TokenHelper::$inlineCommentTokenCodes, true) === false) {
+			if (in_array($token['code'], TokenHelper::INLINE_COMMENT_TOKEN_CODES, true) === false) {
 				$key .= $token['content'];
 			}
 		}

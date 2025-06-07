@@ -39,7 +39,7 @@ class PropertyHelper
 
 		$previousPointer = TokenHelper::findPreviousExcluding(
 			$phpcsFile,
-			array_merge(TokenHelper::$ineffectiveTokenCodes, TokenHelper::getTypeHintTokenCodes(), [T_NULLABLE]),
+			array_merge(TokenHelper::INEFFECTIVE_TOKEN_CODES, TokenHelper::TYPE_HINT_TOKEN_CODES, [T_NULLABLE]),
 			$variablePointer - 1,
 		);
 
@@ -74,12 +74,12 @@ class PropertyHelper
 
 		$functionPointer = TokenHelper::findPrevious(
 			$phpcsFile,
-			array_merge(TokenHelper::$functionTokenCodes, [T_SEMICOLON, T_CLOSE_CURLY_BRACKET, T_OPEN_CURLY_BRACKET]),
+			array_merge(TokenHelper::FUNCTION_TOKEN_CODES, [T_SEMICOLON, T_CLOSE_CURLY_BRACKET, T_OPEN_CURLY_BRACKET]),
 			$variablePointer - 1,
 		);
 		if (
 			$functionPointer !== null
-			&& in_array($tokens[$functionPointer]['code'], TokenHelper::$functionTokenCodes, true)
+			&& in_array($tokens[$functionPointer]['code'], TokenHelper::FUNCTION_TOKEN_CODES, true)
 		) {
 			return false;
 		}
@@ -165,7 +165,7 @@ class PropertyHelper
 
 		$typeHintEndPointer = TokenHelper::findPrevious(
 			$phpcsFile,
-			TokenHelper::getTypeHintTokenCodes(),
+			TokenHelper::TYPE_HINT_TOKEN_CODES,
 			$propertyPointer - 1,
 			$propertyStartPointer,
 		);

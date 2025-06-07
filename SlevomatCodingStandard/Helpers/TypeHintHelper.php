@@ -251,7 +251,7 @@ class TypeHintHelper
 	{
 		$previousPointer = TokenHelper::findPreviousExcluding(
 			$phpcsFile,
-			array_merge([T_WHITESPACE], TokenHelper::getTypeHintTokenCodes()),
+			array_merge([T_WHITESPACE], TokenHelper::TYPE_HINT_TOKEN_CODES),
 			$endPointer - 1,
 		);
 		return TokenHelper::findNextNonWhitespace($phpcsFile, $previousPointer + 1);
@@ -292,7 +292,7 @@ class TypeHintHelper
 
 		$docCommentOwnerPointer = DocCommentHelper::findDocCommentOwnerPointer($phpcsFile, $docCommentOpenPointer);
 		if ($docCommentOwnerPointer !== null) {
-			if (in_array($tokens[$docCommentOwnerPointer]['code'], TokenHelper::$typeKeywordTokenCodes, true)) {
+			if (in_array($tokens[$docCommentOwnerPointer]['code'], TokenHelper::CLASS_TYPE_TOKEN_CODES, true)) {
 				return $containsTypeHintInTemplateAnnotation($docCommentOpenPointer);
 			}
 

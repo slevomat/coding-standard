@@ -208,7 +208,7 @@ class DocCommentHelper
 
 			if (in_array(
 				$tokens[$i]['code'],
-				array_merge([T_FUNCTION, T_VARIABLE, T_CONST], TokenHelper::$typeKeywordTokenCodes),
+				array_merge([T_FUNCTION, T_VARIABLE, T_CONST], TokenHelper::CLASS_TYPE_TOKEN_CODES),
 				true,
 			)) {
 				$docCommentOwnerPointer = $i;

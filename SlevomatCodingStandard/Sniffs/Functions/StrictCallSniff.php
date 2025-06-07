@@ -37,7 +37,7 @@ class StrictCallSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return TokenHelper::getOnlyNameTokenCodes();
+		return TokenHelper::ONLY_NAME_TOKEN_CODES;
 	}
 
 	/**

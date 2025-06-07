@@ -44,7 +44,7 @@ class ArrayHelper
 		for ($i = $arrayKeyValueStartPointer; $i < $arrayCloserPointer; $i++) {
 			$token = $tokens[$i];
 
-			if (in_array($token['code'], TokenHelper::$arrayTokenCodes, true)) {
+			if (in_array($token['code'], TokenHelper::ARRAY_TOKEN_CODES, true)) {
 				$i = self::openClosePointers($token)[1];
 				continue;
 			}
@@ -213,7 +213,7 @@ class ArrayHelper
 
 			$nextNonWhitespacePointer = TokenHelper::findNextNonWhitespace($phpcsFile, $i);
 
-			if (!in_array($tokens[$nextNonWhitespacePointer]['code'], TokenHelper::$inlineCommentTokenCodes, true)) {
+			if (!in_array($tokens[$nextNonWhitespacePointer]['code'], TokenHelper::INLINE_COMMENT_TOKEN_CODES, true)) {
 				break;
 			}
 

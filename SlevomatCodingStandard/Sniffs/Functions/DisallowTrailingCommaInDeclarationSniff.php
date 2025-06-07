@@ -21,7 +21,7 @@ class DisallowTrailingCommaInDeclarationSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return TokenHelper::$functionTokenCodes;
+		return TokenHelper::FUNCTION_TOKEN_CODES;
 	}
 
 	/**

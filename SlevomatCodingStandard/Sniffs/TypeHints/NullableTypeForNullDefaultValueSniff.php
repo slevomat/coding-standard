@@ -32,7 +32,7 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return TokenHelper::$functionTokenCodes;
+		return TokenHelper::FUNCTION_TOKEN_CODES;
 	}
 
 	/**
@@ -48,8 +48,6 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 		$startPointer = $tokens[$functionPointer]['parenthesis_opener'] + 1;
 		$endPointer = $tokens[$functionPointer]['parenthesis_closer'];
-
-		$typeHintTokenCodes = TokenHelper::getOnlyTypeHintTokenCodes();
 
 		for ($i = $startPointer; $i < $endPointer; $i++) {
 			if ($tokens[$i]['code'] !== T_VARIABLE) {
@@ -68,12 +66,12 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 				continue;
 			}
 
-			$ignoreTokensToFindTypeHint = array_merge(TokenHelper::$ineffectiveTokenCodes, [T_BITWISE_AND, T_ELLIPSIS]);
+			$ignoreTokensToFindTypeHint = array_merge(TokenHelper::INEFFECTIVE_TOKEN_CODES, [T_BITWISE_AND, T_ELLIPSIS]);
 			$typeHintEndPointer = TokenHelper::findPreviousExcluding($phpcsFile, $ignoreTokensToFindTypeHint, $i - 1, $startPointer);
 
 			if (
 				$typeHintEndPointer === null
-				|| !in_array($tokens[$typeHintEndPointer]['code'], $typeHintTokenCodes, true)
+				|| !in_array($tokens[$typeHintEndPointer]['code'], TokenHelper::ONLY_TYPE_HINT_TOKEN_CODES, true)
 			) {
 				continue;
 			}

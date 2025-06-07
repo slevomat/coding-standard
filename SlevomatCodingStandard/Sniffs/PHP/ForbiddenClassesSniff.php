@@ -91,7 +91,7 @@ class ForbiddenClassesSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 		$token = $tokens[$tokenPointer];
-		$nameTokens = array_merge(TokenHelper::getNameTokenCodes(), TokenHelper::$ineffectiveTokenCodes);
+		$nameTokens = array_merge(TokenHelper::NAME_TOKEN_CODES, TokenHelper::INEFFECTIVE_TOKEN_CODES);
 
 		if (
 			$token['code'] === T_IMPLEMENTS

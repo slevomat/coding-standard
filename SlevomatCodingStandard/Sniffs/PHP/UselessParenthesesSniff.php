@@ -132,7 +132,7 @@ class UselessParenthesesSniff implements Sniff
 		/** @var int $pointerBeforeParenthesisOpener */
 		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
 		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], array_merge(
-			TokenHelper::getNameTokenCodes(),
+			TokenHelper::NAME_TOKEN_CODES,
 			[
 				T_VARIABLE,
 				T_ISSET,
@@ -380,14 +380,14 @@ class UselessParenthesesSniff implements Sniff
 
 		if (in_array(
 			$tokens[$notBooleanNotOperatorPointer]['code'],
-			array_merge([T_SELF, T_STATIC, T_PARENT, T_VARIABLE, T_DOLLAR], TokenHelper::getNameTokenCodes()),
+			array_merge([T_SELF, T_STATIC, T_PARENT, T_VARIABLE, T_DOLLAR], TokenHelper::NAME_TOKEN_CODES),
 			true,
 		)) {
 			$contentEndPointer = IdentificatorHelper::findEndPointer($phpcsFile, $notBooleanNotOperatorPointer);
 
 			if (
 				$contentEndPointer === null
-				&& in_array($tokens[$notBooleanNotOperatorPointer]['code'], TokenHelper::getNameTokenCodes(), true)
+				&& in_array($tokens[$notBooleanNotOperatorPointer]['code'], TokenHelper::NAME_TOKEN_CODES, true)
 			) {
 				$nextPointer = TokenHelper::findNextEffective($phpcsFile, $contentStartPointer + 1);
 				if ($tokens[$nextPointer]['code'] === T_OPEN_PARENTHESIS) {

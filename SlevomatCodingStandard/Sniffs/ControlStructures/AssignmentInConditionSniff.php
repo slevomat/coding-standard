@@ -90,7 +90,7 @@ class AssignmentInConditionSniff implements Sniff
 
 			$functionCall = TokenHelper::findPrevious(
 				$phpcsFile,
-				TokenHelper::getOnlyNameTokenCodes(),
+				TokenHelper::ONLY_NAME_TOKEN_CODES,
 				$insideParenthesis,
 				$parenthesisOpener,
 			);

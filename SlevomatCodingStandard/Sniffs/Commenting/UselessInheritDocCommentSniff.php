@@ -56,7 +56,7 @@ class UselessInheritDocCommentSniff implements Sniff
 		do {
 			$docCommentOwnerPointer = TokenHelper::findNext(
 				$phpcsFile,
-				array_merge(TokenHelper::$functionTokenCodes, TokenHelper::getTypeHintTokenCodes(), [T_ATTRIBUTE]),
+				array_merge(TokenHelper::FUNCTION_TOKEN_CODES, TokenHelper::TYPE_HINT_TOKEN_CODES, [T_ATTRIBUTE]),
 				$searchPointer,
 			);
 
@@ -73,7 +73,7 @@ class UselessInheritDocCommentSniff implements Sniff
 
 		} while (true);
 
-		if (in_array($tokens[$docCommentOwnerPointer]['code'], TokenHelper::$functionTokenCodes, true)) {
+		if (in_array($tokens[$docCommentOwnerPointer]['code'], TokenHelper::FUNCTION_TOKEN_CODES, true)) {
 			$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $docCommentOwnerPointer);
 			if ($returnTypeHint === null) {
 				return;

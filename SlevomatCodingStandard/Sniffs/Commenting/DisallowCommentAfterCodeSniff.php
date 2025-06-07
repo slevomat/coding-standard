@@ -10,7 +10,6 @@ use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
-use function array_merge;
 use function in_array;
 use function strlen;
 use function substr;
@@ -32,8 +31,7 @@ class DisallowCommentAfterCodeSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		/** @phpstan-var array<int, (int|string)> */
-		return array_merge(TokenHelper::$inlineCommentTokenCodes, [T_DOC_COMMENT_OPEN_TAG]);
+		return [...TokenHelper::INLINE_COMMENT_TOKEN_CODES, T_DOC_COMMENT_OPEN_TAG];
 	}
 
 	/**

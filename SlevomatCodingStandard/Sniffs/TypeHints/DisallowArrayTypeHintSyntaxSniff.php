@@ -236,7 +236,7 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 				return null;
 			}
 
-			$functionPointer = TokenHelper::findNext($phpcsFile, TokenHelper::$functionTokenCodes, $docCommentOpenPointer + 1);
+			$functionPointer = TokenHelper::findNext($phpcsFile, TokenHelper::FUNCTION_TOKEN_CODES, $docCommentOpenPointer + 1);
 
 			if ($functionPointer === null || $phpcsFile->getTokens()[$functionPointer]['code'] !== T_FUNCTION) {
 				return null;

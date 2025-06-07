@@ -24,7 +24,7 @@ class AlphabeticallySortedByKeysSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return TokenHelper::$arrayTokenCodes;
+		return TokenHelper::ARRAY_TOKEN_CODES;
 	}
 
 	/**

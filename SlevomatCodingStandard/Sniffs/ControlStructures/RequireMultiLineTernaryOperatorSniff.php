@@ -122,7 +122,7 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 		while (true) {
 			$possibleEndOfLinePointer = TokenHelper::findPrevious(
 				$phpcsFile,
-				array_merge([T_WHITESPACE, T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO], TokenHelper::$inlineCommentTokenCodes),
+				array_merge([T_WHITESPACE, T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO], TokenHelper::INLINE_COMMENT_TOKEN_CODES),
 				$startPointer,
 			);
 			if (
@@ -142,7 +142,7 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 			}
 
 			if (
-				in_array($tokens[$possibleEndOfLinePointer]['code'], TokenHelper::$inlineCommentTokenCodes, true)
+				in_array($tokens[$possibleEndOfLinePointer]['code'], TokenHelper::INLINE_COMMENT_TOKEN_CODES, true)
 				&& substr($tokens[$possibleEndOfLinePointer]['content'], -1) === $phpcsFile->eolChar
 			) {
 				$endOfLineBefore = $possibleEndOfLinePointer;
