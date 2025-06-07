@@ -7,7 +7,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
-use function array_merge;
 use function in_array;
 use function preg_match;
 use function sprintf;
@@ -66,7 +65,7 @@ class NullableTypeForNullDefaultValueSniff implements Sniff
 				continue;
 			}
 
-			$ignoreTokensToFindTypeHint = array_merge(TokenHelper::INEFFECTIVE_TOKEN_CODES, [T_BITWISE_AND, T_ELLIPSIS]);
+			$ignoreTokensToFindTypeHint = [...TokenHelper::INEFFECTIVE_TOKEN_CODES, T_BITWISE_AND, T_ELLIPSIS];
 			$typeHintEndPointer = TokenHelper::findPreviousExcluding($phpcsFile, $ignoreTokensToFindTypeHint, $i - 1, $startPointer);
 
 			if (

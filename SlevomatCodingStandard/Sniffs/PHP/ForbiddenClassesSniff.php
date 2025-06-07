@@ -10,7 +10,6 @@ use SlevomatCodingStandard\Helpers\ReferencedNameHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use function array_key_exists;
-use function array_merge;
 use function array_pop;
 use function count;
 use function in_array;
@@ -91,7 +90,7 @@ class ForbiddenClassesSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 		$token = $tokens[$tokenPointer];
-		$nameTokens = array_merge(TokenHelper::NAME_TOKEN_CODES, TokenHelper::INEFFECTIVE_TOKEN_CODES);
+		$nameTokens = [...TokenHelper::NAME_TOKEN_CODES, ...TokenHelper::INEFFECTIVE_TOKEN_CODES];
 
 		if (
 			$token['code'] === T_IMPLEMENTS

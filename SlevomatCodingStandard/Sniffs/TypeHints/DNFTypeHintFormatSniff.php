@@ -10,7 +10,6 @@ use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHint;
-use function array_merge;
 use function in_array;
 use function preg_replace;
 use function sprintf;
@@ -58,10 +57,10 @@ class DNFTypeHintFormatSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return array_merge(
-			[T_VARIABLE],
-			TokenHelper::FUNCTION_TOKEN_CODES,
-		);
+		return [
+			T_VARIABLE,
+			...TokenHelper::FUNCTION_TOKEN_CODES,
+		];
 	}
 
 	/**

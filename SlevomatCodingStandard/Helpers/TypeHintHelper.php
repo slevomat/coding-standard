@@ -251,7 +251,7 @@ class TypeHintHelper
 	{
 		$previousPointer = TokenHelper::findPreviousExcluding(
 			$phpcsFile,
-			array_merge([T_WHITESPACE], TokenHelper::TYPE_HINT_TOKEN_CODES),
+			[T_WHITESPACE, ...TokenHelper::TYPE_HINT_TOKEN_CODES],
 			$endPointer - 1,
 		);
 		return TokenHelper::findNextNonWhitespace($phpcsFile, $previousPointer + 1);

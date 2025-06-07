@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use function array_key_exists;
-use function array_merge;
 use function array_reverse;
 use function count;
 use function current;
@@ -227,8 +226,7 @@ class UseStatementHelper
 			$pointer = $openTagPointer + 1;
 			$pointers = [];
 			while (true) {
-				$typesToFind = array_merge([T_USE], TokenHelper::CLASS_TYPE_TOKEN_CODES);
-				$pointer = TokenHelper::findNext($phpcsFile, $typesToFind, $pointer);
+				$pointer = TokenHelper::findNext($phpcsFile, [T_USE, ...TokenHelper::CLASS_TYPE_TOKEN_CODES], $pointer);
 				if ($pointer === null) {
 					break;
 				}

@@ -11,7 +11,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\TypelessParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use function array_filter;
 use function array_map;
-use function array_merge;
 use function array_pop;
 use function array_reverse;
 use function array_values;
@@ -215,7 +214,7 @@ class FunctionHelper
 
 			$pointerBeforeVariable = TokenHelper::findPreviousExcluding(
 				$phpcsFile,
-				array_merge(TokenHelper::INEFFECTIVE_TOKEN_CODES, [T_BITWISE_AND, T_ELLIPSIS]),
+				[...TokenHelper::INEFFECTIVE_TOKEN_CODES, T_BITWISE_AND, T_ELLIPSIS],
 				$i - 1,
 			);
 

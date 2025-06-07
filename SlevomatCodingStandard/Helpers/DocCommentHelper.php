@@ -7,7 +7,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
-use function array_merge;
 use function count;
 use function in_array;
 use function preg_match;
@@ -208,7 +207,7 @@ class DocCommentHelper
 
 			if (in_array(
 				$tokens[$i]['code'],
-				array_merge([T_FUNCTION, T_VARIABLE, T_CONST], TokenHelper::CLASS_TYPE_TOKEN_CODES),
+				[T_FUNCTION, T_VARIABLE, T_CONST, ...TokenHelper::CLASS_TYPE_TOKEN_CODES],
 				true,
 			)) {
 				$docCommentOwnerPointer = $i;

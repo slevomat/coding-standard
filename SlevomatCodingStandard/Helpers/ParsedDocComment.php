@@ -7,7 +7,6 @@ use PHPStan\PhpDocParser\Ast\Attribute;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
-use function array_merge;
 use function count;
 use function strlen;
 use function trim;
@@ -69,7 +68,7 @@ class ParsedDocComment
 			}
 		}
 
-		return TokenHelper::findNext($phpcsFile, array_merge(TokenHelper::ANNOTATION_TOKEN_CODES, [T_DOC_COMMENT_STRING]), $searchPointer);
+		return TokenHelper::findNext($phpcsFile, [...TokenHelper::ANNOTATION_TOKEN_CODES, T_DOC_COMMENT_STRING], $searchPointer);
 	}
 
 	public function getNodeEndPointer(File $phpcsFile, Node $node, int $nodeStartPointer): int
@@ -96,7 +95,7 @@ class ParsedDocComment
 
 		return TokenHelper::findPrevious(
 			$phpcsFile,
-			array_merge(TokenHelper::ANNOTATION_TOKEN_CODES, [T_DOC_COMMENT_STRING]),
+			[...TokenHelper::ANNOTATION_TOKEN_CODES, T_DOC_COMMENT_STRING],
 			$searchPointer,
 		);
 	}

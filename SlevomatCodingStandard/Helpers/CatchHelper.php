@@ -3,7 +3,6 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
-use function array_merge;
 use function in_array;
 use const T_BITWISE_OR;
 use const T_CATCH;
@@ -52,7 +51,7 @@ class CatchHelper
 		do {
 			$nameStartPointer = TokenHelper::findNext(
 				$phpcsFile,
-				array_merge([T_BITWISE_OR], TokenHelper::NAME_TOKEN_CODES),
+				[T_BITWISE_OR, ...TokenHelper::NAME_TOKEN_CODES],
 				$nameEndPointer + 1,
 				$catchParenthesisCloserPointer,
 			);

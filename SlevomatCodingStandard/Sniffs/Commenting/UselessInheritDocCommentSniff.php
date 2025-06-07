@@ -8,7 +8,6 @@ use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
-use function array_merge;
 use function in_array;
 use function preg_match;
 use const T_ATTRIBUTE;
@@ -56,7 +55,7 @@ class UselessInheritDocCommentSniff implements Sniff
 		do {
 			$docCommentOwnerPointer = TokenHelper::findNext(
 				$phpcsFile,
-				array_merge(TokenHelper::FUNCTION_TOKEN_CODES, TokenHelper::TYPE_HINT_TOKEN_CODES, [T_ATTRIBUTE]),
+				[...TokenHelper::FUNCTION_TOKEN_CODES, ...TokenHelper::TYPE_HINT_TOKEN_CODES, T_ATTRIBUTE],
 				$searchPointer,
 			);
 

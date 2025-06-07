@@ -30,7 +30,7 @@ use SlevomatCodingStandard\Helpers\TypeHint;
 use SlevomatCodingStandard\Helpers\TypeHintHelper;
 use function array_key_exists;
 use function array_map;
-use function array_merge;
+use function array_push;
 use function array_unique;
 use function array_values;
 use function count;
@@ -366,10 +366,7 @@ class ReturnTypeHintSniff implements Sniff
 		foreach ($typeHints as $typeHint) {
 			if ($this->enableUnionTypeHint && TypeHintHelper::isUnofficialUnionTypeHint($typeHint)) {
 				$canTryUnionTypeHint = true;
-				$typeHintsWithConvertedUnion = array_merge(
-					$typeHintsWithConvertedUnion,
-					TypeHintHelper::convertUnofficialUnionTypeHintToOfficialTypeHints($typeHint),
-				);
+				array_push($typeHintsWithConvertedUnion, ...TypeHintHelper::convertUnofficialUnionTypeHintToOfficialTypeHints($typeHint));
 			} else {
 				$typeHintsWithConvertedUnion[] = $typeHint;
 			}
