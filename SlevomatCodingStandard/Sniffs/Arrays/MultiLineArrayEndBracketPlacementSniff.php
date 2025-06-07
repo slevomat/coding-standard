@@ -18,7 +18,7 @@ class MultiLineArrayEndBracketPlacementSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return TokenHelper::$arrayTokenCodes;
+		return TokenHelper::ARRAY_TOKEN_CODES;
 	}
 
 	/**
@@ -36,7 +36,7 @@ class MultiLineArrayEndBracketPlacementSniff implements Sniff
 		[$arrayOpenerPointer, $arrayCloserPointer] = ArrayHelper::openClosePointers($tokens[$stackPointer]);
 
 		$nextEffective = TokenHelper::findNextEffective($phpcsFile, $arrayOpenerPointer + 1, $arrayCloserPointer);
-		if ($nextEffective === null || in_array($tokens[$nextEffective]['code'], TokenHelper::$arrayTokenCodes, true) === false) {
+		if ($nextEffective === null || in_array($tokens[$nextEffective]['code'], TokenHelper::ARRAY_TOKEN_CODES, true) === false) {
 			return;
 		}
 

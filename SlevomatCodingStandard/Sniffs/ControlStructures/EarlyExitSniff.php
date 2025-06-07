@@ -409,7 +409,12 @@ class EarlyExitSniff implements Sniff
 
 		$lastSemicolonInScopePointer = TokenHelper::findPreviousEffective($phpcsFile, $endPointer - 1, $startPointer);
 		return $tokens[$lastSemicolonInScopePointer]['code'] === T_SEMICOLON
-			? TokenHelper::findPreviousLocal($phpcsFile, TokenHelper::$earlyExitTokenCodes, $lastSemicolonInScopePointer - 1, $startPointer)
+			? TokenHelper::findPreviousLocal(
+				$phpcsFile,
+				TokenHelper::EARLY_EXIT_TOKEN_CODES,
+				$lastSemicolonInScopePointer - 1,
+				$startPointer,
+			)
 			: null;
 	}
 

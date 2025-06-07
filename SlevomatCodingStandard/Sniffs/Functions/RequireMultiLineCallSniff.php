@@ -167,11 +167,15 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 	private function shouldBeSkipped(File $phpcsFile, int $stringPointer, int $parenthesisCloserPointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
-		$nameTokenCodes = TokenHelper::getOnlyNameTokenCodes();
 
 		$searchStartPointer = TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $stringPointer);
 		while (true) {
-			$stringPointerBefore = TokenHelper::findNext($phpcsFile, $nameTokenCodes, $searchStartPointer, $stringPointer);
+			$stringPointerBefore = TokenHelper::findNext(
+				$phpcsFile,
+				TokenHelper::ONLY_NAME_TOKEN_CODES,
+				$searchStartPointer,
+				$stringPointer,
+			);
 
 			if ($stringPointerBefore === null) {
 				break;
@@ -191,7 +195,12 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 		$lastPointerOnLine = TokenHelper::findLastTokenOnLine($phpcsFile, $parenthesisCloserPointer);
 		$searchStartPointer = $parenthesisCloserPointer + 1;
 		while (true) {
-			$stringPointerAfter = TokenHelper::findNext($phpcsFile, $nameTokenCodes, $searchStartPointer, $lastPointerOnLine + 1);
+			$stringPointerAfter = TokenHelper::findNext(
+				$phpcsFile,
+				TokenHelper::ONLY_NAME_TOKEN_CODES,
+				$searchStartPointer,
+				$lastPointerOnLine + 1,
+			);
 
 			if ($stringPointerAfter === null) {
 				break;

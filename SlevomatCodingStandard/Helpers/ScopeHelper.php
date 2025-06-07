@@ -21,7 +21,7 @@ class ScopeHelper
 			$scope = 0;
 
 			foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
-				if (!in_array($conditionTokenCode, TokenHelper::$functionTokenCodes, true)) {
+				if (!in_array($conditionTokenCode, TokenHelper::FUNCTION_TOKEN_CODES, true)) {
 					continue;
 				}
 

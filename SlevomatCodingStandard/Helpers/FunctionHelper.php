@@ -215,11 +215,11 @@ class FunctionHelper
 
 			$pointerBeforeVariable = TokenHelper::findPreviousExcluding(
 				$phpcsFile,
-				array_merge(TokenHelper::$ineffectiveTokenCodes, [T_BITWISE_AND, T_ELLIPSIS]),
+				array_merge(TokenHelper::INEFFECTIVE_TOKEN_CODES, [T_BITWISE_AND, T_ELLIPSIS]),
 				$i - 1,
 			);
 
-			if (!in_array($tokens[$pointerBeforeVariable]['code'], TokenHelper::getTypeHintTokenCodes(), true)) {
+			if (!in_array($tokens[$pointerBeforeVariable]['code'], TokenHelper::TYPE_HINT_TOKEN_CODES, true)) {
 				$parametersTypeHints[$parameterName] = null;
 				continue;
 			}

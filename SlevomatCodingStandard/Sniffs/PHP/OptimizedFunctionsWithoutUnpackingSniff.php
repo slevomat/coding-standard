@@ -29,7 +29,7 @@ class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return TokenHelper::getOnlyNameTokenCodes();
+		return TokenHelper::ONLY_NAME_TOKEN_CODES;
 	}
 
 	/**
@@ -50,7 +50,7 @@ class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
 			return;
 		}
 		/** @var int $tokenBeforeInvocationPointer */
-		$tokenBeforeInvocationPointer = TokenHelper::findPreviousExcluding($phpcsFile, TokenHelper::getNameTokenCodes(), $pointer);
+		$tokenBeforeInvocationPointer = TokenHelper::findPreviousExcluding($phpcsFile, TokenHelper::NAME_TOKEN_CODES, $pointer);
 		$invokedName = TokenHelper::getContent($phpcsFile, $tokenBeforeInvocationPointer + 1, $pointer);
 		$useName = sprintf('function %s', $invokedName);
 

@@ -69,7 +69,7 @@ class ParsedDocComment
 			}
 		}
 
-		return TokenHelper::findNext($phpcsFile, array_merge(TokenHelper::$annotationTokenCodes, [T_DOC_COMMENT_STRING]), $searchPointer);
+		return TokenHelper::findNext($phpcsFile, array_merge(TokenHelper::ANNOTATION_TOKEN_CODES, [T_DOC_COMMENT_STRING]), $searchPointer);
 	}
 
 	public function getNodeEndPointer(File $phpcsFile, Node $node, int $nodeStartPointer): int
@@ -96,7 +96,7 @@ class ParsedDocComment
 
 		return TokenHelper::findPrevious(
 			$phpcsFile,
-			array_merge(TokenHelper::$annotationTokenCodes, [T_DOC_COMMENT_STRING]),
+			array_merge(TokenHelper::ANNOTATION_TOKEN_CODES, [T_DOC_COMMENT_STRING]),
 			$searchPointer,
 		);
 	}

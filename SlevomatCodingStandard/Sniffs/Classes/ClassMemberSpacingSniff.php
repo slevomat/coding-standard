@@ -41,7 +41,7 @@ class ClassMemberSpacingSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return TokenHelper::$typeWithAnonymousClassKeywordTokenCodes;
+		return TokenHelper::CLASS_TYPE_WITH_ANONYMOUS_CLASS_TOKEN_CODES;
 	}
 
 	/**
@@ -83,7 +83,7 @@ class ClassMemberSpacingSniff implements Sniff
 
 			$commentPointerAfterPreviousMember = TokenHelper::findNextNonWhitespace($phpcsFile, $previousMemberEndPointer + 1);
 			if (
-				in_array($tokens[$commentPointerAfterPreviousMember]['code'], TokenHelper::$inlineCommentTokenCodes, true)
+				in_array($tokens[$commentPointerAfterPreviousMember]['code'], TokenHelper::INLINE_COMMENT_TOKEN_CODES, true)
 				&& (
 					$tokens[$previousMemberEndPointer]['line'] === $tokens[$commentPointerAfterPreviousMember]['line']
 					|| $tokens[$previousMemberEndPointer]['line'] + 1 === $tokens[$commentPointerAfterPreviousMember]['line']

@@ -84,7 +84,7 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 
 		$scopeOwnerPointer = null;
 		foreach (array_reverse($tokens[$variablePointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
-			if (!in_array($conditionTokenCode, TokenHelper::$functionTokenCodes, true)) {
+			if (!in_array($conditionTokenCode, TokenHelper::FUNCTION_TOKEN_CODES, true)) {
 				continue;
 			}
 
@@ -103,7 +103,7 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 			? count($tokens) - 1
 			: $tokens[$scopeOwnerPointer]['scope_closer'];
 
-		if (in_array($tokens[$scopeOwnerPointer]['code'], TokenHelper::$functionTokenCodes, true)) {
+		if (in_array($tokens[$scopeOwnerPointer]['code'], TokenHelper::FUNCTION_TOKEN_CODES, true)) {
 			if ($this->isParameter($phpcsFile, $scopeOwnerPointer, $variablePointer)) {
 				return;
 			}

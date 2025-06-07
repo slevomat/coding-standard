@@ -189,7 +189,7 @@ class UselessVariableSniff implements Sniff
 
 		for ($i = $pointer - 1; $i >= 0; $i--) {
 			if (
-				in_array($tokens[$i]['code'], TokenHelper::$functionTokenCodes, true)
+				in_array($tokens[$i]['code'], TokenHelper::FUNCTION_TOKEN_CODES, true)
 				&& ScopeHelper::isInSameScope($phpcsFile, $tokens[$i]['scope_opener'] + 1, $pointer)
 			) {
 				return null;
@@ -281,7 +281,7 @@ class UselessVariableSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
-			if (in_array($conditionTokenCode, TokenHelper::$functionTokenCodes, true)) {
+			if (in_array($conditionTokenCode, TokenHelper::FUNCTION_TOKEN_CODES, true)) {
 				return $conditionPointer;
 			}
 		}

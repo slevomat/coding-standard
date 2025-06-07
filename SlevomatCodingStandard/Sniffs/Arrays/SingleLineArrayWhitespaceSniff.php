@@ -32,7 +32,7 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return TokenHelper::$arrayTokenCodes;
+		return TokenHelper::ARRAY_TOKEN_CODES;
 	}
 
 	/**
@@ -76,7 +76,7 @@ class SingleLineArrayWhitespaceSniff implements Sniff
 			}
 
 			// Skip nested arrays as they will be processed separately
-			if (in_array($tokens[$i]['code'], TokenHelper::$arrayTokenCodes, true)) {
+			if (in_array($tokens[$i]['code'], TokenHelper::ARRAY_TOKEN_CODES, true)) {
 				$i = ArrayHelper::openClosePointers($tokens[$i])[1];
 
 				continue;

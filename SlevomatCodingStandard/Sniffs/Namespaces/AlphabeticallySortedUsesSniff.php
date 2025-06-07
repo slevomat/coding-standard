@@ -143,7 +143,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 				continue;
 			}
 
-			$commentStartPointer = in_array($tokens[$pointerBeforeUseStatement]['code'], TokenHelper::$inlineCommentTokenCodes, true)
+			$commentStartPointer = in_array($tokens[$pointerBeforeUseStatement]['code'], TokenHelper::INLINE_COMMENT_TOKEN_CODES, true)
 				? CommentHelper::getMultilineCommentStartPointer($phpcsFile, $pointerBeforeUseStatement)
 				: $tokens[$pointerBeforeUseStatement]['comment_opener'];
 

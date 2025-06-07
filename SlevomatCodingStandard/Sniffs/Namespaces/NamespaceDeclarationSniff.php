@@ -92,7 +92,7 @@ class NamespaceDeclarationSniff implements Sniff
 		$namespaceNameStartPointer = TokenHelper::findNextEffective($phpcsFile, $namespacePointer + 1);
 		$namespaceNameEndPointer = TokenHelper::findNextExcluding(
 			$phpcsFile,
-			TokenHelper::getNameTokenCodes(),
+			TokenHelper::NAME_TOKEN_CODES,
 			$namespaceNameStartPointer + 1,
 		) - 1;
 

@@ -166,7 +166,7 @@ abstract class AbstractControlStructureSpacing implements Sniff
 			$whitespaceBefore .= substr($tokens[$pointerBefore]['content'], strlen('<?php'));
 		}
 
-		$hasCommentWithLineEndBefore = in_array($tokens[$pointerBefore]['code'], TokenHelper::$inlineCommentTokenCodes, true)
+		$hasCommentWithLineEndBefore = in_array($tokens[$pointerBefore]['code'], TokenHelper::INLINE_COMMENT_TOKEN_CODES, true)
 			&& substr($tokens[$pointerBefore]['content'], -strlen($phpcsFile->eolChar)) === $phpcsFile->eolChar;
 		if ($hasCommentWithLineEndBefore) {
 			$whitespaceBefore .= $phpcsFile->eolChar;

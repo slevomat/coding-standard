@@ -58,7 +58,7 @@ class TypeNameMatchesFileNameSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return TokenHelper::$typeKeywordTokenCodes;
+		return TokenHelper::CLASS_TYPE_TOKEN_CODES;
 	}
 
 	/**

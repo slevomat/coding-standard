@@ -34,10 +34,10 @@ class ModernClassNameReferenceSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		$tokens = TokenHelper::getOnlyNameTokenCodes();
-		$tokens[] = T_CLASS_C;
-
-		return $tokens;
+		return [
+			T_CLASS_C,
+			...TokenHelper::ONLY_NAME_TOKEN_CODES,
+		];
 	}
 
 	/**

@@ -30,7 +30,7 @@ class ParameterTypeHintSpacingSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return TokenHelper::$functionTokenCodes;
+		return TokenHelper::FUNCTION_TOKEN_CODES;
 	}
 
 	/**
@@ -43,8 +43,6 @@ class ParameterTypeHintSpacingSniff implements Sniff
 
 		$parametersStartPointer = $tokens[$functionPointer]['parenthesis_opener'] + 1;
 		$parametersEndPointer = $tokens[$functionPointer]['parenthesis_closer'] - 1;
-
-		$typeHintTokenCodes = TokenHelper::getTypeHintTokenCodes();
 
 		for ($i = $parametersStartPointer; $i <= $parametersEndPointer; $i++) {
 			if ($tokens[$i]['code'] !== T_VARIABLE) {
@@ -68,7 +66,7 @@ class ParameterTypeHintSpacingSniff implements Sniff
 
 			$typeHintEndPointer = TokenHelper::findPrevious(
 				$phpcsFile,
-				$typeHintTokenCodes,
+				TokenHelper::TYPE_HINT_TOKEN_CODES,
 				$parameterPointer - 1,
 				$attributeCloserPointer ?? $parameterStartPointer,
 			);

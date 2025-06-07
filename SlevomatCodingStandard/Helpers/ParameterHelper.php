@@ -28,7 +28,7 @@ class ParameterHelper
 		}
 
 		$parenthesisOwnerPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_owner'];
-		return in_array($tokens[$parenthesisOwnerPointer]['code'], TokenHelper::$functionTokenCodes, true);
+		return in_array($tokens[$parenthesisOwnerPointer]['code'], TokenHelper::FUNCTION_TOKEN_CODES, true);
 	}
 
 }

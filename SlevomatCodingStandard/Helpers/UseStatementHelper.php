@@ -62,7 +62,7 @@ class UseStatementHelper
 
 			if (
 				$tokens[$previousPointer]['code'] === T_OPEN_CURLY_BRACKET
-				&& in_array($tokens[$scopeConditionPointer]['code'], TokenHelper::$typeWithAnonymousClassKeywordTokenCodes, true)
+				&& in_array($tokens[$scopeConditionPointer]['code'], TokenHelper::CLASS_TYPE_WITH_ANONYMOUS_CLASS_TOKEN_CODES, true)
 			) {
 				return false;
 			}
@@ -123,10 +123,10 @@ class UseStatementHelper
 		$tokens = $phpcsFile->getTokens();
 
 		$nameEndPointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_AS, T_COMMA], $usePointer + 1) - 1;
-		if (in_array($tokens[$nameEndPointer]['code'], TokenHelper::$ineffectiveTokenCodes, true)) {
+		if (in_array($tokens[$nameEndPointer]['code'], TokenHelper::INEFFECTIVE_TOKEN_CODES, true)) {
 			$nameEndPointer = TokenHelper::findPreviousEffective($phpcsFile, $nameEndPointer);
 		}
-		$nameStartPointer = TokenHelper::findPreviousExcluding($phpcsFile, TokenHelper::getNameTokenCodes(), $nameEndPointer - 1) + 1;
+		$nameStartPointer = TokenHelper::findPreviousExcluding($phpcsFile, TokenHelper::NAME_TOKEN_CODES, $nameEndPointer - 1) + 1;
 
 		$name = TokenHelper::getContent($phpcsFile, $nameStartPointer, $nameEndPointer);
 
@@ -227,14 +227,14 @@ class UseStatementHelper
 			$pointer = $openTagPointer + 1;
 			$pointers = [];
 			while (true) {
-				$typesToFind = array_merge([T_USE], TokenHelper::$typeKeywordTokenCodes);
+				$typesToFind = array_merge([T_USE], TokenHelper::CLASS_TYPE_TOKEN_CODES);
 				$pointer = TokenHelper::findNext($phpcsFile, $typesToFind, $pointer);
 				if ($pointer === null) {
 					break;
 				}
 
 				$token = $tokens[$pointer];
-				if (in_array($token['code'], TokenHelper::$typeKeywordTokenCodes, true)) {
+				if (in_array($token['code'], TokenHelper::CLASS_TYPE_TOKEN_CODES, true)) {
 					$pointer = $token['scope_closer'] + 1;
 					continue;
 				}

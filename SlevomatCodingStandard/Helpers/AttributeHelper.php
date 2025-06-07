@@ -67,7 +67,7 @@ class AttributeHelper
 
 			$attributeNameEndPointer = TokenHelper::findNextExcluding(
 				$phpcsFile,
-				TokenHelper::getNameTokenCodes(),
+				TokenHelper::NAME_TOKEN_CODES,
 				$attributeNameStartPointer + 1,
 			) - 1;
 			$attributeName = TokenHelper::getContent($phpcsFile, $attributeNameStartPointer, $attributeNameEndPointer);

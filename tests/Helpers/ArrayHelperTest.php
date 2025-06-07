@@ -19,7 +19,7 @@ class ArrayHelperTest extends TestCase
 	public function testParse(string $file, int $arrayPointerNo, array $expect): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile($file);
-		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
+		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::ARRAY_TOKEN_CODES, 0);
 
 		$parsed = ArrayHelper::parse($phpcsFile, $arrayPointers[$arrayPointerNo]);
 		$tokens = $phpcsFile->getTokens();
@@ -95,7 +95,7 @@ class ArrayHelperTest extends TestCase
 	public function testGetIndentation(string $file, int $arrayPointerNo, array $expect): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile($file);
-		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
+		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::ARRAY_TOKEN_CODES, 0);
 
 		$parsed = ArrayHelper::parse($phpcsFile, $arrayPointers[$arrayPointerNo]);
 		$indentation = ArrayHelper::getIndentation($parsed);
@@ -111,7 +111,7 @@ class ArrayHelperTest extends TestCase
 	public function testIsKeyed(string $file, int $arrayPointerNo, array $expect): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile($file);
-		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
+		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::ARRAY_TOKEN_CODES, 0);
 
 		$parsed = ArrayHelper::parse($phpcsFile, $arrayPointers[$arrayPointerNo]);
 		$isKeyed = ArrayHelper::isKeyed($parsed);
@@ -127,7 +127,7 @@ class ArrayHelperTest extends TestCase
 	public function testIsKeyedAll(string $file, int $arrayPointerNo, array $expect): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile($file);
-		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
+		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::ARRAY_TOKEN_CODES, 0);
 
 		$parsed = ArrayHelper::parse($phpcsFile, $arrayPointers[$arrayPointerNo]);
 		$isKeyedAll = ArrayHelper::isKeyedAll($parsed);
@@ -143,7 +143,7 @@ class ArrayHelperTest extends TestCase
 	public function testIsMultiLine(string $file, int $arrayPointerNo, array $expect): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile($file);
-		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
+		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::ARRAY_TOKEN_CODES, 0);
 
 		$isMultiLine = ArrayHelper::isMultiLine($phpcsFile, $arrayPointers[$arrayPointerNo]);
 		self::assertSame(in_array('multi', $expect['flags'], true), $isMultiLine);
@@ -157,7 +157,7 @@ class ArrayHelperTest extends TestCase
 	public function testIsNotEmpty(string $file, int $arrayPointerNo, array $expect): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile($file);
-		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
+		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::ARRAY_TOKEN_CODES, 0);
 
 		$isNotEmpty = ArrayHelper::isNotEmpty($phpcsFile, $arrayPointers[$arrayPointerNo]);
 
@@ -177,7 +177,7 @@ class ArrayHelperTest extends TestCase
 		}
 
 		$phpcsFile = $this->getCodeSnifferFile($file);
-		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
+		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::ARRAY_TOKEN_CODES, 0);
 
 		$parsed = ArrayHelper::parse($phpcsFile, $arrayPointers[$arrayPointerNo]);
 		$isSortedByKey = ArrayHelper::isSortedByKey($parsed);
@@ -193,7 +193,7 @@ class ArrayHelperTest extends TestCase
 	public function testOpenClosePointers(string $file, int $arrayPointerNo, array $expect): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile($file);
-		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::$arrayTokenCodes, 0);
+		$arrayPointers = TokenHelper::findNextAll($phpcsFile, TokenHelper::ARRAY_TOKEN_CODES, 0);
 
 		$tokens = $phpcsFile->getTokens();
 		[$pointerOpener, $pointerCloser] = ArrayHelper::openClosePointers($tokens[$arrayPointers[$arrayPointerNo]]);

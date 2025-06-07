@@ -67,7 +67,7 @@ class UselessAliasSniff implements Sniff
 				}
 
 				$asPointer = TokenHelper::findNext($phpcsFile, T_AS, $useStatement->getPointer() + 1);
-				$nameEndPointer = TokenHelper::findPrevious($phpcsFile, TokenHelper::getOnlyNameTokenCodes(), $asPointer - 1);
+				$nameEndPointer = TokenHelper::findPrevious($phpcsFile, TokenHelper::ONLY_NAME_TOKEN_CODES, $asPointer - 1);
 				$useSemicolonPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $asPointer + 1);
 
 				$phpcsFile->fixer->beginChangeset();

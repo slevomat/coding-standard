@@ -52,7 +52,7 @@ class DisallowTrailingCommaInCallSniff implements Sniff
 		if (!in_array(
 			$tokens[$pointerBeforeParenthesisOpener]['code'],
 			array_merge(
-				TokenHelper::getOnlyNameTokenCodes(),
+				TokenHelper::ONLY_NAME_TOKEN_CODES,
 				[T_VARIABLE, T_ISSET, T_UNSET, T_CLOSE_PARENTHESIS, T_SELF, T_STATIC, T_PARENT],
 			),
 			true,

@@ -63,7 +63,7 @@ class CommentHelper
 
 		$commentStartPointer = $commentEndPointer;
 		do {
-			$commentBefore = TokenHelper::findPrevious($phpcsFile, TokenHelper::$inlineCommentTokenCodes, $commentStartPointer - 1);
+			$commentBefore = TokenHelper::findPrevious($phpcsFile, TokenHelper::INLINE_COMMENT_TOKEN_CODES, $commentStartPointer - 1);
 			if ($commentBefore === null) {
 				break;
 			}
@@ -84,7 +84,7 @@ class CommentHelper
 
 		$commentEndPointer = $commentStartPointer;
 		do {
-			$commentAfter = TokenHelper::findNext($phpcsFile, TokenHelper::$inlineCommentTokenCodes, $commentEndPointer + 1);
+			$commentAfter = TokenHelper::findNext($phpcsFile, TokenHelper::INLINE_COMMENT_TOKEN_CODES, $commentEndPointer + 1);
 			if ($commentAfter === null) {
 				break;
 			}

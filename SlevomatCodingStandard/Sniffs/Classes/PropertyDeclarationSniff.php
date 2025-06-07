@@ -278,7 +278,7 @@ class PropertyDeclarationSniff implements Sniff
 	{
 		$typeHintEndPointer = TokenHelper::findPrevious(
 			$phpcsFile,
-			TokenHelper::getTypeHintTokenCodes(),
+			TokenHelper::TYPE_HINT_TOKEN_CODES,
 			$propertyPointer - 1,
 			$lastModifierPointer,
 		);
