@@ -12,7 +12,6 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_combine;
 use function array_key_exists;
 use function array_map;
-use function array_merge;
 use function array_unique;
 use function implode;
 use function ltrim;
@@ -273,7 +272,7 @@ class AnnotationNameSniff implements Sniff
 				SniffSettingsHelper::normalizeArray($this->annotations),
 			);
 		} else {
-			$annotationNames = array_merge(self::STANDARD_ANNOTATIONS, self::PHPUNIT_ANNOTATIONS, self::STATIC_ANALYSIS_ANNOTATIONS);
+			$annotationNames = [...self::STANDARD_ANNOTATIONS, ...self::PHPUNIT_ANNOTATIONS, ...self::STATIC_ANALYSIS_ANNOTATIONS];
 
 			foreach (self::STATIC_ANALYSIS_ANNOTATIONS as $annotationName) {
 				if (strpos($annotationName, 'psalm') === 0) {

@@ -131,41 +131,38 @@ class UselessParenthesesSniff implements Sniff
 
 		/** @var int $pointerBeforeParenthesisOpener */
 		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
-		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], array_merge(
-			TokenHelper::NAME_TOKEN_CODES,
-			[
-				T_VARIABLE,
-				T_ISSET,
-				T_UNSET,
-				T_EMPTY,
-				T_CLOSURE,
-				T_FN,
-				T_USE,
-				T_ANON_CLASS,
-				T_NEW,
-				T_SELF,
-				T_STATIC,
-				T_PARENT,
-				T_EXIT,
-				T_CLOSE_PARENTHESIS,
-				T_EVAL,
-				T_LIST,
-				T_INCLUDE,
-				T_INCLUDE_ONCE,
-				T_REQUIRE,
-				T_REQUIRE_ONCE,
-				T_INT_CAST,
-				T_DOUBLE_CAST,
-				T_STRING_CAST,
-				T_ARRAY_CAST,
-				T_OBJECT_CAST,
-				T_BOOL_CAST,
-				T_UNSET_CAST,
-				T_MATCH,
-				T_BITWISE_NOT,
-			],
-		), true)
-		) {
+		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], [
+			...TokenHelper::NAME_TOKEN_CODES,
+			T_VARIABLE,
+			T_ISSET,
+			T_UNSET,
+			T_EMPTY,
+			T_CLOSURE,
+			T_FN,
+			T_USE,
+			T_ANON_CLASS,
+			T_NEW,
+			T_SELF,
+			T_STATIC,
+			T_PARENT,
+			T_EXIT,
+			T_CLOSE_PARENTHESIS,
+			T_EVAL,
+			T_LIST,
+			T_INCLUDE,
+			T_INCLUDE_ONCE,
+			T_REQUIRE,
+			T_REQUIRE_ONCE,
+			T_INT_CAST,
+			T_DOUBLE_CAST,
+			T_STRING_CAST,
+			T_ARRAY_CAST,
+			T_OBJECT_CAST,
+			T_BOOL_CAST,
+			T_UNSET_CAST,
+			T_MATCH,
+			T_BITWISE_NOT,
+		], true,)) {
 			return;
 		}
 
@@ -380,7 +377,7 @@ class UselessParenthesesSniff implements Sniff
 
 		if (in_array(
 			$tokens[$notBooleanNotOperatorPointer]['code'],
-			array_merge([T_SELF, T_STATIC, T_PARENT, T_VARIABLE, T_DOLLAR], TokenHelper::NAME_TOKEN_CODES),
+			[T_SELF, T_STATIC, T_PARENT, T_VARIABLE, T_DOLLAR, ...TokenHelper::NAME_TOKEN_CODES],
 			true,
 		)) {
 			$contentEndPointer = IdentificatorHelper::findEndPointer($phpcsFile, $notBooleanNotOperatorPointer);
@@ -501,9 +498,11 @@ class UselessParenthesesSniff implements Sniff
 			$pointer = TokenHelper::findNext(
 				$phpcsFile,
 				array_merge(
-					self::OPERATORS,
-					[T_OPEN_PARENTHESIS],
-					$complicatedOperators,
+					[
+						...self::OPERATORS,
+						T_OPEN_PARENTHESIS,
+						...$complicatedOperators,
+					],
 					Tokens::$comparisonTokens,
 				),
 				$actualStartPointer,

@@ -4,7 +4,6 @@ namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use function array_key_exists;
-use function array_merge;
 use function in_array;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CLOSE_PARENTHESIS;
@@ -84,7 +83,7 @@ class IdentificatorHelper
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer + 1);
 
 		if (
-			in_array($tokens[$startPointer]['code'], array_merge([T_SELF, T_STATIC, T_PARENT], TokenHelper::NAME_TOKEN_CODES), true)
+			in_array($tokens[$startPointer]['code'], [T_SELF, T_STATIC, T_PARENT, ...TokenHelper::NAME_TOKEN_CODES], true)
 			&& $tokens[$nextPointer]['code'] === T_DOUBLE_COLON
 		) {
 			return self::getEndPointerAfterOperator($phpcsFile, $nextPointer);
@@ -118,7 +117,7 @@ class IdentificatorHelper
 
 		if (
 			$tokens[$operatorPointer]['code'] === T_DOUBLE_COLON
-			&& in_array($tokens[$previousPointer]['code'], array_merge([T_SELF, T_STATIC, T_PARENT], TokenHelper::NAME_TOKEN_CODES), true)
+			&& in_array($tokens[$previousPointer]['code'], [T_SELF, T_STATIC, T_PARENT, ...TokenHelper::NAME_TOKEN_CODES], true)
 		) {
 			return $previousPointer;
 		}
@@ -165,7 +164,7 @@ class IdentificatorHelper
 			return self::getStartPointerBeforeVariablePart($phpcsFile, $tokens[$previousPointer]['bracket_opener']);
 		}
 
-		if (in_array($tokens[$previousPointer]['code'], array_merge([T_VARIABLE], TokenHelper::NAME_TOKEN_CODES), true)) {
+		if (in_array($tokens[$previousPointer]['code'], [T_VARIABLE, ...TokenHelper::NAME_TOKEN_CODES], true)) {
 			return self::getStartPointerBeforeVariablePart($phpcsFile, $previousPointer);
 		}
 

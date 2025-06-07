@@ -13,7 +13,6 @@ use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use Throwable;
 use function array_key_exists;
-use function array_merge;
 use function in_array;
 use function sprintf;
 use const T_BITWISE_OR;
@@ -72,7 +71,7 @@ class ReferenceThrowableOnlySniff implements Sniff
 			if ($tokens[$previousPointer]['code'] === T_BITWISE_OR) {
 				$previousPointer = TokenHelper::findPreviousExcluding(
 					$phpcsFile,
-					array_merge(TokenHelper::INEFFECTIVE_TOKEN_CODES, TokenHelper::NAME_TOKEN_CODES, [T_BITWISE_OR]),
+					[...TokenHelper::INEFFECTIVE_TOKEN_CODES, ...TokenHelper::NAME_TOKEN_CODES, T_BITWISE_OR],
 					$previousPointer - 1,
 				);
 			}

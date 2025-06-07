@@ -280,7 +280,7 @@ class UnusedVariableSniff implements Sniff
 
 		$possibleShortListCloserPointer = TokenHelper::findNextExcluding(
 			$phpcsFile,
-			array_merge(TokenHelper::INEFFECTIVE_TOKEN_CODES, [T_VARIABLE, T_COMMA]),
+			[...TokenHelper::INEFFECTIVE_TOKEN_CODES, T_VARIABLE, T_COMMA],
 			$variablePointer + 1,
 		);
 		if ($tokens[$possibleShortListCloserPointer]['code'] === T_CLOSE_SHORT_ARRAY) {
