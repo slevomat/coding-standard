@@ -71,13 +71,13 @@ class ClassStructureSniffTest extends TestCase
 
 	public function testNoErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/classStructureSniffNoErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/classStructureNoErrors.php');
 		self::assertNoSniffErrorInFile($report);
 	}
 
 	public function testErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/classStructureSniffErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/classStructureErrors.php');
 
 		self::assertSame(30, $report->getErrorCount());
 
@@ -115,7 +115,7 @@ class ClassStructureSniffTest extends TestCase
 
 	public function testManyErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/classStructureSniffManyErrors.php');
+		$report = self::checkFile(__DIR__ . '/data/classStructureManyErrors.php');
 
 		self::assertSame(1, $report->getErrorCount());
 		self::assertAllFixedInFile($report);
@@ -124,7 +124,7 @@ class ClassStructureSniffTest extends TestCase
 	public function testNoErrorsWithDifferentRules(): void
 	{
 		$report = self::checkFile(
-			__DIR__ . '/data/classStructureSniffNoErrorsWithDifferentRules.php',
+			__DIR__ . '/data/classStructureNoErrorsWithDifferentRules.php',
 			['groups' => self::DIFFERENT_RULES],
 		);
 
@@ -134,7 +134,7 @@ class ClassStructureSniffTest extends TestCase
 	public function testErrorsWithDifferentRules(): void
 	{
 		$report = self::checkFile(
-			__DIR__ . '/data/classStructureSniffErrorsWithDifferentRules.php',
+			__DIR__ . '/data/classStructureErrorsWithDifferentRules.php',
 			['groups' => self::DIFFERENT_RULES],
 		);
 
@@ -195,7 +195,7 @@ class ClassStructureSniffTest extends TestCase
 	public function testNoErrorsWithMethodGroupRules(): void
 	{
 		$report = self::checkFile(
-			__DIR__ . '/data/classStructureSniffNoErrorsWithMethodGroupRules.php',
+			__DIR__ . '/data/classStructureNoErrorsWithMethodGroupRules.php',
 			[
 				'methodGroups' => self::METHOD_GROUPS,
 				'groups' => self::METHOD_GROUP_RULES,
@@ -208,7 +208,7 @@ class ClassStructureSniffTest extends TestCase
 	public function testErrorsWithMethodGroupRules(): void
 	{
 		$report = self::checkFile(
-			__DIR__ . '/data/classStructureSniffErrorsWithMethodGroupRules.php',
+			__DIR__ . '/data/classStructureErrorsWithMethodGroupRules.php',
 			[
 				'methodGroups' => self::METHOD_GROUPS,
 				'groups' => self::METHOD_GROUP_RULES,
@@ -230,7 +230,7 @@ class ClassStructureSniffTest extends TestCase
 	{
 		try {
 			self::checkFile(
-				__DIR__ . '/data/classStructureSniffNoErrors.php',
+				__DIR__ . '/data/classStructureNoErrors.php',
 				['groups' => ['whatever']],
 			);
 			self::fail();
@@ -243,7 +243,7 @@ class ClassStructureSniffTest extends TestCase
 	{
 		try {
 			self::checkFile(
-				__DIR__ . '/data/classStructureSniffNoErrors.php',
+				__DIR__ . '/data/classStructureNoErrors.php',
 				['groups' => ['uses']],
 			);
 			self::fail();
