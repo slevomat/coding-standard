@@ -10,13 +10,7 @@ use function sprintf;
 use const T_AS;
 use const T_CONST;
 use const T_FUNCTION;
-use const T_PRIVATE;
-use const T_PROTECTED;
-use const T_PUBLIC;
-use const T_READONLY;
-use const T_STATIC;
 use const T_USE;
-use const T_VAR;
 use const T_VARIABLE;
 
 class PropertySpacingSniff extends AbstractPropertyConstantAndEnumCaseSpacing
@@ -29,7 +23,7 @@ class PropertySpacingSniff extends AbstractPropertyConstantAndEnumCaseSpacing
 	 */
 	public function register(): array
 	{
-		return [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC];
+		return TokenHelper::PROPERTY_MODIFIERS_TOKEN_CODES;
 	}
 
 	/**
@@ -46,8 +40,8 @@ class PropertySpacingSniff extends AbstractPropertyConstantAndEnumCaseSpacing
 		}
 
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
-		if (in_array($tokens[$nextPointer]['code'], [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC], true)) {
-			// We don't want to report the same property twice
+		if (in_array($tokens[$nextPointer]['code'], TokenHelper::PROPERTY_MODIFIERS_TOKEN_CODES, true)) {
+			// We don't want to report the same property multiple times
 			return $nextPointer;
 		}
 

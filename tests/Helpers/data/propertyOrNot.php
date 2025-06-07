@@ -1,4 +1,4 @@
-<?php // lint >= 8.1
+<?php // lint >= 8.4
 
 class Foo
 {
@@ -43,4 +43,28 @@ class Foo
 	readonly int $onlyReadonlyProperty;
 
 	readonly string|int $onlyReadonlyPropertyWithTypeHint;
+
+	public private(set) readonly ?string $privateSet;
+
+	protected(set) array $protectedSet;
+
+	protected(set) public int $protectedSetPublic;
+
+	private(set) protected ?string $privateSetProtected;
+
+	final ?bool $final;
+
+	public final ?bool $publicFinal;
+
+	static protected array $staticProtected = [];
+
+	public string $propertyWithHooks {
+		get => 'mailto:' . $this->propertyWithHooks;
+		set (string $propertyWithHooksValue) {
+			$this->propertyWithHooks = $propertyWithHooksValue;
+		}
+	}
+
+	static $onlyStatic;
+
 }

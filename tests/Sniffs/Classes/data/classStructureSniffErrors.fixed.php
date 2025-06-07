@@ -1,4 +1,4 @@
-<?php // lint >= 8.1
+<?php // lint >= 8.4
 
 class A
 {
@@ -242,4 +242,19 @@ class Foo
 	}
 	private const BA = 582000;
 	private const KE = 599981;
+}
+
+class Foo
+{
+	public protected(set) bool $p2;
+	public $p1;
+	public string $email {
+		get => 'mailto:' . $this->email;
+		set (string $value) {
+			$this->email = $value;
+		}
+	}
+	protected $p3;
+	protected private(set) int $p4;
+	private $p5;
 }

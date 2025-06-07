@@ -18,7 +18,7 @@ class PropertyDeclarationSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/propertyDeclarationErrors.php');
 
-		self::assertSame(17, $report->getErrorCount());
+		self::assertSame(20, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, PropertyDeclarationSniff::CODE_NO_SPACE_BETWEEN_TYPE_HINT_AND_PROPERTY);
 		self::assertSniffError($report, 8, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PROPERTY);
@@ -37,6 +37,9 @@ class PropertyDeclarationSniffTest extends TestCase
 		self::assertSniffError($report, 28, PropertyDeclarationSniff::CODE_MULTIPLE_SPACES_BETWEEN_TYPE_HINT_AND_PROPERTY);
 		self::assertSniffError($report, 30, PropertyDeclarationSniff::CODE_INCORRECT_ORDER_OF_MODIFIERS);
 		self::assertSniffError($report, 32, PropertyDeclarationSniff::CODE_INCORRECT_ORDER_OF_MODIFIERS);
+		self::assertSniffError($report, 39, PropertyDeclarationSniff::CODE_INCORRECT_ORDER_OF_MODIFIERS);
+		self::assertSniffError($report, 41, PropertyDeclarationSniff::CODE_INCORRECT_ORDER_OF_MODIFIERS);
+		self::assertSniffError($report, 43, PropertyDeclarationSniff::CODE_INCORRECT_ORDER_OF_MODIFIERS);
 
 		self::assertAllFixedInFile($report);
 	}

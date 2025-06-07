@@ -87,17 +87,17 @@ class UnusedVariableSniff implements Sniff
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $variablePointer
+	 * @param int $pointer
 	 */
-	public function process(File $phpcsFile, $variablePointer): void
+	public function process(File $phpcsFile, $pointer): void
 	{
-		if (!$this->isAssignment($phpcsFile, $variablePointer)) {
+		if (!$this->isAssignment($phpcsFile, $pointer)) {
 			return;
 		}
 
 		$tokens = $phpcsFile->getTokens();
 
-		$variableName = $tokens[$variablePointer]['content'];
+		$variableName = $tokens[$pointer]['content'];
 
 		if (in_array($variableName, [
 			'$this',
@@ -114,7 +114,7 @@ class UnusedVariableSniff implements Sniff
 			return;
 		}
 
-		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $variablePointer - 1);
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
 
 		if (in_array($tokens[$previousPointer]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
 			// Property
@@ -144,32 +144,32 @@ class UnusedVariableSniff implements Sniff
 			return;
 		}
 
-		if ($this->isUsedAsParameter($phpcsFile, $variablePointer)) {
+		if ($this->isUsedAsParameter($phpcsFile, $pointer)) {
 			return;
 		}
 
-		if ($this->isUsedInForLoopCondition($phpcsFile, $variablePointer, $variableName)) {
+		if ($this->isUsedInForLoopCondition($phpcsFile, $pointer, $variableName)) {
 			return;
 		}
 
-		if ($this->isDefinedInDoConditionAndUsedInLoop($phpcsFile, $variablePointer, $variableName)) {
+		if ($this->isDefinedInDoConditionAndUsedInLoop($phpcsFile, $pointer, $variableName)) {
 			return;
 		}
 
-		if ($this->isUsedInLoopCycle($phpcsFile, $variablePointer, $variableName)) {
+		if ($this->isUsedInLoopCycle($phpcsFile, $pointer, $variableName)) {
 			return;
 		}
 
-		if ($this->isUsedAsKeyOrValueInArray($phpcsFile, $variablePointer)) {
+		if ($this->isUsedAsKeyOrValueInArray($phpcsFile, $pointer)) {
 			return;
 		}
 
-		if ($this->isValueInForeachAndErrorIsIgnored($phpcsFile, $variablePointer)) {
+		if ($this->isValueInForeachAndErrorIsIgnored($phpcsFile, $pointer)) {
 			return;
 		}
 
-		$scopeOwnerPointer = ScopeHelper::getRootPointer($phpcsFile, $variablePointer - 1);
-		foreach (array_reverse($tokens[$variablePointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
+		$scopeOwnerPointer = ScopeHelper::getRootPointer($phpcsFile, $pointer - 1);
+		foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
 			if (in_array($conditionTokenCode, TokenHelper::$functionTokenCodes, true)) {
 				$scopeOwnerPointer = $conditionPointer;
 				break;
@@ -193,21 +193,21 @@ class UnusedVariableSniff implements Sniff
 			}
 		}
 
-		if ($this->isReference($phpcsFile, $scopeOwnerPointer, $variablePointer)) {
+		if ($this->isReference($phpcsFile, $scopeOwnerPointer, $pointer)) {
 			return;
 		}
 
-		if (VariableHelper::isUsedInScopeAfterPointer($phpcsFile, $scopeOwnerPointer, $variablePointer, $variablePointer + 1)) {
+		if (VariableHelper::isUsedInScopeAfterPointer($phpcsFile, $scopeOwnerPointer, $pointer, $pointer + 1)) {
 			return;
 		}
 
-		if ($this->isPartOfStatementAndWithIncrementOrDecrementOperator($phpcsFile, $variablePointer)) {
+		if ($this->isPartOfStatementAndWithIncrementOrDecrementOperator($phpcsFile, $pointer)) {
 			return;
 		}
 
 		$phpcsFile->addError(
 			sprintf('Unused variable %s.', $variableName),
-			$variablePointer,
+			$pointer,
 			self::CODE_UNUSED_VARIABLE,
 		);
 	}

@@ -17,7 +17,7 @@ class DisallowConstructorPropertyPromotionSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/disallowConstructorPropertyPromotionErrors.php');
 
-		self::assertSame(5, $report->getErrorCount());
+		self::assertSame(7, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -48,6 +48,18 @@ class DisallowConstructorPropertyPromotionSniffTest extends TestCase
 			19,
 			DisallowConstructorPropertyPromotionSniff::CODE_DISALLOWED_CONSTRUCTOR_PROPERTY_PROMOTION,
 			'Constructor property promotion is disallowed, promotion of property $c found.',
+		);
+		self::assertSniffError(
+			$report,
+			20,
+			DisallowConstructorPropertyPromotionSniff::CODE_DISALLOWED_CONSTRUCTOR_PROPERTY_PROMOTION,
+			'Constructor property promotion is disallowed, promotion of property $d found.',
+		);
+		self::assertSniffError(
+			$report,
+			21,
+			DisallowConstructorPropertyPromotionSniff::CODE_DISALLOWED_CONSTRUCTOR_PROPERTY_PROMOTION,
+			'Constructor property promotion is disallowed, promotion of property $e found.',
 		);
 	}
 

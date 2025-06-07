@@ -17,7 +17,7 @@ class ClassMemberSpacingSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/classMemberSpacingErrors.php');
 
-		self::assertSame(10, $report->getErrorCount());
+		self::assertSame(12, $report->getErrorCount());
 
 		self::assertSniffError($report, 15, ClassMemberSpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_BETWEEN_MEMBERS);
 		self::assertSniffError($report, 21, ClassMemberSpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_BETWEEN_MEMBERS);
@@ -29,6 +29,8 @@ class ClassMemberSpacingSniffTest extends TestCase
 		self::assertSniffError($report, 58, ClassMemberSpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_BETWEEN_MEMBERS);
 		self::assertSniffError($report, 70, ClassMemberSpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_BETWEEN_MEMBERS);
 		self::assertSniffError($report, 79, ClassMemberSpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_BETWEEN_MEMBERS);
+		self::assertSniffError($report, 96, ClassMemberSpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_BETWEEN_MEMBERS);
+		self::assertSniffError($report, 112, ClassMemberSpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_BETWEEN_MEMBERS);
 
 		self::assertAllFixedInFile($report);
 	}

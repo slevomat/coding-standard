@@ -10,6 +10,7 @@ use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function count;
+use function in_array;
 use function sprintf;
 use function trim;
 use const T_ARRAY;
@@ -17,11 +18,7 @@ use const T_AS;
 use const T_COMMA;
 use const T_FUNCTION;
 use const T_OPEN_SHORT_ARRAY;
-use const T_PRIVATE;
-use const T_PROTECTED;
-use const T_PUBLIC;
 use const T_SEMICOLON;
-use const T_VAR;
 use const T_VARIABLE;
 
 class DisallowMultiPropertyDefinitionSniff implements Sniff
@@ -34,23 +31,29 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE];
+		return TokenHelper::PROPERTY_MODIFIERS_TOKEN_CODES;
 	}
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-	 * @param int $visibilityPointer
+	 * @param int $modifierPointer
 	 */
-	public function process(File $phpcsFile, $visibilityPointer): void
+	public function process(File $phpcsFile, $modifierPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$asPointer = TokenHelper::findPreviousEffective($phpcsFile, $visibilityPointer - 1);
+		$asPointer = TokenHelper::findPreviousEffective($phpcsFile, $modifierPointer - 1);
 		if ($tokens[$asPointer]['code'] === T_AS) {
 			return;
 		}
 
-		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION], $visibilityPointer + 1);
+		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $modifierPointer + 1);
+		if (in_array($tokens[$nextPointer]['code'], TokenHelper::PROPERTY_MODIFIERS_TOKEN_CODES, true)) {
+			// We don't want to report the same property multiple times
+			return;
+		}
+
+		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION], $modifierPointer + 1);
 		if (
 			$propertyPointer === null
 			|| $tokens[$propertyPointer]['code'] !== T_VARIABLE
@@ -89,32 +92,18 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 
 		$fix = $phpcsFile->addFixableError(
 			'Use of multi property definition is disallowed.',
-			$visibilityPointer,
+			$modifierPointer,
 			self::CODE_DISALLOWED_MULTI_PROPERTY_DEFINITION,
 		);
 		if (!$fix) {
 			return;
 		}
 
-		$visibility = $tokens[$visibilityPointer]['content'];
-
-		$pointerAfterVisibility = TokenHelper::findNextEffective($phpcsFile, $visibilityPointer + 1);
+		$propertyStartPointer = PropertyHelper::getStartPointer($phpcsFile, $propertyPointer);
+		$pointerBeforeProperty = TokenHelper::findPreviousEffective($phpcsFile, $propertyPointer - 1);
 		$pointerBeforeSemicolon = TokenHelper::findPreviousEffective($phpcsFile, $semicolonPointer - 1);
 
-		$indentation = IndentationHelper::getIndentation($phpcsFile, $visibilityPointer);
-
-		$nameTokenCodes = TokenHelper::getNameTokenCodes();
-
-		$typeHint = null;
-		$typeHintStartPointer = TokenHelper::findNext($phpcsFile, $nameTokenCodes, $visibilityPointer + 1, $propertyPointer);
-		$typeHintEndPointer = null;
-		$pointerAfterTypeHint = null;
-		if ($typeHintStartPointer !== null) {
-			$typeHintEndPointer = TokenHelper::findNextExcluding($phpcsFile, $nameTokenCodes, $typeHintStartPointer + 1) - 1;
-			$typeHint = TokenHelper::getContent($phpcsFile, $typeHintStartPointer, $typeHintEndPointer);
-
-			$pointerAfterTypeHint = TokenHelper::findNextEffective($phpcsFile, $typeHintEndPointer + 1);
-		}
+		$indentation = IndentationHelper::getIndentation($phpcsFile, $propertyStartPointer);
 
 		$docCommentPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $propertyPointer);
 		$docComment = $docCommentPointer !== null
@@ -129,16 +118,11 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 			];
 		}
 
+		$propertyContent = TokenHelper::getContent($phpcsFile, $propertyStartPointer, $pointerBeforeProperty);
+
 		$phpcsFile->fixer->beginChangeset();
 
-		$phpcsFile->fixer->addContent($visibilityPointer, ' ');
-
-		FixerHelper::removeBetween($phpcsFile, $visibilityPointer, $pointerAfterVisibility);
-
-		if ($typeHint !== null) {
-			$phpcsFile->fixer->addContent($typeHintEndPointer, ' ');
-			FixerHelper::removeBetween($phpcsFile, $typeHintEndPointer, $pointerAfterTypeHint);
-		}
+		FixerHelper::change($phpcsFile, $pointerBeforeProperty + 1, $propertyPointer - 1, ' ');
 
 		foreach ($commaPointers as $commaPointer) {
 			FixerHelper::removeBetween($phpcsFile, $data[$commaPointer]['pointerBeforeComma'], $commaPointer);
@@ -146,14 +130,13 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 			$phpcsFile->fixer->replaceToken(
 				$commaPointer,
 				sprintf(
-					';%s%s%s%s%s ',
+					';%s%s%s%s ',
 					$phpcsFile->eolChar,
 					$docComment !== null
 						? sprintf('%s%s%s', $indentation, $docComment, $phpcsFile->eolChar)
 						: '',
 					$indentation,
-					$visibility,
-					$typeHint !== null ? sprintf(' %s', $typeHint) : '',
+					$propertyContent,
 				),
 			);
 

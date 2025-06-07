@@ -18,23 +18,15 @@ use function array_key_exists;
 use function in_array;
 use function sprintf;
 use function str_repeat;
-use const T_ABSTRACT;
 use const T_AS;
 use const T_ATTRIBUTE_END;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CONST;
 use const T_ENUM_CASE;
-use const T_FINAL;
 use const T_FUNCTION;
 use const T_OPEN_CURLY_BRACKET;
-use const T_PRIVATE;
-use const T_PROTECTED;
-use const T_PUBLIC;
-use const T_READONLY;
 use const T_SEMICOLON;
-use const T_STATIC;
 use const T_USE;
-use const T_VAR;
 use const T_VARIABLE;
 
 class ClassMemberSpacingSniff implements Sniff
@@ -158,11 +150,13 @@ class ClassMemberSpacingSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
+		$memberTokenCodes = [T_USE, T_CONST, T_FUNCTION, T_ENUM_CASE, ...TokenHelper::PROPERTY_MODIFIERS_TOKEN_CODES];
+
 		$memberPointer = $previousMemberPointer;
 		do {
 			$memberPointer = TokenHelper::findNext(
 				$phpcsFile,
-				[T_USE, T_CONST, T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC, T_FUNCTION, T_ENUM_CASE],
+				$memberTokenCodes,
 				$memberPointer + 1,
 				$tokens[$classPointer]['scope_closer'],
 			);
@@ -175,7 +169,7 @@ class ClassMemberSpacingSniff implements Sniff
 				if (!UseStatementHelper::isTraitUse($phpcsFile, $memberPointer)) {
 					continue;
 				}
-			} elseif (in_array($tokens[$memberPointer]['code'], [T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_STATIC], true)) {
+			} elseif (in_array($tokens[$memberPointer]['code'], TokenHelper::PROPERTY_MODIFIERS_TOKEN_CODES, true)) {
 				$asPointer = TokenHelper::findPreviousEffective($phpcsFile, $memberPointer - 1);
 				if ($tokens[$asPointer]['code'] === T_AS) {
 					continue;
@@ -245,17 +239,16 @@ class ClassMemberSpacingSniff implements Sniff
 			return $memberPointer;
 		}
 
+		$endTokenCodes = [T_SEMICOLON, T_CLOSE_CURLY_BRACKET];
+		$startOrEndTokenCodes = [...TokenHelper::MODIFIERS_TOKEN_CODES, ...$endTokenCodes];
+
 		$firstCodePointer = $memberPointer;
 		$previousFirstCodePointer = $memberPointer;
 		do {
 			/** @var int $firstCodePointer */
-			$firstCodePointer = TokenHelper::findPrevious(
-				$phpcsFile,
-				[T_VAR, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_ABSTRACT, T_FINAL, T_SEMICOLON, T_CLOSE_CURLY_BRACKET],
-				$firstCodePointer - 1,
-			);
+			$firstCodePointer = TokenHelper::findPrevious($phpcsFile, $startOrEndTokenCodes, $firstCodePointer - 1);
 
-			if (in_array($tokens[$firstCodePointer]['code'], [T_SEMICOLON, T_CLOSE_CURLY_BRACKET], true)) {
+			if (in_array($tokens[$firstCodePointer]['code'], $endTokenCodes, true)) {
 				break;
 			}
 
@@ -270,7 +263,11 @@ class ClassMemberSpacingSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		if ($tokens[$memberPointer]['code'] === T_USE) {
+		if (
+			$tokens[$memberPointer]['code'] === T_USE
+			// Property with hooks
+			|| $tokens[$memberPointer]['code'] === T_VARIABLE
+		) {
 			$pointer = TokenHelper::findNextLocal($phpcsFile, [T_SEMICOLON, T_OPEN_CURLY_BRACKET], $memberPointer + 1);
 
 			return $tokens[$pointer]['code'] === T_OPEN_CURLY_BRACKET

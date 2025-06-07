@@ -1,4 +1,4 @@
-<?php // lint >= 8.1
+<?php // lint >= 8.4
 
 class Whatever
 {
@@ -6,7 +6,7 @@ class Whatever
 	#[SomeAttribute]
 	private $d;
 
-    /** @phpstan-param array<int, string> $g */
+	/** @phpstan-param array<int, string> $g */
 	public function __construct(public string $a, protected int|null $b = 0, private ?bool $c = null, $d, private $e, private readonly string $f, private array $g)
 	{
 		$this->d = $d;
@@ -38,6 +38,17 @@ class Credentials
 		#[\SensitiveParameter]
 		private string $password
 	) {
+	}
+
+}
+
+class Asymmetric
+{
+
+	public function __construct(
+		public protected(set) int $a,
+	)
+	{
 	}
 
 }

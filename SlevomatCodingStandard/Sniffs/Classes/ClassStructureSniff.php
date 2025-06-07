@@ -43,8 +43,11 @@ use const T_ENUM_CASE;
 use const T_FINAL;
 use const T_FUNCTION;
 use const T_OPEN_CURLY_BRACKET;
+use const T_PRIVATE_SET;
 use const T_PROTECTED;
+use const T_PROTECTED_SET;
 use const T_PUBLIC;
+use const T_PUBLIC_SET;
 use const T_SEMICOLON;
 use const T_STATIC;
 use const T_USE;
@@ -285,14 +288,13 @@ class ClassStructureSniff implements Sniff
 	private function findNextGroup(File $phpcsFile, int $pointer, array $rootScopeToken): ?array
 	{
 		$tokens = $phpcsFile->getTokens();
-		$groupTokenTypes = [T_USE, T_ENUM_CASE, T_CONST, T_VARIABLE, T_FUNCTION];
 
 		$currentTokenPointer = $pointer;
 		while (true) {
 			$currentTokenPointer = TokenHelper::findNext(
 				$phpcsFile,
-				$groupTokenTypes,
-				($currentToken['scope_closer'] ?? $currentTokenPointer) + 1,
+				[T_USE, T_ENUM_CASE, T_CONST, T_VARIABLE, T_FUNCTION],
+				$currentTokenPointer + 1,
 				$rootScopeToken['scope_closer'],
 			);
 			if ($currentTokenPointer === null) {
@@ -321,6 +323,11 @@ class ClassStructureSniff implements Sniff
 			}
 
 			$groupLastMemberPointer = $currentTokenPointer;
+
+			$currentTokenPointer = $currentToken['code'] === T_VARIABLE
+				// Skip to the end of the property definition
+				? PropertyHelper::getEndPointer($phpcsFile, $currentTokenPointer)
+				: ($currentToken['scope_closer'] ?? $currentTokenPointer);
 		}
 
 		if (!isset($currentGroup)) {
@@ -401,6 +408,7 @@ class ClassStructureSniff implements Sniff
 
 				switch ($visibility) {
 					case T_PUBLIC:
+					case T_PUBLIC_SET:
 						return $isStatic ? self::GROUP_PUBLIC_STATIC_PROPERTIES : self::GROUP_PUBLIC_PROPERTIES;
 					case T_PROTECTED:
 						return $isStatic
@@ -525,21 +533,33 @@ class ClassStructureSniff implements Sniff
 		return $attributes;
 	}
 
-	private function getVisibilityForToken(File $phpcsFile, int $pointer): int
+	/**
+	 * @return int|string
+	 */
+	private function getVisibilityForToken(File $phpcsFile, int $pointer)
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		$previousPointer = TokenHelper::findPrevious(
-			$phpcsFile,
-			array_merge(Tokens::$scopeModifiers, [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON]),
-			$pointer - 1,
-		);
+		$previousPointer = $pointer - 1;
 
-		/** @var int $visibilityPointer */
-		$visibilityPointer = in_array($tokens[$previousPointer]['code'], Tokens::$scopeModifiers, true)
-			? $tokens[$previousPointer]['code']
-			: T_PUBLIC;
-		return $visibilityPointer;
+		$endTokenCodes = [T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET, T_SEMICOLON];
+		$tokenCodesToSearch = [...array_values(Tokens::$scopeModifiers), ...$endTokenCodes];
+
+		do {
+			$previousPointer = TokenHelper::findPrevious($phpcsFile, $tokenCodesToSearch, $previousPointer - 1);
+
+			if (in_array($tokens[$previousPointer]['code'], $endTokenCodes, true)) {
+				// No visibility modifier found -> public
+				return T_PUBLIC;
+			}
+
+			if (in_array($tokens[$previousPointer]['code'], [T_PROTECTED_SET, T_PRIVATE_SET], true)) {
+				continue;
+			}
+
+			return $tokens[$previousPointer]['code'];
+
+		} while (true);
 	}
 
 	private function isMemberStatic(File $phpcsFile, int $pointer): bool
@@ -655,15 +675,18 @@ class ClassStructureSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		if ($tokens[$memberPointer]['code'] === T_FUNCTION && !FunctionHelper::isAbstract($phpcsFile, $memberPointer)) {
-			$endPointer = $tokens[$memberPointer]['scope_closer'];
-		} elseif ($tokens[$memberPointer]['code'] === T_USE && array_key_exists('scope_closer', $tokens[$memberPointer])) {
-			$endPointer = $tokens[$memberPointer]['scope_closer'];
-		} else {
-			$endPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $memberPointer + 1);
-			assert($endPointer !== null);
+			return $tokens[$memberPointer]['scope_closer'];
 		}
 
-		return $endPointer;
+		if ($tokens[$memberPointer]['code'] === T_USE && array_key_exists('scope_closer', $tokens[$memberPointer])) {
+			return $tokens[$memberPointer]['scope_closer'];
+		}
+
+		$endPointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_OPEN_CURLY_BRACKET], $memberPointer + 1);
+
+		return $tokens[$endPointer]['code'] === T_OPEN_CURLY_BRACKET
+			? $tokens[$endPointer]['bracket_closer']
+			: $endPointer;
 	}
 
 	private function removeBlankLinesAfterMember(File $phpcsFile, int $memberEndPointer, int $endPointer): int

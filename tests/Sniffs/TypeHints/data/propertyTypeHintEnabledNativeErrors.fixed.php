@@ -1,4 +1,4 @@
-<?php // lint >= 8.1
+<?php // lint >= 8.4
 
 class Whatever
 {
@@ -165,5 +165,7 @@ class Whatever
 	private ?int $uselessAnnotationWithShortNullable;
 
 	static int $staticProperty;
+
+	final int $finalProperty;
 
 }

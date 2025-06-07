@@ -93,6 +93,46 @@ class PropertyHelperTest extends TestCase
 				'$onlyReadonlyPropertyWithTypeHint',
 				true,
 			],
+			[
+				'$privateSet',
+				true,
+			],
+			[
+				'$protectedSet',
+				true,
+			],
+			[
+				'$protectedSetPublic',
+				true,
+			],
+			[
+				'$privateSetProtected',
+				true,
+			],
+			[
+				'$final',
+				true,
+			],
+			[
+				'$publicFinal',
+				true,
+			],
+			[
+				'$staticProtected',
+				true,
+			],
+			[
+				'$propertyWithHooks',
+				true,
+			],
+			[
+				'$propertyWithHooksValue',
+				false,
+			],
+			[
+				'$onlyStatic',
+				true,
+			],
 		];
 	}
 
@@ -209,6 +249,31 @@ class PropertyHelperTest extends TestCase
 				'$onlyReadonlyPropertyWithTypeHint',
 				'string|int',
 				false,
+			],
+			[
+				'$privateSet',
+				'?string',
+				true,
+			],
+			[
+				'$protectedSet',
+				'array',
+				false,
+			],
+			[
+				'$protectedSetPublic',
+				'int',
+				false,
+			],
+			[
+				'$privateSetProtected',
+				'?string',
+				true,
+			],
+			[
+				'$final',
+				'?bool',
+				true,
 			],
 		];
 	}

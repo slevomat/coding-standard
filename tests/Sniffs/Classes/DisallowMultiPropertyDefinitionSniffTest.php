@@ -17,7 +17,7 @@ class DisallowMultiPropertyDefinitionSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/disallowMultiPropertyDefinitionErrors.php');
 
-		self::assertSame(7, $report->getErrorCount());
+		self::assertSame(8, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, DisallowMultiPropertyDefinitionSniff::CODE_DISALLOWED_MULTI_PROPERTY_DEFINITION);
 		self::assertSniffError($report, 8, DisallowMultiPropertyDefinitionSniff::CODE_DISALLOWED_MULTI_PROPERTY_DEFINITION);
@@ -26,6 +26,7 @@ class DisallowMultiPropertyDefinitionSniffTest extends TestCase
 		self::assertSniffError($report, 24, DisallowMultiPropertyDefinitionSniff::CODE_DISALLOWED_MULTI_PROPERTY_DEFINITION);
 		self::assertSniffError($report, 26, DisallowMultiPropertyDefinitionSniff::CODE_DISALLOWED_MULTI_PROPERTY_DEFINITION);
 		self::assertSniffError($report, 32, DisallowMultiPropertyDefinitionSniff::CODE_DISALLOWED_MULTI_PROPERTY_DEFINITION);
+		self::assertSniffError($report, 34, DisallowMultiPropertyDefinitionSniff::CODE_DISALLOWED_MULTI_PROPERTY_DEFINITION);
 
 		self::assertAllFixedInFile($report);
 	}

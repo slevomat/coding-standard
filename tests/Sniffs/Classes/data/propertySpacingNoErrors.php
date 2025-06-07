@@ -1,4 +1,4 @@
-<?php // lint >= 8.0
+<?php // lint >= 8.4
 
 $var = 'foo';
 switch ($var) {
@@ -92,6 +92,13 @@ class TestClass
 	public $foo = 'foo';
 
 	use TestTrait;
+
+	public string $email {
+		get => 'mailto:' . $this->email;
+		set (string $value) {
+			$this->email = $value;
+		}
+	}
 
 	public $bar = 'bar';
 

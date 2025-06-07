@@ -1,4 +1,4 @@
-<?php // lint = 8.1
+<?php // lint = 8.4
 
 class Whatever
 {
@@ -30,5 +30,16 @@ class Whatever
 	public static $publicStatic;
 
 	private readonly int $privateReadonly;
+
+}
+
+abstract class Something
+{
+
+	final public int $publicFinal = 0;
+
+	public private(set) readonly ?string $readonlyPublicPrivateSet;
+
+	protected static array $staticProtected = [];
 
 }
