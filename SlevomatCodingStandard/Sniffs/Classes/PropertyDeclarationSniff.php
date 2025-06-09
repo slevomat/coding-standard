@@ -23,6 +23,7 @@ use function sprintf;
 use function strtolower;
 use const T_ABSTRACT;
 use const T_AS;
+use const T_CLASS;
 use const T_CONST;
 use const T_DOUBLE_COLON;
 use const T_FINAL;
@@ -117,7 +118,7 @@ class PropertyDeclarationSniff implements Sniff
 			}
 		}
 
-		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $modifierPointer + 1);
+		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_CLASS, T_FUNCTION, T_CONST, T_VARIABLE], $modifierPointer + 1);
 
 		if ($propertyPointer === null || $tokens[$propertyPointer]['code'] !== T_VARIABLE) {
 			return;
