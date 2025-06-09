@@ -8,9 +8,9 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
 use function sprintf;
 use const T_AS;
+use const T_CLASS;
 use const T_CONST;
 use const T_FUNCTION;
-use const T_USE;
 use const T_VARIABLE;
 
 class PropertySpacingSniff extends AbstractPropertyConstantAndEnumCaseSpacing
@@ -45,7 +45,8 @@ class PropertySpacingSniff extends AbstractPropertyConstantAndEnumCaseSpacing
 			return $nextPointer;
 		}
 
-		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION, T_CONST, T_USE], $pointer + 1);
+		// Ignore other class members with same mofidiers
+		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION, T_CONST, T_CLASS], $pointer + 1);
 		if (
 			$propertyPointer === null
 			|| $tokens[$propertyPointer]['code'] !== T_VARIABLE

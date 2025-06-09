@@ -15,7 +15,9 @@ use function sprintf;
 use function trim;
 use const T_ARRAY;
 use const T_AS;
+use const T_CLASS;
 use const T_COMMA;
+use const T_CONST;
 use const T_FUNCTION;
 use const T_OPEN_SHORT_ARRAY;
 use const T_SEMICOLON;
@@ -53,7 +55,8 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 			return;
 		}
 
-		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION], $modifierPointer + 1);
+		// Ignore other class members with same mofidiers
+		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_CONST, T_FUNCTION, T_CLASS], $modifierPointer + 1);
 		if (
 			$propertyPointer === null
 			|| $tokens[$propertyPointer]['code'] !== T_VARIABLE

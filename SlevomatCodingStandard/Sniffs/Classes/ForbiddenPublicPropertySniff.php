@@ -11,6 +11,8 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_map;
 use function in_array;
 use const T_AS;
+use const T_CLASS;
+use const T_CONST;
 use const T_FUNCTION;
 use const T_PRIVATE;
 use const T_PRIVATE_SET;
@@ -57,7 +59,8 @@ final class ForbiddenPublicPropertySniff implements Sniff
 			return;
 		}
 
-		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION], $pointer + 1);
+		// Ignore other class members with same mofidiers
+		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_CONST, T_FUNCTION, T_CLASS], $pointer + 1);
 		if (
 			$propertyPointer === null
 			|| $tokens[$propertyPointer]['code'] !== T_VARIABLE
