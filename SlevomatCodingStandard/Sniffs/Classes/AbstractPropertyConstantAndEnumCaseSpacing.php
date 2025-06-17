@@ -10,6 +10,8 @@ use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function assert;
 use function in_array;
+use function max;
+use function min;
 use function str_repeat;
 use const T_ATTRIBUTE;
 use const T_COMMENT;
@@ -27,6 +29,10 @@ use const T_VARIABLE;
  */
 abstract class AbstractPropertyConstantAndEnumCaseSpacing implements Sniff
 {
+
+	public int $minLinesCountBeforeMultiline = -1;
+
+	public int $maxLinesCountBeforeMultiline = -1;
 
 	public int $minLinesCountBeforeWithComment = 1;
 
@@ -46,6 +52,8 @@ abstract class AbstractPropertyConstantAndEnumCaseSpacing implements Sniff
 	 */
 	public function process(File $phpcsFile, $pointer): int
 	{
+		$this->minLinesCountBeforeMultiline = SniffSettingsHelper::normalizeInteger($this->minLinesCountBeforeMultiline);
+		$this->maxLinesCountBeforeMultiline = SniffSettingsHelper::normalizeInteger($this->maxLinesCountBeforeMultiline);
 		$this->minLinesCountBeforeWithComment = SniffSettingsHelper::normalizeInteger($this->minLinesCountBeforeWithComment);
 		$this->maxLinesCountBeforeWithComment = SniffSettingsHelper::normalizeInteger($this->maxLinesCountBeforeWithComment);
 		$this->minLinesCountBeforeWithoutComment = SniffSettingsHelper::normalizeInteger($this->minLinesCountBeforeWithoutComment);
@@ -87,6 +95,21 @@ abstract class AbstractPropertyConstantAndEnumCaseSpacing implements Sniff
 		} else {
 			$minExpectedLines = $this->minLinesCountBeforeWithoutComment;
 			$maxExpectedLines = $this->maxLinesCountBeforeWithoutComment;
+		}
+
+		if (
+			$this->minLinesCountBeforeMultiline !== -1
+			&& $tokens[$pointer]['line'] !== $tokens[$endPointer]['line']
+		) {
+			$minExpectedLines = max($minExpectedLines, $this->minLinesCountBeforeMultiline);
+			$maxExpectedLines = max($minExpectedLines, $maxExpectedLines);
+		}
+
+		if (
+			$this->maxLinesCountBeforeMultiline !== -1
+			&& $tokens[$pointer]['line'] !== $tokens[$endPointer]['line']
+		) {
+			$maxExpectedLines = max($minExpectedLines, min($maxExpectedLines, $this->maxLinesCountBeforeMultiline));
 		}
 
 		if ($linesBetween >= $minExpectedLines && $linesBetween <= $maxExpectedLines) {
