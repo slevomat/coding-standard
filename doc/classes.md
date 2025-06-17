@@ -113,6 +113,8 @@ Sniff provides the following settings:
 * `maxLinesCountBeforeWithComment`: maximum number of lines before constant with a documentation comment or attribute
 * `minLinesCountBeforeWithoutComment`: minimum number of lines before constant without a documentation comment or attribute
 * `maxLinesCountBeforeWithoutComment`: maximum number of lines before constant without a documentation comment or attribute
+* `minLinesCountBeforeMultiline` (default: `null`): minimum number of lines before multiline constant
+* `maxLinesCountBeforeMultiline` (default: `null`): maximum number of lines before multiline constant
 
 #### SlevomatCodingStandard.Classes.DisallowConstructorPropertyPromotion
 
@@ -216,6 +218,8 @@ Sniff provides the following settings:
 * `maxLinesCountBeforeWithComment`: maximum number of lines before property with a documentation comment or attribute
 * `minLinesCountBeforeWithoutComment`: minimum number of lines before property without a documentation comment or attribute
 * `maxLinesCountBeforeWithoutComment`: maximum number of lines before property without a documentation comment or attribute
+* `minLinesCountBeforeMultiline` (default: `null`): minimum number of lines before multiline property
+* `maxLinesCountBeforeMultiline` (default: `null`): maximum number of lines before multiline property
 
 #### SlevomatCodingStandard.Classes.RequireAbstractOrFinal 🔧
 
