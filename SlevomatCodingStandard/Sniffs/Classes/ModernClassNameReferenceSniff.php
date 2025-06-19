@@ -144,7 +144,7 @@ class ModernClassNameReferenceSniff implements Sniff
 
 				/** @var int $classPointer */
 				$classPointer = FunctionHelper::findClassPointer($phpcsFile, $functionPointer);
-				if (!ClassHelper::isFinal($phpcsFile, $classPointer)) {
+				if (!ClassHelper::isFinal($phpcsFile, (int) $classPointer)) {
 					return;
 				}
 			}

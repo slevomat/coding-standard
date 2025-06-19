@@ -51,7 +51,7 @@ class UselessLateStaticBindingSniff implements Sniff
 			break;
 		}
 
-		if (!ClassHelper::isFinal($phpcsFile, $classPointer)) {
+		if (!ClassHelper::isFinal($phpcsFile, (int) $classPointer)) {
 			return;
 		}
 
