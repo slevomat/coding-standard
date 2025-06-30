@@ -35,7 +35,7 @@ class TraitUseSpacingSniff implements Sniff
 
 	public int $linesCountBetweenUses = 0;
 
-	public int $linesCountAfterLastUse = 1;
+	public ?int $linesCountAfterLastUse = 1;
 
 	public int $linesCountAfterLastUseWhenLastInClass = 1;
 
@@ -63,7 +63,7 @@ class TraitUseSpacingSniff implements Sniff
 			$this->linesCountBeforeFirstUseWhenFirstInClass,
 		);
 		$this->linesCountBetweenUses = SniffSettingsHelper::normalizeInteger($this->linesCountBetweenUses);
-		$this->linesCountAfterLastUse = SniffSettingsHelper::normalizeInteger($this->linesCountAfterLastUse);
+		$this->linesCountAfterLastUse = SniffSettingsHelper::normalizeNullableInteger($this->linesCountAfterLastUse);
 		$this->linesCountAfterLastUseWhenLastInClass = SniffSettingsHelper::normalizeInteger($this->linesCountAfterLastUseWhenLastInClass);
 
 		$usePointers = ClassHelper::getTraitUsePointers($phpcsFile, $classPointer);
@@ -175,6 +175,11 @@ class TraitUseSpacingSniff implements Sniff
 		$whitespaceAfterLastUse = TokenHelper::getContent($phpcsFile, $lastUseEndPointer + 1, $whitespaceEnd);
 
 		$requiredLinesCountAfterLastUse = $isAtTheEndOfClass ? $this->linesCountAfterLastUseWhenLastInClass : $this->linesCountAfterLastUse;
+
+		if ($requiredLinesCountAfterLastUse === null) {
+			return;
+		}
+
 		$actualLinesCountAfterLastUse = substr_count($whitespaceAfterLastUse, $phpcsFile->eolChar) - 1;
 
 		if ($actualLinesCountAfterLastUse === $requiredLinesCountAfterLastUse) {

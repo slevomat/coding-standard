@@ -82,7 +82,7 @@ class TraitUseSpacingSniffTest extends TestCase
 			'linesCountBeforeFirstUse' => 0,
 			'linesCountBeforeFirstUseWhenFirstInClass' => 0,
 			'linesCountBetweenUses' => 1,
-			'linesCountAfterLastUse' => 2,
+			'linesCountAfterLastUse' => '',
 			'linesCountAfterLastUseWhenLastInClass' => 2,
 		]);
 		self::assertNoSniffErrorInFile($report);
