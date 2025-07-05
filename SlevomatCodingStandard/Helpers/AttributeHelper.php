@@ -42,8 +42,13 @@ class AttributeHelper
 		T_VARIABLE,
 	];
 
-	public static function hasAttribute(File $phpcsFile, int $docCommentOpenPointer, string $attributeName): bool
+	public static function hasAttribute(File $phpcsFile, int $pointer, string $attributeName): bool
 	{
+		$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $pointer);
+		if ($docCommentOpenPointer === null) {
+			return false;
+		}
+
 		$tokens = $phpcsFile->getTokens();
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $docCommentOpenPointer + 1);
 

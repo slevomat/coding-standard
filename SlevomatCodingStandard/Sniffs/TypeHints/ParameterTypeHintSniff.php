@@ -22,6 +22,7 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
+use SlevomatCodingStandard\Helpers\AttributeHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
@@ -206,6 +207,10 @@ class ParameterTypeHintSniff implements Sniff
 					self::CODE_MISSING_ANY_TYPE_HINT,
 				);
 
+				continue;
+			}
+
+			if (AttributeHelper::hasAttribute($phpcsFile, $functionPointer, '\Override')) {
 				continue;
 			}
 

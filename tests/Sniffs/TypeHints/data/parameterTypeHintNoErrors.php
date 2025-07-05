@@ -1,6 +1,7 @@
 <?php // lint >= 8.0
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Override;
 
 class Whatever
 {
@@ -275,6 +276,15 @@ class Whatever
 	public function brokenParameterDescription(int $a, array $b)
 	{
 	}
+
+	/**
+	 * @param bool $a
+	 */
+	#[Override]
+	public function overrideAttribute($a): void
+	{
+	}
+
 
 }
 
