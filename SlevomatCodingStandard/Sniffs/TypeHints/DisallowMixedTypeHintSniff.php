@@ -6,15 +6,10 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
-use SlevomatCodingStandard\Helpers\Attribute;
 use SlevomatCodingStandard\Helpers\AttributeHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
-use SlevomatCodingStandard\Helpers\TokenHelper;
-use function array_map;
-use function in_array;
 use function sprintf;
 use function strtolower;
-use const T_ATTRIBUTE;
 use const T_DOC_COMMENT_OPEN_TAG;
 
 class DisallowMixedTypeHintSniff implements Sniff
@@ -48,7 +43,7 @@ class DisallowMixedTypeHintSniff implements Sniff
 			return;
 		}
 
-		if ($this->targetHasOverrideAttribute($phpcsFile, $docCommentOpenPointer)) {
+		if (AttributeHelper::hasAttribute($phpcsFile, $docCommentOpenPointer, '\Override')) {
 			return;
 		}
 
@@ -76,23 +71,6 @@ class DisallowMixedTypeHintSniff implements Sniff
 	private function getSniffName(string $sniffName): string
 	{
 		return sprintf('%s.%s', self::NAME, $sniffName);
-	}
-
-	private function targetHasOverrideAttribute(File $phpcsFile, int $docCommentOpenPointer): bool
-	{
-		$tokens = $phpcsFile->getTokens();
-		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $docCommentOpenPointer + 1);
-
-		if ($nextPointer === null || $tokens[$nextPointer]['code'] !== T_ATTRIBUTE) {
-			return false;
-		}
-
-		$attributeNames = array_map(
-			static fn (Attribute $name): string => $name->getFullyQualifiedName(),
-			AttributeHelper::getAttributes($phpcsFile, $nextPointer),
-		);
-
-		return in_array('\Override', $attributeNames, true);
 	}
 
 }

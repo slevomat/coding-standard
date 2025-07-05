@@ -4,6 +4,8 @@ namespace SlevomatCodingStandard\Helpers;
 
 use InvalidArgumentException;
 use PHP_CodeSniffer\Files\File;
+use function array_map;
+use function in_array;
 use function sprintf;
 use const T_ANON_CLASS;
 use const T_ATTRIBUTE;
@@ -39,6 +41,23 @@ class AttributeHelper
 		T_TRAIT,
 		T_VARIABLE,
 	];
+
+	public static function hasAttribute(File $phpcsFile, int $docCommentOpenPointer, string $attributeName): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $docCommentOpenPointer + 1);
+
+		if ($nextPointer === null || $tokens[$nextPointer]['code'] !== T_ATTRIBUTE) {
+			return false;
+		}
+
+		$attributeNames = array_map(
+			static fn (Attribute $name): string => $name->getFullyQualifiedName(),
+			self::getAttributes($phpcsFile, $nextPointer),
+		);
+
+		return in_array($attributeName, $attributeNames, true);
+	}
 
 	/**
 	 * @return list<Attribute>
