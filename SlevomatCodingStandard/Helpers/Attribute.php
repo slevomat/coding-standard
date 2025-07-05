@@ -12,16 +12,26 @@ class Attribute
 
 	private string $name;
 
+	private string $fullyQualifiedName;
+
 	private int $startPointer;
 
 	private int $endPointer;
 
 	private ?string $content = null;
 
-	public function __construct(int $attributePointer, string $name, int $startPointer, int $endPointer, ?string $content = null)
+	public function __construct(
+		int $attributePointer,
+		string $name,
+		string $fullyQualifiedName,
+		int $startPointer,
+		int $endPointer,
+		?string $content = null
+	)
 	{
 		$this->attributePointer = $attributePointer;
 		$this->name = $name;
+		$this->fullyQualifiedName = $fullyQualifiedName;
 		$this->startPointer = $startPointer;
 		$this->endPointer = $endPointer;
 		$this->content = $content;
@@ -35,6 +45,11 @@ class Attribute
 	public function getName(): string
 	{
 		return $this->name;
+	}
+
+	public function getFullyQualifiedName(): string
+	{
+		return $this->fullyQualifiedName;
 	}
 
 	public function getStartPointer(): int

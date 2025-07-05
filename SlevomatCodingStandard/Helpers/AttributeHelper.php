@@ -78,6 +78,7 @@ class AttributeHelper
 				$attributes[] = new Attribute(
 					$attributeOpenerPointer,
 					$attributeName,
+					NamespaceHelper::resolveClassName($phpcsFile, $attributeName, $attributeOpenerPointer),
 					$attributeNameStartPointer,
 					$attributeNameEndPointer,
 				);
@@ -88,6 +89,7 @@ class AttributeHelper
 				$attributes[] = new Attribute(
 					$attributeOpenerPointer,
 					$attributeName,
+					NamespaceHelper::resolveClassName($phpcsFile, $attributeName, $attributeOpenerPointer),
 					$attributeNameStartPointer,
 					$attributeNameEndPointer,
 				);
@@ -99,6 +101,7 @@ class AttributeHelper
 				$attributes[] = new Attribute(
 					$attributeOpenerPointer,
 					$attributeName,
+					NamespaceHelper::resolveClassName($phpcsFile, $attributeName, $attributeOpenerPointer),
 					$attributeNameStartPointer,
 					$tokens[$pointerAfterAttributeName]['parenthesis_closer'],
 					TokenHelper::getContent(

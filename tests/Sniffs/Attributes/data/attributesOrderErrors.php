@@ -1,5 +1,7 @@
 <?php
 
+use Group\Unknown;
+
 #[UnknownOrder]
 #[\Group\Unknown]
 #[\Group\Attribute2]
@@ -16,6 +18,7 @@ class Whatever
 	{
 	}
 
+	#[Unknown]
 	#[UnknownOrder] #[\Group\Unknown] #[AppAssertB\SomeAssert]
 	#[\Group\Attribute2] #[Attribute2] #[\Group\Attribute1]
 	#[Attribute1] #[AppAssertA\SomeAssert]

@@ -92,8 +92,8 @@ class AttributesOrderSniff implements Sniff
 			uasort(
 				$expectedOrder,
 				static fn (array $attributesGroup1, array $attributesGroup2): int => strnatcmp(
-					$attributesGroup1[0]->getName(),
-					$attributesGroup2[0]->getName(),
+					$attributesGroup1[0]->getFullyQualifiedName(),
+					$attributesGroup2[0]->getFullyQualifiedName(),
 				),
 			);
 
@@ -101,7 +101,7 @@ class AttributesOrderSniff implements Sniff
 			$actualOrder = [];
 
 			foreach ($attributesGroups as $attributesGroupNo => $attributesGroup) {
-				$attributeName = $this->normalizeAttributeName($attributesGroup[0]->getName());
+				$attributeName = $this->normalizeAttributeName($attributesGroup[0]->getFullyQualifiedName());
 
 				foreach ($this->order as $orderPosition => $attributeNameOnPosition) {
 					if (

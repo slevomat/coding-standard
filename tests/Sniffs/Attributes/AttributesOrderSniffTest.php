@@ -40,9 +40,9 @@ class AttributesOrderSniffTest extends TestCase
 
 		self::assertSame(3, $report->getErrorCount());
 
-		self::assertSniffError($report, 3, AttributesOrderSniff::CODE_INCORRECT_ORDER);
-		self::assertSniffError($report, 14, AttributesOrderSniff::CODE_INCORRECT_ORDER);
-		self::assertSniffError($report, 19, AttributesOrderSniff::CODE_INCORRECT_ORDER);
+		self::assertSniffError($report, 5, AttributesOrderSniff::CODE_INCORRECT_ORDER);
+		self::assertSniffError($report, 16, AttributesOrderSniff::CODE_INCORRECT_ORDER);
+		self::assertSniffError($report, 21, AttributesOrderSniff::CODE_INCORRECT_ORDER);
 
 		self::assertAllFixedInFile($report);
 	}

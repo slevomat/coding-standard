@@ -1,5 +1,7 @@
 <?php
 
+use Group\Unknown;
+
 #[Attribute1]
 #[Attribute2]
 #[\Group\Attribute1]
@@ -20,6 +22,7 @@ class Whatever
 	#[Attribute2]
 	#[\Group\Attribute1]
 	#[\Group\Attribute2]
+	#[Unknown]
 	#[\Group\Unknown]
 	#[AppAssertB\SomeAssert]
 	#[AppAssertA\SomeAssert]

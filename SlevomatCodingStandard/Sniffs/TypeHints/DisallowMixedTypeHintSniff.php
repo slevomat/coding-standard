@@ -88,11 +88,11 @@ class DisallowMixedTypeHintSniff implements Sniff
 		}
 
 		$attributeNames = array_map(
-			static fn (Attribute $name): string => $name->getName(),
+			static fn (Attribute $name): string => $name->getFullyQualifiedName(),
 			AttributeHelper::getAttributes($phpcsFile, $nextPointer),
 		);
 
-		return in_array('Override', $attributeNames, true) || in_array('\Override', $attributeNames, true);
+		return in_array('\Override', $attributeNames, true);
 	}
 
 }

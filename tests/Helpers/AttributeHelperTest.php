@@ -18,20 +18,21 @@ class AttributeHelperTest extends TestCase
 		$attributes = AttributeHelper::getAttributes($phpcsFile, $firstAttributePointer);
 
 		$expected = [
-			4 => ['Attribute1', null],
-			7 => ['\\FQN\\Attribute2', "('var')"],
-			17 => ['Attribute3', "(option: PDO::class, option2: true, option3: 'False')"],
-			39 => ['\\Attribute4', '()'],
-			44 => ['Attribute5', null],
+			['Attribute1', '\\Attribute1', null],
+			['\\FQN\\Attribute2', '\\FQN\\Attribute2', "('var')"],
+			['Attribute3', '\\Attribute3', "(option: PDO::class, option2: true, option3: 'False')"],
+			['\\Attribute4', '\\Attribute4', '()'],
+			['Attribute5', '\\Attribute5', null],
+			['Attribute6', '\\FQN\\Attribute6', null],
 		];
 
 		self::assertCount(count($expected), $attributes);
 
-		foreach ($attributes as $attribute) {
-			self::assertSame(3, $attribute->getAttributePointer());
-			self::assertArrayHasKey($attribute->getStartPointer(), $expected);
-			self::assertSame($expected[$attribute->getStartPointer()][0], $attribute->getName());
-			self::assertSame($expected[$attribute->getStartPointer()][1], $attribute->getContent());
+		foreach ($attributes as $attributeNo => $attribute) {
+			self::assertSame(11, $attribute->getAttributePointer());
+			self::assertSame($expected[$attributeNo][0], $attribute->getName());
+			self::assertSame($expected[$attributeNo][1], $attribute->getFullyQualifiedName());
+			self::assertSame($expected[$attributeNo][2], $attribute->getContent());
 		}
 	}
 
