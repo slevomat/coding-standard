@@ -1,8 +1,21 @@
 <?php // lint >= 8.0
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Override;
 
-class Whatever
+class ParentClass
+{
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint
+	 */
+	public function overrideAttribute($a): void
+	{
+	}
+
+}
+
+class Whatever extends ParentClass
 {
 
 	/**
@@ -275,6 +288,15 @@ class Whatever
 	public function brokenParameterDescription(int $a, array $b)
 	{
 	}
+
+	/**
+	 * @param bool $a
+	 */
+	#[Override]
+	public function overrideAttribute($a): void
+	{
+	}
+
 
 }
 
