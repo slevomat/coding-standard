@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use const T_IF;
 
 class ConditionHelperTest extends TestCase
@@ -28,6 +29,7 @@ class ConditionHelperTest extends TestCase
 	/**
 	 * @dataProvider dataConditionReturnsBoolean
 	 */
+	#[DataProvider('dataConditionReturnsBoolean')]
 	public function testConditionReturnsBoolean(int $line, bool $result): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/conditions.php');

@@ -2,6 +2,8 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class TypeHelperTest extends TestCase
 {
 
@@ -28,6 +30,7 @@ class TypeHelperTest extends TestCase
 	/**
 	 * @dataProvider dataValidTypeNames
 	 */
+	#[DataProvider('dataValidTypeNames')]
 	public function testValidTypeName(string $typeName): void
 	{
 		self::assertTrue(TypeHelper::isTypeName($typeName));
@@ -51,6 +54,7 @@ class TypeHelperTest extends TestCase
 	/**
 	 * @dataProvider dataNotValidTypeNames
 	 */
+	#[DataProvider('dataNotValidTypeNames')]
 	public function testNotValidTypeName(string $typeName): void
 	{
 		self::assertFalse(TypeHelper::isTypeName($typeName));

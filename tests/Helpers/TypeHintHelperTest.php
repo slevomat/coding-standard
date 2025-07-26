@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPUnit\Framework\Attributes\DataProvider;
 use const T_DOC_COMMENT_OPEN_TAG;
 
 class TypeHintHelperTest extends TestCase
@@ -37,6 +38,7 @@ class TypeHintHelperTest extends TestCase
 	/**
 	 * @dataProvider dataIsSimpleTypeHint
 	 */
+	#[DataProvider('dataIsSimpleTypeHint')]
 	public function testIsSimpleTypeHint(string $typeHint, bool $isSimple): void
 	{
 		self::assertSame($isSimple, TypeHintHelper::isSimpleTypeHint($typeHint));
@@ -59,6 +61,7 @@ class TypeHintHelperTest extends TestCase
 	/**
 	 * @dataProvider dataIsSimpleIterableTypeHint
 	 */
+	#[DataProvider('dataIsSimpleIterableTypeHint')]
 	public function testIsSimpleIterableTypeHint(string $typeHint, bool $isSimple): void
 	{
 		self::assertSame($isSimple, TypeHintHelper::isSimpleIterableTypeHint($typeHint));
@@ -90,6 +93,7 @@ class TypeHintHelperTest extends TestCase
 	/**
 	 * @dataProvider dataIsSimpleUnofficialTypeHint
 	 */
+	#[DataProvider('dataIsSimpleUnofficialTypeHint')]
 	public function testIsSimpleUnofficialTypeHint(string $typeHint, bool $isSimple): void
 	{
 		self::assertSame($isSimple, TypeHintHelper::isSimpleUnofficialTypeHints($typeHint));
@@ -114,6 +118,7 @@ class TypeHintHelperTest extends TestCase
 	/**
 	 * @dataProvider dataConvertLongSimpleTypeHintToShort
 	 */
+	#[DataProvider('dataConvertLongSimpleTypeHintToShort')]
 	public function testConvertLongSimpleTypeHintToShort(string $long, string $short): void
 	{
 		self::assertSame($short, TypeHintHelper::convertLongSimpleTypeHintToShort($long));
@@ -328,6 +333,7 @@ class TypeHintHelperTest extends TestCase
 	/**
 	 * @dataProvider dataIsTypeDefinedInAnnotation
 	 */
+	#[DataProvider('dataIsTypeDefinedInAnnotation')]
 	public function testIsTypeDefinedInAnnotation(string $typeHintName, bool $isTemplate): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintDefinedInAnnotation.php');
@@ -353,6 +359,7 @@ class TypeHintHelperTest extends TestCase
 	/**
 	 * @dataProvider dataIsTypeDefinedInAnnotationWhenAnnotationIsInvalid
 	 */
+	#[DataProvider('dataIsTypeDefinedInAnnotationWhenAnnotationIsInvalid')]
 	public function testIsTypeDefinedInAnnotationWhenAnnotationIsInvalid(int $line, string $type, bool $isDefined): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintDefinedInAnnotation.php');
@@ -378,6 +385,7 @@ class TypeHintHelperTest extends TestCase
 	/**
 	 * @dataProvider dataTypeHintEqualsAnnotation
 	 */
+	#[DataProvider('dataTypeHintEqualsAnnotation')]
 	public function testTypeHintEqualsAnnotation(string $functionName, bool $equals): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintEqualsAnnotation.php');

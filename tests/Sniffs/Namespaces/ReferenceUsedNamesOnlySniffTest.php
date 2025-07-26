@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use SlevomatCodingStandard\Sniffs\TestCase;
 
 class ReferenceUsedNamesOnlySniffTest extends TestCase
@@ -26,6 +27,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testDoNotReportNamespaceName(array $ignoredNames): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/shouldBeInUseStatement.php', [
@@ -38,6 +40,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testCreatingNewObjectViaNonFullyQualifiedName(array $ignoredNames): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/shouldBeInUseStatement.php', [
@@ -50,6 +53,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testCreatingNewObjectViaFullyQualifiedName(array $ignoredNames): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/shouldBeInUseStatement.php', [
@@ -62,6 +66,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testReferencingClassConstantViaFullyQualifiedName(array $ignoredNames): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/shouldBeInUseStatement.php', [
@@ -118,6 +123,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testCreatingObjectFromSpecialExceptionName(array $ignoredNames): void
 	{
 		$report = self::checkFile(
@@ -137,6 +143,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testReportFullyQualifiedInFileWithNamespace(array $ignoredNames): void
 	{
 		$report = self::checkFile(
@@ -154,6 +161,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testDoNotAllowFullyQualifiedExtends(array $ignoredNames): void
 	{
 		$report = self::checkFile(
@@ -170,6 +178,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testDoNotAllowFullyQualifiedImplements(array $ignoredNames): void
 	{
 		$report = self::checkFile(
@@ -192,6 +201,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testAllowFullyQualifiedExceptions(array $ignoredNames): void
 	{
 		$report = self::checkFile(
@@ -209,6 +219,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testDoNotAllowFullyQualifiedExceptionsInTypeHint(array $ignoredNames): void
 	{
 		$report = self::checkFile(
@@ -226,6 +237,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testDoNotAllowFullyQualifiedExceptionsInThrow(array $ignoredNames): void
 	{
 		$report = self::checkFile(
@@ -243,6 +255,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testDoNotAllowFullyQualifiedExceptionsInCatch(array $ignoredNames): void
 	{
 		$report = self::checkFile(
@@ -286,6 +299,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testDoNotAllowPartialUses(array $ignoredNames): void
 	{
 		$report = self::checkFile(
@@ -303,6 +317,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testAllowPartialUses(array $ignoredNames): void
 	{
 		$report = self::checkFile(
@@ -332,6 +347,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testUseOnlyWhitelistedNamespaces(array $ignoredNames): void
 	{
 		$report = self::checkFile(
@@ -353,6 +369,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testDisallowFullyQualifiedImplementsWithMultipleInterfaces(array $ignoredNames): void
 	{
 		$report = self::checkFile(
@@ -370,6 +387,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesForIrrelevantTests')]
 	public function testDoNotUseTypeInRootNamespaceInFileWithoutNamespace(array $ignoredNames): void
 	{
 		$report = self::checkFile(
@@ -408,6 +426,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNames
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNames')]
 	public function testIgnoredNames(bool $allowFullyQualifiedExceptions, array $ignoredNames): void
 	{
 		$report = self::checkFile(
@@ -456,6 +475,7 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 	 * @dataProvider dataIgnoredNamesInNamespace
 	 * @param list<string> $ignoredNames
 	 */
+	#[DataProvider('dataIgnoredNamesInNamespace')]
 	public function testIgnoredNamesInNamespace(bool $allowFullyQualifiedExceptions, array $ignoredNames): void
 	{
 		$report = self::checkFile(

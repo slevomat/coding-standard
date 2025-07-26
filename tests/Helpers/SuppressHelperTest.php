@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SuppressHelperTest extends TestCase
 {
@@ -94,6 +95,7 @@ class SuppressHelperTest extends TestCase
 	/**
 	 * @dataProvider dataFunctionIsSuppressed
 	 */
+	#[DataProvider('dataFunctionIsSuppressed')]
 	public function testFunctionIsSuppressed(string $name): void
 	{
 		self::assertTrue(
@@ -120,6 +122,7 @@ class SuppressHelperTest extends TestCase
 	/**
 	 * @dataProvider dataFunctionIsNotSuppressed
 	 */
+	#[DataProvider('dataFunctionIsNotSuppressed')]
 	public function testFunctionIsNotSuppressed(string $name): void
 	{
 		self::assertFalse(

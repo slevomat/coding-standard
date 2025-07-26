@@ -2,6 +2,8 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class StringHelperTest extends TestCase
 {
 
@@ -29,6 +31,7 @@ class StringHelperTest extends TestCase
 	/**
 	 * @dataProvider dataStartsWith
 	 */
+	#[DataProvider('dataStartsWith')]
 	public function testStartsWith(string $haystack, string $needle): void
 	{
 		self::assertTrue(StringHelper::startsWith($haystack, $needle));
@@ -62,6 +65,7 @@ class StringHelperTest extends TestCase
 	/**
 	 * @dataProvider dataNotStartsWith
 	 */
+	#[DataProvider('dataNotStartsWith')]
 	public function testNotStartsWith(string $haystack, string $needle): void
 	{
 		self::assertFalse(StringHelper::startsWith($haystack, $needle));
@@ -91,6 +95,7 @@ class StringHelperTest extends TestCase
 	/**
 	 * @dataProvider dataEndsWith
 	 */
+	#[DataProvider('dataEndsWith')]
 	public function testEndsWith(string $haystack, string $needle): void
 	{
 		self::assertTrue(StringHelper::endsWith($haystack, $needle));
@@ -124,6 +129,7 @@ class StringHelperTest extends TestCase
 	/**
 	 * @dataProvider dataNotEndsWith
 	 */
+	#[DataProvider('dataNotEndsWith')]
 	public function testNotEndsWith(string $haystack, string $needle): void
 	{
 		self::assertFalse(StringHelper::endsWith($haystack, $needle));

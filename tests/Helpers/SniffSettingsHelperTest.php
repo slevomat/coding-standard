@@ -2,6 +2,8 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class SniffSettingsHelperTest extends TestCase
 {
 
@@ -66,6 +68,7 @@ class SniffSettingsHelperTest extends TestCase
 	 * @dataProvider validRegularExpressionsProvider
 	 * @dataProvider invalidRegularExpressionsProvider
 	 */
+	#[DataProvider('validRegularExpressionsProvider')]
 	public function testIsValidRegularExpression(string $expression, bool $valid): void
 	{
 		self::assertSame($valid, SniffSettingsHelper::isValidRegularExpression($expression));

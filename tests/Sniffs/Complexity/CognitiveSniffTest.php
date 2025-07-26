@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\Complexity;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use SlevomatCodingStandard\Sniffs\TestCase;
 use function sprintf;
 
@@ -99,6 +100,7 @@ class CognitiveSniffTest extends TestCase
 	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
 	 * @dataProvider dataProviderFiles
 	 */
+	#[DataProvider('dataProviderFiles')]
 	public function testNoErrorsOrWarnings(string $filepath, int $line, string $functionName, int $expectedComplexity): void
 	{
 		$report = self::checkFile($filepath, [
@@ -112,6 +114,7 @@ class CognitiveSniffTest extends TestCase
 	/**
 	 * @dataProvider dataProviderFiles
 	 */
+	#[DataProvider('dataProviderFiles')]
 	public function testWarnings(string $filepath, int $line, string $functionName, int $expectedComplexity): void
 	{
 		$report = self::checkFile($filepath, [
@@ -137,6 +140,7 @@ class CognitiveSniffTest extends TestCase
 	/**
 	 * @dataProvider dataProviderFiles
 	 */
+	#[DataProvider('dataProviderFiles')]
 	public function testErrors(string $filepath, int $line, string $functionName, int $expectedComplexity): void
 	{
 		$report = self::checkFile($filepath, [
@@ -208,6 +212,7 @@ class CognitiveSniffTest extends TestCase
 	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
 	 * @dataProvider dataProviderFiles
 	 */
+	#[DataProvider('dataProviderFiles')]
 	public function testDeprecatedNoErrorsOrWarnings(string $filepath, int $line, string $functionName, int $expectedComplexity): void
 	{
 		$report = self::checkFile($filepath, [
@@ -220,6 +225,7 @@ class CognitiveSniffTest extends TestCase
 	/**
 	 * @dataProvider dataProviderFiles
 	 */
+	#[DataProvider('dataProviderFiles')]
 	public function testDeprecatedErrors(string $filepath, int $line, string $functionName, int $expectedComplexity): void
 	{
 		$report = self::checkFile($filepath, [

@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use SlevomatCodingStandard\Sniffs\TestCase;
 
 class DeclareStrictTypesSniffTest extends TestCase
@@ -43,6 +44,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 	/**
 	 * @dataProvider dataDeclareStrictTypesMissing
 	 */
+	#[DataProvider('dataDeclareStrictTypesMissing')]
 	public function testDeclareStrictTypesMissing(string $file, int $line): void
 	{
 		$report = self::checkFile($file);
@@ -70,6 +72,7 @@ class DeclareStrictTypesSniffTest extends TestCase
 	/**
 	 * @dataProvider dataDeclareStrictTypesIncorrectFormat
 	 */
+	#[DataProvider('dataDeclareStrictTypesIncorrectFormat')]
 	public function testDeclareStrictTypesIncorrectFormat(string $file): void
 	{
 		$report = self::checkFile($file);

@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\Files;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use SlevomatCodingStandard\Sniffs\TestCase;
 use function str_replace;
 use const DIRECTORY_SEPARATOR;
@@ -104,6 +105,7 @@ class FilepathNamespaceExtractorTest extends TestCase
 	 * @dataProvider dataGetTypeNameFromProjectPath
 	 * @param list<string> $extensions
 	 */
+	#[DataProvider('dataGetTypeNameFromProjectPath')]
 	public function testGetTypeNameFromProjectPath(string $path, ?string $expectedNamespace, array $extensions): void
 	{
 		$extractor = new FilepathNamespaceExtractor(

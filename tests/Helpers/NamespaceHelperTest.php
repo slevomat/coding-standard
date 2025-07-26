@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use function sprintf;
 use const T_STRING;
 
@@ -22,6 +23,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @dataProvider dataIsFullyQualifiedName
 	 */
+	#[DataProvider('dataIsFullyQualifiedName')]
 	public function testIsFullyQualifiedName(string $typeName): void
 	{
 		self::assertTrue(NamespaceHelper::isFullyQualifiedName($typeName));
@@ -30,6 +32,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @dataProvider dataIsFullyQualifiedName
 	 */
+	#[DataProvider('dataIsFullyQualifiedName')]
 	public function testGetFullyQualifiedTypeNameUnchanged(string $typeName): void
 	{
 		self::assertSame($typeName, NamespaceHelper::getFullyQualifiedTypeName($typeName));
@@ -49,6 +52,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @dataProvider dataIsNotFullyQualifiedName
 	 */
+	#[DataProvider('dataIsNotFullyQualifiedName')]
 	public function testIsNotFullyQualifiedName(string $typeName): void
 	{
 		self::assertFalse(NamespaceHelper::isFullyQualifiedName($typeName));
@@ -57,6 +61,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @dataProvider dataIsNotFullyQualifiedName
 	 */
+	#[DataProvider('dataIsNotFullyQualifiedName')]
 	public function testGetFullyQualifiedTypeNameChanged(string $typeName): void
 	{
 		self::assertSame(
@@ -79,6 +84,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @dataProvider dataHasNamespace
 	 */
+	#[DataProvider('dataHasNamespace')]
 	public function testHasNamespace(string $typeName): void
 	{
 		self::assertTrue(NamespaceHelper::hasNamespace($typeName));
@@ -98,6 +104,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @dataProvider dataDoesNotHaveNamespace
 	 */
+	#[DataProvider('dataDoesNotHaveNamespace')]
 	public function testDoesNotHaveNamespace(string $typeName): void
 	{
 		self::assertFalse(NamespaceHelper::hasNamespace($typeName));
@@ -132,6 +139,7 @@ class NamespaceHelperTest extends TestCase
 	 * @dataProvider dataGetNameParts
 	 * @param list<string> $parts
 	 */
+	#[DataProvider('dataGetNameParts')]
 	public function testGetNameParts(string $namespace, array $parts): void
 	{
 		self::assertSame($parts, NamespaceHelper::getNameParts($namespace));
@@ -217,6 +225,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @dataProvider dataGetUnqualifiedNameFromFullyQualifiedName
 	 */
+	#[DataProvider('dataGetUnqualifiedNameFromFullyQualifiedName')]
 	public function testGetUnqualifiedNameFromFullyQualifiedName(string $unqualifiedName, string $fullyQualifiedName): void
 	{
 		self::assertSame($unqualifiedName, NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($fullyQualifiedName));
@@ -237,6 +246,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @dataProvider dataIsQualifiedName
 	 */
+	#[DataProvider('dataIsQualifiedName')]
 	public function testIsQualifiedName(string $name): void
 	{
 		self::assertTrue(NamespaceHelper::isQualifiedName($name));
@@ -255,6 +265,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @dataProvider dataIsNotQualifiedName
 	 */
+	#[DataProvider('dataIsNotQualifiedName')]
 	public function testIsNotQualifiedName(string $name): void
 	{
 		self::assertFalse(NamespaceHelper::isQualifiedName($name));
@@ -288,6 +299,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @dataProvider dataNormalizeToCanonicalName
 	 */
+	#[DataProvider('dataNormalizeToCanonicalName')]
 	public function testNormalizeToCanonicalName(string $normalizedName, string $originalName): void
 	{
 		self::assertSame($normalizedName, NamespaceHelper::normalizeToCanonicalName($originalName));
@@ -321,6 +333,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @dataProvider dataTypeIsInNamespace
 	 */
+	#[DataProvider('dataTypeIsInNamespace')]
 	public function testTypeIsInNamespace(string $typeName, string $namespace): void
 	{
 		self::assertTrue(NamespaceHelper::isTypeInNamespace($typeName, $namespace));
@@ -362,6 +375,7 @@ class NamespaceHelperTest extends TestCase
 	/**
 	 * @dataProvider dataTypeIsNotInNamespace
 	 */
+	#[DataProvider('dataTypeIsNotInNamespace')]
 	public function testTypeIsNotInNamespace(string $typeName, string $namespace): void
 	{
 		self::assertFalse(NamespaceHelper::isTypeInNamespace($typeName, $namespace));

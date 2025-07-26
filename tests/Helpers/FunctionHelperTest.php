@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use function array_map;
 use function sprintf;
 use const T_CLOSURE;
@@ -103,6 +104,7 @@ class FunctionHelperTest extends TestCase
 	 * @dataProvider dataParametersNames
 	 * @param list<string> $expectedParametersNames
 	 */
+	#[DataProvider('dataParametersNames')]
 	public function testParametersNames(string $functionName, array $expectedParametersNames): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersNames.php');
@@ -234,6 +236,7 @@ class FunctionHelperTest extends TestCase
 	 * @dataProvider dataParametersTypeHints
 	 * @param array<string, TypeHint|null> $expectedParametersTypeHints
 	 */
+	#[DataProvider('dataParametersTypeHints')]
 	public function testParametersTypeHints(string $functionName, array $expectedParametersTypeHints): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersTypeHints.php');
@@ -265,6 +268,7 @@ class FunctionHelperTest extends TestCase
 	 * @dataProvider dataParametersNullableTypeHints
 	 * @param array<string, TypeHint|null> $expectedParametersTypeHints
 	 */
+	#[DataProvider('dataParametersNullableTypeHints')]
 	public function testParametersNullableTypeHints(string $functionName, array $expectedParametersTypeHints): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionParametersNullableTypeHints.php');
@@ -308,6 +312,7 @@ class FunctionHelperTest extends TestCase
 	/**
 	 * @dataProvider dataFunctionReturnsValueOrNot
 	 */
+	#[DataProvider('dataFunctionReturnsValueOrNot')]
 	public function testFunctionReturnsValueOrNot(string $functionName, bool $returnsValue): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/functionReturnsValueOrNot.php');
@@ -333,6 +338,7 @@ class FunctionHelperTest extends TestCase
 	/**
 	 * @dataProvider dataClosureReturnsValueOrNot
 	 */
+	#[DataProvider('dataClosureReturnsValueOrNot')]
 	public function testClosureReturnsValueOrNot(int $line, bool $returnsValue): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/closureReturnsValueOrNot.php');

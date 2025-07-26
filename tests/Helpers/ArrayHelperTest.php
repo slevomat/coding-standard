@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use function array_key_exists;
 use function count;
 use function in_array;
@@ -16,6 +17,7 @@ class ArrayHelperTest extends TestCase
 	 * @dataProvider dataKeyValues
 	 * @param array{keyValues: array<int, array{content: string, indent?: string|null, key?: string|null, pointerArrow?: bool, pointerComma?: bool}>} $expect
 	 */
+	#[DataProvider('dataKeyValues')]
 	public function testParse(string $file, int $arrayPointerNo, array $expect): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile($file);
@@ -92,6 +94,7 @@ class ArrayHelperTest extends TestCase
 	 * @dataProvider dataKeyValues
 	 * @param array{indentation: string|null} $expect
 	 */
+	#[DataProvider('dataFlagsAndIndentation')]
 	public function testGetIndentation(string $file, int $arrayPointerNo, array $expect): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile($file);
@@ -108,6 +111,7 @@ class ArrayHelperTest extends TestCase
 	 * @dataProvider dataKeyValues
 	 * @param array{flags: list<string>} $expect
 	 */
+	#[DataProvider('dataFlagsAndIndentation')]
 	public function testIsKeyed(string $file, int $arrayPointerNo, array $expect): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile($file);
@@ -124,6 +128,7 @@ class ArrayHelperTest extends TestCase
 	 * @dataProvider dataKeyValues
 	 * @param array{flags: list<string>} $expect
 	 */
+	#[DataProvider('dataFlagsAndIndentation')]
 	public function testIsKeyedAll(string $file, int $arrayPointerNo, array $expect): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile($file);
@@ -140,6 +145,7 @@ class ArrayHelperTest extends TestCase
 	 * @dataProvider dataKeyValues
 	 * @param array{flags: list<string>} $expect
 	 */
+	#[DataProvider('dataFlagsAndIndentation')]
 	public function testIsMultiLine(string $file, int $arrayPointerNo, array $expect): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile($file);
@@ -154,6 +160,7 @@ class ArrayHelperTest extends TestCase
 	 * @dataProvider dataKeyValues
 	 * @param array{flags: list<string>} $expect
 	 */
+	#[DataProvider('dataFlagsAndIndentation')]
 	public function testIsNotEmpty(string $file, int $arrayPointerNo, array $expect): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile($file);
@@ -169,6 +176,7 @@ class ArrayHelperTest extends TestCase
 	 * @dataProvider dataKeyValues
 	 * @param array{flags: list<string>} $expect
 	 */
+	#[DataProvider('dataFlagsAndIndentation')]
 	public function testIsSortedByKey(string $file, int $arrayPointerNo, array $expect): void
 	{
 		if (!in_array('keyed', $expect['flags'], true)) {
@@ -190,6 +198,7 @@ class ArrayHelperTest extends TestCase
 	 * @dataProvider dataKeyValues
 	 * @param array{flags: list<string>} $expect
 	 */
+	#[DataProvider('dataFlagsAndIndentation')]
 	public function testOpenClosePointers(string $file, int $arrayPointerNo, array $expect): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile($file);

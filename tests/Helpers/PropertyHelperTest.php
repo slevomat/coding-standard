@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
+use PHPUnit\Framework\Attributes\DataProvider;
 use function sprintf;
 use const T_VARIABLE;
 
@@ -139,6 +140,7 @@ class PropertyHelperTest extends TestCase
 	/**
 	 * @dataProvider dataIsProperty
 	 */
+	#[DataProvider('dataIsProperty')]
 	public function testIsProperty(string $variableName, bool $isProperty): void
 	{
 		$phpcsFile = $this->getTestedCodeSnifferFile();
@@ -161,6 +163,7 @@ class PropertyHelperTest extends TestCase
 	/**
 	 * @dataProvider dataIsPropertyIfPromoted
 	 */
+	#[DataProvider('dataIsPropertyIfPromoted')]
 	public function testIsPropertyIfPromoted(string $variableName): void
 	{
 		$phpcsFile = $this->getTestedCodeSnifferFile();
@@ -281,6 +284,7 @@ class PropertyHelperTest extends TestCase
 	/**
 	 * @dataProvider dataFindTypeHint
 	 */
+	#[DataProvider('dataFindTypeHint')]
 	public function testFindTypeHint(string $propertyName, ?string $typeHint, ?bool $isNullable): void
 	{
 		$phpcsFile = $this->getTestedCodeSnifferFile();
