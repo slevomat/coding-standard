@@ -27,9 +27,9 @@ class Whatever
 
 	private string|int|float|bool|null $scalarNullable = null;
 
-	private int|float $numeric;
+	private int|float|string $numeric;
 
-	private int|float|null $numericNullable = null;
+	private int|float|string|null $numericNullable = null;
 
 	private string|int|float|bool|null $scalarAndnumericNullable = null;
 

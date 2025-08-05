@@ -48,11 +48,11 @@ class Whatever
 	{}
 
 	/** */
-	private function numeric(): int|float
+	private function numeric(): int|float|string
 	{}
 
 	/** */
-	private function numericNullable(): int|float|null
+	private function numericNullable(): int|float|string|null
 	{}
 
 	/** */
@@ -65,6 +65,10 @@ class Whatever
 
 	/** */
 	private function mixedAndVoid(): mixed
+	{}
+
+	/** @return non-empty-array|null */
+	public function returnNonEmptyArray(): ?array
 	{}
 
 }

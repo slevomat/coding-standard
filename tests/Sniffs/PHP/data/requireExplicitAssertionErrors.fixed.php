@@ -42,7 +42,7 @@ $i = new \stdClass();
 \assert(\is_object($i));
 
 $j = 0;
-\assert(\is_int($j) || \is_float($j));
+\assert(\is_int($j) || \is_numeric($j));
 
 $k = 'string';
 \assert(\is_int($k) || \is_float($k) || \is_bool($k) || \is_string($k));
@@ -51,7 +51,7 @@ $l = new \stdClass();
 \assert($l instanceof \stdClass);
 
 foreach ([] as $m) {
-	\assert(\is_int($m) || \is_float($m) || \is_bool($m));
+	\assert(\is_numeric($m) || \is_bool($m));
 }
 
 while ($n = next($array)) {
@@ -77,7 +77,7 @@ $u = new ArrayObject();
 \assert($u instanceof \Traversable && $u instanceof \Countable);
 
 foreach ([] as $v) {
-	\assert(\is_int($v) || \is_float($v) || \is_bool($v));
+	\assert(\is_numeric($v) || \is_bool($v));
 }
 
 while ($w = next($array)) {

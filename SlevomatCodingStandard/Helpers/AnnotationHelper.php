@@ -293,11 +293,10 @@ class AnnotationHelper
 				return $enableStandaloneNullTrueFalseTypeHints;
 			}
 
-			if (in_array(
+			if (TypeHintHelper::isSimpleUnofficialTypeHints(
 				strtolower($annotationType->name),
-				['class-string', 'trait-string', 'callable-string', 'numeric-string', 'non-empty-string', 'non-falsy-string', 'literal-string', 'positive-int', 'negative-int'],
-				true,
-			)) {
+			) && !in_array($annotationType->name, ['object', 'mixed'], true)
+			) {
 				return false;
 			}
 		}

@@ -397,4 +397,14 @@ class Aliases
 	{
 	}
 
+	/** @return non-empty-lowercase-string */
+	public function returnComplexString(): string
+	{
+	}
+
+	/** @return callable-array */
+	public function returnCallableArray(): callable
+	{
+	}
+
 }
