@@ -76,7 +76,7 @@ class RequireExplicitAssertionSniffTest extends TestCase
 			'enableAdvancedStringTypes' => false,
 		]);
 
-		self::assertSame(10, $report->getErrorCount());
+		self::assertSame(11, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
 		self::assertSniffError($report, 6, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
@@ -88,6 +88,7 @@ class RequireExplicitAssertionSniffTest extends TestCase
 		self::assertSniffError($report, 24, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
 		self::assertSniffError($report, 27, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
 		self::assertSniffError($report, 30, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
+		self::assertSniffError($report, 33, RequireExplicitAssertionSniff::CODE_REQUIRED_EXPLICIT_ASSERTION);
 
 		self::assertAllFixedInFile($report);
 	}

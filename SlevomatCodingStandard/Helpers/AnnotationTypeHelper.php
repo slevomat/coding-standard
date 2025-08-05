@@ -22,6 +22,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use function count;
 use function in_array;
+use function preg_match;
 use function strtolower;
 
 /**
@@ -303,16 +304,33 @@ class AnnotationTypeHelper
 				return $enableUnionTypeHint || $enableStandaloneNullTrueFalseTypeHints ? 'false' : 'bool';
 			}
 
-			if (in_array(strtolower($typeNode->name), ['positive-int', 'negative-int'], true)) {
+			if (in_array(
+				strtolower($typeNode->name),
+				['positive-int', 'non-positive-int', 'negative-int', 'non-negative-int', 'literal-int', 'int-mask'],
+				true,
+			)) {
 				return 'int';
 			}
 
 			if (in_array(
 				strtolower($typeNode->name),
-				['class-string', 'trait-string', 'callable-string', 'numeric-string', 'non-empty-string', 'non-falsy-string', 'literal-string'],
+				['callable-array', 'callable-string'],
 				true,
 			)) {
+				return 'callable';
+			}
+
+			// See https://psalm.dev/docs/annotating_code/type_syntax/scalar_types/#class-string-interface-string
+			if (preg_match('~-string$~i', $typeNode->name) === 1) {
 				return 'string';
+			}
+
+			if (in_array(
+				strtolower($typeNode->name),
+				['non-empty-array', 'list', 'non-empty-list'],
+				true,
+			)) {
+				return 'array';
 			}
 
 			return $typeNode->name;

@@ -29,3 +29,6 @@ $e = 0;
 
 /** @var int<50, max>|null $ee */
 $ee = null;
+
+/** @var literal-int $f */
+$f = 100;

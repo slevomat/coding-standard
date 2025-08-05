@@ -13,6 +13,7 @@ use function array_unique;
 use function count;
 use function implode;
 use function in_array;
+use function preg_match;
 use function preg_split;
 use function sort;
 use function sprintf;
@@ -79,7 +80,7 @@ class TypeHintHelper
 
 	public static function isUnofficialUnionTypeHint(string $typeHint): bool
 	{
-		return in_array($typeHint, ['scalar', 'numeric'], true);
+		return in_array($typeHint, ['scalar', 'numeric', 'array-key'], true);
 	}
 
 	public static function isVoidTypeHint(string $typeHint): bool
@@ -99,7 +100,8 @@ class TypeHintHelper
 	{
 		$conversion = [
 			'scalar' => ['string', 'int', 'float', 'bool'],
-			'numeric' => ['int', 'float'],
+			'numeric' => ['int', 'float', 'string'],
+			'array-key' => ['int', 'string'],
 		];
 
 		return $conversion[$typeHint];
@@ -167,37 +169,37 @@ class TypeHintHelper
 
 	public static function isSimpleUnofficialTypeHints(string $typeHint): bool
 	{
-		static $simpleUnofficialTypeHints;
+		static $simpleUnofficialTypeHints = null;
 
-		if ($simpleUnofficialTypeHints === null) {
-			$simpleUnofficialTypeHints = [
-				'null',
-				'mixed',
-				'scalar',
-				'numeric',
-				'true',
-				'object',
-				'resource',
-				'static',
-				'$this',
-				'class-string',
-				'trait-string',
-				'callable-string',
-				'numeric-string',
-				'non-empty-string',
-				'non-falsy-string',
-				'literal-string',
-				'array-key',
-				'list',
-				'empty',
-				'positive-int',
-				'negative-int',
-				'min',
-				'max',
-			];
-		}
+		// See https://psalm.dev/docs/annotating_code/type_syntax/atomic_types/
+		$simpleUnofficialTypeHints ??= [
+			'null',
+			'mixed',
+			'scalar',
+			'numeric',
+			'true',
+			'object',
+			'resource',
+			'static',
+			'$this',
+			'array-key',
+			'list',
+			'non-empty-array',
+			'non-empty-list',
+			'empty',
+			'positive-int',
+			'non-positive-int',
+			'negative-int',
+			'non-negative-int',
+			'literal-int',
+			'int-mask',
+			'min',
+			'max',
+			'callable-array',
+			'callable-string',
+		];
 
-		return in_array($typeHint, $simpleUnofficialTypeHints, true);
+		return in_array($typeHint, $simpleUnofficialTypeHints, true) || preg_match('~-string$~i', $typeHint) === 1;
 	}
 
 	/**

@@ -81,6 +81,19 @@ class TypeHintHelperTest extends TestCase
 			['resource', true],
 			['static', true],
 			['$this', true],
+			['array-key', true],
+			['list', true],
+			['non-empty-array', true],
+			['non-empty-list', true],
+			['empty', true],
+			['positive-int', true],
+			['non-positive-int', true],
+			['negative-int', true],
+			['non-negative-int', true],
+			['literal-int', true],
+			['int-mask', true],
+			['callable-array', true],
+			['callable-string', true],
 
 			['\Traversable', false],
 			['int', false],
@@ -379,6 +392,8 @@ class TypeHintHelperTest extends TestCase
 		return [
 			['scalar', true],
 			['unionIsNotIntersection', false],
+			['fooFunctionWithReturnAnnotationComplexString', false],
+			['fooFunctionWithReturnAnnotationSimpleHyphenedIterable', false],
 		];
 	}
 

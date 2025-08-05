@@ -48,11 +48,11 @@ class Whatever
 	{}
 
 	/** */
-	private function numeric(int|float $a)
+	private function numeric(int|float|string $a)
 	{}
 
 	/** */
-	private function numericNullable(int|float|null $a)
+	private function numericNullable(int|float|string|null $a)
 	{}
 
 	/** */

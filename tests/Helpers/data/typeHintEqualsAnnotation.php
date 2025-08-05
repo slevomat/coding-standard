@@ -14,3 +14,19 @@ function scalar(): int|bool|float|string
 function unionIsNotIntersection(): Foo|Bar
 {
 }
+
+/**
+ * @return non-empty-lowercase-string
+ */
+function fooFunctionWithReturnAnnotationComplexString(): string
+{
+
+}
+
+/**
+ * @return non-empty-array|null
+ */
+function fooFunctionWithReturnAnnotationSimpleHyphenedIterable(): ?array
+{
+
+}

@@ -29,3 +29,6 @@ $e = 0;
 
 $ee = null;
 \assert((\is_int($ee) && $ee >= 50) || $ee === null);
+
+$f = 100;
+\assert(\is_int($f));

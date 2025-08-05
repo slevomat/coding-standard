@@ -361,4 +361,19 @@ abstract class Whatever
 	{
 	}
 
+	/** @return non-empty-lowercase-string */
+	public function returnComplexString(): string
+	{
+	}
+
+	/** @return callable-array */
+	public function returnCallableArray(): callable
+	{
+	}
+
+	/** @return non-empty-array */
+	public function returnNonEmptyArray(): array
+	{
+	}
+
 }

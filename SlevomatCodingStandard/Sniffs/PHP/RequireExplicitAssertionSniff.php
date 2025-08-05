@@ -27,6 +27,7 @@ use function array_unique;
 use function count;
 use function implode;
 use function in_array;
+use function preg_match;
 use function sprintf;
 use function strpos;
 use function trim;
@@ -417,8 +418,7 @@ class RequireExplicitAssertionSniff implements Sniff
 
 		if ($typeNode->name === 'numeric') {
 			return [
-				sprintf('\is_int(%s)', $variableName),
-				sprintf('\is_float(%s)', $variableName),
+				sprintf('\is_numeric(%s)', $variableName),
 			];
 		}
 
@@ -432,29 +432,33 @@ class RequireExplicitAssertionSniff implements Sniff
 		}
 
 		if ($this->enableIntegerRanges) {
-			if ($typeNode->name === 'positive-int') {
+			if ($typeNode->name === 'positive-int' || $typeNode->name === 'non-negative-int') {
 				return [sprintf('\is_int(%1$s) && %1$s > 0', $variableName)];
 			}
 
-			if ($typeNode->name === 'negative-int') {
+			if ($typeNode->name === 'negative-int' || $typeNode->name === 'non-positive-int') {
 				return [sprintf('\is_int(%1$s) && %1$s < 0', $variableName)];
+			}
+
+			if ($typeNode->name === 'literal-int') {
+				return [sprintf('\is_int(%1$s)', $variableName)];
 			}
 		}
 
 		if (
 			$this->enableAdvancedStringTypes
-			&& in_array($typeNode->name, ['non-empty-string', 'non-falsy-string', 'callable-string', 'numeric-string'], true)
+			&& preg_match('~-string$~', $typeNode->name) === 1
 		) {
 			$conditions = [sprintf('\is_string(%s)', $variableName)];
 
-			if ($typeNode->name === 'non-empty-string') {
-				$conditions[] = sprintf("%s !== ''", $variableName);
-			} elseif ($typeNode->name === 'non-falsy-string') {
-				$conditions[] = sprintf('(bool) %s === true', $variableName);
-			} elseif ($typeNode->name === 'callable-string') {
+			if ($typeNode->name === 'callable-string') {
 				$conditions[] = sprintf('\is_callable(%s)', $variableName);
-			} else {
+			} elseif ($typeNode->name === 'numeric-string') {
 				$conditions[] = sprintf('\is_numeric(%s)', $variableName);
+			} elseif (preg_match('~^non-empty-~i', $typeNode->name) === 1) {
+				$conditions[] = sprintf("%s !== ''", $variableName);
+			} elseif (preg_match('~^non-falsy-~i', $typeNode->name) === 1) {
+				$conditions[] = sprintf('(bool) %s === true', $variableName);
 			}
 
 			return [implode(' && ', $conditions)];

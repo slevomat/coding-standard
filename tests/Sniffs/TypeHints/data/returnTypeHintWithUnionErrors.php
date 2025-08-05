@@ -67,4 +67,8 @@ class Whatever
 	private function mixedAndVoid()
 	{}
 
+	/** @return non-empty-array|null */
+	public function returnNonEmptyArray()
+	{}
+
 }

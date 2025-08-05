@@ -33,4 +33,14 @@ class Whatever
 	{
 	}
 
+	/** @return non-empty-lowercase-string|null */
+	public function returnComplexString(): ?string
+	{
+	}
+
+	/** @return callable-array|null */
+	public function returnCallableArray(): ?callable
+	{
+	}
+
 }
