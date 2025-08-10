@@ -68,6 +68,19 @@ final class RequireMultiLineMethodSignatureSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testErrorsBasedOnPromotedProperties(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/requireMultiLineMethodSignatureBasedOnPromotedPropertiesErrors.php',
+			['withPromotedProperties' => true],
+		);
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 5, RequireMultiLineMethodSignatureSniff::CODE_REQUIRED_MULTI_LINE_SIGNATURE);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testForAllMethods(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireMultiLineMethodSignatureAllMethodsErrors.php', ['minLineLength' => 0]);
