@@ -11,7 +11,6 @@ use SlevomatCodingStandard\Helpers\TokenHelper;
 use function assert;
 use function in_array;
 use function max;
-use function min;
 use function str_repeat;
 use const T_ATTRIBUTE;
 use const T_COMMENT;
@@ -111,7 +110,7 @@ abstract class AbstractPropertyConstantAndEnumCaseSpacing implements Sniff
 			&& !$this instanceof EnumCaseSpacingSniff
 			&& $tokens[$pointer]['line'] !== $tokens[$endPointer]['line']
 		) {
-			$maxExpectedLines = max($minExpectedLines, min($maxExpectedLines, $this->maxLinesCountBeforeMultiline));
+			$maxExpectedLines = max($minExpectedLines, $this->maxLinesCountBeforeMultiline);
 		}
 
 		if ($linesBetween >= $minExpectedLines && $linesBetween <= $maxExpectedLines) {
@@ -140,10 +139,10 @@ abstract class AbstractPropertyConstantAndEnumCaseSpacing implements Sniff
 			FixerHelper::removeBetween($phpcsFile, $lastPointerOnLine, $firstPointerOnNextLine);
 
 			$phpcsFile->fixer->endChangeset();
-		} else {
+		} elseif ($linesBetween < $minExpectedLines) {
 			$phpcsFile->fixer->beginChangeset();
 
-			for ($i = 0; $i < $minExpectedLines; $i++) {
+			for ($i = 0; $i < $minExpectedLines - $linesBetween; $i++) {
 				$phpcsFile->fixer->addNewlineBefore($firstOnLinePointer);
 			}
 

@@ -48,14 +48,16 @@ class ConstantSpacingSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/constantSpacingMultilineErrors.php', [
 			'minLinesCountBeforeMultiline' => 1,
+			'maxLinesCountBeforeMultiline' => 2,
 			'minLinesCountBeforeWithComment' => 2,
 			'maxLinesCountBeforeWithComment' => 2,
 		]);
 
-		self::assertSame(2, $report->getErrorCount());
+		self::assertSame(3, $report->getErrorCount());
 
 		self::assertSniffError($report, 4, ConstantSpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_CONSTANT);
 		self::assertSniffError($report, 9, ConstantSpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_CONSTANT);
+		self::assertSniffError($report, 24, ConstantSpacingSniff::CODE_INCORRECT_COUNT_OF_BLANK_LINES_AFTER_CONSTANT);
 
 		self::assertAllFixedInFile($report);
 	}

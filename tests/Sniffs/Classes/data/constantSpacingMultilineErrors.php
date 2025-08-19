@@ -11,8 +11,23 @@ abstract class Foo {
 		'B',
 		'C',
 	];
-	/** @var array<string> */
+
+
+
 	const ItemsC = [
+		'A',
+		'B',
+		'C',
+	];
+
+
+	const ItemsD = [
+		'A',
+		'B',
+		'C',
+	];
+	/** @var array<string> */
+	const ItemsE = [
 		'A',
 		'B',
 		'C',
