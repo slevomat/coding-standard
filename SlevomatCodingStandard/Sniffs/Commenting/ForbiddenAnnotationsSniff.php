@@ -123,9 +123,7 @@ class ForbiddenAnnotationsSniff implements Sniff
 	 */
 	private function getNormalizedForbiddenAnnotations(): array
 	{
-		if ($this->normalizedForbiddenAnnotations === null) {
-			$this->normalizedForbiddenAnnotations = SniffSettingsHelper::normalizeArray($this->forbiddenAnnotations);
-		}
+		$this->normalizedForbiddenAnnotations ??= SniffSettingsHelper::normalizeArray($this->forbiddenAnnotations);
 		return $this->normalizedForbiddenAnnotations;
 	}
 

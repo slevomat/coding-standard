@@ -136,9 +136,7 @@ class SuppressHelperTest extends TestCase
 
 	private function getTestedCodeSnifferFile(): File
 	{
-		if ($this->testedCodeSnifferFile === null) {
-			$this->testedCodeSnifferFile = $this->getCodeSnifferFile(__DIR__ . '/data/suppress.php');
-		}
+		$this->testedCodeSnifferFile ??= $this->getCodeSnifferFile(__DIR__ . '/data/suppress.php');
 		return $this->testedCodeSnifferFile;
 	}
 

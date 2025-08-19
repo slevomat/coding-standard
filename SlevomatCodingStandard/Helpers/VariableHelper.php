@@ -126,9 +126,7 @@ class VariableHelper
 			$firstPointerInScope = $tokens[$scopeOwnerPointer]['scope_opener'] + 1;
 		}
 
-		if ($startCheckPointer === null) {
-			$startCheckPointer = $firstPointerInScope;
-		}
+		$startCheckPointer ??= $firstPointerInScope;
 
 		for ($i = $startCheckPointer; $i <= $scopeCloserPointer; $i++) {
 			if (!ScopeHelper::isInSameScope($phpcsFile, $i, $firstPointerInScope)) {

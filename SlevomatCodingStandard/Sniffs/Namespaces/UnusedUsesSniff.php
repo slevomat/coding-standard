@@ -247,17 +247,15 @@ class UnusedUsesSniff implements Sniff
 	 */
 	private function getIgnoredAnnotationNames(): array
 	{
-		if ($this->normalizedIgnoredAnnotationNames === null) {
-			$this->normalizedIgnoredAnnotationNames = array_merge(
-				SniffSettingsHelper::normalizeArray($this->ignoredAnnotationNames),
-				[
-					'@param',
-					'@throws',
-					'@property',
-					'@method',
-				],
-			);
-		}
+		$this->normalizedIgnoredAnnotationNames ??= array_merge(
+			SniffSettingsHelper::normalizeArray($this->ignoredAnnotationNames),
+			[
+				'@param',
+				'@throws',
+				'@property',
+				'@method',
+			],
+		);
 
 		return $this->normalizedIgnoredAnnotationNames;
 	}
@@ -267,9 +265,7 @@ class UnusedUsesSniff implements Sniff
 	 */
 	private function getIgnoredAnnotations(): array
 	{
-		if ($this->normalizedIgnoredAnnotations === null) {
-			$this->normalizedIgnoredAnnotations = SniffSettingsHelper::normalizeArray($this->ignoredAnnotations);
-		}
+		$this->normalizedIgnoredAnnotations ??= SniffSettingsHelper::normalizeArray($this->ignoredAnnotations);
 
 		return $this->normalizedIgnoredAnnotations;
 	}

@@ -22,9 +22,7 @@ class PhpDocParserHelper
 	{
 		static $lexer;
 
-		if ($lexer === null) {
-			$lexer = new Lexer(self::getConfig());
-		}
+		$lexer ??= new Lexer(self::getConfig());
 
 		return $lexer;
 	}
@@ -50,9 +48,7 @@ class PhpDocParserHelper
 	{
 		static $printer;
 
-		if ($printer === null) {
-			$printer = new Printer();
-		}
+		$printer ??= new Printer();
 
 		return $printer;
 	}
@@ -66,9 +62,7 @@ class PhpDocParserHelper
 	{
 		static $cloningTraverser;
 
-		if ($cloningTraverser === null) {
-			$cloningTraverser = new NodeTraverser([new CloningVisitor()]);
-		}
+		$cloningTraverser ??= new NodeTraverser([new CloningVisitor()]);
 
 		[$cloneNode] = $cloningTraverser->traverse([$node]);
 
@@ -79,9 +73,7 @@ class PhpDocParserHelper
 	{
 		static $config;
 
-		if ($config === null) {
-			$config = new ParserConfig(['lines' => true, 'indexes' => true]);
-		}
+		$config ??= new ParserConfig(['lines' => true, 'indexes' => true]);
 
 		return $config;
 	}

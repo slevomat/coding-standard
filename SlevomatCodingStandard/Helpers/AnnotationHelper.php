@@ -88,66 +88,62 @@ class AnnotationHelper
 		static $visitor;
 		static $traverser;
 
-		if ($visitor === null) {
-			$visitor = new class extends AbstractNodeVisitor {
+		$visitor ??= new class extends AbstractNodeVisitor {
 
-				/** @var class-string */
-				private string $type;
+			/** @var class-string */
+			private string $type;
 
-				/** @var list<Node> */
-				private array $nodes = [];
+			/** @var list<Node> */
+			private array $nodes = [];
 
-				/** @var list<Node> */
-				private array $nodesToIgnore = [];
+			/** @var list<Node> */
+			private array $nodesToIgnore = [];
 
-				/**
-				 * @return Node|list<Node>|NodeTraverser::*|null
-				 */
-				public function enterNode(Node $node)
-				{
-					if ($this->type === IdentifierTypeNode::class) {
-						if ($node instanceof ArrayShapeItemNode || $node instanceof ObjectShapeItemNode) {
-							$this->nodesToIgnore[] = $node->keyName;
-						} elseif ($node instanceof DoctrineArgument) {
-							$this->nodesToIgnore[] = $node->key;
-						}
+			/**
+			 * @return Node|list<Node>|NodeTraverser::*|null
+			 */
+			public function enterNode(Node $node)
+			{
+				if ($this->type === IdentifierTypeNode::class) {
+					if ($node instanceof ArrayShapeItemNode || $node instanceof ObjectShapeItemNode) {
+						$this->nodesToIgnore[] = $node->keyName;
+					} elseif ($node instanceof DoctrineArgument) {
+						$this->nodesToIgnore[] = $node->key;
 					}
-
-					if ($node instanceof $this->type && !in_array($node, $this->nodesToIgnore, true)) {
-						$this->nodes[] = $node;
-					}
-
-					return null;
 				}
 
-				/**
-				 * @param class-string $type
-				 */
-				public function setType(string $type): void
-				{
-					$this->type = $type;
+				if ($node instanceof $this->type && !in_array($node, $this->nodesToIgnore, true)) {
+					$this->nodes[] = $node;
 				}
 
-				public function clean(): void
-				{
-					$this->nodes = [];
-					$this->nodesToIgnore = [];
-				}
+				return null;
+			}
 
-				/**
-				 * @return list<Node>
-				 */
-				public function getNodes(): array
-				{
-					return $this->nodes;
-				}
+			/**
+			 * @param class-string $type
+			 */
+			public function setType(string $type): void
+			{
+				$this->type = $type;
+			}
 
-			};
-		}
+			public function clean(): void
+			{
+				$this->nodes = [];
+				$this->nodesToIgnore = [];
+			}
 
-		if ($traverser === null) {
-			$traverser = new NodeTraverser([$visitor]);
-		}
+			/**
+			 * @return list<Node>
+			 */
+			public function getNodes(): array
+			{
+				return $this->nodes;
+			}
+
+		};
+
+		$traverser ??= new NodeTraverser([$visitor]);
 
 		$visitor->setType($type);
 		$visitor->clean();
@@ -315,38 +311,34 @@ class AnnotationHelper
 		static $visitor;
 		static $traverser;
 
-		if ($visitor === null) {
-			$visitor = new class extends AbstractNodeVisitor {
+		$visitor ??= new class extends AbstractNodeVisitor {
 
-				private Node $nodeToChange;
+			private Node $nodeToChange;
 
-				private Node $changedNode;
+			private Node $changedNode;
 
-				public function enterNode(Node $node): ?Node
-				{
-					if ($node->getAttribute(Attribute::ORIGINAL_NODE) === $this->nodeToChange) {
-						return $this->changedNode;
-					}
-
-					return null;
+			public function enterNode(Node $node): ?Node
+			{
+				if ($node->getAttribute(Attribute::ORIGINAL_NODE) === $this->nodeToChange) {
+					return $this->changedNode;
 				}
 
-				public function setNodeToChange(Node $nodeToChange): void
-				{
-					$this->nodeToChange = $nodeToChange;
-				}
+				return null;
+			}
 
-				public function setChangedNode(Node $changedNode): void
-				{
-					$this->changedNode = $changedNode;
-				}
+			public function setNodeToChange(Node $nodeToChange): void
+			{
+				$this->nodeToChange = $nodeToChange;
+			}
 
-			};
-		}
+			public function setChangedNode(Node $changedNode): void
+			{
+				$this->changedNode = $changedNode;
+			}
 
-		if ($traverser === null) {
-			$traverser = new NodeTraverser([$visitor]);
-		}
+		};
+
+		$traverser ??= new NodeTraverser([$visitor]);
 
 		$visitor->setNodeToChange($nodeToChange);
 		$visitor->setChangedNode($changedNode);

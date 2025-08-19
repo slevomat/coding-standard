@@ -135,23 +135,21 @@ class TypeHintHelper
 	{
 		static $simpleTypeHints;
 
-		if ($simpleTypeHints === null) {
-			$simpleTypeHints = [
-				'int',
-				'integer',
-				'false',
-				'float',
-				'string',
-				'bool',
-				'boolean',
-				'callable',
-				'self',
-				'array',
-				'iterable',
-				'void',
-				'never',
-			];
-		}
+		$simpleTypeHints ??= [
+			'int',
+			'integer',
+			'false',
+			'float',
+			'string',
+			'bool',
+			'boolean',
+			'callable',
+			'self',
+			'array',
+			'iterable',
+			'void',
+			'never',
+		];
 
 		return $simpleTypeHints;
 	}
@@ -169,7 +167,7 @@ class TypeHintHelper
 
 	public static function isSimpleUnofficialTypeHints(string $typeHint): bool
 	{
-		static $simpleUnofficialTypeHints = null;
+		static $simpleUnofficialTypeHints;
 
 		// See https://psalm.dev/docs/annotating_code/type_syntax/atomic_types/
 		$simpleUnofficialTypeHints ??= [

@@ -67,9 +67,7 @@ class UseOnlyWhitelistedNamespacesSniff implements Sniff
 	 */
 	private function getNamespacesRequiredToUse(): array
 	{
-		if ($this->normalizedNamespacesRequiredToUse === null) {
-			$this->normalizedNamespacesRequiredToUse = SniffSettingsHelper::normalizeArray($this->namespacesRequiredToUse);
-		}
+		$this->normalizedNamespacesRequiredToUse ??= SniffSettingsHelper::normalizeArray($this->namespacesRequiredToUse);
 
 		return $this->normalizedNamespacesRequiredToUse;
 	}

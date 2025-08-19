@@ -84,9 +84,7 @@ class OptimizedFunctionsWithoutUnpackingSniff implements Sniff
 			&& $tokens[$lastArgumentSeparatorPointer]['level'] !== $tokens[$openBracketPointer]['level']
 		);
 
-		if ($lastArgumentSeparatorPointer === null) {
-			$lastArgumentSeparatorPointer = $openBracketPointer;
-		}
+		$lastArgumentSeparatorPointer ??= $openBracketPointer;
 
 		/** @var int $nextTokenAfterSeparatorPointer */
 		$nextTokenAfterSeparatorPointer = TokenHelper::findNextEffective(

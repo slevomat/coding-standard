@@ -42,9 +42,7 @@ class UseFromSameNamespaceSniff implements Sniff
 		}
 
 		$namespaceName = NamespaceHelper::findCurrentNamespaceName($phpcsFile, $usePointer);
-		if ($namespaceName === null) {
-			$namespaceName = '';
-		}
+		$namespaceName ??= '';
 
 		$usedTypeName = UseStatementHelper::getFullyQualifiedTypeNameFromUse($phpcsFile, $usePointer);
 		if (!StringHelper::startsWith($usedTypeName, $namespaceName)) {

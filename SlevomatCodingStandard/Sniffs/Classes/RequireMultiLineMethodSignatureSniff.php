@@ -116,9 +116,7 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 				$parameter['token'] - 1,
 				$tokens[$methodPointer]['parenthesis_opener'],
 			);
-			if ($pointerBeforeParameter === null) {
-				$pointerBeforeParameter = $tokens[$methodPointer]['parenthesis_opener'];
-			}
+			$pointerBeforeParameter ??= $tokens[$methodPointer]['parenthesis_opener'];
 
 			FixerHelper::add(
 				$phpcsFile,
@@ -157,9 +155,7 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 	 */
 	private function getIncludedMethodNormalizedPatterns(): array
 	{
-		if ($this->includedMethodNormalizedPatterns === null) {
-			$this->includedMethodNormalizedPatterns = SniffSettingsHelper::normalizeArray($this->includedMethodPatterns);
-		}
+		$this->includedMethodNormalizedPatterns ??= SniffSettingsHelper::normalizeArray($this->includedMethodPatterns);
 		return $this->includedMethodNormalizedPatterns;
 	}
 
@@ -168,9 +164,7 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 	 */
 	private function getExcludedMethodNormalizedPatterns(): array
 	{
-		if ($this->excludedMethodNormalizedPatterns === null) {
-			$this->excludedMethodNormalizedPatterns = SniffSettingsHelper::normalizeArray($this->excludedMethodPatterns);
-		}
+		$this->excludedMethodNormalizedPatterns ??= SniffSettingsHelper::normalizeArray($this->excludedMethodPatterns);
 		return $this->excludedMethodNormalizedPatterns;
 	}
 

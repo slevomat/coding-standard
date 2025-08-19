@@ -568,9 +568,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	 */
 	private function getSpecialExceptionNames(): array
 	{
-		if ($this->normalizedSpecialExceptionNames === null) {
-			$this->normalizedSpecialExceptionNames = SniffSettingsHelper::normalizeArray($this->specialExceptionNames);
-		}
+		$this->normalizedSpecialExceptionNames ??= SniffSettingsHelper::normalizeArray($this->specialExceptionNames);
 
 		return $this->normalizedSpecialExceptionNames;
 	}
@@ -580,9 +578,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	 */
 	private function getIgnoredNames(): array
 	{
-		if ($this->normalizedIgnoredNames === null) {
-			$this->normalizedIgnoredNames = SniffSettingsHelper::normalizeArray($this->ignoredNames);
-		}
+		$this->normalizedIgnoredNames ??= SniffSettingsHelper::normalizeArray($this->ignoredNames);
 
 		return $this->normalizedIgnoredNames;
 	}
@@ -592,9 +588,7 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 	 */
 	private function getNamespacesRequiredToUse(): array
 	{
-		if ($this->normalizedNamespacesRequiredToUse === null) {
-			$this->normalizedNamespacesRequiredToUse = SniffSettingsHelper::normalizeArray($this->namespacesRequiredToUse);
-		}
+		$this->normalizedNamespacesRequiredToUse ??= SniffSettingsHelper::normalizeArray($this->namespacesRequiredToUse);
 
 		return $this->normalizedNamespacesRequiredToUse;
 	}

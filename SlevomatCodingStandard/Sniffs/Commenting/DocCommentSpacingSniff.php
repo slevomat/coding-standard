@@ -603,9 +603,7 @@ class DocCommentSpacingSniff implements Sniff
 			$docCommentCloserPointer,
 		);
 
-		if ($docCommentContentEndPointer === null) {
-			$docCommentContentEndPointer = $lastAnnotation->getEndPointer();
-		}
+		$docCommentContentEndPointer ??= $lastAnnotation->getEndPointer();
 
 		$phpcsFile->fixer->beginChangeset();
 

@@ -92,9 +92,7 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 			break;
 		}
 
-		if ($scopeOwnerPointer === null) {
-			$scopeOwnerPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $variablePointer - 1);
-		}
+		$scopeOwnerPointer ??= TokenHelper::findPrevious($phpcsFile, T_OPEN_TAG, $variablePointer - 1);
 
 		$scopeOpenerPointer = $tokens[$scopeOwnerPointer]['code'] === T_OPEN_TAG
 			? $scopeOwnerPointer

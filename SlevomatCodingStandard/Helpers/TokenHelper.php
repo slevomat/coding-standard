@@ -479,7 +479,7 @@ class TokenHelper
 	public static function getContent(File $phpcsFile, int $startPointer, ?int $endPointer = null): string
 	{
 		$tokens = $phpcsFile->getTokens();
-		$endPointer = $endPointer ?? self::getLastTokenPointer($phpcsFile);
+		$endPointer ??= self::getLastTokenPointer($phpcsFile);
 
 		$content = '';
 		for ($i = $startPointer; $i <= $endPointer; $i++) {

@@ -152,47 +152,43 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 		static $visitor;
 		static $traverser;
 
-		if ($visitor === null) {
-			$visitor = new class extends AbstractNodeVisitor {
+		$visitor ??= new class extends AbstractNodeVisitor {
 
-				/** @var list<ArrayTypeNode> */
-				private array $nodes = [];
+			/** @var list<ArrayTypeNode> */
+			private array $nodes = [];
 
-				/**
-				 * @return NodeTraverser::DONT_TRAVERSE_CHILDREN|null
-				 */
-				public function enterNode(Node $node)
-				{
-					if ($node instanceof ArrayTypeNode) {
-						$this->nodes[] = $node;
+			/**
+			 * @return NodeTraverser::DONT_TRAVERSE_CHILDREN|null
+			 */
+			public function enterNode(Node $node)
+			{
+				if ($node instanceof ArrayTypeNode) {
+					$this->nodes[] = $node;
 
-						if ($node->type instanceof ArrayTypeNode) {
-							return NodeTraverser::DONT_TRAVERSE_CHILDREN;
-						}
+					if ($node->type instanceof ArrayTypeNode) {
+						return NodeTraverser::DONT_TRAVERSE_CHILDREN;
 					}
-
-					return null;
 				}
 
-				public function cleanNodes(): void
-				{
-					$this->nodes = [];
-				}
+				return null;
+			}
 
-				/**
-				 * @return list<ArrayTypeNode>
-				 */
-				public function getNodes(): array
-				{
-					return $this->nodes;
-				}
+			public function cleanNodes(): void
+			{
+				$this->nodes = [];
+			}
 
-			};
-		}
+			/**
+			 * @return list<ArrayTypeNode>
+			 */
+			public function getNodes(): array
+			{
+				return $this->nodes;
+			}
 
-		if ($traverser === null) {
-			$traverser = new NodeTraverser([$visitor]);
-		}
+		};
+
+		$traverser ??= new NodeTraverser([$visitor]);
 
 		$visitor->cleanNodes();
 
@@ -293,15 +289,13 @@ class DisallowArrayTypeHintSyntaxSniff implements Sniff
 	 */
 	private function getNormalizedTraversableTypeHints(): array
 	{
-		if ($this->normalizedTraversableTypeHints === null) {
-			$this->normalizedTraversableTypeHints = array_flip(
-				array_map(static fn (string $typeHint): string => NamespaceHelper::isFullyQualifiedName($typeHint)
-						? $typeHint
-						: sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint), SniffSettingsHelper::normalizeArray(
-							$this->traversableTypeHints,
-						)),
-			);
-		}
+		$this->normalizedTraversableTypeHints ??= array_flip(
+			array_map(static fn (string $typeHint): string => NamespaceHelper::isFullyQualifiedName($typeHint)
+					? $typeHint
+					: sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint), SniffSettingsHelper::normalizeArray(
+						$this->traversableTypeHints,
+					)),
+		);
 		return $this->normalizedTraversableTypeHints;
 	}
 

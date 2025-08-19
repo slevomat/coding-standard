@@ -658,9 +658,7 @@ class ClassStructureSniff implements Sniff
 	{
 		$startPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $memberPointer - 1);
 		if ($startPointer === null) {
-			if ($previousMemberEndPointer === null) {
-				$previousMemberEndPointer = $this->findPreviousMemberEndPointer($phpcsFile, $memberPointer);
-			}
+			$previousMemberEndPointer ??= $this->findPreviousMemberEndPointer($phpcsFile, $memberPointer);
 
 			$startPointer = TokenHelper::findNextEffective($phpcsFile, $previousMemberEndPointer + 1);
 			assert($startPointer !== null);

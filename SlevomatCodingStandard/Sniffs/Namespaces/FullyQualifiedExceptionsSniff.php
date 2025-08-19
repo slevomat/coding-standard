@@ -140,9 +140,7 @@ class FullyQualifiedExceptionsSniff implements Sniff
 	 */
 	private function getSpecialExceptionNames(): array
 	{
-		if ($this->normalizedSpecialExceptionNames === null) {
-			$this->normalizedSpecialExceptionNames = SniffSettingsHelper::normalizeArray($this->specialExceptionNames);
-		}
+		$this->normalizedSpecialExceptionNames ??= SniffSettingsHelper::normalizeArray($this->specialExceptionNames);
 
 		return $this->normalizedSpecialExceptionNames;
 	}
@@ -152,9 +150,7 @@ class FullyQualifiedExceptionsSniff implements Sniff
 	 */
 	private function getIgnoredNames(): array
 	{
-		if ($this->normalizedIgnoredNames === null) {
-			$this->normalizedIgnoredNames = SniffSettingsHelper::normalizeArray($this->ignoredNames);
-		}
+		$this->normalizedIgnoredNames ??= SniffSettingsHelper::normalizeArray($this->ignoredNames);
 
 		return $this->normalizedIgnoredNames;
 	}

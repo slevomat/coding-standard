@@ -140,9 +140,7 @@ class TypeNameMatchesFileNameSniff implements Sniff
 	 */
 	private function getSkipDirs(): array
 	{
-		if ($this->normalizedSkipDirs === null) {
-			$this->normalizedSkipDirs = SniffSettingsHelper::normalizeArray($this->skipDirs);
-		}
+		$this->normalizedSkipDirs ??= SniffSettingsHelper::normalizeArray($this->skipDirs);
 
 		return $this->normalizedSkipDirs;
 	}
@@ -152,9 +150,7 @@ class TypeNameMatchesFileNameSniff implements Sniff
 	 */
 	private function getIgnoredNamespaces(): array
 	{
-		if ($this->normalizedIgnoredNamespaces === null) {
-			$this->normalizedIgnoredNamespaces = SniffSettingsHelper::normalizeArray($this->ignoredNamespaces);
-		}
+		$this->normalizedIgnoredNamespaces ??= SniffSettingsHelper::normalizeArray($this->ignoredNamespaces);
 
 		return $this->normalizedIgnoredNamespaces;
 	}
@@ -164,22 +160,18 @@ class TypeNameMatchesFileNameSniff implements Sniff
 	 */
 	private function getExtensions(): array
 	{
-		if ($this->normalizedExtensions === null) {
-			$this->normalizedExtensions = SniffSettingsHelper::normalizeArray($this->extensions);
-		}
+		$this->normalizedExtensions ??= SniffSettingsHelper::normalizeArray($this->extensions);
 
 		return $this->normalizedExtensions;
 	}
 
 	private function getNamespaceExtractor(): FilepathNamespaceExtractor
 	{
-		if ($this->namespaceExtractor === null) {
-			$this->namespaceExtractor = new FilepathNamespaceExtractor(
-				$this->getRootNamespaces(),
-				$this->getSkipDirs(),
-				$this->getExtensions(),
-			);
-		}
+		$this->namespaceExtractor ??= new FilepathNamespaceExtractor(
+			$this->getRootNamespaces(),
+			$this->getSkipDirs(),
+			$this->getExtensions(),
+		);
 
 		return $this->namespaceExtractor;
 	}

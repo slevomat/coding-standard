@@ -115,9 +115,7 @@ class RequireNonCapturingCatchSniff implements Sniff
 			$variablePointer + 1,
 			$tokens[$catchPointer]['parenthesis_closer'],
 		);
-		if ($fixEndPointer === null) {
-			$fixEndPointer = $tokens[$catchPointer]['parenthesis_closer'];
-		}
+		$fixEndPointer ??= $tokens[$catchPointer]['parenthesis_closer'];
 
 		$phpcsFile->fixer->beginChangeset();
 

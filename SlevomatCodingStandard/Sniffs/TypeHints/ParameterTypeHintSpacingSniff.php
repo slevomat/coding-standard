@@ -54,14 +54,10 @@ class ParameterTypeHintSpacingSniff implements Sniff
 			$parameterName = $tokens[$parameterPointer]['content'];
 
 			$parameterStartPointer = TokenHelper::findPrevious($phpcsFile, T_COMMA, $parameterPointer - 1, $parametersStartPointer);
-			if ($parameterStartPointer === null) {
-				$parameterStartPointer = $parametersStartPointer;
-			}
+			$parameterStartPointer ??= $parametersStartPointer;
 
 			$parameterEndPointer = TokenHelper::findNext($phpcsFile, T_COMMA, $parameterPointer + 1, $parametersEndPointer + 1);
-			if ($parameterEndPointer === null) {
-				$parameterEndPointer = $parametersEndPointer;
-			}
+			$parameterEndPointer ??= $parametersEndPointer;
 
 			$attributeCloserPointer = TokenHelper::findPrevious($phpcsFile, T_ATTRIBUTE_END, $parameterPointer - 1, $parameterStartPointer);
 
