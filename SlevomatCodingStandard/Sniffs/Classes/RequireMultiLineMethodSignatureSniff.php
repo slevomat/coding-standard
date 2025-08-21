@@ -26,6 +26,8 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 
 	public ?int $minParametersCount = null;
 
+	public bool $withPromotedProperties = false;
+
 	/** @var list<string> */
 	public array $includedMethodPatterns = [];
 
@@ -91,12 +93,24 @@ class RequireMultiLineMethodSignatureSniff extends AbstractMethodSignature
 			return;
 		}
 
-		if ($this->minLineLength !== null && $this->minLineLength !== 0 && strlen($signature) < $this->minLineLength) {
-			return;
+		$splitPromotedProperties = false;
+		if ($this->withPromotedProperties) {
+			foreach ($parameters as $parameter) {
+				if (isset($parameter['property_visibility'])) {
+					$splitPromotedProperties = true;
+					break;
+				}
+			}
 		}
 
-		if ($this->minParametersCount !== null && $parametersCount < $this->minParametersCount) {
-			return;
+		if (!$splitPromotedProperties) {
+			if ($this->minLineLength !== null && $this->minLineLength !== 0 && strlen($signature) < $this->minLineLength) {
+				return;
+			}
+
+			if ($this->minParametersCount !== null && $parametersCount < $this->minParametersCount) {
+				return;
+			}
 		}
 
 		$error = sprintf('Signature of method "%s" should be split to more lines so each parameter is on its own line.', $methodName);
