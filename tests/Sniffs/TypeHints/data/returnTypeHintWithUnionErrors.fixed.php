@@ -59,14 +59,6 @@ class Whatever
 	private function scalarAndnumericNullable(): string|int|float|bool|null
 	{}
 
-	/** */
-	private function objectAndVoid(): object|null
-	{}
-
-	/** */
-	private function mixedAndVoid(): mixed
-	{}
-
 	/** @return non-empty-array|null */
 	public function returnNonEmptyArray(): ?array
 	{}

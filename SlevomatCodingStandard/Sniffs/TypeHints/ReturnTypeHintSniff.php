@@ -406,9 +406,12 @@ class ReturnTypeHintSniff implements Sniff
 				return;
 			}
 
-			$typeHintsWithConvertedUnion[$typeHintNo] = TypeHintHelper::isVoidTypeHint($typeHint)
-				? 'null'
-				: TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
+			if (TypeHintHelper::isVoidTypeHint($typeHint) || TypeHintHelper::isNeverTypeHint($typeHint)) {
+				$this->reportUselessSuppress($phpcsFile, $functionPointer, $isSuppressedNativeTypeHint, $suppressNameNativeTypeHint);
+				return;
+			}
+
+			$typeHintsWithConvertedUnion[$typeHintNo] = TypeHintHelper::convertLongSimpleTypeHintToShort($typeHint);
 		}
 
 		if ($originalReturnTypeNode instanceof NullableTypeNode) {

@@ -43,4 +43,12 @@ class Whatever
 	{
 	}
 
+	/** @return bool|never */
+	public function neverUnion() {
+	}
+
+	/** @return bool|void */
+	public function voidUnion() {
+	}
+
 }
