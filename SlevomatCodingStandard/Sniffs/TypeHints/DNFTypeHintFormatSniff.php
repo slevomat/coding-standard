@@ -75,6 +75,10 @@ class DNFTypeHintFormatSniff implements Sniff
 			return;
 		}
 
+		if ($this->shortNullable !== self::YES && SniffSettingsHelper::isEnabledByPhpVersion(null, 80000) === false) {
+			$this->shortNullable = self::YES;
+		}
+
 		$tokens = $phpcsFile->getTokens();
 
 		if ($tokens[$pointer]['code'] === T_VARIABLE) {
