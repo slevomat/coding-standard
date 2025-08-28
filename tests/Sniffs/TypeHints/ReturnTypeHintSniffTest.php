@@ -228,7 +228,7 @@ class ReturnTypeHintSniffTest extends TestCase
 			'enableStandaloneNullTrueFalseTypeHints' => true,
 		]);
 
-		self::assertSame(6, $report->getErrorCount());
+		self::assertSame(7, $report->getErrorCount());
 
 		self::assertSniffError($report, 7, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
 		self::assertSniffError($report, 13, ReturnTypeHintSniff::CODE_MISSING_NATIVE_TYPE_HINT);
@@ -236,6 +236,7 @@ class ReturnTypeHintSniffTest extends TestCase
 		self::assertSniffError($report, 22, ReturnTypeHintSniff::CODE_USELESS_ANNOTATION);
 		self::assertSniffError($report, 27, ReturnTypeHintSniff::CODE_USELESS_ANNOTATION);
 		self::assertSniffError($report, 33, ReturnTypeHintSniff::CODE_USELESS_ANNOTATION);
+		self::assertSniffError($report, 41, ReturnTypeHintSniff::CODE_LESS_SPECIFIC_NATIVE_TYPE_HINT);
 
 		self::assertAllFixedInFile($report);
 	}

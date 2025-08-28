@@ -35,4 +35,10 @@ class Whatever
 	public function parameterFalseWithUselessAnnotation(false $a)
 	{}
 
+	/**
+	 * @param true $a
+	 */
+	function trueStandaloneNotEqualBool(bool $a): bool
+	{}
+
 }

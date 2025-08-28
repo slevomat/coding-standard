@@ -297,6 +297,11 @@ class Whatever extends ParentClass
 	{
 	}
 
+	/**
+	 * @param true $a
+	 */
+	function trueStandaloneNotEqualBool(bool $a): bool
+	{}
 
 }
 

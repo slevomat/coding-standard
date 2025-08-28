@@ -296,6 +296,12 @@ abstract class Whatever
 
 	}
 
+	/**
+	 * @return true
+	 */
+	function returnsTrueFromBool(): bool
+	{}
+
 }
 
 /**
