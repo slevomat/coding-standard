@@ -309,6 +309,12 @@ abstract class Whatever implements FloatsYourBoat
 
 	}
 
+	/**
+	 * @return true
+	 */
+	function returnsTrueFromBool(): bool
+	{}
+
 }
 
 /**

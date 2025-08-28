@@ -35,4 +35,10 @@ class Whatever
 	public function returnsFalseWithUselessAnnotation(): false
 	{}
 
+	/**
+	 * @return true
+	 */
+	function returnsTrueFromBool(): bool
+	{}
+
 }

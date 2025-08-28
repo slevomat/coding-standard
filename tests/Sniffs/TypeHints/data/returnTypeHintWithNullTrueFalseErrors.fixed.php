@@ -31,4 +31,9 @@ class Whatever
 	public function returnsFalseWithUselessAnnotation(): false
 	{}
 
+	/**
+	 */
+	function returnsTrueFromBool(): true
+	{}
+
 }
