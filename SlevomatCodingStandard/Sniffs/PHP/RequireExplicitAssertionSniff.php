@@ -448,6 +448,7 @@ class RequireExplicitAssertionSniff implements Sniff
 		if (
 			$this->enableAdvancedStringTypes
 			&& preg_match('~-string$~', $typeNode->name) === 1
+			&& preg_match('~^(?:class|trait|enum)-string$~', $typeNode->name) !== 1
 		) {
 			$conditions = [sprintf('\is_string(%s)', $variableName)];
 

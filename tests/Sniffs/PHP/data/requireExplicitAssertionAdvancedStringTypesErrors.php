@@ -14,3 +14,6 @@ $c = '100';
 
 /** @var SomeClass|null $d */
 $d = null;
+
+/** @var class-string $e */
+$e = Exception::class;

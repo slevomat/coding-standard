@@ -14,3 +14,6 @@ $c = '100';
 
 $d = null;
 \assert($d instanceof SomeClass || $d === null);
+
+/** @var class-string $e */
+$e = Exception::class;
