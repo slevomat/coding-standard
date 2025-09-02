@@ -2,16 +2,20 @@
 
 namespace SlevomatCodingStandard\Sniffs\Functions;
 
+use Exception;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\VariableHelper;
 use function array_merge;
 use function in_array;
+use function preg_match;
 use function sprintf;
+use function substr;
 use const T_COMMA;
 use const T_VARIABLE;
 
@@ -22,6 +26,9 @@ class UnusedParameterSniff implements Sniff
 	public const CODE_USELESS_SUPPRESS = 'UselessSuppress';
 
 	private const NAME = 'SlevomatCodingStandard.Functions.UnusedParameter';
+
+	/** @var list<string> */
+	public array $allowedParameterPatterns = [];
 
 	/**
 	 * @return array<int, (int|string)>
@@ -70,7 +77,10 @@ class UnusedParameterSniff implements Sniff
 				continue;
 			}
 
-			if (VariableHelper::isUsedInScope($phpcsFile, $functionPointer, $parameterPointer)) {
+			if (
+				$this->variableIsSuppressedViaName($tokens[$parameterPointer]['content']) ||
+				VariableHelper::isUsedInScope($phpcsFile, $functionPointer, $parameterPointer)
+			) {
 				$currentPointer = $parameterPointer + 1;
 				continue;
 			}
@@ -102,6 +112,21 @@ class UnusedParameterSniff implements Sniff
 	private function getSniffName(string $sniffName): string
 	{
 		return sprintf('%s.%s', self::NAME, $sniffName);
+	}
+
+	private function variableIsSuppressedViaName(string $variableName): bool
+	{
+		foreach (SniffSettingsHelper::normalizeArray($this->allowedParameterPatterns) as $allowedParamPattern) {
+			if (!SniffSettingsHelper::isValidRegularExpression($allowedParamPattern)) {
+				throw new Exception(sprintf('%s is not valid PCRE pattern.', $allowedParamPattern));
+			}
+
+			if (preg_match($allowedParamPattern, substr($variableName, 1)) === 1) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }
