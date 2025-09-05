@@ -205,7 +205,7 @@ class ReturnTypeHintSniff implements Sniff
 			? ($hasReturnAnnotation && !$isAnnotationReturnTypeVoidOrNever)
 			: FunctionHelper::returnsValue($phpcsFile, $functionPointer);
 
-		if ($returnsValue && !$hasReturnAnnotation) {
+		if (($returnsValue || $isAbstract) && !$hasReturnAnnotation) {
 			if (count($prefixedReturnAnnotations) !== 0) {
 				$this->reportUselessSuppress($phpcsFile, $functionPointer, $isSuppressedAnyTypeHint, $suppressNameAnyTypeHint);
 				return;

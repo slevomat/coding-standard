@@ -376,4 +376,10 @@ abstract class Whatever
 	{
 	}
 
+	abstract public function returnWhoKnows();
+
+}
+
+interface Whateverable {
+	function returnWhoKnows();
 }
