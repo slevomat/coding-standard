@@ -229,7 +229,7 @@ class DocCommentHelper
 			$nextPointer !== null
 			&& in_array(
 				$tokens[$nextPointer]['code'],
-				[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM],
+				[T_PUBLIC, T_PROTECTED, T_PRIVATE, T_READONLY, T_FINAL, T_STATIC, T_ABSTRACT, T_CONST, T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM, T_ATTRIBUTE],
 				true,
 			)
 		) {

@@ -2,12 +2,28 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-use InvalidArgumentException;
 use function count;
 use const T_ATTRIBUTE;
+use const T_FUNCTION;
 
 class AttributeHelperTest extends TestCase
 {
+
+	public function testHasAttribute(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/attributes.php');
+
+		$functionsPointers = TokenHelper::findNextAll($phpcsFile, T_FUNCTION, 0);
+
+		self::assertCount(2, $functionsPointers);
+
+		foreach ($functionsPointers as $functionPointer) {
+			self::assertTrue(
+				AttributeHelper::hasAttribute($phpcsFile, $functionPointer, '\Attribute1'),
+				FunctionHelper::getName($phpcsFile, $functionPointer),
+			);
+		}
+	}
 
 	public function testGetAttributesInsideAttributeTags(): void
 	{
@@ -50,14 +66,6 @@ class AttributeHelperTest extends TestCase
 		/** @var int $firstAttributePointer */
 		$firstAttributePointer = $phpcsFile->findNext(T_ATTRIBUTE, 0);
 		self::assertFalse(AttributeHelper::isValidAttribute($phpcsFile, $firstAttributePointer));
-	}
-
-	public function testGetAttributesInsideAttributeTagsException(): void
-	{
-		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/classWithJoinedAttributes.php');
-		self::expectException(InvalidArgumentException::class);
-		self::expectExceptionMessage('Token 0 must be attribute, T_OPEN_TAG given');
-		AttributeHelper::getAttributes($phpcsFile, 0);
 	}
 
 }

@@ -2,14 +2,14 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
-use InvalidArgumentException;
 use PHP_CodeSniffer\Files\File;
 use function array_map;
 use function in_array;
-use function sprintf;
 use const T_ANON_CLASS;
 use const T_ATTRIBUTE;
+use const T_ATTRIBUTE_END;
 use const T_CLASS;
+use const T_CLOSE_CURLY_BRACKET;
 use const T_CLOSURE;
 use const T_COMMA;
 use const T_CONST;
@@ -18,7 +18,9 @@ use const T_ENUM_CASE;
 use const T_FN;
 use const T_FUNCTION;
 use const T_INTERFACE;
+use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_PARENTHESIS;
+use const T_SEMICOLON;
 use const T_TRAIT;
 use const T_VARIABLE;
 
@@ -44,21 +46,9 @@ class AttributeHelper
 
 	public static function hasAttribute(File $phpcsFile, int $pointer, string $attributeName): bool
 	{
-		$docCommentOpenPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $pointer);
-		if ($docCommentOpenPointer === null) {
-			return false;
-		}
-
-		$tokens = $phpcsFile->getTokens();
-		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $docCommentOpenPointer + 1);
-
-		if ($nextPointer === null || $tokens[$nextPointer]['code'] !== T_ATTRIBUTE) {
-			return false;
-		}
-
 		$attributeNames = array_map(
 			static fn (Attribute $name): string => $name->getFullyQualifiedName(),
-			self::getAttributes($phpcsFile, $nextPointer),
+			self::getAttributes($phpcsFile, $pointer),
 		);
 
 		return in_array($attributeName, $attributeNames, true);
@@ -67,14 +57,36 @@ class AttributeHelper
 	/**
 	 * @return list<Attribute>
 	 */
-	public static function getAttributes(File $phpcsFile, int $attributeOpenerPointer): array
+	public static function getAttributes(File $phpcsFile, int $pointer): array
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		if ($tokens[$attributeOpenerPointer]['code'] !== T_ATTRIBUTE) {
-			throw new InvalidArgumentException(
-				sprintf('Token %d must be attribute, %s given.', $attributeOpenerPointer, $tokens[$attributeOpenerPointer]['type']),
-			);
+		if ($tokens[$pointer]['code'] !== T_ATTRIBUTE) {
+			$attributeOpenerPointer = null;
+
+			do {
+				$attributeEndPointerCandidate = TokenHelper::findPrevious(
+					$phpcsFile,
+					[T_ATTRIBUTE_END, T_SEMICOLON, T_CLOSE_CURLY_BRACKET, T_OPEN_CURLY_BRACKET],
+					$attributeOpenerPointer ?? $pointer - 1,
+				);
+
+				if (
+					$attributeEndPointerCandidate === null
+					|| $tokens[$attributeEndPointerCandidate]['code'] !== T_ATTRIBUTE_END
+				) {
+					break;
+				}
+
+				$attributeOpenerPointer = $tokens[$attributeEndPointerCandidate]['attribute_opener'];
+			} while (true);
+
+			if ($attributeOpenerPointer === null) {
+				return [];
+			}
+
+		} else {
+			$attributeOpenerPointer = $pointer;
 		}
 
 		$attributeCloserPointer = $tokens[$attributeOpenerPointer]['attribute_closer'];

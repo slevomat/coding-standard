@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AttributeHelper;
+use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use function sprintf;
 use function strtolower;
@@ -43,7 +44,12 @@ class DisallowMixedTypeHintSniff implements Sniff
 			return;
 		}
 
-		if (AttributeHelper::hasAttribute($phpcsFile, $docCommentOpenPointer, '\Override')) {
+		$docCommentOwnerPointer = DocCommentHelper::findDocCommentOwnerPointer($phpcsFile, $docCommentOpenPointer);
+
+		if (
+			$docCommentOwnerPointer !== null
+			&& AttributeHelper::hasAttribute($phpcsFile, $docCommentOwnerPointer, '\Override')
+		) {
 			return;
 		}
 
