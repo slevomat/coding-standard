@@ -54,3 +54,12 @@ abstract class DummyClass
 	}
 
 }
+
+class Foo
+{
+
+	private function __construct()
+	{
+	}
+
+}
