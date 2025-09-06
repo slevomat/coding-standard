@@ -62,11 +62,12 @@ class AttributesOrderSniffTest extends TestCase
 			'orderAlphabetically' => true,
 		]);
 
-		self::assertSame(3, $report->getErrorCount());
+		self::assertSame(4, $report->getErrorCount());
 
-		self::assertSniffError($report, 3, AttributesOrderSniff::CODE_INCORRECT_ORDER);
-		self::assertSniffError($report, 12, AttributesOrderSniff::CODE_INCORRECT_ORDER);
-		self::assertSniffError($report, 18, AttributesOrderSniff::CODE_INCORRECT_ORDER);
+		self::assertSniffError($report, 6, AttributesOrderSniff::CODE_INCORRECT_ORDER);
+		self::assertSniffError($report, 15, AttributesOrderSniff::CODE_INCORRECT_ORDER);
+		self::assertSniffError($report, 21, AttributesOrderSniff::CODE_INCORRECT_ORDER);
+		self::assertSniffError($report, 31, AttributesOrderSniff::CODE_INCORRECT_ORDER);
 
 		self::assertAllFixedInFile($report);
 	}

@@ -1,5 +1,8 @@
 <?php
 
+use A\B;
+use B\A;
+
 #[AttributeA]
 #[AttributeB]
 #[\Group\AttributeA('paramS')]
@@ -25,4 +28,11 @@ class Whatever
 	public function method2()
 	{
 	}
+
+	#[A]
+	#[B]
+	public function method3()
+	{
+	}
+
 }
