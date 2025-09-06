@@ -250,6 +250,10 @@ class UnusedVariableSniff implements Sniff
 			$parenthesisOpenerPointer = $this->findOpenerOfNestedParentheses($phpcsFile, $actualPointer);
 			$parenthesisOwnerPointer = $this->findOwnerOfNestedParentheses($phpcsFile, $actualPointer);
 
+			if ($parenthesisOpenerPointer === null) {
+				break;
+			}
+
 			$actualPointer = $parenthesisOpenerPointer;
 		} while ($parenthesisOwnerPointer === null && isset($tokens[$actualPointer]['nested_parenthesis']));
 

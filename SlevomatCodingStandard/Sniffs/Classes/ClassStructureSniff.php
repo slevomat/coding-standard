@@ -241,7 +241,7 @@ class ClassStructureSniff implements Sniff
 				$group = self::GROUP_MAGIC_METHODS;
 			}
 
-			if ($groupsOrder[$group] >= ($groupsOrder[$expectedGroup] ?? 0)) {
+			if ($groupsOrder[$group] >= ($expectedGroup !== null ? $groupsOrder[$expectedGroup] : 0)) {
 				$groupsFirstMembers[$group] = $groupFirstMemberPointer;
 				$expectedGroup = $group;
 
