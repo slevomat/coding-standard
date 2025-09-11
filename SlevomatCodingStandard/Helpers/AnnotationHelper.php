@@ -286,7 +286,7 @@ class AnnotationHelper
 				['true', 'false', 'null'],
 				true,
 			)) {
-				return $enableStandaloneNullTrueFalseTypeHints;
+				return $typeHint->getTypeHint() === strtolower($annotationType->name) ? $enableStandaloneNullTrueFalseTypeHints : false;
 			}
 
 			if (TypeHintHelper::isSimpleUnofficialTypeHints(
