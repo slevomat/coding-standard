@@ -42,6 +42,11 @@ class Whatever extends Something
 		return count(array_filter($list->call('something'), fn (object $object): bool => $object->getAnything() === $this->anything)) === 1;
 	}
 
+	public function thisIsTheLastToken()
+	{
+		return array_values(array_filter(self::getAvailableEnums(), fn (self $state): bool => $state->getParent() === $this));
+	}
+
 }
 
 Closure::bind(function ($instance, $value) {

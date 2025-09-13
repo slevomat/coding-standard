@@ -63,7 +63,7 @@ class StaticClosureSniff implements Sniff
 			T_VARIABLE,
 			'$this',
 			$closureScopeOpenerPointer + 1,
-			$closureScopeCloserPointer,
+			$closureScopeCloserPointer + 1,
 		);
 		if ($thisPointer !== null) {
 			return;
