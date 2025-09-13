@@ -7,4 +7,4 @@ parameters:
 
 	ignoreErrors!:
 		- "#Offset '(bracket|scope|parenthesis|comment)_(opener|closer)' (does|might) not exist#"
-
+		- "#Offset int\\|null might not exist#"
