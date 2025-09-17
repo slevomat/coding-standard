@@ -177,8 +177,7 @@ $anotherObject = new ($object->getClassName());
 
 echo 'Hello' . ($foo ? ' There' : $fn());
 
-$response = (new Response())->withStatus(200);
-$ip = (new RemoteAddress())?->getIpAddress();
+doSomething((new Response()));
 
 echo ~(1 - 1);
 
