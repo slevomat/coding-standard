@@ -4,7 +4,6 @@
 	"license": "MIT",
 	"type": "phpcodesniffer-standard",
 	"keywords": [ "phpcs", "dev" ],
-	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"config": {
 		"bin-dir": "bin",
