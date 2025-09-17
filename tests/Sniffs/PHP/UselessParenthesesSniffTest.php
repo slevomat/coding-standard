@@ -26,6 +26,30 @@ class UselessParenthesesSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testCheckAroundNewDisabled(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/uselessParenthesesCheckAroundNewErrors.php', [
+			'enableCheckAroundNew' => false,
+		]);
+
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testCheckAroundNewEnabled(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/uselessParenthesesCheckAroundNewErrors.php', [
+			'enableCheckAroundNew' => true,
+		]);
+
+		self::assertSame(2, $report->getErrorCount());
+
+		foreach ([3, 5] as $line) {
+			self::assertSniffError($report, $line, UselessParenthesesSniff::CODE_USELESS_PARENTHESES);
+		}
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testNoErrorsWithIgnoredComplexTernaryConditions(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/uselessParenthesesNoErrorsWithIgnoredComplexTernaryConditions.php', [
