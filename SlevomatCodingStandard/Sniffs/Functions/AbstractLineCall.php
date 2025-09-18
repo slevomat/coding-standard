@@ -11,9 +11,6 @@ use const T_CLOSE_PARENTHESIS;
 use const T_COMMA;
 use const T_FUNCTION;
 use const T_OPEN_PARENTHESIS;
-use const T_PARENT;
-use const T_SELF;
-use const T_STATIC;
 use const T_WHITESPACE;
 
 abstract class AbstractLineCall implements Sniff
@@ -24,7 +21,7 @@ abstract class AbstractLineCall implements Sniff
 	 */
 	public function register(): array
 	{
-		return [...TokenHelper::NAME_TOKEN_CODES, T_SELF, T_STATIC, T_PARENT];
+		return [...TokenHelper::NAME_TOKEN_CODES, ...TokenHelper::CLASS_KEYWORD_CODES];
 	}
 
 	protected function isCall(File $phpcsFile, int $stringPointer): bool

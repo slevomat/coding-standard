@@ -73,6 +73,12 @@ class TokenHelper
 		T_NAME_RELATIVE,
 	];
 
+	public const CLASS_KEYWORD_CODES = [
+		T_PARENT,
+		T_SELF,
+		T_STATIC,
+	];
+
 	public const ONLY_TYPE_HINT_TOKEN_CODES = [
 		...self::NAME_TOKEN_CODES,
 		T_SELF,

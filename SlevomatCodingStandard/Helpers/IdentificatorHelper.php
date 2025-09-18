@@ -14,9 +14,6 @@ use const T_NULLSAFE_OBJECT_OPERATOR;
 use const T_OBJECT_OPERATOR;
 use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_SQUARE_BRACKET;
-use const T_PARENT;
-use const T_SELF;
-use const T_STATIC;
 use const T_VARIABLE;
 
 /**
@@ -83,7 +80,7 @@ class IdentificatorHelper
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer + 1);
 
 		if (
-			in_array($tokens[$startPointer]['code'], [T_SELF, T_STATIC, T_PARENT, ...TokenHelper::NAME_TOKEN_CODES], true)
+			in_array($tokens[$startPointer]['code'], [...TokenHelper::CLASS_KEYWORD_CODES, ...TokenHelper::NAME_TOKEN_CODES], true)
 			&& $tokens[$nextPointer]['code'] === T_DOUBLE_COLON
 		) {
 			return self::getEndPointerAfterOperator($phpcsFile, $nextPointer);
@@ -117,7 +114,7 @@ class IdentificatorHelper
 
 		if (
 			$tokens[$operatorPointer]['code'] === T_DOUBLE_COLON
-			&& in_array($tokens[$previousPointer]['code'], [T_SELF, T_STATIC, T_PARENT, ...TokenHelper::NAME_TOKEN_CODES], true)
+			&& in_array($tokens[$previousPointer]['code'], [...TokenHelper::CLASS_KEYWORD_CODES, ...TokenHelper::NAME_TOKEN_CODES], true)
 		) {
 			return $previousPointer;
 		}

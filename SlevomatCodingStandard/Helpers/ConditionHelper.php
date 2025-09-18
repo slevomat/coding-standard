@@ -32,9 +32,6 @@ use const T_LOGICAL_AND;
 use const T_LOGICAL_OR;
 use const T_LOGICAL_XOR;
 use const T_OPEN_PARENTHESIS;
-use const T_PARENT;
-use const T_SELF;
-use const T_STATIC;
 use const T_STRING;
 use const T_VARIABLE;
 
@@ -211,7 +208,7 @@ class ConditionHelper
 			}
 		}
 
-		if (in_array($tokens[$pointerAfterConditionStart]['code'], [T_VARIABLE, T_SELF, T_STATIC, T_PARENT], true)) {
+		if (in_array($tokens[$pointerAfterConditionStart]['code'], [T_VARIABLE, ...TokenHelper::CLASS_KEYWORD_CODES], true)) {
 			$identificatorEndPointer = IdentificatorHelper::findEndPointer($phpcsFile, $pointerAfterConditionStart);
 			$pointerAfterIdentificatorEnd = TokenHelper::findNextEffective($phpcsFile, $identificatorEndPointer + 1);
 			if (
