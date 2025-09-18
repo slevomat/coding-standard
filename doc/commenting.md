@@ -90,6 +90,10 @@ Sniff provides the following settings:
 * `allowDocCommentAboveReturn`: Allows documentation comments without variable name above `return` statement.
 * `allowAboveNonAssignment`: Allows documentation comments above non-assignment if the line contains the right variable name.
 
+#### SlevomatCodingStandard.Commenting.RequireOneDocComment 
+
+Ensures that there is only one PHPDoc comment block for each entity (class, method, property, constant, etc.). This sniff prevents multiple documentation comments from being associated with a single code element, which can lead to confusion and inconsistency.
+
 #### SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment 🔧
 
 Requires property comments with single-line content to be written as one-liners.
