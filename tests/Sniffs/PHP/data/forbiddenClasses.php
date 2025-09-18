@@ -65,4 +65,12 @@ namespace BarNamespace {
 	{
 		use \SomeTraitB;
 	}
+
+	class Foo
+	{
+	    public static function create(): self
+	    {
+	        return new self();
+	    }
+	}
 }

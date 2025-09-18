@@ -21,7 +21,10 @@ use const T_EXTENDS;
 use const T_IMPLEMENTS;
 use const T_NEW;
 use const T_OPEN_CURLY_BRACKET;
+use const T_PARENT;
+use const T_SELF;
 use const T_SEMICOLON;
+use const T_STATIC;
 use const T_USE;
 
 class ForbiddenClassesSniff implements Sniff
@@ -211,13 +214,20 @@ class ForbiddenClassesSniff implements Sniff
 	 */
 	private function getAllReferences(File $phpcsFile, int $startPointer, int $endPointer): array
 	{
+		$tokens = $phpcsFile->getTokens();
+
 		// Always ignore first token
 		$startPointer++;
 		$references = [];
 
 		while ($startPointer < $endPointer) {
-			$referencePointer = TokenHelper::findNext($phpcsFile, TokenHelper::NAME_TOKEN_CODES, $startPointer);
-			$reference = $phpcsFile->getTokens()[$referencePointer]['content'];
+			$referencePointer = TokenHelper::findNext($phpcsFile, [T_SELF, T_STATIC, T_PARENT, ...TokenHelper::NAME_TOKEN_CODES], $startPointer);
+			if (in_array($tokens[$referencePointer]['code'], [T_SELF, T_STATIC, T_PARENT], true)) {
+				$startPointer = $referencePointer + 1;
+				continue;
+			}
+
+			$reference = $tokens[$referencePointer]['content'];
 
 			if (
 				strlen($reference) !== 0
