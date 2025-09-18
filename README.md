@@ -82,6 +82,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/PHPCSStandards
  - [SlevomatCodingStandard.Commenting.ForbiddenAnnotations](doc/commenting.md#slevomatcodingstandardcommentingforbiddenannotations-) 🔧
  - [SlevomatCodingStandard.Commenting.ForbiddenComments](doc/commenting.md#slevomatcodingstandardcommentingforbiddencomments-) 🔧
  - [SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration](doc/commenting.md#slevomatcodingstandardcommentinginlinedoccommentdeclaration-) 🔧
+ - [SlevomatCodingStandard.Commenting.RequireOneDocComment](doc/commenting.md#slevomatcodingstandardcommentingrequireonedoccomment-) 🔧
  - [SlevomatCodingStandard.Commenting.RequireOneLineDocComment](doc/commenting.md#slevomatcodingstandardcommentingrequireonelinedoccomment-) 🔧
  - [SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment](doc/commenting.md#slevomatcodingstandardcommentingrequireonelinepropertydoccomment-) 🔧
  - [SlevomatCodingStandard.Commenting.UselessFunctionDocComment](doc/commenting.md#slevomatcodingstandardcommentinguselessfunctiondoccomment-) 🔧
