@@ -52,7 +52,7 @@ class RequireSingleLineConditionSniff extends AbstractLineCondition
 		$lineLength = strlen($lineStart . $condition . $lineEnd);
 		$isSimpleCondition = TokenHelper::findNext(
 			$phpcsFile,
-			Tokens::$booleanOperators,
+			Tokens::BOOLEAN_OPERATORS,
 			$parenthesisOpenerPointer + 1,
 			$parenthesisCloserPointer,
 		) === null;

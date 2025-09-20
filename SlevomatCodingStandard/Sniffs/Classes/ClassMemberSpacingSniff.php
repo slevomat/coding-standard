@@ -210,7 +210,7 @@ class ClassMemberSpacingSniff implements Sniff
 				continue;
 			}
 
-			if (in_array($tokens[$pointerBefore]['code'], Tokens::$commentTokens, true)) {
+			if (in_array($tokens[$pointerBefore]['code'], Tokens::COMMENT_TOKENS, true)) {
 				$pointerBeforeComment = TokenHelper::findPreviousEffective($phpcsFile, $pointerBefore - 1);
 				if ($tokens[$pointerBeforeComment]['line'] !== $tokens[$pointerBefore]['line']) {
 					$memberFirstCodePointer = array_key_exists('comment_opener', $tokens[$pointerBefore])

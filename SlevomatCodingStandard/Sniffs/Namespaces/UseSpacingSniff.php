@@ -79,7 +79,7 @@ class UseSpacingSniff implements Sniff
 		$useStartPointer = $firstUse->getPointer();
 
 		if (
-			in_array($tokens[$pointerBeforeFirstUse]['code'], Tokens::$commentTokens, true)
+			in_array($tokens[$pointerBeforeFirstUse]['code'], Tokens::COMMENT_TOKENS, true)
 			&& $tokens[$pointerBeforeFirstUse]['line'] + 1 === $tokens[$useStartPointer]['line']
 		) {
 			$useStartPointer = array_key_exists('comment_opener', $tokens[$pointerBeforeFirstUse])
@@ -137,7 +137,7 @@ class UseSpacingSniff implements Sniff
 		}
 
 		if (
-			in_array($tokens[$pointerAfterWhitespaceEnd]['code'], Tokens::$commentTokens, true)
+			in_array($tokens[$pointerAfterWhitespaceEnd]['code'], Tokens::COMMENT_TOKENS, true)
 			&& $tokens[$pointerAfterWhitespaceEnd]['code'] !== T_DOC_COMMENT_OPEN_TAG
 			&& (
 				$tokens[$useEndPointer]['line'] === $tokens[$pointerAfterWhitespaceEnd]['line']
@@ -215,7 +215,7 @@ class UseSpacingSniff implements Sniff
 			$useStartPointer = $use->getPointer();
 
 			if (
-				in_array($tokens[$pointerBeforeUse]['code'], Tokens::$commentTokens, true)
+				in_array($tokens[$pointerBeforeUse]['code'], Tokens::COMMENT_TOKENS, true)
 				&& TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $pointerBeforeUse) === $pointerBeforeUse
 				&& $tokens[$pointerBeforeUse]['line'] + 1 === $tokens[$useStartPointer]['line']
 			) {
@@ -285,7 +285,7 @@ class UseSpacingSniff implements Sniff
 			$useStartPointer = $use->getPointer();
 
 			if (
-				in_array($tokens[$pointerBeforeUse]['code'], Tokens::$commentTokens, true)
+				in_array($tokens[$pointerBeforeUse]['code'], Tokens::COMMENT_TOKENS, true)
 				&& TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $pointerBeforeUse) === $pointerBeforeUse
 				&& $tokens[$pointerBeforeUse]['line'] + 1 === $tokens[$useStartPointer]['line']
 			) {

@@ -52,7 +52,7 @@ class PropertyHelper
 
 		if (in_array(
 			$tokens[$previousPointer]['code'],
-			[...array_values(Tokens::$scopeModifiers), T_READONLY],
+			[...array_values(Tokens::SCOPE_MODIFIERS), T_READONLY],
 			true,
 		)) {
 			$constructorPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $previousPointer - 1);
@@ -105,7 +105,7 @@ class PropertyHelper
 
 		$conditionCode = array_values($tokens[$variablePointer]['conditions'])[count($tokens[$variablePointer]['conditions']) - 1];
 
-		return in_array($conditionCode, Tokens::$ooScopeTokens, true);
+		return in_array($conditionCode, Tokens::OO_SCOPE_TOKENS, true);
 	}
 
 	public static function getStartPointer(File $phpcsFile, int $propertyPointer): int

@@ -241,7 +241,7 @@ class RequireTernaryOperatorSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 		return TokenHelper::findNext(
 			$phpcsFile,
-			Tokens::$commentTokens,
+			Tokens::COMMENT_TOKENS,
 			$tokens[$scopeOwnerPointer]['scope_opener'] + 1,
 			$tokens[$scopeOwnerPointer]['scope_closer'],
 		) !== null;

@@ -63,12 +63,12 @@ class UnusedParameterSniff implements Sniff
 
 			$previousPointer = TokenHelper::findPrevious(
 				$phpcsFile,
-				array_merge([T_COMMA], Tokens::$scopeModifiers),
+				array_merge([T_COMMA], Tokens::SCOPE_MODIFIERS),
 				$parameterPointer - 1,
 				$tokens[$functionPointer]['parenthesis_opener'],
 			);
 
-			if ($previousPointer !== null && in_array($tokens[$previousPointer]['code'], Tokens::$scopeModifiers, true)) {
+			if ($previousPointer !== null && in_array($tokens[$previousPointer]['code'], Tokens::SCOPE_MODIFIERS, true)) {
 				$currentPointer = $parameterPointer + 1;
 				continue;
 			}

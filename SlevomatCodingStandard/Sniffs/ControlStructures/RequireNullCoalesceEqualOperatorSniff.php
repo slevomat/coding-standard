@@ -90,7 +90,7 @@ class RequireNullCoalesceEqualOperatorSniff implements Sniff
 		}
 
 		$semicolonPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $equalPointer + 1);
-		if (TokenHelper::findNext($phpcsFile, Tokens::$operators, $nullCoalescePointer + 1, $semicolonPointer) !== null) {
+		if (TokenHelper::findNext($phpcsFile, Tokens::OPERATORS, $nullCoalescePointer + 1, $semicolonPointer) !== null) {
 			return;
 		}
 

@@ -113,7 +113,7 @@ class RequireCombinedAssignmentOperatorSniff implements Sniff
 		}
 
 		$semicolonPointer = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $equalPointer + 1);
-		if (TokenHelper::findNext($phpcsFile, Tokens::$operators, $operatorPointer + 1, $semicolonPointer) !== null) {
+		if (TokenHelper::findNext($phpcsFile, Tokens::OPERATORS, $operatorPointer + 1, $semicolonPointer) !== null) {
 			return;
 		}
 

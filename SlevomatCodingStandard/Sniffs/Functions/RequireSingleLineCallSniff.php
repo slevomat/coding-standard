@@ -59,7 +59,7 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 
 		if (TokenHelper::findNext(
 			$phpcsFile,
-			array_merge(TokenHelper::INLINE_COMMENT_TOKEN_CODES, Tokens::$heredocTokens),
+			array_merge(TokenHelper::INLINE_COMMENT_TOKEN_CODES, Tokens::HEREDOC_TOKENS),
 			$parenthesisOpenerPointer + 1,
 			$parenthesisCloserPointer,
 		) !== null) {

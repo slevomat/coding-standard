@@ -184,7 +184,7 @@ class JumpStatementsSpacingSniff extends AbstractControlStructureSpacing
 		$pointerBefore = TokenHelper::findPreviousEffective($phpcsFile, $jumpStatementPointer - 1);
 
 		// check if yield is used in assignment
-		if (in_array($tokens[$pointerBefore]['code'], Tokens::$assignmentTokens, true)) {
+		if (in_array($tokens[$pointerBefore]['code'], Tokens::ASSIGNMENT_TOKENS, true)) {
 			return true;
 		}
 

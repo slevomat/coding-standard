@@ -176,7 +176,7 @@ class ParameterTypeHintSniff implements Sniff
 
 				$visibilityPointer = TokenHelper::findNextEffective($phpcsFile, $pointerBeforeParameter + 1);
 
-				$isPropertyPromotion = in_array($tokens[$visibilityPointer]['code'], Tokens::$scopeModifiers, true);
+				$isPropertyPromotion = in_array($tokens[$visibilityPointer]['code'], Tokens::SCOPE_MODIFIERS, true);
 			}
 
 			if (

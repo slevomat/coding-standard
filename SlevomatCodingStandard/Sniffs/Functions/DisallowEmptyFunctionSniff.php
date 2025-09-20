@@ -50,7 +50,7 @@ class DisallowEmptyFunctionSniff implements Sniff
 
 			$propertyPromotion = TokenHelper::findNext(
 				$phpcsFile,
-				Tokens::$scopeModifiers,
+				Tokens::SCOPE_MODIFIERS,
 				$tokens[$functionPointer]['parenthesis_opener'] + 1,
 				$tokens[$functionPointer]['parenthesis_closer'],
 			);

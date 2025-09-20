@@ -115,7 +115,7 @@ class RequireNullSafeObjectOperatorSniff implements Sniff
 
 		$searchStartPointer = $ternaryOperatorStartPointer;
 		do {
-			$booleanOperatorPointer = TokenHelper::findNext($phpcsFile, Tokens::$booleanOperators, $searchStartPointer, $inlineThenPointer);
+			$booleanOperatorPointer = TokenHelper::findNext($phpcsFile, Tokens::BOOLEAN_OPERATORS, $searchStartPointer, $inlineThenPointer);
 			if ($booleanOperatorPointer === null) {
 				break;
 			}

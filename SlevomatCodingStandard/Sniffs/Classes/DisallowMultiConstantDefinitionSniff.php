@@ -68,7 +68,7 @@ class DisallowMultiConstantDefinitionSniff implements Sniff
 		}
 
 		$possibleVisibilityPointer = TokenHelper::findPreviousEffective($phpcsFile, $constantPointer - 1);
-		$visibilityPointer = in_array($tokens[$possibleVisibilityPointer]['code'], Tokens::$scopeModifiers, true)
+		$visibilityPointer = in_array($tokens[$possibleVisibilityPointer]['code'], Tokens::SCOPE_MODIFIERS, true)
 			? $possibleVisibilityPointer
 			: null;
 		$visibility = $visibilityPointer !== null ? $tokens[$possibleVisibilityPointer]['content'] : null;

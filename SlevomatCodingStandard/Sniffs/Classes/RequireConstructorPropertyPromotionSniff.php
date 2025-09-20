@@ -379,7 +379,7 @@ class RequireConstructorPropertyPromotionSniff implements Sniff
 			}
 
 			$nextPointer = TokenHelper::findNextEffective($phpcsFile, $i + 1);
-			if (in_array($tokens[$nextPointer]['code'], Tokens::$assignmentTokens, true)) {
+			if (in_array($tokens[$nextPointer]['code'], Tokens::ASSIGNMENT_TOKENS, true)) {
 				return true;
 			}
 

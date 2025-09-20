@@ -310,7 +310,7 @@ class YodaHelper
 				T_STRING => self::DYNAMISM_FUNCTION_CALL,
 			];
 
-			$tokenDynamism += array_fill_keys(array_keys(Tokens::$castTokens), 3);
+			$tokenDynamism += array_fill_keys(array_keys(Tokens::CAST_TOKENS), 3);
 		}
 
 		return $tokenDynamism;
@@ -343,8 +343,8 @@ class YodaHelper
 				T_FN_ARROW => true,
 			];
 
-			$stopTokenCodes += array_fill_keys(array_keys(Tokens::$assignmentTokens), true);
-			$stopTokenCodes += array_fill_keys(array_keys(Tokens::$commentTokens), true);
+			$stopTokenCodes += array_fill_keys(array_keys(Tokens::ASSIGNMENT_TOKENS), true);
+			$stopTokenCodes += array_fill_keys(array_keys(Tokens::COMMENT_TOKENS), true);
 		}
 
 		return $stopTokenCodes;

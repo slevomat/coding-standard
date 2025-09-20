@@ -39,7 +39,7 @@ class UselessLateStaticBindingSniff implements Sniff
 
 		$classPointer = null;
 		foreach (array_reverse($tokens[$staticPointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
-			if (!in_array($conditionTokenCode, Tokens::$ooScopeTokens, true)) {
+			if (!in_array($conditionTokenCode, Tokens::OO_SCOPE_TOKENS, true)) {
 				continue;
 			}
 

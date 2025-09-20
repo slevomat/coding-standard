@@ -139,7 +139,7 @@ class UselessIfConditionWithReturnSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		if (TokenHelper::findNext($phpcsFile, Tokens::$commentTokens, $ifPointer + 1, $endPointer) !== null) {
+		if (TokenHelper::findNext($phpcsFile, Tokens::COMMENT_TOKENS, $ifPointer + 1, $endPointer) !== null) {
 			return false;
 		}
 

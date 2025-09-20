@@ -38,7 +38,7 @@ class DisallowConstructorPropertyPromotionSniff implements Sniff
 
 		$modifierPointers = TokenHelper::findNextAll(
 			$phpcsFile,
-			[...array_values(Tokens::$scopeModifiers), T_READONLY],
+			[...array_values(Tokens::SCOPE_MODIFIERS), T_READONLY],
 			$tokens[$functionPointer]['parenthesis_opener'] + 1,
 			$tokens[$functionPointer]['parenthesis_closer'],
 		);

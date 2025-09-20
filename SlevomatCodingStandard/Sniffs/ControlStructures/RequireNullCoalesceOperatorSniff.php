@@ -58,7 +58,7 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 			return;
 		}
 
-		if (in_array($tokens[$previousPointer]['code'], Tokens::$booleanOperators, true)) {
+		if (in_array($tokens[$previousPointer]['code'], Tokens::BOOLEAN_OPERATORS, true)) {
 			return;
 		}
 
@@ -95,7 +95,7 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 		}
 
 		$startPointer = $issetPointer;
-		if (in_array($tokens[$previousPointer]['code'], Tokens::$castTokens, true)) {
+		if (in_array($tokens[$previousPointer]['code'], Tokens::CAST_TOKENS, true)) {
 			$startPointer = $previousPointer;
 		}
 
@@ -141,7 +141,7 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 			($isYodaCondition ? $pointerBeforeIdenticalOperator : $variableStartPointer) - 1,
 		);
 
-		if (in_array($tokens[$pointerBeforeCondition]['code'], Tokens::$booleanOperators, true)) {
+		if (in_array($tokens[$pointerBeforeCondition]['code'], Tokens::BOOLEAN_OPERATORS, true)) {
 			return;
 		}
 

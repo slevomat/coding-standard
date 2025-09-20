@@ -41,7 +41,7 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 
 		$booleanOperatorPointers = TokenHelper::findNextAll(
 			$phpcsFile,
-			Tokens::$booleanOperators,
+			Tokens::BOOLEAN_OPERATORS,
 			$parenthesisOpenerPointer + 1,
 			$parenthesisCloserPointer,
 		);
@@ -105,7 +105,7 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 			if ($tokens[$i]['code'] === T_OPEN_PARENTHESIS) {
 				$containsBooleanOperator = TokenHelper::findNext(
 					$phpcsFile,
-					Tokens::$booleanOperators,
+					Tokens::BOOLEAN_OPERATORS,
 					$i + 1,
 					$tokens[$i]['parenthesis_closer'],
 				) !== null;
@@ -142,7 +142,7 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 				continue;
 			}
 
-			if (!in_array($tokens[$i]['code'], Tokens::$booleanOperators, true)) {
+			if (!in_array($tokens[$i]['code'], Tokens::BOOLEAN_OPERATORS, true)) {
 				continue;
 			}
 

@@ -29,7 +29,7 @@ class ClassLengthSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		return array_values(Tokens::$ooScopeTokens);
+		return array_values(Tokens::OO_SCOPE_TOKENS);
 	}
 
 	public function process(File $phpcsFile, int $pointer): void

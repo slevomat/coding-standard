@@ -130,7 +130,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 		foreach ($useStatements as $useStatement) {
 			$pointerBeforeUseStatement = TokenHelper::findPreviousNonWhitespace($phpcsFile, $useStatement->getPointer() - 1);
 
-			if (!in_array($tokens[$pointerBeforeUseStatement]['code'], Tokens::$commentTokens, true)) {
+			if (!in_array($tokens[$pointerBeforeUseStatement]['code'], Tokens::COMMENT_TOKENS, true)) {
 				continue;
 			}
 

@@ -233,18 +233,18 @@ class UselessParenthesesSniff implements Sniff
 			return;
 		}
 
-		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], Tokens::$comparisonTokens, true)) {
+		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], Tokens::COMPARISON_TOKENS, true)) {
 			return;
 		}
 
-		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], Tokens::$booleanOperators, true)) {
+		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], Tokens::BOOLEAN_OPERATORS, true)) {
 			return;
 		}
 
 		if ($this->ignoreComplexTernaryConditions) {
 			if (TokenHelper::findNext(
 				$phpcsFile,
-				Tokens::$booleanOperators,
+				Tokens::BOOLEAN_OPERATORS,
 				$parenthesisOpenerPointer + 1,
 				$parenthesisCloserPointer,
 			) !== null) {
@@ -349,7 +349,7 @@ class UselessParenthesesSniff implements Sniff
 		}
 
 		$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisOpenerPointer - 1);
-		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], Tokens::$booleanOperators, true)) {
+		if (in_array($tokens[$pointerBeforeParenthesisOpener]['code'], Tokens::BOOLEAN_OPERATORS, true)) {
 			return;
 		}
 
@@ -483,8 +483,8 @@ class UselessParenthesesSniff implements Sniff
 		}
 
 		if (
-			in_array($tokens[$pointerBeforeParenthesisOpener]['code'], Tokens::$booleanOperators, true)
-			|| in_array($tokens[$pointerAfterParenthesisCloser]['code'], Tokens::$booleanOperators, true)
+			in_array($tokens[$pointerBeforeParenthesisOpener]['code'], Tokens::BOOLEAN_OPERATORS, true)
+			|| in_array($tokens[$pointerAfterParenthesisCloser]['code'], Tokens::BOOLEAN_OPERATORS, true)
 			|| $tokens[$pointerBeforeParenthesisOpener]['code'] === T_BOOLEAN_NOT
 		) {
 			return;
@@ -503,7 +503,7 @@ class UselessParenthesesSniff implements Sniff
 						T_OPEN_PARENTHESIS,
 						...$complicatedOperators,
 					],
-					Tokens::$comparisonTokens,
+					Tokens::COMPARISON_TOKENS,
 				),
 				$actualStartPointer,
 				$tokens[$parenthesisOpenerPointer]['parenthesis_closer'],
@@ -517,7 +517,7 @@ class UselessParenthesesSniff implements Sniff
 				return;
 			}
 
-			if (in_array($tokens[$pointer]['code'], Tokens::$comparisonTokens, true)) {
+			if (in_array($tokens[$pointer]['code'], Tokens::COMPARISON_TOKENS, true)) {
 				return;
 			}
 

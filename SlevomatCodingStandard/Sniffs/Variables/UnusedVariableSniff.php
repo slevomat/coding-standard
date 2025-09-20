@@ -117,7 +117,7 @@ class UnusedVariableSniff implements Sniff
 			return;
 		}
 
-		if (in_array($tokens[$previousPointer]['code'], Tokens::$castTokens, true)) {
+		if (in_array($tokens[$previousPointer]['code'], Tokens::CAST_TOKENS, true)) {
 			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
 		}
 
@@ -659,10 +659,10 @@ class UnusedVariableSniff implements Sniff
 			$tokens[$previousPointer]['code'],
 			array_merge(
 				[T_STRING_CONCAT, T_ECHO, T_RETURN, T_EXIT, T_PRINT, T_COMMA, T_EMPTY, T_EVAL, T_YIELD],
-				Tokens::$operators,
-				Tokens::$assignmentTokens,
-				Tokens::$booleanOperators,
-				Tokens::$castTokens,
+				Tokens::OPERATORS,
+				Tokens::ASSIGNMENT_TOKENS,
+				Tokens::BOOLEAN_OPERATORS,
+				Tokens::CAST_TOKENS,
 			),
 			true,
 		);

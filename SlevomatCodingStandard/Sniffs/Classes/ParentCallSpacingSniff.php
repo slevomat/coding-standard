@@ -47,14 +47,14 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 		}
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $parentPointer - 1);
-		if (in_array($tokens[$previousPointer]['code'], array_merge(Tokens::$castTokens, [T_ASPERAND]), true)) {
+		if (in_array($tokens[$previousPointer]['code'], array_merge(Tokens::CAST_TOKENS, [T_ASPERAND]), true)) {
 			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
 		}
 
 		$tokensToIgnore = array_merge(
-			Tokens::$assignmentTokens,
-			Tokens::$equalityTokens,
-			Tokens::$booleanOperators,
+			Tokens::ASSIGNMENT_TOKENS,
+			Tokens::EQUALITY_TOKENS,
+			Tokens::BOOLEAN_OPERATORS,
 			[T_RETURN, T_YIELD, T_YIELD_FROM, T_COLON, T_STRING_CONCAT, T_INLINE_THEN, T_INLINE_ELSE, T_COALESCE, T_MATCH_ARROW],
 		);
 		if (in_array($tokens[$previousPointer]['code'], $tokensToIgnore, true)) {

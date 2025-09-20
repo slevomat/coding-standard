@@ -69,7 +69,7 @@ class DuplicateSpacesSniff implements Sniff
 				$pointerAfter = TokenHelper::findNextNonWhitespace($phpcsFile, $whitespacePointer + 1);
 				if (
 					$pointerAfter !== null
-					&& in_array($tokens[$pointerAfter]['code'], Tokens::$assignmentTokens, true)
+					&& in_array($tokens[$pointerAfter]['code'], Tokens::ASSIGNMENT_TOKENS, true)
 				) {
 					return;
 				}
