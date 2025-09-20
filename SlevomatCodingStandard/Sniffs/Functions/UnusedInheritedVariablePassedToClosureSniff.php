@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use SlevomatCodingStandard\Helpers\VariableHelper;
+use function array_key_exists;
 use function in_array;
 use function sprintf;
 use const T_BITWISE_AND;
@@ -36,23 +37,16 @@ class UnusedInheritedVariablePassedToClosureSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		/** @var int $parenthesisOpenerPointer */
-		$parenthesisOpenerPointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
-		if ($tokens[$parenthesisOpenerPointer]['code'] !== T_OPEN_PARENTHESIS) {
+		if (!array_key_exists('parenthesis_opener', $tokens[$usePointer])) {
 			return;
 		}
 
 		/** @var int $closurePointer */
 		$closurePointer = TokenHelper::findPrevious($phpcsFile, T_CLOSURE, $usePointer - 1);
 
-		$currentPointer = $parenthesisOpenerPointer + 1;
+		$currentPointer = $tokens[$usePointer]['parenthesis_opener'] + 1;
 		do {
-			$variablePointer = TokenHelper::findNext(
-				$phpcsFile,
-				T_VARIABLE,
-				$currentPointer,
-				$tokens[$parenthesisOpenerPointer]['parenthesis_closer'],
-			);
+			$variablePointer = TokenHelper::findNext($phpcsFile, T_VARIABLE, $currentPointer, $tokens[$usePointer]['parenthesis_closer']);
 			if ($variablePointer === null) {
 				break;
 			}
@@ -60,8 +54,8 @@ class UnusedInheritedVariablePassedToClosureSniff implements Sniff
 			$this->checkVariableUsage(
 				$phpcsFile,
 				$usePointer,
-				$parenthesisOpenerPointer,
-				$tokens[$parenthesisOpenerPointer]['parenthesis_closer'],
+				$tokens[$usePointer]['parenthesis_opener'],
+				$tokens[$usePointer]['parenthesis_closer'],
 				$variablePointer,
 				$closurePointer,
 			);

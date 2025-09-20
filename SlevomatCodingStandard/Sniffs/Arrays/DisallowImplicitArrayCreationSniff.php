@@ -147,14 +147,12 @@ class DisallowImplicitArrayCreationSniff implements Sniff
 			return false;
 		}
 
-		$parenthesisOpenerPointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
-
 		$inheritedVariablePointer = TokenHelper::findNextContent(
 			$phpcsFile,
 			T_VARIABLE,
 			$variableName,
-			$parenthesisOpenerPointer + 1,
-			$tokens[$parenthesisOpenerPointer]['parenthesis_closer'],
+			$tokens[$usePointer]['parenthesis_opener'] + 1,
+			$tokens[$usePointer]['parenthesis_closer'],
 		);
 		return $inheritedVariablePointer !== null;
 	}

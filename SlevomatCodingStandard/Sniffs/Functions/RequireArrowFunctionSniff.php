@@ -10,7 +10,6 @@ use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function count;
 use const T_BITWISE_AND;
-use const T_CLOSE_PARENTHESIS;
 use const T_CLOSURE;
 use const T_FN;
 use const T_RETURN;
@@ -53,16 +52,13 @@ class RequireArrowFunctionSniff implements Sniff
 		}
 
 		$usePointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$closurePointer]['parenthesis_closer'] + 1);
-		if ($tokens[$usePointer]['code'] === T_USE) {
-			$useOpenParenthesisPointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
-			if (TokenHelper::findNext(
-				$phpcsFile,
-				T_BITWISE_AND,
-				$useOpenParenthesisPointer + 1,
-				$tokens[$useOpenParenthesisPointer]['parenthesis_closer'],
-			) !== null) {
-				return;
-			}
+		if ($tokens[$usePointer]['code'] === T_USE && TokenHelper::findNext(
+			$phpcsFile,
+			T_BITWISE_AND,
+			$tokens[$usePointer]['parenthesis_opener'] + 1,
+			$tokens[$usePointer]['parenthesis_closer'],
+		) !== null) {
+			return;
 		}
 
 		if (!$this->allowNested) {
@@ -98,11 +94,10 @@ class RequireArrowFunctionSniff implements Sniff
 
 		$nonWhitespacePointerAfterUseParenthesisCloser = null;
 		if ($usePointer !== null) {
-			$useParenthesiCloserPointer = TokenHelper::findNext($phpcsFile, T_CLOSE_PARENTHESIS, $usePointer + 1);
 			$nonWhitespacePointerAfterUseParenthesisCloser = TokenHelper::findNextExcluding(
 				$phpcsFile,
 				T_WHITESPACE,
-				$useParenthesiCloserPointer + 1,
+				$tokens[$usePointer]['parenthesis_closer'] + 1,
 			);
 		}
 

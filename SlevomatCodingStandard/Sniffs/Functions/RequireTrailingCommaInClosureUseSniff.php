@@ -45,8 +45,8 @@ class RequireTrailingCommaInClosureUseSniff implements Sniff
 			return;
 		}
 
-		$useParenthesisOpenerPointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
-		$useParenthesisCloserPointer = $tokens[$useParenthesisOpenerPointer]['parenthesis_closer'];
+		$useParenthesisOpenerPointer = $tokens[$usePointer]['parenthesis_opener'];
+		$useParenthesisCloserPointer = $tokens[$usePointer]['parenthesis_closer'];
 
 		if ($tokens[$useParenthesisOpenerPointer]['line'] === $tokens[$useParenthesisCloserPointer]['line']) {
 			return;

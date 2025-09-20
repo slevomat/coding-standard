@@ -83,10 +83,9 @@ class UseStatementHelper
 	public static function isTraitUse(File $phpcsFile, int $usePointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
-		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
 
 		// Anonymous function use
-		if ($tokens[$nextPointer]['code'] === T_OPEN_PARENTHESIS) {
+		if (array_key_exists('parenthesis_opener', $tokens[$usePointer])) {
 			return false;
 		}
 

@@ -40,13 +40,13 @@ class DisallowTrailingCommaInClosureUseSniff implements Sniff
 			return;
 		}
 
-		$useParenthesisOpenerPointer = TokenHelper::findNextEffective($phpcsFile, $usePointer + 1);
-		$useParenthesisCloserPointer = $tokens[$useParenthesisOpenerPointer]['parenthesis_closer'];
+		$useParenthesisOpenerPointer = $tokens[$usePointer]['parenthesis_opener'];
+		$useParenthesisCloserPointer = $tokens[$usePointer]['parenthesis_closer'];
 
 		$pointerBeforeUseParenthesisCloser = TokenHelper::findPreviousExcluding(
 			$phpcsFile,
 			T_WHITESPACE,
-			$tokens[$useParenthesisOpenerPointer]['parenthesis_closer'] - 1,
+			$tokens[$usePointer]['parenthesis_closer'] - 1,
 			$useParenthesisOpenerPointer,
 		);
 

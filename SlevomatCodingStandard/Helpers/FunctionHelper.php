@@ -287,12 +287,9 @@ class FunctionHelper
 
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$functionPointer]['parenthesis_closer'] + 1);
 
-		if ($tokens[$nextPointer]['code'] === T_USE) {
-			$useParenthesisOpener = TokenHelper::findNextEffective($phpcsFile, $nextPointer + 1);
-			$colonPointer = TokenHelper::findNextEffective($phpcsFile, $tokens[$useParenthesisOpener]['parenthesis_closer'] + 1);
-		} else {
-			$colonPointer = $nextPointer;
-		}
+		$colonPointer = $tokens[$nextPointer]['code'] === T_USE
+			? TokenHelper::findNextEffective($phpcsFile, $tokens[$nextPointer]['parenthesis_closer'] + 1)
+			: $nextPointer;
 
 		if ($tokens[$colonPointer]['code'] !== T_COLON) {
 			return null;
