@@ -60,6 +60,11 @@ class ClassStructureSniffErrorsWithMethodGroupRulesData
 	{
 	}
 
+	public static function fooDataProvider(): \Generator
+	{
+		yield 'foo' => ['bar'];
+	}
+
 	/**
 	 * @after
 	 */

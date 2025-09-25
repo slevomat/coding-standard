@@ -427,6 +427,12 @@ class ClassStructureSniff implements Sniff
 						if ($method === $methodNamePrefix || !StringHelper::startsWith($method, $methodNamePrefix)) {
 							continue;
 						}
+					} elseif (StringHelper::startsWith($requiredName, '*')) {
+						$methodNameSuffix = substr($requiredName, 1);
+
+						if ($method === $methodNameSuffix || !StringHelper::endsWith($method, $methodNameSuffix)) {
+							continue;
+						}
 					} elseif ($method !== $requiredName) {
 						continue;
 					}

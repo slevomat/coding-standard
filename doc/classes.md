@@ -46,6 +46,7 @@ Sniff provides the following settings:
 
 * `groups`: order of groups. Use multiple groups in one `<element value="">` to not differentiate among them. You can use specific groups or shortcuts.
 * `methodGroups`: custom method groups. Define a custom group for special methods based on their name, annotation, or attribute.
+  * You can use a `*` as prefix or suffix to filter methods name as seen in the example below.
 
 **List of supported groups**:
 uses,
@@ -68,6 +69,7 @@ constants, properties, static properties, methods, all public methods, all prote
 			<element key="inject method" value="inject"/>
 			<element key="inject methods" value="inject*"/>
 			<element key="phpunit before" value="setUp, @before, #PHPUnit\Framework\Attributes\Before"/>
+			<element key="phpunit data provider" value="*DataProvider"/>
 		</property>
 
 		<property name="groups" type="array">
@@ -95,6 +97,9 @@ constants, properties, static properties, methods, all public methods, all prote
 			<!-- Then all public methods, followed by protected/private methods -->
 			<element value="all public methods"/>
 			<element value="methods"/>
+
+			<!-- PHPUnit's data providers are placed after all other public methods using a custom method group -->
+			<element value="phpunit data provider"/>
 
 			<!-- Magic methods are last -->
 			<element value="magic methods"/>
