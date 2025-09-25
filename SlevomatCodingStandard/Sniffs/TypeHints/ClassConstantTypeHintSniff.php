@@ -4,12 +4,15 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use SlevomatCodingStandard\Helpers\Annotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use SlevomatCodingStandard\Helpers\TypeHint;
 use function array_key_exists;
 use function count;
 use function sprintf;
@@ -160,6 +163,25 @@ class ClassConstantTypeHintSniff implements Sniff
 		$namePointer = $this->getConstantNamePointer($phpcsFile, $constantPointer);
 		$constantName = $tokens[$namePointer]['content'];
 
+		$typeHintPointer = TokenHelper::findPreviousEffective($phpcsFile, $namePointer - 1);
+		$hasTypeHint = $typeHintPointer !== $constantPointer;
+
+		/** @var Annotation<VarTagValueNode> $annotation */
+		$annotation = $annotations[0];
+
+		if (
+			$hasTypeHint
+			&& !AnnotationHelper::isAnnotationUseless(
+				$phpcsFile,
+				$constantPointer,
+				new TypeHint($tokens[$typeHintPointer]['content'], false, $typeHintPointer, $typeHintPointer),
+				$annotation,
+				[],
+			)
+		) {
+			return;
+		}
+
 		$uselessDocComment = !DocCommentHelper::hasDocCommentDescription($phpcsFile, $constantPointer) && count($annotations) === 1;
 		if ($uselessDocComment) {
 			$fix = $phpcsFile->addFixableError(
@@ -172,8 +194,6 @@ class ClassConstantTypeHintSniff implements Sniff
 			$fixerStart = TokenHelper::findLastTokenOnPreviousLine($phpcsFile, $docCommentOpenPointer);
 			$fixerEnd = $tokens[$docCommentOpenPointer]['comment_closer'];
 		} else {
-			$annotation = $annotations[0];
-
 			$fix = $phpcsFile->addFixableError(
 				sprintf('Useless @var annotation for constant %s.', $constantName),
 				$annotation->getStartPointer(),

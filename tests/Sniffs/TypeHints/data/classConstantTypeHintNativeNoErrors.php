@@ -19,5 +19,4 @@ class Whatever
 	const SomeEnum C_ENUM = SomeEnum::VALUE;
 	const string C_CONSTANT = Whatever::STRING;
 
-
 }

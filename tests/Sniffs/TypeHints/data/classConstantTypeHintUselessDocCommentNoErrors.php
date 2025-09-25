@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.4
 
 namespace Alphabet;
 
@@ -27,5 +27,8 @@ new class implements B
 {
 
 	const CC = 0;
+
+	/** @var class-string */
+	const string CLASS_STRING = 'stdClass';
 
 };
