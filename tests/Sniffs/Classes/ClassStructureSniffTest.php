@@ -33,6 +33,7 @@ class ClassStructureSniffTest extends TestCase
 		'phpunit after class' => 'tearDownAfterClass, @afterClass, #PHPUnit\Framework\Attributes\AfterClass',
 		'phpunit before' => 'setUp, @before, #PHPUnit\Framework\Attributes\Before',
 		'phpunit after' => 'tearDown, @after, #PHPUnit\Framework\Attributes\After',
+		'phpunit data provider' => '*DataProvider',
 	];
 
 	private const METHOD_GROUP_RULES = [
@@ -67,6 +68,7 @@ class ClassStructureSniffTest extends TestCase
 		'protected static abstract methods',
 		'private methods',
 		'private static methods',
+		'phpunit data provider',
 	];
 
 	public function testNoErrors(): void
@@ -220,9 +222,9 @@ class ClassStructureSniffTest extends TestCase
 		self::assertSniffError($report, 33, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 44, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertSniffError($report, 48, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($report, 67, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($report, 71, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
-		self::assertSniffError($report, 75, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 72, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 76, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+		self::assertSniffError($report, 80, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
 		self::assertAllFixedInFile($report);
 	}
 

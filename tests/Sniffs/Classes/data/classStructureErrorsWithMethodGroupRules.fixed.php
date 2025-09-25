@@ -75,4 +75,9 @@ class ClassStructureSniffErrorsWithMethodGroupRulesData
 	private function dolor()
 	{
 	}
+
+	public static function fooDataProvider(): \Generator
+	{
+		yield 'foo' => ['bar'];
+	}
 }
