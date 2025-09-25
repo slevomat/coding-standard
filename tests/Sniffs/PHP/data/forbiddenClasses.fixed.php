@@ -73,4 +73,13 @@ namespace BarNamespace {
 	        return new self();
 	    }
 	}
+
+	class Boo
+	{
+		public static function create(string $class): self
+		{
+			return new $class();
+		}
+	}
+
 }

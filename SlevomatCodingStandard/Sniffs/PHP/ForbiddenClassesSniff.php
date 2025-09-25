@@ -223,6 +223,11 @@ class ForbiddenClassesSniff implements Sniff
 				[...TokenHelper::CLASS_KEYWORD_CODES, ...TokenHelper::NAME_TOKEN_CODES],
 				$startPointer,
 			);
+
+			if ($referencePointer === null) {
+				break;
+			}
+
 			if (in_array($tokens[$referencePointer]['code'], TokenHelper::CLASS_KEYWORD_CODES, true)) {
 				$startPointer = $referencePointer + 1;
 				continue;
