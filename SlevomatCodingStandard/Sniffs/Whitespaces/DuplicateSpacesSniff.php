@@ -13,12 +13,14 @@ use function preg_match_all;
 use function preg_replace;
 use function sprintf;
 use const PREG_OFFSET_CAPTURE;
+use const T_BITWISE_AND;
 use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_DOC_COMMENT_STAR;
 use const T_DOC_COMMENT_STRING;
 use const T_DOC_COMMENT_TAG;
 use const T_DOC_COMMENT_WHITESPACE;
+use const T_ELLIPSIS;
 use const T_MATCH_ARROW;
 use const T_VARIABLE;
 use const T_WHITESPACE;
@@ -77,12 +79,18 @@ class DuplicateSpacesSniff implements Sniff
 
 			if ($this->ignoreSpacesInParameters) {
 				$pointerAfter = TokenHelper::findNextNonWhitespace($phpcsFile, $whitespacePointer + 1);
-				if (
-					$pointerAfter !== null
-					&& $tokens[$pointerAfter]['code'] === T_VARIABLE
-					&& ParameterHelper::isParameter($phpcsFile, $pointerAfter)
-				) {
-					return;
+				if ($pointerAfter !== null) {
+					if (in_array($tokens[$pointerAfter]['code'], [T_BITWISE_AND, T_ELLIPSIS], true)) {
+						$pointerAfter = TokenHelper::findNextNonWhitespace($phpcsFile, $pointerAfter + 1);
+					}
+
+					if (
+						$pointerAfter !== null
+						&& $tokens[$pointerAfter]['code'] === T_VARIABLE
+						&& ParameterHelper::isParameter($phpcsFile, $pointerAfter)
+					) {
+						return;
+					}
 				}
 			}
 

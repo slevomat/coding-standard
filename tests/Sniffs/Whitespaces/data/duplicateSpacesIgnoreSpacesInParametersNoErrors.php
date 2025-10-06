@@ -2,7 +2,9 @@
 
 function doSomething(
 	string $a,
-	int    $b
+	int    $b,
+	int    &$c,
+	int    ...$d
 ) {
 
 }
