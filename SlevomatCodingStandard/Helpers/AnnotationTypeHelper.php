@@ -227,6 +227,10 @@ class AnnotationTypeHelper
 			);
 		}
 
+		if ($typeNode instanceof ThisTypeNode) {
+			return $inTraversable;
+		}
+
 		if ($typeNode instanceof ConstTypeNode) {
 			return $inTraversable;
 		}
