@@ -242,7 +242,7 @@ class ReturnTypeHintSniffTest extends TestCase
 
 	public function testWithThisInGenericsNoErrors(): void
 	{
-		$report = self::checkFile(__DIR__ . '/data/returnTypeHintWithThisInGenericsNoErrors.php', [
+		$report = self::checkFile(__DIR__ . '/data/returnTypeHintWithTraversableNoErrors.php', [
 			'enableObjectTypeHint' => true,
 			'enableMixedTypeHint' => true,
 			'enableUnionTypeHint' => false,
