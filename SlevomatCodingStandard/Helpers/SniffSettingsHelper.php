@@ -79,8 +79,15 @@ class SniffSettingsHelper
 			return $value;
 		}
 
-		$phpVersion = Config::getConfigData('php_version') !== null ? (int) Config::getConfigData('php_version') : PHP_VERSION_ID;
+		$phpVersion = self::getPhpVersion() ?? PHP_VERSION_ID;
 		return $phpVersion >= $phpVersionLimit;
+	}
+
+	public static function getPhpVersion(): ?int
+	{
+		$phpVersion = Config::getConfigData('php_version');
+
+		return $phpVersion !== null ? (int) $phpVersion : null;
 	}
 
 }

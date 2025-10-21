@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IdentificatorHelper;
+use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
 use function array_map;
@@ -119,6 +120,13 @@ class UselessParenthesesSniff implements Sniff
 
 	public function process(File $phpcsFile, int $parenthesisOpenerPointer): void
 	{
+		// @codeCoverageIgnoreStart
+		$phpVersion = SniffSettingsHelper::getPhpVersion();
+		if ($phpVersion !== null && $phpVersion < 80400) {
+			$this->enableCheckAroundNew = false;
+		}
+		// @codeCoverageIgnoreEnd
+
 		$tokens = $phpcsFile->getTokens();
 
 		if (array_key_exists('parenthesis_owner', $tokens[$parenthesisOpenerPointer])) {
