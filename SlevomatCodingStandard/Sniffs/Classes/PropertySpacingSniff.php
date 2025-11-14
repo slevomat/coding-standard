@@ -41,7 +41,7 @@ class PropertySpacingSniff extends AbstractPropertyConstantAndEnumCaseSpacing
 			return $nextPointer;
 		}
 
-		// Ignore other class members with same mofidiers
+		// Ignore other class members with same modifiers
 		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_FUNCTION, T_CONST, T_CLASS], $pointer + 1);
 		if (
 			$propertyPointer === null
