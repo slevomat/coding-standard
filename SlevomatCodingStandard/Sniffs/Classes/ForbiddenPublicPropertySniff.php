@@ -55,7 +55,7 @@ final class ForbiddenPublicPropertySniff implements Sniff
 			return;
 		}
 
-		// Ignore other class members with same mofidiers
+		// Ignore other class members with same modifiers
 		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_VARIABLE, T_CONST, T_FUNCTION, T_CLASS], $pointer + 1);
 		if (
 			$propertyPointer === null
