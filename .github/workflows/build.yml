@@ -195,6 +195,7 @@ jobs:
         run: bin/phing tests
 
       - name: "Upload to Codecov.io"
+        if: ${{ success() && github.event.repository.fork == false }}
         uses: codecov/codecov-action@v4
         with:
           token: "${{ secrets.CODECOV }}"
