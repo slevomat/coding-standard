@@ -7,6 +7,7 @@ use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use UnexpectedValueException;
 use function array_unique;
 use function count;
 use function in_array;
@@ -27,12 +28,25 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 {
 
 	public const CODE_REQUIRED_MULTI_LINE_CALL = 'RequiredMultiLineCall';
+	private const DEFAULT_MIN_LINE_LENGTH = 121;
 
-	public int $minLineLength = 121;
+	public ?int $minLineLength = null;
+
+	public ?int $minParametersCount = null;
 
 	public function process(File $phpcsFile, int $stringPointer): void
 	{
-		$this->minLineLength = SniffSettingsHelper::normalizeInteger($this->minLineLength);
+		$this->minLineLength = SniffSettingsHelper::normalizeNullableInteger($this->minLineLength);
+		$this->minParametersCount = SniffSettingsHelper::normalizeNullableInteger($this->minParametersCount);
+
+		if ($this->minLineLength !== null && $this->minParametersCount !== null) {
+			throw new UnexpectedValueException('Either minLineLength or minParametersCount can be set.');
+		}
+
+		// Backward compatibility if no configuration provided
+		if ($this->minLineLength === null && $this->minParametersCount === null) {
+			$this->minLineLength = self::DEFAULT_MIN_LINE_LENGTH;
+		}
 
 		if (!$this->isCall($phpcsFile, $stringPointer)) {
 			return;
@@ -228,7 +242,11 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 			return true;
 		}
 
-		if ($lineLength < $this->minLineLength) {
+		if ($this->minLineLength !== null && $lineLength < $this->minLineLength) {
+			return false;
+		}
+
+		if ($this->minParametersCount !== null && $parametersCount < $this->minParametersCount) {
 			return false;
 		}
 

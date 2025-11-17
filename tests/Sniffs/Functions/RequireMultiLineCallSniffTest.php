@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Sniffs\Functions;
 
 use SlevomatCodingStandard\Sniffs\TestCase;
+use Throwable;
 
 class RequireMultiLineCallSniffTest extends TestCase
 {
@@ -131,6 +132,32 @@ class RequireMultiLineCallSniffTest extends TestCase
 
 		self::assertSniffError($report, 7, RequireMultiLineCallSniff::CODE_REQUIRED_MULTI_LINE_CALL);
 		self::assertSniffError($report, 12, RequireMultiLineCallSniff::CODE_REQUIRED_MULTI_LINE_CALL);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testThrowExceptionOnInvalidSetup(): void
+	{
+		$this->expectException(Throwable::class);
+
+		self::checkFile(
+			__DIR__ . '/data/requireMultiLineCallAllCallsNoErrors.php',
+			['minLineLength' => 100, 'minParametersCount' => 2],
+		);
+	}
+
+	public function testErrorsBasedOnParamCount(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/requireMultiLineCallParamCountErrors.php',
+			[
+				'minParametersCount' => 2,
+			],
+		);
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 8, RequireMultiLineCallSniff::CODE_REQUIRED_MULTI_LINE_CALL);
+		self::assertSniffError($report, 14, RequireMultiLineCallSniff::CODE_REQUIRED_MULTI_LINE_CALL);
 
 		self::assertAllFixedInFile($report);
 	}
