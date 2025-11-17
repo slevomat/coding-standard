@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Sniffs\Functions;
 
+use Exception;
 use PHP_CodeSniffer\Files\File;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
@@ -12,6 +13,7 @@ use function array_unique;
 use function count;
 use function in_array;
 use function ltrim;
+use function preg_match;
 use function sprintf;
 use function strlen;
 use function trim;
@@ -33,6 +35,12 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 	public ?int $minLineLength = null;
 
 	public ?int $minParametersCount = null;
+
+	/** @var list<string> */
+	public array $excludedCallPatterns = [];
+
+	/** @var list<string>|null */
+	public ?array $excludedCallNormalizedPatterns = null;
 
 	public function process(File $phpcsFile, int $stringPointer): void
 	{
@@ -138,6 +146,13 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $stringPointer - 1);
 
 		$name = ltrim($tokens[$stringPointer]['content'], '\\');
+
+		if (
+			count($this->excludedCallPatterns) !== 0
+			&& $this->isCallNameInPatterns($name, $this->getExcludedCallNormalizedPatterns())
+		) {
+			return;
+		}
 
 		if (in_array($tokens[$previousPointer]['code'], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
 			$error = sprintf('Call of method %s() should be split to more lines.', $name);
@@ -255,6 +270,33 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 		}
 
 		return strlen(trim($lineStart) . trim($lineEnd)) > $indentationLength;
+	}
+
+	/**
+	 * @param list<string> $normalizedPatterns
+	 */
+	private function isCallNameInPatterns(string $callName, array $normalizedPatterns): bool
+	{
+		foreach ($normalizedPatterns as $pattern) {
+			if (!SniffSettingsHelper::isValidRegularExpression($pattern)) {
+				throw new Exception(sprintf('%s is not valid PCRE pattern.', $pattern));
+			}
+
+			if (preg_match($pattern, $callName) !== 0) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return list<string>
+	 */
+	private function getExcludedCallNormalizedPatterns(): array
+	{
+		$this->excludedCallNormalizedPatterns ??= SniffSettingsHelper::normalizeArray($this->excludedCallPatterns);
+		return $this->excludedCallNormalizedPatterns;
 	}
 
 }
