@@ -162,4 +162,34 @@ class RequireMultiLineCallSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testThrowExceptionForInvalidPattern(): void
+	{
+		$this->expectException(Throwable::class);
+
+		self::checkFile(
+			__DIR__ . '/data/requireMultiLineCallErrors.php',
+			['includedCallPatterns' => ['invalidPattern']],
+		);
+
+		self::checkFile(
+			__DIR__ . '/data/requireMultiLineCallErrors.php',
+			['excludedCallPatterns' => ['invalidPattern']],
+		);
+	}
+
+	public function testExcludedCallPatterns(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireMultiLineCallExcludedCallsErrors.php', [
+			'minLineLength' => 0,
+			'excludedCallPatterns' => ['/dontReportError/'],
+		], [RequireMultiLineCallSniff::CODE_REQUIRED_MULTI_LINE_CALL]);
+
+		self::assertSame(2, $report->getErrorCount());
+
+		self::assertSniffError($report, 7, RequireMultiLineCallSniff::CODE_REQUIRED_MULTI_LINE_CALL);
+		self::assertSniffError($report, 13, RequireMultiLineCallSniff::CODE_REQUIRED_MULTI_LINE_CALL);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
