@@ -251,7 +251,7 @@ Sniff provides the following settings:
 
 * `excludedMethodPatterns`: allows to configure which methods are excluded from sniff detection. This is an array of regular expressions (PCRE) with delimiters. You should not use this with `includedMethodPatterns`, as it will not work properly.
 
-* `withPromotedProperties`: always require multiline signatures for methods with promoted properties.
+* `withPromotedProperties` (default: `false`): always require multiline signatures for methods with promoted properties.
 * `withParametersWithAttributes` (default: `false`): always require multiline signatures for methods with parameters with attributes.
 
 #### SlevomatCodingStandard.Classes.RequireSelfReference 🔧
