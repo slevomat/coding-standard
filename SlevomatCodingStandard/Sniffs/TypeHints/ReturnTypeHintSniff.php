@@ -179,6 +179,31 @@ class ReturnTypeHintSniff implements Sniff
 				}
 			}
 
+			if (
+				$this->enableStandaloneNullTrueFalseTypeHints
+				&& $returnTypeHint->getTypeHint() === 'bool'
+				&& $returnTypeNode instanceof IdentifierTypeNode
+				&& in_array(strtolower($returnTypeNode->name), ['true', 'false'], true)
+			) {
+				$fix = $phpcsFile->addFixableError(
+					sprintf(
+						'%s %s() has return type hint "bool" but it should be possible to use "%s" based on @return annotation "%s".',
+						FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
+						FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
+						strtolower($returnTypeNode->name),
+						AnnotationTypeHelper::print($returnTypeNode),
+					),
+					$functionPointer,
+					self::CODE_LESS_SPECIFIC_NATIVE_TYPE_HINT,
+				);
+
+				if ($fix) {
+					$phpcsFile->fixer->beginChangeset();
+					FixerHelper::replace($phpcsFile, $returnTypeHint->getStartPointer(), strtolower($returnTypeNode->name));
+					$phpcsFile->fixer->endChangeset();
+				}
+			}
+
 			return;
 		}
 
