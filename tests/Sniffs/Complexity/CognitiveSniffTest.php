@@ -52,6 +52,12 @@ class CognitiveSniffTest extends TestCase
 				19,
 			],
 			[
+				__DIR__ . '/data/cognitive/nesting3.php',
+				3,
+				'anonymous function',
+				19,
+			],
+			[
 				__DIR__ . '/data/cognitive/nestingContinueWithLabel.php',
 				3,
 				'sumOfPrimes',

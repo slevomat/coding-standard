@@ -153,7 +153,9 @@ class CognitiveSniff implements Sniff
 			return;
 		}
 
-		$name = $phpcsFile->getDeclarationName($stackPtr);
+		$name = $phpcsFile->getTokens()[$stackPtr]['code'] === T_FUNCTION
+			? FunctionHelper::getName($phpcsFile, $stackPtr)
+			: 'anonymous function';
 
 		$errorParameters = [
 			'Cognitive complexity for "%s" is %d but has to be less than or equal to %d.',
