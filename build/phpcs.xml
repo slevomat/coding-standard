@@ -187,6 +187,7 @@
 	<rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
 
 	<rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility"/>
+	<rule ref="SlevomatCodingStandard.Classes.ClassKeywordOrder"/>
 	<rule ref="SlevomatCodingStandard.Classes.ClassMemberSpacing"/>
 	<rule ref="SlevomatCodingStandard.Classes.ClassStructure">
 		<properties>
