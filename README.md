@@ -43,6 +43,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/PHPCSStandards
  - [SlevomatCodingStandard.Attributes.RequireAttributeAfterDocComment](doc/attributes.md#slevomatcodingstandardattributesrequireattributeafterdoccomment-) 🔧
  - [SlevomatCodingStandard.Classes.BackedEnumTypeSpacing](doc/classes.md#slevomatcodingstandardclassesbackedenumtypespacing-) 🔧
  - [SlevomatCodingStandard.Classes.ClassConstantVisibility](doc/classes.md#slevomatcodingstandardclassesclassconstantvisibility-) 🔧
+ - [SlevomatCodingStandard.Classes.ClassKeywordOrder](doc/classes.md#slevomatcodingstandardclassesclasskeywordorder-) 🔧
  - [SlevomatCodingStandard.Classes.ClassLength](doc/classes.md#slevomatcodingstandardclassesclasslength)
  - [SlevomatCodingStandard.Classes.ClassMemberSpacing](doc/classes.md#slevomatcodingstandardclassesclassmemberspacing-) 🔧
  - [SlevomatCodingStandard.Classes.ClassStructure](doc/classes.md#slevomatcodingstandardclassesclassstructure-) 🔧
