@@ -1,4 +1,4 @@
-<?php // lint >= 8.0
+<?php // lint >= 8.4
 
 class Foo
 {
@@ -16,6 +16,14 @@ class Foo
 		'b',
 		'c',
 	];
+
+	public private(set) LocalizedString $hook {
+		get => LocalizedString::fromCzechAndSlovak($this->locativeCs, $this->locativeSk);
+		set {
+			$this->locativeCs = $value->getInCzech(required: false);
+			$this->locativeSk = $value->getInSlovak(required: false);
+		}
+	}
 
 	public $oldArray = array(
 		'a',

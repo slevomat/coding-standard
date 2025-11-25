@@ -19,6 +19,7 @@ use const T_CLASS;
 use const T_COMMA;
 use const T_CONST;
 use const T_FUNCTION;
+use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_SHORT_ARRAY;
 use const T_SEMICOLON;
 use const T_VARIABLE;
@@ -58,6 +59,11 @@ class DisallowMultiPropertyDefinitionSniff implements Sniff
 			|| $tokens[$propertyPointer]['code'] !== T_VARIABLE
 			|| !PropertyHelper::isProperty($phpcsFile, $propertyPointer)
 		) {
+			return;
+		}
+
+		$endPointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_OPEN_CURLY_BRACKET], $propertyPointer + 1);
+		if ($tokens[$endPointer]['code'] === T_OPEN_CURLY_BRACKET) {
 			return;
 		}
 
