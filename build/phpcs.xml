@@ -222,6 +222,7 @@
 	<rule ref="SlevomatCodingStandard.Classes.DisallowMultiPropertyDefinition"/>
 	<rule ref="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces"/>
 	<rule ref="SlevomatCodingStandard.Classes.EnumCaseSpacing"/>
+	<rule ref="SlevomatCodingStandard.Classes.ClassKeywordOrder"/>
 	<rule ref="SlevomatCodingStandard.Classes.MethodSpacing"/>
 	<rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference"/>
 	<rule ref="SlevomatCodingStandard.Classes.ParentCallSpacing"/>

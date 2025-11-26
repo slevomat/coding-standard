@@ -161,6 +161,12 @@ Sniff provides the following settings:
 * `minLinesCountBeforeWithoutComment`: minimum number of lines before enum case without a documentation comment or attribute
 * `maxLinesCountBeforeWithoutComment`: maximum number of lines before enum case without a documentation comment or attribute
 
+#### SlevomatCodingStandard.Classes.ClassKeywordOrder 🔧
+
+Enforces the correct order of class modifiers (e.g., `final`, `abstract`, `readonly`).
+
+Required order is (final | abstract) readonly class. That is, use either `final` or `abstract` (never both), then `readonly` if present, then `class`.
+
 #### SlevomatCodingStandard.Classes.ForbiddenPublicProperty
 
 Disallows using public properties.
