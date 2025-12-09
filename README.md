@@ -54,6 +54,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/PHPCSStandards
  - [SlevomatCodingStandard.Classes.DisallowStringExpressionPropertyFetch](doc/classes.md#slevomatcodingstandardclassesdisallowstringexpressionpropertyfetch-) 🔧
  - [SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces](doc/classes.md#slevomatcodingstandardclassesemptylinesaroundclassbraces-) 🔧
  - [SlevomatCodingStandard.Classes.EnumCaseSpacing](doc/classes.md#slevomatcodingstandardclassesenumcasespacing-) 🔧
+ - [SlevomatCodingStandard.Classes.ClassKeywordOrder](doc/classes.md#slevomatcodingstandardclassesclasskeywordorder-) 🔧
  - [SlevomatCodingStandard.Classes.ForbiddenPublicProperty](doc/classes.md#slevomatcodingstandardclassesforbiddenpublicproperty)
  - [SlevomatCodingStandard.Classes.MethodSpacing](doc/classes.md#slevomatcodingstandardclassesmethodspacing-) 🔧
  - [SlevomatCodingStandard.Classes.ModernClassNameReference](doc/classes.md#slevomatcodingstandardclassesmodernclassnamereference-) 🔧
