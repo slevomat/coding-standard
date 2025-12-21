@@ -130,14 +130,6 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 			}
 
 			if (
-				$tokens[$possibleEndOfLinePointer]['code'] === T_OPEN_TAG
-				|| $tokens[$possibleEndOfLinePointer]['code'] === T_OPEN_TAG_WITH_ECHO
-			) {
-				$endOfLineBefore = $possibleEndOfLinePointer;
-				break;
-			}
-
-			if (
 				in_array($tokens[$possibleEndOfLinePointer]['code'], TokenHelper::INLINE_COMMENT_TOKEN_CODES, true)
 				&& substr($tokens[$possibleEndOfLinePointer]['content'], -1) === $phpcsFile->eolChar
 			) {
