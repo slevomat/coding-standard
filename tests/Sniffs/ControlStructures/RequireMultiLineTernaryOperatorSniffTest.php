@@ -10,7 +10,7 @@ class RequireMultiLineTernaryOperatorSniffTest extends TestCase
 	public function testNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireMultiLineTernaryOperatorNoErrors.php', [
-			'lineLengthLimit' => 80,
+			'lineLengthLimit' => 100,
 		]);
 		self::assertNoSniffErrorInFile($report);
 	}

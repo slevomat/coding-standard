@@ -31,6 +31,13 @@ use const T_THROW;
 class TernaryOperatorHelper
 {
 
+	public static function is(File $phpcsFile, int $pointer): bool
+	{
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
+
+		return $phpcsFile->getTokens()[$previousPointer]['code'] !== T_OPEN_PARENTHESIS;
+	}
+
 	public static function isConditionOfTernaryOperator(File $phpcsFile, int $pointer): bool
 	{
 		$inlineThenPointer = TokenHelper::findNext($phpcsFile, T_INLINE_THEN, $pointer + 1);

@@ -40,6 +40,10 @@ class RequireMultiLineTernaryOperatorSniff implements Sniff
 
 	public function process(File $phpcsFile, int $inlineThenPointer): void
 	{
+		if (!TernaryOperatorHelper::is($phpcsFile, $inlineThenPointer)) {
+			return;
+		}
+
 		$this->lineLengthLimit = SniffSettingsHelper::normalizeInteger($this->lineLengthLimit);
 		$this->minExpressionsLength = SniffSettingsHelper::normalizeNullableInteger($this->minExpressionsLength);
 

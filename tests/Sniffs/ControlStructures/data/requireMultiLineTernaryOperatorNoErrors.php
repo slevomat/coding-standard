@@ -1,4 +1,4 @@
-<?php $a = $b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' ? 'bbbb' : 'ccccccc';
+<?php // lint >= 8.4
 
 $a = $b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' ? 'bbbb' : 'ccccccc';
 
@@ -45,3 +45,12 @@ $a = $b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' ? 'bbbb' : 'ccccccccccccc';
 $a = $b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' ? 'bbbb' : 'ccccccccccccc';
 
 $a = $b === 'bbbbbbbbbbbbbb' ? 'bbbb' : doSomething([], $c);
+
+class Foo {
+	public private(set) ?string $property {
+		get => null;
+		set(?string $value) {
+			$this->otherProperty = $value;
+		}
+	}
+}
