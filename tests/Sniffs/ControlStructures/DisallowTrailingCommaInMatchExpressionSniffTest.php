@@ -24,13 +24,13 @@ class DisallowTrailingCommaInMatchExpressionSniffTest extends TestCase
 
 		self::assertSame(7, $report->getErrorCount());
 
-		self::assertSniffError($report, 5, DisallowTrailingCommaInMatchExpressionSniff::CODE_DISALLOWED_TRAILING_COMMA);
-		self::assertSniffError($report, 9, DisallowTrailingCommaInMatchExpressionSniff::CODE_DISALLOWED_TRAILING_COMMA);
-		self::assertSniffError($report, 16, DisallowTrailingCommaInMatchExpressionSniff::CODE_DISALLOWED_TRAILING_COMMA);
-		self::assertSniffError($report, 17, DisallowTrailingCommaInMatchExpressionSniff::CODE_DISALLOWED_TRAILING_COMMA);
-		self::assertSniffError($report, 24, DisallowTrailingCommaInMatchExpressionSniff::CODE_DISALLOWED_TRAILING_COMMA);
-		self::assertSniffError($report, 34, DisallowTrailingCommaInMatchExpressionSniff::CODE_DISALLOWED_TRAILING_COMMA);
-		self::assertSniffError($report, 35, DisallowTrailingCommaInMatchExpressionSniff::CODE_DISALLOWED_TRAILING_COMMA);
+		self::assertSniffError($report, 3, DisallowTrailingCommaInMatchExpressionSniff::CODE_DISALLOWED_TRAILING_COMMA);
+		self::assertSniffError($report, 7, DisallowTrailingCommaInMatchExpressionSniff::CODE_DISALLOWED_TRAILING_COMMA);
+		self::assertSniffError($report, 14, DisallowTrailingCommaInMatchExpressionSniff::CODE_DISALLOWED_TRAILING_COMMA);
+		self::assertSniffError($report, 15, DisallowTrailingCommaInMatchExpressionSniff::CODE_DISALLOWED_TRAILING_COMMA);
+		self::assertSniffError($report, 22, DisallowTrailingCommaInMatchExpressionSniff::CODE_DISALLOWED_TRAILING_COMMA);
+		self::assertSniffError($report, 32, DisallowTrailingCommaInMatchExpressionSniff::CODE_DISALLOWED_TRAILING_COMMA);
+		self::assertSniffError($report, 33, DisallowTrailingCommaInMatchExpressionSniff::CODE_DISALLOWED_TRAILING_COMMA);
 
 		self::assertAllFixedInFile($report);
 	}
@@ -42,7 +42,7 @@ class DisallowTrailingCommaInMatchExpressionSniffTest extends TestCase
 		]);
 
 		self::assertSame(1, $report->getErrorCount());
-		self::assertSniffError($report, 5, DisallowTrailingCommaInMatchExpressionSniff::CODE_DISALLOWED_TRAILING_COMMA);
+		self::assertSniffError($report, 3, DisallowTrailingCommaInMatchExpressionSniff::CODE_DISALLOWED_TRAILING_COMMA);
 		self::assertAllFixedInFile($report);
 	}
 

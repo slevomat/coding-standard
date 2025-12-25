@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php // lint >= 8.0
 
 $foo = match(rand(0, 1)) {0 => false, 1 => true,};
 
