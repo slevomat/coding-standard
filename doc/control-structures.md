@@ -126,6 +126,24 @@ $t = $someCondition
 	: $otherwiseThis;
 ```
 
+#### SlevomatCodingStandard.ControlStructures.RequireTrailingCommaInMatchExpression 🔧
+
+Commas after the last branch in match expression make adding a new parameter easier and result in a cleaner versioning diff.
+
+This sniff enforces trailing commas in multi-line match expressions.
+
+This sniff provides the following setting:
+
+* `enable`: either to enable or not this sniff. By default, it is enabled for PHP versions 8.0 or higher.
+
+#### SlevomatCodingStandard.ControlStructures.DisallowTrailingCommaInMatchExpression 🔧
+
+This sniff disallows trailing commas on the last branch of a match expression.
+
+This sniff provides the following setting:
+
+* `onlySingleLine`: to enable checks only for single-line match expressions.
+
 #### SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing 🔧
 
 Enforces configurable number of lines around jump statements (continue, return, ...).
