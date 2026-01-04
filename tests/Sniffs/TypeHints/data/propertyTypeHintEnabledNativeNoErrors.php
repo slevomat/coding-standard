@@ -1,6 +1,17 @@
-<?php // lint >= 8.0
+<?php // lint >= 8.5
 
-class Whatever
+class ParentClass
+{
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint
+	 * @var string[]
+	 */
+	public $arrayTypeHint;
+
+}
+
+class Whatever extends ParentClass
 {
 
 	use Anything {
@@ -176,6 +187,12 @@ class Whatever
 	 * @var WeakMap<static, object{a: int}> https://phpstan.org/writing-php-code/phpdoc-types#object-shapes
 	 */
 	public WeakMap $objectShapeInItems;
+
+	/**
+	 * @var string[]
+	 */
+	#[Override]
+	public $arrayTypeHint = ['hello'];
 
 	public function __construct(private $propertyPromotion)
 	{

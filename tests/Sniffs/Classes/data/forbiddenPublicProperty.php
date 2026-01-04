@@ -1,4 +1,4 @@
-<?php // lint >= 8.4
+<?php // lint >= 8.5
 
 class TestSniff
 {
@@ -11,7 +11,14 @@ class TestSniff
 	public $pub;
 }
 
-class Test
+class ParentClass
+{
+
+	public $fromParent;
+
+}
+
+class Test extends ParentClass
 {
 	var $var;
 	public $pub;
@@ -21,4 +28,8 @@ class Test
 
 	public protected(set) int $protectedSet;
 	public private(set) int $privateSet;
+
+	#[Override]
+	public $fromParent;
+
 }
