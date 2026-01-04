@@ -65,7 +65,7 @@ class DNFTypeHintFormatSniff implements Sniff
 
 	public function process(File $phpcsFile, int $pointer): void
 	{
-		$this->enable = SniffSettingsHelper::isEnabledByPhpVersion($this->enable, 80000);
+		$this->enable = SniffSettingsHelper::isEnabledByPhpVersion($this->enable, 71000);
 
 		if (!$this->enable) {
 			return;
