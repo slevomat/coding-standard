@@ -3,6 +3,7 @@
 namespace SlevomatCodingStandard\Sniffs\TypeHints;
 
 use SlevomatCodingStandard\Sniffs\TestCase;
+use const PHP_VERSION_ID;
 
 class DNFTypeHintFormatSniffTest extends TestCase
 {
@@ -188,7 +189,14 @@ class DNFTypeHintFormatSniffTest extends TestCase
 		$report = self::checkFile(__DIR__ . '/data/dnfTypeHintFormatShortNullableNotSetNoErrors.php', [
 			'enable' => true,
 		], [DNFTypeHintFormatSniff::CODE_REQUIRED_SHORT_NULLABLE, DNFTypeHintFormatSniff::CODE_DISALLOWED_SHORT_NULLABLE]);
-		self::assertNoSniffErrorInFile($report);
+
+		// in tests there is no phpcs config "php_version" value set, which means it will use the runner PHP version
+		if (PHP_VERSION_ID >= 80000) {
+			self::assertNoSniffErrorInFile($report);
+		} else {
+			self::assertSame(2, $report->getErrorCount());
+			self::assertSniffError($report, 8, DNFTypeHintFormatSniff::CODE_REQUIRED_SHORT_NULLABLE);
+		}
 	}
 
 	public function testShortNullableRequiredNoErrors(): void
@@ -232,6 +240,7 @@ class DNFTypeHintFormatSniffTest extends TestCase
 			'enable' => true,
 			'shortNullable' => 'no',
 		], [DNFTypeHintFormatSniff::CODE_DISALLOWED_SHORT_NULLABLE]);
+
 		self::assertNoSniffErrorInFile($report);
 	}
 
@@ -241,6 +250,11 @@ class DNFTypeHintFormatSniffTest extends TestCase
 			'enable' => true,
 			'shortNullable' => 'no',
 		], [DNFTypeHintFormatSniff::CODE_DISALLOWED_SHORT_NULLABLE]);
+
+		if (PHP_VERSION_ID < 80000) {
+			self::assertNoSniffErrorInFile($report);
+			return;
+		}
 
 		self::assertSame(3, $report->getErrorCount());
 
@@ -285,9 +299,14 @@ class DNFTypeHintFormatSniffTest extends TestCase
 			'nullPosition' => 'first',
 		], [DNFTypeHintFormatSniff::CODE_NULL_TYPE_HINT_NOT_ON_FIRST_POSITION]);
 
-		self::assertSame(3, $report->getErrorCount());
+		if (PHP_VERSION_ID >= 80000) {
+			self::assertSame(3, $report->getErrorCount());
 
-		self::assertSniffError($report, 6, DNFTypeHintFormatSniff::CODE_NULL_TYPE_HINT_NOT_ON_FIRST_POSITION);
+			self::assertSniffError($report, 6, DNFTypeHintFormatSniff::CODE_NULL_TYPE_HINT_NOT_ON_FIRST_POSITION);
+		} else {
+			self::assertSame(2, $report->getErrorCount());
+		}
+
 		self::assertSniffError(
 			$report,
 			8,
@@ -301,7 +320,10 @@ class DNFTypeHintFormatSniffTest extends TestCase
 			'Null type hint should be on first position in "string|null|\Anything".',
 		);
 
-		self::assertAllFixedInFile($report);
+		// in PHP < 8 it would be changed to short nullable, which is not tested in this test
+		if (PHP_VERSION_ID >= 80000) {
+			self::assertAllFixedInFile($report);
+		}
 	}
 
 	public function testNullPositionLastNoErrors(): void
@@ -320,9 +342,14 @@ class DNFTypeHintFormatSniffTest extends TestCase
 			'nullPosition' => 'last',
 		], [DNFTypeHintFormatSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION]);
 
-		self::assertSame(3, $report->getErrorCount());
+		if (PHP_VERSION_ID >= 80000) {
+			self::assertSame(3, $report->getErrorCount());
 
-		self::assertSniffError($report, 6, DNFTypeHintFormatSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
+			self::assertSniffError($report, 6, DNFTypeHintFormatSniff::CODE_NULL_TYPE_HINT_NOT_ON_LAST_POSITION);
+		} else {
+			self::assertSame(2, $report->getErrorCount());
+		}
+
 		self::assertSniffError(
 			$report,
 			8,
@@ -336,7 +363,10 @@ class DNFTypeHintFormatSniffTest extends TestCase
 			'Null type hint should be on last position in "string|null|\Anything".',
 		);
 
-		self::assertAllFixedInFile($report);
+		// in PHP < 8 it would be changed to short nullable, which is not tested in this test
+		if (PHP_VERSION_ID >= 80000) {
+			self::assertAllFixedInFile($report);
+		}
 	}
 
 	public function testShouldNotReportIfSniffIsDisabled(): void
