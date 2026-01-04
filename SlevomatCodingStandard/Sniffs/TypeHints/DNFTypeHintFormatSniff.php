@@ -257,6 +257,8 @@ class DNFTypeHintFormatSniff implements Sniff
 				$typeHintWithoutNull = self::getTypeHintContentWithoutNull($phpcsFile, $typeHint);
 				$this->fixTypeHint($phpcsFile, $typeHint, '?' . $typeHintWithoutNull);
 			}
+
+			$hasShortNullable = true;
 		} elseif ($this->shortNullable === self::NO && $hasShortNullable && !$requiresShortNullable) {
 			$fix = $phpcsFile->addFixableError(
 				sprintf('Usage of short nullable type hint in "%s" is disallowed.', $typeHint->getTypeHint()),
@@ -268,7 +270,7 @@ class DNFTypeHintFormatSniff implements Sniff
 			}
 		}
 
-		if ($hasShortNullable || (($this->shortNullable === self::YES || $requiresShortNullable ) && $typeHintsCount === 2)) {
+		if ($hasShortNullable) {
 			return;
 		}
 
