@@ -19,6 +19,7 @@ use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use SlevomatCodingStandard\Helpers\Annotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\AnnotationTypeHelper;
+use SlevomatCodingStandard\Helpers\AttributeHelper;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
@@ -355,6 +356,10 @@ class PropertyTypeHintSniff implements Sniff
 
 		if ($originalTypeNode instanceof NullableTypeNode) {
 			$nullableTypeHint = true;
+		}
+
+		if (AttributeHelper::hasAttribute($phpcsFile, $propertyPointer, '\Override')) {
+			return;
 		}
 
 		if ($isSuppressedNativeTypeHint) {

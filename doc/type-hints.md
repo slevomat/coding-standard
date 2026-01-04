@@ -81,7 +81,7 @@ Sniff provides the following settings:
 * `enableStandaloneNullTrueFalseTypeHints`: enforces to transform `@param true`, `@param false` or `@param null` into native typehints. It's on by default if you're on PHP 8.2+
 * `traversableTypeHints`: enforces which typehints must have specified contained type. E.g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
 
-This sniff can cause an error if you're overriding or implementing a parent method which does not have typehints. In such cases add `@phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint` annotation to the method to have this sniff skip it.
+This sniff can cause an error if you're overriding or implementing a parent method which does not have typehints. In such cases add `#[Override]` attribute or `@phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint` annotation to the method to have this sniff skip it.
 
 #### SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing 🔧
 
@@ -103,7 +103,7 @@ Sniff provides the following settings:
 * `enableStandaloneNullTrueFalseTypeHints`: enforces to transform `@var true`, `@var false` or `@var null` into native typehints. It's on by default if you're on PHP 8.2+. It can be enabled only when `enableNativeTypeHint` is enabled too.
 * `traversableTypeHints`: enforces which typehints must have specified contained type. E.g. if you set this to `\Doctrine\Common\Collections\Collection`, then `\Doctrine\Common\Collections\Collection` must always be supplied with the contained type: `\Doctrine\Common\Collections\Collection|Foo[]`.
 
-This sniff can cause an error if you're overriding parent property which does not have typehints. In such cases add `@phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint` annotation to the property to have this sniff skip it.
+This sniff can cause an error if you're overriding parent property which does not have typehints. In such cases add `#[Override]` attribute if you are using PHP 8.5+ or add `@phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint` annotation to the property to have this sniff skip it.
 
 #### SlevomatCodingStandard.TypeHints.ReturnTypeHint 🔧🚧
 
