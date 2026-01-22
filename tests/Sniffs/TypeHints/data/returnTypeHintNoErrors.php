@@ -1,8 +1,15 @@
 <?php // lint >= 8.0
 
-abstract class Whatever
-{
+use Override;
 
+interface FloatsYourBoat
+{
+	/** @return array{} */
+	public function overrideAttribute(): array;
+}
+
+abstract class Whatever implements FloatsYourBoat
+{
 	public function __construct()
 	{
 	}
@@ -85,6 +92,12 @@ abstract class Whatever
 	private function noTraversableType(): int
 	{
 		return 0;
+	}
+
+	#[Override]
+	public function overrideAttribute(): array
+	{
+		return [];
 	}
 
 	/**
