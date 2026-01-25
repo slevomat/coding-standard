@@ -202,7 +202,10 @@ class PropertyTypeHintSniff implements Sniff
 				return;
 			}
 
-			if (!$isSuppressedAnyTypeHint) {
+			if (
+				!$isSuppressedAnyTypeHint
+				&& !AttributeHelper::hasAttribute($phpcsFile, $propertyPointer, '\Override')
+			) {
 				$phpcsFile->addError(
 					sprintf(
 						$this->enableNativeTypeHint
@@ -219,6 +222,10 @@ class PropertyTypeHintSniff implements Sniff
 		}
 
 		if (!$this->enableNativeTypeHint) {
+			return;
+		}
+
+		if (AttributeHelper::hasAttribute($phpcsFile, $propertyPointer, '\Override')) {
 			return;
 		}
 
@@ -358,10 +365,6 @@ class PropertyTypeHintSniff implements Sniff
 			$nullableTypeHint = true;
 		}
 
-		if (AttributeHelper::hasAttribute($phpcsFile, $propertyPointer, '\Override')) {
-			return;
-		}
-
 		if ($isSuppressedNativeTypeHint) {
 			return;
 		}
@@ -439,7 +442,10 @@ class PropertyTypeHintSniff implements Sniff
 					return;
 				}
 
-				if (!$isSuppressed) {
+				if (
+					!$isSuppressed
+					&& !AttributeHelper::hasAttribute($phpcsFile, $propertyPointer, '\Override')
+				) {
 					$phpcsFile->addError(
 						sprintf(
 							'@var annotation of property %s does not specify type hint for its items.',

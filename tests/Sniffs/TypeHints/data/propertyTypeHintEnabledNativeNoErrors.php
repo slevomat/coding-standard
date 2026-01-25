@@ -52,6 +52,18 @@ class Whatever extends ParentClass
 	 */
 	private int $isSniffCodeUselessAnnotationSuppressed;
 
+	#[Override]
+	protected $withOverride;
+
+	/**
+	 * @var int
+	 */
+	#[Override]
+	protected $withAnnotationAndOverride;
+
+	#[Override]
+	protected array $withoutTraversableTypeHintSpecificationButWithOverride;
+
 	private int $noTraversableType;
 
 	/**
