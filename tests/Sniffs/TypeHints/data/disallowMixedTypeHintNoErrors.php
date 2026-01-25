@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.5
 
 /**
  * @see mixed
@@ -32,10 +32,24 @@ class Whatever
 		return $mixed === true;
 	}
 
+	protected array $property;
+
+	public readonly array $data;
+
 }
 
 class WhateverOverridden extends Whatever
 {
+
+	/**
+	 * @var array<mixed>
+	 */
+	#[Override]
+	protected array $property;
+
+	/** @var array<string, mixed> */
+	#[Override]
+	public readonly array $data;
 
 	/**
 	 * @var array<mixed>

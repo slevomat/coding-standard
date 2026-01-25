@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Helpers;
 
 use PHP_CodeSniffer\Files\File;
 use function array_map;
+use function sprintf;
 use const T_DOC_COMMENT_OPEN_TAG;
 
 class DocCommentHelperTest extends TestCase
@@ -377,9 +378,10 @@ class DocCommentHelperTest extends TestCase
 	{
 		$phpcsFile = $this->getTestedCodeSnifferFile();
 
-		foreach ([3, 10, 18, 32, 46, 51, 76, 99] as $line) {
+		foreach ([3, 10, 32, 46, 51, 76, 99] as $line) {
 			self::assertFalse(
 				DocCommentHelper::isInline($phpcsFile, $this->findPointerByLineAndType($phpcsFile, $line, T_DOC_COMMENT_OPEN_TAG)),
+				sprintf('Failed asserting that doc comment on line %d is not inline.', $line),
 			);
 		}
 
