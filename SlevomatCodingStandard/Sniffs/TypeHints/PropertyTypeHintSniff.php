@@ -184,6 +184,8 @@ class PropertyTypeHintSniff implements Sniff
 		array $prefixedPropertyAnnotations
 	): void
 	{
+		$isInherited = AttributeHelper::hasAttribute($phpcsFile, $propertyPointer, '\Override');
+
 		$suppressNameAnyTypeHint = $this->getSniffName(self::CODE_MISSING_ANY_TYPE_HINT);
 		$isSuppressedAnyTypeHint = SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, $suppressNameAnyTypeHint);
 
@@ -204,7 +206,7 @@ class PropertyTypeHintSniff implements Sniff
 
 			if (
 				!$isSuppressedAnyTypeHint
-				&& !AttributeHelper::hasAttribute($phpcsFile, $propertyPointer, '\Override')
+				&& !$isInherited
 			) {
 				$phpcsFile->addError(
 					sprintf(
@@ -222,10 +224,6 @@ class PropertyTypeHintSniff implements Sniff
 		}
 
 		if (!$this->enableNativeTypeHint) {
-			return;
-		}
-
-		if (AttributeHelper::hasAttribute($phpcsFile, $propertyPointer, '\Override')) {
 			return;
 		}
 
@@ -365,7 +363,7 @@ class PropertyTypeHintSniff implements Sniff
 			$nullableTypeHint = true;
 		}
 
-		if ($isSuppressedNativeTypeHint) {
+		if ($isSuppressedNativeTypeHint || $isInherited) {
 			return;
 		}
 
@@ -429,6 +427,8 @@ class PropertyTypeHintSniff implements Sniff
 		array $prefixedPropertyAnnotations
 	): void
 	{
+		$isInherited = AttributeHelper::hasAttribute($phpcsFile, $propertyPointer, '\Override');
+
 		$suppressName = $this->getSniffName(self::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION);
 		$isSuppressed = SuppressHelper::isSniffSuppressed($phpcsFile, $propertyPointer, $suppressName);
 
@@ -444,7 +444,7 @@ class PropertyTypeHintSniff implements Sniff
 
 				if (
 					!$isSuppressed
-					&& !AttributeHelper::hasAttribute($phpcsFile, $propertyPointer, '\Override')
+					&& !$isInherited
 				) {
 					$phpcsFile->addError(
 						sprintf(

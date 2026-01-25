@@ -200,9 +200,6 @@ class Whatever extends ParentClass
 	 */
 	public WeakMap $objectShapeInItems;
 
-	/**
-	 * @var string[]
-	 */
 	#[Override]
 	public $arrayTypeHint = ['hello'];
 

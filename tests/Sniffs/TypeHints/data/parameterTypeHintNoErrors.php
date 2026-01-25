@@ -8,8 +8,9 @@ class ParentClass
 
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint
+	 * @param array{} $b
 	 */
-	public function overrideAttribute($a): void
+	public function overrideAttribute($a, array $b): void
 	{
 	}
 
@@ -293,7 +294,7 @@ class Whatever extends ParentClass
 	 * @param bool $a
 	 */
 	#[Override]
-	public function overrideAttribute($a): void
+	public function overrideAttribute($a, array $b): void
 	{
 	}
 
