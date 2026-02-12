@@ -72,6 +72,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/PHPCSStandards
  - [SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming](doc/classes.md#slevomatcodingstandardclassessuperfluousinterfacenaming)
  - [SlevomatCodingStandard.Classes.SuperfluousTraitNaming](doc/classes.md#slevomatcodingstandardclassessuperfluoustraitnaming)
  - [SlevomatCodingStandard.Classes.TraitUseDeclaration](doc/classes.md#slevomatcodingstandardclassestraitusedeclaration-) 🔧
+ - [SlevomatCodingStandard.Classes.TraitUseOrder](doc/classes.md#slevomatcodingstandardclassestraituseorder-) 🔧
  - [SlevomatCodingStandard.Classes.TraitUseSpacing](doc/classes.md#slevomatcodingstandardclassestraitusespacing-) 🔧
  - [SlevomatCodingStandard.Classes.UselessLateStaticBinding](doc/classes.md#slevomatcodingstandardclassesuselesslatestaticbinding-) 🔧
  - [SlevomatCodingStandard.Commenting.AnnotationName](doc/commenting.md#slevomatcodingstandardcommentingannotationname-)
