@@ -300,6 +300,14 @@ Reports use of superfluous suffix "Trait" for traits.
 
 Prohibits multiple traits separated by commas in one `use` statement.
 
+#### SlevomatCodingStandard.Classes.TraitUseOrder 🔧
+
+Enforces alphabetical order of trait `use` statements, both when traits are on separate lines and when they are comma-separated in a single `use` statement.
+
+Sniff provides the following settings:
+
+* `caseSensitive` (default: `false`): compare trait names case-sensitively.
+
 #### SlevomatCodingStandard.Classes.TraitUseSpacing 🔧
 
 Enforces configurable number of lines before first `use`, after last `use` and between two `use` statements.

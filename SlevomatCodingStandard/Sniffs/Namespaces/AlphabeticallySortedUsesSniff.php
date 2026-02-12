@@ -14,16 +14,11 @@ use SlevomatCodingStandard\Helpers\UseStatement;
 use SlevomatCodingStandard\Helpers\UseStatementHelper;
 use function array_key_exists;
 use function array_map;
-use function count;
 use function end;
-use function explode;
 use function implode;
 use function in_array;
-use function min;
 use function reset;
 use function sprintf;
-use function strcasecmp;
-use function strcmp;
 use function uasort;
 use const T_COMMA;
 use const T_OPEN_TAG;
@@ -205,29 +200,7 @@ class AlphabeticallySortedUsesSniff implements Sniff
 			return $order[$a->getType()] <=> $order[$b->getType()];
 		}
 
-		$aNameParts = explode(NamespaceHelper::NAMESPACE_SEPARATOR, $a->getFullyQualifiedTypeName());
-		$bNameParts = explode(NamespaceHelper::NAMESPACE_SEPARATOR, $b->getFullyQualifiedTypeName());
-
-		$minPartsCount = min(count($aNameParts), count($bNameParts));
-		for ($i = 0; $i < $minPartsCount; $i++) {
-			$comparison = $this->compare($aNameParts[$i], $bNameParts[$i]);
-			if ($comparison === 0) {
-				continue;
-			}
-
-			return $comparison;
-		}
-
-		return count($aNameParts) <=> count($bNameParts);
-	}
-
-	private function compare(string $a, string $b): int
-	{
-		if ($this->caseSensitive) {
-			return strcmp($a, $b);
-		}
-
-		return strcasecmp($a, $b);
+		return NamespaceHelper::compareStatements($a->getFullyQualifiedTypeName(), $b->getFullyQualifiedTypeName(), $this->caseSensitive);
 	}
 
 }
