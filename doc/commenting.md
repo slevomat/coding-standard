@@ -106,6 +106,14 @@ Sniff requires comments with single-line content to be written as one-liners.
 
 Sniff requires comments with single-line content to be written as multi-liners.
 
+#### SlevomatCodingStandard.Commenting.ThrowsAnnotationsOrder 🔧
+
+Checks that `@throws` annotations are sorted alphabetically by exception class name.
+
+Sniff provides the following settings:
+
+* `caseSensitive`: compare class names case-sensitively. Default is `false`.
+
 #### SlevomatCodingStandard.Commenting.UselessFunctionDocComment 🔧
 
 * Checks for useless doc comments. If the native method declaration contains everything and the phpDoc does not add anything useful, it's reported as useless and can optionally be automatically removed with `phpcbf`.
