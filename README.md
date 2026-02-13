@@ -116,6 +116,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/PHPCSStandards
  - [SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn](doc/control-structures.md#slevomatcodingstandardcontrolstructuresuselessifconditionwithreturn-) 🔧
  - [SlevomatCodingStandard.ControlStructures.UselessTernaryOperator](doc/control-structures.md#slevomatcodingstandardcontrolstructuresuselessternaryoperator-) 🔧
  - [SlevomatCodingStandard.Exceptions.DeadCatch](doc/exceptions.md#slevomatcodingstandardexceptionsdeadcatch)
+ - [SlevomatCodingStandard.Exceptions.CatchExceptionsOrder](doc/exceptions.md#slevomatcodingstandardexceptionscatchexceptionsorder-) 🔧
  - [SlevomatCodingStandard.Exceptions.DisallowNonCapturingCatch](doc/exceptions.md#slevomatcodingstandardexceptionsdisallownoncapturingcatch)
  - [SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly](doc/exceptions.md#slevomatcodingstandardexceptionsreferencethrowableonly-) 🔧🚧
  - [SlevomatCodingStandard.Exceptions.RequireNonCapturingCatch](doc/exceptions.md#slevomatcodingstandardexceptionsrequirenoncapturingcatch-) 🔧
