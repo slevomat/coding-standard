@@ -130,4 +130,17 @@ class AlphabeticallySortedUsesSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testNonContiguousUseBlocksNotFixable(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/nonContiguousUseBlocksNotFixable.php',
+			[],
+			[AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER],
+		);
+
+		self::assertSniffError($report, 4, AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER, 'A');
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
