@@ -184,11 +184,23 @@ class UseStatementHelper
 					$currentBlockKey = $basePointerBeforeUse;
 					$previousSemicolon = null;
 				} elseif ($previousSemicolon !== null) {
-					// Check for non-contiguous block (code between uses)
+					// Check for non-contiguous block:
+					// - Effective code (not comments) between uses always means separate blocks
+					// - Comments with a blank line before the use indicate intentional separation
 					$effectiveToken = TokenHelper::findNextEffective($phpcsFile, $previousSemicolon + 1, $usePointer);
 					if ($effectiveToken !== null) {
-						// Gap detected - start new block using previous semicolon as key
 						$currentBlockKey = $previousSemicolon;
+					} else {
+						// No effective code, but check if there's a blank line before this use
+						// (indicating the use is intentionally separated, even if only by comments)
+						$pointerBeforeUse = TokenHelper::findPreviousNonWhitespace($phpcsFile, $usePointer - 1);
+						if (
+							$pointerBeforeUse !== null
+							&& $pointerBeforeUse !== $previousSemicolon
+							&& $tokens[$usePointer]['line'] - $tokens[$pointerBeforeUse]['line'] > 1
+						) {
+							$currentBlockKey = $previousSemicolon;
+						}
 					}
 				}
 
