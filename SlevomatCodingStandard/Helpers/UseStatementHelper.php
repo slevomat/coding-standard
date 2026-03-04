@@ -163,14 +163,32 @@ class UseStatementHelper
 			$namespaceAndOpenTagPointers = TokenHelper::findNextAll($phpcsFile, [T_OPEN_TAG, T_NAMESPACE], 0);
 			$openTagPointer = $namespaceAndOpenTagPointers[0];
 
+			$currentBlockKey = null;
+			$previousSemicolon = null;
+
 			foreach (self::getUseStatementPointers($phpcsFile, $openTagPointer) as $usePointer) {
-				$pointerBeforeUseStatements = $openTagPointer;
+				// Get base key (namespace or open tag before this use)
+				$basePointerBeforeUse = $openTagPointer;
 				if (count($namespaceAndOpenTagPointers) > 1) {
 					foreach (array_reverse($namespaceAndOpenTagPointers) as $namespaceAndOpenTagPointer) {
 						if ($namespaceAndOpenTagPointer < $usePointer) {
-							$pointerBeforeUseStatements = $namespaceAndOpenTagPointer;
+							$basePointerBeforeUse = $namespaceAndOpenTagPointer;
 							break;
 						}
+					}
+				}
+
+				// Determine block key: start new block if namespace changed or if there's code between uses
+				if ($currentBlockKey === null || $basePointerBeforeUse > $currentBlockKey) {
+					// First use or crossed namespace boundary
+					$currentBlockKey = $basePointerBeforeUse;
+					$previousSemicolon = null;
+				} elseif ($previousSemicolon !== null) {
+					// Check for non-contiguous block (code between uses)
+					$effectiveToken = TokenHelper::findNextEffective($phpcsFile, $previousSemicolon + 1, $usePointer);
+					if ($effectiveToken !== null) {
+						// Gap detected - start new block using previous semicolon as key
+						$currentBlockKey = $previousSemicolon;
 					}
 				}
 
@@ -191,7 +209,10 @@ class UseStatementHelper
 					$type,
 					self::getAlias($phpcsFile, $usePointer),
 				);
-				$useStatements[$pointerBeforeUseStatements][UseStatement::getUniqueId($type, $name)] = $useStatement;
+				$useStatements[$currentBlockKey][UseStatement::getUniqueId($type, $name)] = $useStatement;
+
+				// Track semicolon for next iteration
+				$previousSemicolon = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $usePointer + 1);
 			}
 
 			return $useStatements;

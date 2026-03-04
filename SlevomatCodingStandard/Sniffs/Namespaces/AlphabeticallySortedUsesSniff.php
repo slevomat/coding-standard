@@ -20,14 +20,10 @@ use function in_array;
 use function reset;
 use function sprintf;
 use function uasort;
-use function usort;
-use function array_values;
-use function count;
 use const T_COMMA;
 use const T_OPEN_TAG;
 use const T_OPEN_USE_GROUP;
 use const T_SEMICOLON;
-use const T_USE;
 
 class AlphabeticallySortedUsesSniff implements Sniff
 {
@@ -80,11 +76,6 @@ class AlphabeticallySortedUsesSniff implements Sniff
 								$fixable = false;
 								break;
 							}
-						}
-
-						// Check if use statements are contiguous (no code between them)
-						if ($fixable && !$this->areUseStatementsContiguous($phpcsFile, $useStatements)) {
-							$fixable = false;
 						}
 
 						$errorParameters = [
@@ -210,37 +201,6 @@ class AlphabeticallySortedUsesSniff implements Sniff
 		}
 
 		return NamespaceHelper::compareStatements($a->getFullyQualifiedTypeName(), $b->getFullyQualifiedTypeName(), $this->caseSensitive);
-	}
-
-	/**
-	 * Checks if all use statements are contiguous (no code between them, only whitespace and comments).
-	 *
-	 * @param array<string, UseStatement> $useStatements
-	 */
-	private function areUseStatementsContiguous(File $phpcsFile, array $useStatements): bool
-	{
-		$statements = array_values($useStatements);
-		$count = count($statements);
-
-		if ($count <= 1) {
-			return true;
-		}
-
-		// Sort by position in file
-		usort($statements, static fn (UseStatement $a, UseStatement $b): int => $a->getPointer() <=> $b->getPointer());
-
-		for ($i = 0; $i < $count - 1; $i++) {
-			$currentSemicolon = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $statements[$i]->getPointer());
-			$nextUse = $statements[$i + 1]->getPointer();
-
-			// Check if there's any effective token between the semicolon and the next use statement
-			$effectiveToken = TokenHelper::findNextEffective($phpcsFile, $currentSemicolon + 1, $nextUse);
-			if ($effectiveToken !== null) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 }

@@ -1,10 +1,10 @@
 <?php
 
-use B;
 use A;
+use B;
 
 // This code should NOT be deleted
 $x = 1;
 
-use D;
 use C;
+use D;
