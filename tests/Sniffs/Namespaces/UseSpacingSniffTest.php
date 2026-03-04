@@ -208,7 +208,7 @@ class UseSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
-	public function testNonContiguousBlocksFixedIndependently(): void
+	public function testNonContiguousBlocks(): void
 	{
 		$report = self::checkFile(
 			__DIR__ . '/data/useSpacingNonContiguousBlocks.php',
