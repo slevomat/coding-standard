@@ -16,6 +16,7 @@ use function array_values;
 use function count;
 use function in_array;
 use function sprintf;
+use const T_USE;
 use const T_DOC_COMMENT_OPEN_TAG;
 use const T_OPEN_TAG;
 use const T_SEMICOLON;
@@ -231,6 +232,25 @@ class UseSpacingSniff implements Sniff
 				continue;
 			}
 
+			/** @var int $previousUseSemicolonPointer */
+			$previousUseSemicolonPointer = TokenHelper::findNextLocal($phpcsFile, T_SEMICOLON, $previousUse->getPointer() + 1);
+
+			// Check if there's any code between the previous use and the current use (non-contiguous blocks)
+			$effectiveTokenBetween = TokenHelper::findNextEffective($phpcsFile, $previousUseSemicolonPointer + 1, $use->getPointer());
+			if ($effectiveTokenBetween !== null) {
+				// Non-contiguous use blocks - report error but don't fix to avoid deleting code
+				$phpcsFile->addError(
+					sprintf(
+						'Expected 0 lines between same types of use statement, found %d.',
+						$actualLinesCountAfterPreviousUse,
+					),
+					$use->getPointer(),
+					self::CODE_INCORRECT_LINES_COUNT_BETWEEN_SAME_TYPES_OF_USE,
+				);
+				$previousUse = $use;
+				continue;
+			}
+
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
 					'Expected 0 lines between same types of use statement, found %d.',
@@ -244,9 +264,6 @@ class UseSpacingSniff implements Sniff
 				$previousUse = $use;
 				continue;
 			}
-
-			/** @var int $previousUseSemicolonPointer */
-			$previousUseSemicolonPointer = TokenHelper::findNextLocal($phpcsFile, T_SEMICOLON, $previousUse->getPointer() + 1);
 
 			$phpcsFile->fixer->beginChangeset();
 			FixerHelper::removeBetween($phpcsFile, $previousUseSemicolonPointer, $useStartPointer);
@@ -301,6 +318,27 @@ class UseSpacingSniff implements Sniff
 				continue;
 			}
 
+			/** @var int $previousUseSemicolonPointer */
+			$previousUseSemicolonPointer = TokenHelper::findNextLocal($phpcsFile, T_SEMICOLON, $previousUse->getPointer() + 1);
+
+			// Check if there's any code between the previous use and the current use (non-contiguous blocks)
+			$effectiveTokenBetween = TokenHelper::findNextEffective($phpcsFile, $previousUseSemicolonPointer + 1, $use->getPointer());
+			if ($effectiveTokenBetween !== null) {
+				// Non-contiguous use blocks - report error but don't fix to avoid deleting code
+				$phpcsFile->addError(
+					sprintf(
+						'Expected %d line%s between different types of use statement, found %d.',
+						$this->linesCountBetweenUseTypes,
+						$this->linesCountBetweenUseTypes === 1 ? '' : 's',
+						$actualLinesCountAfterPreviousUse,
+					),
+					$use->getPointer(),
+					self::CODE_INCORRECT_LINES_COUNT_BETWEEN_DIFFERENT_TYPES_OF_USE,
+				);
+				$previousUse = $use;
+				continue;
+			}
+
 			$fix = $phpcsFile->addFixableError(
 				sprintf(
 					'Expected %d line%s between different types of use statement, found %d.',
@@ -316,9 +354,6 @@ class UseSpacingSniff implements Sniff
 				$previousUse = $use;
 				continue;
 			}
-
-			/** @var int $previousUseSemicolonPointer */
-			$previousUseSemicolonPointer = TokenHelper::findNextLocal($phpcsFile, T_SEMICOLON, $previousUse->getPointer() + 1);
 
 			$phpcsFile->fixer->beginChangeset();
 
