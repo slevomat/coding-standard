@@ -145,4 +145,15 @@ class AlphabeticallySortedUsesSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testFixableWithFileLevelDocblock(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/docblockBeforeUses.php',
+			[],
+			[AlphabeticallySortedUsesSniff::CODE_INCORRECT_ORDER],
+		);
+		// File-level docblock (only the first use has a comment) should stay at top
+		self::assertAllFixedInFile($report);
+	}
+
 }
