@@ -64,3 +64,49 @@ class AlreadySortedMixedOneline
 	use A, B\C, \D\E\F;
 
 }
+
+class AlreadySortedWithDocBlocks
+{
+
+	/** @use AnotherGenericTrait<int> */
+	use AnotherGenericTrait;
+	/** @use GenericTrait<string> */
+	use GenericTrait;
+
+}
+
+class AlreadySortedWithInlineComments
+{
+
+	// AnotherGenericTrait comment
+	use AnotherGenericTrait;
+	// GenericTrait comment
+	use GenericTrait;
+
+}
+
+class AlreadySortedWithMultiLineInlineComments
+{
+
+	// AnotherGenericTrait comment
+	// second line
+	use AnotherGenericTrait;
+	// GenericTrait comment
+	// second line
+	use GenericTrait;
+
+}
+
+class AlreadySortedWithMultiLineDocBlocks
+{
+
+	/**
+	 * @use AnotherGenericTrait<int>
+	 */
+	use AnotherGenericTrait;
+	/**
+	 * @use GenericTrait<string>
+	 */
+	use GenericTrait;
+
+}

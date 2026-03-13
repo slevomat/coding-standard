@@ -60,3 +60,49 @@ class UnsortedMixedOneline
 	use B\C, \Abc, \D\E\F, A;
 
 }
+
+class UnsortedWithDocBlocks
+{
+
+	/** @use GenericTrait<string> */
+	use GenericTrait;
+	/** @use AnotherGenericTrait<int> */
+	use AnotherGenericTrait;
+
+}
+
+class UnsortedWithInlineComments
+{
+
+	// GenericTrait comment
+	use GenericTrait;
+	// AnotherGenericTrait comment
+	use AnotherGenericTrait;
+
+}
+
+class UnsortedWithMultiLineInlineComments
+{
+
+	// GenericTrait comment
+	// second line
+	use GenericTrait;
+	// AnotherGenericTrait comment
+	// second line
+	use AnotherGenericTrait;
+
+}
+
+class UnsortedWithMultiLineDocBlocks
+{
+
+	/**
+	 * @use GenericTrait<string>
+	 */
+	use GenericTrait;
+	/**
+	 * @use AnotherGenericTrait<int>
+	 */
+	use AnotherGenericTrait;
+
+}
