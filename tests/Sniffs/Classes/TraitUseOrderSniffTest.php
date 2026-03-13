@@ -19,7 +19,7 @@ class TraitUseOrderSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/traitUseOrderErrors.php');
 
-		self::assertSame(7, $report->getErrorCount());
+		self::assertSame(11, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, TraitUseOrderSniff::CODE_INCORRECT_ORDER);
 		self::assertSniffError($report, 12, TraitUseOrderSniff::CODE_INCORRECT_ORDER);
@@ -28,6 +28,10 @@ class TraitUseOrderSniffTest extends TestCase
 		self::assertSniffError($report, 39, TraitUseOrderSniff::CODE_INCORRECT_ORDER);
 		self::assertSniffError($report, 47, TraitUseOrderSniff::CODE_INCORRECT_ORDER);
 		self::assertSniffError($report, 57, TraitUseOrderSniff::CODE_INCORRECT_ORDER);
+		self::assertSniffError($report, 64, TraitUseOrderSniff::CODE_INCORRECT_ORDER);
+		self::assertSniffError($report, 74, TraitUseOrderSniff::CODE_INCORRECT_ORDER);
+		self::assertSniffError($report, 84, TraitUseOrderSniff::CODE_INCORRECT_ORDER);
+		self::assertSniffError($report, 96, TraitUseOrderSniff::CODE_INCORRECT_ORDER);
 
 		self::assertAllFixedInFile($report);
 	}

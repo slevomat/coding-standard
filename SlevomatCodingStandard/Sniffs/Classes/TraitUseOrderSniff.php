@@ -12,6 +12,8 @@ use function count;
 use function usort;
 use const T_ANON_CLASS;
 use const T_CLASS;
+use const T_COMMENT;
+use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_ENUM;
 use const T_OPEN_CURLY_BRACKET;
 use const T_SEMICOLON;
@@ -70,9 +72,28 @@ class TraitUseOrderSniff implements Sniff
 				$endPointer = $tokens[$endPointer]['bracket_closer'];
 			}
 
+			$contentStartPointer = $usePointer;
+			$previousNonWhitespace = TokenHelper::findPreviousNonWhitespace($phpcsFile, $usePointer - 1);
+
+			if ($previousNonWhitespace !== null && $tokens[$previousNonWhitespace]['code'] === T_DOC_COMMENT_CLOSE_TAG) {
+				$contentStartPointer = $tokens[$previousNonWhitespace]['comment_opener'];
+			} elseif ($previousNonWhitespace !== null && $tokens[$previousNonWhitespace]['code'] === T_COMMENT) {
+				$contentStartPointer = $previousNonWhitespace;
+
+				while (true) {
+					$prev = TokenHelper::findPreviousNonWhitespace($phpcsFile, $contentStartPointer - 1);
+
+					if ($prev === null || $tokens[$prev]['code'] !== T_COMMENT) {
+						break;
+					}
+
+					$contentStartPointer = $prev;
+				}
+			}
+
 			$uses[] = [
 				'name' => $name,
-				'contentStartPointer' => $nameStartPointer,
+				'contentStartPointer' => $contentStartPointer,
 				'contentEndPointer' => $endPointer,
 			];
 		}
