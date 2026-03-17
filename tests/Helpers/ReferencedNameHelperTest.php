@@ -243,4 +243,25 @@ class ReferencedNameHelperTest extends TestCase
 		}
 	}
 
+	public function testReferencedNamesFromStringBoundsCheck(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/referencedNamesFromStringBoundsCheck.php');
+
+		$expectedTypes = [
+			['\Exception', false, false],
+			['\Some\ClassName', false, false],
+			['\Another\ClassName', false, false],
+		];
+
+		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
+		self::assertCount(count($expectedTypes), $names);
+		foreach ($names as $i => $referencedName) {
+			[$type, $isFunction, $isConstant] = $expectedTypes[$i];
+
+			self::assertSame($type, $referencedName->getNameAsReferencedInFile());
+			self::assertSame($isFunction, $referencedName->isFunction(), $type);
+			self::assertSame($isConstant, $referencedName->isConstant(), $type);
+		}
+	}
+
 }
