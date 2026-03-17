@@ -44,7 +44,6 @@ use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_OPEN_TAG;
 use const T_PARAM_NAME;
-use const T_STRING;
 use const T_TRAIT;
 use const T_TYPE_INTERSECTION;
 use const T_TYPE_UNION;
@@ -438,7 +437,11 @@ class ReferencedNameHelper
 				$referencedName = '';
 				$tmpPosition = $position - 1;
 				while (true) {
-					if (!is_array($subTokens[$tmpPosition]) || $subTokens[$tmpPosition][0] !== T_STRING) {
+					if (!isset($subTokens[$tmpPosition]) || !is_array($subTokens[$tmpPosition])) {
+						break;
+					}
+					// We need to check namespace separator because of support for PHP 7.4
+					if (!in_array($subTokens[$tmpPosition][0], [T_NS_SEPARATOR, ...TokenHelper::NAME_TOKEN_CODES], true)) {
 						break;
 					}
 
@@ -446,12 +449,14 @@ class ReferencedNameHelper
 					$tmpPosition--;
 				}
 
-				$referencedNames[] = $referencedName;
+				if ($referencedName !== '') {
+					$referencedNames[] = $referencedName;
+				}
 			} elseif (is_array($token) && $token[0] === T_NEW) {
 				$referencedName = '';
 				$tmpPosition = $position + 1;
 				while (true) {
-					if (!is_array($subTokens[$tmpPosition])) {
+					if (!isset($subTokens[$tmpPosition]) || !is_array($subTokens[$tmpPosition])) {
 						break;
 					}
 					if ($subTokens[$tmpPosition][0] === T_WHITESPACE) {
