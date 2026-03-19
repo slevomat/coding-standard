@@ -429,21 +429,25 @@ class ReferenceUsedNamesOnlySniff implements Sniff
 				$canBeFixed = false;
 			}
 
+			$hasExistingUseForCanonicalName = false;
+			$hasCollision = false;
 			foreach ($useStatements as $useStatement) {
 				if ($useStatement->getType() !== $reference->type) {
 					continue;
 				}
 
 				if ($useStatement->getFullyQualifiedTypeName() === $canonicalName) {
-					continue;
+					$hasExistingUseForCanonicalName = true;
+					break;
 				}
 
-				if ($useStatement->getCanonicalNameAsReferencedInFile() !== $canonicalNameToReference) {
-					continue;
+				if ($useStatement->getCanonicalNameAsReferencedInFile() === $canonicalNameToReference) {
+					$hasCollision = true;
 				}
+			}
 
+			if ($hasCollision && !$hasExistingUseForCanonicalName) {
 				$canBeFixed = false;
-				break;
 			}
 
 			$label = sprintf(
