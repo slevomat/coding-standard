@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function in_array;
 use const T_ANON_CLASS;
 use const T_CLOSE_PARENTHESIS;
 use const T_CLOSE_SHORT_ARRAY;
@@ -13,10 +14,14 @@ use const T_CLOSE_SQUARE_BRACKET;
 use const T_COALESCE;
 use const T_COMMA;
 use const T_DOUBLE_ARROW;
+use const T_DOUBLE_COLON;
 use const T_INLINE_ELSE;
 use const T_INLINE_THEN;
 use const T_NEW;
+use const T_NULLSAFE_OBJECT_OPERATOR;
+use const T_OBJECT_OPERATOR;
 use const T_OPEN_PARENTHESIS;
+use const T_OPEN_SQUARE_BRACKET;
 use const T_SEMICOLON;
 
 class NewWithoutParenthesesSniff implements Sniff
@@ -80,6 +85,21 @@ class NewWithoutParenthesesSniff implements Sniff
 
 		$nextPointer = TokenHelper::findNextNonWhitespace($phpcsFile, $parenthesisOpenerPointer + 1);
 		if ($nextPointer !== $tokens[$parenthesisOpenerPointer]['parenthesis_closer']) {
+			return;
+		}
+
+		$pointerAfterParenthesisCloser = TokenHelper::findNextEffective(
+			$phpcsFile,
+			$tokens[$parenthesisOpenerPointer]['parenthesis_closer'] + 1,
+		);
+		if (
+			$pointerAfterParenthesisCloser !== null
+			&& in_array(
+				$tokens[$pointerAfterParenthesisCloser]['code'],
+				[T_OBJECT_OPERATOR, T_NULLSAFE_OBJECT_OPERATOR, T_DOUBLE_COLON, T_OPEN_SQUARE_BRACKET, T_OPEN_PARENTHESIS],
+				true,
+			)
+		) {
 			return;
 		}
 

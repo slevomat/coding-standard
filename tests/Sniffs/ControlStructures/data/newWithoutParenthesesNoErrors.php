@@ -1,4 +1,4 @@
-<?php // lint >= 8.3
+<?php // lint >= 8.4
 
 $foo = new \DateTimeImmutable;
 
@@ -68,3 +68,13 @@ new WithMultiLineParameters(
 );
 
 new WithComment( /* Comment */ );
+
+new SomeClass()->method();
+new SomeClass()?->method();
+new SomeClass()::staticMethod();
+new SomeClass()[0];
+new SomeClass()();
+new \Full\Qualified\SomeClass()->method();
+new $variable()->method();
+new static()->method();
+new self()->method();
