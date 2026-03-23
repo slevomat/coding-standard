@@ -208,4 +208,21 @@ class UseSpacingSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testNonContiguousBlocks(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/useSpacingNonContiguousBlocks.php',
+			[],
+			[UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_SAME_TYPES_OF_USE],
+		);
+
+		// Error between A and B (contiguous block, can be fixed)
+		self::assertSniffError($report, 6, UseSpacingSniff::CODE_INCORRECT_LINES_COUNT_BETWEEN_SAME_TYPES_OF_USE);
+
+		// No error between B and C - they're in separate blocks now
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
