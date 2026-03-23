@@ -65,7 +65,7 @@ class DNFTypeHintFormatSniff implements Sniff
 
 	public function process(File $phpcsFile, int $pointer): void
 	{
-		$this->enable = SniffSettingsHelper::isEnabledByPhpVersion($this->enable, 80000);
+		$this->enable = SniffSettingsHelper::isEnabledByPhpVersion($this->enable, 71000);
 
 		if (!$this->enable) {
 			return;
@@ -245,8 +245,9 @@ class DNFTypeHintFormatSniff implements Sniff
 		}
 
 		$hasShortNullable = strpos($typeHint->getTypeHint(), '?') === 0;
+		$requiresShortNullable = SniffSettingsHelper::isEnabledByPhpVersion(null, 80000) === false;
 
-		if ($this->shortNullable === self::YES && $typeHintsCount === 2 && !$hasShortNullable) {
+		if (($this->shortNullable === self::YES || $requiresShortNullable) && $typeHintsCount === 2 && !$hasShortNullable) {
 			$fix = $phpcsFile->addFixableError(
 				sprintf('Short nullable type hint in "%s" is required.', $typeHint->getTypeHint()),
 				$typeHint->getStartPointer(),
@@ -256,7 +257,9 @@ class DNFTypeHintFormatSniff implements Sniff
 				$typeHintWithoutNull = self::getTypeHintContentWithoutNull($phpcsFile, $typeHint);
 				$this->fixTypeHint($phpcsFile, $typeHint, '?' . $typeHintWithoutNull);
 			}
-		} elseif ($this->shortNullable === self::NO && $hasShortNullable) {
+
+			$hasShortNullable = true;
+		} elseif ($this->shortNullable === self::NO && $hasShortNullable && !$requiresShortNullable) {
 			$fix = $phpcsFile->addFixableError(
 				sprintf('Usage of short nullable type hint in "%s" is disallowed.', $typeHint->getTypeHint()),
 				$typeHint->getStartPointer(),
@@ -267,7 +270,7 @@ class DNFTypeHintFormatSniff implements Sniff
 			}
 		}
 
-		if ($hasShortNullable || ($this->shortNullable === self::YES && $typeHintsCount === 2)) {
+		if ($hasShortNullable) {
 			return;
 		}
 
