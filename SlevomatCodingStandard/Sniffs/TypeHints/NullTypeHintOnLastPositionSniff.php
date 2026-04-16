@@ -16,6 +16,9 @@ use function sprintf;
 use function strtolower;
 use const T_DOC_COMMENT_OPEN_TAG;
 
+/**
+ * @deprecated Use DNFTypeHintFormatSniff with nullPosition set to 'last' and enableForDocComments set to true, which enforces the same rule for both PHP code and docblocks.
+ */
 class NullTypeHintOnLastPositionSniff implements Sniff
 {
 
