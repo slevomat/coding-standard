@@ -48,6 +48,10 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 
 			$annotationName = $annotation->getName();
 
+			if (in_array($annotationName, $this->ignoredAnnotationNames, true)) {
+				continue;
+			}
+
 			foreach ($identifierTypeNodes as $typeHintNode) {
 				$typeHint = $typeHintNode->name;
 
@@ -58,10 +62,6 @@ class FullyQualifiedClassNameInAnnotationSniff implements Sniff
 					|| !TypeHelper::isTypeName($typeHint)
 					|| TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $docCommentOpenPointer, $typeHint)
 				) {
-					continue;
-				}
-
-				if (in_array($annotationName, $this->ignoredAnnotationNames, true)) {
 					continue;
 				}
 

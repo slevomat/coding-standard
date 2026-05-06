@@ -534,7 +534,7 @@ class FullyQualifiedClassNameInAnnotationSniffTest extends TestCase
 			'ignoredAnnotationNames' => ['@return', '@param', '@var'],
 		]);
 
-		self::assertSame(41, $report->getErrorCount());
+		self::assertSame(37, $report->getErrorCount());
 	}
 
 }
