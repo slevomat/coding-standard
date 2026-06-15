@@ -60,7 +60,9 @@ class RequireTrailingCommaInCallSniff implements Sniff
 
 		$parenthesisCloserPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_closer'];
 
-		if ($tokens[$parenthesisOpenerPointer]['line'] === $tokens[$parenthesisCloserPointer]['line']) {
+		if ($parenthesisCloserPointer === null
+			|| $tokens[$parenthesisOpenerPointer]['line'] === $tokens[$parenthesisCloserPointer]['line']
+		) {
 			return;
 		}
 

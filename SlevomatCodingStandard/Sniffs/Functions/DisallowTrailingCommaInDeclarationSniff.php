@@ -38,7 +38,7 @@ class DisallowTrailingCommaInDeclarationSniff implements Sniff
 			$parenthesisOpenerPointer,
 		);
 
-		if ($tokens[$pointerBeforeParenthesisCloser]['code'] !== T_COMMA) {
+		if ($pointerBeforeParenthesisCloser === null || $tokens[$pointerBeforeParenthesisCloser]['code'] !== T_COMMA) {
 			return;
 		}
 

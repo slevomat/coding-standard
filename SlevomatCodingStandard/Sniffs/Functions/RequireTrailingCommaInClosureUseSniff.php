@@ -48,7 +48,10 @@ class RequireTrailingCommaInClosureUseSniff implements Sniff
 		$useParenthesisOpenerPointer = $tokens[$usePointer]['parenthesis_opener'];
 		$useParenthesisCloserPointer = $tokens[$usePointer]['parenthesis_closer'];
 
-		if ($tokens[$useParenthesisOpenerPointer]['line'] === $tokens[$useParenthesisCloserPointer]['line']) {
+		if ($useParenthesisOpenerPointer === null
+			|| $useParenthesisCloserPointer === null
+			|| $tokens[$useParenthesisOpenerPointer]['line'] === $tokens[$useParenthesisCloserPointer]['line']
+		) {
 			return;
 		}
 
