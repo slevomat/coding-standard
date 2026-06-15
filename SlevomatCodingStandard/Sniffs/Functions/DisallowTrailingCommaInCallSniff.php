@@ -53,7 +53,7 @@ class DisallowTrailingCommaInCallSniff implements Sniff
 		$parenthesisCloserPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_closer'];
 		$pointerBeforeParenthesisCloser = TokenHelper::findPreviousEffective($phpcsFile, $parenthesisCloserPointer - 1);
 
-		if ($tokens[$pointerBeforeParenthesisCloser]['code'] !== T_COMMA) {
+		if ($pointerBeforeParenthesisCloser === null || $tokens[$pointerBeforeParenthesisCloser]['code'] !== T_COMMA) {
 			return;
 		}
 
