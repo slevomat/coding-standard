@@ -735,6 +735,61 @@ class DNFTypeHintFormatSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testDocBlockShortNullableDisallowedNullPositionFirstErrors(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/dnfTypeHintFormatDocBlockShortNullableDisallowedNullPositionFirstErrors.php',
+			[
+				'enable' => true,
+				'enableForDocComments' => true,
+				'shortNullable' => 'no',
+				'nullPosition' => 'first',
+			],
+			[DNFTypeHintFormatSniff::CODE_DISALLOWED_SHORT_NULLABLE],
+		);
+
+		self::assertSame(3, $report->getErrorCount());
+
+		self::assertSniffError(
+			$report,
+			7,
+			DNFTypeHintFormatSniff::CODE_DISALLOWED_SHORT_NULLABLE,
+			'Usage of short nullable type hint in "?string" is disallowed.',
+		);
+		self::assertSniffError(
+			$report,
+			8,
+			DNFTypeHintFormatSniff::CODE_DISALLOWED_SHORT_NULLABLE,
+			'Usage of short nullable type hint in "?int" is disallowed.',
+		);
+		self::assertSniffError(
+			$report,
+			15,
+			DNFTypeHintFormatSniff::CODE_DISALLOWED_SHORT_NULLABLE,
+			'Usage of short nullable type hint in "?bool" is disallowed.',
+		);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testDocBlockEdgeCasesNoErrors(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/dnfTypeHintFormatDocBlockEdgeCasesNoErrors.php',
+			[
+				'enable' => true,
+				'enableForDocComments' => true,
+				'shortNullable' => 'yes',
+				'nullPosition' => 'first',
+			],
+			[
+				DNFTypeHintFormatSniff::CODE_REQUIRED_SHORT_NULLABLE,
+				DNFTypeHintFormatSniff::CODE_NULL_TYPE_HINT_NOT_ON_FIRST_POSITION,
+			],
+		);
+		self::assertNoSniffErrorInFile($report);
+	}
+
 	public function testShouldNotReportDocCommentsIfNotEnabledForDocComments(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/dnfTypeHintFormatDocBlockShortNullableRequiredErrors.php', [
