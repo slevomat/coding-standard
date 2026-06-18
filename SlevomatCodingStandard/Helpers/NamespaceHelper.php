@@ -13,10 +13,12 @@ use function explode;
 use function implode;
 use function ltrim;
 use function min;
+use function preg_match;
 use function sprintf;
 use function strcasecmp;
 use function strcmp;
 use function strpos;
+use function trim;
 use const T_NAME_FULLY_QUALIFIED;
 use const T_NAMESPACE;
 use const T_NS_SEPARATOR;
@@ -146,6 +148,33 @@ class NamespaceHelper
 	public static function normalizeToCanonicalName(string $fullyQualifiedName): string
 	{
 		return ltrim($fullyQualifiedName, self::NAMESPACE_SEPARATOR);
+	}
+
+	/**
+	 * @return array{namespace: string, alias: string}
+	 */
+	public static function parseNamespaceWithAlias(string $namespaceOrAlias): array
+	{
+		$namespaceOrAlias = trim($namespaceOrAlias);
+
+		if ($namespaceOrAlias === '') {
+			return [
+				'namespace' => '',
+				'alias' => '',
+			];
+		}
+
+		$namespace = $namespaceOrAlias;
+		$alias = '';
+		if (preg_match('~^(.+?)\s+as\s+(.+)$~i', $namespaceOrAlias, $matches) === 1) {
+			$namespace = trim($matches[1]);
+			$alias = trim($matches[2]);
+		}
+
+		return [
+			'namespace' => $namespace,
+			'alias' => $alias,
+		];
 	}
 
 	public static function isTypeInNamespace(string $typeName, string $namespace): bool
