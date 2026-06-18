@@ -128,7 +128,9 @@ Sniff provides the following settings:
 * `allowFullyQualifiedGlobalConstants`: allows using fully qualified constants from global space (i.e. `\PHP_VERSION`).
 * `allowFallbackGlobalFunctions`: allows using global functions via fallback name without `use` (i.e. `phpversion()`).
 * `allowFallbackGlobalConstants`: allows using global constants via fallback name without `use` (i.e. `PHP_VERSION`).
-* `allowPartialUses`: allows using and referencing whole namespaces.
+* `allowPartialUses` (default: `true`): allows using and referencing whole namespaces unless a more specific namespace rule applies.
+* `namespacesAllowedToUsePartially`: if set, only namespaces in this list may be referenced partially. Use `Namespace\Name as Alias` when you want to require a specific alias like `use Some\SubNamespace as SubNamespace;`.
+* `namespacesRequiredToUsePartially`: namespaces in this list must be referenced partially. The same `Namespace\Name as Alias` syntax applies when you want to enforce a concrete alias.
 * `allowWhenNoNamespace` (default: `true`): force even when there's no namespace in the file.
 
 #### SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash 🔧

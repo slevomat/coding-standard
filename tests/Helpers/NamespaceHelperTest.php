@@ -382,4 +382,51 @@ class NamespaceHelperTest extends TestCase
 		self::assertFalse(NamespaceHelper::isTypeInNamespace($typeName, $namespace));
 	}
 
+	/**
+	 * @return list<array{0: string, 1: string, 2: string}>
+	 */
+	public static function dataParseNamespaceWithAlias(): array
+	{
+		return [
+			[
+				'Doctrine\ORM',
+				'Doctrine\ORM',
+				'',
+			],
+			[
+				'Doctrine\ORM as ORM',
+				'Doctrine\ORM',
+				'ORM',
+			],
+			[
+				' Symfony\Component\Validator\Constraints as Assert ',
+				'Symfony\Component\Validator\Constraints',
+				'Assert',
+			],
+		];
+	}
+
+	/**
+	 * @dataProvider dataParseNamespaceWithAlias
+	 */
+	#[DataProvider('dataParseNamespaceWithAlias')]
+	public function testParseNamespaceWithAlias(string $setting, string $namespace, string $alias): void
+	{
+		self::assertSame([
+			'namespace' => $namespace,
+			'alias' => $alias,
+		], NamespaceHelper::parseNamespaceWithAlias($setting));
+	}
+
+	public function testParseEmptyNamespaceWithAlias(): void
+	{
+		self::assertSame(
+			[
+				'namespace' => '',
+				'alias' => '',
+			],
+			NamespaceHelper::parseNamespaceWithAlias('   '),
+		);
+	}
+
 }

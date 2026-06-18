@@ -343,6 +343,48 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testAllowPartialUsesOnlyForConfiguredNamespaces(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/partialUsesAllowedNamespaces.php',
+			[
+				'allowPartialUses' => false,
+				'namespacesAllowedToUsePartially' => [
+					'Some\SubNamespace as SubNamespace',
+				],
+			],
+		);
+
+			self::assertSame(1, $report->getErrorCount());
+		self::assertSniffError(
+			$report,
+			17,
+			ReferenceUsedNamesOnlySniff::CODE_PARTIAL_USE,
+			'Partial use statements are not allowed except for Some\SubNamespace as SubNamespace, but referencing SomeFramework\\ObjectPrototype found.',
+		);
+	}
+
+	public function testAllowPartialUsesOnlyForConfiguredNamespacesWithoutAlias(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/partialUsesAllowedNamespaces.php',
+			[
+				'allowPartialUses' => false,
+				'namespacesAllowedToUsePartially' => [
+					'Some\SubNamespace',
+				],
+			],
+		);
+
+		self::assertSame(1, $report->getErrorCount());
+		self::assertSniffError(
+			$report,
+			17,
+			ReferenceUsedNamesOnlySniff::CODE_PARTIAL_USE,
+			'Partial use statements are not allowed except for Some\SubNamespace, but referencing SomeFramework\\ObjectPrototype found.',
+		);
+	}
+
 	/**
 	 * @dataProvider dataIgnoredNamesForIrrelevantTests
 	 * @param list<string> $ignoredNames
@@ -1303,6 +1345,104 @@ class ReferenceUsedNamesOnlySniffTest extends TestCase
 		self::assertSniffError($report, 12, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
 		self::assertSniffError($report, 17, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
 
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testRequirePartialUsesForConfiguredNamespaces(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/referenceUsedNamesOnlyWithSubNamespacesRequiredPartial.php',
+			[
+				'searchAnnotations' => true,
+				'allowPartialUses' => false,
+				'namespacesRequiredToUsePartially' => [
+					'Some\\SubNamespace as SubNamespace',
+				],
+			],
+		);
+
+		self::assertSame(3, $report->getErrorCount());
+		self::assertSniffError($report, 12, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+		self::assertSniffError($report, 17, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testRequirePartialUsesAllowedForConfiguredAlias(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/partialUsesAllowedNamespaces.php',
+			[
+				'allowPartialUses' => false,
+				'namespacesAllowedToUsePartially' => [
+					'Some\SubNamespace as SubNamespace',
+				],
+				'namespacesRequiredToUsePartially' => [
+					'Some\SubNamespace as SubNamespace',
+				],
+			],
+		);
+
+		self::assertSame(1, $report->getErrorCount());
+		self::assertSniffError(
+			$report,
+			17,
+			ReferenceUsedNamesOnlySniff::CODE_PARTIAL_USE,
+			'Partial use statements are not allowed except for Some\SubNamespace as SubNamespace, but referencing SomeFramework\\ObjectPrototype found.',
+		);
+	}
+
+	public function testRequirePartialUsesSkipsNonMatchingNamespaces(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/referenceUsedNamesOnlyWithSubNamespacesRequiredPartial.php',
+			[
+				'searchAnnotations' => true,
+				'allowPartialUses' => false,
+				'namespacesRequiredToUsePartially' => [
+					'Other\\Namespace as OtherNamespace',
+					'Some\\SubNamespace as SubNamespace',
+				],
+			],
+		);
+
+		self::assertSame(3, $report->getErrorCount());
+		self::assertSniffError($report, 12, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+		self::assertSniffError($report, 17, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testRequirePartialUsesForExactNamespace(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/referenceUsedNamesOnlyWithRequiredPartialExact.php',
+			[
+				'allowPartialUses' => false,
+				'namespacesRequiredToUsePartially' => [
+					'Some\\SubNamespace',
+				],
+			],
+		);
+
+		self::assertSame(1, $report->getErrorCount());
+		self::assertSniffError($report, 10, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testRequirePartialUsesForConfiguredAlias(): void
+	{
+		$report = self::checkFile(
+			__DIR__ . '/data/referenceUsedNamesOnlyWithRequiredPartialAlias.php',
+			[
+				'allowPartialUses' => false,
+				'namespacesRequiredToUsePartially' => [
+					'Some\SubNamespace as SubNamespace',
+				],
+			],
+		);
+
+		self::assertSame(2, $report->getErrorCount());
+		self::assertSniffError($report, 10, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
+		self::assertSniffError($report, 11, ReferenceUsedNamesOnlySniff::CODE_REFERENCE_VIA_FULLY_QUALIFIED_NAME);
 		self::assertAllFixedInFile($report);
 	}
 
