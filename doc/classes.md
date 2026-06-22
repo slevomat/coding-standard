@@ -232,6 +232,12 @@ Sniff provides the following settings:
 * `minLinesCountBeforeMultiline` (default: `null`): minimum number of lines before multiline property
 * `maxLinesCountBeforeMultiline` (default: `null`): maximum number of lines before multiline property
 
+#### SlevomatCodingStandard.Classes.ReadonlyClass 🔧
+
+Reports classes where all promoted constructor properties are declared as `readonly` and suggests marking the whole class as `readonly`.
+
+In readonly classes, promoted constructor properties must not be explicitly declared as `readonly`.
+
 #### SlevomatCodingStandard.Classes.RequireAbstractOrFinal 🔧
 
 Requires the class to be declared either as abstract or as final.
