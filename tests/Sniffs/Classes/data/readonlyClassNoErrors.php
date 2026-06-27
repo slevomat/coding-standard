@@ -22,3 +22,16 @@ class PromotedReadonlyWithNonReadonlyBodyProperty
     {
     }
 }
+
+class ChildClassWithAllReadonlyProperties extends ParentClass
+{
+    public function __construct(private readonly int $id, private readonly string $name)
+    {
+    }
+}
+
+class ChildClassWithReadonlyBodyProperties extends ParentClass
+{
+    private readonly int $id;
+    public readonly string $name;
+}
