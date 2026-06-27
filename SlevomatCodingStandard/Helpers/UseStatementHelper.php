@@ -163,13 +163,43 @@ class UseStatementHelper
 			$namespaceAndOpenTagPointers = TokenHelper::findNextAll($phpcsFile, [T_OPEN_TAG, T_NAMESPACE], 0);
 			$openTagPointer = $namespaceAndOpenTagPointers[0];
 
+			$currentBlockKey = null;
+			$previousSemicolon = null;
+
 			foreach (self::getUseStatementPointers($phpcsFile, $openTagPointer) as $usePointer) {
-				$pointerBeforeUseStatements = $openTagPointer;
+				// Get base key (namespace or open tag before this use)
+				$basePointerBeforeUse = $openTagPointer;
 				if (count($namespaceAndOpenTagPointers) > 1) {
 					foreach (array_reverse($namespaceAndOpenTagPointers) as $namespaceAndOpenTagPointer) {
 						if ($namespaceAndOpenTagPointer < $usePointer) {
-							$pointerBeforeUseStatements = $namespaceAndOpenTagPointer;
+							$basePointerBeforeUse = $namespaceAndOpenTagPointer;
 							break;
+						}
+					}
+				}
+
+				// Determine block key: start new block if namespace changed or if there's code between uses
+				if ($currentBlockKey === null || $basePointerBeforeUse > $currentBlockKey) {
+					// First use or crossed namespace boundary
+					$currentBlockKey = $basePointerBeforeUse;
+					$previousSemicolon = null;
+				} elseif ($previousSemicolon !== null) {
+					// Check for non-contiguous block:
+					// - Effective code (not comments) between uses always means separate blocks
+					// - Comments with a blank line before the use indicate intentional separation
+					$effectiveToken = TokenHelper::findNextEffective($phpcsFile, $previousSemicolon + 1, $usePointer);
+					if ($effectiveToken !== null) {
+						$currentBlockKey = $previousSemicolon;
+					} else {
+						// No effective code, but check if there's a blank line before this use
+						// (indicating the use is intentionally separated, even if only by comments)
+						$pointerBeforeUse = TokenHelper::findPreviousNonWhitespace($phpcsFile, $usePointer - 1);
+						if (
+							$pointerBeforeUse !== null
+							&& $pointerBeforeUse !== $previousSemicolon
+							&& $tokens[$usePointer]['line'] - $tokens[$pointerBeforeUse]['line'] > 1
+						) {
+							$currentBlockKey = $previousSemicolon;
 						}
 					}
 				}
@@ -191,7 +221,10 @@ class UseStatementHelper
 					$type,
 					self::getAlias($phpcsFile, $usePointer),
 				);
-				$useStatements[$pointerBeforeUseStatements][UseStatement::getUniqueId($type, $name)] = $useStatement;
+				$useStatements[$currentBlockKey][UseStatement::getUniqueId($type, $name)] = $useStatement;
+
+				// Track semicolon for next iteration
+				$previousSemicolon = TokenHelper::findNext($phpcsFile, T_SEMICOLON, $usePointer + 1);
 			}
 
 			return $useStatements;
