@@ -18,6 +18,7 @@ use const T_ABSTRACT;
 use const T_ATTRIBUTE_END;
 use const T_CLASS;
 use const T_COMMA;
+use const T_EXTENDS;
 use const T_FINAL;
 use const T_FUNCTION;
 use const T_OPEN_PARENTHESIS;
@@ -122,6 +123,10 @@ class ReadonlyClassSniff implements Sniff
 			if ($classBodyProperty['readonlyModifierPointer'] === null) {
 				return;
 			}
+		}
+
+		if ($this->classExtendsAnotherClass($phpcsFile, $classPointer)) {
+			return;
 		}
 
 		$fix = $phpcsFile->addFixableError(
@@ -274,6 +279,12 @@ class ReadonlyClassSniff implements Sniff
 		}
 
 		return $classBodyProperties;
+	}
+
+	private function classExtendsAnotherClass(File $phpcsFile, int $classPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+		return TokenHelper::findNext($phpcsFile, T_EXTENDS, $classPointer + 1, $tokens[$classPointer]['scope_opener']) !== null;
 	}
 
 	private function removeReadonlyModifier(File $phpcsFile, int $readonlyModifierPointer): void
