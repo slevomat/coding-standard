@@ -66,6 +66,35 @@ class ReadonlyClassSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testModifiedSettingsErrors(): void
+	{
+		$this->skipIfReadonlyClassIsNotSupported();
+		$report = self::checkFile(__DIR__ . '/data/readonlyClassModifiedSettingsErrors.php', [
+			'allowNonFinalClasses' => true,
+			'ignoreTraits' => true,
+		]);
+		self::assertSame(3, $report->getErrorCount());
+		self::assertSniffError(
+			$report,
+			10,
+			ReadonlyClassSniff::CODE_CLASS_CAN_BE_READONLY,
+			'Class NonFinalCandidate can be marked as readonly.',
+		);
+		self::assertSniffError(
+			$report,
+			17,
+			ReadonlyClassSniff::CODE_CLASS_CAN_BE_READONLY,
+			'Class FinalWithTraitCandidate can be marked as readonly.',
+		);
+		self::assertSniffError(
+			$report,
+			26,
+			ReadonlyClassSniff::CODE_CLASS_CAN_BE_READONLY,
+			'Class NonFinalWithTraitCandidate can be marked as readonly.',
+		);
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testFindConstructorPointerBranchesNoErrors(): void
 	{
 		$this->skipIfReadonlyClassIsNotSupported();

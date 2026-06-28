@@ -236,7 +236,12 @@ Sniff provides the following settings:
 
 Reports classes where all promoted constructor properties and class body properties are declared as `readonly` and suggests marking the whole class as `readonly`.
 
-Suggestion is reported only for classes that are `final`, do not `extends` another class, do not use traits, and do not have `#[\AllowDynamicProperties]`.
+Suggestion is reported only for classes that do not `extends` another class and do not have `#[\AllowDynamicProperties]`.
+
+Sniff provides the following settings:
+
+* `allowNonFinalClasses` (default: `false`): allows suggesting `readonly` also for non-final classes.
+* `ignoreTraits` (default: `false`): ignores trait usage when evaluating whether class can be marked as `readonly`.
 
 In readonly classes, promoted constructor properties must not be explicitly declared as `readonly`.
 
