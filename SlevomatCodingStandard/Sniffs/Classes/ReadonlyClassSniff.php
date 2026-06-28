@@ -36,6 +36,10 @@ class ReadonlyClassSniff implements Sniff
 
 	public ?bool $enable = null;
 
+	public bool $allowNonFinalClasses = false;
+
+	public bool $ignoreTraits = false;
+
 	/**
 	 * @return array<int, (int|string)>
 	 */
@@ -126,12 +130,19 @@ class ReadonlyClassSniff implements Sniff
 			}
 		}
 
-		if (
-			!ClassHelper::isFinal($phpcsFile, $classPointer)
-			|| $this->classExtendsAnotherClass($phpcsFile, $classPointer)
-			|| count(ClassHelper::getTraitUsePointers($phpcsFile, $classPointer)) > 0
-			|| AttributeHelper::hasAttribute($phpcsFile, $classPointer, '\AllowDynamicProperties')
-		) {
+		if (!$this->allowNonFinalClasses && !ClassHelper::isFinal($phpcsFile, $classPointer)) {
+			return;
+		}
+
+		if ($this->classExtendsAnotherClass($phpcsFile, $classPointer)) {
+			return;
+		}
+
+		if (!$this->ignoreTraits && count(ClassHelper::getTraitUsePointers($phpcsFile, $classPointer)) > 0) {
+			return;
+		}
+
+		if (AttributeHelper::hasAttribute($phpcsFile, $classPointer, '\AllowDynamicProperties')) {
 			return;
 		}
 
