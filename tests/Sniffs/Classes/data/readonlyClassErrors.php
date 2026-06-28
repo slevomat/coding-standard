@@ -59,3 +59,25 @@ readonly class InvalidReadonlyWithBodyProperty
     {
     }
 }
+
+readonly class InvalidReadonlyWithBodyProperty extends InvalidReadonly
+{
+	private readonly int $extra;
+
+	public function __construct(private int $id)
+	{
+	}
+}
+
+final class FinalExtendingCandidate extends ParentClass
+{
+	public function __construct(private readonly int $id, private readonly string $name)
+	{
+	}
+}
+
+final class FinalWithBodyPropertiesCandidate
+{
+	private readonly int $id;
+	public readonly string $name;
+}

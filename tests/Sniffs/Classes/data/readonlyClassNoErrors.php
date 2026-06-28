@@ -35,3 +35,25 @@ class ChildClassWithReadonlyBodyProperties extends ParentClass
     private readonly int $id;
     public readonly string $name;
 }
+
+trait TraitWithMutableProperty
+{
+	public int $traitProperty;
+}
+
+final class FinalClassUsingTrait
+{
+	use TraitWithMutableProperty;
+
+	public function __construct(private readonly int $id)
+	{
+	}
+}
+
+#[\AllowDynamicProperties]
+final class FinalClassWithAllowDynamicProperties
+{
+	public function __construct(private readonly int $id)
+	{
+	}
+}

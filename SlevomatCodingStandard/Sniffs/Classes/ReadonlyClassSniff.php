@@ -4,6 +4,7 @@ namespace SlevomatCodingStandard\Sniffs\Classes;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use SlevomatCodingStandard\Helpers\AttributeHelper;
 use SlevomatCodingStandard\Helpers\ClassHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
@@ -125,7 +126,12 @@ class ReadonlyClassSniff implements Sniff
 			}
 		}
 
-		if ($this->classExtendsAnotherClass($phpcsFile, $classPointer)) {
+		if (
+			!ClassHelper::isFinal($phpcsFile, $classPointer)
+			|| $this->classExtendsAnotherClass($phpcsFile, $classPointer)
+			|| count(ClassHelper::getTraitUsePointers($phpcsFile, $classPointer)) > 0
+			|| AttributeHelper::hasAttribute($phpcsFile, $classPointer, '\AllowDynamicProperties')
+		) {
 			return;
 		}
 

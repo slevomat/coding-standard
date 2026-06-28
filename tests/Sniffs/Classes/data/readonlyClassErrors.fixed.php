@@ -1,10 +1,10 @@
 <?php // lint >= 8.2
 
-readonly class Candidate
+class Candidate
 {
     public function __construct(
-		private int $id,
-		public string $name,
+		private readonly int $id,
+		public readonly string $name,
 	)
     {
     }
@@ -27,24 +27,24 @@ final readonly class FinalCandidate
     }
 }
 
-readonly class WithBodyPropertiesCandidate
+class WithBodyPropertiesCandidate
 {
-    private int $id;
-    public string $name;
+    private readonly int $id;
+    public readonly string $name;
 }
 
-readonly class MixedPropertiesCandidate
+class MixedPropertiesCandidate
 {
-    private string $extra;
+    private readonly string $extra;
 
-    public function __construct(private int $id)
+    public function __construct(private readonly int $id)
     {
     }
 }
 
-readonly class WithoutPromotion
+class WithoutPromotion
 {
-    private int $id;
+    private readonly int $id;
     public function __construct(int $id)
     {
         $this->id = $id;
@@ -58,4 +58,26 @@ readonly class InvalidReadonlyWithBodyProperty
     public function __construct(private int $id)
     {
     }
+}
+
+readonly class InvalidReadonlyWithBodyProperty extends InvalidReadonly
+{
+	private int $extra;
+
+	public function __construct(private int $id)
+	{
+	}
+}
+
+final class FinalExtendingCandidate extends ParentClass
+{
+	public function __construct(private readonly int $id, private readonly string $name)
+	{
+	}
+}
+
+final readonly class FinalWithBodyPropertiesCandidate
+{
+	private int $id;
+	public string $name;
 }
