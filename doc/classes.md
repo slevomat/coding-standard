@@ -234,7 +234,9 @@ Sniff provides the following settings:
 
 #### SlevomatCodingStandard.Classes.ReadonlyClass 🔧
 
-Reports classes where all promoted constructor properties are declared as `readonly` and suggests marking the whole class as `readonly`.
+Reports classes where all promoted constructor properties and class body properties are declared as `readonly` and suggests marking the whole class as `readonly`.
+
+Suggestion is reported only for classes that are `final`, do not `extends` another class, do not use traits, and do not have `#[\AllowDynamicProperties]`.
 
 In readonly classes, promoted constructor properties must not be explicitly declared as `readonly`.
 

@@ -19,8 +19,7 @@ class ReadonlyClassSniffTest extends TestCase
 	{
 		$this->skipIfReadonlyClassIsNotSupported();
 		$report = self::checkFile(__DIR__ . '/data/readonlyClassErrors.php');
-		self::assertSame(8, $report->getErrorCount());
-		self::assertSniffError($report, 3, ReadonlyClassSniff::CODE_CLASS_CAN_BE_READONLY, 'Class Candidate can be marked as readonly.');
+		self::assertSame(6, $report->getErrorCount());
 		self::assertSniffError(
 			$report,
 			16,
@@ -41,27 +40,21 @@ class ReadonlyClassSniffTest extends TestCase
 		);
 		self::assertSniffError(
 			$report,
-			30,
-			ReadonlyClassSniff::CODE_CLASS_CAN_BE_READONLY,
-			'Class WithBodyPropertiesCandidate can be marked as readonly.',
-		);
-		self::assertSniffError(
-			$report,
-			36,
-			ReadonlyClassSniff::CODE_CLASS_CAN_BE_READONLY,
-			'Class MixedPropertiesCandidate can be marked as readonly.',
-		);
-		self::assertSniffError(
-			$report,
-			45,
-			ReadonlyClassSniff::CODE_CLASS_CAN_BE_READONLY,
-			'Class WithoutPromotion can be marked as readonly.',
-		);
-		self::assertSniffError(
-			$report,
 			56,
 			ReadonlyClassSniff::CODE_PROMOTED_PROPERTY_CANNOT_BE_READONLY_IN_READONLY_CLASS,
 			'Property $extra in readonly class cannot be declared as readonly.',
+		);
+		self::assertSniffError(
+			$report,
+			65,
+			ReadonlyClassSniff::CODE_PROMOTED_PROPERTY_CANNOT_BE_READONLY_IN_READONLY_CLASS,
+			'Property $extra in readonly class cannot be declared as readonly.',
+		);
+		self::assertSniffError(
+			$report,
+			79,
+			ReadonlyClassSniff::CODE_CLASS_CAN_BE_READONLY,
+			'Class FinalWithBodyPropertiesCandidate can be marked as readonly.',
 		);
 		self::assertAllFixedInFile($report);
 	}
