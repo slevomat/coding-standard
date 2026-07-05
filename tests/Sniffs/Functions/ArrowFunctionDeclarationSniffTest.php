@@ -151,4 +151,40 @@ class ArrowFunctionDeclarationSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testDisallowReturnTypeHintErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/arrowFunctionDeclarationDisallowReturnTypeHintErrors.php', [
+			'disallowReturnTypeHint' => true,
+		]);
+
+		self::assertSame(4, $report->getErrorCount());
+
+		self::assertSniffError(
+			$report,
+			3,
+			ArrowFunctionDeclarationSniff::CODE_DISALLOWED_RETURN_TYPE_HINT,
+			'Arrow function must not have return type hint.',
+		);
+		self::assertSniffError(
+			$report,
+			5,
+			ArrowFunctionDeclarationSniff::CODE_DISALLOWED_RETURN_TYPE_HINT,
+			'Arrow function must not have return type hint.',
+		);
+		self::assertSniffError(
+			$report,
+			7,
+			ArrowFunctionDeclarationSniff::CODE_DISALLOWED_RETURN_TYPE_HINT,
+			'Arrow function must not have return type hint.',
+		);
+		self::assertSniffError(
+			$report,
+			9,
+			ArrowFunctionDeclarationSniff::CODE_DISALLOWED_RETURN_TYPE_HINT,
+			'Arrow function must not have return type hint.',
+		);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
