@@ -10,6 +10,7 @@ Sniff provides the following settings:
 * `spacesCountBeforeArrow`: the number of spaces before `=>`.
 * `spacesCountAfterArrow`: the number of spaces after `=>`.
 * `allowMultiLine`: allows multi-line declaration.
+* `disallowReturnTypeHint` (default: `false`): disallows return type hints in arrow functions.
 
 #### SlevomatCodingStandard.Functions.DisallowArrowFunction
 

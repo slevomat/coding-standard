@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Sniffs\Functions;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\FixerHelper;
+use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function preg_match;
@@ -21,6 +22,7 @@ class ArrowFunctionDeclarationSniff implements Sniff
 	public const CODE_INCORRECT_SPACES_AFTER_KEYWORD = 'IncorrectSpacesAfterKeyword';
 	public const CODE_INCORRECT_SPACES_BEFORE_ARROW = 'IncorrectSpacesBeforeArrow';
 	public const CODE_INCORRECT_SPACES_AFTER_ARROW = 'IncorrectSpacesAfterArrow';
+	public const CODE_DISALLOWED_RETURN_TYPE_HINT = 'DisallowedReturnTypeHint';
 
 	public int $spacesCountAfterKeyword = 1;
 
@@ -29,6 +31,8 @@ class ArrowFunctionDeclarationSniff implements Sniff
 	public int $spacesCountAfterArrow = 1;
 
 	public bool $allowMultiLine = false;
+
+	public bool $disallowReturnTypeHint = false;
 
 	/**
 	 * @return array<int, (int|string)>
@@ -50,8 +54,44 @@ class ArrowFunctionDeclarationSniff implements Sniff
 
 		$arrowPointer = TokenHelper::findNext($phpcsFile, T_FN_ARROW, $arrowFunctionPointer);
 
+		$this->checkReturnTypeHint($phpcsFile, $arrowFunctionPointer, $arrowPointer);
+
 		$this->checkSpacesBeforeArrow($phpcsFile, $arrowPointer);
 		$this->checkSpacesAfterArrow($phpcsFile, $arrowPointer);
+	}
+
+	private function checkReturnTypeHint(File $phpcsFile, int $arrowFunctionPointer, int $arrowPointer): void
+	{
+		if (!$this->disallowReturnTypeHint) {
+			return;
+		}
+
+		$returnTypeHint = FunctionHelper::findReturnTypeHint($phpcsFile, $arrowFunctionPointer);
+		if ($returnTypeHint === null) {
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError(
+			'Arrow function must not have return type hint.',
+			$returnTypeHint->getStartPointer(),
+			self::CODE_DISALLOWED_RETURN_TYPE_HINT,
+		);
+		if (!$fix) {
+			return;
+		}
+
+		$colonPointer = TokenHelper::findPreviousEffective($phpcsFile, $returnTypeHint->getStartPointer() - 1);
+
+		$pointerBeforeColon = TokenHelper::findPreviousEffective($phpcsFile, $colonPointer - 1);
+
+		$phpcsFile->fixer->beginChangeset();
+		FixerHelper::removeBetween($phpcsFile, $pointerBeforeColon, $arrowPointer);
+
+		if ($this->spacesCountBeforeArrow > 0) {
+			FixerHelper::addBefore($phpcsFile, $arrowPointer, str_repeat(' ', $this->spacesCountBeforeArrow));
+		}
+
+		$phpcsFile->fixer->endChangeset();
 	}
 
 	private function checkSpacesAfterKeyword(File $phpcsFile, int $arrowFunctionPointer): void
