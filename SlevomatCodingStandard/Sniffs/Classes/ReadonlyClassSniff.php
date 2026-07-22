@@ -130,6 +130,10 @@ class ReadonlyClassSniff implements Sniff
 			}
 		}
 
+		if ($this->isAbstractClass($phpcsFile, $classPointer)) {
+			return;
+		}
+
 		if (!$this->allowNonFinalClasses && !ClassHelper::isFinal($phpcsFile, $classPointer)) {
 			return;
 		}
@@ -204,6 +208,24 @@ class ReadonlyClassSniff implements Sniff
 			&& in_array($tokens[$modifierPointer]['code'], [T_FINAL, T_ABSTRACT, T_READONLY], true)
 		) {
 			if ($tokens[$modifierPointer]['code'] === T_READONLY) {
+				return true;
+			}
+
+			$modifierPointer = TokenHelper::findPreviousEffective($phpcsFile, $modifierPointer - 1);
+		}
+
+		return false;
+	}
+
+	private function isAbstractClass(File $phpcsFile, int $classPointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+		$modifierPointer = TokenHelper::findPreviousEffective($phpcsFile, $classPointer - 1);
+		while (
+			$modifierPointer !== null
+			&& in_array($tokens[$modifierPointer]['code'], [T_FINAL, T_ABSTRACT, T_READONLY], true)
+		) {
+			if ($tokens[$modifierPointer]['code'] === T_ABSTRACT) {
 				return true;
 			}
 

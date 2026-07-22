@@ -31,3 +31,15 @@ class NonFinalWithTraitCandidate
 	{
 	}
 }
+
+abstract class AbstractWithPromotedProperties
+{
+	public function __construct(private readonly int $id)
+	{
+	}
+}
+
+abstract class AbstractWithBodyProperties
+{
+	private readonly int $id;
+}
