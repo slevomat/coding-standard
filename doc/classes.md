@@ -236,7 +236,7 @@ Sniff provides the following settings:
 
 Reports classes where all promoted constructor properties and class body properties are declared as `readonly` and suggests marking the whole class as `readonly`.
 
-Suggestion is reported only for classes that do not `extends` another class and do not have `#[\AllowDynamicProperties]`.
+Suggestion is reported only for non-abstract classes that do not `extends` another class and do not have `#[\AllowDynamicProperties]`.
 
 Sniff provides the following settings:
 
