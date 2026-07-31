@@ -90,6 +90,15 @@ class ParentCallSpacingSniff extends AbstractControlStructureSpacing
 		return $this->linesCountBefore;
 	}
 
+	protected function getControlStructureStartPointer(File $phpcsFile, int $parentPointer): int
+	{
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $parentPointer - 1);
+
+		return $phpcsFile->getTokens()[$previousPointer]['code'] === T_ASPERAND
+			? $previousPointer
+			: $parentPointer;
+	}
+
 	/**
 	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
 	 */

@@ -88,4 +88,13 @@ class X extends Whatever
 		};
 	}
 
+	public function r()
+	{
+		echo 'wow';
+
+		@parent::r();
+
+		echo 'wow';
+	}
+
 }

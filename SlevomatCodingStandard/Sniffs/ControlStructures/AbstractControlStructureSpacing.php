@@ -132,9 +132,8 @@ abstract class AbstractControlStructureSpacing implements Sniff
 			}
 		}
 
-		$nonWhitespacePointerBefore = TokenHelper::findPreviousNonWhitespace($phpcsFile, $controlStructurePointer - 1);
-
-		$controlStructureStartPointer = $controlStructurePointer;
+		$controlStructureStartPointer = $this->getControlStructureStartPointer($phpcsFile, $controlStructurePointer);
+		$nonWhitespacePointerBefore = TokenHelper::findPreviousNonWhitespace($phpcsFile, $controlStructureStartPointer - 1);
 		$pointerBefore = $nonWhitespacePointerBefore;
 
 		$pointerToCheckFirst = $pointerBefore;
@@ -226,6 +225,14 @@ abstract class AbstractControlStructureSpacing implements Sniff
 		}
 
 		$phpcsFile->fixer->endChangeset();
+	}
+
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
+	 */
+	protected function getControlStructureStartPointer(File $phpcsFile, int $controlStructurePointer): int
+	{
+		return $controlStructurePointer;
 	}
 
 	protected function checkLinesAfter(File $phpcsFile, int $controlStructurePointer): void
