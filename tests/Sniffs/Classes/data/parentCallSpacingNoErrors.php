@@ -97,4 +97,16 @@ class X extends Whatever
 		echo 'wow';
 	}
 
+	public function s()
+	{
+		yield 'key' => parent::s();
+	}
+
+	public function t()
+	{
+		return [
+			'parent' => parent::t(),
+		];
+	}
+
 }
