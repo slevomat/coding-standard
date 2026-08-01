@@ -14,7 +14,7 @@ function () {
 	}
 
 	while (
-		doSomething('veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy long')
+		doSomething('veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy long')
 		&& true
 	) {
 
@@ -23,7 +23,7 @@ function () {
 	do {
 
 	} while (
-		doSomething('veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy long')
+		doSomething('veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy long')
 		&& true
 	);
 
@@ -33,3 +33,25 @@ function () {
 
 	}
 };
+
+if (
+	doSomething('veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy long')
+) {
+
+}
+
+if (
+	doSomething(
+		'short',
+		[
+			'short',
+			'short'
+		],
+		[
+			'veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy',
+			'long',
+		]
+	)
+) {
+
+}

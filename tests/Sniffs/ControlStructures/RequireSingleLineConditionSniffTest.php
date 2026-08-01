@@ -17,7 +17,7 @@ class RequireSingleLineConditionSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireSingleLineConditionErrors.php');
 
-		self::assertSame(5, $report->getErrorCount());
+		self::assertSame(7, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -46,6 +46,18 @@ class RequireSingleLineConditionSniffTest extends TestCase
 		self::assertSniffError(
 			$report,
 			30,
+			RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION,
+			'Condition of "if" should be placed on a single line.',
+		);
+		self::assertSniffError(
+			$report,
+			37,
+			RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION,
+			'Condition of "if" should be placed on a single line.',
+		);
+		self::assertSniffError(
+			$report,
+			43,
 			RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION,
 			'Condition of "if" should be placed on a single line.',
 		);
