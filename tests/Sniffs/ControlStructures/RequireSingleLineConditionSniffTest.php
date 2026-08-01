@@ -116,4 +116,33 @@ class RequireSingleLineConditionSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testMaxLineLengthErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireSingleLineConditionMaxLineLengthErrors.php', [
+			'maxLineLength' => 80,
+		]);
+
+		self::assertSame(3, $report->getErrorCount());
+
+		self::assertSniffError($report, 4, RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION);
+		self::assertSniffError($report, 18, RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION);
+		self::assertSniffError($report, 24, RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testMaxLineLengthWithoutSimpleConditionsErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireSingleLineConditionMaxLineLengthWithoutSimpleConditionsErrors.php', [
+			'maxLineLength' => 80,
+			'alwaysForSimpleConditions' => false,
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 4, RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
