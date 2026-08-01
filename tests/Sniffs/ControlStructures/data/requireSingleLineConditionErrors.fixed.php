@@ -7,15 +7,23 @@ function () {
 
 	}
 
-	while (doSomething('veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy long') && true) {
+	while (doSomething('veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy long') && true) {
 
 	}
 
 	do {
 
-	} while (doSomething('veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy long') && true);
+	} while (doSomething('veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy long') && true);
 
 	if (doSomething('')) { // Very looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong fucking comment
 
 	}
 };
+
+if (doSomething('veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy long')) {
+
+}
+
+if (doSomething( 'short', [ 'short', 'short' ], [ 'veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy', 'long', ] )) {
+
+}

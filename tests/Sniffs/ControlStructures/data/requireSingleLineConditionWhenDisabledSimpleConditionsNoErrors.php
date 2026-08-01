@@ -1,7 +1,23 @@
 <?php
 
 if (
-	doSomething('veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy long')
+	doSomething('veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy long')
+) {
+
+}
+
+if (
+	doSomething(
+		'short',
+		[
+			'short',
+			'short'
+		],
+		[
+			'veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy',
+			'long',
+		]
+	)
 ) {
 
 }

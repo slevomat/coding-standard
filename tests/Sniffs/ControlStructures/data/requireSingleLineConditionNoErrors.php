@@ -5,6 +5,13 @@ function () {
 
 	}
 
+	if (
+		doSomething('veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy long')
+		&& true
+	) {
+
+	}
+
 	while (doSomething('short') && true) {
 
 	}

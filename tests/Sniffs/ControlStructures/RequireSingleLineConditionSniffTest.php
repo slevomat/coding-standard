@@ -17,7 +17,7 @@ class RequireSingleLineConditionSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireSingleLineConditionErrors.php');
 
-		self::assertSame(5, $report->getErrorCount());
+		self::assertSame(7, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -46,6 +46,18 @@ class RequireSingleLineConditionSniffTest extends TestCase
 		self::assertSniffError(
 			$report,
 			30,
+			RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION,
+			'Condition of "if" should be placed on a single line.',
+		);
+		self::assertSniffError(
+			$report,
+			37,
+			RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION,
+			'Condition of "if" should be placed on a single line.',
+		);
+		self::assertSniffError(
+			$report,
+			43,
 			RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION,
 			'Condition of "if" should be placed on a single line.',
 		);
@@ -102,6 +114,35 @@ class RequireSingleLineConditionSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireSingleLineConditionLiveCoding.php');
 		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testMaxLineLengthErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireSingleLineConditionMaxLineLengthErrors.php', [
+			'maxLineLength' => 80,
+		]);
+
+		self::assertSame(3, $report->getErrorCount());
+
+		self::assertSniffError($report, 4, RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION);
+		self::assertSniffError($report, 18, RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION);
+		self::assertSniffError($report, 24, RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testMaxLineLengthWithoutSimpleConditionsErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireSingleLineConditionMaxLineLengthWithoutSimpleConditionsErrors.php', [
+			'maxLineLength' => 80,
+			'alwaysForSimpleConditions' => false,
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 4, RequireSingleLineConditionSniff::CODE_REQUIRED_SINGLE_LINE_CONDITION);
+
+		self::assertAllFixedInFile($report);
 	}
 
 }
