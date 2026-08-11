@@ -9,6 +9,7 @@ use function array_values;
 use function count;
 use function in_array;
 use function is_array;
+use function strtolower;
 use function token_get_all;
 use const T_ANON_CLASS;
 use const T_ARRAY;
@@ -23,6 +24,7 @@ use const T_COLON;
 use const T_COMMA;
 use const T_CONST;
 use const T_DECLARE;
+use const T_DOUBLE_ARROW;
 use const T_DOUBLE_COLON;
 use const T_DOUBLE_QUOTED_STRING;
 use const T_ELLIPSIS;
@@ -40,6 +42,7 @@ use const T_NS_SEPARATOR;
 use const T_NULLABLE;
 use const T_NULLSAFE_OBJECT_OPERATOR;
 use const T_OBJECT_OPERATOR;
+use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_OPEN_TAG;
@@ -254,6 +257,11 @@ class ReferencedNameHelper
 	{
 		$tokens = $phpcsFile->getTokens();
 
+		if (self::isPropertyHookName($phpcsFile, $startPointer)) {
+			// PHP 8.4 property hook keywords ("get"/"set") are not name references.
+			return false;
+		}
+
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $startPointer + 1);
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $startPointer - 1);
 
@@ -347,6 +355,54 @@ class ReferencedNameHelper
 		}
 
 		return true;
+	}
+
+	private static function isPropertyHookName(File $phpcsFile, int $pointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$lowercasedName = strtolower($tokens[$pointer]['content']);
+		if ($lowercasedName !== 'get' && $lowercasedName !== 'set') {
+			return false;
+		}
+
+		// A property hook is declared as "get => ...", "set => ...", "get { ... }",
+		// "set { ... }" or "set(...) ...". A "get"/"set" used as a value (e.g. a
+		// constant of that name) is followed by something else and is not a hook.
+		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
+		if (
+			$nextPointer === null
+			|| !in_array(
+				$tokens[$nextPointer]['code'],
+				[T_DOUBLE_ARROW, T_OPEN_CURLY_BRACKET, T_OPEN_PARENTHESIS],
+				true,
+			)
+		) {
+			return false;
+		}
+
+		// The name must sit directly inside a property hook list, i.e. the nearest
+		// enclosing curly bracket must be a bracket pair (property hook lists are
+		// not scopes, unlike function/match bodies) that immediately follows the
+		// property variable. This excludes array keys, match arms and method bodies.
+		$enclosingPointer = $pointer;
+		do {
+			$enclosingPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_CURLY_BRACKET, $enclosingPointer - 1);
+			if ($enclosingPointer === null) {
+				return false;
+			}
+
+			$closerPointer = $tokens[$enclosingPointer]['bracket_closer']
+				?? $tokens[$enclosingPointer]['scope_closer']
+				?? null;
+		} while ($closerPointer === null || $closerPointer < $pointer);
+
+		if (array_key_exists('scope_condition', $tokens[$enclosingPointer])) {
+			return false;
+		}
+
+		$beforeEnclosingPointer = TokenHelper::findPreviousEffective($phpcsFile, $enclosingPointer - 1);
+		return $tokens[$beforeEnclosingPointer]['code'] === T_VARIABLE;
 	}
 
 	/**
