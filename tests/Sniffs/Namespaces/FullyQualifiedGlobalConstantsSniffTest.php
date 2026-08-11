@@ -87,4 +87,14 @@ class FullyQualifiedGlobalConstantsSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testPropertyHooksAreNotReportedAsConstants(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsPropertyHooks.php');
+
+		self::assertNoSniffErrorInFile($report);
+		self::assertNoSniffWarningInFile($report);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
