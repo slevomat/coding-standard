@@ -35,7 +35,7 @@ Disallows usage of "mixed" type hint in phpDocs.
 
 #### SlevomatCodingStandard.TypeHints.DNFTypeHintFormat 🔧
 
-Checks format of DNF type hints. The same checks can also be applied to type hints inside `@param`, `@return`, `@var`, `@property` and `@property-read` annotations by enabling `enableForDocComments`.
+Checks format of DNF type hints. The same checks can also be applied to type hints inside all doc-comment annotations, including `@param`, `@return`, `@var`, `@property`, `@property-read`, `@phpstan-type` and `@psalm-type`, by enabling `enableForDocComments`.
 
 Sniff provides the following settings:
 

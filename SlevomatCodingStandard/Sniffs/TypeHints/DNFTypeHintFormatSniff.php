@@ -5,10 +5,6 @@ namespace SlevomatCodingStandard\Sniffs\TypeHints;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHPStan\PhpDocParser\Ast\Attribute;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
@@ -190,7 +186,9 @@ class DNFTypeHintFormatSniff implements Sniff
 					$this->checkDocCommentNullableExpansion($phpcsFile, $annotation, $nullableTypeNode, $parsedDocComment);
 				}
 			} elseif ($this->shortNullable === self::YES) {
-				$this->checkDocCommentNullableContraction($phpcsFile, $annotation, $parsedDocComment);
+				foreach (AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), UnionTypeNode::class) as $unionTypeNode) {
+					$this->checkDocCommentNullableContraction($phpcsFile, $annotation, $unionTypeNode, $parsedDocComment);
+				}
 			}
 		}
 	}
@@ -405,18 +403,21 @@ class DNFTypeHintFormatSniff implements Sniff
 		$this->fixDocCommentTypeText($phpcsFile, $parsedDocComment, $rawTypeText, $fixedTypeText);
 	}
 
-	private function checkDocCommentNullableContraction(File $phpcsFile, Annotation $annotation, ParsedDocComment $parsedDocComment): void
+	private function checkDocCommentNullableContraction(
+		File $phpcsFile,
+		Annotation $annotation,
+		UnionTypeNode $unionTypeNode,
+		ParsedDocComment $parsedDocComment
+	): void
 	{
-		$directType = $this->getAnnotationDirectType($annotation);
-
-		if (!$directType instanceof UnionTypeNode || count($directType->types) !== 2) {
+		if (count($unionTypeNode->types) !== 2) {
 			return;
 		}
 
 		$nullTypeNode = null;
 		$otherTypeNode = null;
 
-		foreach ($directType->types as $typeNode) {
+		foreach ($unionTypeNode->types as $typeNode) {
 			if ($typeNode instanceof IdentifierTypeNode && strtolower($typeNode->name) === 'null') {
 				$nullTypeNode = $typeNode;
 			} else {
@@ -429,8 +430,8 @@ class DNFTypeHintFormatSniff implements Sniff
 		}
 
 		$rawTypeText = trim($parsedDocComment->getTokens()->getContentBetween(
-			$directType->getAttribute(Attribute::START_INDEX),
-			$directType->getAttribute(Attribute::END_INDEX) + 1,
+			$unionTypeNode->getAttribute(Attribute::START_INDEX),
+			$unionTypeNode->getAttribute(Attribute::END_INDEX) + 1,
 		));
 
 		$fix = $phpcsFile->addFixableError(
@@ -472,22 +473,6 @@ class DNFTypeHintFormatSniff implements Sniff
 		);
 
 		$phpcsFile->fixer->endChangeset();
-	}
-
-	private function getAnnotationDirectType(Annotation $annotation): ?TypeNode
-	{
-		$value = $annotation->getValue();
-
-		if (
-			$value instanceof ParamTagValueNode
-			|| $value instanceof ReturnTagValueNode
-			|| $value instanceof VarTagValueNode
-			|| $value instanceof PropertyTagValueNode
-		) {
-			return $value->type;
-		}
-
-		return null;
 	}
 
 	private function checkTypeHint(File $phpcsFile, TypeHint $typeHint): void

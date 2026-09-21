@@ -576,7 +576,7 @@ class DNFTypeHintFormatSniffTest extends TestCase
 			'shortNullable' => 'yes',
 		], [DNFTypeHintFormatSniff::CODE_REQUIRED_SHORT_NULLABLE]);
 
-		self::assertSame(3, $report->getErrorCount());
+		self::assertSame(6, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -595,6 +595,18 @@ class DNFTypeHintFormatSniffTest extends TestCase
 			15,
 			DNFTypeHintFormatSniff::CODE_REQUIRED_SHORT_NULLABLE,
 			'Short nullable type hint in "bool|null" is required.',
+		);
+		self::assertSniffError(
+			$report,
+			20,
+			DNFTypeHintFormatSniff::CODE_REQUIRED_SHORT_NULLABLE,
+			'Short nullable type hint in "float|null" is required.',
+		);
+		self::assertSniffError(
+			$report,
+			27,
+			DNFTypeHintFormatSniff::CODE_REQUIRED_SHORT_NULLABLE,
+			'Short nullable type hint in "float|null" is required.',
 		);
 
 		self::assertAllFixedInFile($report);
