@@ -120,6 +120,13 @@ function () {
 };
 
 function () {
+	$a = 'a';
+	$b = 'b';
+
+	return \compact('a', "b");
+};
+
+function () {
 	$a = '';
 	echo "$a";
 };
@@ -308,6 +315,11 @@ function ($result) {
 function () {
 	$a = 1;
 	return get_defined_vars();
+};
+
+function () {
+	$a = 1;
+	return \get_defined_vars();
 };
 
 function ($c) {
