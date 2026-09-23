@@ -5,6 +5,7 @@ namespace SlevomatCodingStandard\Helpers;
 use PHP_CodeSniffer\Files\File;
 use function count;
 use function in_array;
+use function ltrim;
 use function preg_match;
 use function preg_quote;
 use function strlen;
@@ -14,6 +15,7 @@ use const T_DOUBLE_COLON;
 use const T_DOUBLE_QUOTED_STRING;
 use const T_FN;
 use const T_HEREDOC;
+use const T_NAME_FULLY_QUALIFIED;
 use const T_OPEN_PARENTHESIS;
 use const T_OPEN_TAG;
 use const T_STRING;
@@ -61,7 +63,7 @@ class VariableHelper
 		$tokens = $phpcsFile->getTokens();
 
 		$stringContent = $tokens[$stringPointer]['content'];
-		if (strtolower($stringContent) !== 'compact') {
+		if (strtolower(ltrim($stringContent, '\\')) !== 'compact') {
 			return false;
 		}
 
@@ -140,7 +142,7 @@ class VariableHelper
 				return true;
 			}
 
-			if ($tokens[$i]['code'] === T_STRING) {
+			if (in_array($tokens[$i]['code'], [T_STRING, T_NAME_FULLY_QUALIFIED], true)) {
 				if (self::isGetDefinedVarsCall($phpcsFile, $i)) {
 					return true;
 				}
@@ -166,7 +168,7 @@ class VariableHelper
 		$tokens = $phpcsFile->getTokens();
 
 		$stringContent = $tokens[$stringPointer]['content'];
-		if (strtolower($stringContent) !== 'get_defined_vars') {
+		if (strtolower(ltrim($stringContent, '\\')) !== 'get_defined_vars') {
 			return false;
 		}
 
