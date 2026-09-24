@@ -7,10 +7,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use function array_filter;
-use function array_pop;
-use function array_splice;
-use function count;
 use function in_array;
 use const T_BOOLEAN_AND;
 use const T_BOOLEAN_OR;
@@ -22,6 +18,7 @@ use const T_CONTINUE;
 use const T_DO;
 use const T_ELSE;
 use const T_ELSEIF;
+use const T_FN;
 use const T_FOR;
 use const T_FOREACH;
 use const T_FUNCTION;
@@ -188,37 +185,8 @@ class CognitiveSniff implements Sniff
 		$this->lastBooleanOperator = 0;
 		$this->cognitiveComplexity = 0;
 
-		/*
-			Keep track of parser's level stack
-			We push to this stak whenever we encounter a Tokens::SCOPE_OPENERS token
-		*/
-		$levelStack = [];
-		/*
-			We look for changes in token[level] to know when to remove from the stack
-			however ['level'] only increases when there are tokens inside {}
-			after pushing to the stack watch for a level change
-		*/
-		$levelIncreased = false;
-
 		for ($i = $functionStartPosition + 1; $i < $functionEndPosition; $i++) {
 			$currentToken = $tokens[$i];
-
-			$isNestingToken = false;
-			if (in_array($currentToken['code'], Tokens::SCOPE_OPENERS, true)) {
-				$isNestingToken = true;
-				if ($levelIncreased === false && count($levelStack) > 0) {
-					// parser's level never increased
-					// caused by empty condition such as `if ($x) { }`
-					array_pop($levelStack);
-				}
-				$levelStack[] = $currentToken;
-				$levelIncreased = false;
-			} elseif (isset($tokens[$i - 1]) && $currentToken['level'] < $tokens[$i - 1]['level']) {
-				$diff = $tokens[$i - 1]['level'] - $currentToken['level'];
-				array_splice($levelStack, 0 - $diff);
-			} elseif (isset($tokens[$i - 1]) && $currentToken['level'] > $tokens[$i - 1]['level']) {
-				$levelIncreased = true;
-			}
 
 			$this->resolveBooleanOperatorChain($currentToken);
 
@@ -233,16 +201,9 @@ class CognitiveSniff implements Sniff
 			if (!$addNestingIncrement) {
 				continue;
 			}
-			$measuredNestingLevel = count(
-				array_filter($levelStack, static fn (array $token) => in_array($token['code'], self::NESTING_INCREMENTS, true)),
-			);
-			if ($isNestingToken) {
-				$measuredNestingLevel--;
-			}
+
 			// B3. Nesting increment
-			if ($measuredNestingLevel > 0) {
-				$this->cognitiveComplexity += $measuredNestingLevel;
-			}
+			$this->cognitiveComplexity += $this->getNestingLevel($position, $i);
 		}
 
 		return $this->cognitiveComplexity;
@@ -256,6 +217,33 @@ class CognitiveSniff implements Sniff
 		$pointerAfterParenthesisCloser = TokenHelper::findNextEffective($phpcsFile, $parenthesisCloserPointer + 1);
 
 		return $tokens[$pointerAfterParenthesisCloser]['code'] !== T_OPEN_CURLY_BRACKET;
+	}
+
+	/**
+	 * Nesting level of a token, relative to the function being measured.
+	 *
+	 * PHPCS records the scope conditions of every token, but arrow functions have no braces
+	 * and are not part of them, so they are counted separately.
+	 */
+	private function getNestingLevel(int $functionPointer, int $pointer): int
+	{
+		$tokens = $this->phpcsFile->getTokens();
+
+		$nestingLevel = 0;
+		foreach ($tokens[$pointer]['conditions'] as $conditionPointer => $conditionCode) {
+			if ($conditionPointer > $functionPointer && isset(self::NESTING_INCREMENTS[$conditionCode])) {
+				$nestingLevel++;
+			}
+		}
+
+		$searchStartPointer = $tokens[$functionPointer]['scope_opener'] + 1;
+		foreach (TokenHelper::findNextAll($this->phpcsFile, T_FN, $searchStartPointer, $pointer) as $arrowFunctionPointer) {
+			if ($tokens[$arrowFunctionPointer]['scope_opener'] < $pointer && $tokens[$arrowFunctionPointer]['scope_closer'] >= $pointer) {
+				$nestingLevel++;
+			}
+		}
+
+		return $nestingLevel;
 	}
 
 	/**
