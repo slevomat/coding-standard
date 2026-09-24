@@ -97,6 +97,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/PHPCSStandards
  - [SlevomatCodingStandard.ControlStructures.DisallowEmpty](doc/control-structures.md#slevomatcodingstandardcontrolstructuresdisallowempty)
  - [SlevomatCodingStandard.ControlStructures.DisallowNullSafeObjectOperator](doc/control-structures.md#slevomatcodingstandardcontrolstructuresdisallownullsafeobjectoperator)
  - [SlevomatCodingStandard.ControlStructures.DisallowShortTernaryOperator](doc/control-structures.md#slevomatcodingstandardcontrolstructuresdisallowshortternaryoperator-) 🔧
+ - [SlevomatCodingStandard.ControlStructures.DisallowTrailingCommaInMatchExpression](doc/control-structures.md#slevomatcodingstandardcontrolstructuresdisallowtrailingcommainmatchexpression-) 🔧
  - [SlevomatCodingStandard.ControlStructures.DisallowTrailingMultiLineTernaryOperatorSniff](doc/control-structures.md#slevomatcodingstandardcontrolstructuresdisallowtrailingmultilineternaryoperator-) 🔧
  - [SlevomatCodingStandard.ControlStructures.DisallowYodaComparison](doc/control-structures.md#slevomatcodingstandardcontrolstructuresdisallowyodacomparison-) 🔧
  - [SlevomatCodingStandard.ControlStructures.EarlyExit](doc/control-structures.md#slevomatcodingstandardcontrolstructuresearlyexit-) 🔧
@@ -112,6 +113,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/PHPCSStandards
  - [SlevomatCodingStandard.ControlStructures.RequireShortTernaryOperator](doc/control-structures.md#slevomatcodingstandardcontrolstructuresrequireshortternaryoperator-) 🔧
  - [SlevomatCodingStandard.ControlStructures.RequireSingleLineCondition](doc/control-structures.md#slevomatcodingstandardcontrolstructuresrequiresinglelinecondition-) 🔧
  - [SlevomatCodingStandard.ControlStructures.RequireTernaryOperator](doc/control-structures.md#slevomatcodingstandardcontrolstructuresrequireternaryoperator-) 🔧
+ - [SlevomatCodingStandard.ControlStructures.RequireTrailingCommaInMatchExpression](doc/control-structures.md#slevomatcodingstandardcontrolstructuresrequiretrailingcommainmatchexpression-) 🔧
  - [SlevomatCodingStandard.ControlStructures.RequireYodaComparison](doc/control-structures.md#slevomatcodingstandardcontrolstructuresrequireyodacomparison-) 🔧
  - [SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn](doc/control-structures.md#slevomatcodingstandardcontrolstructuresuselessifconditionwithreturn-) 🔧
  - [SlevomatCodingStandard.ControlStructures.UselessTernaryOperator](doc/control-structures.md#slevomatcodingstandardcontrolstructuresuselessternaryoperator-) 🔧
