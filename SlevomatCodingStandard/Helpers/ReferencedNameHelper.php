@@ -15,10 +15,12 @@ use const T_ANON_CLASS;
 use const T_ARRAY;
 use const T_AS;
 use const T_ATTRIBUTE;
+use const T_ATTRIBUTE_END;
 use const T_BITWISE_AND;
 use const T_BITWISE_OR;
 use const T_CATCH;
 use const T_CLASS;
+use const T_CLOSE_CURLY_BRACKET;
 use const T_CLOSE_PARENTHESIS;
 use const T_COLON;
 use const T_COMMA;
@@ -30,7 +32,9 @@ use const T_DOUBLE_QUOTED_STRING;
 use const T_ELLIPSIS;
 use const T_ENUM;
 use const T_ENUM_CASE;
+use const T_EQUAL;
 use const T_EXTENDS;
+use const T_FINAL;
 use const T_FUNCTION;
 use const T_GOTO;
 use const T_HEREDOC;
@@ -47,6 +51,7 @@ use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_OPEN_TAG;
 use const T_PARAM_NAME;
+use const T_SEMICOLON;
 use const T_TRAIT;
 use const T_TYPE_INTERSECTION;
 use const T_TYPE_UNION;
@@ -367,14 +372,13 @@ class ReferencedNameHelper
 		}
 
 		// A property hook is declared as "get => ...", "set => ...", "get { ... }",
-		// "set { ... }" or "set(...) ...". A "get"/"set" used as a value (e.g. a
-		// constant of that name) is followed by something else and is not a hook.
+		// "set { ... }", "set(...) ..." or, without a body, "get;" and "set;".
 		$nextPointer = TokenHelper::findNextEffective($phpcsFile, $pointer + 1);
 		if (
 			$nextPointer === null
 			|| !in_array(
 				$tokens[$nextPointer]['code'],
-				[T_DOUBLE_ARROW, T_OPEN_CURLY_BRACKET, T_OPEN_PARENTHESIS],
+				[T_DOUBLE_ARROW, T_OPEN_CURLY_BRACKET, T_OPEN_PARENTHESIS, T_SEMICOLON],
 				true,
 			)
 		) {
@@ -383,8 +387,8 @@ class ReferencedNameHelper
 
 		// The name must sit directly inside a property hook list, i.e. the nearest
 		// enclosing curly bracket must be a bracket pair (property hook lists are
-		// not scopes, unlike function/match bodies) that immediately follows the
-		// property variable. This excludes array keys, match arms and method bodies.
+		// not scopes, unlike function/match bodies) that follows the property.
+		// This excludes array keys, match arms and method bodies.
 		$enclosingPointer = $pointer;
 		do {
 			$enclosingPointer = TokenHelper::findPrevious($phpcsFile, T_OPEN_CURLY_BRACKET, $enclosingPointer - 1);
@@ -401,8 +405,41 @@ class ReferencedNameHelper
 			return false;
 		}
 
-		$beforeEnclosingPointer = TokenHelper::findPreviousEffective($phpcsFile, $enclosingPointer - 1);
-		return $tokens[$beforeEnclosingPointer]['code'] === T_VARIABLE;
+		// The hook list follows the property variable or its default value ("$items = [] {").
+		$variablePointer = TokenHelper::findPrevious($phpcsFile, T_VARIABLE, $enclosingPointer - 1);
+		if ($variablePointer === null) {
+			return false;
+		}
+
+		$afterVariablePointer = TokenHelper::findNextEffective($phpcsFile, $variablePointer + 1);
+		if ($afterVariablePointer !== $enclosingPointer) {
+			if (
+				$tokens[$afterVariablePointer]['code'] !== T_EQUAL
+				|| !PropertyHelper::isProperty($phpcsFile, $variablePointer, true)
+				|| TokenHelper::findNext(
+					$phpcsFile,
+					[T_SEMICOLON, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET],
+					$afterVariablePointer + 1,
+				) !== $enclosingPointer
+			) {
+				return false;
+			}
+		}
+
+		// The name must start a hook declaration, not appear in an arrow hook body such as "get => get()".
+		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
+		while (true) {
+			if ($tokens[$previousPointer]['code'] === T_ATTRIBUTE_END) {
+				$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $tokens[$previousPointer]['attribute_opener'] - 1);
+			} elseif ($tokens[$previousPointer]['code'] === T_FINAL || $tokens[$previousPointer]['content'] === '&') {
+				$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
+			} else {
+				break;
+			}
+		}
+
+		return $previousPointer === $enclosingPointer
+			|| in_array($tokens[$previousPointer]['code'], [T_SEMICOLON, T_CLOSE_CURLY_BRACKET], true);
 	}
 
 	/**
