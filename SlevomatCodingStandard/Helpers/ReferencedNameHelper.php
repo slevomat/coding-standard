@@ -396,9 +396,7 @@ class ReferencedNameHelper
 				return false;
 			}
 
-			$closerPointer = $tokens[$enclosingPointer]['bracket_closer']
-				?? $tokens[$enclosingPointer]['scope_closer']
-				?? null;
+			$closerPointer = $tokens[$enclosingPointer]['bracket_closer'] ?? null;
 		} while ($closerPointer === null || $closerPointer < $pointer);
 
 		if (array_key_exists('scope_condition', $tokens[$enclosingPointer])) {
@@ -407,14 +405,11 @@ class ReferencedNameHelper
 
 		// The hook list follows the property variable or its default value ("$items = [] {").
 		$variablePointer = TokenHelper::findPrevious($phpcsFile, T_VARIABLE, $enclosingPointer - 1);
-		if ($variablePointer === null) {
-			return false;
-		}
-
-		$afterVariablePointer = TokenHelper::findNextEffective($phpcsFile, $variablePointer + 1);
+		$afterVariablePointer = $variablePointer !== null ? TokenHelper::findNextEffective($phpcsFile, $variablePointer + 1) : null;
 		if ($afterVariablePointer !== $enclosingPointer) {
 			if (
-				$tokens[$afterVariablePointer]['code'] !== T_EQUAL
+				$afterVariablePointer === null
+				|| $tokens[$afterVariablePointer]['code'] !== T_EQUAL
 				|| !PropertyHelper::isProperty($phpcsFile, $variablePointer, true)
 				|| TokenHelper::findNext(
 					$phpcsFile,
