@@ -1,4 +1,4 @@
-<?php
+<?php // lint >= 8.4
 
 namespace App;
 
