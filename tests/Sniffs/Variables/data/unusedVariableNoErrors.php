@@ -453,3 +453,84 @@ function () {
 	    return null ?: $numericIndex++;
 	}
 };
+
+$readThroughGlobal = [];
+
+function readsGlobal()
+{
+	global $readThroughGlobal;
+	return $readThroughGlobal['key'];
+}
+
+$firstReadThroughGlobalList = 1;
+$secondReadThroughGlobalList = 2;
+
+function readsGlobalList()
+{
+	global $firstReadThroughGlobalList, $secondReadThroughGlobalList;
+	return $firstReadThroughGlobalList + $secondReadThroughGlobalList;
+}
+
+function readsGlobalAssignedLater()
+{
+	global $assignedAfterFunction;
+	return $assignedAfterFunction;
+}
+
+$assignedAfterFunction = 1;
+
+$readThroughGlobalInMethod = 1;
+
+class ReadsGlobal
+{
+
+	public function get()
+	{
+		global $readThroughGlobalInMethod;
+		return $readThroughGlobalInMethod;
+	}
+
+}
+
+$readThroughGlobalInNestedClosure = 1;
+
+function () {
+	return function () {
+		global $readThroughGlobalInNestedClosure;
+		return $readThroughGlobalInNestedClosure;
+	};
+};
+
+$readThroughGlobalInheritedByClosure = 1;
+
+function () {
+	global $readThroughGlobalInheritedByClosure;
+	return function () use ($readThroughGlobalInheritedByClosure) {
+		return $readThroughGlobalInheritedByClosure;
+	};
+};
+
+function () {
+	global $firstInGlobalList, $secondInGlobalList, $assignedThroughGlobalList;
+	$assignedThroughGlobalList = 1;
+};
+
+function () {
+	static $firstInStaticList, $secondInStaticList, $assignedThroughStaticList;
+	$assignedThroughStaticList = 1;
+};
+
+$writtenThroughGlobal = 1;
+
+function () {
+	global $writtenThroughGlobal;
+	$writtenThroughGlobal = 2;
+};
+
+$readAfterCloseTag = 1;
+
+function () {
+	global $readAfterCloseTag ?>
+<?php
+	return $readAfterCloseTag;
+};

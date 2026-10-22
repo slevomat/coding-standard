@@ -21,12 +21,14 @@ use const T_AS;
 use const T_BITWISE_AND;
 use const T_CLOSE_CURLY_BRACKET;
 use const T_CLOSE_SHORT_ARRAY;
+use const T_CLOSE_TAG;
 use const T_CLOSURE;
 use const T_COMMA;
 use const T_CONCAT_EQUAL;
 use const T_DEC;
 use const T_DIV_EQUAL;
 use const T_DO;
+use const T_DOLLAR;
 use const T_DOUBLE_ARROW;
 use const T_DOUBLE_COLON;
 use const T_DOUBLE_QUOTED_STRING;
@@ -57,6 +59,7 @@ use const T_PLUS_EQUAL;
 use const T_POW_EQUAL;
 use const T_PRINT;
 use const T_RETURN;
+use const T_SEMICOLON;
 use const T_SL_EQUAL;
 use const T_SR_EQUAL;
 use const T_STATIC;
@@ -164,13 +167,7 @@ class UnusedVariableSniff implements Sniff
 			return;
 		}
 
-		$scopeOwnerPointer = ScopeHelper::getRootPointer($phpcsFile, $pointer - 1);
-		foreach (array_reverse($tokens[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
-			if (in_array($conditionTokenCode, TokenHelper::FUNCTION_TOKEN_CODES, true)) {
-				$scopeOwnerPointer = $conditionPointer;
-				break;
-			}
-		}
+		$scopeOwnerPointer = $this->findScopeOwnerPointer($phpcsFile, $pointer);
 
 		if (in_array($tokens[$scopeOwnerPointer]['code'], TokenHelper::FUNCTION_TOKEN_CODES, true)) {
 			if ($this->isStaticOrGlobalVariable($phpcsFile, $scopeOwnerPointer, $variableName)) {
@@ -193,7 +190,10 @@ class UnusedVariableSniff implements Sniff
 			return;
 		}
 
-		if (VariableHelper::isUsedInScopeAfterPointer($phpcsFile, $scopeOwnerPointer, $pointer, $pointer + 1)) {
+		if (
+			VariableHelper::isUsedInScopeAfterPointer($phpcsFile, $scopeOwnerPointer, $pointer, $pointer + 1)
+			|| $this->isUsedThroughGlobalInFunction($phpcsFile, $scopeOwnerPointer, $variableName)
+		) {
 			return;
 		}
 
@@ -550,7 +550,58 @@ class UnusedVariableSniff implements Sniff
 			}
 
 			$pointerBeforeParameter = TokenHelper::findPreviousEffective($phpcsFile, $i - 1);
+			while ($tokens[$pointerBeforeParameter]['code'] === T_COMMA) {
+				$previousVariablePointer = TokenHelper::findPreviousEffective($phpcsFile, $pointerBeforeParameter - 1);
+				if ($tokens[$previousVariablePointer]['code'] !== T_VARIABLE) {
+					break;
+				}
+
+				$pointerBeforeParameter = TokenHelper::findPreviousEffective($phpcsFile, $previousVariablePointer - 1);
+			}
+
 			if (in_array($tokens[$pointerBeforeParameter]['code'], [T_STATIC, T_GLOBAL], true)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private function findScopeOwnerPointer(File $phpcsFile, int $pointer): int
+	{
+		foreach (array_reverse($phpcsFile->getTokens()[$pointer]['conditions'], true) as $conditionPointer => $conditionTokenCode) {
+			if (in_array($conditionTokenCode, TokenHelper::FUNCTION_TOKEN_CODES, true)) {
+				return $conditionPointer;
+			}
+		}
+
+		return ScopeHelper::getRootPointer($phpcsFile, $pointer - 1);
+	}
+
+	private function isUsedThroughGlobalInFunction(File $phpcsFile, int $scopeOwnerPointer, string $variableName): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		if (in_array($tokens[$scopeOwnerPointer]['code'], TokenHelper::FUNCTION_TOKEN_CODES, true)) {
+			return false;
+		}
+
+		foreach (TokenHelper::findNextAll($phpcsFile, T_GLOBAL, 0) as $globalPointer) {
+			$functionPointer = $this->findScopeOwnerPointer($phpcsFile, $globalPointer);
+			$statementEndPointer = TokenHelper::findNext($phpcsFile, [T_SEMICOLON, T_CLOSE_TAG], $globalPointer + 1);
+			$globalVariablePointer = TokenHelper::findNextContent(
+				$phpcsFile,
+				T_VARIABLE,
+				$variableName,
+				$globalPointer + 1,
+				$statementEndPointer,
+			);
+			if (
+				$globalVariablePointer !== null
+				&& $tokens[$globalVariablePointer - 1]['code'] !== T_DOLLAR
+				&& in_array($tokens[$functionPointer]['code'], TokenHelper::FUNCTION_TOKEN_CODES, true)
+				&& VariableHelper::isUsedInScopeAfterPointer($phpcsFile, $functionPointer, $globalVariablePointer, $statementEndPointer + 1)
+			) {
 				return true;
 			}
 		}
