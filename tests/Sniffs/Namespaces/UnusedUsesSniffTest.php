@@ -305,4 +305,16 @@ class UnusedUsesSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testFunctionCallsInPropertyHookBodiesAreUsed(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/unusedUsesPropertyHooks.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testFunctionCallsInVariableVariablesAreUsed(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/unusedUsesPropertyHookNamesInMethod.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
 }

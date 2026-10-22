@@ -87,4 +87,42 @@ class FullyQualifiedGlobalConstantsSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testGetAndSetConstantsOutsidePropertyHooksAreReported(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsGetSetErrors.php');
+
+		self::assertSame(3, $report->getErrorCount());
+
+		self::assertSniffError(
+			$report,
+			5,
+			FullyQualifiedGlobalConstantsSniff::CODE_NON_FULLY_QUALIFIED,
+			'Constant get should be referenced via a fully qualified name.',
+		);
+		self::assertSniffError(
+			$report,
+			10,
+			FullyQualifiedGlobalConstantsSniff::CODE_NON_FULLY_QUALIFIED,
+			'Constant get should be referenced via a fully qualified name.',
+		);
+		self::assertSniffError(
+			$report,
+			10,
+			FullyQualifiedGlobalConstantsSniff::CODE_NON_FULLY_QUALIFIED,
+			'Constant set should be referenced via a fully qualified name.',
+		);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testPropertyHooksAreNotReportedAsConstants(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedGlobalConstantsPropertyHooks.php');
+
+		self::assertNoSniffErrorInFile($report);
+		self::assertNoSniffWarningInFile($report);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
