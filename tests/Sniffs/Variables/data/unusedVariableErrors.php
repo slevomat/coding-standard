@@ -132,3 +132,67 @@ function ($b) {
 function ($s): string {
 	return (string) ++$s;
 };
+
+$declaredGlobalButNotRead = 1;
+
+function declaresGlobalWithoutReading()
+{
+	global $declaredGlobalButNotRead;
+}
+
+$readAsLocalInOtherFunction = 1;
+
+function declaresDifferentGlobal()
+{
+	global $otherGlobal;
+	return $readAsLocalInOtherFunction ?? $otherGlobal;
+}
+
+$readOnlyInInnerClosure = 1;
+
+function () {
+	global $readOnlyInInnerClosure;
+	return function () {
+		return $readOnlyInInnerClosure;
+	};
+};
+
+function readsGlobalWithLocalNameElsewhere()
+{
+	global $localWithGlobalName;
+	return $localWithGlobalName;
+}
+
+function () {
+	$localWithGlobalName = 1;
+};
+
+global $globalOnFileScope;
+$globalOnFileScope = 1;
+
+class StaticInExpression
+{
+
+	public function register(): void
+	{
+		$handler = null;
+		$this->add(new static, $handler);
+		$handler = 2;
+	}
+
+	public function registerParenthesized(): void
+	{
+		$handler = null;
+		$this->add((new static), $handler);
+		$handler = 2;
+	}
+
+}
+
+$variableVariableName = 'other';
+
+function readsVariableVariable()
+{
+	global $$variableVariableName;
+	return $variableVariableName;
+}

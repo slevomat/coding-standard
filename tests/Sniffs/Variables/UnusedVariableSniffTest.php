@@ -17,7 +17,7 @@ class UnusedVariableSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/unusedVariableErrors.php');
 
-		self::assertSame(25, $report->getErrorCount());
+		self::assertSame(33, $report->getErrorCount());
 
 		self::assertSniffError($report, 7, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $firstMatch.');
 		self::assertSniffError($report, 12, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $unused.');
@@ -44,6 +44,14 @@ class UnusedVariableSniffTest extends TestCase
 		self::assertSniffError($report, 116, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $a.');
 		self::assertSniffError($report, 122, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $a.');
 		self::assertSniffError($report, 128, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $a.');
+		self::assertSniffError($report, 136, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $declaredGlobalButNotRead.');
+		self::assertSniffError($report, 143, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $readAsLocalInOtherFunction.');
+		self::assertSniffError($report, 151, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $readOnlyInInnerClosure.');
+		self::assertSniffError($report, 167, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $localWithGlobalName.');
+		self::assertSniffError($report, 171, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $globalOnFileScope.');
+		self::assertSniffError($report, 180, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $handler.');
+		self::assertSniffError($report, 187, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $handler.');
+		self::assertSniffError($report, 192, UnusedVariableSniff::CODE_UNUSED_VARIABLE, 'Unused variable $variableVariableName.');
 	}
 
 	public function testErrorsWithIgnoredUnusedValuesWhenOnlyKeysAreUsedInForeach(): void
