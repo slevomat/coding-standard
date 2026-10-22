@@ -22,10 +22,28 @@ class CognitiveSniffTest extends TestCase
 				19,
 			],
 			[
+				__DIR__ . '/data/cognitive/arrowFunctionIncNesting.php',
+				3,
+				'arrowFunction',
+				4,
+			],
+			[
 				__DIR__ . '/data/cognitive/closureIncNesting.php',
 				3,
 				'myMethod2',
 				2,
+			],
+			[
+				__DIR__ . '/data/cognitive/closureInConditionNesting.php',
+				3,
+				'closureInCondition',
+				3,
+			],
+			[
+				__DIR__ . '/data/cognitive/closureUseIncNesting.php',
+				3,
+				'closureUse',
+				4,
 			],
 			[
 				__DIR__ . '/data/cognitive/continue.php',
