@@ -44,12 +44,21 @@ class RequireSelfReferenceSniff implements Sniff
 			ReferencedNameHelper::getAllReferencedNamesInAttributes($phpcsFile, $openTagPointer),
 		);
 
+		$anonymousClassPointers = TokenHelper::findNextAll($phpcsFile, T_ANON_CLASS, 0);
+
 		foreach ($referencedNames as $referencedName) {
 			if (!$referencedName->isClass()) {
 				continue;
 			}
 
-			$anonymousClassPointer = TokenHelper::findPrevious($phpcsFile, T_ANON_CLASS, $referencedName->getStartPointer() - 1);
+			$anonymousClassPointer = null;
+			foreach ($anonymousClassPointers as $currentAnonymousClassPointer) {
+				if ($currentAnonymousClassPointer >= $referencedName->getStartPointer()) {
+					break;
+				}
+
+				$anonymousClassPointer = $currentAnonymousClassPointer;
+			}
 
 			if (
 				$anonymousClassPointer !== null
