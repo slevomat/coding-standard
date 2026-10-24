@@ -8,13 +8,15 @@ use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
+use function array_keys;
 use function array_merge;
-use function array_reverse;
 use function in_array;
 use function ltrim;
+use function rsort;
 use function sprintf;
 use function strlen;
 use function strpos;
+use const T_BITWISE_AND;
 use const T_CLOSURE;
 use const T_CONSTANT_ENCAPSED_STRING;
 use const T_DOUBLE_COLON;
@@ -44,16 +46,16 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 			return;
 		}
 
-		if ($this->shouldBeSkipped($phpcsFile, $stringPointer)) {
-			return;
-		}
-
 		$tokens = $phpcsFile->getTokens();
 
 		$parenthesisOpenerPointer = TokenHelper::findNextEffective($phpcsFile, $stringPointer + 1);
 		$parenthesisCloserPointer = $tokens[$parenthesisOpenerPointer]['parenthesis_closer'];
 
 		if ($tokens[$parenthesisOpenerPointer]['line'] === $tokens[$parenthesisCloserPointer]['line']) {
+			return;
+		}
+
+		if ($this->shouldBeSkipped($phpcsFile, $stringPointer)) {
 			return;
 		}
 
@@ -154,17 +156,32 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		foreach (array_reverse(TokenHelper::findNextAll($phpcsFile, [T_OPEN_PARENTHESIS, T_FUNCTION], 0, $stringPointer)) as $pointer) {
-			if ($tokens[$pointer]['code'] === T_FUNCTION) {
-				if (array_key_exists('scope_closer', $tokens[$pointer]) && $tokens[$pointer]['scope_closer'] > $stringPointer) {
-					return false;
-				}
-
-				continue;
+		// The name of a by-reference function is in its signature but outside its parameter list parenthesis
+		$pointerBeforeString = TokenHelper::findPreviousEffective($phpcsFile, $stringPointer - 1);
+		if ($tokens[$pointerBeforeString]['code'] === T_BITWISE_AND) {
+			$pointerBeforeAmpersand = TokenHelper::findPreviousEffective($phpcsFile, $pointerBeforeString - 1);
+			if (
+				$tokens[$pointerBeforeAmpersand]['code'] === T_FUNCTION
+				&& array_key_exists('scope_closer', $tokens[$pointerBeforeAmpersand])
+			) {
+				return false;
 			}
+		}
 
-			if ($tokens[$pointer]['parenthesis_closer'] < $stringPointer) {
-				continue;
+		// The innermost enclosing parenthesis or function is checked first. A parameter list is
+		// recorded as an enclosing parenthesis of its tokens, not as one of their scope conditions.
+		$pointers = array_keys($tokens[$stringPointer]['nested_parenthesis'] ?? []);
+		foreach ($tokens[$stringPointer]['conditions'] as $conditionPointer => $conditionTokenCode) {
+			if ($conditionTokenCode === T_FUNCTION) {
+				$pointers[] = $conditionPointer;
+			}
+		}
+
+		rsort($pointers);
+
+		foreach ($pointers as $pointer) {
+			if ($tokens[$pointer]['code'] === T_FUNCTION) {
+				return false;
 			}
 
 			$pointerBeforeParenthesisOpener = TokenHelper::findPreviousEffective($phpcsFile, $pointer - 1);
