@@ -27,4 +27,18 @@ class RequireSelfReferenceSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testAnonymousClassesErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireSelfReferenceAnonymousClassesErrors.php');
+
+		self::assertSame(4, $report->getErrorCount());
+
+		self::assertSniffError($report, 6, RequireSelfReferenceSniff::CODE_REQUIRED_SELF_REFERENCE);
+		self::assertSniffError($report, 17, RequireSelfReferenceSniff::CODE_REQUIRED_SELF_REFERENCE);
+		self::assertSniffError($report, 44, RequireSelfReferenceSniff::CODE_REQUIRED_SELF_REFERENCE);
+		self::assertCount(2, $report->getErrors()[44]);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
