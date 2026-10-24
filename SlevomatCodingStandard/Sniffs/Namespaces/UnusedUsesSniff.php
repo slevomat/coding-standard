@@ -8,6 +8,7 @@ use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\Doctrine\DoctrineAnnotation;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use SlevomatCodingStandard\Helpers\Annotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\NamespaceHelper;
@@ -132,6 +133,7 @@ class UnusedUsesSniff implements Sniff
 					continue;
 				}
 
+				$contentsToCheck = null;
 				foreach ($fileUnusedNames[$pointerBeforeUseStatements] as $useStatement) {
 					if (!$useStatement->isClass()) {
 						continue;
@@ -140,68 +142,15 @@ class UnusedUsesSniff implements Sniff
 					$nameAsReferencedInFile = $useStatement->getNameAsReferencedInFile();
 					$uniqueId = UseStatement::getUniqueId($useStatement->getType(), $nameAsReferencedInFile);
 
-					foreach ($annotations as $annotation) {
-						if (in_array($annotation->getName(), $this->getIgnoredAnnotations(), true)) {
+					$contentsToCheck ??= $this->getAnnotationsContentsToCheck($annotations);
+					$pattern = '~(?<=^|[^a-z\\\\])(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|::|\\\\|\||\[|$)~im';
+
+					foreach ($contentsToCheck as $contentToCheck) {
+						if (preg_match($pattern, $contentToCheck) === 0) {
 							continue;
 						}
 
-						if ($annotation->isInvalid()) {
-							continue;
-						}
-
-						$contentsToCheck = [];
-
-						if ($annotation->getValue() instanceof GenericTagValueNode) {
-							$contentsToCheck[] = $annotation->getName();
-							$contentsToCheck[] = $annotation->getValue()->value;
-						} else {
-							$identifierTypeNodes = AnnotationHelper::getAnnotationNodesByType(
-								$annotation->getNode(),
-								IdentifierTypeNode::class,
-							);
-							$doctrineAnnotations = AnnotationHelper::getAnnotationNodesByType(
-								$annotation->getNode(),
-								DoctrineAnnotation::class,
-							);
-							$constFetchNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), ConstFetchNode::class);
-
-							$contentsToCheck = array_filter(array_merge(
-								$contentsToCheck,
-								array_map(static function (IdentifierTypeNode $identifierTypeNode): ?string {
-									if (
-										TypeHintHelper::isSimpleTypeHint($identifierTypeNode->name)
-										|| TypeHintHelper::isSimpleUnofficialTypeHints($identifierTypeNode->name)
-										|| !TypeHelper::isTypeName($identifierTypeNode->name)
-									) {
-										return null;
-									}
-
-									return $identifierTypeNode->name;
-								}, $identifierTypeNodes),
-								array_map(function (DoctrineAnnotation $doctrineAnnotation): ?string {
-									if (in_array($doctrineAnnotation->name, $this->getIgnoredAnnotationNames(), true)) {
-										return null;
-									}
-
-									return $doctrineAnnotation->name;
-								}, $doctrineAnnotations),
-								array_map(
-									static fn (ConstFetchNode $constFetchNode): string => $constFetchNode->className,
-									$constFetchNodes,
-								),
-							), static fn (?string $content): bool => $content !== null);
-						}
-
-						foreach ($contentsToCheck as $contentToCheck) {
-							if (preg_match(
-								'~(?<=^|[^a-z\\\\])(' . preg_quote($nameAsReferencedInFile, '~') . ')(?=\\s|::|\\\\|\||\[|$)~im',
-								$contentToCheck,
-							) === 0) {
-								continue;
-							}
-
-							$allUsedNames[$pointerBeforeUseStatements][$uniqueId] = true;
-						}
+						$allUsedNames[$pointerBeforeUseStatements][$uniqueId] = true;
 					}
 				}
 
@@ -236,6 +185,67 @@ class UnusedUsesSniff implements Sniff
 				$phpcsFile->fixer->endChangeset();
 			}
 		}
+	}
+
+	/**
+	 * @param list<Annotation> $annotations
+	 * @return list<string>
+	 */
+	private function getAnnotationsContentsToCheck(array $annotations): array
+	{
+		$contents = [];
+
+		foreach ($annotations as $annotation) {
+			if (in_array($annotation->getName(), $this->getIgnoredAnnotations(), true)) {
+				continue;
+			}
+
+			if ($annotation->isInvalid()) {
+				continue;
+			}
+
+			if ($annotation->getValue() instanceof GenericTagValueNode) {
+				$contents[] = $annotation->getName();
+				$contents[] = $annotation->getValue()->value;
+			} else {
+				$identifierTypeNodes = AnnotationHelper::getAnnotationNodesByType(
+					$annotation->getNode(),
+					IdentifierTypeNode::class,
+				);
+				$doctrineAnnotations = AnnotationHelper::getAnnotationNodesByType(
+					$annotation->getNode(),
+					DoctrineAnnotation::class,
+				);
+				$constFetchNodes = AnnotationHelper::getAnnotationNodesByType($annotation->getNode(), ConstFetchNode::class);
+
+				$contents = array_merge($contents, array_filter(array_merge(
+					array_map(static function (IdentifierTypeNode $identifierTypeNode): ?string {
+						if (
+							TypeHintHelper::isSimpleTypeHint($identifierTypeNode->name)
+							|| TypeHintHelper::isSimpleUnofficialTypeHints($identifierTypeNode->name)
+							|| !TypeHelper::isTypeName($identifierTypeNode->name)
+						) {
+							return null;
+						}
+
+						return $identifierTypeNode->name;
+					}, $identifierTypeNodes),
+					array_map(function (DoctrineAnnotation $doctrineAnnotation): ?string {
+						if (in_array($doctrineAnnotation->name, $this->getIgnoredAnnotationNames(), true)) {
+							return null;
+						}
+
+						return $doctrineAnnotation->name;
+					}, $doctrineAnnotations),
+					array_map(
+						static fn (ConstFetchNode $constFetchNode): string => $constFetchNode->className,
+						$constFetchNodes,
+					),
+				), static fn (?string $content): bool => $content !== null));
+			}
+		}
+
+		return $contents;
 	}
 
 	/**
