@@ -47,3 +47,12 @@ CODE
 		");
 	}
 }
+
+doSomething(function () {
+	interface WithReference
+	{
+		public function &doInterfaceReference(
+			$parameter
+		);
+	}
+});

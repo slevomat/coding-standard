@@ -102,4 +102,44 @@ class RequireSingleLineCallSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testEnclosingStructuresErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireSingleLineCallEnclosingStructuresErrors.php');
+
+		self::assertSame(5, $report->getErrorCount());
+
+		self::assertSniffError(
+			$report,
+			45,
+			RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL,
+			'Call of function doAnything() should be placed on a single line.',
+		);
+		self::assertSniffError(
+			$report,
+			52,
+			RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL,
+			'Call of function doAnything() should be placed on a single line.',
+		);
+		self::assertSniffError(
+			$report,
+			60,
+			RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL,
+			'Call of function doAnything() should be placed on a single line.',
+		);
+		self::assertSniffError(
+			$report,
+			77,
+			RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL,
+			'Call of function doAnything() should be placed on a single line.',
+		);
+		self::assertSniffError(
+			$report,
+			85,
+			RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL,
+			'Call of function doReference() should be placed on a single line.',
+		);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
