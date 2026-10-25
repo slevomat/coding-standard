@@ -14,6 +14,12 @@ class RequireMultiLineCallSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testUnicodeLineLength(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireMultiLineCallUnicodeLineLength.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
 	public function testErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireMultiLineCallErrors.php');
