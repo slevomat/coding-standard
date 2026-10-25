@@ -148,7 +148,7 @@ class AnnotationNameSniff implements Sniff
 	/** @var list<string>|null */
 	public ?array $annotations = null;
 
-	/** @var array<string, string>|null */
+	/** @var array<lowercase-string, string>|null */
 	private ?array $normalizedAnnotations = null;
 
 	/**
@@ -283,10 +283,13 @@ class AnnotationNameSniff implements Sniff
 
 		$annotationNames = array_map(static fn (string $annotationName): string => '@' . $annotationName, array_unique($annotationNames));
 
-		$this->normalizedAnnotations = array_combine(
+		/** @var array<lowercase-string&non-falsy-string, non-falsy-string> $normalizedAnnotations */
+		$normalizedAnnotations = array_combine(
 			array_map(static fn (string $annotationName): string => strtolower($annotationName), $annotationNames),
 			$annotationNames,
 		);
+
+		$this->normalizedAnnotations = $normalizedAnnotations;
 
 		return $this->normalizedAnnotations;
 	}
