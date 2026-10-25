@@ -14,6 +14,7 @@ use function count;
 use function in_array;
 use function ltrim;
 use function preg_match;
+use function preg_match_all;
 use function sprintf;
 use function strlen;
 use function trim;
@@ -123,10 +124,10 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 		if ($tokens[$parenthesisCloserPointer]['line'] === $tokens[$stringPointer]['line']) {
 			$call = $this->getCall($phpcsFile, $parenthesisOpenerPointer, $parenthesisCloserPointer);
 			$lineEnd = $this->getLineEnd($phpcsFile, $parenthesisCloserPointer);
-			$lineLength = strlen($lineStart . $call . $lineEnd);
+			$lineLength = $this->getLineLength($lineStart . $call . $lineEnd);
 		} else {
 			$lineEnd = $this->getLineEnd($phpcsFile, $parenthesisOpenerPointer + 1);
-			$lineLength = strlen($lineStart . $lineEnd);
+			$lineLength = $this->getLineLength($lineStart . $lineEnd);
 		}
 
 		$firstNonWhitespaceOnLine = TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $stringPointer);
@@ -243,6 +244,12 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 		}
 
 		return false;
+	}
+
+	private function getLineLength(string $line): int
+	{
+		$lineLength = preg_match_all('/./us', $line, $matches);
+		return $lineLength === false ? strlen($line) : $lineLength;
 	}
 
 	private function shouldReportError(
