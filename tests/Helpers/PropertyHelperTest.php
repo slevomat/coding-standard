@@ -328,6 +328,54 @@ class PropertyHelperTest extends TestCase
 		);
 	}
 
+	public function testIsPropertyInAnonymousClassArgument(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/propertyInAnonymousClassArgument.php');
+
+		$variablePointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, '$fooProperty', 0);
+		self::assertTrue(PropertyHelper::isProperty($phpcsFile, $variablePointer));
+	}
+
+	/**
+	 * @return list<array{0: string, 1: bool}>
+	 */
+	public static function dataIsPropertyOutsideOfParenthesis(): array
+	{
+		return [
+			['$typed', true],
+			['$untyped', true],
+			['$static', true],
+			['$staticTyped', true],
+			['$readonly', true],
+			['$first', true],
+			['$second', true],
+			['$local', false],
+		];
+	}
+
+	/**
+	 * @dataProvider dataIsPropertyOutsideOfParenthesis
+	 */
+	#[DataProvider('dataIsPropertyOutsideOfParenthesis')]
+	public function testIsPropertyOutsideOfParenthesis(string $variableName, bool $isProperty): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/propertyOutsideOfParenthesis.php');
+
+		$variablePointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, $variableName, 0);
+		self::assertSame($isProperty, PropertyHelper::isProperty($phpcsFile, $variablePointer));
+	}
+
+	public function testIsPropertyInBracedCase(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/propertyOrNotInBracedCase.php');
+
+		$propertyPointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, '$property', 0);
+		self::assertTrue(PropertyHelper::isProperty($phpcsFile, $propertyPointer));
+
+		$variablePointer = TokenHelper::findNextContent($phpcsFile, T_VARIABLE, '$result', 0);
+		self::assertFalse(PropertyHelper::isProperty($phpcsFile, $variablePointer));
+	}
+
 	private function getTestedCodeSnifferFile(): File
 	{
 		$this->testedCodeSnifferFile ??= $this->getCodeSnifferFile(__DIR__ . '/data/propertyOrNot.php');

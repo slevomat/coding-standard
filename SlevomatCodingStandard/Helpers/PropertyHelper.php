@@ -55,6 +55,11 @@ class PropertyHelper
 			[...array_values(Tokens::SCOPE_MODIFIERS), T_READONLY],
 			true,
 		)) {
+			// Outside of any parenthesis the modifier cannot be in a function's parameter list
+			if (!array_key_exists('nested_parenthesis', $tokens[$previousPointer])) {
+				return true;
+			}
+
 			$constructorPointer = TokenHelper::findPrevious($phpcsFile, T_FUNCTION, $previousPointer - 1);
 
 			if ($constructorPointer === null) {
@@ -68,6 +73,11 @@ class PropertyHelper
 			!array_key_exists('conditions', $tokens[$variablePointer])
 			|| count($tokens[$variablePointer]['conditions']) === 0
 		) {
+			return false;
+		}
+
+		$conditionCode = array_values($tokens[$variablePointer]['conditions'])[count($tokens[$variablePointer]['conditions']) - 1];
+		if (!in_array($conditionCode, Tokens::OO_SCOPE_TOKENS, true)) {
 			return false;
 		}
 
@@ -103,9 +113,7 @@ class PropertyHelper
 			}
 		}
 
-		$conditionCode = array_values($tokens[$variablePointer]['conditions'])[count($tokens[$variablePointer]['conditions']) - 1];
-
-		return in_array($conditionCode, Tokens::OO_SCOPE_TOKENS, true);
+		return true;
 	}
 
 	public static function getStartPointer(File $phpcsFile, int $propertyPointer): int
