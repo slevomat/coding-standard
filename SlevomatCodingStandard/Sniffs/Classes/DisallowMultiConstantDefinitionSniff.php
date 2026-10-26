@@ -7,7 +7,6 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
-use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function count;
 use function in_array;
@@ -15,6 +14,8 @@ use function sprintf;
 use function trim;
 use const T_COMMA;
 use const T_CONST;
+use const T_EQUAL;
+use const T_FINAL;
 use const T_OPEN_SHORT_ARRAY;
 use const T_SEMICOLON;
 
@@ -67,20 +68,45 @@ class DisallowMultiConstantDefinitionSniff implements Sniff
 			return;
 		}
 
-		$possibleVisibilityPointer = TokenHelper::findPreviousEffective($phpcsFile, $constantPointer - 1);
-		$visibilityPointer = in_array($tokens[$possibleVisibilityPointer]['code'], Tokens::SCOPE_MODIFIERS, true)
-			? $possibleVisibilityPointer
-			: null;
-		$visibility = $visibilityPointer !== null ? $tokens[$possibleVisibilityPointer]['content'] : null;
+		$firstModifierPointer = $constantPointer;
+		$modifiers = '';
+		$possibleModifierPointer = TokenHelper::findPreviousEffective($phpcsFile, $constantPointer - 1);
+		while (
+			$tokens[$possibleModifierPointer]['code'] === T_FINAL
+			|| in_array($tokens[$possibleModifierPointer]['code'], Tokens::SCOPE_MODIFIERS, true)
+		) {
+			$firstModifierPointer = $possibleModifierPointer;
+			$modifiers = sprintf('%s %s', $tokens[$possibleModifierPointer]['content'], $modifiers);
+			$possibleModifierPointer = TokenHelper::findPreviousEffective($phpcsFile, $possibleModifierPointer - 1);
+		}
 
 		$pointerAfterConst = TokenHelper::findNextEffective($phpcsFile, $constantPointer + 1);
 		$pointerBeforeSemicolon = TokenHelper::findPreviousEffective($phpcsFile, $semicolonPointer - 1);
 
-		$indentation = IndentationHelper::getIndentation($phpcsFile, $visibilityPointer ?? $constantPointer);
+		$equalPointer = TokenHelper::findNext($phpcsFile, T_EQUAL, $pointerAfterConst + 1, $semicolonPointer);
+		$namePointer = TokenHelper::findPreviousEffective($phpcsFile, $equalPointer - 1);
+		$typeHint = $namePointer !== $pointerAfterConst
+			? sprintf(
+				'%s ',
+				TokenHelper::getContent(
+					$phpcsFile,
+					$pointerAfterConst,
+					TokenHelper::findPreviousEffective($phpcsFile, $namePointer - 1),
+				),
+			)
+			: '';
+
+		// Original content is used, because tabs are replaced with spaces in token content when tab width is set
+		$firstPointerOnLine = TokenHelper::findFirstTokenOnLine($phpcsFile, $firstModifierPointer);
+		$indentation = $phpcsFile->getTokensAsString($firstPointerOnLine, $firstModifierPointer - $firstPointerOnLine, true);
 
 		$docCommentPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $constantPointer);
 		$docComment = $docCommentPointer !== null
-			? trim(TokenHelper::getContent($phpcsFile, $docCommentPointer, $tokens[$docCommentPointer]['comment_closer']))
+			? trim($phpcsFile->getTokensAsString(
+				$docCommentPointer,
+				$tokens[$docCommentPointer]['comment_closer'] - $docCommentPointer + 1,
+				true,
+			))
 			: null;
 
 		$data = [];
@@ -99,17 +125,18 @@ class DisallowMultiConstantDefinitionSniff implements Sniff
 
 		foreach ($commaPointers as $commaPointer) {
 			FixerHelper::removeBetween($phpcsFile, $data[$commaPointer]['pointerBeforeComma'], $commaPointer);
-			FixerHelper::replace(
-				$phpcsFile,
+			// Indentation is copied as written, FixerHelper::replace() would convert spaces to tabs
+			$phpcsFile->fixer->replaceToken(
 				$commaPointer,
 				sprintf(
-					';%s%s%s%sconst ',
+					';%s%s%s%sconst %s',
 					$phpcsFile->eolChar,
 					$docComment !== null
 						? sprintf('%s%s%s', $indentation, $docComment, $phpcsFile->eolChar)
 						: '',
 					$indentation,
-					$visibility !== null ? sprintf('%s ', $visibility) : '',
+					$modifiers,
+					$typeHint,
 				),
 			);
 

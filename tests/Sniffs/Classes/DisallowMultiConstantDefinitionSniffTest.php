@@ -29,4 +29,19 @@ class DisallowMultiConstantDefinitionSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testModifiersAndTypeErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/disallowMultiConstantDefinitionModifiersAndTypeErrors.php');
+
+		self::assertSame(5, $report->getErrorCount());
+
+		self::assertSniffError($report, 6, DisallowMultiConstantDefinitionSniff::CODE_DISALLOWED_MULTI_CONSTANT_DEFINITION);
+		self::assertSniffError($report, 8, DisallowMultiConstantDefinitionSniff::CODE_DISALLOWED_MULTI_CONSTANT_DEFINITION);
+		self::assertSniffError($report, 10, DisallowMultiConstantDefinitionSniff::CODE_DISALLOWED_MULTI_CONSTANT_DEFINITION);
+		self::assertSniffError($report, 16, DisallowMultiConstantDefinitionSniff::CODE_DISALLOWED_MULTI_CONSTANT_DEFINITION);
+		self::assertSniffError($report, 18, DisallowMultiConstantDefinitionSniff::CODE_DISALLOWED_MULTI_CONSTANT_DEFINITION);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
