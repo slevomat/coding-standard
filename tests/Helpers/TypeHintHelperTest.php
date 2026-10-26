@@ -385,6 +385,55 @@ class TypeHintHelperTest extends TestCase
 	}
 
 	/**
+	 * @return list<array{0: int, 1: string, 2: bool}>
+	 */
+	public static function dataIsTypeDefinedInAnnotationWhenTypeIsTemplate(): array
+	{
+		return [
+			[3, 'TClass', true],
+			[9, 'TClass', true],
+			[9, 'TMethod', true],
+			[36, 'TFunction', true],
+			[47, 'TMethod', true],
+			[27, 'TPhpstan', true],
+			[27, 'TPsalm', true],
+			[9, 'tclass', false],
+			[9, 'tmethod', false],
+			[36, 'tfunction', false],
+		];
+	}
+
+	/**
+	 * @dataProvider dataIsTypeDefinedInAnnotationWhenTypeIsTemplate
+	 */
+	#[DataProvider('dataIsTypeDefinedInAnnotationWhenTypeIsTemplate')]
+	public function testIsTypeDefinedInAnnotationWhenTypeIsTemplate(int $line, string $type, bool $isDefined): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintTemplate.php');
+
+		$docCommentOpenPointer = $this->findPointerByLineAndType($phpcsFile, $line, T_DOC_COMMENT_OPEN_TAG);
+
+		self::assertNotNull($docCommentOpenPointer);
+
+		self::assertSame($isDefined, TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $docCommentOpenPointer, $type));
+	}
+
+	public function testIsTypeDefinedInAnnotationWhenTypeIsTemplateOfAnotherClass(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typeHintTemplate.php');
+
+		$classTemplateDocCommentOpenPointer = $this->findPointerByLineAndType($phpcsFile, 9, T_DOC_COMMENT_OPEN_TAG);
+		$otherClassDocCommentOpenPointer = $this->findPointerByLineAndType($phpcsFile, 27, T_DOC_COMMENT_OPEN_TAG);
+
+		self::assertNotNull($classTemplateDocCommentOpenPointer);
+		self::assertNotNull($otherClassDocCommentOpenPointer);
+
+		self::assertTrue(TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $classTemplateDocCommentOpenPointer, 'TClass'));
+		self::assertFalse(TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $otherClassDocCommentOpenPointer, 'TClass'));
+		self::assertFalse(TypeHintHelper::isTypeDefinedInAnnotation($phpcsFile, $otherClassDocCommentOpenPointer, 'TMethod'));
+	}
+
+	/**
 	 * @return list<array{0: string, 1: bool}>
 	 */
 	public static function dataTypeHintEqualsAnnotation(): array
