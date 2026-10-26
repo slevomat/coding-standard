@@ -13,4 +13,6 @@ class Foo
 		'c',
 	];
 
+	private const DEF = array('d', 'e', 'f');
+
 }

@@ -16,6 +16,7 @@ use const T_COMMA;
 use const T_CONST;
 use const T_EQUAL;
 use const T_FINAL;
+use const T_OPEN_PARENTHESIS;
 use const T_OPEN_SHORT_ARRAY;
 use const T_SEMICOLON;
 
@@ -40,7 +41,12 @@ class DisallowMultiConstantDefinitionSniff implements Sniff
 		$commaPointers = [];
 		$nextPointer = $constantPointer;
 		do {
-			$nextPointer = TokenHelper::findNext($phpcsFile, [T_COMMA, T_OPEN_SHORT_ARRAY], $nextPointer + 1, $semicolonPointer);
+			$nextPointer = TokenHelper::findNext(
+				$phpcsFile,
+				[T_COMMA, T_OPEN_SHORT_ARRAY, T_OPEN_PARENTHESIS],
+				$nextPointer + 1,
+				$semicolonPointer,
+			);
 
 			if ($nextPointer === null) {
 				break;
@@ -48,6 +54,11 @@ class DisallowMultiConstantDefinitionSniff implements Sniff
 
 			if ($tokens[$nextPointer]['code'] === T_OPEN_SHORT_ARRAY) {
 				$nextPointer = $tokens[$nextPointer]['bracket_closer'];
+				continue;
+			}
+
+			if ($tokens[$nextPointer]['code'] === T_OPEN_PARENTHESIS) {
+				$nextPointer = $tokens[$nextPointer]['parenthesis_closer'];
 				continue;
 			}
 

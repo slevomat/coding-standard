@@ -13,11 +13,17 @@ class DisallowMultiConstantDefinitionSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testNoErrorsWithParentheses(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/disallowMultiConstantDefinitionWithParenthesesNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
 	public function testErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/disallowMultiConstantDefinitionErrors.php');
 
-		self::assertSame(6, $report->getErrorCount());
+		self::assertSame(7, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, DisallowMultiConstantDefinitionSniff::CODE_DISALLOWED_MULTI_CONSTANT_DEFINITION);
 		self::assertSniffError($report, 8, DisallowMultiConstantDefinitionSniff::CODE_DISALLOWED_MULTI_CONSTANT_DEFINITION);
@@ -25,6 +31,7 @@ class DisallowMultiConstantDefinitionSniffTest extends TestCase
 		self::assertSniffError($report, 13, DisallowMultiConstantDefinitionSniff::CODE_DISALLOWED_MULTI_CONSTANT_DEFINITION);
 		self::assertSniffError($report, 24, DisallowMultiConstantDefinitionSniff::CODE_DISALLOWED_MULTI_CONSTANT_DEFINITION);
 		self::assertSniffError($report, 26, DisallowMultiConstantDefinitionSniff::CODE_DISALLOWED_MULTI_CONSTANT_DEFINITION);
+		self::assertSniffError($report, 32, DisallowMultiConstantDefinitionSniff::CODE_DISALLOWED_MULTI_CONSTANT_DEFINITION);
 
 		self::assertAllFixedInFile($report);
 	}

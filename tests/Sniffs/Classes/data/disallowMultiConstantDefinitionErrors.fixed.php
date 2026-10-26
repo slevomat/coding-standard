@@ -33,4 +33,7 @@ class Foo
 	private const B = ['b'];
 	private const C = ['c'];
 
+	private const D = array('d', 'dd');
+	private const E = array('e', 'ee');
+
 }
