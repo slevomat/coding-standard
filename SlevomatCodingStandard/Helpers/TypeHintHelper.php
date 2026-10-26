@@ -259,6 +259,20 @@ class TypeHintHelper
 
 	private static function isTemplate(File $phpcsFile, int $docCommentOpenPointer, string $typeHint): bool
 	{
+		$templateNames = SniffLocalCache::getAndSetIfNotCached(
+			$phpcsFile,
+			sprintf('template-names-%d', $docCommentOpenPointer),
+			static fn (): array => self::getTemplateNames($phpcsFile, $docCommentOpenPointer),
+		);
+
+		return array_key_exists($typeHint, $templateNames);
+	}
+
+	/**
+	 * @return array<string, true>
+	 */
+	private static function getTemplateNames(File $phpcsFile, int $docCommentOpenPointer): array
+	{
 		static $templateAnnotationNames = null;
 		if ($templateAnnotationNames === null) {
 			foreach (['template', 'template-covariant'] as $annotationName) {
@@ -269,7 +283,9 @@ class TypeHintHelper
 			}
 		}
 
-		$containsTypeHintInTemplateAnnotation = static function (int $docCommentOpenPointer) use ($phpcsFile, $templateAnnotationNames, $typeHint): bool {
+		$getTemplateNamesFromAnnotations = static function (int $docCommentOpenPointer) use ($phpcsFile, $templateAnnotationNames): array {
+			$templateNames = [];
+
 			foreach ($templateAnnotationNames as $templateAnnotationName) {
 				/** @var list<Annotation<TemplateTagValueNode>> $annotations */
 				$annotations = AnnotationHelper::getAnnotations($phpcsFile, $docCommentOpenPointer, $templateAnnotationName);
@@ -279,40 +295,40 @@ class TypeHintHelper
 						continue;
 					}
 
-					if ($templateAnnotation->getValue()->name === $typeHint) {
-						return true;
-					}
+					$templateNames[$templateAnnotation->getValue()->name] = true;
 				}
 			}
 
-			return false;
+			return $templateNames;
 		};
 
 		$tokens = $phpcsFile->getTokens();
 
+		$templateNames = [];
+
 		$docCommentOwnerPointer = DocCommentHelper::findDocCommentOwnerPointer($phpcsFile, $docCommentOpenPointer);
 		if ($docCommentOwnerPointer !== null) {
 			if (in_array($tokens[$docCommentOwnerPointer]['code'], TokenHelper::CLASS_TYPE_TOKEN_CODES, true)) {
-				return $containsTypeHintInTemplateAnnotation($docCommentOpenPointer);
+				return $getTemplateNamesFromAnnotations($docCommentOpenPointer);
 			}
 
-			if ($tokens[$docCommentOwnerPointer]['code'] === T_FUNCTION && $containsTypeHintInTemplateAnnotation($docCommentOpenPointer)) {
-				return true;
+			if ($tokens[$docCommentOwnerPointer]['code'] === T_FUNCTION) {
+				$templateNames = $getTemplateNamesFromAnnotations($docCommentOpenPointer);
 			}
 		}
 
 		$classPointer = ClassHelper::getClassPointer($phpcsFile, $docCommentOpenPointer);
 
 		if ($classPointer === null) {
-			return false;
+			return $templateNames;
 		}
 
 		$classDocCommentOpenPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $classPointer);
 		if ($classDocCommentOpenPointer === null) {
-			return false;
+			return $templateNames;
 		}
 
-		return $containsTypeHintInTemplateAnnotation($classDocCommentOpenPointer);
+		return $templateNames + $getTemplateNamesFromAnnotations($classDocCommentOpenPointer);
 	}
 
 	private static function isAlias(File $phpcsFile, int $docCommentOpenPointer, string $typeHint): bool
