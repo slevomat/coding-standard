@@ -29,4 +29,6 @@ class Foo
 		C = ['c']
 	;
 
+	private const D = array('d', 'dd'), E = array('e', 'ee');
+
 }
