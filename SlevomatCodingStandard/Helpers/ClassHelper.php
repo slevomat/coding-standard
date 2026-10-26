@@ -108,7 +108,7 @@ class ClassHelper
 	/**
 	 * @return list<int>
 	 */
-	private static function getAllClassPointers(File $phpcsFile): array
+	public static function getAllClassPointers(File $phpcsFile): array
 	{
 		$lazyValue = static fn (): array => TokenHelper::findNextAll(
 			$phpcsFile,

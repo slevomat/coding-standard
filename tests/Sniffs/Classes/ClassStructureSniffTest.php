@@ -123,6 +123,28 @@ class ClassStructureSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testStaticConstructorsErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/classStructureStaticConstructorsErrors.php');
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 23, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	public function testStaticConstructorsAfterAnonymousClassErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/classStructureStaticConstructorsAfterAnonymousClassErrors.php');
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 25, ClassStructureSniff::CODE_INCORRECT_GROUP_ORDER);
+
+		self::assertAllFixedInFile($report);
+	}
+
 	public function testNoErrorsWithDifferentRules(): void
 	{
 		$report = self::checkFile(
