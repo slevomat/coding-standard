@@ -24,8 +24,10 @@ use function array_merge;
 use function array_shift;
 use function array_values;
 use function assert;
+use function count;
 use function implode;
 use function in_array;
+use function intdiv;
 use function ltrim;
 use function preg_replace;
 use function preg_split;
@@ -588,7 +590,20 @@ class ClassStructureSniff implements Sniff
 
 	private function getParentClassName(File $phpcsFile, int $pointer): string
 	{
-		$classPointer = TokenHelper::findPrevious($phpcsFile, Tokens::OO_SCOPE_TOKENS, $pointer - 1);
+		$classPointers = ClassHelper::getAllClassPointers($phpcsFile);
+		$classPointer = null;
+		$low = 0;
+		$high = count($classPointers) - 1;
+		while ($low <= $high) {
+			$middle = intdiv($low + $high, 2);
+			if ($classPointers[$middle] >= $pointer) {
+				$high = $middle - 1;
+				continue;
+			}
+
+			$classPointer = $classPointers[$middle];
+			$low = $middle + 1;
+		}
 		assert($classPointer !== null);
 
 		return ClassHelper::getName($phpcsFile, $classPointer);
