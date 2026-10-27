@@ -216,4 +216,26 @@ class PropertyTypeHintSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testModifiersErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/propertyTypeHintModifiersErrors.php', [
+			'enableNativeTypeHint' => true,
+			'enableMixedTypeHint' => true,
+			'enableUnionTypeHint' => true,
+			'enableIntersectionTypeHint' => true,
+			'enableStandaloneNullTrueFalseTypeHints' => true,
+		]);
+
+		self::assertSame(6, $report->getErrorCount());
+
+		self::assertSniffError($report, 6, PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION);
+		self::assertSniffError($report, 8, PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION);
+		self::assertSniffError($report, 10, PropertyTypeHintSniff::CODE_USELESS_ANNOTATION);
+		self::assertSniffError($report, 13, PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION);
+		self::assertSniffError($report, 15, PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION);
+		self::assertSniffError($report, 21, PropertyTypeHintSniff::CODE_MISSING_TRAVERSABLE_TYPE_HINT_SPECIFICATION);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }

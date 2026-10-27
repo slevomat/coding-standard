@@ -39,19 +39,15 @@ use function implode;
 use function in_array;
 use function sprintf;
 use function strtolower;
+use const T_ANON_CLASS;
 use const T_AS;
+use const T_CLASS;
 use const T_COMMA;
 use const T_CONST;
 use const T_DOC_COMMENT_CLOSE_TAG;
 use const T_DOC_COMMENT_STAR;
-use const T_FINAL;
 use const T_FUNCTION;
-use const T_PRIVATE;
-use const T_PROTECTED;
-use const T_PUBLIC;
 use const T_SEMICOLON;
-use const T_STATIC;
-use const T_VAR;
 use const T_VARIABLE;
 
 class PropertyTypeHintSniff implements Sniff
@@ -90,15 +86,7 @@ class PropertyTypeHintSniff implements Sniff
 	 */
 	public function register(): array
 	{
-		// Other modifiers cannot be used without type hint
-		return [
-			T_VAR,
-			T_PUBLIC,
-			T_PROTECTED,
-			T_PRIVATE,
-			T_STATIC,
-			T_FINAL,
-		];
+		return TokenHelper::PROPERTY_MODIFIERS_TOKEN_CODES;
 	}
 
 	public function process(File $phpcsFile, int $pointer): void
@@ -130,7 +118,7 @@ class PropertyTypeHintSniff implements Sniff
 			return;
 		}
 
-		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_FUNCTION, T_CONST, T_VARIABLE], $pointer + 1);
+		$propertyPointer = TokenHelper::findNext($phpcsFile, [T_CLASS, T_ANON_CLASS, T_FUNCTION, T_CONST, T_VARIABLE], $pointer + 1);
 
 		if ($propertyPointer === null || $tokens[$propertyPointer]['code'] !== T_VARIABLE) {
 			return;
