@@ -108,6 +108,29 @@ Sniff provides the following settings:
 
 This sniff can cause an error if you're overriding parent property which does not have typehints. In such cases add `#[Override]` attribute if you are using PHP 8.5+ or add `@phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint` annotation to the property to have this sniff skip it.
 
+#### SlevomatCodingStandard.TypeHints.RequireTrailingCommaInArrayShape 🔧
+
+Enforces trailing commas in non-empty multi-line PHPDoc array shapes, including nested shapes and type aliases.
+Supports `array`, `list`, `non-empty-array`, and `non-empty-list` shapes, including unsealed shapes ending in `...` or `...<key, value>`.
+A shape is multi-line when its opening and closing braces are on different lines. Single-line shapes, empty shapes, and object shapes are not changed.
+
+```php
+/**
+ * @phpstan-return array{
+ *     name: string,
+ *     options: array{
+ *         enabled: bool,
+ *     },
+ * }
+ */
+```
+
+Enable this sniff in your ruleset:
+
+```xml
+<rule ref="SlevomatCodingStandard.TypeHints.RequireTrailingCommaInArrayShape"/>
+```
+
 #### SlevomatCodingStandard.TypeHints.ReturnTypeHint 🔧🚧
 
 * Checks for missing return typehints in case they can be declared natively. If the phpDoc contains something that can be written as a native PHP 7.0+ typehint, this sniff reports that.
