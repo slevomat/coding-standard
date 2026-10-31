@@ -285,6 +285,7 @@ class RequireExplicitAssertionSniff implements Sniff
 		if (
 			$this->enableIntegerRanges
 			&& $typeNode instanceof GenericTypeNode
+			&& $typeNode->type instanceof IdentifierTypeNode
 			&& $typeNode->type->name === 'int'
 			&& count($typeNode->genericTypes) === 2
 		) {

@@ -290,7 +290,7 @@ class AnnotationTypeHelper
 	): string
 	{
 		if ($typeNode instanceof GenericTypeNode) {
-			$genericName = $typeNode->type->name;
+			$genericName = self::print($typeNode->type);
 
 			if (in_array(strtolower($genericName), ['non-empty-array', 'list', 'non-empty-list'], true)) {
 				return 'array';
@@ -341,7 +341,7 @@ class AnnotationTypeHelper
 		}
 
 		if ($typeNode instanceof CallableTypeNode) {
-			return $typeNode->identifier->name;
+			return self::print($typeNode->identifier);
 		}
 
 		if ($typeNode instanceof ArrayTypeNode) {
