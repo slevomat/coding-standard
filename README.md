@@ -191,6 +191,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/PHPCSStandards
  - [SlevomatCodingStandard.TypeHints.ParameterTypeHint](doc/type-hints.md#slevomatcodingstandardtypehintsparametertypehint-) 🔧🚧
  - [SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing](doc/type-hints.md#slevomatcodingstandardtypehintsparametertypehintspacing-) 🔧
  - [SlevomatCodingStandard.TypeHints.PropertyTypeHint](doc/type-hints.md#slevomatcodingstandardtypehintspropertytypehint-) 🔧🚧
+ - [SlevomatCodingStandard.TypeHints.RequireTrailingCommaInArrayShape](doc/type-hints.md#slevomatcodingstandardtypehintsrequiretrailingcommainarrayshape-) 🔧
  - [SlevomatCodingStandard.TypeHints.ReturnTypeHint](doc/type-hints.md#slevomatcodingstandardtypehintsreturntypehint-) 🔧🚧
  - [SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing](doc/type-hints.md#slevomatcodingstandardtypehintsreturntypehintspacing-) 🔧
  - [SlevomatCodingStandard.TypeHints.UnionTypeHintFormat](doc/type-hints.md#slevomatcodingstandardtypehintsuniontypehintformat-) 🔧
