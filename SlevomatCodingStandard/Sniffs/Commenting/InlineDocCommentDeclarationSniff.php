@@ -4,12 +4,14 @@ namespace SlevomatCodingStandard\Sniffs\Commenting;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use SlevomatCodingStandard\Helpers\Annotation;
 use SlevomatCodingStandard\Helpers\AnnotationHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\PropertyHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
+use function array_values;
 use function count;
 use function in_array;
 use function preg_match;
@@ -28,9 +30,6 @@ use const T_FN;
 use const T_FOREACH;
 use const T_LIST;
 use const T_OPEN_SHORT_ARRAY;
-use const T_PRIVATE;
-use const T_PROTECTED;
-use const T_PUBLIC;
 use const T_READONLY;
 use const T_RETURN;
 use const T_SEMICOLON;
@@ -84,7 +83,7 @@ class InlineDocCommentDeclarationSniff implements Sniff
 
 			if (in_array(
 				$tokens[$pointerAfterCommentClosePointer]['code'],
-				[T_PRIVATE, T_PROTECTED, T_PUBLIC, T_READONLY, T_FINAL, T_CONST],
+				[...array_values(Tokens::SCOPE_MODIFIERS), T_READONLY, T_FINAL, T_CONST],
 				true,
 			)) {
 				return;
@@ -92,7 +91,11 @@ class InlineDocCommentDeclarationSniff implements Sniff
 
 			if ($tokens[$pointerAfterCommentClosePointer]['code'] === T_STATIC) {
 				$pointerAfterStatic = TokenHelper::findNextEffective($phpcsFile, $pointerAfterCommentClosePointer + 1);
-				if (in_array($tokens[$pointerAfterStatic]['code'], [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_READONLY], true)) {
+				if (in_array(
+					$tokens[$pointerAfterStatic]['code'],
+					[...array_values(Tokens::SCOPE_MODIFIERS), T_READONLY],
+					true,
+				)) {
 					return;
 				}
 

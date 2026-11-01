@@ -13,6 +13,18 @@ class InlineDocCommentDeclarationSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
+	public function testNoInvalidInlineDocCommentDeclarationsWithAsymmetricVisibility(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/noInvalidInlineDocCommentDeclarationsWithAsymmetricVisibility.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testNoInvalidInlineDocCommentDeclarationsWithStaticAsymmetricVisibility(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/noInvalidInlineDocCommentDeclarationsWithStaticAsymmetricVisibility.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
 	public function testInvalidInlineDocCommentDeclarations(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/invalidInlineDocCommentDeclarations.php');
