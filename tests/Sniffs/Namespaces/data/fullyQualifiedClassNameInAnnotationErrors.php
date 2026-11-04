@@ -298,3 +298,12 @@ class ArrayShapeWithQuotes
 	}
 
 }
+
+/**
+ * @phpstan-type AliasUsingAliasAndClass array{alias: AliasWithClass, date: DateTime}
+ * @phpstan-type AliasWithClass list<DateTimeImmutable>
+ */
+class TypeAliasesWithClassNames
+{
+
+}

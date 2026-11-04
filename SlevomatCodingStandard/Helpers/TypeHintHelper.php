@@ -342,13 +342,7 @@ class TypeHintHelper
 			}
 		}
 
-		$classPointer = ClassHelper::getClassPointer($phpcsFile, $docCommentOpenPointer);
-
-		if ($classPointer === null) {
-			return false;
-		}
-
-		$classDocCommentOpenPointer = DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $classPointer);
+		$classDocCommentOpenPointer = self::findClassDocCommentOpenPointer($phpcsFile, $docCommentOpenPointer);
 		if ($classDocCommentOpenPointer === null) {
 			return false;
 		}
@@ -378,6 +372,24 @@ class TypeHintHelper
 		}
 
 		return false;
+	}
+
+	private static function findClassDocCommentOpenPointer(File $phpcsFile, int $docCommentOpenPointer): ?int
+	{
+		$docCommentOwnerPointer = DocCommentHelper::findDocCommentOwnerPointer($phpcsFile, $docCommentOpenPointer);
+		if (
+			$docCommentOwnerPointer !== null
+			&& in_array($phpcsFile->getTokens()[$docCommentOwnerPointer]['code'], TokenHelper::CLASS_TYPE_TOKEN_CODES, true)
+		) {
+			return $docCommentOpenPointer;
+		}
+
+		$classPointer = ClassHelper::getClassPointer($phpcsFile, $docCommentOpenPointer);
+		if ($classPointer === null) {
+			return null;
+		}
+
+		return DocCommentHelper::findDocCommentOpenPointer($phpcsFile, $classPointer);
 	}
 
 	private static function normalize(string $typeHint): string
