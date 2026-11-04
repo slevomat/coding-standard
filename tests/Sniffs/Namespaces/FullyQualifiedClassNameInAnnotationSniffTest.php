@@ -17,7 +17,7 @@ class FullyQualifiedClassNameInAnnotationSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/fullyQualifiedClassNameInAnnotationErrors.php');
 
-		self::assertSame(91, $report->getErrorCount());
+		self::assertSame(93, $report->getErrorCount());
 
 		self::assertSniffError(
 			$report,
@@ -525,6 +525,19 @@ class FullyQualifiedClassNameInAnnotationSniffTest extends TestCase
 			'Class name \DateTime in @return should be referenced via a fully qualified name',
 		);
 
+		self::assertSniffError(
+			$report,
+			303,
+			FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME,
+			'Class name \DateTime in @phpstan-type should be referenced via a fully qualified name',
+		);
+		self::assertSniffError(
+			$report,
+			304,
+			FullyQualifiedClassNameInAnnotationSniff::CODE_NON_FULLY_QUALIFIED_CLASS_NAME,
+			'Class name \DateTimeImmutable in @phpstan-type should be referenced via a fully qualified name',
+		);
+
 		self::assertAllFixedInFile($report);
 	}
 
@@ -534,7 +547,7 @@ class FullyQualifiedClassNameInAnnotationSniffTest extends TestCase
 			'ignoredAnnotationNames' => ['@return', '@param', '@var'],
 		]);
 
-		self::assertSame(37, $report->getErrorCount());
+		self::assertSame(39, $report->getErrorCount());
 	}
 
 }

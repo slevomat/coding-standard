@@ -165,6 +165,21 @@ class TypeAliasAndImports
 
 }
 
+/**
+ * @phpstan-type AliasUsingLaterAlias list<LaterAlias>
+ * @phpstan-type LaterAlias array{id: string}
+ * @phpstan-type AliasUsingImportedAlias array<string, ImportedAlias>
+ * @phpstan-type AliasUsingRenamedImportedAlias list<RenamedImportedAlias>
+ * @phpstan-import-type ImportedAlias from \SomeImportFrom1
+ * @phpstan-import-type AnotherImportedAlias from \SomeImportFrom2 as RenamedImportedAlias
+ * @psalm-type PsalmAlias = array{id: string}
+ * @psalm-type PsalmAliasUsingAlias = list<PsalmAlias>
+ */
+class TypeAliasesUsedInTypeAliases
+{
+
+}
+
 class NeverIsType
 {
 
