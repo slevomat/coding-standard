@@ -196,3 +196,34 @@ function readsVariableVariable()
 	global $$variableVariableName;
 	return $variableVariableName;
 }
+
+function capturedByValueInClosure(callable $listen): void
+{
+	$captured = true;
+	$listen(static function () use ($captured): bool {
+		return $captured;
+	});
+	$captured = false;
+}
+
+function capturedByReferenceInOtherScope(callable $listen): void
+{
+	$listen(static function () use (&$capturedElsewhere): bool {
+		return $capturedElsewhere;
+	});
+
+	function () {
+		$capturedElsewhere = false;
+	};
+}
+
+function capturedByReferenceInNestedClosure(callable $listen): void
+{
+	$listen(static function () use ($listen): void {
+		$listen(static function () use (&$capturedInNested): bool {
+			return $capturedInNested;
+		});
+	});
+
+	$capturedInNested = false;
+}

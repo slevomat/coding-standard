@@ -534,3 +534,20 @@ function () {
 <?php
 	return $readAfterCloseTag;
 };
+
+function capturedByReferenceInClosure(callable $listen, callable $run): void
+{
+	$fail = true;
+
+	$listen(static function () use (&$fail): void {
+		if ($fail) {
+			throw new \RuntimeException('injected');
+		}
+	});
+
+	$run();
+
+	$fail = false;
+
+	$run();
+}

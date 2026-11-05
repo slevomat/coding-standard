@@ -184,6 +184,10 @@ class UnusedVariableSniff implements Sniff
 			) {
 				return;
 			}
+
+			if ($this->isCapturedByReferenceInClosure($phpcsFile, $scopeOwnerPointer, $pointer)) {
+				return;
+			}
 		}
 
 		if ($this->isReference($phpcsFile, $scopeOwnerPointer, $pointer)) {
@@ -680,6 +684,28 @@ class UnusedVariableSniff implements Sniff
 
 			$referencePointer = TokenHelper::findNextEffective($phpcsFile, $assignmentPointer + 1);
 			if ($tokens[$referencePointer]['code'] === T_BITWISE_AND) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private function isCapturedByReferenceInClosure(File $phpcsFile, int $functionPointer, int $variablePointer): bool
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		foreach (TokenHelper::findNextAll(
+			$phpcsFile,
+			T_CLOSURE,
+			$tokens[$functionPointer]['scope_opener'] + 1,
+			$variablePointer,
+		) as $closurePointer) {
+			if ($this->findScopeOwnerPointer($phpcsFile, $closurePointer) !== $functionPointer) {
+				continue;
+			}
+
+			if ($this->isInheritedVariablePassedByReference($phpcsFile, $closurePointer, $tokens[$variablePointer]['content'])) {
 				return true;
 			}
 		}
