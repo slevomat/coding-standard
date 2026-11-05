@@ -164,6 +164,30 @@ class ReferencedNameHelperTest extends TestCase
 		self::assertCount(0, $names);
 	}
 
+	public function testTypedClassConstants(): void
+	{
+		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/typedClassConstants.php');
+
+		$expectedNames = [
+			'ErrorCodeInterface',
+			'Code',
+			'Union',
+			'Union2',
+			'\Foo\Nullable',
+			'Intersection',
+			'Intersection2',
+		];
+
+		$names = ReferencedNameHelper::getAllReferencedNames($phpcsFile, 0);
+
+		self::assertCount(count($expectedNames), $names);
+
+		foreach ($expectedNames as $no => $expectedName) {
+			self::assertSame($expectedName, $names[$no]->getNameAsReferencedInFile());
+			self::assertTrue($names[$no]->isClass());
+		}
+	}
+
 	public function testEnumCaseIsNotReferencedName(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/enumCase.php');

@@ -165,6 +165,11 @@ class ReferencedNameHelper
 				: ReferencedName::TYPE_FUNCTION;
 		}
 
+		if ($tokens[$previousTokenBeforeStartPointer]['code'] === T_CONST) {
+			// Type of typed constant
+			return ReferencedName::TYPE_CLASS;
+		}
+
 		if (
 			$tokens[$previousTokenBeforeStartPointer]['code'] === T_TYPE_UNION
 			|| $tokens[$nextTokenAfterEndPointer]['code'] === T_TYPE_UNION
@@ -284,13 +289,24 @@ class ReferencedNameHelper
 
 		$previousToken = $tokens[$previousPointer];
 
+		if ($tokens[$nextPointer]['code'] === T_EQUAL) {
+			$pointerBeforeType = TokenHelper::findPreviousExcluding(
+				$phpcsFile,
+				[...TokenHelper::TYPE_HINT_TOKEN_CODES, T_NULLABLE, ...TokenHelper::INEFFECTIVE_TOKEN_CODES],
+				$startPointer - 1,
+			);
+			if ($pointerBeforeType !== null && $tokens[$pointerBeforeType]['code'] === T_CONST) {
+				// Constant name
+				return false;
+			}
+		}
+
 		$skipTokenCodes = [
 			T_FUNCTION,
 			T_DOUBLE_COLON,
 			T_OBJECT_OPERATOR,
 			T_NULLSAFE_OBJECT_OPERATOR,
 			T_NAMESPACE,
-			T_CONST,
 			T_ENUM_CASE,
 		];
 
