@@ -2,6 +2,7 @@
 
 namespace SlevomatCodingStandard\Helpers;
 
+use function array_values;
 use const T_CLASS;
 use const T_FUNCTION;
 use const T_USE;
@@ -113,8 +114,11 @@ class UseStatementHelperTest extends TestCase
 	public function testGetFileUseStatements(): void
 	{
 		$phpcsFile = $this->getCodeSnifferFile(__DIR__ . '/data/useStatements.php');
-		$useStatements = UseStatementHelper::getFileUseStatements($phpcsFile)[0];
-		self::assertCount(8, $useStatements);
+		$allUseStatements = UseStatementHelper::getFileUseStatements($phpcsFile);
+
+		// First block (at open tag)
+		$useStatements = $allUseStatements[0];
+		self::assertCount(7, $useStatements);
 		self::assertPointer(4, $useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CLASS, 'Baz')]->getPointer());
 		self::assertUseStatement(
 			'Bar\Baz',
@@ -140,10 +144,14 @@ class UseStatementHelperTest extends TestCase
 			false,
 			'LoremIpsum',
 		);
+
+		// Second block (after function whatever) - Zero is in a separate block due to code between uses
+		$secondBlockStatements = array_values($allUseStatements)[1];
+		self::assertCount(1, $secondBlockStatements);
 		self::assertUseStatement(
 			'Zero',
 			'Zero',
-			$useStatements[UseStatement::getUniqueId(UseStatement::TYPE_CLASS, 'Zero')],
+			$secondBlockStatements[UseStatement::getUniqueId(UseStatement::TYPE_CLASS, 'Zero')],
 			false,
 			false,
 			null,

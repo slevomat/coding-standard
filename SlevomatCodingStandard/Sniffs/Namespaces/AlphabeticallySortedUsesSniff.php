@@ -21,6 +21,7 @@ use function reset;
 use function sprintf;
 use function uasort;
 use const T_COMMA;
+use const T_DOC_COMMENT_OPEN_TAG;
 use const T_OPEN_TAG;
 use const T_OPEN_USE_GROUP;
 use const T_SEMICOLON;
@@ -121,7 +122,13 @@ class AlphabeticallySortedUsesSniff implements Sniff
 
 		$tokens = $phpcsFile->getTokens();
 
+		// Track comments before use statements
 		$commentsBefore = [];
+		// Track potential block-level comment (docblock before first use when only first has one)
+		$blockLevelComment = null;
+		$firstUseDocblockInfo = null;
+
+		// First pass: collect all comments and detect if first use has a docblock
 		foreach ($useStatements as $useStatement) {
 			$pointerBeforeUseStatement = TokenHelper::findPreviousNonWhitespace($phpcsFile, $useStatement->getPointer() - 1);
 
@@ -138,14 +145,44 @@ class AlphabeticallySortedUsesSniff implements Sniff
 				? CommentHelper::getMultilineCommentStartPointer($phpcsFile, $pointerBeforeUseStatement)
 				: $tokens[$pointerBeforeUseStatement]['comment_opener'];
 
+			if ($firstPointer === $useStatement->getPointer()) {
+				$firstPointer = $commentStartPointer;
+				$isDocblock = $tokens[$commentStartPointer]['code'] === T_DOC_COMMENT_OPEN_TAG;
+				if ($isDocblock) {
+					// Save info for second pass - we may treat this as block-level
+					$firstUseDocblockInfo = [
+						'startPointer' => $commentStartPointer,
+						'endPointer' => $pointerBeforeUseStatement,
+						'usePointer' => $useStatement->getPointer(),
+					];
+					continue;
+				}
+			}
+
 			$commentsBefore[$useStatement->getPointer()] = TokenHelper::getContent(
 				$phpcsFile,
 				$commentStartPointer,
 				$pointerBeforeUseStatement,
 			);
+		}
 
-			if ($firstPointer === $useStatement->getPointer()) {
-				$firstPointer = $commentStartPointer;
+		// If first use has a docblock and no other uses have comments, treat it as block-level
+		// (likely file-level documentation). Otherwise, it's per-use and should move with sorting.
+		if ($firstUseDocblockInfo !== null) {
+			if (count($commentsBefore) === 0) {
+				// Only first use has a comment - treat as block-level
+				$blockLevelComment = TokenHelper::getContent(
+					$phpcsFile,
+					$firstUseDocblockInfo['startPointer'],
+					$firstUseDocblockInfo['endPointer'],
+				);
+			} else {
+				// Other uses also have comments - treat first use's docblock as per-use
+				$commentsBefore[$firstUseDocblockInfo['usePointer']] = TokenHelper::getContent(
+					$phpcsFile,
+					$firstUseDocblockInfo['startPointer'],
+					$firstUseDocblockInfo['endPointer'],
+				);
 			}
 		}
 
@@ -155,10 +192,19 @@ class AlphabeticallySortedUsesSniff implements Sniff
 
 		FixerHelper::removeBetweenIncluding($phpcsFile, $firstPointer, $lastSemicolonPointer);
 
+		// Build the new content with block-level comment first, then sorted uses
+		$blockLevelCommentContent = '';
+		if ($blockLevelComment !== null) {
+			$blockLevelCommentContent = $blockLevelComment;
+			if (!StringHelper::endsWith($blockLevelCommentContent, $phpcsFile->eolChar)) {
+				$blockLevelCommentContent .= $phpcsFile->eolChar;
+			}
+		}
+
 		FixerHelper::add(
 			$phpcsFile,
 			$firstPointer,
-			implode($phpcsFile->eolChar, array_map(static function (UseStatement $useStatement) use ($phpcsFile, $commentsBefore): string {
+			$blockLevelCommentContent . implode($phpcsFile->eolChar, array_map(static function (UseStatement $useStatement) use ($phpcsFile, $commentsBefore): string {
 				$unqualifiedName = NamespaceHelper::getUnqualifiedNameFromFullyQualifiedName($useStatement->getFullyQualifiedTypeName());
 
 				$useTypeName = UseStatement::getTypeName($useStatement->getType());
