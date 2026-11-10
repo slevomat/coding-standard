@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function rtrim;
 use function trim;
+use const T_BITWISE_AND;
 use const T_CLOSE_PARENTHESIS;
 use const T_COMMA;
 use const T_FUNCTION;
@@ -35,6 +36,10 @@ abstract class AbstractLineCall implements Sniff
 		}
 
 		$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $stringPointer - 1);
+
+		if ($tokens[$previousPointer]['code'] === T_BITWISE_AND) {
+			$previousPointer = TokenHelper::findPreviousEffective($phpcsFile, $previousPointer - 1);
+		}
 
 		return $tokens[$previousPointer]['code'] !== T_FUNCTION;
 	}

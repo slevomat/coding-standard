@@ -72,9 +72,3 @@ class Something
 		};
 	}
 }
-
-doSomething(new class {
-	public function &doReference($parameter) {
-		return $parameter;
-	}
-});
