@@ -38,3 +38,11 @@ $array = array_merge([], array_map(function (): string {
 $array = array_map(['a loooooooooooooooooong value that exactly fits into the line length limit'], function (): string {
 	return 'foo';
 });
+
+class WithReferenceMethod
+{
+	public function &doSomethingWithAVeryLongName(string $firstParameter, string $secondParameter, int $thirdParameter, bool $fourth)
+	{
+		return $this->value;
+	}
+}

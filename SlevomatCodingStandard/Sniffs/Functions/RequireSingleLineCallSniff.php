@@ -7,7 +7,6 @@ use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
-use function array_key_exists;
 use function array_keys;
 use function array_merge;
 use function in_array;
@@ -16,7 +15,6 @@ use function rsort;
 use function sprintf;
 use function strlen;
 use function strpos;
-use const T_BITWISE_AND;
 use const T_CLOSURE;
 use const T_CONSTANT_ENCAPSED_STRING;
 use const T_DOUBLE_COLON;
@@ -155,18 +153,6 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 	private function shouldBeSkipped(File $phpcsFile, int $stringPointer): bool
 	{
 		$tokens = $phpcsFile->getTokens();
-
-		// The name of a by-reference function is in its signature but outside its parameter list parenthesis
-		$pointerBeforeString = TokenHelper::findPreviousEffective($phpcsFile, $stringPointer - 1);
-		if ($tokens[$pointerBeforeString]['code'] === T_BITWISE_AND) {
-			$pointerBeforeAmpersand = TokenHelper::findPreviousEffective($phpcsFile, $pointerBeforeString - 1);
-			if (
-				$tokens[$pointerBeforeAmpersand]['code'] === T_FUNCTION
-				&& array_key_exists('scope_closer', $tokens[$pointerBeforeAmpersand])
-			) {
-				return false;
-			}
-		}
 
 		// The innermost enclosing parenthesis or function is checked first. A parameter list is
 		// recorded as an enclosing parenthesis of its tokens, not as one of their scope conditions.

@@ -56,3 +56,27 @@ doSomething(function () {
 		);
 	}
 });
+
+class WithReferenceMethod
+{
+	public function &doReference(
+		$parameter
+	) {
+		return $parameter;
+	}
+}
+
+interface WithReferenceInterfaceMethod
+{
+	public function &doInterfaceReference(
+		$parameter
+	);
+}
+
+doSomething(new class {
+	public function &doReference(
+		$parameter
+	) {
+		return $parameter;
+	}
+});

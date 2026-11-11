@@ -26,3 +26,7 @@ printf(
 	'%s',
 	'something'
 );
+
+$result = $flags & doAnything(
+	true
+);
