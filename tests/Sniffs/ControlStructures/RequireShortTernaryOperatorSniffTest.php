@@ -17,7 +17,7 @@ class RequireShortTernaryOperatorSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/requireShortTernaryOperatorErrors.php');
 
-		self::assertSame(29, $report->getErrorCount());
+		self::assertSame(36, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, RequireShortTernaryOperatorSniff::CODE_REQUIRED_SHORT_TERNARY_OPERATOR);
 		self::assertSniffError($report, 8, RequireShortTernaryOperatorSniff::CODE_REQUIRED_SHORT_TERNARY_OPERATOR);
@@ -47,6 +47,13 @@ class RequireShortTernaryOperatorSniffTest extends TestCase
 		self::assertSniffError($report, 50, RequireShortTernaryOperatorSniff::CODE_REQUIRED_SHORT_TERNARY_OPERATOR);
 		self::assertSniffError($report, 52, RequireShortTernaryOperatorSniff::CODE_REQUIRED_SHORT_TERNARY_OPERATOR);
 		self::assertSniffError($report, 56, RequireShortTernaryOperatorSniff::CODE_REQUIRED_SHORT_TERNARY_OPERATOR);
+		self::assertSniffError($report, 60, RequireShortTernaryOperatorSniff::CODE_REQUIRED_SHORT_TERNARY_OPERATOR);
+		self::assertSniffError($report, 61, RequireShortTernaryOperatorSniff::CODE_REQUIRED_SHORT_TERNARY_OPERATOR);
+		self::assertSniffError($report, 62, RequireShortTernaryOperatorSniff::CODE_REQUIRED_SHORT_TERNARY_OPERATOR);
+		self::assertSniffError($report, 63, RequireShortTernaryOperatorSniff::CODE_REQUIRED_SHORT_TERNARY_OPERATOR);
+		self::assertSniffError($report, 64, RequireShortTernaryOperatorSniff::CODE_REQUIRED_SHORT_TERNARY_OPERATOR);
+		self::assertSniffError($report, 66, RequireShortTernaryOperatorSniff::CODE_REQUIRED_SHORT_TERNARY_OPERATOR);
+		self::assertSniffError($report, 68, RequireShortTernaryOperatorSniff::CODE_REQUIRED_SHORT_TERNARY_OPERATOR);
 
 		self::assertAllFixedInFile($report);
 	}

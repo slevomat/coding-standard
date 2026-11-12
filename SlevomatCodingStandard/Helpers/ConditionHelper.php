@@ -31,7 +31,10 @@ use const T_LESS_THAN;
 use const T_LOGICAL_AND;
 use const T_LOGICAL_OR;
 use const T_LOGICAL_XOR;
+use const T_OPEN_CURLY_BRACKET;
 use const T_OPEN_PARENTHESIS;
+use const T_OPEN_SHORT_ARRAY;
+use const T_OPEN_SQUARE_BRACKET;
 use const T_STRING;
 use const T_VARIABLE;
 
@@ -41,6 +44,16 @@ use const T_VARIABLE;
 class ConditionHelper
 {
 
+	/**
+	 * Determines whether the condition expression is guaranteed to return a boolean value based on
+	 * top-level boolean or comparison operators, ignoring comparisons enclosed within parentheses,
+	 * brackets, or curly braces (such as match expressions, closures, or arrays).
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int $conditionBoundaryStartPointer The token pointer to the start of the condition.
+	 * @param int $conditionBoundaryEndPointer The token pointer to the end of the condition.
+	 * @return bool True if the expression evaluates to a boolean, false otherwise.
+	 */
 	public static function conditionReturnsBoolean(
 		File $phpcsFile,
 		int $conditionBoundaryStartPointer,
@@ -63,7 +76,14 @@ class ConditionHelper
 			$actualPointer = TokenHelper::findNext(
 				$phpcsFile,
 				array_merge(
-					[T_OPEN_PARENTHESIS, T_LESS_THAN, T_GREATER_THAN],
+					[
+						T_OPEN_PARENTHESIS,
+						T_OPEN_SHORT_ARRAY,
+						T_OPEN_SQUARE_BRACKET,
+						T_OPEN_CURLY_BRACKET,
+						T_LESS_THAN,
+						T_GREATER_THAN,
+					],
 					Tokens::BOOLEAN_OPERATORS,
 					Tokens::EQUALITY_TOKENS,
 				),
@@ -80,6 +100,19 @@ class ConditionHelper
 				continue;
 			}
 
+			if (in_array($tokens[$actualPointer]['code'], [T_OPEN_SHORT_ARRAY, T_OPEN_SQUARE_BRACKET], true)) {
+				$actualPointer = $tokens[$actualPointer]['bracket_closer'];
+				continue;
+			}
+
+			if ($tokens[$actualPointer]['code'] === T_OPEN_CURLY_BRACKET) {
+				$closer = $tokens[$actualPointer]['bracket_closer'] ?? $tokens[$actualPointer]['scope_closer'] ?? null;
+				if ($closer !== null) {
+					$actualPointer = $closer;
+					continue;
+				}
+			}
+
 			return true;
 
 		} while (true);
@@ -87,6 +120,16 @@ class ConditionHelper
 		return false;
 	}
 
+	/**
+	 * Computes the logically inverted (negative) representation of a given condition expression range,
+	 * handling outer parentheses unwrapping and delegating to logical or atomic negation helpers.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int $conditionBoundaryStartPointer The token pointer where the condition begins.
+	 * @param int $conditionBoundaryEndPointer The token pointer where the condition ends.
+	 * @param bool $nested Whether the condition is a sub-expression of an enclosing logical expression.
+	 * @return string The negated condition expression string.
+	 */
 	public static function getNegativeCondition(
 		File $phpcsFile,
 		int $conditionBoundaryStartPointer,
@@ -130,6 +173,16 @@ class ConditionHelper
 		);
 	}
 
+	/**
+	 * Computes the negative representation of an individual condition operand or atomic expression,
+	 * inverting comparisons, stripping leading negations, or prefixing with "!".
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int $conditionBoundaryStartPointer The token pointer where the condition part begins.
+	 * @param int $conditionBoundaryEndPointer The token pointer where the condition part ends.
+	 * @param bool $nested Whether the condition is a sub-expression of an enclosing logical expression.
+	 * @return string The negated condition part string.
+	 */
 	private static function getNegativeConditionPart(
 		File $phpcsFile,
 		int $conditionBoundaryStartPointer,
@@ -149,17 +202,25 @@ class ConditionHelper
 		}
 
 		$pointerAfterConditionStart = TokenHelper::findNextEffective($phpcsFile, $conditionBoundaryStartPointer);
-		$booleanPointers = TokenHelper::findNextAll(
+		$topLevelBooleanPointers = self::findTopLevelAll(
 			$phpcsFile,
 			Tokens::BOOLEAN_OPERATORS,
 			$conditionBoundaryStartPointer,
-			$conditionBoundaryEndPointer + 1,
+			$conditionBoundaryEndPointer,
 		);
 
 		if ($tokens[$pointerAfterConditionStart]['code'] === T_BOOLEAN_NOT) {
 			$pointerAfterBooleanNot = TokenHelper::findNextEffective($phpcsFile, $pointerAfterConditionStart + 1);
 			if ($tokens[$pointerAfterBooleanNot]['code'] === T_OPEN_PARENTHESIS) {
-				if ($nested && $booleanPointers !== []) {
+				if (
+					$nested
+					&& TokenHelper::findNext(
+						$phpcsFile,
+						Tokens::BOOLEAN_OPERATORS,
+						$conditionBoundaryStartPointer,
+						$conditionBoundaryEndPointer + 1,
+					) !== null
+				) {
 					return self::removeBooleanNot($condition);
 				}
 
@@ -181,7 +242,7 @@ class ConditionHelper
 			}
 		}
 
-		if (count($booleanPointers) > 0) {
+		if (count($topLevelBooleanPointers) > 0) {
 			return self::getNegativeLogicalCondition($phpcsFile, $conditionBoundaryStartPointer, $conditionBoundaryEndPointer);
 		}
 
@@ -189,11 +250,11 @@ class ConditionHelper
 			return self::removeBooleanNot($condition);
 		}
 
-		if (TokenHelper::findNext(
+		if (self::findTopLevel(
 			$phpcsFile,
 			[T_INSTANCEOF, T_BITWISE_AND, T_COALESCE, T_INLINE_THEN],
 			$conditionBoundaryStartPointer,
-			$conditionBoundaryEndPointer + 1,
+			$conditionBoundaryEndPointer,
 		) !== null) {
 			return sprintf('!(%s)', $condition);
 		}
@@ -219,11 +280,11 @@ class ConditionHelper
 			}
 		}
 
-		$comparisonPointer = TokenHelper::findNext(
+		$comparisonPointer = self::findTopLevel(
 			$phpcsFile,
 			[T_IS_EQUAL, T_IS_NOT_EQUAL, T_IS_IDENTICAL, T_IS_NOT_IDENTICAL, T_IS_SMALLER_OR_EQUAL, T_IS_GREATER_OR_EQUAL, T_LESS_THAN, T_GREATER_THAN],
 			$conditionBoundaryStartPointer,
-			$conditionBoundaryEndPointer + 1,
+			$conditionBoundaryEndPointer,
 		);
 		if ($comparisonPointer !== null) {
 			$comparisonReplacements = [
@@ -240,10 +301,28 @@ class ConditionHelper
 			$negativeCondition = '';
 			for ($i = $conditionBoundaryStartPointer; $i <= $conditionBoundaryEndPointer; $i++) {
 				// Skip calls()
-				if ($tokens[$i]['code'] === T_OPEN_PARENTHESIS) {
+				if ($tokens[$i]['code'] === T_OPEN_PARENTHESIS && isset($tokens[$i]['parenthesis_closer'])) {
 					$negativeCondition .= TokenHelper::getContent($phpcsFile, $i, $tokens[$i]['parenthesis_closer']);
 					$i = $tokens[$i]['parenthesis_closer'];
 					continue;
+				}
+
+				if (
+					in_array($tokens[$i]['code'], [T_OPEN_SHORT_ARRAY, T_OPEN_SQUARE_BRACKET], true)
+					&& isset($tokens[$i]['bracket_closer'])
+				) {
+					$negativeCondition .= TokenHelper::getContent($phpcsFile, $i, $tokens[$i]['bracket_closer']);
+					$i = $tokens[$i]['bracket_closer'];
+					continue;
+				}
+
+				if ($tokens[$i]['code'] === T_OPEN_CURLY_BRACKET) {
+					$closer = $tokens[$i]['bracket_closer'] ?? $tokens[$i]['scope_closer'] ?? null;
+					if ($closer !== null) {
+						$negativeCondition .= TokenHelper::getContent($phpcsFile, $i, $closer);
+						$i = $closer;
+						continue;
+					}
 				}
 
 				$negativeCondition .= array_key_exists($tokens[$i]['code'], $comparisonReplacements)
@@ -257,11 +336,26 @@ class ConditionHelper
 		return sprintf('!%s', $condition);
 	}
 
+	/**
+	 * Removes the leading boolean not ("!") operator and any following whitespace from a condition string.
+	 *
+	 * @param string $condition The condition string starting with "!".
+	 * @return string The condition string without the leading negation.
+	 */
 	private static function removeBooleanNot(string $condition): string
 	{
 		return preg_replace('~^!\\s*~', '', $condition);
 	}
 
+	/**
+	 * Computes the negative representation of a logical compound condition expression by applying De Morgan's laws
+	 * to top-level boolean operators and recursively negating each operand.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int $conditionBoundaryStartPointer The token pointer where the logical condition begins.
+	 * @param int $conditionBoundaryEndPointer The token pointer where the logical condition ends.
+	 * @return string The negated logical condition expression string.
+	 */
 	private static function getNegativeLogicalCondition(
 		File $phpcsFile,
 		int $conditionBoundaryStartPointer,
@@ -292,7 +386,16 @@ class ConditionHelper
 		do {
 			$actualPointer = TokenHelper::findNext(
 				$phpcsFile,
-				array_merge([T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS], Tokens::BOOLEAN_OPERATORS),
+				array_merge(
+					[
+						T_OPEN_PARENTHESIS,
+						T_CLOSE_PARENTHESIS,
+						T_OPEN_SHORT_ARRAY,
+						T_OPEN_SQUARE_BRACKET,
+						T_OPEN_CURLY_BRACKET,
+					],
+					Tokens::BOOLEAN_OPERATORS,
+				),
 				$actualPointer,
 				$conditionBoundaryEndPointer + 1,
 			);
@@ -317,6 +420,22 @@ class ConditionHelper
 				$parenthesesLevel--;
 				$actualPointer++;
 				continue;
+			}
+
+			if (
+				in_array($tokens[$actualPointer]['code'], [T_OPEN_SHORT_ARRAY, T_OPEN_SQUARE_BRACKET], true)
+				&& isset($tokens[$actualPointer]['bracket_closer'])
+			) {
+				$actualPointer = $tokens[$actualPointer]['bracket_closer'] + 1;
+				continue;
+			}
+
+			if ($tokens[$actualPointer]['code'] === T_OPEN_CURLY_BRACKET) {
+				$closer = $tokens[$actualPointer]['bracket_closer'] ?? $tokens[$actualPointer]['scope_closer'] ?? null;
+				if ($closer !== null) {
+					$actualPointer = $closer + 1;
+					continue;
+				}
 			}
 
 			if ($parenthesesLevel !== 0) {
@@ -347,6 +466,131 @@ class ConditionHelper
 			$conditionBoundaryEndPointer,
 			true,
 		);
+	}
+
+	/**
+	 * Locates the first occurrence of any of the specified token types that is at the top level
+	 * of the expression, skipping tokens enclosed in parentheses, brackets, or curly braces.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param array<int|string, int|string> $types The token codes to search for.
+	 * @param int $startPointer The token pointer where the search begins.
+	 * @param int $endPointer The token pointer where the search ends (inclusive).
+	 * @return int|null The pointer to the first matching top-level token, or null if none found.
+	 */
+	private static function findTopLevel(File $phpcsFile, array $types, int $startPointer, int $endPointer): ?int
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$searchTypes = array_merge(
+			[
+				T_OPEN_PARENTHESIS,
+				T_OPEN_SHORT_ARRAY,
+				T_OPEN_SQUARE_BRACKET,
+				T_OPEN_CURLY_BRACKET,
+			],
+			$types,
+		);
+
+		$actualPointer = $startPointer;
+		do {
+			$actualPointer = TokenHelper::findNext($phpcsFile, $searchTypes, $actualPointer, $endPointer + 1);
+			if ($actualPointer === null) {
+				return null;
+			}
+
+			if ($tokens[$actualPointer]['code'] === T_OPEN_PARENTHESIS && isset($tokens[$actualPointer]['parenthesis_closer'])) {
+				$actualPointer = $tokens[$actualPointer]['parenthesis_closer'] + 1;
+				continue;
+			}
+
+			if (
+				in_array($tokens[$actualPointer]['code'], [T_OPEN_SHORT_ARRAY, T_OPEN_SQUARE_BRACKET], true)
+				&& isset($tokens[$actualPointer]['bracket_closer'])
+			) {
+				$actualPointer = $tokens[$actualPointer]['bracket_closer'] + 1;
+				continue;
+			}
+
+			if ($tokens[$actualPointer]['code'] === T_OPEN_CURLY_BRACKET) {
+				$closer = $tokens[$actualPointer]['bracket_closer'] ?? $tokens[$actualPointer]['scope_closer'] ?? null;
+				if ($closer !== null) {
+					$actualPointer = $closer + 1;
+					continue;
+				}
+			}
+
+			if (in_array($tokens[$actualPointer]['code'], $types, true)) {
+				return $actualPointer;
+			}
+
+			$actualPointer++;
+		} while ($actualPointer <= $endPointer);
+
+		return null;
+	}
+
+	/**
+	 * Locates all occurrences of the specified token types that are at the top level
+	 * of the expression, skipping tokens enclosed in parentheses, brackets, or curly braces.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param array<int|string, int|string> $types The token codes to search for.
+	 * @param int $startPointer The token pointer where the search begins.
+	 * @param int $endPointer The token pointer where the search ends (inclusive).
+	 * @return list<int> Pointers to all matching top-level tokens.
+	 */
+	private static function findTopLevelAll(File $phpcsFile, array $types, int $startPointer, int $endPointer): array
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$searchTypes = array_merge(
+			[
+				T_OPEN_PARENTHESIS,
+				T_OPEN_SHORT_ARRAY,
+				T_OPEN_SQUARE_BRACKET,
+				T_OPEN_CURLY_BRACKET,
+			],
+			$types,
+		);
+
+		$pointers = [];
+		$actualPointer = $startPointer;
+		do {
+			$actualPointer = TokenHelper::findNext($phpcsFile, $searchTypes, $actualPointer, $endPointer + 1);
+			if ($actualPointer === null) {
+				break;
+			}
+
+			if ($tokens[$actualPointer]['code'] === T_OPEN_PARENTHESIS && isset($tokens[$actualPointer]['parenthesis_closer'])) {
+				$actualPointer = $tokens[$actualPointer]['parenthesis_closer'] + 1;
+				continue;
+			}
+
+			if (
+				in_array($tokens[$actualPointer]['code'], [T_OPEN_SHORT_ARRAY, T_OPEN_SQUARE_BRACKET], true)
+				&& isset($tokens[$actualPointer]['bracket_closer'])
+			) {
+				$actualPointer = $tokens[$actualPointer]['bracket_closer'] + 1;
+				continue;
+			}
+
+			if ($tokens[$actualPointer]['code'] === T_OPEN_CURLY_BRACKET) {
+				$closer = $tokens[$actualPointer]['bracket_closer'] ?? $tokens[$actualPointer]['scope_closer'] ?? null;
+				if ($closer !== null) {
+					$actualPointer = $closer + 1;
+					continue;
+				}
+			}
+
+			if (in_array($tokens[$actualPointer]['code'], $types, true)) {
+				$pointers[] = $actualPointer;
+			}
+
+			$actualPointer++;
+		} while ($actualPointer <= $endPointer);
+
+		return $pointers;
 	}
 
 }

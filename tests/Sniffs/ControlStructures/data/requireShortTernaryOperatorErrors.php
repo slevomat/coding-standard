@@ -56,6 +56,16 @@ class Whatever
 		if (!a() ? null : a()) {
 
 		}
+
+		$r = !$a ? $b ? 'x' : 'y' : $a;
+		$s = !$a ? [$b][0] ? 'x' : 'y' : $a;
+		$t = !$a ? ${'b'} ? 'x' : 'y' : $a;
+		$u = !$a ? ($b ? 'x' : 'y') : $a;
+		$v = !$a ? $b ? 'x' : 'y' // note
+			: $a;
+		$w = !$a ? $b ? 'x' : 'y' # note
+			: $a;
+		$z = !$a ? $b ? 'x' : 'y' /* note */ : $a;
 	}
 
 }

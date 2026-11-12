@@ -6,13 +6,22 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\ConditionHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
+use SlevomatCodingStandard\Helpers\ScopeHelper;
 use SlevomatCodingStandard\Helpers\TernaryOperatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
+use const T_CLOSE_TAG;
+use const T_DOUBLE_ARROW;
 use const T_FALSE;
 use const T_INLINE_ELSE;
 use const T_INLINE_THEN;
+use const T_LOGICAL_AND;
+use const T_LOGICAL_OR;
+use const T_LOGICAL_XOR;
+use const T_MATCH_ARROW;
 use const T_TRUE;
+use const T_YIELD;
+use const T_YIELD_FROM;
 
 class UselessTernaryOperatorSniff implements Sniff
 {
@@ -74,13 +83,19 @@ class UselessTernaryOperatorSniff implements Sniff
 			return;
 		}
 
+		$inlineElseEndPointer = TernaryOperatorHelper::getEndPointer($phpcsFile, $inlineThenPointer, $inlineElsePointer);
+
+		if ($this->containsYieldInSameScope($phpcsFile, $inlineThenPointer, $inlineElsePointer, $inlineElseEndPointer)) {
+			// Removing the only "yield" would change the generator status of the function
+			$phpcsFile->addError(...$errorParameters);
+			return;
+		}
+
 		$fix = $phpcsFile->addFixableError(...$errorParameters);
 
 		if (!$fix) {
 			return;
 		}
-
-		$inlineElseEndPointer = TernaryOperatorHelper::getEndPointer($phpcsFile, $inlineThenPointer, $inlineElsePointer);
 
 		$pointerAfterTernaryOperator = TokenHelper::findNextEffective($phpcsFile, $inlineElseEndPointer + 1);
 
@@ -94,7 +109,36 @@ class UselessTernaryOperatorSniff implements Sniff
 
 		FixerHelper::removeBetween($phpcsFile, $conditionEndPointer, $pointerAfterTernaryOperator);
 
+		if (in_array(
+			$tokens[$pointerAfterTernaryOperator]['code'],
+			[T_LOGICAL_AND, T_LOGICAL_OR, T_LOGICAL_XOR, T_INLINE_THEN, T_CLOSE_TAG, T_DOUBLE_ARROW, T_MATCH_ARROW],
+			true,
+		)) {
+			FixerHelper::addBefore($phpcsFile, $pointerAfterTernaryOperator, ' ');
+		}
+
 		$phpcsFile->fixer->endChangeset();
+	}
+
+	/**
+	 * Determines whether the ternary false-branch expression contains a yield or yield from
+	 * within the same function scope, which would change the function's generator status if removed.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int $inlineThenPointer The token pointer to the T_INLINE_THEN ("?") token.
+	 * @param int $startPointer The token pointer after which to start searching (typically T_INLINE_ELSE).
+	 * @param int $endPointer The token pointer up to which to search (the end of the ternary expression).
+	 * @return bool True if a yield token exists in the same scope, false otherwise.
+	 */
+	private function containsYieldInSameScope(File $phpcsFile, int $inlineThenPointer, int $startPointer, int $endPointer): bool
+	{
+		foreach (TokenHelper::findNextAll($phpcsFile, [T_YIELD, T_YIELD_FROM], $startPointer + 1, $endPointer + 1) as $yieldPointer) {
+			if (ScopeHelper::isInSameScope($phpcsFile, $inlineThenPointer, $yieldPointer)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }

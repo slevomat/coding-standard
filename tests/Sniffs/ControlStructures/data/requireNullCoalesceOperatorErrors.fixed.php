@@ -37,3 +37,24 @@ $r[$something ?? ($anything !== false ? $anything : 'default')] = true;
 function ($options) {
 	return $options['value'] ?? 1;
 };
+
+$s = $a ?? ($b ? 'x' : 'y');
+$t = $a ?? ([$b][0] ? 'x' : 'y');
+$u = $a ?? (${'b'} ? 'x' : 'y');
+echo $a ?? 'default';
+echo $a ?? 'default';
+$out .= $a ?? 'default';
+$out .= $a ?? 'default';
+$v = [$a ?? [1, 2], 'foo'];
+
+$s2 = $a ?? ($b ? 'x' : 'y') /* keep */;
+$s3 = $a ?? ($b ? 'x' : 'y') // keep
+;
+
+function () use ($a) {
+	yield $a ?? 'default';
+	yield from $a ?? 'default';
+	yield $a ?? 'default';
+	yield from $a ?? 'default';
+};
+

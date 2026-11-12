@@ -66,3 +66,7 @@ class Whatever
 function ($someString) {
 	return $someString === 'empty' || !$someString ? [] : $someString;
 };
+
+$r = !$a && $b ? $c ? 'x' : 'y' : $a && $b;
+$r = !($a) && $b ? $c ? 'x' : 'y' : ($a) && $b;
+$r = !$a ? $b ? null : 'y' : $a ?? 'z';

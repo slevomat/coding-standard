@@ -17,7 +17,7 @@ class UselessTernaryOperatorSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/uselessTernaryOperatorErrors.php');
 
-		self::assertSame(13, $report->getErrorCount());
+		self::assertSame(29, $report->getErrorCount());
 
 		self::assertSniffError($report, 4, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
 		self::assertSniffError($report, 8, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
@@ -32,6 +32,40 @@ class UselessTernaryOperatorSniffTest extends TestCase
 		self::assertSniffError($report, 55, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
 		self::assertSniffError($report, 59, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
 		self::assertSniffError($report, 65, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 71, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 75, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 79, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 83, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 87, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 91, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 95, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 99, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 103, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 107, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 111, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 115, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 119, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 123, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 127, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 131, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+
+		self::assertAllFixedInFile($report);
+	}
+
+	/**
+	 * Verifies that useless ternary expressions inside match arms are reported and fixed.
+	 */
+	public function testMatchErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/uselessTernaryOperatorMatchErrors.php');
+
+		self::assertSame(5, $report->getErrorCount());
+
+		self::assertSniffError($report, 4, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 8, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 12, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 16, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
+		self::assertSniffError($report, 20, UselessTernaryOperatorSniff::CODE_USELESS_TERNARY_OPERATOR);
 
 		self::assertAllFixedInFile($report);
 	}

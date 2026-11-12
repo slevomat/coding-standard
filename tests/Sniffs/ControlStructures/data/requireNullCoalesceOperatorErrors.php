@@ -43,3 +43,24 @@ $r[$something === null ? ($anything !== false ? $anything : 'default') : $someth
 function ($options) {
 	return (int) isset($options['value']) ? $options['value'] : 1;
 };
+
+$s = $a === null ? $b ? 'x' : 'y' : $a;
+$t = $a === null ? [$b][0] ? 'x' : 'y' : $a;
+$u = $a === null ? ${'b'} ? 'x' : 'y' : $a;
+echo isset($a) ? $a : 'default';
+echo $a === null ? 'default' : $a;
+$out .= $a === null ? 'default' : $a;
+$out .= isset($a) ? $a : 'default';
+$v = [isset($a) ? $a : [1, 2], 'foo'];
+
+$s2 = $a === null ? $b ? 'x' : 'y' /* keep */ : $a;
+$s3 = $a === null ? $b ? 'x' : 'y' // keep
+	: $a;
+
+function () use ($a) {
+	yield isset($a) ? $a : 'default';
+	yield from isset($a) ? $a : 'default';
+	yield $a === null ? 'default' : $a;
+	yield from $a === null ? 'default' : $a;
+};
+
