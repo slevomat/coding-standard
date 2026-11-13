@@ -66,3 +66,79 @@ function ($request) {
 
 	return $withFiles;
 };
+
+function ($a) {
+	$r = $a === 1 and sideEffect();
+};
+
+function ($a) {
+	$r = (print $a === 1) ? true : false;
+};
+
+function ($a) {
+	$r = $a === 1 ?: sideEffect();
+};
+
+function ($a, $b) {
+	$r = $a === 1;
+};
+
+function ($key, $a) {
+	$r = [$key === 'x' => $a ? true : false];
+};
+
+function ($a) {
+	$r = $a === 1 ?>Hello<?php echo 'retained';
+};
+
+function ($a) {
+	$r = $a === 1;
+};
+
+function ($a) {
+	$r = $a === 1;
+};
+
+function ($a) {
+	$r = $a === 1;
+};
+
+function ($a) {
+	$r = $a === 1 ? true : false ?? yield 1;
+};
+
+function ($a) {
+	foo($a === 1, 2);
+};
+
+function ($flag) {
+	$r = !$flag || function (): void {} === null;
+};
+
+function ($flag) {
+	$r = !$flag || static function (): int {} === null;
+};
+
+function ($flag) {
+	$r = !$flag || new class () { public function foo(): void {} } === null;
+};
+
+function ($a) {
+	$r = [$a === 1 => 2];
+};
+
+function ($flag, $a) {
+	$r = !$flag || ![0 => $a === 1, 1 => 'fallback'];
+};
+
+function ($override, $a) {
+	$r = $override ?? [0 => $a] === [0 => 1] ? true : false;
+};
+
+echo !$a !== $b;
+$r = $ready ? true : null;
+$r = $a === 1;
+$r = true;
+$r = $a === 1;
+$r = true;
+$r = true and $c = 4;

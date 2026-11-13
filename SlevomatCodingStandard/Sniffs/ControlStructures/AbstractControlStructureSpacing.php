@@ -273,8 +273,8 @@ abstract class AbstractControlStructureSpacing implements Sniff
 			[T_CASE, T_DEFAULT],
 			true,
 		)
-				? $tokens[$pointer]['code'] === T_CLOSE_CURLY_BRACKET
-				: in_array($tokens[$pointer]['code'], [T_CLOSE_CURLY_BRACKET, T_CASE, T_DEFAULT], true);
+			? $tokens[$pointer]['code'] === T_CLOSE_CURLY_BRACKET
+			: in_array($tokens[$pointer]['code'], [T_CLOSE_CURLY_BRACKET, T_CASE, T_DEFAULT], true);
 
 		if ($hasCommentAfter) {
 			if ($tokens[$notWhitespacePointerAfter]['line'] === $tokens[$controlStructureEndPointer]['line'] + 1) {

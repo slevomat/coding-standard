@@ -33,3 +33,41 @@ $a = $b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
 $array[$b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
 	? 'bbbb'
 	: 'ccccccc'] = 'b';
+
+$a = in_array(
+	$b,
+	$c,
+	true
+)
+	? 'bbbb'
+	: 'cccccccccccccc';
+
+$a = in_array(
+	$b,
+	$c,
+	true
+)
+	? 'bbbb'
+	: 'cccccccccccccc';
+
+$a = $b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
+	? 'bbbb'
+	: 'cccccccccccccc';
+
+$a = $b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
+	? 'bbbb'
+	: 'cccccccccccccc';
+
+$a = $b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
+	? 'bbbb'
+	: 'cccccccccccccc';
+
+function () use ($b) {
+	yield $b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
+		? 'bbbb'
+		: 'cccccccccccccc';
+
+	yield from $b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
+		? 'bbbb'
+		: 'cccccccccccccc';
+};

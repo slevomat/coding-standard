@@ -11,6 +11,7 @@ use SlevomatCodingStandard\Helpers\TernaryOperatorHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function in_array;
 use function sprintf;
+use function strpos;
 use function trim;
 use const T_BOOLEAN_NOT;
 use const T_CLOSE_PARENTHESIS;
@@ -20,6 +21,7 @@ use const T_IS_IDENTICAL;
 use const T_IS_NOT_IDENTICAL;
 use const T_ISSET;
 use const T_NULL;
+use const T_WHITESPACE;
 
 class RequireNullCoalesceOperatorSniff implements Sniff
 {
@@ -49,6 +51,12 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 		}
 	}
 
+	/**
+	 * Checks whether an isset() ternary operator can be simplified to a null coalesce ("??") expression.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int $issetPointer The token pointer to the T_ISSET token.
+	 */
 	public function checkIsset(File $phpcsFile, int $issetPointer): void
 	{
 		$tokens = $phpcsFile->getTokens();
@@ -85,6 +93,15 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 			return;
 		}
 
+		$startPointer = $issetPointer;
+		if (in_array($tokens[$previousPointer]['code'], Tokens::CAST_TOKENS, true)) {
+			$startPointer = $previousPointer;
+		}
+
+		if (TernaryOperatorHelper::getStartPointer($phpcsFile, $inlineThenPointer) !== $startPointer) {
+			return;
+		}
+
 		$fix = $phpcsFile->addFixableError(
 			'Use null coalesce operator instead of ternary operator.',
 			$inlineThenPointer,
@@ -94,11 +111,6 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 			return;
 		}
 
-		$startPointer = $issetPointer;
-		if (in_array($tokens[$previousPointer]['code'], Tokens::CAST_TOKENS, true)) {
-			$startPointer = $previousPointer;
-		}
-
 		$phpcsFile->fixer->beginChangeset();
 
 		FixerHelper::change($phpcsFile, $startPointer, $inlineElsePointer, sprintf('%s ??', $variableContent));
@@ -106,6 +118,12 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 		$phpcsFile->fixer->endChangeset();
 	}
 
+	/**
+	 * Checks whether an identical comparison with null in a ternary operator can be simplified to a null coalesce ("??") expression.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int $identicalOperator The token pointer to the T_IS_IDENTICAL or T_IS_NOT_IDENTICAL token.
+	 */
 	public function checkIdenticalOperator(File $phpcsFile, int $identicalOperator): void
 	{
 		$tokens = $phpcsFile->getTokens();
@@ -151,6 +169,12 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 			($isYodaCondition ? $variableEndPointer : $pointerAfterIdenticalOperator) + 1,
 		);
 		if ($tokens[$inlineThenPointer]['code'] !== T_INLINE_THEN) {
+			return;
+		}
+
+		/** @var int $conditionStart */
+		$conditionStart = $isYodaCondition ? $pointerBeforeIdenticalOperator : $variableStartPointer;
+		if (TernaryOperatorHelper::getStartPointer($phpcsFile, $inlineThenPointer) !== $conditionStart) {
 			return;
 		}
 
@@ -200,8 +224,37 @@ class RequireNullCoalesceOperatorSniff implements Sniff
 			FixerHelper::removeBetweenIncluding($phpcsFile, $conditionStart + 1, $inlineThenPointer);
 
 			$pointerBeforeInlineElse = TokenHelper::findPreviousEffective($phpcsFile, $inlineElsePointer - 1);
+			$firstPointerInThen = TokenHelper::findNextEffective($phpcsFile, $inlineThenPointer + 1);
 
-			FixerHelper::removeBetweenIncluding($phpcsFile, $pointerBeforeInlineElse + 1, $inlineElseEndPointer);
+			if (TernaryOperatorHelper::hasUnparenthesizedLowPrecedenceExpression(
+				$phpcsFile,
+				$firstPointerInThen,
+				$pointerBeforeInlineElse,
+			)) {
+				FixerHelper::addBefore($phpcsFile, $firstPointerInThen, '(');
+				FixerHelper::add($phpcsFile, $pointerBeforeInlineElse, ')');
+			}
+
+			$lastCommentPointer = TokenHelper::findPrevious(
+				$phpcsFile,
+				Tokens::$commentTokens,
+				$inlineElsePointer - 1,
+				$pointerBeforeInlineElse,
+			);
+
+			if ($lastCommentPointer !== null) {
+				$removeStartPointer = $inlineElsePointer;
+				if (
+					$tokens[$inlineElsePointer - 1]['code'] === T_WHITESPACE
+					&& strpos($tokens[$inlineElsePointer - 1]['content'], "\n") === false
+				) {
+					$removeStartPointer = $inlineElsePointer - 1;
+				}
+
+				FixerHelper::removeBetweenIncluding($phpcsFile, $removeStartPointer, $inlineElseEndPointer);
+			} else {
+				FixerHelper::removeBetweenIncluding($phpcsFile, $pointerBeforeInlineElse + 1, $inlineElseEndPointer);
+			}
 
 		} else {
 			FixerHelper::removeBetweenIncluding($phpcsFile, $conditionStart + 1, $inlineElsePointer);
