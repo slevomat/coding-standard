@@ -45,3 +45,7 @@ $t = $t || isset($v) ? $v : null;
 $t = $t and isset($v) ? $v : null;
 $t = $t or isset($v) ? $v : null;
 $t = $t xor isset($v) ? $v : null;
+
+$u = $override ?? $a === null ? $b ? 'x' : 'y' : $a;
+$v = $override ?? isset($a) ? $a : 'default';
+$w = $a === null ? $b ? null : 'y' : $a ?? 'z';
