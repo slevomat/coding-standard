@@ -56,6 +56,20 @@ class Whatever
 		if (!a() ? null : a()) {
 
 		}
+
+		$r = !$a ? $b ? 'x' : 'y' : $a;
+		$s = !$a ? [$b][0] ? 'x' : 'y' : $a;
+		$t = !$a ? ${'b'} ? 'x' : 'y' : $a;
+		$u = !$a ? ($b ? 'x' : 'y') : $a;
+		$v = !$a ? $b ? 'x' : 'y' // note
+			: $a;
+		$w = !$a ? $b ? 'x' : 'y' # note
+			: $a;
+		$z = !$a ? $b ? 'x' : 'y' /* note */ : $a;
+		echo !$a ? $b and $c : $a;
+		$r = !$a ? fn () => 1 : $a and $b = 1;
+		$r = !$a ? include 'a.php' : $a and $b = 1;
+		$r = !$a ? function () { $x = 1; } : $a;
 	}
 
 }

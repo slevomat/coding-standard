@@ -24,3 +24,6 @@ function ($a) {
 function ($a) {
 	return true ?: $a;
 };
+
+echo false ? false : true + 1;
+echo $x ? false : true + 1;
