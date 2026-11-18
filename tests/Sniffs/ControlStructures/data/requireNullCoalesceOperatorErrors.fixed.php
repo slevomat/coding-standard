@@ -37,3 +37,47 @@ $r[$something ?? ($anything !== false ? $anything : 'default')] = true;
 function ($options) {
 	return $options['value'] ?? 1;
 };
+
+$s = $a ?? ($b ? 'x' : 'y');
+$t = $a ?? ([$b][0] ? 'x' : 'y');
+$u = $a ?? (${'b'} ? 'x' : 'y');
+echo $a ?? 'default';
+echo $a ?? 'default';
+$out .= $a ?? 'default';
+$out .= $a ?? 'default';
+$v = [$a ?? [1, 2], 'foo'];
+
+$s2 = $a ?? ($b ? 'x' : 'y') /* keep */;
+$s3 = $a ?? ($b ? 'x' : 'y') // keep
+;
+
+function () use ($a) {
+	yield $a ?? 'default';
+	yield from $a ?? 'default';
+	yield $a ?? 'default';
+	yield from $a ?? 'default';
+};
+
+foo(); $a ?? 'fallback';
+foo(); $a ?? 'default';
+if ($flag) { $a ?? 'fallback'; }
+if ($flag) { $a ?? 'default'; }
+
+$result = $ready ? $a ?? 'default' : null;
+include $path ?? 'default.php';
+require_once $path ?? 'default.php';
+$r = $a ?? (fn () => 1) and $b = 1;
+$r = $a ?? (include 'a.php') and $b = 1;
+$r = $a ?? ($b and $c);
+$r = $a ?? function () { $x = 1; };
+$s4 = $a ?? $b // keep
+;
+$s5 = $a ?? $b # keep
+;
+$s6 = $a ?? $b /* keep */
+;
+$s7 = $a ?? $b // keep
+
+;
+
+

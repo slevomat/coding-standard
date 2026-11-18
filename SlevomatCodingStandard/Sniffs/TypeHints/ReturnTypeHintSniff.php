@@ -746,8 +746,8 @@ class ReturnTypeHintSniff implements Sniff
 	{
 		$this->normalizedTraversableTypeHints ??= array_map(
 			static fn (string $typeHint): string => NamespaceHelper::isFullyQualifiedName($typeHint)
-					? $typeHint
-					: sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint),
+				? $typeHint
+				: sprintf('%s%s', NamespaceHelper::NAMESPACE_SEPARATOR, $typeHint),
 			SniffSettingsHelper::normalizeArray($this->traversableTypeHints),
 		);
 		return $this->normalizedTraversableTypeHints;

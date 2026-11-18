@@ -8,6 +8,14 @@ Disallows using loose `==` and `!=` comparison operators. Use `===` and `!==` in
 
 Disallows using `++` and `--` operators.
 
+#### SlevomatCodingStandard.Operators.MultiLineOperatorIndentation 🔧
+
+Enforces leading placement and exact indentation of multiline string concatenation (`.`) and configurable operators.
+
+Sniff provides the following settings:
+
+* `operators`: optional list of operator token names or codes to check (default: `[T_STRING_CONCAT]`).
+
 #### SlevomatCodingStandard.Operators.NegationOperatorSpacing 🔧
 
 Checks if there is the same number of spaces after negation operator as expected.
