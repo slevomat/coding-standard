@@ -17,11 +17,18 @@ class DisallowDirectMagicInvokeCallSniffTest extends TestCase
 	{
 		$report = self::checkFile(__DIR__ . '/data/disallowDirectMagicInvokeCallErrors.php');
 
-		self::assertSame(3, $report->getErrorCount());
+		self::assertSame(10, $report->getErrorCount());
 
 		self::assertSniffError($report, 3, DisallowDirectMagicInvokeCallSniff::CODE_DISALLOWED_DIRECT_MAGIC_INVOKE_CALL);
 		self::assertSniffError($report, 7, DisallowDirectMagicInvokeCallSniff::CODE_DISALLOWED_DIRECT_MAGIC_INVOKE_CALL);
 		self::assertSniffError($report, 9, DisallowDirectMagicInvokeCallSniff::CODE_DISALLOWED_DIRECT_MAGIC_INVOKE_CALL);
+		self::assertSniffError($report, 11, DisallowDirectMagicInvokeCallSniff::CODE_DISALLOWED_DIRECT_MAGIC_INVOKE_CALL);
+		self::assertSniffError($report, 13, DisallowDirectMagicInvokeCallSniff::CODE_DISALLOWED_DIRECT_MAGIC_INVOKE_CALL);
+		self::assertSniffError($report, 15, DisallowDirectMagicInvokeCallSniff::CODE_DISALLOWED_DIRECT_MAGIC_INVOKE_CALL);
+		self::assertSniffError($report, 17, DisallowDirectMagicInvokeCallSniff::CODE_DISALLOWED_DIRECT_MAGIC_INVOKE_CALL);
+		self::assertSniffError($report, 19, DisallowDirectMagicInvokeCallSniff::CODE_DISALLOWED_DIRECT_MAGIC_INVOKE_CALL);
+		self::assertSniffError($report, 21, DisallowDirectMagicInvokeCallSniff::CODE_DISALLOWED_DIRECT_MAGIC_INVOKE_CALL);
+		self::assertSniffError($report, 23, DisallowDirectMagicInvokeCallSniff::CODE_DISALLOWED_DIRECT_MAGIC_INVOKE_CALL);
 
 		self::assertAllFixedInFile($report);
 	}
