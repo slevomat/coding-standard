@@ -132,4 +132,17 @@ final class RequireMultiLineMethodSignatureSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testUnicodeLineLengthErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireMultiLineMethodSignatureUnicodeLineLengthErrors.php', [
+			'minLineLength' => 53,
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 8, RequireMultiLineMethodSignatureSniff::CODE_REQUIRED_MULTI_LINE_SIGNATURE);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }

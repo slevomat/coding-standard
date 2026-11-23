@@ -120,4 +120,17 @@ class RequireMultiLineConditionSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testUnicodeLineLengthErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireMultiLineConditionUnicodeLineLengthErrors.php', [
+			'minLineLength' => 41,
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 7, RequireMultiLineConditionSniff::CODE_REQUIRED_MULTI_LINE_CONDITION);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }

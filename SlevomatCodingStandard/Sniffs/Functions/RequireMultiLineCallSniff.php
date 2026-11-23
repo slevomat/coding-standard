@@ -7,6 +7,7 @@ use PHP_CodeSniffer\Files\File;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
+use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use UnexpectedValueException;
 use function array_unique;
@@ -14,7 +15,6 @@ use function count;
 use function in_array;
 use function ltrim;
 use function preg_match;
-use function preg_match_all;
 use function sprintf;
 use function strlen;
 use function trim;
@@ -124,10 +124,10 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 		if ($tokens[$parenthesisCloserPointer]['line'] === $tokens[$stringPointer]['line']) {
 			$call = $this->getCall($phpcsFile, $parenthesisOpenerPointer, $parenthesisCloserPointer);
 			$lineEnd = $this->getLineEnd($phpcsFile, $parenthesisCloserPointer);
-			$lineLength = $this->getLineLength($lineStart . $call . $lineEnd);
+			$lineLength = StringHelper::charactersCount($lineStart . $call . $lineEnd);
 		} else {
 			$lineEnd = $this->getLineEnd($phpcsFile, $parenthesisOpenerPointer + 1);
-			$lineLength = $this->getLineLength($lineStart . $lineEnd);
+			$lineLength = StringHelper::charactersCount($lineStart . $lineEnd);
 		}
 
 		$firstNonWhitespaceOnLine = TokenHelper::findFirstNonWhitespaceOnLine($phpcsFile, $stringPointer);
@@ -244,12 +244,6 @@ class RequireMultiLineCallSniff extends AbstractLineCall
 		}
 
 		return false;
-	}
-
-	private function getLineLength(string $line): int
-	{
-		$lineLength = preg_match_all('/./us', $line, $matches);
-		return $lineLength === false ? strlen($line) : $lineLength;
 	}
 
 	private function shouldReportError(

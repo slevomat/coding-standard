@@ -142,4 +142,17 @@ class RequireSingleLineCallSniffTest extends TestCase
 		self::assertAllFixedInFile($report);
 	}
 
+	public function testUnicodeLineLengthErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/requireSingleLineCallUnicodeLineLengthErrors.php', [
+			'maxLineLength' => 25,
+		]);
+
+		self::assertSame(1, $report->getErrorCount());
+
+		self::assertSniffError($report, 4, RequireSingleLineCallSniff::CODE_REQUIRED_SINGLE_LINE_CALL);
+
+		self::assertAllFixedInFile($report);
+	}
+
 }
