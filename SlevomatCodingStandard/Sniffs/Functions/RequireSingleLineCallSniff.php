@@ -6,6 +6,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
+use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_keys;
 use function array_merge;
@@ -13,7 +14,6 @@ use function in_array;
 use function ltrim;
 use function rsort;
 use function sprintf;
-use function strlen;
 use function strpos;
 use const T_CLOSURE;
 use const T_CONSTANT_ENCAPSED_STRING;
@@ -117,7 +117,7 @@ class RequireSingleLineCallSniff extends AbstractLineCall
 		$call = $this->getCall($phpcsFile, $parenthesisOpenerPointer, $parenthesisCloserPointer);
 		$lineEnd = $this->getLineEnd($phpcsFile, $parenthesisCloserPointer);
 
-		$lineLength = strlen($lineStart . $call . $lineEnd);
+		$lineLength = StringHelper::charactersCount($lineStart . $call . $lineEnd);
 
 		if (!$this->shouldReportError($lineLength)) {
 			return;

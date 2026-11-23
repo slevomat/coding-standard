@@ -6,9 +6,9 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
+use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function sprintf;
-use function strlen;
 
 class RequireSingleLineConditionSniff extends AbstractLineCondition
 {
@@ -49,7 +49,7 @@ class RequireSingleLineConditionSniff extends AbstractLineCondition
 		$condition = $this->getCondition($phpcsFile, $parenthesisOpenerPointer, $parenthesisCloserPointer);
 		$lineEnd = $this->getLineEnd($phpcsFile, $parenthesisCloserPointer);
 
-		$lineLength = strlen($lineStart . $condition . $lineEnd);
+		$lineLength = StringHelper::charactersCount($lineStart . $condition . $lineEnd);
 		$isSimpleCondition = TokenHelper::findNext(
 			$phpcsFile,
 			Tokens::BOOLEAN_OPERATORS,

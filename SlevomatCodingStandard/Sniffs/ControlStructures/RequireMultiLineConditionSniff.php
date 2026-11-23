@@ -7,11 +7,11 @@ use PHP_CodeSniffer\Util\Tokens;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\IndentationHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
+use SlevomatCodingStandard\Helpers\StringHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function count;
 use function in_array;
 use function sprintf;
-use function strlen;
 use const T_CLOSE_PARENTHESIS;
 use const T_OPEN_PARENTHESIS;
 
@@ -61,7 +61,7 @@ class RequireMultiLineConditionSniff extends AbstractLineCondition
 
 		$condition = $this->getCondition($phpcsFile, $parenthesisOpenerPointer, $parenthesisCloserPointer);
 
-		$lineLength = strlen($lineStart . $condition . $lineEnd);
+		$lineLength = StringHelper::charactersCount($lineStart . $condition . $lineEnd);
 		$conditionLinesCount = $tokens[$conditionEndPointer]['line'] - $tokens[$conditionStartPointer]['line'] + 1;
 
 		if (!$this->shouldReportError($lineLength, $conditionLinesCount, count($booleanOperatorPointers))) {

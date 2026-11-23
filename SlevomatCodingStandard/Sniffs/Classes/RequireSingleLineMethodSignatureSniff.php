@@ -7,10 +7,10 @@ use PHP_CodeSniffer\Files\File;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
+use SlevomatCodingStandard\Helpers\StringHelper;
 use function count;
 use function preg_match;
 use function sprintf;
-use function strlen;
 
 class RequireSingleLineMethodSignatureSniff extends AbstractMethodSignature
 {
@@ -64,7 +64,7 @@ class RequireSingleLineMethodSignatureSniff extends AbstractMethodSignature
 			return;
 		}
 
-		if ($this->maxLineLength !== 0 && strlen($signature) > $this->maxLineLength) {
+		if ($this->maxLineLength !== 0 && StringHelper::charactersCount($signature) > $this->maxLineLength) {
 			return;
 		}
 

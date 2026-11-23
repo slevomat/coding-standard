@@ -135,4 +135,50 @@ class StringHelperTest extends TestCase
 		self::assertFalse(StringHelper::endsWith($haystack, $needle));
 	}
 
+	/**
+	 * @return list<array{0: string, 1: int}>
+	 */
+	public static function dataCharactersCount(): array
+	{
+		return [
+			[
+				'',
+				0,
+			],
+			[
+				'foo',
+				3,
+			],
+			[
+				"\tfoo",
+				4,
+			],
+			[
+				"foo\n",
+				4,
+			],
+			[
+				'ação',
+				4,
+			],
+			[
+				'недопустимый',
+				12,
+			],
+			[
+				"a\xC3",
+				2,
+			],
+		];
+	}
+
+	/**
+	 * @dataProvider dataCharactersCount
+	 */
+	#[DataProvider('dataCharactersCount')]
+	public function testCharactersCount(string $string, int $charactersCount): void
+	{
+		self::assertSame($charactersCount, StringHelper::charactersCount($string));
+	}
+
 }
