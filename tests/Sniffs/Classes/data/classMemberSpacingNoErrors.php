@@ -1,4 +1,4 @@
-<?php // lint >= 8.1
+<?php // lint >= 8.5
 
 class EmptyClass
 {
@@ -167,6 +167,45 @@ class Test
 	#[FirstAttribute]
 	#[AnotherAttribute]
 	public function method3(): void
+	{
+	}
+
+}
+
+class ClosureInConstantExpression
+{
+
+	public const FOO = [
+		'bar' => static function () {
+			return 1;
+		},
+		'baz' => 2,
+	];
+
+	protected array $foo = [
+		'bar' => static function () {
+			return 1;
+		},
+		'baz' => 2,
+	];
+
+	public const BAR = static function () {
+		return 1;
+	};
+
+	protected function first(): void
+	{
+	}
+
+	public function __construct(
+		private array $baz = [static function () {
+			return 1;
+		}],
+	)
+	{
+	}
+
+	protected function setUp(): void
 	{
 	}
 

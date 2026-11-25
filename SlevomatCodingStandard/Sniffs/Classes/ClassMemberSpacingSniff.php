@@ -21,10 +21,14 @@ use function str_repeat;
 use const T_AS;
 use const T_ATTRIBUTE_END;
 use const T_CLOSE_CURLY_BRACKET;
+use const T_CLOSURE;
 use const T_CONST;
 use const T_ENUM_CASE;
 use const T_FUNCTION;
 use const T_OPEN_CURLY_BRACKET;
+use const T_OPEN_PARENTHESIS;
+use const T_OPEN_SHORT_ARRAY;
+use const T_OPEN_SQUARE_BRACKET;
 use const T_SEMICOLON;
 use const T_USE;
 use const T_VARIABLE;
@@ -259,23 +263,37 @@ class ClassMemberSpacingSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		if (
-			$tokens[$memberPointer]['code'] === T_USE
-			// Property with hooks
-			|| $tokens[$memberPointer]['code'] === T_VARIABLE
-		) {
-			$pointer = TokenHelper::findNextLocal($phpcsFile, [T_SEMICOLON, T_OPEN_CURLY_BRACKET], $memberPointer + 1);
-
-			return $tokens[$pointer]['code'] === T_OPEN_CURLY_BRACKET
-				? $tokens[$pointer]['bracket_closer']
-				: $pointer;
-		}
-
 		if ($tokens[$memberPointer]['code'] === T_FUNCTION && !FunctionHelper::isAbstract($phpcsFile, $memberPointer)) {
 			return $tokens[$memberPointer]['scope_closer'];
 		}
 
-		return TokenHelper::findNext($phpcsFile, T_SEMICOLON, $memberPointer + 1);
+		$pointer = $memberPointer + 1;
+		do {
+			/** @var int $pointer */
+			$pointer = TokenHelper::findNext(
+				$phpcsFile,
+				[T_SEMICOLON, T_OPEN_CURLY_BRACKET, T_OPEN_PARENTHESIS, T_OPEN_SHORT_ARRAY, T_OPEN_SQUARE_BRACKET, T_CLOSURE],
+				$pointer,
+			);
+
+			if ($tokens[$pointer]['code'] === T_SEMICOLON) {
+				return $pointer;
+			}
+
+			if ($tokens[$pointer]['code'] === T_OPEN_CURLY_BRACKET) {
+				// Trait use with conflict resolution or property with hooks
+				return $tokens[$pointer]['bracket_closer'];
+			}
+
+			if ($tokens[$pointer]['code'] === T_OPEN_PARENTHESIS) {
+				$pointer = $tokens[$pointer]['parenthesis_closer'] + 1;
+			} elseif (in_array($tokens[$pointer]['code'], [T_OPEN_SHORT_ARRAY, T_OPEN_SQUARE_BRACKET], true)) {
+				$pointer = $tokens[$pointer]['bracket_closer'] + 1;
+			} else {
+				$pointer = $tokens[$pointer]['scope_closer'] + 1;
+			}
+
+		} while (true);
 	}
 
 }
