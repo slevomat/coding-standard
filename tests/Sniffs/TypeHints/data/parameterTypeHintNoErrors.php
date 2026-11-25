@@ -1,4 +1,4 @@
-<?php // lint >= 8.0
+<?php // lint >= 8.5
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Override;
@@ -366,6 +366,23 @@ class Promoted
 	)
 	{
 
+	}
+
+}
+
+class ClosureInConstantExpression
+{
+
+	public function __construct(
+		#[SomeAttribute(run: static function (bool $closureParameter): bool {
+			return $closureParameter;
+		})]
+		bool $parameter,
+		Closure $closure = static function ($closureParameter) {
+			return $closureParameter;
+		},
+	)
+	{
 	}
 
 }

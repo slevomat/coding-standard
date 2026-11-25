@@ -10,10 +10,12 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TypelessParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use function array_filter;
+use function array_key_last;
 use function array_map;
 use function array_pop;
 use function array_reverse;
 use function array_values;
+use function count;
 use function in_array;
 use function iterator_to_array;
 use function preg_match;
@@ -179,6 +181,36 @@ class FunctionHelper
 	}
 
 	/**
+	 * @return list<int>
+	 */
+	public static function getParametersPointers(File $phpcsFile, int $functionPointer): array
+	{
+		$tokens = $phpcsFile->getTokens();
+
+		$parenthesisOpenerPointer = $tokens[$functionPointer]['parenthesis_opener'];
+		$parenthesisCloserPointer = $tokens[$functionPointer]['parenthesis_closer'];
+
+		$parametersPointers = [];
+		for ($i = $parenthesisOpenerPointer + 1; $i < $parenthesisCloserPointer; $i++) {
+			if ($tokens[$i]['code'] !== T_VARIABLE) {
+				continue;
+			}
+
+			// Skip variables in nested parentheses or closures (e.g. closures in attributes or default values)
+			if (
+				array_key_last($tokens[$i]['nested_parenthesis'] ?? []) !== $parenthesisOpenerPointer
+				|| count($tokens[$i]['conditions']) !== count($tokens[$parenthesisOpenerPointer]['conditions'])
+			) {
+				continue;
+			}
+
+			$parametersPointers[] = $i;
+		}
+
+		return $parametersPointers;
+	}
+
+	/**
 	 * @return list<string>
 	 */
 	public static function getParametersNames(File $phpcsFile, int $functionPointer): array
@@ -186,11 +218,7 @@ class FunctionHelper
 		$tokens = $phpcsFile->getTokens();
 
 		$parametersNames = [];
-		for ($i = $tokens[$functionPointer]['parenthesis_opener'] + 1; $i < $tokens[$functionPointer]['parenthesis_closer']; $i++) {
-			if ($tokens[$i]['code'] !== T_VARIABLE) {
-				continue;
-			}
-
+		foreach (self::getParametersPointers($phpcsFile, $functionPointer) as $i) {
 			$parametersNames[] = $tokens[$i]['content'];
 		}
 
@@ -205,11 +233,7 @@ class FunctionHelper
 		$tokens = $phpcsFile->getTokens();
 
 		$parametersTypeHints = [];
-		for ($i = $tokens[$functionPointer]['parenthesis_opener'] + 1; $i < $tokens[$functionPointer]['parenthesis_closer']; $i++) {
-			if ($tokens[$i]['code'] !== T_VARIABLE) {
-				continue;
-			}
-
+		foreach (self::getParametersPointers($phpcsFile, $functionPointer) as $i) {
 			$parameterName = $tokens[$i]['content'];
 
 			$pointerBeforeVariable = TokenHelper::findPreviousExcluding(
@@ -339,11 +363,7 @@ class FunctionHelper
 		$parametersAnnotations = [];
 
 		if (self::getName($phpcsFile, $functionPointer) === '__construct') {
-			for ($i = $tokens[$functionPointer]['parenthesis_opener'] + 1; $i < $tokens[$functionPointer]['parenthesis_closer']; $i++) {
-				if ($tokens[$i]['code'] !== T_VARIABLE) {
-					continue;
-				}
-
+			foreach (self::getParametersPointers($phpcsFile, $functionPointer) as $i) {
 				$varAnnotations = AnnotationHelper::getAnnotations($phpcsFile, $i, '@var');
 				if ($varAnnotations === []) {
 					continue;
@@ -374,11 +394,7 @@ class FunctionHelper
 		$parametersAnnotations = [];
 		foreach (AnnotationHelper::STATIC_ANALYSIS_PREFIXES as $prefix) {
 			if (self::getName($phpcsFile, $functionPointer) === '__construct') {
-				for ($i = $tokens[$functionPointer]['parenthesis_opener'] + 1; $i < $tokens[$functionPointer]['parenthesis_closer']; $i++) {
-					if ($tokens[$i]['code'] !== T_VARIABLE) {
-						continue;
-					}
-
+				foreach (self::getParametersPointers($phpcsFile, $functionPointer) as $i) {
 					/** @var list<Annotation<VarTagValueNode>> $varAnnotations */
 					$varAnnotations = AnnotationHelper::getAnnotations($phpcsFile, $i, sprintf('@%s-var', $prefix));
 					if ($varAnnotations === []) {
