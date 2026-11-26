@@ -4,10 +4,13 @@ namespace SlevomatCodingStandard\Sniffs\Namespaces;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Util\Tokens;
+use SlevomatCodingStandard\Helpers\CommentHelper;
 use SlevomatCodingStandard\Helpers\FixerHelper;
 use SlevomatCodingStandard\Helpers\SniffSettingsHelper;
 use SlevomatCodingStandard\Helpers\TokenHelper;
 use function array_key_exists;
+use function in_array;
 use function preg_match;
 use function rtrim;
 use function sprintf;
@@ -54,6 +57,20 @@ class NamespaceSpacingSniff implements Sniff
 		/** @var int $pointerBeforeNamespace */
 		$pointerBeforeNamespace = TokenHelper::findPreviousNonWhitespace($phpcsFile, $namespacePointer - 1);
 
+		$namespaceStartPointer = $namespacePointer;
+
+		if (
+			in_array($tokens[$pointerBeforeNamespace]['code'], Tokens::PHPCS_ANNOTATION_TOKENS, true)
+			&& $tokens[$pointerBeforeNamespace]['line'] + 1 === $tokens[$namespacePointer]['line']
+		) {
+			// PHPCS annotations apply to the code below them, so they are part of the namespace statement
+			// and the required empty lines belong before the annotations, not between them and the namespace.
+			$namespaceStartPointer = CommentHelper::getMultilineCommentStartPointer($phpcsFile, $pointerBeforeNamespace);
+
+			/** @var int $pointerBeforeNamespace */
+			$pointerBeforeNamespace = TokenHelper::findPreviousNonWhitespace($phpcsFile, $namespaceStartPointer - 1);
+		}
+
 		$whitespaceBeforeNamespace = '';
 
 		$isInlineCommentBefore = (bool) preg_match('~^(?://|#)(.*)~', $tokens[$pointerBeforeNamespace]['content']);
@@ -64,8 +81,8 @@ class NamespaceSpacingSniff implements Sniff
 			$whitespaceBeforeNamespace .= $phpcsFile->eolChar;
 		}
 
-		if ($pointerBeforeNamespace + 1 !== $namespacePointer) {
-			$whitespaceBeforeNamespace .= TokenHelper::getContent($phpcsFile, $pointerBeforeNamespace + 1, $namespacePointer - 1);
+		if ($pointerBeforeNamespace + 1 !== $namespaceStartPointer) {
+			$whitespaceBeforeNamespace .= TokenHelper::getContent($phpcsFile, $pointerBeforeNamespace + 1, $namespaceStartPointer - 1);
 		}
 
 		$actualLinesCountBeforeNamespace = substr_count($whitespaceBeforeNamespace, $phpcsFile->eolChar) - 1;
@@ -101,7 +118,7 @@ class NamespaceSpacingSniff implements Sniff
 			);
 		}
 
-		FixerHelper::removeBetween($phpcsFile, $pointerBeforeNamespace, $namespacePointer);
+		FixerHelper::removeBetween($phpcsFile, $pointerBeforeNamespace, $namespaceStartPointer);
 
 		for ($i = 0; $i <= $this->linesCountBeforeNamespace; $i++) {
 			$phpcsFile->fixer->addNewline($pointerBeforeNamespace);
