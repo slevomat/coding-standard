@@ -112,7 +112,7 @@ Sniff provides the following settings:
 
 #### SlevomatCodingStandard.ControlStructures.DisallowTrailingMultiLineTernaryOperator 🔧
 
-Ternary operator has to be reformatted when the operator is not leading the line.
+Ternary operator has to be reformatted when the operator is not leading the line or has invalid indentation.
 
 ```php
 # wrong
@@ -125,6 +125,10 @@ $t = $someCondition
 	? $thenThis
 	: $otherwiseThis;
 ```
+
+#### SlevomatCodingStandard.ControlStructures.MultiLineTernaryOperatorIndentation 🔧
+
+Enforces leading placement and exact indentation of `?` and `:` operators in multiline ternary expressions.
 
 #### SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing 🔧
 

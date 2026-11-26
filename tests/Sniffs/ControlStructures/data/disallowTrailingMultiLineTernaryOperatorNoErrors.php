@@ -59,3 +59,47 @@ $a = $b === 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' ? 'bbbb' :
 
 $a = $b ? 'bbb'
 	: 'ccc';
+
+$a = in_array(
+	$b,
+	$c,
+	true
+)
+	? 'bbbb'
+	: 'ccccccccccccc';
+
+$nested = $a
+	? $b
+		? 'x'
+		: 'y'
+	: 'z';
+
+$anon = new class {
+	public $prop = 'value';
+}
+	? 'bbbb'
+	: 'ccccccccccccc';
+
+if ($a) {
+	$other =
+		'value';
+	echo $b
+		? 'bbbb'
+		: 'ccccccccccccc';
+}
+
+switch ($x) {
+	case 'foo':
+		$flag
+			? 'bbbb'
+			: 'ccccccccccccc';
+	default:
+		$flag
+			? 'bbbb'
+			: 'ccccccccccccc';
+}
+
+$fn = fn () =>
+	$flag
+		? 'bbbb'
+		: 'ccccccccccccc';

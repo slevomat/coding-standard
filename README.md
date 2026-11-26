@@ -102,6 +102,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/PHPCSStandards
  - [SlevomatCodingStandard.ControlStructures.EarlyExit](doc/control-structures.md#slevomatcodingstandardcontrolstructuresearlyexit-) 🔧
  - [SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing](doc/control-structures.md#slevomatcodingstandardcontrolstructuresjumpstatementsspacing-) 🔧
  - [SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses](doc/control-structures.md#slevomatcodingstandardcontrolstructureslanguageconstructwithparentheses-) 🔧
+ - [SlevomatCodingStandard.ControlStructures.MultiLineTernaryOperatorIndentation](doc/control-structures.md#slevomatcodingstandardcontrolstructuresmultilineternaryoperatorindentation-) 🔧
  - [SlevomatCodingStandard.ControlStructures.NewWithParentheses](doc/control-structures.md#slevomatcodingstandardcontrolstructuresnewwithparentheses-) 🔧
  - [SlevomatCodingStandard.ControlStructures.NewWithoutParentheses](doc/control-structures.md#slevomatcodingstandardcontrolstructuresnewwithoutparentheses-) 🔧
  - [SlevomatCodingStandard.ControlStructures.RequireMultiLineCondition](doc/control-structures.md#slevomatcodingstandardcontrolstructuresrequiremultilinecondition-) 🔧
@@ -164,6 +165,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/PHPCSStandards
  - [SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator](doc/numbers.md#slevomatcodingstandardnumbersrequirenumericliteralseparator)
  - [SlevomatCodingStandard.Operators.DisallowEqualOperators](doc/operators.md#slevomatcodingstandardoperatorsdisallowequaloperators-) 🔧
  - [SlevomatCodingStandard.Operators.DisallowIncrementAndDecrementOperators](doc/operators.md#slevomatcodingstandardoperatorsdisallowincrementanddecrementoperators)
+ - [SlevomatCodingStandard.Operators.MultiLineOperatorIndentation](doc/operators.md#slevomatcodingstandardoperatorsmultilineoperatorindentation-) 🔧
  - [SlevomatCodingStandard.Operators.NegationOperatorSpacing](doc/operators.md#slevomatcodingstandardoperatorsnegationoperatorspacing-) 🔧
  - [SlevomatCodingStandard.Operators.RequireCombinedAssignmentOperator](doc/operators.md#slevomatcodingstandardoperatorsrequirecombinedassignmentoperator-) 🔧
  - [SlevomatCodingStandard.Operators.RequireOnlyStandaloneIncrementAndDecrementOperators](doc/operators.md#slevomatcodingstandardoperatorsrequireonlystandaloneincrementanddecrementoperators)
@@ -202,6 +204,7 @@ Slevomat Coding Standard for [PHP_CodeSniffer](https://github.com/PHPCSStandards
  - [SlevomatCodingStandard.Variables.UnusedVariable](doc/variables.md#slevomatcodingstandardvariablesunusedvariable)
  - [SlevomatCodingStandard.Variables.UselessVariable](doc/variables.md#slevomatcodingstandardvariablesuselessvariable-) 🔧
  - [SlevomatCodingStandard.Whitespaces.DuplicateSpaces](doc/whitespaces.md#slevomatcodingstandardwhitespacesduplicatespaces-) 🔧
+ - [SlevomatCodingStandard.Whitespaces.MultiLineOperatorIndentation](doc/whitespaces.md#slevomatcodingstandardwhitespacesmultilineoperatorindentation-) 🔧
 
 ## Installation
 
