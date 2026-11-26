@@ -119,9 +119,33 @@ class NamespaceSpacingSniffTest extends TestCase
 		self::assertNoSniffErrorInFile($report);
 	}
 
-	public function testPhpcsCommentBefore(): void
+	public function testPhpcsCommentBeforeNoErrors(): void
 	{
 		$report = self::checkFile(__DIR__ . '/data/namespaceSpacingWithPhpcsCommentBefore.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testPhpcsAnnotationsBeforeNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/namespaceSpacingWithPhpcsAnnotationsNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testMultiplePhpcsAnnotationsBeforeNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/namespaceSpacingWithMultiplePhpcsAnnotationsNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testPhpcsBlockAnnotationBeforeNoErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/namespaceSpacingWithPhpcsBlockAnnotationNoErrors.php');
+		self::assertNoSniffErrorInFile($report);
+	}
+
+	public function testPhpcsAnnotationsBeforeErrors(): void
+	{
+		$report = self::checkFile(__DIR__ . '/data/namespaceSpacingWithPhpcsAnnotationsErrors.php');
 
 		self::assertSame(1, $report->getErrorCount());
 
